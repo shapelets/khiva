@@ -10,7 +10,5 @@
 using namespace af;
 
 namespace tsa {
-
     const char* version();
-
 }
