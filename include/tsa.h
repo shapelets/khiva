@@ -7,3 +7,10 @@
 #include <arrayfire.h>
 #include "version.h"
 
+using namespace af;
+
+namespace tsa {
+
+    const char* version();
+
+}
