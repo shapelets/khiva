@@ -6,7 +6,6 @@
 
 #include <tsa.h>
 
-
 const char* tsa::version() {
     return VERSION;
 }
