@@ -1,3 +1,4 @@
 bin
 build
 .DS_Store
+include/version.h
