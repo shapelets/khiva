@@ -1,0 +1,116 @@
+{
+  "variant": {
+    "label": "Debug",
+    "keywordSettings": {
+      "buildType": "debug"
+    },
+    "description": "Emit debug information without performing optimizations"
+  },
+  "activeEnvironments": [],
+  "codeModel": {
+    "configurations": [
+      {
+        "name": "Debug",
+        "projects": [
+          {
+            "buildDirectory": "/Users/justo.ruiz/Development/tsa/build",
+            "name": "Project",
+            "sourceDirectory": "/Users/justo.ruiz/Development/tsa",
+            "targets": [
+              {
+                "artifacts": [
+                  "/Users/justo.ruiz/Development/tsa/build/src/libTSALIB.a"
+                ],
+                "buildDirectory": "/Users/justo.ruiz/Development/tsa/build/src",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "../include/tsa.h",
+                      "../include/version.h"
+                    ]
+                  },
+                  {
+                    "compileFlags": " -std=c++11 -g  ",
+                    "defines": [
+                      "AF_UNIFIED",
+                      "NOMINMAX"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "/usr/local/include"
+                      },
+                      {
+                        "path": "/Users/justo.ruiz/Development/tsa/src/../include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "version.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "libTSALIB.a",
+                "linkerLanguage": "CXX",
+                "name": "TSALIB",
+                "sourceDirectory": "/Users/justo.ruiz/Development/tsa/src",
+                "type": "STATIC_LIBRARY"
+              }
+            ]
+          },
+          {
+            "buildDirectory": "/Users/justo.ruiz/Development/tsa/build/src",
+            "name": "TSALIB",
+            "sourceDirectory": "/Users/justo.ruiz/Development/tsa/src",
+            "targets": [
+              {
+                "artifacts": [
+                  "/Users/justo.ruiz/Development/tsa/build/src/libTSALIB.a"
+                ],
+                "buildDirectory": "/Users/justo.ruiz/Development/tsa/build/src",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "../include/tsa.h",
+                      "../include/version.h"
+                    ]
+                  },
+                  {
+                    "compileFlags": " -std=c++11 -g  ",
+                    "defines": [
+                      "AF_UNIFIED",
+                      "NOMINMAX"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "/usr/local/include"
+                      },
+                      {
+                        "path": "/Users/justo.ruiz/Development/tsa/src/../include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "version.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "libTSALIB.a",
+                "linkerLanguage": "CXX",
+                "name": "TSALIB",
+                "sourceDirectory": "/Users/justo.ruiz/Development/tsa/src",
+                "type": "STATIC_LIBRARY"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cookie": "0.40447462135317713",
+    "inReplyTo": "codemodel",
+    "type": "reply"
+  }
+}
