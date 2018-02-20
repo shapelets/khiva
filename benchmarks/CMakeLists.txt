@@ -1,28 +1,14 @@
-find_package(Threads REQUIRED)
+FIND_PACKAGE(Threads REQUIRED)
 
-#~~~~~~~~~~~~~~~~
+FILE(GLOB_RECURSE ALL_BENCH_CPP *.cpp)
 
-file(GLOB_RECURSE ALL_BENCH_CPP *.cpp)
-
-foreach(ONE_BENCH_CPP ${ALL_BENCH_CPP})
-
-   get_filename_component(ONE_BENCH_EXEC ${ONE_BENCH_CPP} NAME_WE)
-
-   # Avoid name collision 
-   set(TARGET_NAME Bench_${ONE_BENCH_EXEC})
-
-   add_executable(${TARGET_NAME} ${ONE_BENCH_CPP})
-   set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME ${ONE_BENCH_EXEC}) 
-   target_link_libraries(${TARGET_NAME} 
-
-# If required, you can add your project library here
-# ...
-
-   benchmark
-   TSALIB
-     ${CMAKE_THREAD_LIBS_INIT})
-
-   # If you want to run benchmarks with the "make test" command, uncomment me
-   add_test(${TARGET_NAME} ${ONE_BENCH_EXEC})
-endforeach()
+FOREACH(ONE_BENCH_CPP ${ALL_BENCH_CPP})
+   GET_FILENAME_COMPONENT(ONE_BENCH_EXEC ${ONE_BENCH_CPP} NAME_WE)
+   SET(TARGET_NAME Bench_${ONE_BENCH_EXEC})
+   ADD_EXECUTABLE(${TARGET_NAME} ${ONE_BENCH_CPP})
+   
+   SET_TARGET_PROPERTIES(${TARGET_NAME} PROPERTIES OUTPUT_NAME ${ONE_BENCH_EXEC}) 
+   TARGET_LINK_LIBRARIES(${TARGET_NAME} benchmark TSALIB ${CMAKE_THREAD_LIBS_INIT})
+   ADD_TEST(${TARGET_NAME} ${TARGET_NAME})
+ENDFOREACH()
 
