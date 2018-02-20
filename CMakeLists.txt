@@ -5,6 +5,8 @@ SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 SET(CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH})
 SET(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 # Set the build type
 IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE "Release" 
@@ -12,26 +14,8 @@ IF(NOT CMAKE_BUILD_TYPE)
       FORCE)
 ENDIF()
 
-# Download and unpack googletest at configure time
-CONFIGURE_FILE(CMakeLists.txt.in googletest-download/CMakeLists.txt)
-
-EXECUTE_PROCESS(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
-EXECUTE_PROCESS(COMMAND "${CMAKE_COMMAND}" --build . WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
-
-# Prevent GoogleTest from overriding our compiler/linker options
-# when building with Visual Studio
-SET(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-
-# Add googletest directly to our build. This adds
-# the following targets: gtest, gtest_main, gmock
-# and gmock_main
-ADD_SUBDIRECTORY("${CMAKE_BINARY_DIR}/googletest-src"
-                 "${CMAKE_BINARY_DIR}/googletest-build")
-
-
 # git support
-INCLUDE("cmake/GetGitRevisionDescription.cmake")
+INCLUDE(GetGitRevisionDescription)
 
 # get current version from git tags
 git_describe(VERSION --tags --dirty=-dirty)
@@ -50,5 +34,12 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/version.h.in
 # build items in subdirectories
 ADD_SUBDIRECTORY(src)
 
-enable_testing()
+ENABLE_TESTING()
+INCLUDE(ConfigGTest)
+INCLUDE(ConfigGBench)
+
 ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(benchmarks)
+
+
+
