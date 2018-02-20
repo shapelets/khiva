@@ -19,7 +19,7 @@ template<af::Backend BE> void MovingSumConvolve(benchmark::State& state) {
 
   while (state.KeepRunning()) {
     af::array movSum = af::convolve(ts, filter, AF_CONV_EXPAND);
-    benchmark::DoNotOptimize(movSum(af::seq(m-1, tsLen-1)));
+    movSum(af::seq(m-1, tsLen-1)).eval();
   }
   af::sync();
 }
@@ -32,29 +32,30 @@ template<af::Backend BE> void MovingSumScan(benchmark::State& state) {
   while (state.KeepRunning()) {
     af::array cumsum = af::accum(ts);
     af::array exCumsum = af::scan(ts, 0, AF_BINARY_ADD, false);
-    benchmark::DoNotOptimize(
-      cumsum(af::seq(m - 1, tsLen - 1)) - exCumsum(af::seq(0, tsLen - m))
-    );
+    (cumsum(af::seq(m - 1, tsLen - 1)) - exCumsum(af::seq(0, tsLen - m))).eval();
   }
   af::sync();
 }
 
 
-// Register the function as a benchmark
 BENCHMARK_TEMPLATE(MovingSumConvolve, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 512}});
+  ->Ranges({{1<<10, 32<<10}, {64, 512}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(MovingSumConvolve, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 512}});
+  ->Ranges({{1<<10, 32<<10}, {64, 512}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(MovingSumScan, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 512}});
+  ->Ranges({{1<<10, 32<<10}, {64, 512}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(MovingSumScan, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 512}});
+  ->Ranges({{1<<10, 32<<10}, {64, 512}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_MAIN();

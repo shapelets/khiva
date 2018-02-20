@@ -25,7 +25,7 @@ template<af::Backend BE> void ManualFFT(benchmark::State& state) {
     auto qraf = af::fft(qra);
     auto raf = af::fft(ta);
     auto prod = qraf * raf;
-    benchmark::DoNotOptimize(af::ifft(prod));
+    af::ifft(prod).eval();
   }
   af::sync();
 }
@@ -39,29 +39,31 @@ template<af::Backend BE> void ConvolveOp(benchmark::State& state) {
   auto q = af::randu(m);
 
   while (state.KeepRunning()) {
-    benchmark::DoNotOptimize(
-      convolve(ts, flip(q, 0), AF_CONV_EXPAND)
-    );
+    convolve(ts, flip(q, 0), AF_CONV_EXPAND).eval();
   }
   af::sync();
 }
 
 
-// Register the function as a benchmark
 BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}});
+  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}});
+  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}});
+  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}});
+  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+  
 
 BENCHMARK_MAIN();
