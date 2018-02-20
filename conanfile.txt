@@ -1,0 +1,13 @@
+[requires]
+gtest/1.8.0@bincrafters/stable
+google-benchmark/1.1.0@cpace6/stable
+
+[options]
+gtest:shared=False
+gtest:build_gmock=True
+gtest:fPIC=True
+
+[generators]
+cmake
+
+

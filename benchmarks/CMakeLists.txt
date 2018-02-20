@@ -18,7 +18,8 @@ foreach(ONE_BENCH_CPP ${ALL_BENCH_CPP})
 # If required, you can add your project library here
 # ...
 
-	 benchmark
+   benchmark
+   TSALIB
      ${CMAKE_THREAD_LIBS_INIT})
 
    # If you want to run benchmarks with the "make test" command, uncomment me

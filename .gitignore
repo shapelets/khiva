@@ -2,3 +2,7 @@ bin
 build
 .DS_Store
 include/version.h
+conanbuildinfo.cmake
+conanbuildinfo.txt
+conaninfo.txt
+
