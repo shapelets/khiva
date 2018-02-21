@@ -11,12 +11,13 @@ using namespace af;
 
 
 namespace tsa {
+    
     const char* version();
 
     namespace simplification {
         //array rdp(array source, int maxPoints);
         //array visvalingam(array source, int maxPoints);         
-    }
+    };
 
     namespace regularization {
         // array xyz(array source);
@@ -27,24 +28,41 @@ namespace tsa {
         // max min
         // decimal scaling
         // adaptive normalization
-    }
+    };
 
     namespace features {
         // tsfresh
         // PIP Perceptualy important points
-    }
+    };
 
     namespace dimensionality {
         // PAA/PLA
         // SAX
         // Principal Components A.
         // Random Projections
-    }
+    };
 
     namespace distances {
+
+        /**
+         * @brief Returns euclidian distances between timeseries.  
+         * 
+         * Expects an input array whose dimension zero is the lenght of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
+         * 
+         * Returns an upper triangular matrix where each position corresponds to the 
+         * distance between two time series.  Diagonal elements will be zero.  For example: 
+         * Position row 0 column 1 will record the distance between time series 0 
+         * and time series 1.
+         */
+        array euclidian(array tss);
+
         // habituales + la ncc
 
         // una funcion que dada un tipo de destiancia retorna 
         // una matriz triangular de distancias entre timeseries 
-    }
-}
+    };
+
+};
+

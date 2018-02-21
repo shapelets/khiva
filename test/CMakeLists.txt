@@ -6,10 +6,18 @@ INCLUDE(GoogleTest)
 ### Targets ###
 ADD_EXECUTABLE(simple simple.cpp)
 TARGET_LINK_LIBRARIES(simple TSALIB gtest gtest_main)
-
-
 # see https://cmake.org/cmake/help/v3.10/module/GoogleTest.html
 gtest_add_tests(TARGET      simple
                 TEST_SUFFIX .noArgs
                 TEST_LIST   noArgsTests
 )
+
+
+ADD_EXECUTABLE(distances distancesTest.cpp)
+TARGET_LINK_LIBRARIES(distances TSALIB gtest gtest_main)
+gtest_add_tests(TARGET      distances
+                TEST_SUFFIX .noArgs
+                TEST_LIST   noArgsTests
+)
+
+
