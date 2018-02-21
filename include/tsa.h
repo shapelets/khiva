@@ -88,7 +88,9 @@ namespace tsa {
         void maxMinNormInPlace(array &tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
 
 
-        
+        array decimalScalingNorm(array tss);
+
+        void decimalScalingNormInPlace(array &tss);
 
         // decimal scaling
         // adaptive normalization

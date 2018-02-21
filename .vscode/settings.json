@@ -18,6 +18,8 @@
         "system_error": "cpp",
         "tuple": "cpp",
         "type_traits": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "__tuple": "cpp",
+        "__locale": "cpp"
     }
 }

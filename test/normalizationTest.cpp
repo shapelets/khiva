@@ -61,7 +61,6 @@ TEST(NormalizationTests, MaxMinNorm)
         ASSERT_NEAR(host_col1[i], expected[i], 0.00000001);
         ASSERT_NEAR(host_col2[i], expected[i], 0.00000001);
     }
-    
 }
 
 TEST(NormalizationTests, MaxMinNormInPlace)
@@ -79,5 +78,37 @@ TEST(NormalizationTests, MaxMinNormInPlace)
         ASSERT_NEAR(host_col1[i], expected[i], 0.00000001);
         ASSERT_NEAR(host_col2[i], expected[i], 0.00000001);
     }
-    
+}
+
+
+TEST(NormalizationTests, DecimalScalingNorm)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {0, 1, -2, 3, 40, 50, 60, -70};
+    af::array tss(4, 2, data);
+
+    auto result = tsa::normalization::decimalScalingNorm(tss);
+
+    ASSERT_EQ(tss.dims(), result.dims());
+
+    double expected[] = { 0.0, 0.1, -0.2, 0.3,  0.4, 0.5, 0.6, -0.7};
+    double* host = result.host<double>();
+    for (int i=0; i<8; i++) {
+        ASSERT_NEAR(host[i], expected[i], 0.00000001);
+    }
+}
+
+TEST(NormalizationTests, DecimalScalingNormInPlace)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {0, 1, -2, 3, 40, 50, 60, -70};
+    af::array tss(4, 2, data);
+
+    tsa::normalization::decimalScalingNormInPlace(tss);
+
+    double expected[] = { 0.0, 0.1, -0.2, 0.3,  0.4, 0.5, 0.6, -0.7};
+    double* host = tss.host<double>();
+    for (int i=0; i<8; i++) {
+        ASSERT_NEAR(host[i], expected[i], 0.00000001);
+    }
 }

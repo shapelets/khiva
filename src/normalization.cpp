@@ -36,3 +36,20 @@ void tsa::normalization::maxMinNormInPlace(af::array &tss, double high, double l
     tss /= scale;
     tss += low;
 }
+
+af::array tsa::normalization::decimalScalingNorm(af::array tss) {
+    auto maxAbs = af::max(af::abs(tss), 0);
+    auto const10 = af::constant(10, 1, tss.dims(1));
+    auto d = af::ceil(af::log10(maxAbs));
+    auto divFactor = af::pow(const10, d);
+    auto result = tss / af::tile(divFactor, tss.dims(0));
+    return result;
+}
+
+void tsa::normalization::decimalScalingNormInPlace(af::array &tss) {
+    auto maxAbs = af::max(af::abs(tss), 0);
+    auto const10 = af::constant(10, 1, tss.dims(1));
+    auto d = af::ceil(af::log10(maxAbs));
+    auto divFactor = af::pow(const10, d);
+    tss /= af::tile(divFactor, tss.dims(0));
+}
