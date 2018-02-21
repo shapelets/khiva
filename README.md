@@ -11,3 +11,5 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 
 ###Caveats 
 One of the recipies used by conan has an issue and it may require a manual change.  The file is called `conanfile.py` under `<home>./conan/data/google-benchmark/1.1.0/cpace6/stable/export` and you may need to replace line 24 with `cmake = CMake(self)`
+ 
+ 
