@@ -8,10 +8,11 @@ SET(CMAKE_CXX_STANDARD 11)
 INCLUDE(conanbuildinfo.cmake)
 CONAN_BASIC_SETUP()
 
-# Load from environmnet variables
+# Load from environment variables
 SET(CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH})
 SET(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 
 # Set the build type
 IF(NOT CMAKE_BUILD_TYPE)
@@ -44,6 +45,8 @@ ADD_SUBDIRECTORY(src)
 ENABLE_TESTING()
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(benchmarks)
+# build items in subdirectories
+ADD_SUBDIRECTORY(doc)
 
 
 
