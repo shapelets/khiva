@@ -20,4 +20,12 @@ gtest_add_tests(TARGET      distances
                 TEST_LIST   noArgsTests
 )
 
+ADD_EXECUTABLE(normalization normalizationTest.cpp)
+TARGET_LINK_LIBRARIES(normalization TSALIB gtest gtest_main)
+gtest_add_tests(TARGET      normalization
+                TEST_SUFFIX .noArgs
+                TEST_LIST   noArgsTests
+)
+
+
 

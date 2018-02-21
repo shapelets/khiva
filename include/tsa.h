@@ -24,7 +24,34 @@ namespace tsa {
     }
 
     namespace normalization {
-        // znorm
+        /**
+         * @brief Calculates a new set of timeseries with zero mean and 
+         * standard deviation one.
+         * 
+         * @param tss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
+         * 
+         * @param epsilon Minimum standard deviation to consider.  It acts a a gatekeeper for
+         * those time series that may be constant or near constant.  
+         * 
+         * @return array Array with the same dimensions as tss where the time series have been
+         * adjusted for zero mean and one as standard deviation.
+         */
+        array znorm(array tss, double epsilon = 0.00000001);
+
+        /**
+         * @brief Adjusts the time series in the given input and performs z-norm 
+         * inplace (without allocating further memory)
+         * 
+         * @param tss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
+         * 
+         * @param epsilon Minimum standard deviation to consider.  It acts a a gatekeeper for
+         * those time series that may be constant or near constant.  
+         */
+        void znormInPlace(array &tss, double epsilon = 0.00000001);
         // max min
         // decimal scaling
         // adaptive normalization
