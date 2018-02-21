@@ -1,28 +1,28 @@
-find_package(Sphinx REQUIRED)
+FIND_PACKAGE(Sphinx REQUIRED)
  
-if(NOT DEFINED SPHINX_THEME)
-    set(SPHINX_THEME default)
-endif()
+IF(NOT DEFINED SPHINX_THEME)
+    SET(SPHINX_THEME default)
+ENDIF()
  
-if(NOT DEFINED SPHINX_THEME_DIR)
-    set(SPHINX_THEME_DIR)
-endif()
+IF(NOT DEFINED SPHINX_THEME_DIR)
+    SET(SPHINX_THEME_DIR)
+ENDIF()
  
 # configured documentation tools and intermediate build results
-set(BINARY_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_build")
+SET(BINARY_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_build")
  
 # Sphinx cache with pickled ReST documents
-set(SPHINX_CACHE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_doctrees")
+SET(SPHINX_CACHE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_doctrees")
  
 # HTML output directory
-set(SPHINX_HTML_DIR "${CMAKE_CURRENT_BINARY_DIR}/html")
+SET(SPHINX_HTML_DIR "${CMAKE_CURRENT_BINARY_DIR}/html")
  
-configure_file(
+CONFIGURE_FILE(
     "${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in"
     "${BINARY_BUILD_DIR}/conf.py"
     @ONLY)
  
-add_custom_target(TSA_docs ALL
+ADD_CUSTOM_TARGET(TSA_docs ALL
     ${SPHINX_EXECUTABLE}
         -q -b html
         -c "${BINARY_BUILD_DIR}"
