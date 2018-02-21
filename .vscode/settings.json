@@ -1,5 +1,23 @@
 {
     "licenser.license": "MPLv2",
     "licenser.projectName": "TSA",
-    "licenser.author": "Grumpy Cat Software S.L."
+    "licenser.author": "Grumpy Cat Software S.L.",
+    "files.associations": {
+        "algorithm": "cpp",
+        "chrono": "cpp",
+        "limits": "cpp",
+        "ratio": "cpp",
+        "__bit_reference": "cpp",
+        "__functional_base": "cpp",
+        "atomic": "cpp",
+        "bitset": "cpp",
+        "functional": "cpp",
+        "iterator": "cpp",
+        "locale": "cpp",
+        "memory": "cpp",
+        "system_error": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "vector": "cpp"
+    }
 }

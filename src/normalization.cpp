@@ -19,3 +19,20 @@ void tsa::normalization::znormInPlace(af::array &tss, double epsilon) {
     tss -= mean;
     tss /= stdev;
 }
+
+af::array tsa::normalization::maxMinNorm(af::array tss, double high, double low, double epsilon) {
+    auto max = af::tile(af::max(tss, 0), tss.dims(0));
+    auto min = af::tile(af::min(tss, 0), tss.dims(0));
+    auto scale = max - min;
+    return low + (((high - low) * (tss - min)) / scale);
+}
+
+void tsa::normalization::maxMinNormInPlace(af::array &tss, double high, double low, double epsilon) {
+    auto max = af::tile(af::max(tss, 0), tss.dims(0));
+    auto min = af::tile(af::min(tss, 0), tss.dims(0));
+    auto scale = max - min;
+    tss -= min;
+    tss *= (high - low);
+    tss /= scale;
+    tss += low;
+}

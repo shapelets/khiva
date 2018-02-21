@@ -52,7 +52,44 @@ namespace tsa {
          * those time series that may be constant or near constant.  
          */
         void znormInPlace(array &tss, double epsilon = 0.00000001);
-        // max min
+
+        /**
+         * @brief Normalizes the given time series according to its minimum and maximun value and 
+         * adjusts each value within the range [low, high]
+         * 
+         * @param tss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
+         * 
+         * @param high Maximum final value.  Defaults to 1.0
+         * @param low  Minimum final value.  Defaults to 0.0
+         * 
+         * @param epsilon Safeguard for constant (or near constant) time series as the operation implies
+         * a unit scale operation between min and max values in the tss.
+         * 
+         * @return array An array with the same dimensions as tss, whose values (time series in dimension 0)
+         * have been normalized by maximun and minimun values, and scaled as per high and low parameters.
+         */
+        array maxMinNorm(array tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
+
+        /**
+         * @brief Same as maxMinNorm, but it performs the operation in place, without allocating further memory.
+         * 
+         * @param tss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
+         * 
+         * @param high Maximum final value.  Defaults to 1.0
+         * @param low  Minimum final value.  Defaults to 0.0
+         * 
+         * @param epsilon Safeguard for constant (or near constant) time series as the operation implies
+         * a unit scale operation between min and max values in the tss.
+         */
+        void maxMinNormInPlace(array &tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
+
+
+        
+
         // decimal scaling
         // adaptive normalization
     };
