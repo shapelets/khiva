@@ -6,7 +6,7 @@
 
 #include <tsa.h>
 
-af::array tsa::distances::euclidian(af::array tss) {
+af::array tsa::distances::squaredEuclidian(af::array tss) {
     // get the number of time series
     auto numOfTs = tss.dims(1);
     // the result is a squared matrix of dimensions numOfTs x numOfTs
@@ -16,9 +16,15 @@ af::array tsa::distances::euclidian(af::array tss) {
     // for each time series, calculate in parallel all distances
     for (auto currentCol = 0; currentCol < numOfTs-1; currentCol++) {
 		gfor(seq otherCol, currentCol + 1, numOfTs-1) {
-			result(currentCol, otherCol) = af::sqrt(af::sum(af::pow(tss(span, currentCol) - tss(span, otherCol), 2)));
+			result(currentCol, otherCol) = af::sum(af::pow(tss(span, currentCol) - tss(span, otherCol), 2));
 		}
 	}
 
     return result;
+}
+
+af::array tsa::distances::euclidian(af::array tss) {
+    // simply invokes non squared version and completes with
+    // an elementwise sqrt operation.
+    return sqrt(squaredEuclidian(tss));
 }

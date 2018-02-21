@@ -45,18 +45,32 @@ namespace tsa {
     namespace distances {
 
         /**
-         * @brief Returns euclidian distances between timeseries.  
+         * @brief Calculates euclidian distances between timeseries.  
          * 
-         * Expects an input array whose dimension zero is the lenght of the time 
+         * @param tss Expects an input array whose dimension zero is the length of the time 
          * series (all the same) and dimension one indicates the number of 
          * time series.
          * 
-         * Returns an upper triangular matrix where each position corresponds to the 
+         * @return array Returns an upper triangular matrix where each position corresponds to the 
          * distance between two time series.  Diagonal elements will be zero.  For example: 
          * Position row 0 column 1 will record the distance between time series 0 
          * and time series 1.
          */
         array euclidian(array tss);
+
+        /**
+         * @brief Calculates non squared version of the euclidian distance.
+         * 
+         * @param tss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
+         * 
+         * @return array Returns an upper triangular matrix where each position corresponds to the 
+         * distance between two time series.  Diagonal elements will be zero.  For example: 
+         * Position row 0 column 1 will record the distance between time series 0 
+         * and time series 1.
+         */
+        array squaredEuclidian(array tss);
 
         // habituales + la ncc
 
