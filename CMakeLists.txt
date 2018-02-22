@@ -41,6 +41,9 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/version.h.in
 # build items in subdirectories
 ADD_SUBDIRECTORY(src)
 
+# build experiments
+ADD_SUBDIRECTORY(experiments)
+
 # test and benchmarks
 ENABLE_TESTING()
 ADD_SUBDIRECTORY(test)
