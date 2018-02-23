@@ -9,6 +9,19 @@
 #include <vector>
 #include <arrayfire.h>
 
+void addMemoryCounters(benchmark::State &state) {
+  size_t bytes, buffers, lockedBytes, lockedBuffers;
+  //This is already doing an af::sync();
+  af::deviceMemInfo(&bytes, &buffers, &lockedBytes, &lockedBuffers);
+
+  state.counters["Memory"] = bytes;
+  state.counters["Buffers"] = buffers;
+  state.counters["LockedMemory"] = lockedBytes;
+  state.counters["LockedBuffers"] = lockedBuffers;
+
+  af::deviceGC();
+}
+
 template<af::Backend BE> void ManualFFT(benchmark::State& state) {
   af::setBackend(BE);
 
@@ -27,7 +40,7 @@ template<af::Backend BE> void ManualFFT(benchmark::State& state) {
     auto prod = qraf * raf;
     af::ifft(prod).eval();
   }
-  af::sync();
+  addMemoryCounters(state);
 }
 
 template<af::Backend BE> void ExpansionFFT(benchmark::State& state) {
@@ -45,7 +58,7 @@ template<af::Backend BE> void ExpansionFFT(benchmark::State& state) {
     auto prod = qraf * raf;
     af::ifft(prod).eval();
   }
-  af::sync();
+  addMemoryCounters(state);
 }
 
 template<af::Backend BE> void ConvolveOp(benchmark::State& state) {
@@ -59,7 +72,7 @@ template<af::Backend BE> void ConvolveOp(benchmark::State& state) {
   while (state.KeepRunning()) {
     convolve(ts, flip(q, 0), AF_CONV_EXPAND).eval();
   }
-  af::sync();
+  addMemoryCounters(state);
 }
 
 
