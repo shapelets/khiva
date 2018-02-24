@@ -9,7 +9,7 @@
                 "/Library/Developer/CommandLineTools/usr/include",
                 "/usr/include",
                 "${workspaceRoot}/include",
-                "~/.conan/data/google-benchmark/1.1.0/cpace6/stable/package/7fe67dff831b24bc4a8b5db678a51f1be5e44e7c/include",
+                "~/.conan/data/google-benchmark/1.3.0/mpusz/stable/package/bad1e59df2b38916775db7c57ea7b4151640ec32/include",
                 "~/.conan/data/gtest/1.8.0/bincrafters/stable/package/7e0734a7c8a477ced55cec8c9e50f3c58ad81fd0/include"
             ],
             "defines": [],
@@ -22,7 +22,7 @@
                     "/Library/Developer/CommandLineTools/usr/include",
                     "/usr/include",
                     "${workspaceRoot}/include",
-                    "~/.conan/data/google-benchmark/1.1.0/cpace6/stable/package/7fe67dff831b24bc4a8b5db678a51f1be5e44e7c/include",
+                    "~/.conan/data/google-benchmark/1.3.0/mpusz/stable/package/bad1e59df2b38916775db7c57ea7b4151640ec32/include",
                     "~/.conan/data/gtest/1.8.0/bincrafters/stable/package/7e0734a7c8a477ced55cec8c9e50f3c58ad81fd0/include"
     
                 ],

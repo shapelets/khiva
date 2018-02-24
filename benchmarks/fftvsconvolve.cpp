@@ -9,6 +9,19 @@
 #include <vector>
 #include <arrayfire.h>
 
+void addMemoryCounters(benchmark::State &state) {
+  size_t bytes, buffers, lockedBytes, lockedBuffers;
+  //This is already doing an af::sync();
+  af::deviceMemInfo(&bytes, &buffers, &lockedBytes, &lockedBuffers);
+
+  state.counters["Memory"] = bytes;
+  state.counters["Buffers"] = buffers;
+  state.counters["LockedMemory"] = lockedBytes;
+  state.counters["LockedBuffers"] = lockedBuffers;
+
+  af::deviceGC();
+}
+
 template<af::Backend BE> void ManualFFT(benchmark::State& state) {
   af::setBackend(BE);
 
@@ -27,7 +40,25 @@ template<af::Backend BE> void ManualFFT(benchmark::State& state) {
     auto prod = qraf * raf;
     af::ifft(prod).eval();
   }
-  af::sync();
+  addMemoryCounters(state);
+}
+
+template<af::Backend BE> void ExpansionFFT(benchmark::State& state) {
+  af::setBackend(BE);
+
+  auto n = state.range(0);
+  auto m = state.range(1);
+
+  auto ts = af::randu(n);
+  auto q = af::randu(m);
+  auto qr = af::flip(q, 0);
+  while (state.KeepRunning()) {
+    auto qraf = af::fft(qr, 2*n);
+    auto raf = af::fft(ts, 2*n);
+    auto prod = qraf * raf;
+    af::ifft(prod).eval();
+  }
+  addMemoryCounters(state);
 }
 
 template<af::Backend BE> void ConvolveOp(benchmark::State& state) {
@@ -41,19 +72,9 @@ template<af::Backend BE> void ConvolveOp(benchmark::State& state) {
   while (state.KeepRunning()) {
     convolve(ts, flip(q, 0), AF_CONV_EXPAND).eval();
   }
-  af::sync();
+  addMemoryCounters(state);
 }
 
-
-BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
-
-BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(8)
@@ -61,6 +82,26 @@ BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_OPENCL)
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_CPU)
+  ->RangeMultiplier(8)
+  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_OPENCL)
+  ->RangeMultiplier(8)
+  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_CPU)
+  ->RangeMultiplier(8)
+  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+  BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_OPENCL)
+  ->RangeMultiplier(8)
+  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(8)
   ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
