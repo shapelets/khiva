@@ -6,6 +6,7 @@
 
 #include <arrayfire.h>
 #include "version.h"
+#include <vector>
 
 using namespace af;
 
@@ -15,8 +16,13 @@ namespace tsa {
     const char* version();
 
     namespace simplification {
-        //array rdp(array source, int maxPoints);
-        //array visvalingam(array source, int maxPoints);         
+
+        // Type Point
+        typedef std::pair<double, double> Point;
+
+        void RamerDouglasPeucker(const std::vector<tsa::simplification::Point> pointList, double epsilon, std::vector<tsa::simplification::Point> &out);
+        
+        void visvalingam_simplify(std::vector<tsa::simplification::Point> &pointList, int num_points_allowed);      
     };
 
     namespace regularization {
