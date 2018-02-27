@@ -5,7 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <tsa.h>
-#include <float.h>
+#include <limits>
 
 af::array tsa::matrix::slidingDotProduct(af::array q, af::array t){
     long n = t.dims(0);
@@ -37,7 +37,7 @@ void tsa::matrix::meanStdev(af::array t, af::array *a, long m, af::array *mean, 
     array sigma_t2 = mean_t2 - mean_t_p2;
     *stdev = af::sqrt(sigma_t2);
 
-    *a = (sum_t2 - 2 * sum_t * (*mean) + m * mean_t_p2) / (sigma_t2 + DBL_MIN);
+    *a = (sum_t2 - 2 * sum_t * (*mean) + m * mean_t_p2) / (sigma_t2 + std::numeric_limits<double>::min());
 }
 
 void tsa::matrix::meanStdev(af::array t, long m, af::array *mean, af::array *stdev){
@@ -71,7 +71,7 @@ void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a,
     af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, batchSize);
     af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, batchSize);
 
-    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / (sigma_t_tiled + DBL_MIN)) + sum_q2_tiled;
+    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / (sigma_t_tiled +  std::numeric_limits<double>::min())) + sum_q2_tiled;
     dist = af::sqrt(af::abs(dist));
 
     dist = af::reorder(dist, 3, 0, 1, 2);
@@ -82,7 +82,7 @@ void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a,
     int tmp = batchStart > 0;
     af::array mask = af::convolve2(af::shift(af::identity(std::max(batchSize, bandSize) + 1, tsLength + bandSize - 1), 0, batchStart - tmp), af::constant(1, bandSize, bandSize)) > 0.0;
     mask = mask(seq(tmp, batchSize - 1 + tmp), seq(tsLength));
-    dist += d * DBL_MAX * mask.as(qt.type());
+    dist += d * std::numeric_limits<double>::max() * mask.as(qt.type());
 
     af_array minimum = 0;
     af_array idx = 0;
@@ -95,7 +95,7 @@ void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a,
 
 void tsa::matrix::mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::array sigma_t, bool ignoreTrivial,
                         af::array *distance, af::array *index, long batchStart) {
-    q = tsa::normalization::znorm(q, DBL_MIN);
+    q = tsa::normalization::znorm(q, std::numeric_limits<double>::min());
 
     af::array qt = tsa::matrix::slidingDotProduct(q, t);
     af::array sum_q = af::sum(q);
