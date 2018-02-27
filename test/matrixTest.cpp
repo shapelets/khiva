@@ -7,6 +7,8 @@
 #include "tsa.h"
 #include "gtest/gtest.h"
 
+#define EPSILON 1e-6
+
 TEST(MatrixTests, SlidingDotProduct)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
@@ -46,8 +48,8 @@ TEST(MatrixTests, MeanStdev)
     double *resultingMean = mean.host<double>();
     double *resultingStdev = stdev.host<double>();    
     for(int i = 0; i < 12; i++) {
-        ASSERT_NEAR(resultingMean[i], expectedMean[i], 0.000000001);
-        ASSERT_NEAR(resultingStdev[i], expectedStdev[i], 0.000000001);        
+        ASSERT_NEAR(resultingMean[i], expectedMean[i], EPSILON);
+        ASSERT_NEAR(resultingStdev[i], expectedStdev[i], EPSILON);        
     }
 }
 
@@ -80,7 +82,7 @@ TEST(MatrixTests, CalculateDistanceProfile)
     unsigned int resultingIndex;
     index.host(&resultingIndex);    
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, 0.0000000001);
+    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
     ASSERT_EQ(resultingIndex, expectedIndex);
 }
 
@@ -113,7 +115,7 @@ TEST(MatrixTests, CalculateDistanceProfileMiddle)
     unsigned int resultingIndex;
     index.host(&resultingIndex);    
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, 0.0000000001);
+    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
     ASSERT_EQ(resultingIndex, expectedIndex);
 }
 
@@ -147,7 +149,7 @@ TEST(MatrixTests, MassIgnoreTrivial)
     unsigned int resultingIndex;
     index.host(&resultingIndex);    
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, 0.0000000001);
+    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
     ASSERT_EQ(resultingIndex, expectedIndex);
 }
 
@@ -181,7 +183,7 @@ TEST(MatrixTests, MassConsiderTrivial)
     unsigned int resultingIndex;
     index.host(&resultingIndex);    
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, 0.0000000001);
+    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
     ASSERT_EQ(resultingIndex, expectedIndex);
 }
 
@@ -205,7 +207,7 @@ TEST(MatrixTests, StampOneTimeSeries)
     index.host(&resultingIndex);    
 
     for(int i = 0; i < 12; i++){
-        ASSERT_NEAR(resultingDistance[i], 0.0, 0.000001);
+        ASSERT_NEAR(resultingDistance[i], 0.0, EPSILON);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
 }
@@ -230,7 +232,7 @@ TEST(MatrixTests, StampTwoTimeSeries)
     index.host(&resultingIndex);    
 
     for(int i = 0; i < 12; i++){
-        ASSERT_NEAR(resultingDistance[i], 0.0, 0.000001);
+        ASSERT_NEAR(resultingDistance[i], 0.0, EPSILON);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
 }

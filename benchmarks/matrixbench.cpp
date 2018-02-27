@@ -222,6 +222,27 @@ template <af::Backend BE> void Stamp(benchmark::State &state) {
   addMemoryCounters(state);
 }
 
+template <af::Backend BE> void StampWithItself(benchmark::State &state) {
+  af::setBackend(BE);
+
+  auto n = state.range(0);
+  auto m = state.range(1);
+
+  auto t = af::randu(n, f64);
+
+  af::array profile;
+  af::array index;
+  
+  while (state.KeepRunning())
+  {
+    tsa::matrix::stamp(t, m, &profile, &index);
+    profile.eval();
+    index.eval();
+  }
+
+  addMemoryCounters(state);
+}
+
 BENCHMARK_TEMPLATE(SlidingDotProduct, af::Backend::AF_BACKEND_OPENCL)
     ->RangeMultiplier(8)
     ->Ranges({{1 << 10, 128 << 10}, {16, 512}})
@@ -294,12 +315,22 @@ BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_CPU)
 
 BENCHMARK_TEMPLATE(Stamp, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 8<<10}, {16, 512}})
+  ->Ranges({{1<<10, 16<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(Stamp, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 8<<10}, {16, 512}})
+  ->Ranges({{1<<10, 16<<10}, {16, 512}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(StampWithItself, af::Backend::AF_BACKEND_OPENCL)
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 16<<10}, {16, 512}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(StampWithItself, af::Backend::AF_BACKEND_CPU)
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 16<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_MAIN();

@@ -7,6 +7,9 @@
 #include <tsa.h>
 #include <limits>
 
+#define BATCH_SIZE 2048
+#define EPSILON 1e-8
+
 af::array tsa::matrix::slidingDotProduct(af::array q, af::array t){
     long n = t.dims(0);
     long m = q.dims(0);
@@ -37,7 +40,7 @@ void tsa::matrix::meanStdev(af::array t, af::array *a, long m, af::array *mean, 
     array sigma_t2 = mean_t2 - mean_t_p2;
     *stdev = af::sqrt(sigma_t2);
 
-    *a = (sum_t2 - 2 * sum_t * (*mean) + m * mean_t_p2) / (sigma_t2 + std::numeric_limits<double>::min());
+    *a = (sum_t2 - 2 * sum_t * (*mean) + m * mean_t_p2) / af::max(sigma_t2, af::constant(EPSILON, sigma_t2.dims(), t.type()));
 }
 
 void tsa::matrix::meanStdev(af::array t, long m, af::array *mean, af::array *stdev){
@@ -71,7 +74,7 @@ void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a,
     af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, batchSize);
     af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, batchSize);
 
-    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / (sigma_t_tiled +  std::numeric_limits<double>::min())) + sum_q2_tiled;
+    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / af::max(sigma_t_tiled, af::constant(EPSILON, sigma_t_tiled.dims(), qt.type()))) + sum_q2_tiled;
     dist = af::sqrt(af::abs(dist));
 
     dist = af::reorder(dist, 3, 0, 1, 2);
@@ -82,20 +85,14 @@ void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a,
     int tmp = batchStart > 0;
     af::array mask = af::convolve2(af::shift(af::identity(std::max(batchSize, bandSize) + 1, tsLength + bandSize - 1), 0, batchStart - tmp), af::constant(1, bandSize, bandSize)) > 0.0;
     mask = mask(seq(tmp, batchSize - 1 + tmp), seq(tsLength));
-    dist += d * std::numeric_limits<double>::max() * mask.as(qt.type());
+    dist += d * 1/EPSILON * mask.as(qt.type());
 
-    af_array minimum = 0;
-    af_array idx = 0;
-
-    af_imin(&minimum, &idx, dist.get(), 1);
-
-    *distance = af::array(minimum);
-    *index = af::array(idx);
+    af::min(*distance, *index, dist, 1);
 }
 
 void tsa::matrix::mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::array sigma_t, bool ignoreTrivial,
                         af::array *distance, af::array *index, long batchStart) {
-    q = tsa::normalization::znorm(q, std::numeric_limits<double>::min());
+    q = tsa::normalization::znorm(q, EPSILON);
 
     af::array qt = tsa::matrix::slidingDotProduct(q, t);
     af::array sum_q = af::sum(q);
@@ -112,7 +109,7 @@ void stamp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
     af::array stdev;
 
     (*profile) = af::array(0, ta.type());
-    (*index) = af::array(0, u32);
+    (*index) = af::array(0, af::dtype::u32);
 
     tsa::matrix::meanStdev(ta, &aux, m, &mean, &stdev);
 
@@ -144,6 +141,75 @@ void stamp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
     }
 }
 
+void stamp_batched_two_levels(af::array ta, af::array tb, long m, long batch_size_b, long batch_size_a, af::array *profile, af::array *index) {
+    long nb = tb.dims(0);
+    long na = ta.dims(0);
+
+    (*profile) = af::array(0, ta.type());
+    (*index) = af::array(0, af::dtype::u32);
+
+    long chunkSizeB = std::min(nb - m + 1, batch_size_b);
+    long chunkSizeA = std::min(na, batch_size_a);    
+
+    af::array input = af::array(m, chunkSizeB, tb.type());
+
+    for(long i = 0; i < (nb - m); i+=chunkSizeB)
+    {
+        long iterationSizeB = std::min(chunkSizeB, nb - m - i + 1);
+
+        if(iterationSizeB != chunkSizeB) {
+            input = af::array(m, iterationSizeB, tb.type());
+        }
+
+        for(long j = 0; j < m; j++){
+            input(j, span, span, span) = tb(af::seq(i + j, i + j + iterationSizeB - 1));
+        }
+
+        af::array distance = af::array(0, ta.type());
+        af::array pidx = af::array(0, af::dtype::u32);
+
+        for(long k = 0; k < na; k+=chunkSizeA) {
+            long start = k/chunkSizeA * (chunkSizeA - m + 1);
+            long iterationSizeA = std::min(chunkSizeA, na - start);
+            long end = start + iterationSizeA - 1;
+            af::array taChunk = ta(seq(start, end));
+            af::array aux;
+            af::array mean;
+            af::array stdev;
+            tsa::matrix::meanStdev(taChunk, &aux, m, &mean, &stdev);
+            gfor(af::seq idx, iterationSizeB) {
+                af::array distanceTmp;
+                af::array pidxTmp;
+
+                tsa::matrix::mass(input(span, idx, span, span), taChunk, m, aux, mean, stdev, false, &distanceTmp, &pidxTmp);
+
+                pidxTmp += start;
+
+                distance = join(1, distance, distanceTmp);
+                pidx = join(1, pidx, pidxTmp);
+            }
+        }
+
+        af::array idx;
+        af::array min;
+
+        af::min(min, idx, distance, 1);
+
+        af::dim4 dims = min.dims();
+        double sliceStride = dims[0]*dims[1];
+
+        array bidx = af::iota(af::dim4(dims[0], dims[1]));
+
+        af::array flatIndices = af::flat(idx*sliceStride+bidx);
+
+        af::array flatPidx = af::flat(pidx);
+        af::array vFromPidx = flatPidx(flatIndices);
+
+        *profile = af::join(0, *profile, min);
+        *index   = af::join(0, *index, af::moddims(vFromPidx, af::dim4(dims[0], dims[1])));
+    }
+}
+
 void stamp_parallel(af::array ta, af::array tb, long m, af::array *profile, af::array *index) {
     long nb = tb.dims(0);
 
@@ -165,8 +231,12 @@ void stamp_parallel(af::array ta, af::array tb, long m, af::array *profile, af::
 }
 
 void tsa::matrix::stamp(array ta, array tb, long m, af::array *profile, af::array *index) { 
-    if(tb.dims(0) > 4096) {
-        return stamp_batched(ta, tb, m, 4096, profile, index);
+    if(tb.dims(0) > BATCH_SIZE) {
+        if(ta.dims(0) > BATCH_SIZE) {
+            return stamp_batched_two_levels(ta, tb, m, BATCH_SIZE, BATCH_SIZE, profile, index);
+        } else {
+            return stamp_batched(ta, tb, m, BATCH_SIZE, profile, index);
+        }
     } else {
         return stamp_parallel(ta, tb, m, profile, index);
     }
@@ -180,7 +250,7 @@ void stamp_batched(af::array t, long m, long batch_size, af::array *profile, af:
     af::array stdev;
 
     (*profile) = af::array(0, t.type());
-    (*index) = af::array(0, u32);
+    (*index) = af::array(0, af::dtype::u32);
 
     tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
 
@@ -233,8 +303,8 @@ void stamp_parallel(af::array t, long m, af::array *profile, af::array *index) {
 }
 
 void tsa::matrix::stamp(array t, long m, af::array *profile, af::array *index) { 
-    if(t.dims(0) > 4096) {
-        return stamp_batched(t, m, 4096, profile, index);
+    if(t.dims(0) > BATCH_SIZE) {
+        return stamp_batched(t, m, BATCH_SIZE, profile, index);
     } else {
         return stamp_parallel(t, m, profile, index);
     }
