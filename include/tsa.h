@@ -179,7 +179,7 @@ namespace tsa {
          * @return result A vector with the reduced dimensionality.
          */
         template <class InputIt>
-        std::vector<tsa::simplification::Point> PAA(InputIt begin, InputIt last, int bins){
+        std::vector<tsa::simplification::Point> PAA_CPU(InputIt begin, InputIt last, int bins){
 
             double xrange = (*(last-1)).first - (*begin).first;
             double width_bin = xrange / bins;
@@ -204,7 +204,17 @@ namespace tsa {
             return result;
         }
 
-
+        /**
+         * @brief Symbolic Aggregate approXimation. It transforms a numeric timeseries into
+         * a timeseries of symbols with the same size.
+         * 
+         * @param a, array with the input timeseries
+         * 
+         * @param alphabet_size, number of element within the alphabet
+         * 
+         * @return result An array of symbols.
+         */
+        array SAX(array a, int alphabet_size);
 
         // PAA/PLA
         // SAX
