@@ -238,7 +238,7 @@ namespace tsa {
 
         /**
          * @brief STAMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
-         * of 'm'
+         * of 'm'. This method filters the trivial matches.
          * 
          * @param t Query and reference time series
          * @param m Subsequence length

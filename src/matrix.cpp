@@ -230,7 +230,7 @@ void stamp_parallel(af::array ta, af::array tb, long m, af::array *profile, af::
     }
 }
 
-void tsa::matrix::stamp(array ta, array tb, long m, af::array *profile, af::array *index) { 
+void tsa::matrix::stamp(af::array ta, af::array tb, long m, af::array *profile, af::array *index) { 
     if(tb.dims(0) > BATCH_SIZE) {
         if(ta.dims(0) > BATCH_SIZE) {
             return stamp_batched_two_levels(ta, tb, m, BATCH_SIZE, BATCH_SIZE, profile, index);
