@@ -4,46 +4,18 @@ PROJECT(TSALIB_TEST)
 INCLUDE(GoogleTest)
 
 ### Targets ###
-ADD_EXECUTABLE(simple simple.cpp)
-TARGET_LINK_LIBRARIES(simple TSALIB gtest gtest_main)
 # see https://cmake.org/cmake/help/v3.10/module/GoogleTest.html
-gtest_add_tests(TARGET      simple
-                TEST_SUFFIX .noArgs
-                TEST_LIST   noArgsTests
-)
+FILE(GLOB_RECURSE ALL_TEST_CPP *.cpp)
 
-
-ADD_EXECUTABLE(distances distancesTest.cpp)
-TARGET_LINK_LIBRARIES(distances TSALIB gtest gtest_main)
-gtest_add_tests(TARGET      distances
-                TEST_SUFFIX .noArgs
-                TEST_LIST   noArgsTests
-)
-
-ADD_EXECUTABLE(normalization normalizationTest.cpp)
-TARGET_LINK_LIBRARIES(normalization TSALIB gtest gtest_main)
-gtest_add_tests(TARGET      normalization
-                TEST_SUFFIX .noArgs
-                TEST_LIST   noArgsTests
-)
-
-ADD_EXECUTABLE(simplification simplificationTest.cpp)
-TARGET_LINK_LIBRARIES(simplification TSALIB gtest gtest_main)
-gtest_add_tests(TARGET      simplification
-                TEST_SUFFIX .noArgs
-                TEST_LIST   noArgsTests
-)
-
-ADD_EXECUTABLE(dimensionality dimensionalityTest.cpp)
-TARGET_LINK_LIBRARIES(dimensionality TSALIB gtest gtest_main)
-gtest_add_tests(TARGET      dimensionality
-                TEST_SUFFIX .noArgs
-                TEST_LIST   noArgsTests
-)
-
-ADD_EXECUTABLE(matrix matrixTest.cpp)
-TARGET_LINK_LIBRARIES(matrix TSALIB gtest gtest_main)
-gtest_add_tests(TARGET      matrix
-                TEST_SUFFIX .noArgs
-                TEST_LIST   noArgsTests
-)
+FOREACH(ONE_TEST_CPP ${ALL_TEST_CPP})
+    GET_FILENAME_COMPONENT(ONE_TEST_EXEC_TMP ${ONE_TEST_CPP} NAME_WE)
+    STRING(REPLACE "Test" "" ONE_TEST_EXEC ${ONE_TEST_EXEC_TMP})
+    SET(TARGET_NAME ${ONE_TEST_EXEC})
+    ADD_EXECUTABLE(${TARGET_NAME} ${ONE_TEST_CPP})
+   
+    TARGET_LINK_LIBRARIES(${TARGET_NAME} TSALIB gtest gtest_main)
+    gtest_add_tests(TARGET      ${TARGET_NAME}
+                    TEST_SUFFIX .noArgs
+                    TEST_LIST   noArgsTests
+    )
+ENDFOREACH()

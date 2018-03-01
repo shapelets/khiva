@@ -211,7 +211,7 @@ template <af::Backend BE> void Stamp(benchmark::State &state) {
 
   af::array profile;
   af::array index;
-  
+
   while (state.KeepRunning())
   {
     tsa::matrix::stamp(ta, tb, m, &profile, &index);
@@ -221,6 +221,33 @@ template <af::Backend BE> void Stamp(benchmark::State &state) {
 
   addMemoryCounters(state);
 }
+
+template <af::Backend BE> void StampDataCPU(benchmark::State &state) {
+  af::setBackend(BE);
+
+  auto n = state.range(0);
+  auto m = state.range(1);
+
+  std::srand(0);
+  double *t_host = (double *)malloc(n*sizeof(double));
+  for(long i=0; i < n; i++) {
+    t_host[i] = std::rand();
+  }
+
+  af::array profile;
+  af::array index;
+
+  while (state.KeepRunning())
+  {
+    tsa::matrix::stamp(af::array(n, t_host), af::array(n, t_host), m, &profile, &index);
+    profile.eval();
+    index.eval();
+  }
+
+  addMemoryCounters(state);
+
+  delete [] t_host;
+}  
 
 template <af::Backend BE> void StampWithItself(benchmark::State &state) {
   af::setBackend(BE);
@@ -315,10 +342,20 @@ BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_CPU)
 
 BENCHMARK_TEMPLATE(Stamp, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 16<<10}, {16, 512}})
+  ->Ranges({{512<<10, 2<<11}, {256, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(Stamp, af::Backend::AF_BACKEND_CPU)
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 16<<10}, {16, 512}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(StampDataCPU, af::Backend::AF_BACKEND_OPENCL)
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 16<<10}, {16, 512}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(StampDataCPU, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(2)
   ->Ranges({{1<<10, 16<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
