@@ -6,6 +6,7 @@
 
 #include <arrayfire.h>
 #include "version.h"
+#include <vector>
 
 using namespace af;
 
@@ -15,8 +16,38 @@ namespace tsa {
     const char* version();
 
     namespace simplification {
-        //array rdp(array source, int maxPoints);
-        //array visvalingam(array source, int maxPoints);         
+
+       /**
+         * @brief Definition of Point structure to represent 2D points
+         */
+        typedef std::pair<double, double> Point;
+        
+        /**
+         * @brief Simplifies a set of points by applying the RamerDouglasPeucker method 
+         * depending on the perpendicular distance of the points and epsilon, the greater epsilon,
+         * ore points are deleted.
+         * 
+         * @param epsilon It acts as  the threshold value to decide which points should be considered
+         * meaningful or not.
+         * 
+         * @return array Array with the same dimensions as tss where the time series have been
+         * adjusted for zero mean and one as standard deviation.
+         */
+        std::vector<tsa::simplification::Point> ramerDouglasPeucker(std::vector<tsa::simplification::Point> pointList, double epsilon);
+
+        /**
+         * @brief Simplifies a set of points by applying the visvalingam method (minimun triangle area) 
+         * until the number of points is reduced to @num_points_allowed.
+         * 
+         * @param pointList Expects an input array whose dimension zero is the length of the time 
+         * series.
+         * 
+         * @param numPoints Sets the number of points in pointList after the execution of the method.
+         * 
+         * @return a vector with the same dimensions as poinList where the number of points has been 
+         * reduced up to numPoints.
+         */
+        std::vector<tsa::simplification::Point> visvalingam_simplify(std::vector<tsa::simplification::Point> pointList, int numPoints);      
     };
 
     namespace regularization {
@@ -87,12 +118,28 @@ namespace tsa {
          */
         void maxMinNormInPlace(array &tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
 
-
+        /**
+         * @brief Normalizes the given time series according to its maximun value and 
+         * adjusts each value within the range (-1, 1)
+         * 
+         * @param tss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of time series.
+         * 
+         * @return array An array with the same dimensions as tss, whose values (time series in dimension 0)
+         * have been normalized by dividing each number by 10^j, where j is the number of integer digits of 
+         * the max number in the timeseries
+         */
         array decimalScalingNorm(array tss);
 
+        /**
+         * @brief Same as decimalScalingNorm, but it performs the operation in place, without allocating further
+         *  memory.
+         * 
+         * @param tss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of time series.
+         */
         void decimalScalingNormInPlace(array &tss);
 
-        // decimal scaling
         // adaptive normalization
     };
 
@@ -102,6 +149,63 @@ namespace tsa {
     };
 
     namespace dimensionality {
+        
+        /**
+         * @brief Piecewise Aggregate Approximation. It reduces the dimensionality of the timeseries
+         * given by @begin and @last iterators to a number equal to bins. This algorithim divides the
+         * whole timeseries in @bins partitions and computes the average of each partition
+         * 
+         * @param begin iterator to the first element
+         * 
+         * @param last iterator to the last element
+         * 
+         * @param bins sets the total number of divisions
+         * 
+         * @return result A vector with the reduced dimensionality.
+         */
+        array PAA(array a, int bins);
+
+        /**
+         * @brief Piecewise Aggregate Approximation. It reduces the dimensionality of the timeseries
+         * given by @begin and @last iterators to a number equal to bins. This algorithim divides the
+         * whole timeseries in @bins partitions and computes the average of each partition
+         * 
+         * @param begin iterator to the first element
+         * 
+         * @param last iterator to the last element
+         * 
+         * @param bins sets the total number of divisions
+         * 
+         * @return result A vector with the reduced dimensionality.
+         */
+        template <class InputIt>
+        std::vector<tsa::simplification::Point> PAA(InputIt begin, InputIt last, int bins){
+
+            double xrange = (*(last-1)).first - (*begin).first;
+            double width_bin = xrange / bins;
+            double reduction = bins / xrange;
+
+            std::vector<double> sum(bins, 0.0);
+            std::vector<int> counter(bins, 0);
+            std::vector<tsa::simplification::Point> result(bins, tsa::simplification::Point(0.0, 0.0));
+            
+            //Iterating over the  timeseries
+            for(auto i = begin; i != last; i++){
+                int pos = std::min((*i).first * reduction, (double) (bins-1));
+                sum[pos] += (*i).second;
+                counter[pos] = counter[pos] + 1;
+            }
+
+            //Compute the average per bin
+            for(int i = 0; i < bins; i++){
+                result[i].first = (width_bin * i) + (width_bin / 2.0);
+                result[i].second = sum[i] / counter[i];
+            }
+            return result;
+        }
+
+
+
         // PAA/PLA
         // SAX
         // Principal Components A.
@@ -111,32 +215,32 @@ namespace tsa {
     namespace distances {
 
         /**
-         * @brief Calculates euclidian distances between timeseries.  
+         * @brief Calculates euclidean distances between timeseries.  
          * 
          * @param tss Expects an input array whose dimension zero is the length of the time 
          * series (all the same) and dimension one indicates the number of 
          * time series.
          * 
          * @return array Returns an upper triangular matrix where each position corresponds to the 
-         * distance between two time series.  Diagonal elements will be zero.  For example: 
+         * distance between two time series. Diagonal elements will be zero.  For example: 
          * Position row 0 column 1 will record the distance between time series 0 
          * and time series 1.
          */
-        array euclidian(array tss);
+        array euclidean(array tss);
 
         /**
-         * @brief Calculates non squared version of the euclidian distance.
+         * @brief Calculates non squared version of the euclidean distance.
          * 
          * @param tss Expects an input array whose dimension zero is the length of the time 
          * series (all the same) and dimension one indicates the number of 
          * time series.
          * 
          * @return array Returns an upper triangular matrix where each position corresponds to the 
-         * distance between two time series.  Diagonal elements will be zero.  For example: 
+         * distance between two time series. Diagonal elements will be zero.  For example: 
          * Position row 0 column 1 will record the distance between time series 0 
          * and time series 1.
          */
-        array squaredEuclidian(array tss);
+        array squaredEuclidean(array tss);
 
         // habituales + la ncc
 

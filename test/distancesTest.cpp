@@ -8,13 +8,13 @@
 #include "gtest/gtest.h"
 
 // Simple test, does not use gmock
-TEST(DistanceTests, Euclidian)
+TEST(DistanceTests, Euclidean)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(4, 3, data);
 
-    auto result = tsa::distances::euclidian(tss);
+    auto result = tsa::distances::euclidean(tss);
     
     // check dimensions
     auto dims = result.dims();
@@ -37,13 +37,13 @@ TEST(DistanceTests, Euclidian)
 }
 
 // Simple test, does not use gmock
-TEST(DistanceTests, SquaredEuclidian)
+TEST(DistanceTests, SquaredEuclidean)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(4, 3, data);
 
-    auto result = tsa::distances::squaredEuclidian(tss);
+    auto result = tsa::distances::squaredEuclidean(tss);
     
     // check dimensions
     auto dims = result.dims();
