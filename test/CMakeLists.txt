@@ -27,5 +27,19 @@ gtest_add_tests(TARGET      normalization
                 TEST_LIST   noArgsTests
 )
 
+ADD_EXECUTABLE(simplification simplificationTest.cpp)
+TARGET_LINK_LIBRARIES(simplification TSALIB gtest gtest_main)
+gtest_add_tests(TARGET      simplification
+                TEST_SUFFIX .noArgs
+                TEST_LIST   noArgsTests
+)
+
+ADD_EXECUTABLE(dimensionality dimensionalityTest.cpp)
+TARGET_LINK_LIBRARIES(dimensionality TSALIB gtest gtest_main)
+gtest_add_tests(TARGET      dimensionality
+                TEST_SUFFIX .noArgs
+                TEST_LIST   noArgsTests
+)
+
 
 

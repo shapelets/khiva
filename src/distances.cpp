@@ -6,7 +6,7 @@
 
 #include <tsa.h>
 
-af::array tsa::distances::squaredEuclidian(af::array tss) {
+af::array tsa::distances::squaredEuclidean(af::array tss) {
     // get the number of time series
     auto numOfTs = tss.dims(1);
     // the result is a squared matrix of dimensions numOfTs x numOfTs
@@ -23,8 +23,8 @@ af::array tsa::distances::squaredEuclidian(af::array tss) {
     return result;
 }
 
-af::array tsa::distances::euclidian(af::array tss) {
+af::array tsa::distances::euclidean(af::array tss) {
     // simply invokes non squared version and completes with
     // an elementwise sqrt operation.
-    return sqrt(squaredEuclidian(tss));
+    return sqrt(squaredEuclidean(tss));
 }
