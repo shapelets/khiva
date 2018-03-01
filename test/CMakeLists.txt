@@ -37,6 +37,9 @@ gtest_add_tests(TARGET      simplification
 ADD_EXECUTABLE(dimensionality dimensionalityTest.cpp)
 TARGET_LINK_LIBRARIES(dimensionality TSALIB gtest gtest_main)
 gtest_add_tests(TARGET      dimensionality
+                TEST_SUFFIX .noArgs
+                TEST_LIST   noArgsTests
+)
 
 ADD_EXECUTABLE(matrix matrixTest.cpp)
 TARGET_LINK_LIBRARIES(matrix TSALIB gtest gtest_main)
@@ -44,6 +47,3 @@ gtest_add_tests(TARGET      matrix
                 TEST_SUFFIX .noArgs
                 TEST_LIST   noArgsTests
 )
-
-
-
