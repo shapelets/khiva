@@ -351,6 +351,41 @@ namespace tsa {
          * @param index The matrix profile index, which points to where the previously mentioned minimum is located
          */
         void stamp(array t, long m, af::array *profile, af::array *index);
+        
+        #ifdef __cplusplus
+        extern "C"{
+        #endif
+        
+        /**
+         * @brief  Primitive for calling the STAMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
+         * of 'm'.
+         * 
+         * @param ta Pointer of an array of doubles with the first time series values.
+         * @param tb Pointer of an array of doubles with the second time series values.
+         * @param lta Pointer to an integer with the length of the first time series. 
+         * @param ltb Pointer to an integer with the length of the second time series.
+         * @param m Pointer to a long with the length of the subsequence.
+         * @param p Pointer to an initialized array of doubles for storing the distance profile.
+         * @param i Pointer to an initialized array of doubles for storing the index profile.
+         */
+        void stamp(double* ta, double* tb, int* lta, int* ltb, long*m, double* p, unsigned int* i);
+        
+        /**
+         * @brief Primitive for calling the STAMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
+         * of 'm'. This method filters the trivial matches.
+         * 
+         * @param ta Pointer of an array of doubles with the first time series values.
+         * @param lta Pointer to an integer with the length of the first time series.
+         * @param m Pointer to a long with the length of the subsequence.
+         * @param p Pointer to an initialized  array of doubles for storing the distance profile.
+         * @param i Pointer to an initialized  array of doubles for storing the index profile.
+         */
+        void stamp_self_join(double* ta, int* lta, long*m, double* p, unsigned int* i);
+
+        #ifdef __cplusplus
+        }
+        #endif
+       
     };
 };
 

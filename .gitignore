@@ -5,4 +5,7 @@ include/version.h
 conanbuildinfo.cmake
 conanbuildinfo.txt
 conaninfo.txt
-
+*.cmake
+*CMakeFiles*
+*Makefile
+CMakeCache.txt
