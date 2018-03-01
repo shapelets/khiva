@@ -20,6 +20,13 @@
         "type_traits": "cpp",
         "vector": "cpp",
         "__tuple": "cpp",
-        "__locale": "cpp"
+        "__locale": "cpp",
+        "__config": "cpp",
+        "__nullptr": "cpp",
+        "exception": "cpp",
+        "initializer_list": "cpp",
+        "new": "cpp",
+        "stdexcept": "cpp",
+        "typeinfo": "cpp"
     }
 }
