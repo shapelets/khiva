@@ -309,3 +309,25 @@ void tsa::matrix::stamp(array t, long m, af::array *profile, af::array *index) {
         return stamp_parallel(t, m, profile, index);
     }
 }
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+    void stamp(double* ta, double* tb, int* lta, int* ltb, long* m, double* p, unsigned int* i){
+        af::array distance;
+        af::array index;
+        tsa::matrix::stamp(array(*lta, ta), array(*ltb, tb), *m, &distance, &index);
+        distance.host(p);
+        index.host(i);           
+        }
+
+    void stamp_self_join(double* ta, int* lta, long* m, double* p, unsigned int* i){
+        af::array distance;
+        af::array index;
+        tsa::matrix::stamp(array(*lta, ta), *m, &distance, &index);
+        distance.host(p);
+        index.host(i);           
+        }
+#ifdef __cplusplus
+    }
+#endif
