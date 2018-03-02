@@ -53,6 +53,12 @@ TEST(MatrixTests, MeanStdev)
     }
 }
 
+TEST(MatrixTests, GenerateMask)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    tsa::matrix::generateMask(3, 4, 2, 8);
+}
+
 TEST(MatrixTests, CalculateDistanceProfile)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
@@ -73,7 +79,7 @@ TEST(MatrixTests, CalculateDistanceProfile)
     af::array distance;
     af::array index;
 
-    tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, true, &distance, &index);
+    tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, &distance, &index);
 
     double expectedDistance = 19.0552097998;
     int expectedIndex = 7;    
@@ -106,10 +112,12 @@ TEST(MatrixTests, CalculateDistanceProfileMiddle)
     af::array distance;
     af::array index;
 
-    tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, true, &distance, &index, 7);
+    af::array mask = tsa::matrix::generateMask(m, 1, 0, 12);
+
+    tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, mask, &distance, &index);
 
     double expectedDistance = 19.0552097998;
-    int expectedIndex = 2;    
+    int expectedIndex = 7;    
     double *resultingDistance = distance.host<double>();
 
     unsigned int resultingIndex;
@@ -140,7 +148,9 @@ TEST(MatrixTests, MassIgnoreTrivial)
     af::array distance;
     af::array index;
 
-    tsa::matrix::mass(q, t, m, aux, mean, stdev, true, &distance, &index);
+    af::array mask = tsa::matrix::generateMask(m, 1, 0, 12);
+
+    tsa::matrix::mass(q, t, m, aux, mean, stdev, mask, &distance, &index);
 
     double expectedDistance = 0.00000004712;
     int expectedIndex = 7;    
@@ -174,7 +184,7 @@ TEST(MatrixTests, MassConsiderTrivial)
     af::array distance;
     af::array index;
 
-    tsa::matrix::mass(q, t, m, aux, mean, stdev, false, &distance, &index);
+    tsa::matrix::mass(q, t, m, aux, mean, stdev, &distance, &index);
 
     double expectedDistance = 0.00000004712;
     int expectedIndex = 7;    

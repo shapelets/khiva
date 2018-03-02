@@ -77,33 +77,33 @@ template<af::Backend BE> void ConvolveOp(benchmark::State& state) {
 
 
 BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-  BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_OPENCL)
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
   
 

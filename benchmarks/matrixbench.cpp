@@ -102,6 +102,27 @@ template <af::Backend BE> void MeanStdev(benchmark::State &state) {
   addMemoryCounters(state);
 }
 
+template <af::Backend BE> void GenerateMask(benchmark::State &state) {
+  af::setBackend(BE);
+
+  auto n = state.range(0);
+  auto m = state.range(1);
+  auto batchStart = state.range(2);
+
+  auto t = af::randu(n, f64);
+
+  af::array profile;
+  af::array index;
+  
+  while (state.KeepRunning())
+  {
+    af::array mask = tsa::matrix::generateMask(m, 2048, batchStart, n - m + 1);
+    mask.eval();
+  }
+
+  addMemoryCounters(state);
+}
+
 template <af::Backend BE> void CalculateDistanceProfile(benchmark::State &state) {
   af::setBackend(BE);
 
@@ -310,6 +331,16 @@ BENCHMARK_TEMPLATE(MeanStdev, af::Backend::AF_BACKEND_CPU)
   ->Ranges({{1<<10, 32<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_OPENCL)
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 32<<10}, {16, 512}, {2<<9, 16<<9}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_CPU)
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 32<<10}, {16, 512}, {2<<9, 16<<9}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
 BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(8)
   ->Ranges({{1<<10, 32<<10}, {16, 512}})
@@ -342,12 +373,12 @@ BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_CPU)
 
 BENCHMARK_TEMPLATE(Stamp, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(2)
-  ->Ranges({{16<<10, 512<<10}, {256, 512}})
+  ->Ranges({{16<<10, 32<<10}, {256, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(Stamp, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 16<<10}, {16, 512}})
+  ->Ranges({{16<<10, 32<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(StampDataCPU, af::Backend::AF_BACKEND_OPENCL)
@@ -362,12 +393,12 @@ BENCHMARK_TEMPLATE(StampDataCPU, af::Backend::AF_BACKEND_CPU)
 
 BENCHMARK_TEMPLATE(StampWithItself, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 16<<10}, {16, 512}})
+  ->Ranges({{16<<10, 32<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(StampWithItself, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 16<<10}, {16, 512}})
+  ->Ranges({{16<<10, 32<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_MAIN();
