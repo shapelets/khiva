@@ -307,6 +307,28 @@ namespace tsa {
                                 af::array *distance, af::array *index, long batchStart = 0);
 
         /**
+         * @brief Calculates the distance between 'q' and the time series 't', which produced the sliding. Multiple queries can
+         * be computed simultaneously in the last dimension of 'q'.
+         * @param m Subsequence length (required to mask the minimum m/2 positions left and right in case ignoreTrivial is true)
+         * @param qt The sliding dot product of 'q' and 't'
+         * @param a Auxiliary array computed using the meanStdev function. This array contains a
+         * precomputed fixed value to speed up the distance calculation 
+         * @param sum_q Sum of the values contained in 'q'
+         * @param sum_q2 Sum of squaring the values contained in 'q'
+         * @param mean_t Moving average of 't' using a window size equal to the number of elements
+         * in 'q'
+         * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements
+         * in 'q'
+         * @param distance Resulting minimal distance
+         * @param index Position where the minimum is occurring
+         * @param batchStart Indicates where the currently computed batch starts. Defaults to 0 for the parallel case. The parameter
+         * is used to determine the mask for the trivial matches.
+         */
+        void calculateDistanceProfile(long m, af::array qt, af::array a,
+                                af::array sum_q, af::array sum_q2, af::array mean_t, af::array sigma_t,
+                                af::array *distance, af::array *index, long batchStart = 0);
+
+        /**
          * @brief 
          * 
          * @param q Array whose first dimension is the length of the query time series
@@ -324,7 +346,26 @@ namespace tsa {
          * @param distance Resulting minimal distance
          * @param index Position where the minimum is occurring
          */
-        void mass(array q, array t, long m, array a, array mean_t, array sigma_t, bool ignoreTrivial, array *distance, array *index,
+        void mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::array sigma_t, bool ignoreTrivial,
+                    af::array *distance, af::array *index, long batchStart = 0);
+
+        /**
+         * @brief 
+         * 
+         * @param q Array whose first dimension is the length of the query time series
+         * and the last dimension is the number of time series to calculate
+         * @param t Array with the second time series in the first dimension
+         * @param m Subsequence length (required to mask the minimum m/2 positions left and right in case ignoreTrivial is true)
+         * @param a Auxiliary array computed using the meanStdev function. This array contains a
+         * precomputed fixed value to speed up the distance calculation
+         * * @param mean_t Moving average of 't' using a window size equal to the number of elements
+         * in 'q'
+         * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements
+         * in 'q'
+         * @param distance Resulting minimal distance
+         * @param index Position where the minimum is occurring
+         */
+        void mass(array q, array t, long m, array a, array mean_t, array sigma_t, af::array *distance, af::array *index,
                     long batchStart = 0);
 
         /**

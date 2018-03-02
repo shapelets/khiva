@@ -342,7 +342,7 @@ BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_CPU)
 
 BENCHMARK_TEMPLATE(Stamp, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(2)
-  ->Ranges({{512<<10, 2<<11}, {256, 512}})
+  ->Ranges({{16<<10, 512<<10}, {256, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(Stamp, af::Backend::AF_BACKEND_CPU)

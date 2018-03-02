@@ -29,8 +29,10 @@ void tsa::matrix::meanStdev(af::array t, af::array *a, long m, af::array *mean, 
     af::array sum_t = af::constant(0, na - m + 1, t.type());
     af::array sum_t2 = af::constant(0, na - m + 1, t.type());
 
-    sum_t = cumulative_sum_t(af::seq(m - 1, na - 1)) - af::join(0, af::constant(0, 1, t.type()), cumulative_sum_t(af::seq(0, na - m - 1)));
-    sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1)) - af::join(0, af::constant(0, 1, t.type()), cumulative_sum_t2(af::seq(0, na - m - 1)));
+    af::array tmp = af::constant(0, 1, t.type());
+
+    sum_t = cumulative_sum_t(af::seq(m - 1, na - 1)) - af::join(0, tmp, cumulative_sum_t(af::seq(0, na - m - 1)));
+    sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1)) - af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1)));
 
     *mean = sum_t / m;
     array mean_t2 = sum_t2 / m;
@@ -49,8 +51,10 @@ void tsa::matrix::meanStdev(af::array t, long m, af::array *mean, af::array *std
     af::array sum_t = af::constant(0, na - m + 1, t.type());
     af::array sum_t2 = af::constant(0, na - m + 1, t.type());
 
-    sum_t = cumulative_sum_t(af::seq(m - 1, na - 1)) - af::join(0, af::constant(0, 1, t.type()), cumulative_sum_t(af::seq(0, na - m - 1)));
-    sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1)) - af::join(0, af::constant(0, 1, t.type()), cumulative_sum_t2(af::seq(0, na - m - 1)));
+    af::array tmp = af::constant(0, 1, t.type());
+
+    sum_t = cumulative_sum_t(af::seq(m - 1, na - 1)) - af::join(0, tmp, cumulative_sum_t(af::seq(0, na - m - 1)));
+    sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1)) - af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1)));
 
     *mean = sum_t / m;
     array mean_t2 = sum_t2 / m;
@@ -75,13 +79,32 @@ void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a,
 
     dist = af::reorder(dist, 3, 0, 1, 2);
 
-    int d = ignoreTrivial;
+    double d = ignoreTrivial;
     long bandSize = std::ceil(m/2.0)+1;
 
     int tmp = batchStart > 0;
     af::array mask = af::convolve2(af::shift(af::identity(std::max(batchSize, bandSize) + 1, tsLength + bandSize - 1), 0, batchStart - tmp), af::constant(1, bandSize, bandSize));
     mask = mask(af::seq(tmp, batchSize - 1 + tmp), af::seq(tsLength));
     dist += d * 1/EPSILON * mask.as(qt.type());
+
+    af::min(*distance, *index, dist, 1);
+}
+
+void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a,
+                                af::array sum_q, af::array sum_q2, af::array mean_t, af::array sigma_t,
+                                af::array *distance, af::array *index, long batchStart) {
+    long batchSize = qt.dims(3);
+    long tsLength = qt.dims(0);
+    af::array a_tiled = af::tile(a, 1, 1, 1, batchSize);
+    af::array sum_q_tiled = af::tile(sum_q, tsLength);
+    af::array sum_q2_tiled = af::tile(sum_q2, tsLength);
+    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, batchSize);
+    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, batchSize);
+
+    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / af::max(sigma_t_tiled, af::constant(EPSILON, sigma_t_tiled.dims(), qt.type()))) + sum_q2_tiled;
+    dist = af::sqrt(af::abs(dist));
+
+    dist = af::reorder(dist, 3, 0, 1, 2);
 
     af::min(*distance, *index, dist, 1);
 }
@@ -95,6 +118,17 @@ void tsa::matrix::mass(af::array q, af::array t, long m, af::array a, af::array 
     af::array sum_q2 = af::sum(af::pow(q, 2));
 
     tsa::matrix::calculateDistanceProfile(m, qt, a, sum_q, sum_q2, mean_t, sigma_t, ignoreTrivial, distance, index, batchStart);
+}
+
+void tsa::matrix::mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::array sigma_t,
+                        af::array *distance, af::array *index, long batchStart) {
+    q = tsa::normalization::znorm(q, EPSILON);
+
+    af::array qt = tsa::matrix::slidingDotProduct(q, t);
+    af::array sum_q = af::sum(q);
+    af::array sum_q2 = af::sum(af::pow(q, 2));
+
+    tsa::matrix::calculateDistanceProfile(m, qt, a, sum_q, sum_q2, mean_t, sigma_t, distance, index, batchStart);
 }
 
 void stamp_batched(af::array ta, af::array tb, long m, long batch_size, af::array *profile, af::array *index) {
@@ -129,7 +163,7 @@ void stamp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
             af::array distance;
             af::array pidx;
 
-            tsa::matrix::mass(input(span, idx, span, span), ta, m, aux, mean, stdev, false, &distance, &pidx);
+            tsa::matrix::mass(input(span, idx, span, span), ta, m, aux, mean, stdev, &distance, &pidx);
 
             *profile = join(0, *profile, distance);
             *index = join(0, *index, pidx);
@@ -177,7 +211,7 @@ void stamp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
                 af::array distanceTmp;
                 af::array pidxTmp;
 
-                tsa::matrix::mass(input(span, idx, span, span), taChunk, m, aux, mean, stdev, false, &distanceTmp, &pidxTmp);
+                tsa::matrix::mass(input(span, idx, span, span), taChunk, m, aux, mean, stdev, &distanceTmp, &pidxTmp);
 
                 pidxTmp += start;
 
@@ -222,7 +256,7 @@ void stamp_parallel(af::array ta, af::array tb, long m, af::array *profile, af::
     }
 
     gfor(af::seq idx, nb - m + 1) {
-        tsa::matrix::mass(input(span, idx, span, span), ta, m, aux, mean, stdev, false, profile, index);
+        tsa::matrix::mass(input(span, idx, span, span), ta, m, aux, mean, stdev, profile, index);
     }
 }
 
