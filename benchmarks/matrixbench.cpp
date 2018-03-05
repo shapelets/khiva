@@ -147,7 +147,7 @@ template <af::Backend BE> void CalculateDistanceProfile(benchmark::State &state)
 
   while (state.KeepRunning())
   {
-    tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, true, &distance, &index);
+    tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, true, distance, index);
     distance.eval();
     index.eval();
   }
@@ -186,7 +186,7 @@ template <af::Backend BE> void CalculateDistanceProfileParallel(benchmark::State
       auto sumQ = sum(q);
       auto sumQ2 = sum(pow(q, 2));
       auto qt = tsa::matrix::slidingDotProduct(q, t);
-      tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, true, &distance, &index);
+      tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, true, distance, index);
       distance.eval();
       index.eval();
     } 
@@ -213,7 +213,7 @@ template <af::Backend BE> void Mass(benchmark::State &state) {
   
   while (state.KeepRunning())
   {
-    tsa::matrix::mass(q, t, m, aux, mean, stdev, true, &distance, &index);
+    tsa::matrix::mass(q, t, m, aux, mean, stdev, true, distance, index);
     distance.eval();
     index.eval();
   }
@@ -235,7 +235,7 @@ template <af::Backend BE> void Stamp(benchmark::State &state) {
 
   while (state.KeepRunning())
   {
-    tsa::matrix::stamp(ta, tb, m, &profile, &index);
+    tsa::matrix::stamp(ta, tb, m, profile, index);
     profile.eval();
     index.eval();
   }
@@ -260,7 +260,7 @@ template <af::Backend BE> void StampDataCPU(benchmark::State &state) {
 
   while (state.KeepRunning())
   {
-    tsa::matrix::stamp(af::array(n, t_host), af::array(n, t_host), m, &profile, &index);
+    tsa::matrix::stamp(af::array(n, t_host), af::array(n, t_host), m, profile, index);
     profile.eval();
     index.eval();
   }
@@ -283,7 +283,7 @@ template <af::Backend BE> void StampWithItself(benchmark::State &state) {
   
   while (state.KeepRunning())
   {
-    tsa::matrix::stamp(t, m, &profile, &index);
+    tsa::matrix::stamp(t, m, profile, index);
     profile.eval();
     index.eval();
   }
