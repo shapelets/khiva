@@ -138,7 +138,7 @@ void tsa::matrix::mass(af::array q, af::array t, long m, af::array a, af::array 
     tsa::matrix::calculateDistanceProfile(m, qt, a, sum_q, sum_q2, mean_t, sigma_t, distance, index);
 }
 
-void stamp_batched(af::array ta, af::array tb, long m, long batch_size, af::array &profile, af::array &index) {
+void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::array &profile, af::array &index) {
     long nb = tb.dims(0);
 
     af::array aux;
@@ -177,7 +177,7 @@ void stamp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
     }
 }
 
-void stamp_batched_two_levels(af::array ta, af::array tb, long m, long batch_size_b, long batch_size_a, af::array &profile, af::array &index) {
+void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_size_b, long batch_size_a, af::array &profile, af::array &index) {
     long nb = tb.dims(0);
     long na = ta.dims(0);
 
@@ -245,7 +245,7 @@ void stamp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
     }
 }
 
-void stamp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
+void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
     long nb = tb.dims(0);
 
     af::array aux;
@@ -265,19 +265,19 @@ void stamp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::
     }
 }
 
-void tsa::matrix::stamp(af::array ta, af::array tb, long m, af::array &profile, af::array &index) { 
+void tsa::matrix::stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index) { 
     if(tb.dims(0) > BATCH_SIZE) {
         if(ta.dims(0) > BATCH_SIZE) {
-            return stamp_batched_two_levels(ta, tb, m, BATCH_SIZE, BATCH_SIZE, profile, index);
+            return stomp_batched_two_levels(ta, tb, m, BATCH_SIZE, BATCH_SIZE, profile, index);
         } else {
-            return stamp_batched(ta, tb, m, BATCH_SIZE, profile, index);
+            return stomp_batched(ta, tb, m, BATCH_SIZE, profile, index);
         }
     } else {
-        return stamp_parallel(ta, tb, m, profile, index);
+        return stomp_parallel(ta, tb, m, profile, index);
     }
 }
 
-void stamp_batched_two_levels(af::array t, long m, long batch_size_b, long batch_size_a, af::array &profile, af::array &index) {
+void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch_size_a, af::array &profile, af::array &index) {
     long n = t.dims(0);
 
     profile = af::array(0, t.type());
@@ -347,7 +347,7 @@ void stamp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
     }
 }
 
-void stamp_parallel(af::array t, long m, af::array &profile, af::array &index) {
+void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
     long n = t.dims(0);
 
     af::array aux;
@@ -369,11 +369,11 @@ void stamp_parallel(af::array t, long m, af::array &profile, af::array &index) {
     }
 }
 
-void tsa::matrix::stamp(array t, long m, af::array &profile, af::array &index) { 
+void tsa::matrix::stomp(array t, long m, af::array &profile, af::array &index) { 
     if(t.dims(0) > BATCH_SIZE) {
-        return stamp_batched_two_levels(t, m, BATCH_SIZE, BATCH_SIZE, profile, index);
+        return stomp_batched_two_levels(t, m, BATCH_SIZE, BATCH_SIZE, profile, index);
     } else {
-        return stamp_parallel(t, m, profile, index);
+        return stomp_parallel(t, m, profile, index);
     }
 }
 
@@ -406,18 +406,18 @@ void tsa::matrix::findBestNDiscords(af::array profile, af::array index, long n, 
 #ifdef __cplusplus
 extern "C" {
 #endif
-    void stamp(double* ta, double* tb, int* lta, int* ltb, long* m, double* p, unsigned int* i) {
+    void stomp(double* ta, double* tb, int* lta, int* ltb, long* m, double* p, unsigned int* i) {
         af::array distance;
         af::array index;
-        tsa::matrix::stamp(array(*lta, ta), array(*ltb, tb), *m, distance, index);
+        tsa::matrix::stomp(array(*lta, ta), array(*ltb, tb), *m, distance, index);
         distance.host(p);
         index.host(i);           
     }
 
-    void stamp_self_join(double* ta, int* lta, long* m, double* p, unsigned int* i) {
+    void stomp_self_join(double* ta, int* lta, long* m, double* p, unsigned int* i) {
         af::array distance;
         af::array index;
-        tsa::matrix::stamp(array(*lta, ta), *m, distance, index);
+        tsa::matrix::stomp(array(*lta, ta), *m, distance, index);
         distance.host(p);
         index.host(i);           
     }

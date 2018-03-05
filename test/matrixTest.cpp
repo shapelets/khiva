@@ -208,7 +208,7 @@ TEST(MatrixTests, StampOneTimeSeries)
     af::array distance;
     af::array index;
 
-    tsa::matrix::stamp(t, m, distance, index);
+    tsa::matrix::stomp(t, m, distance, index);
 
     unsigned int expectedIndex[] = {11, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 0};    
     double *resultingDistance = distance.host<double>();
@@ -233,7 +233,7 @@ TEST(MatrixTests, StampTwoTimeSeries)
     af::array distance;
     af::array index;
 
-    tsa::matrix::stamp(t, t, m, distance, index);
+    tsa::matrix::stomp(t, t, m, distance, index);
 
     unsigned int expectedIndex[] = {11, 1, 2, 8, 9, 5, 1, 2, 8, 9, 5, 11};    
     double *resultingDistance = distance.host<double>();
@@ -261,7 +261,7 @@ TEST(MatrixTests, FindBestMotifs)
     af::array distance;
     af::array index;
 
-    tsa::matrix::stamp(ta, tb, m, distance, index);
+    tsa::matrix::stomp(ta, tb, m, distance, index);
 
     af::array motifs;
     af::array motifsIndices;
@@ -293,7 +293,7 @@ TEST(MatrixTests, FindBestDiscords)
     af::array distance;
     af::array index;
 
-    tsa::matrix::stamp(ta, tb, m, distance, index);
+    tsa::matrix::stomp(ta, tb, m, distance, index);
 
     af::array discords;
     af::array discordsIndices;

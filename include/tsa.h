@@ -386,7 +386,7 @@ namespace tsa {
          * from 'ta' in 'tb'
          * @param index The matrix profile index, which points to where the previously mentioned minimum is located
          */
-        void stamp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
+        void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
 
         /**
          * @brief STAMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
@@ -398,7 +398,7 @@ namespace tsa {
          * from 't' in a different location of itself
          * @param index The matrix profile index, which points to where the previously mentioned minimum is located
          */
-        void stamp(af::array t, long m, af::array &profile, af::array &index);
+        void stomp(af::array t, long m, af::array &profile, af::array &index);
 
         /**
          * @brief This function extracts the best N motifs from a previously calculated matrix profile
@@ -442,7 +442,7 @@ namespace tsa {
          * @param p Pointer to an initialized array of doubles for storing the distance profile.
          * @param i Pointer to an initialized array of doubles for storing the index profile.
          */
-        void stamp(double* ta, double* tb, int* lta, int* ltb, long*m, double* p, unsigned int* i);
+        void stomp(double* ta, double* tb, int* lta, int* ltb, long*m, double* p, unsigned int* i);
         
         /**
          * @brief Primitive for calling the STAMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
@@ -454,7 +454,7 @@ namespace tsa {
          * @param p Pointer to an initialized  array of doubles for storing the distance profile.
          * @param i Pointer to an initialized  array of doubles for storing the index profile.
          */
-        void stamp_self_join(double* ta, int* lta, long*m, double* p, unsigned int* i);
+        void stomp_self_join(double* ta, int* lta, long*m, double* p, unsigned int* i);
 
         #ifdef __cplusplus
         }
