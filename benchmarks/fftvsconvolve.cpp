@@ -39,6 +39,7 @@ template<af::Backend BE> void ManualFFT(benchmark::State& state) {
     auto raf = af::fft(ta);
     auto prod = qraf * raf;
     af::ifft(prod).eval();
+    af::sync();
   }
   addMemoryCounters(state);
 }
@@ -57,6 +58,7 @@ template<af::Backend BE> void ExpansionFFT(benchmark::State& state) {
     auto raf = af::fft(ts, 2*n);
     auto prod = qraf * raf;
     af::ifft(prod).eval();
+    af::sync();
   }
   addMemoryCounters(state);
 }
@@ -71,39 +73,40 @@ template<af::Backend BE> void ConvolveOp(benchmark::State& state) {
 
   while (state.KeepRunning()) {
     convolve(ts, flip(q, 0), AF_CONV_EXPAND).eval();
+    af::sync();
   }
   addMemoryCounters(state);
 }
 
 
 BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-  BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_OPENCL)
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {64, 1<<10}})
+  ->RangeMultiplier(2)
+  ->Ranges({{1<<10, 512<<10}, {64, 1<<10}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
   
 

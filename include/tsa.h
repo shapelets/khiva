@@ -96,7 +96,7 @@ namespace tsa {
          * @return array Array with the same dimensions as tss where the time series have been
          * adjusted for zero mean and one as standard deviation.
          */
-        array znorm(array tss, double epsilon = 0.00000001);
+        af::array znorm(af::array tss, double epsilon = 0.00000001);
 
         /**
          * @brief Adjusts the time series in the given input and performs z-norm 
@@ -109,7 +109,7 @@ namespace tsa {
          * @param epsilon Minimum standard deviation to consider.  It acts a a gatekeeper for
          * those time series that may be constant or near constant.  
          */
-        void znormInPlace(array &tss, double epsilon = 0.00000001);
+        void znormInPlace(af::array &tss, double epsilon = 0.00000001);
 
         /**
          * @brief Normalizes the given time series according to its minimum and maximun value and 
@@ -128,7 +128,7 @@ namespace tsa {
          * @return array An array with the same dimensions as tss, whose values (time series in dimension 0)
          * have been normalized by maximun and minimun values, and scaled as per high and low parameters.
          */
-        array maxMinNorm(array tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
+        af::array maxMinNorm(af::array tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
 
         /**
          * @brief Same as maxMinNorm, but it performs the operation in place, without allocating further memory.
@@ -143,7 +143,7 @@ namespace tsa {
          * @param epsilon Safeguard for constant (or near constant) time series as the operation implies
          * a unit scale operation between min and max values in the tss.
          */
-        void maxMinNormInPlace(array &tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
+        void maxMinNormInPlace(af::array &tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
 
         /**
          * @brief Normalizes the given time series according to its maximun value and 
@@ -156,7 +156,7 @@ namespace tsa {
          * have been normalized by dividing each number by 10^j, where j is the number of integer digits of 
          * the max number in the timeseries
          */
-        array decimalScalingNorm(array tss);
+        af::array decimalScalingNorm(af::array tss);
 
         /**
          * @brief Same as decimalScalingNorm, but it performs the operation in place, without allocating further
@@ -165,7 +165,7 @@ namespace tsa {
          * @param tss Expects an input array whose dimension zero is the length of the time 
          * series (all the same) and dimension one indicates the number of time series.
          */
-        void decimalScalingNormInPlace(array &tss);
+        void decimalScalingNormInPlace(af::array &tss);
 
         // adaptive normalization
     };
@@ -190,7 +190,7 @@ namespace tsa {
          * 
          * @return result A vector with the reduced dimensionality.
          */
-        array PAA(array a, int bins);
+        af::array PAA(af::array a, int bins);
 
         /**
          * @brief Piecewise Aggregate Approximation. It reduces the dimensionality of the timeseries
@@ -263,7 +263,7 @@ namespace tsa {
          * Position row 0 column 1 will record the distance between time series 0 
          * and time series 1.
          */
-        array euclidean(array tss);
+        af::array euclidean(af::array tss);
 
         /**
          * @brief Calculates non squared version of the euclidean distance.
@@ -277,7 +277,7 @@ namespace tsa {
          * Position row 0 column 1 will record the distance between time series 0 
          * and time series 1.
          */
-        array squaredEuclidean(array tss);
+        af::array squaredEuclidean(af::array tss);
 
         // habituales + la ncc
 
@@ -295,7 +295,7 @@ namespace tsa {
          * @return array Returns an array with as many elements as 't' in the first dimension
          * and as many elements as the last dimension of 'q' in the last dimension
          */
-        array slidingDotProduct(array q, array t);
+        af::array slidingDotProduct(af::array q, af::array t);
 
         /**
          * @brief Calculates the moving average and standard deviation of the time series 't'.
@@ -307,7 +307,7 @@ namespace tsa {
          * @param mean Output array containing the moving average
          * @param stdev Output array containing the moving standard deviation
          */
-        void meanStdev(af::array t, af::array *a, long m, af::array *mean, af::array *stdev);
+        void meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &stdev);
 
         /**
          * @brief Calculates the moving average and standard deviation of the time series 't'.
@@ -317,7 +317,18 @@ namespace tsa {
          * @param mean Output array containing the moving average
          * @param stdev Output array containing the moving standard deviation
          */
-        void meanStdev(af::array t, long m, af::array *mean, af::array *stdev);
+        void meanStdev(af::array t, long m, af::array &mean, af::array &stdev);
+
+        /**
+         * @brief Function to generate a band matrix of batchSizeXtsLength with the offset batchStart
+         * 
+         * @param m Subsequence length used to generate a band of m/2 at each side
+         * @param batchSize size of the first dimension
+         * @param batchStart offset of the band matrix
+         * @param tsLength size of the second dimension of the matrix
+         * @return af::array 
+         */
+        af::array generateMask(long m, long batchSize, long batchStart, long tsLength);
         
         /**
          * @brief Calculates the distance between 'q' and the time series 't', which produced the sliding. Multiple queries can
@@ -332,16 +343,35 @@ namespace tsa {
          * in 'q'
          * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements
          * in 'q'
-         * @param ignoreTrivial Boolean value that indicates whether the function should consider the trivial match of
-         * a subsequence with itself or not
+         * @param mask Mask band matrix to filter the trivial match of a subsequence with itself
          * @param distance Resulting minimal distance
          * @param index Position where the minimum is occurring
          * @param batchStart Indicates where the currently computed batch starts. Defaults to 0 for the parallel case. The parameter
          * is used to determine the mask for the trivial matches.
          */
         void calculateDistanceProfile(long m, af::array qt, af::array a,
-                                af::array sum_q, af::array sum_q2, af::array mean_t, af::array sigma_t, bool ignoreTrivial,
-                                af::array *distance, af::array *index, long batchStart = 0);
+                                af::array sum_q, af::array sum_q2, af::array mean_t, af::array sigma_t, af::array mask,
+                                af::array &distance, af::array &index);
+
+        /**
+         * @brief Calculates the distance between 'q' and the time series 't', which produced the sliding. Multiple queries can
+         * be computed simultaneously in the last dimension of 'q'.
+         * @param m Subsequence length (required to mask the minimum m/2 positions left and right in case ignoreTrivial is true)
+         * @param qt The sliding dot product of 'q' and 't'
+         * @param a Auxiliary array computed using the meanStdev function. This array contains a
+         * precomputed fixed value to speed up the distance calculation 
+         * @param sum_q Sum of the values contained in 'q'
+         * @param sum_q2 Sum of squaring the values contained in 'q'
+         * @param mean_t Moving average of 't' using a window size equal to the number of elements
+         * in 'q'
+         * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements
+         * in 'q'
+         * @param distance Resulting minimal distance
+         * @param index Position where the minimum is occurring
+         */
+        void calculateDistanceProfile(long m, af::array qt, af::array a,
+                                af::array sum_q, af::array sum_q2, af::array mean_t, af::array sigma_t,
+                                af::array &distance, af::array &index);
 
         /**
          * @brief 
@@ -361,8 +391,26 @@ namespace tsa {
          * @param distance Resulting minimal distance
          * @param index Position where the minimum is occurring
          */
-        void mass(array q, array t, long m, array a, array mean_t, array sigma_t, bool ignoreTrivial, array *distance, array *index,
-                    long batchStart = 0);
+        void mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::array sigma_t, af::array mask,
+                    af::array &distance, af::array &index);
+
+        /**
+         * @brief 
+         * 
+         * @param q Array whose first dimension is the length of the query time series
+         * and the last dimension is the number of time series to calculate
+         * @param t Array with the second time series in the first dimension
+         * @param m Subsequence length (required to mask the minimum m/2 positions left and right in case ignoreTrivial is true)
+         * @param a Auxiliary array computed using the meanStdev function. This array contains a
+         * precomputed fixed value to speed up the distance calculation
+         * * @param mean_t Moving average of 't' using a window size equal to the number of elements
+         * in 'q'
+         * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements
+         * in 'q'
+         * @param distance Resulting minimal distance
+         * @param index Position where the minimum is occurring
+         */
+        void mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::array sigma_t, af::array &distance, af::array &index);
 
         /**
          * @brief STAMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
@@ -375,7 +423,7 @@ namespace tsa {
          * from 'ta' in 'tb'
          * @param index The matrix profile index, which points to where the previously mentioned minimum is located
          */
-        void stamp(array ta, array tb, long m, af::array *profile, af::array *index);
+        void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
 
         /**
          * @brief STAMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
@@ -387,7 +435,33 @@ namespace tsa {
          * from 't' in a different location of itself
          * @param index The matrix profile index, which points to where the previously mentioned minimum is located
          */
-        void stamp(array t, long m, af::array *profile, af::array *index);
+        void stomp(af::array t, long m, af::array &profile, af::array &index);
+
+        /**
+         * @brief This function extracts the best N motifs from a previously calculated matrix profile
+         * 
+         * @param profile The matrix profile containing the minimum distance of each subsequence
+         * @param index The matrix profile index containing where each minimum occurs
+         * @param n Number of motifs to extract
+         * @param motifs The distance of the best N motifs
+         * @param motifsIndices The indices of the best N motifs
+         * @param subsequenceIndices The indices of the query sequences that produced the minimum reported in the motifs
+         * output array
+         */
+        void findBestNMotifs(af::array profile, af::array index, long n, af::array &motifs, af::array &motifsIndices, af::array &subsequenceIndices);
+
+        /**
+         * @brief This function extracts the best N discords from a previously calculated matrix profile
+         * 
+         * @param profile The matrix profile containing the minimum distance of each subsequence
+         * @param index The matrix profile index containing where each minimum occurs
+         * @param n Number of discords to extract
+         * @param discords The distance of the best N discords
+         * @param discordIndices The indices of the best N discords
+         * @param subsequenceIndices The indices of the query sequences that produced the discords reported in the discords
+         * output array
+         */
+        void findBestNDiscords(af::array profile, af::array index, long n, af::array &discords, af::array &discordsIndices, af::array &subsequenceIndices);
         
         #ifdef __cplusplus
         extern "C"{
@@ -405,7 +479,7 @@ namespace tsa {
          * @param p Pointer to an initialized array of doubles for storing the distance profile.
          * @param i Pointer to an initialized array of doubles for storing the index profile.
          */
-        void stamp(double* ta, double* tb, int* lta, int* ltb, long*m, double* p, unsigned int* i);
+        void stomp(double* ta, double* tb, int* lta, int* ltb, long*m, double* p, unsigned int* i);
         
         /**
          * @brief Primitive for calling the STAMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
@@ -417,7 +491,7 @@ namespace tsa {
          * @param p Pointer to an initialized  array of doubles for storing the distance profile.
          * @param i Pointer to an initialized  array of doubles for storing the index profile.
          */
-        void stamp_self_join(double* ta, int* lta, long*m, double* p, unsigned int* i);
+        void stomp_self_join(double* ta, int* lta, long*m, double* p, unsigned int* i);
 
         #ifdef __cplusplus
         }

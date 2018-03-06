@@ -31,6 +31,7 @@ template <af::Backend BE> void SlidingDotProduct(benchmark::State &state) {
   while (state.KeepRunning()) {
     auto sdp = tsa::matrix::slidingDotProduct(q, t);
     sdp.eval();
+    af::sync();
   }
   addMemoryCounters(state);
 }
@@ -58,6 +59,7 @@ template <af::Backend BE> void SlidingDotProductParallel(benchmark::State &state
       auto sdp = tsa::matrix::slidingDotProduct(input(span, idx, span, span), t);
       sdp.eval();
     }
+    af::sync();
   }
   addMemoryCounters(state);
 }
@@ -75,9 +77,10 @@ template <af::Backend BE> void MeanStdevAuxiliary(benchmark::State &state) {
   af::array stdev;
   while (state.KeepRunning())
   {
-    tsa::matrix::meanStdev(t, &a, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, a, m, mean, stdev);
     mean.eval();
     stdev.eval();
+    af::sync();
   }
   addMemoryCounters(state);
 }
@@ -95,10 +98,33 @@ template <af::Backend BE> void MeanStdev(benchmark::State &state) {
   af::array stdev;
   while (state.KeepRunning())
   {
-    tsa::matrix::meanStdev(t, &a, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, a, m, mean, stdev);
     mean.eval();
     stdev.eval();
+    af::sync();
   }
+  addMemoryCounters(state);
+}
+
+template <af::Backend BE> void GenerateMask(benchmark::State &state) {
+  af::setBackend(BE);
+
+  auto n = state.range(0);
+  auto m = state.range(1);
+  auto batchStart = state.range(2);
+
+  auto t = af::randu(n, f64);
+
+  af::array profile;
+  af::array index;
+  
+  while (state.KeepRunning())
+  {
+    af::array mask = tsa::matrix::generateMask(m, 2048, batchStart, n - m + 1);
+    mask.eval();
+    af::sync();
+  }
+
   addMemoryCounters(state);
 }
 
@@ -114,9 +140,10 @@ template <af::Backend BE> void CalculateDistanceProfile(benchmark::State &state)
   af::array mean;
   af::array stdev;
 
-  tsa::matrix::meanStdev(t, &a, m, &mean, &stdev);
+  tsa::matrix::meanStdev(t, a, m, mean, stdev);
 
   auto qt = tsa::matrix::slidingDotProduct(q, t);
+  af::array mask = tsa::matrix::generateMask(m, 1, 0, n - m + 1);
 
   auto sumQ = sum(q);
   auto sumQ2 = sum(pow(q, 2));
@@ -126,9 +153,10 @@ template <af::Backend BE> void CalculateDistanceProfile(benchmark::State &state)
 
   while (state.KeepRunning())
   {
-    tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, true, &distance, &index);
+    tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
     distance.eval();
     index.eval();
+    af::sync();
   }
   addMemoryCounters(state);
 }
@@ -144,31 +172,33 @@ template <af::Backend BE> void CalculateDistanceProfileParallel(benchmark::State
   af::array mean;
   af::array stdev;
 
-  tsa::matrix::meanStdev(t, &a, m, &mean, &stdev);
+  tsa::matrix::meanStdev(t, a, m, mean, stdev);
 
-  auto indices = af::range(n - m);
-  auto input = af::array(m, n - m, t.type());
+  auto input = af::array(m, n - m + 1, t.type());
 
   for (int i = 0; i < m; i++)
   {
-    input(i, span, span, span) = t(seq(i, n - m - 1 + i));
+    input(i, span, span, span) = t(seq(i, n - m + i));
   }
 
   af::array distance;
   af::array index;
 
+  af::array mask = tsa::matrix::generateMask(m, n - m + 1, 0, n - m + 1);
+
   while (state.KeepRunning())
   {
-    gfor(seq idx, n - m)
+    gfor(seq idx, n - m + 1)
     {
       auto q = input(span, idx, span, span);
       auto sumQ = sum(q);
       auto sumQ2 = sum(pow(q, 2));
       auto qt = tsa::matrix::slidingDotProduct(q, t);
-      tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, true, &distance, &index);
+      tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
       distance.eval();
       index.eval();
     } 
+    af::sync();
   }
   addMemoryCounters(state);
 }
@@ -188,19 +218,21 @@ template <af::Backend BE> void Mass(benchmark::State &state) {
   af::array mean;
   af::array stdev;
 
-  tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
+  tsa::matrix::meanStdev(t, aux, m, mean, stdev);
+  af::array mask = tsa::matrix::generateMask(m, 1, 0, n - m + 1);
   
   while (state.KeepRunning())
   {
-    tsa::matrix::mass(q, t, m, aux, mean, stdev, true, &distance, &index);
+    tsa::matrix::mass(q, t, m, aux, mean, stdev, mask, distance, index);
     distance.eval();
     index.eval();
+    af::sync();
   }
 
   addMemoryCounters(state);
 }
 
-template <af::Backend BE> void Stamp(benchmark::State &state) {
+template <af::Backend BE> void Stomp(benchmark::State &state) {
   af::setBackend(BE);
 
   auto n = state.range(0);
@@ -214,15 +246,16 @@ template <af::Backend BE> void Stamp(benchmark::State &state) {
 
   while (state.KeepRunning())
   {
-    tsa::matrix::stamp(ta, tb, m, &profile, &index);
+    tsa::matrix::stomp(ta, tb, m, profile, index);
     profile.eval();
     index.eval();
+    af::sync();
   }
 
   addMemoryCounters(state);
 }
 
-template <af::Backend BE> void StampDataCPU(benchmark::State &state) {
+template <af::Backend BE> void StompDataCPU(benchmark::State &state) {
   af::setBackend(BE);
 
   auto n = state.range(0);
@@ -239,9 +272,10 @@ template <af::Backend BE> void StampDataCPU(benchmark::State &state) {
 
   while (state.KeepRunning())
   {
-    tsa::matrix::stamp(af::array(n, t_host), af::array(n, t_host), m, &profile, &index);
+    tsa::matrix::stomp(af::array(n, t_host), af::array(n, t_host), m, profile, index);
     profile.eval();
     index.eval();
+    af::sync();
   }
 
   addMemoryCounters(state);
@@ -249,7 +283,7 @@ template <af::Backend BE> void StampDataCPU(benchmark::State &state) {
   delete [] t_host;
 }  
 
-template <af::Backend BE> void StampWithItself(benchmark::State &state) {
+template <af::Backend BE> void StompWithItself(benchmark::State &state) {
   af::setBackend(BE);
 
   auto n = state.range(0);
@@ -262,9 +296,10 @@ template <af::Backend BE> void StampWithItself(benchmark::State &state) {
   
   while (state.KeepRunning())
   {
-    tsa::matrix::stamp(t, m, &profile, &index);
+    tsa::matrix::stomp(t, m, profile, index);
     profile.eval();
     index.eval();
+    af::sync();
   }
 
   addMemoryCounters(state);
@@ -310,6 +345,16 @@ BENCHMARK_TEMPLATE(MeanStdev, af::Backend::AF_BACKEND_CPU)
   ->Ranges({{1<<10, 32<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_OPENCL)
+  ->RangeMultiplier(2)
+  ->Ranges({{2<<10, 8<<10}, {128, 512}, {16<<9, 32<<9}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_CPU)
+  ->RangeMultiplier(2)
+  ->Ranges({{2<<10, 8<<10}, {128, 512}, {16<<9, 32<<9}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
 BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(8)
   ->Ranges({{1<<10, 32<<10}, {16, 512}})
@@ -340,34 +385,34 @@ BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_CPU)
   ->Ranges({{1<<10, 4<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Stamp, af::Backend::AF_BACKEND_OPENCL)
+BENCHMARK_TEMPLATE(Stomp, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(2)
-  ->Ranges({{512<<10, 2<<11}, {256, 512}})
+  ->Ranges({{16<<10, 128<<10}, {256, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Stamp, af::Backend::AF_BACKEND_CPU)
+BENCHMARK_TEMPLATE(Stomp, af::Backend::AF_BACKEND_CPU)
+  ->RangeMultiplier(2)
+  ->Ranges({{16<<10, 128<<10}, {16, 512}})
+  ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(2)
   ->Ranges({{1<<10, 16<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(StampDataCPU, af::Backend::AF_BACKEND_OPENCL)
+BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(2)
   ->Ranges({{1<<10, 16<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(StampDataCPU, af::Backend::AF_BACKEND_CPU)
+BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_OPENCL)
   ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 16<<10}, {16, 512}})
+  ->Ranges({{16<<10, 32<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(StampWithItself, af::Backend::AF_BACKEND_OPENCL)
+BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_CPU)
   ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 16<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
-
-BENCHMARK_TEMPLATE(StampWithItself, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 16<<10}, {16, 512}})
+  ->Ranges({{16<<10, 32<<10}, {16, 512}})
   ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_MAIN();

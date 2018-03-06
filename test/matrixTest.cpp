@@ -38,7 +38,7 @@ TEST(MatrixTests, MeanStdev)
     af::array mean;
     af::array stdev;
 
-    tsa::matrix::meanStdev(t, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, m, mean, stdev);
 
     ASSERT_EQ(mean.dims(0), 12);
     ASSERT_EQ(stdev.dims(0), 12);
@@ -51,6 +51,12 @@ TEST(MatrixTests, MeanStdev)
         ASSERT_NEAR(resultingMean[i], expectedMean[i], EPSILON);
         ASSERT_NEAR(resultingStdev[i], expectedStdev[i], EPSILON);        
     }
+}
+
+TEST(MatrixTests, GenerateMask)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    tsa::matrix::generateMask(3, 4, 2, 8);
 }
 
 TEST(MatrixTests, CalculateDistanceProfile)
@@ -68,12 +74,12 @@ TEST(MatrixTests, CalculateDistanceProfile)
     af::array aux;
 
     af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, true, &distance, &index);
+    tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, distance, index);
 
     double expectedDistance = 19.0552097998;
     int expectedIndex = 7;    
@@ -101,15 +107,17 @@ TEST(MatrixTests, CalculateDistanceProfileMiddle)
     af::array aux;
 
     af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, true, &distance, &index, 7);
+    af::array mask = tsa::matrix::generateMask(m, 1, 0, 12);
+
+    tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, mask, distance, index);
 
     double expectedDistance = 19.0552097998;
-    int expectedIndex = 2;    
+    int expectedIndex = 7;    
     double *resultingDistance = distance.host<double>();
 
     unsigned int resultingIndex;
@@ -135,12 +143,14 @@ TEST(MatrixTests, MassIgnoreTrivial)
     af::array aux;
 
     af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::mass(q, t, m, aux, mean, stdev, true, &distance, &index);
+    af::array mask = tsa::matrix::generateMask(m, 1, 0, 12);
+
+    tsa::matrix::mass(q, t, m, aux, mean, stdev, mask, distance, index);
 
     double expectedDistance = 0.00000004712;
     int expectedIndex = 7;    
@@ -169,12 +179,12 @@ TEST(MatrixTests, MassConsiderTrivial)
     af::array aux;
 
     af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::mass(q, t, m, aux, mean, stdev, false, &distance, &index);
+    tsa::matrix::mass(q, t, m, aux, mean, stdev, distance, index);
 
     double expectedDistance = 0.00000004712;
     int expectedIndex = 7;    
@@ -187,7 +197,7 @@ TEST(MatrixTests, MassConsiderTrivial)
     ASSERT_EQ(resultingIndex, expectedIndex);
 }
 
-TEST(MatrixTests, StampOneTimeSeries)
+TEST(MatrixTests, StompOneTimeSeries)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
@@ -198,7 +208,7 @@ TEST(MatrixTests, StampOneTimeSeries)
     af::array distance;
     af::array index;
 
-    tsa::matrix::stamp(t, m, &distance, &index);
+    tsa::matrix::stomp(t, m, distance, index);
 
     unsigned int expectedIndex[] = {11, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 0};    
     double *resultingDistance = distance.host<double>();
@@ -212,7 +222,7 @@ TEST(MatrixTests, StampOneTimeSeries)
     }
 }
 
-TEST(MatrixTests, StampTwoTimeSeries)
+TEST(MatrixTests, StompTwoTimeSeries)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
@@ -223,7 +233,7 @@ TEST(MatrixTests, StampTwoTimeSeries)
     af::array distance;
     af::array index;
 
-    tsa::matrix::stamp(t, t, m, &distance, &index);
+    tsa::matrix::stomp(t, t, m, distance, index);
 
     unsigned int expectedIndex[] = {11, 1, 2, 8, 9, 5, 1, 2, 8, 9, 5, 11};    
     double *resultingDistance = distance.host<double>();
@@ -235,4 +245,65 @@ TEST(MatrixTests, StampTwoTimeSeries)
         ASSERT_NEAR(resultingDistance[i], 0.0, EPSILON);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
+}
+
+TEST(MatrixTests, FindBestMotifs)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data_a[] = {10, 11, 10, 10, 10, 10, 9, 10, 10, 10, 10, 10, 11, 10};
+    af::array ta = af::array(14, data_a);
+
+    double data_b[] = {10, 11, 10, 300, 20, 30, 40, 50, 60, 70, 80, 90, 80, 90};
+    af::array tb = af::array(14, data_b);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    tsa::matrix::stomp(ta, tb, m, distance, index);
+
+    af::array motifs;
+    af::array motifsIndices;
+    af::array subsequenceIndices;
+
+    tsa::matrix::findBestNMotifs(distance, index, 2, motifs, motifsIndices, subsequenceIndices);
+
+    unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
+    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+
+    ASSERT_EQ(motifsIndicesHost[0], 5);
+    ASSERT_EQ(motifsIndicesHost[1], 0);
+
+    ASSERT_EQ(subsequenceIndicesHost[0], 11);
+    ASSERT_EQ(subsequenceIndicesHost[1], 0);    
+}
+
+TEST(MatrixTests, FindBestDiscords)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data_a[] = {10, 11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 10};
+    af::array ta = af::array(14, data_a);
+
+    double data_b[] = {10, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 9, 10};
+    af::array tb = af::array(14, data_b);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    tsa::matrix::stomp(ta, tb, m, distance, index);
+
+    af::array discords;
+    af::array discordsIndices;
+    af::array subsequenceIndices;
+
+    tsa::matrix::findBestNDiscords(distance, index, 2, discords, discordsIndices, subsequenceIndices);
+
+    unsigned int *discordsIndicesHost = discordsIndices.host<unsigned int>();
+    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+
+    ASSERT_EQ(subsequenceIndicesHost[0], 0);
+    ASSERT_EQ(subsequenceIndicesHost[1], 11);    
 }
