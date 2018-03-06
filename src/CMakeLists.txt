@@ -2,6 +2,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
 
 # Find the ArrayFire package.
 FIND_PACKAGE(ArrayFire REQUIRED)
+# Find the JNI package.
+FIND_PACKAGE(JNI REQUIRED)
 
 PROJECT(TSALIB)
 
@@ -43,7 +45,8 @@ ADD_LIBRARY(TSALIB STATIC ${TSALIB_CODE})
 # Declare include directories
 TARGET_INCLUDE_DIRECTORIES(TSALIB PUBLIC 
                            ${ArrayFire_INCLUDE_DIRS}
-                           ${TSALIB_INC} )
+                           ${TSALIB_INC} 
+                           ${JNI_INCLUDE_DIRS})
 
 # Declare compilation libraries
 TARGET_LINK_LIBRARIES(TSALIB
