@@ -7,12 +7,8 @@
 #include <tsa.h>
 
 af::array tsa::features::absEnergy(af::array base){
-    af::array exp= af::constant(2, 10);
+    af::array exp = af::constant(2, 10);
     af::array p2 = af::pow(base, exp);
     af::array sp2 = af::sum(p2);
     return sp2;
-}
-
-void tsa::features::absEnergyInPlace(af::array in){
-
 }

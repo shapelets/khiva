@@ -174,7 +174,6 @@ namespace tsa {
 
         af::array absEnergy(af::array);
 
-        void absEnergyInPlace(af::array);
         // tsfresh
         // PIP Perceptualy important points
     };
