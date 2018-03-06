@@ -81,6 +81,19 @@ std::vector<tsa::simplification::Point> tsa::simplification::ramerDouglasPeucker
 	return out;
 }
 
+// array tsa::simplification::ramerDouglasPeucker(array pointList, double epsilon){
+// 	int elems = pointList.elements();
+// 	tsa::simplification::Point * a = pointList.host<tsa::simplification::Point>();
+// 	std::vector<tsa::simplification::Point> arrayPoints(a, a + elems);
+
+// 	std::vector<tsa::simplification::Point> res = tsa::simplification::ramerDouglasPeucker(arrayPoints, epsilon);
+// 	tsa::simplification::Point * arr = (tsa::simplification::Point *) malloc(sizeof(tsa::simplification::Point) * elems);
+// 	std::copy(res.begin(), res.end(), arr);
+
+// 	array result = af::array(elems, arr);
+// 	return result;
+// }
+
 float computeTriangleArea(tsa::simplification::Point a, tsa::simplification::Point b, tsa::simplification::Point c){
     float res = 0.0;
     
@@ -114,3 +127,15 @@ std::vector<tsa::simplification::Point> tsa::simplification::visvalingam_simplif
     }
 	return out;
 }
+
+// array tsa::simplification::visvalingam_simplify(array pointList, int numPoints){
+// 	int elems = pointList.elements();
+// 	tsa::simplification::Point * a = pointList.host<tsa::simplification::Point>();
+// 	std::vector<tsa::simplification::Point> arrayPoints(a, a + elems);
+
+// 	std::vector<tsa::simplification::Point> res = tsa::simplification::visvalingam_simplify(arrayPoints, numPoints);
+// 	tsa::simplification::Point * arr = (tsa::simplification::Point *) malloc(sizeof(tsa::simplification::Point) * elems);
+// 	std::copy(res.begin(), res.end(), arr);
+// 	array result = af::array(elems, arr);
+// 	return result;
+// }
