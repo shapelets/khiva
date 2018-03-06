@@ -93,7 +93,7 @@ namespace tsa {
          * @param epsilon Minimum standard deviation to consider.  It acts a a gatekeeper for
          * those time series that may be constant or near constant.  
          * 
-         * @return array Array with the same dimensions as tss where the time series have been
+         * @return af::array Array with the same dimensions as tss where the time series have been
          * adjusted for zero mean and one as standard deviation.
          */
         af::array znorm(af::array tss, double epsilon = 0.00000001);
@@ -125,7 +125,7 @@ namespace tsa {
          * @param epsilon Safeguard for constant (or near constant) time series as the operation implies
          * a unit scale operation between min and max values in the tss.
          * 
-         * @return array An array with the same dimensions as tss, whose values (time series in dimension 0)
+         * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
          * have been normalized by maximun and minimun values, and scaled as per high and low parameters.
          */
         af::array maxMinNorm(af::array tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
@@ -152,7 +152,7 @@ namespace tsa {
          * @param tss Expects an input array whose dimension zero is the length of the time 
          * series (all the same) and dimension one indicates the number of time series.
          * 
-         * @return array An array with the same dimensions as tss, whose values (time series in dimension 0)
+         * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
          * have been normalized by dividing each number by 10^j, where j is the number of integer digits of 
          * the max number in the timeseries
          */
@@ -175,6 +175,17 @@ namespace tsa {
         af::array absEnergy(af::array);
 
         // tsfresh
+        /**
+         * @brief Calculates the sum over the absolute value of consecutive changes in the time series
+         * 
+         * @param tss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
+         * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
+         * contains absolute value of consecutive changes in the time series
+         */
+        af::array absoluteSumOfChanges(af::array tss);
+        
         // PIP Perceptualy important points
     };
 
