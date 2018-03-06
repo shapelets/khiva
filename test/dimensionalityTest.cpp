@@ -24,7 +24,7 @@ TEST(DimensionalityTests, PAA_NORM)
 	pointList.push_back(tsa::simplification::Point(8.0, 9.0));
 	pointList.push_back(tsa::simplification::Point(9.0, 9.0));
 
-	auto out = tsa::dimensionality::PAA(pointList.begin(), pointList.end(), 6);
+	auto out = tsa::dimensionality::PAA_CPU(pointList.begin(), pointList.end(), 6);
 	
     std::vector<tsa::simplification::Point> expected = {tsa::simplification::Point(0.75, 0.05), 
 		tsa::simplification::Point(2.25, -0.1), tsa::simplification::Point(3.75, 5.5), 
@@ -48,6 +48,23 @@ TEST(DimensionalityTests, PAA)
     
     double* out_h = out.host<double>();
     std::vector<double> expected = {0.05, 2.45, 6.5, 8.55, 9.0};
+	
+    for(size_t i = 0; i < 5;i++){
+        EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
+	}
+}
+
+
+TEST(DimensionalityTests, SAX)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    float pointList[] = {0.05, 2.45, 6.5, 8.55, 9.0};
+    af::array a(5, 1, pointList);
+
+	std::vector<int> out_h = tsa::dimensionality::SAX(a, 3);
+    
+    std::vector<int> expected = {0, 0, 1, 2, 2};
 	
     for(size_t i = 0; i < 5;i++){
         EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
