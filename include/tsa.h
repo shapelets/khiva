@@ -7,6 +7,7 @@
 #include <arrayfire.h>
 #include "version.h"
 #include <vector>
+#include <jni.h>
 
 using namespace af;
 
@@ -508,10 +509,36 @@ namespace tsa {
          */
         void stomp_self_join(double* ta, int* lta, long*m, double* p, unsigned int* i);
 
+        /**
+         * @brief JNI interface for calling the STAMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
+         * of 'm'.
+         * 
+         * @param ta Jarray of doubles with the first time series values.
+         * @param tb Jarray of doubles with the second time series values.
+         * @param lta Jinteger with the length of the first time series. 
+         * @param ltb Jinteger with the length of the second time series.
+         * @param m Jong with the length of the subsequence.
+         * @param p initialized Jarray of doubles for storing the distance profile.
+         * @param i nitialized Jarray of doubles for storing the index profile.
+         */
+        JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb,
+            jint lta, jint ltb, jlong m, jdoubleArray p, jintArray i );
+        
+        /**
+         * @brief JNI interface for calling the STAMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
+         * of 'm'. This method filters the trivial matches.
+         * 
+         * @param ta Jarray of doubles with the first time series values.
+         * @param lta Jinteger with the length of the first time series.
+         * @param m Jlong with the length of the subsequence.
+         * @param p Jarray of doubles for storing the distance profile.
+         * @param i Jarray of doubles for storing the index profile.
+         */
+        JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta,
+            jint lta, jlong m, jdoubleArray p, jintArray i );
+        
         #ifdef __cplusplus
         }
         #endif
-       
     };
 };
-
