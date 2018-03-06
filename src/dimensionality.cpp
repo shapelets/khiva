@@ -6,7 +6,6 @@
 
 #include "tsa.h" 
 #include <iostream>
-#include <arrayfire.h>
 #include <boost/math/distributions/normal.hpp>
         
 af::array tsa::dimensionality::PAA(array a, int bins){

@@ -513,5 +513,15 @@ namespace tsa {
         #endif
        
     };
+
+    namespace stats {
+        /**
+         * @brief Cumulative density function (CDF) of a standard normal (Gaussian) random variable
+         * 
+         * @param x The random variable
+         * @return double The CDF value
+         */
+        double cdf(double x);
+    };
 };
 
