@@ -10,3 +10,14 @@ af::array tsa::features::absoluteSumOfChanges(af::array tss) {
     long n = tss.dims(0);
     return af::sum(af::abs(tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span)));
 }
+
+af::array tsa::features::absEnergy(af::array base){
+    af::array exp= af::constant(2, 10);
+    af::array p2 = af::pow(base, exp);
+    af::array sp2 = af::sum(p2);
+    return sp2;
+}
+
+void tsa::features::absEnergyInPlace(af::array in){
+
+}

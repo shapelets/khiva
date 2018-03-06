@@ -7,7 +7,8 @@
 #include <tsa.h>
 #include <gtest/gtest.h>
 
-TEST(FeaturesTests, AbsoluteSumOfChanges) {
+TEST(FeaturesTests, AbsoluteSumOfChanges)
+{
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {0, 1, 2, 3, 4, 6, 8, 10, 11, 14, 17, 20};
     af::array tss(4, 3, data);
@@ -26,4 +27,19 @@ TEST(FeaturesTests, AbsoluteSumOfChanges) {
     ASSERT_EQ(3, hostResult[0]);
     ASSERT_EQ(6, hostResult[1]);
     ASSERT_EQ(9, hostResult[2]);
+}
+
+TEST(FeatureTests, absEnergy)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    af::array tss(10, 1, data);
+
+    auto result = tsa::features::absEnergy(tss);
+
+    double expected[] = {385};
+    double* host_res = result.host<double>();
+    for (int i=0; i<1; i++) {
+        ASSERT_NEAR(host_res[i], expected[i], 0.00000001);
+    }
 }
