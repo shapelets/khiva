@@ -20,8 +20,8 @@ template<af::Backend BE> void MovingSumConvolve(benchmark::State& state) {
   while (state.KeepRunning()) {
     af::array movSum = af::convolve(ts, filter, AF_CONV_EXPAND);
     movSum(af::seq(m-1, tsLen-1)).eval();
+    af::sync();
   }
-  af::sync();
 }
 
 template<af::Backend BE> void MovingSumScan(benchmark::State& state) {
@@ -33,8 +33,8 @@ template<af::Backend BE> void MovingSumScan(benchmark::State& state) {
     af::array cumsum = af::accum(ts);
     af::array exCumsum = af::scan(ts, 0, AF_BINARY_ADD, false);
     (cumsum(af::seq(m - 1, tsLen - 1)) - exCumsum(af::seq(0, tsLen - m))).eval();
+    af::sync();
   }
-  af::sync();
 }
 
 

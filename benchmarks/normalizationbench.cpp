@@ -19,8 +19,8 @@ template<af::Backend BE> void ZNorm(benchmark::State& state) {
   while (state.KeepRunning()) {
     auto normalised = tsa::normalization::znorm(ts, DBL_MIN);
     normalised.eval();
+    af::sync();
   }
-  af::sync();
 }
 
 template<af::Backend BE> void ZNormInPlace(benchmark::State& state) {
@@ -31,8 +31,8 @@ template<af::Backend BE> void ZNormInPlace(benchmark::State& state) {
   while (state.KeepRunning()) {
     tsa::normalization::znormInPlace(ts, DBL_MIN);
     ts.eval();
+    af::sync();
   }
-  af::sync();
 }
 
 BENCHMARK_TEMPLATE(ZNorm, af::Backend::AF_BACKEND_OPENCL)

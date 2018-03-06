@@ -38,7 +38,7 @@ TEST(MatrixTests, MeanStdev)
     af::array mean;
     af::array stdev;
 
-    tsa::matrix::meanStdev(t, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, m, mean, stdev);
 
     ASSERT_EQ(mean.dims(0), 12);
     ASSERT_EQ(stdev.dims(0), 12);
@@ -74,7 +74,7 @@ TEST(MatrixTests, CalculateDistanceProfile)
     af::array aux;
 
     af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
@@ -107,7 +107,7 @@ TEST(MatrixTests, CalculateDistanceProfileMiddle)
     af::array aux;
 
     af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
@@ -143,7 +143,7 @@ TEST(MatrixTests, MassIgnoreTrivial)
     af::array aux;
 
     af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
@@ -179,7 +179,7 @@ TEST(MatrixTests, MassConsiderTrivial)
     af::array aux;
 
     af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
@@ -197,7 +197,7 @@ TEST(MatrixTests, MassConsiderTrivial)
     ASSERT_EQ(resultingIndex, expectedIndex);
 }
 
-TEST(MatrixTests, StampOneTimeSeries)
+TEST(MatrixTests, StompOneTimeSeries)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
@@ -222,7 +222,7 @@ TEST(MatrixTests, StampOneTimeSeries)
     }
 }
 
-TEST(MatrixTests, StampTwoTimeSeries)
+TEST(MatrixTests, StompTwoTimeSeries)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};

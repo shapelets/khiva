@@ -270,7 +270,7 @@ namespace tsa {
          * @param mean Output array containing the moving average
          * @param stdev Output array containing the moving standard deviation
          */
-        void meanStdev(af::array t, af::array *a, long m, af::array *mean, af::array *stdev);
+        void meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &stdev);
 
         /**
          * @brief Calculates the moving average and standard deviation of the time series 't'.
@@ -280,7 +280,7 @@ namespace tsa {
          * @param mean Output array containing the moving average
          * @param stdev Output array containing the moving standard deviation
          */
-        void meanStdev(af::array t, long m, af::array *mean, af::array *stdev);
+        void meanStdev(af::array t, long m, af::array &mean, af::array &stdev);
 
         /**
          * @brief Function to generate a band matrix of batchSizeXtsLength with the offset batchStart

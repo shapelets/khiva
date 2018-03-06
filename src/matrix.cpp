@@ -21,7 +21,7 @@ af::array tsa::matrix::slidingDotProduct(af::array q, af::array t) {
     return qt(af::seq(m - 1, n - 1), span, span, span);
 }
 
-void tsa::matrix::meanStdev(af::array t, af::array *a, long m, af::array *mean, af::array *stdev) {
+void tsa::matrix::meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &stdev) {
     long na = t.dims(0);
 
     af::array cumulative_sum_t = af::accum(t);
@@ -34,16 +34,16 @@ void tsa::matrix::meanStdev(af::array t, af::array *a, long m, af::array *mean, 
     sum_t = cumulative_sum_t(af::seq(m - 1, na - 1)) - af::join(0, tmp, cumulative_sum_t(af::seq(0, na - m - 1)));
     sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1)) - af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1)));
 
-    *mean = sum_t / m;
+    mean = sum_t / m;
     array mean_t2 = sum_t2 / m;
-    array mean_t_p2 = af::pow(*mean, 2);
+    array mean_t_p2 = af::pow(mean, 2);
     array sigma_t2 = mean_t2 - mean_t_p2;
-    *stdev = af::sqrt(sigma_t2);
+    stdev = af::sqrt(sigma_t2);
 
-    *a = (sum_t2 - 2 * sum_t * (*mean) + m * mean_t_p2) / af::max(sigma_t2, af::constant(EPSILON, sigma_t2.dims(), t.type()));
+    a = (sum_t2 - 2 * sum_t * mean + m * mean_t_p2) / af::max(sigma_t2, af::constant(EPSILON, sigma_t2.dims(), t.type()));
 }
 
-void tsa::matrix::meanStdev(af::array t, long m, af::array *mean, af::array *stdev) {
+void tsa::matrix::meanStdev(af::array t, long m, af::array &mean, af::array &stdev) {
     long na = t.dims(0);
 
     af::array cumulative_sum_t = af::accum(t);
@@ -56,24 +56,21 @@ void tsa::matrix::meanStdev(af::array t, long m, af::array *mean, af::array *std
     sum_t = cumulative_sum_t(af::seq(m - 1, na - 1)) - af::join(0, tmp, cumulative_sum_t(af::seq(0, na - m - 1)));
     sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1)) - af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1)));
 
-    *mean = sum_t / m;
+    mean = sum_t / m;
     array mean_t2 = sum_t2 / m;
-    array mean_t_p2 = af::pow(*mean, 2);
+    array mean_t_p2 = af::pow(mean, 2);
     array sigma_t2 = mean_t2 - mean_t_p2;
-    *stdev = af::sqrt(sigma_t2);
+    stdev = af::sqrt(sigma_t2);
 }
 
 af::array tsa::matrix::generateMask(long m, long batchSize, long batchStart, long tsLength) {
-    int bandSize = std::ceil(m/2.0);
-    af::array result = af::array(batchSize, tsLength);
-    af::array tmp = af::transpose(af::join(0, af::constant(1, 2*bandSize + 1), af::constant(0, tsLength - 1)));
+    long bandSize = std::ceil(m/2.0);
+    
+    int tmp = batchStart > 0;
+    af::array mask = af::convolve2(af::shift(af::identity(std::max(batchSize, bandSize) + 1, tsLength + bandSize - 1), 0, batchStart - tmp), af::constant(1, bandSize, bandSize)) > 0;
+    mask = mask(af::seq(tmp, batchSize - 1 + tmp), af::seq(tsLength));
 
-    for(int i = 0; i < batchSize; i++){
-        af::array tmp2 = af::shift(tmp, 0, i+batchStart);
-        result(i, span) = tmp2(af::seq(bandSize, tsLength + bandSize - 1));
-    }
-
-    return result;
+    return mask;
 }
 
 void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a,
@@ -148,7 +145,7 @@ void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
     profile = af::array(0, ta.type());
     index = af::array(0, af::dtype::u32);
 
-    tsa::matrix::meanStdev(ta, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(ta, aux, m, mean, stdev);
 
     long chunkSize = std::min(nb - m + 1, batch_size);
 
@@ -174,6 +171,7 @@ void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
             profile = join(0, profile, distance);
             index = join(0, index, pidx);
         }
+        af::sync();
     }
 }
 
@@ -211,7 +209,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
             af::array aux;
             af::array mean;
             af::array stdev;
-            tsa::matrix::meanStdev(taChunk, &aux, m, &mean, &stdev);
+            tsa::matrix::meanStdev(taChunk, aux, m, mean, stdev);
             gfor(af::seq idx, iterationSizeB) {
                 af::array distanceTmp;
                 af::array pidxTmp;
@@ -223,6 +221,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
                 distance = af::join(1, distance, distanceTmp);
                 pidx = af::join(1, pidx, pidxTmp);
             }
+            af::sync();
         }
 
         af::array idx;
@@ -252,7 +251,7 @@ void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::
     af::array mean;
     af::array stdev;
 
-    tsa::matrix::meanStdev(ta, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(ta, aux, m, mean, stdev);
 
     af::array input = af::array(m, nb - m + 1, tb.type());
 
@@ -263,6 +262,7 @@ void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::
     gfor(af::seq idx, nb - m + 1) {
         tsa::matrix::mass(input(span, idx, span, span), ta, m, aux, mean, stdev, profile, index);
     }
+    af::sync();
 }
 
 void tsa::matrix::stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index) { 
@@ -312,7 +312,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
             af::array aux;
             af::array mean;
             af::array stdev;
-            tsa::matrix::meanStdev(tChunk, &aux, m, &mean, &stdev);
+            tsa::matrix::meanStdev(tChunk, aux, m, mean, stdev);
 
             gfor(af::seq idx, iterationSizeB) {
                 af::array distanceTmp;
@@ -325,6 +325,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
                 distance = af::join(1, distance, distanceTmp);
                 pidx = af::join(1, pidx, pidxTmp);
             }
+            af::sync();
         }
 
         af::array idx;
@@ -354,7 +355,7 @@ void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
     af::array mean;
     af::array stdev;
 
-    tsa::matrix::meanStdev(t, &aux, m, &mean, &stdev);
+    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
 
     af::array input = af::array(m, n - m + 1, t.type());
 
@@ -367,6 +368,7 @@ void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
     gfor(af::seq idx, n - m + 1) {
         tsa::matrix::mass(input(span, idx, span, span), t, m, aux, mean, stdev, mask, profile, index);
     }
+    af::sync();
 }
 
 void tsa::matrix::stomp(array t, long m, af::array &profile, af::array &index) { 
