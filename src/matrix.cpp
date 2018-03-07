@@ -410,7 +410,7 @@ extern "C" {
 #endif
 
     void find_best_n_motifs(double* profile, unsigned int* index, long* length_profile, long* n, 
-    double* motif_distances, int* motif_indices, int* subsequence_indices){
+                            double* motif_distances, int* motif_indices, int* subsequence_indices){
         af::array motifs;
         af::array motifIndices;
         af::array subsequenceIndices;
