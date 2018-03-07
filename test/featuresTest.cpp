@@ -7,28 +7,6 @@
 #include <tsa.h>
 #include <gtest/gtest.h>
 
-TEST(FeaturesTests, AbsoluteSumOfChanges)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {0, 1, 2, 3, 4, 6, 8, 10, 11, 14, 17, 20};
-    af::array tss(4, 3, data);
-
-    af::array asoc = tsa::features::absoluteSumOfChanges(tss);
-
-    // check dimensions
-    af::dim4 dims = asoc.dims();
-    ASSERT_EQ(dims[0], 1);
-    ASSERT_EQ(dims[1], 3);
-    ASSERT_EQ(dims[2], 1);
-    ASSERT_EQ(dims[3], 1);
-
-    // check distances
-    double* hostResult = asoc.host<double>();    
-    ASSERT_EQ(3, hostResult[0]);
-    ASSERT_EQ(6, hostResult[1]);
-    ASSERT_EQ(9, hostResult[2]);
-}
-
 TEST(FeatureTests, absEnergy)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
@@ -59,4 +37,51 @@ TEST(FeatureTests, absEnergy2)
     for (int i=0; i<3; i++) {
         ASSERT_NEAR(host_res[i], expected[i], 0.00000001);
     }
+}
+
+TEST(FeaturesTests, AbsoluteSumOfChanges)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {0, 1, 2, 3, 4, 6, 8, 10, 11, 14, 17, 20};
+    af::array tss(4, 3, data);
+
+    af::array asoc = tsa::features::absoluteSumOfChanges(tss);
+
+    // check dimensions
+    af::dim4 dims = asoc.dims();
+    ASSERT_EQ(dims[0], 1);
+    ASSERT_EQ(dims[1], 3);
+    ASSERT_EQ(dims[2], 1);
+    ASSERT_EQ(dims[3], 1);
+
+    // check distances
+    double* hostResult = asoc.host<double>();    
+    ASSERT_EQ(3, hostResult[0]);
+    ASSERT_EQ(6, hostResult[1]);
+    ASSERT_EQ(9, hostResult[2]);
+}
+
+TEST(FeaturesTests, AggregatedLinearTrend)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5};
+    af::array tss(12, data);
+
+    af::array slope, intercept, rvalue, pvalue, stderrest;
+
+    tsa::features::aggregatedLinearTrend(tss, 3, af::mean, slope, intercept, rvalue, pvalue, stderrest);
+
+    double slopeCalculated, interceptCalculated, rvalueCalculated, pvalueCalculated, stderrestCalculated;
+
+    slope.host(&slopeCalculated);
+    intercept.host(&interceptCalculated);
+    rvalue.host(&rvalueCalculated);
+    pvalue.host(&pvalueCalculated);
+    stderrest.host(&stderrestCalculated);
+
+    ASSERT_EQ(slopeCalculated, 1.0);
+    ASSERT_EQ(interceptCalculated, 2.0);
+    ASSERT_EQ(rvalueCalculated, 1.0);
+    ASSERT_EQ(pvalueCalculated, 0.0);
+    ASSERT_EQ(stderrestCalculated, 0.0);
 }

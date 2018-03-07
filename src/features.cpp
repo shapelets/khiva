@@ -24,3 +24,27 @@ af::array aggregating(af::array input, af::array (*aggregationFunction)(const af
 af::array aggregating(af::array input, af::array (*aggregationFunction)(const af::array&, const dim_t)) {
     return aggregationFunction(input, -1);
 }
+
+af::array aggregatingOnChunks(af::array input, long chunkSize, af::array (*aggregationFunction)(const af::array&, const int)) {
+    af::array inputChunks = af::join(0, input, af::constant(0, (input.dims(0)%chunkSize == 0)? 0: chunkSize - input.dims(0)%chunkSize, input.type()));
+    inputChunks = af::moddims(inputChunks, chunkSize, inputChunks.dims(0)/chunkSize);
+    return af::transpose(aggregationFunction(inputChunks, 0));
+}
+
+af::array aggregatingOnChunks(af::array input, long chunkSize, af::array (*aggregationFunction)(const af::array&, const dim_t)) {
+    af::array inputChunks = af::join(0, input, af::constant(0, (input.dims(0)%chunkSize == 0)? 0: chunkSize - input.dims(0)%chunkSize, input.type()));
+    inputChunks = af::moddims(inputChunks, chunkSize, inputChunks.dims(0)/chunkSize);
+    return af::transpose(aggregationFunction(inputChunks, 0));
+}
+
+void tsa::features::aggregatedLinearTrend(af::array t, long chunkSize, af::array (*aggregationFunction)(const af::array&, const int),
+                                            af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest) {
+    af::array aggregateResult = aggregatingOnChunks(t, chunkSize, aggregationFunction);
+    tsa::regression::linear(af::range(aggregateResult.dims(0)).as(t.type()), aggregateResult, slope, intercept, rvalue, pvalue, stderrest);
+}
+
+void tsa::features::aggregatedLinearTrend(af::array t, long chunkSize, af::array (*aggregationFunction)(const af::array&, const dim_t),
+                                            af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest) {
+    af::array aggregateResult = aggregatingOnChunks(t, chunkSize, aggregationFunction);
+    tsa::regression::linear(af::range(aggregateResult.dims(0)).as(t.type()), aggregateResult, slope, intercept, rvalue, pvalue, stderrest);
+}

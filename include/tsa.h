@@ -195,7 +195,43 @@ namespace tsa {
          * contains absolute value of consecutive changes in the time series
          */
         af::array absoluteSumOfChanges(af::array tss);
-        
+
+        /**
+         * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
+         * over chunks versus the sequence from 0 up to the number of chunks minus one
+         * 
+         * @param t The time series to calculate the features of
+         * @param chunkSize The chunkSize used to aggregate the data
+         * @param aggregationFunction Function to be used in the aggregation
+         * @param slope Slope of the regression line
+         * @param intercept Intercept of the regression line
+         * @param rvalue Correlation coefficient
+         * @param pvalue Two-sided p-value for a hypothesis test whose null hypothesis is
+         * that the slope is zero, using Wald Test with t-distribution of
+         * the test statistic
+         * @param stderrest Standard error of the estimated gradient
+         */
+        void aggregatedLinearTrend(af::array t, long chunkSize, af::array (*aggregationFunction)(const af::array&, const int),
+                                    af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
+
+        /**
+         * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
+         * over chunks versus the sequence from 0 up to the number of chunks minus one
+         * 
+         * @param t The time series to calculate the features of
+         * @param chunkSize The chunkSize used to aggregate the data
+         * @param aggregationFunction Function to be used in the aggregation
+         * @param slope Slope of the regression line
+         * @param intercept Intercept of the regression line
+         * @param rvalue Correlation coefficient
+         * @param pvalue Two-sided p-value for a hypothesis test whose null hypothesis is
+         * that the slope is zero, using Wald Test with t-distribution of
+         * the test statistic
+         * @param stderrest Standard error of the estimated gradient
+         */
+        void aggregatedLinearTrend(af::array t, long chunkSize, af::array (*aggregationFunction)(const af::array&, const dim_t),
+                                    af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
+
         // PIP Perceptualy important points
     };
 
@@ -584,7 +620,7 @@ namespace tsa {
          * @brief Calculate a linear least-squares regression for two sets of measurements.
          * Both arrays should have the same length
          * 
-         * @param x First sets of measurements 
+         * @param x First set of measurements 
          * @param y Second set of measurements
          * @param slope Slope of the regression line
          * @param intercept Intercept of the regression line

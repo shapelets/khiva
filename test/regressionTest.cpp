@@ -7,8 +7,11 @@
 #include<tsa.h>
 #include<gtest/gtest.h>
 
+#define EPSILON 1e-8
+
 TEST(RegressionTests, Linear)
 {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
     double dataX[] = {0.24580423, 0.59642861, 0.35879163, 0.37891011, 0.02445137,
                         0.23830957, 0.38793433, 0.68054104, 0.83934083, 0.76073689};
     af::array x = af::array(10, dataX);
@@ -18,12 +21,19 @@ TEST(RegressionTests, Linear)
     af::array y = af::array(10, dataY);
 
     af::array slope, intercept, rvalue, pvalue, stderrest;
+    double slope_host, intercept_host, rvalue_host, pvalue_host, stderrest_host;
 
     tsa::regression::linear(x, y, slope, intercept, rvalue, pvalue, stderrest);
 
-    af_print(slope, 16);
-    af_print(intercept, 16);
-    af_print(rvalue, 16);
-    af_print(pvalue, 16);
-    af_print(stderrest, 16);
+    slope.host(&slope_host);
+    intercept.host(&intercept_host);
+    rvalue.host(&rvalue_host);
+    pvalue.host(&pvalue_host);
+    stderrest.host(&stderrest_host);
+
+    ASSERT_NEAR(slope_host,     0.344864266, EPSILON);
+    ASSERT_NEAR(intercept_host, 0.268578232, EPSILON);
+    ASSERT_NEAR(rvalue_host,    0.283552942, EPSILON);
+    ASSERT_NEAR(pvalue_host,    0.427239418, EPSILON);
+    ASSERT_NEAR(stderrest_host, 0.412351891, EPSILON);
 }
