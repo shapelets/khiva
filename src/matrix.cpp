@@ -409,11 +409,12 @@ void tsa::matrix::findBestNDiscords(af::array profile, af::array index, long n, 
 extern "C" {
 #endif
 
-    void find_best_n_motifs(double* profile,unsigned int* index, long* length_profile, long* n, double* motif_distances, int* motif_indices,int* subsequence_indices){
+    void find_best_n_motifs(double* profile, unsigned int* index, long* length_profile, long* n, 
+    double* motif_distances, int* motif_indices, int* subsequence_indices){
         af::array motifs;
         af::array motifIndices;
         af::array subsequenceIndices;
-        tsa::matrix::findBestNMotifs(array(*length_profile,profile),array(*length_profile,index), *n ,motifs, motifIndices, subsequenceIndices);
+        tsa::matrix::findBestNMotifs(array(*length_profile,profile), array(*length_profile,index), *n, motifs, motifIndices, subsequenceIndices);
         motifs.host(motif_distances);
         motifIndices.host(motif_indices);
         subsequenceIndices.host(subsequence_indices);

@@ -491,7 +491,7 @@ namespace tsa {
         extern "C"{
         #endif
         /**
-         * @brief Primitive for calling findBestNMotifs function in order to extract the best N discords from a previously calculated matrix profile
+         * @brief Primitive for calling findBestNMotifs function in order to extract the best N motifs from a previously calculated matrix profile
          * 
          * @param profile The matrix profile containing the minimum distance of each subsequence
          * @param index The matrix profile index containing where each minimum occurs
@@ -501,7 +501,8 @@ namespace tsa {
          * @param motif_indices The indices of the best N motifs
          * @param subsequence_indexes The indices of the query sequences that produced the minimum reported in the motifs
          */
-        void find_best_n_motifs(double* profile,unsigned int* index, long* length_profile, long* n, double* motif_distances, int* motif_indices,int* subsequence_indices);
+        void find_best_n_motifs(double* profile, unsigned int* index, long* length_profile, long* n, 
+        double* motif_distances, int* motif_indices, int* subsequence_indices);
         
         /**
          * @brief  Primitive for calling the STAMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
