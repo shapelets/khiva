@@ -436,8 +436,38 @@ extern "C" {
         index.host(i);           
     }
 
+    JNIEXPORT void JNICALL Java_tsa_TSA_findBestNMotifs(JNIEnv *env, jobject thisObj, jdoubleArray profile, jintArray index, 
+                                                        jlong lengthProfile, jlong n, jdoubleArray jMotifDistances, jintArray jMotifIndices,
+                                                        jintArray jSubsequenceIndices){
+        af::array motifs;
+        af::array motifIndices;
+        af::array subsequenceIndices;
+
+        double inputP[lengthProfile];
+        int inputI[lengthProfile];
+
+        env->GetDoubleArrayRegion(profile, 0, lengthProfile, &inputP[0]);
+        env->GetIntArrayRegion(index, 0, lengthProfile, &inputI[0]);
+
+        tsa::matrix::findBestNMotifs(array(lengthProfile, inputP), array(lengthProfile, inputI), n, motifs, motifIndices, subsequenceIndices);
+
+        double inputMotifs[n];
+        int inputMotifIndices[n];
+        int inputSubsequenceIndices[n];
+
+        motifs.host(inputMotifs);
+        motifIndices.host(inputMotifIndices);
+        subsequenceIndices.host(inputSubsequenceIndices);
+
+        env->SetDoubleArrayRegion(jMotifDistances, 0, n, &inputMotifs[0]);
+        env->SetIntArrayRegion(jMotifIndices, 0, n, &inputMotifIndices[0]);
+        env->SetIntArrayRegion(jSubsequenceIndices, 0, n, &inputSubsequenceIndices[0]);
+
+        return;                                             
+    }
+
     JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb,
-    jint lta, jint ltb, jlong m, jdoubleArray p, jintArray i) {
+                                                jint lta, jint ltb, jlong m, jdoubleArray p, jintArray i) {
 
         af::array distance;
         af::array index;
@@ -468,7 +498,7 @@ extern "C" {
     }
     
     JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta,
-    jint lta, jlong m, jdoubleArray p, jintArray i) {
+                                                        jint lta, jlong m, jdoubleArray p, jintArray i) {
 
         af::array distance;
         af::array index;
