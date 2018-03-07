@@ -4,6 +4,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
 FIND_PACKAGE(ArrayFire REQUIRED)
 # Find the JNI package.
 FIND_PACKAGE(JNI REQUIRED)
+# Find the Boost package
+FIND_PACKAGE(Boost REQUIRED)
 
 PROJECT(TSALIB)
 
@@ -46,7 +48,8 @@ ADD_LIBRARY(TSALIB STATIC ${TSALIB_CODE})
 TARGET_INCLUDE_DIRECTORIES(TSALIB PUBLIC 
                            ${ArrayFire_INCLUDE_DIRS}
                            ${TSALIB_INC} 
-                           ${JNI_INCLUDE_DIRS})
+                           ${JNI_INCLUDE_DIRS}
+                           ${Boost_INCLUDE_DIRS})
 
 # Declare compilation libraries
 TARGET_LINK_LIBRARIES(TSALIB

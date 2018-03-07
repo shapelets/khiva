@@ -21,3 +21,12 @@ af::array tsa::features::absEnergy(af::array base){
 void tsa::features::absEnergyInPlace(af::array in){
 
 }
+
+af::array aggregating(af::array input, af::array (*aggregationFunction)(const af::array&, const int)) {
+    return aggregationFunction(input, -1);
+}
+
+af::array aggregating(af::array input, af::array (*aggregationFunction)(const af::array&, const dim_t)) {
+    return aggregationFunction(input, -1);
+}
+
