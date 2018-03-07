@@ -423,6 +423,66 @@ extern "C" {
         distance.host(p);
         index.host(i);           
     }
+
+    JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb,
+    jint lta, jint ltb, jlong m, jdoubleArray p, jintArray i) {
+
+        af::array distance;
+        af::array index;
+
+        double input_ta[lta];
+        double input_tb[ltb];
+
+        env->GetDoubleArrayRegion( ta, 0, lta, &input_ta[0]);
+        env->GetDoubleArrayRegion( tb, 0, ltb, &input_tb[0]);
+
+        af::array ata = array(lta, input_ta);
+        af::array atb = array(ltb, input_tb);
+
+        long subsequence = m;
+
+        tsa::matrix::stomp(ata, atb, subsequence, distance, index);
+
+        double input_p[ltb - m + 1];
+        int input_i[ltb - m + 1];
+
+        distance.host(input_p);
+        index.host(input_i);
+
+        env->SetDoubleArrayRegion( p, 0, ltb - m + 1, &input_p[0]);
+        env->SetIntArrayRegion( i, 0, ltb - m + 1, &input_i[0]);
+
+        return;
+    }
+    
+    JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta,
+    jint lta, jlong m, jdoubleArray p, jintArray i) {
+
+        af::array distance;
+        af::array index;
+
+        double input_ta[lta];
+
+        env->GetDoubleArrayRegion( ta, 0, lta, &input_ta[0]);
+
+        af::array ata = array(lta, input_ta);
+
+        long subsequence = m;
+
+        tsa::matrix::stomp(ata, subsequence, distance, index);
+        
+        double input_p[lta - m + 1];
+        int input_i[lta - m + 1];
+       
+        distance.host(input_p);
+        index.host(input_i);
+
+        env->SetDoubleArrayRegion( p, 0, lta - m +1, &input_p[0]);
+        env->SetIntArrayRegion( i, 0, lta - m +1, &input_i[0]);
+
+        return;
+    }
+
 #ifdef __cplusplus
 }
 #endif
