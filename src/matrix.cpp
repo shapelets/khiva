@@ -449,7 +449,7 @@ extern "C" {
         env->GetDoubleArrayRegion(profile, 0, lengthProfile, &inputP[0]);
         env->GetIntArrayRegion(index, 0, lengthProfile, &inputI[0]);
 
-        tsa::matrix::findBestNMotifs(array(lengthProfile,inputP), array(lengthProfile,inputI), n, motifs, motifIndices, subsequenceIndices);
+        tsa::matrix::findBestNMotifs(array(lengthProfile, inputP), array(lengthProfile, inputI), n, motifs, motifIndices, subsequenceIndices);
 
         double inputMotifs[n];
         int inputMotifIndices[n];
