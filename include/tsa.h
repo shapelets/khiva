@@ -172,7 +172,16 @@ namespace tsa {
 
     namespace features {
 
-        af::array absEnergy(af::array);
+        /**
+         * @brief Calculates the sum over the square values of the timeseries
+         * 
+         * @param base Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
+         * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
+         * contains the sum of the suares values in the timeseries
+         */
+        af::array absEnergy(af::array base);
 
         // tsfresh
         /**
