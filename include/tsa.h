@@ -490,9 +490,22 @@ namespace tsa {
         #ifdef __cplusplus
         extern "C"{
         #endif
+        /**
+         * @brief Primitive for calling findBestNMotifs function in order to extract the best N motifs from a previously calculated matrix profile
+         * 
+         * @param profile The matrix profile containing the minimum distance of each subsequence
+         * @param index The matrix profile index containing where each minimum occurs
+         * @param length_profile Length of the matrix profile
+         * @param n Number of motifs to extract
+         * @param motif_distances The distance of the best N motifs
+         * @param motif_indices The indices of the best N motifs
+         * @param subsequence_indexes The indices of the query sequences that produced the minimum reported in the motifs
+         */
+        void find_best_n_motifs(double* profile, unsigned int* index, long* length_profile, long* n, 
+                                double* motif_distances, int* motif_indices, int* subsequence_indices);
         
         /**
-         * @brief  Primitive for calling the STAMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
+         * @brief  Primitive for calling the STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
          * of 'm'.
          * 
          * @param ta Pointer of an array of doubles with the first time series values.
@@ -506,7 +519,7 @@ namespace tsa {
         void stomp(double* ta, double* tb, int* lta, int* ltb, long*m, double* p, unsigned int* i);
         
         /**
-         * @brief Primitive for calling the STAMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
+         * @brief Primitive for calling the STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
          * of 'm'. This method filters the trivial matches.
          * 
          * @param ta Pointer of an array of doubles with the first time series values.
@@ -518,7 +531,7 @@ namespace tsa {
         void stomp_self_join(double* ta, int* lta, long*m, double* p, unsigned int* i);
 
         /**
-         * @brief JNI interface for calling the STAMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
+         * @brief JNI interface for calling the STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
          * of 'm'.
          * 
          * @param ta Jarray of doubles with the first time series values.
@@ -530,10 +543,10 @@ namespace tsa {
          * @param i nitialized Jarray of doubles for storing the index profile.
          */
         JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb,
-            jint lta, jint ltb, jlong m, jdoubleArray p, jintArray i );
+                                                    jint lta, jint ltb, jlong m, jdoubleArray p, jintArray i );
         
         /**
-         * @brief JNI interface for calling the STAMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
+         * @brief JNI interface for calling the STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
          * of 'm'. This method filters the trivial matches.
          * 
          * @param ta Jarray of doubles with the first time series values.
@@ -543,7 +556,7 @@ namespace tsa {
          * @param i Jarray of doubles for storing the index profile.
          */
         JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta,
-            jint lta, jlong m, jdoubleArray p, jintArray i );
+                                                            jint lta, jlong m, jdoubleArray p, jintArray i );
         
         #ifdef __cplusplus
         }
