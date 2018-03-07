@@ -39,7 +39,24 @@ TEST(FeatureTests, absEnergy)
 
     double expected[] = {385};
     double* host_res = result.host<double>();
+    
     for (int i=0; i<1; i++) {
+        ASSERT_NEAR(host_res[i], expected[i], 0.00000001);
+    }
+}
+
+TEST(FeatureTests, absEnergy2)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    float data[] = {1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4};
+    af::array tss(4, 3, data);
+
+    auto result = tsa::features::absEnergy(tss);
+
+    float expected[] = {30, 30, 30};
+    float* host_res = result.row(0).host<float>();
+    
+    for (int i=0; i<3; i++) {
         ASSERT_NEAR(host_res[i], expected[i], 0.00000001);
     }
 }
