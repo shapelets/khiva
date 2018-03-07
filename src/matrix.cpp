@@ -463,7 +463,7 @@ extern "C" {
         env->SetIntArrayRegion(jMotifIndices, 0, n, &inputMotifIndices[0]);
         env->SetIntArrayRegion(jSubsequenceIndices, 0, n, &inputSubsequenceIndices[0]);
 
-                                                     
+        return;                                             
     }
 
     JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb,

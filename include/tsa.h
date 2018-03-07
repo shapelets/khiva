@@ -490,7 +490,7 @@ namespace tsa {
         #ifdef __cplusplus
         extern "C"{
         #endif
-        
+
         /**
          * @brief Primitive for calling findBestNMotifs function in order to extract the best N motifs from a previously calculated matrix profile
          * 
@@ -556,7 +556,7 @@ namespace tsa {
          * @param ltb Jinteger with the length of the second time series.
          * @param m Jong with the length of the subsequence.
          * @param p initialized Jarray of doubles for storing the distance profile.
-         * @param i nitialized Jarray of doubles for storing the index profile.
+         * @param i initialized Jarray of doubles for storing the index profile.
          */
         JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb,
                                                     jint lta, jint ltb, jlong m, jdoubleArray p, jintArray i );
