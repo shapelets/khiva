@@ -4,13 +4,18 @@
 This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 
 ## Installation
-1. Install conan, c++ package manager, preferably through `pip install conan`.  For more informacion and alternative instalation optins, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html)
+1. Install conan, c++ package manager, preferably through `pip install conan`.  For more informacion and alternative instalation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html)
 2. Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`
 3. Run `conan install . --build`, which will bring down dependencies and generate the necessary include files for the `cmake` build.
 4. Create `build` folder and, after moving into the new folder, run `cmake ..` 
 5. Run the actual make for your environment.
 
 ## Contributing
+
+### Formatting Style
+
+In order to have a standarised code base, we only accept code that is formatted according to the Visual Studio rules for C++. For this purpose, we use `clang-format`, which can be installed in MacOs by executing the next command: `brew install clang-format`.
+We use the `C/C++` plugin for Code editor to format our codes. This plugin uses `clang-format` and the Visual Studio rules under the hood.
 
 ### Branching model
 
@@ -32,5 +37,5 @@ In order t contribute to the code base, we follow the next process :
 7. Pull the latest changes.
 `git pull`
 
-# Builds
+### Builds
 We have a first approach to generate a build and execute the set of tests on every pull request to the **develop** branch. This process is based on bitbucket pipelines and is **currently stopped**.
