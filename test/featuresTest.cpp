@@ -87,75 +87,96 @@ TEST(FeaturesTests, AggregatedLinearTrend)
 }
 
 TEST(FeaturesTests, Autocorrelation) {
-  af::setBackend(af::Backend::AF_BACKEND_CPU);
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
 
-  double data[] = {0, 1, 2, 3, 4, 6, 8, 10, 11, 14, 17, 20};
-  af::array tss(4, 3, data);
+    double data[] = {0, 1, 2, 3, 4, 6, 8, 10, 11, 14, 17, 20};
+    af::array tss(4, 3, data);
 
-  af::array calculated2 = tsa::features::autocorrelation(tss, 2);
+    af::array calculated2 = tsa::features::autocorrelation(tss, 2);
 
-  double *calculated2Host = calculated2.host<double>();
+    double *calculated2Host = calculated2.host<double>();
 
-  // Expected results obtained using tsfresh
-  ASSERT_EQ(calculated2Host[0], -0.6);
-  ASSERT_EQ(calculated2Host[1], -0.6);
-  ASSERT_EQ(calculated2Host[2], -0.6);
+    // Expected results obtained using tsfresh
+    ASSERT_EQ(calculated2Host[0], -0.6);
+    ASSERT_EQ(calculated2Host[1], -0.6);
+    ASSERT_EQ(calculated2Host[2], -0.6);
 
-  af::array calculated3 = tsa::features::autocorrelation(tss, 3);
+    af::array calculated3 = tsa::features::autocorrelation(tss, 3);
 
-  double *calculated3Host = calculated3.host<double>();
+    double *calculated3Host = calculated3.host<double>();
 
-  // Expected results obtained using tsfresh
-  ASSERT_EQ(calculated3Host[0], -1.8);
-  ASSERT_EQ(calculated3Host[1], -1.8);
-  ASSERT_EQ(calculated3Host[2], -1.8);
+    // Expected results obtained using tsfresh
+    ASSERT_EQ(calculated3Host[0], -1.8);
+    ASSERT_EQ(calculated3Host[1], -1.8);
+    ASSERT_EQ(calculated3Host[2], -1.8);
 }
 
 TEST(FeaturesTests, C3) {
-  af::setBackend(af::Backend::AF_BACKEND_CPU);
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
 
-  double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-  af::array tss(6, 2, data);
+    double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(6, 2, data);
 
-  af::array c3Result = tsa::features::c3(tss, 2);
+    af::array c3Result = tsa::features::c3(tss, 2);
 
-  double *c3Calculated = c3Result.host<double>();
+    double *c3Calculated = c3Result.host<double>();
 
-  ASSERT_EQ(c3Calculated[0], 7.5);
-  ASSERT_EQ(c3Calculated[1], 586.5);
+    ASSERT_EQ(c3Calculated[0], 7.5);
+    ASSERT_EQ(c3Calculated[1], 586.5);
 }
 
 TEST(FeaturesTests, CidCe) {
-  af::setBackend(af::Backend::AF_BACKEND_CPU);
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
 
-  double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-  af::array tss(6, 2, data);
+    double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(6, 2, data);
 
-  af::array cidCeResult = tsa::features::cidCe(tss);
+    af::array cidCeResult = tsa::features::cidCe(tss);
 
-  double *cidCeCalculated = cidCeResult.host<double>();
+    double *cidCeCalculated = cidCeResult.host<double>();
 
-  ASSERT_NEAR(cidCeCalculated[0], 2.23606797749979, 1e-9);
-  ASSERT_NEAR(cidCeCalculated[1], 2.23606797749979, 1e-9);
+    ASSERT_NEAR(cidCeCalculated[0], 2.23606797749979, 1e-9);
+    ASSERT_NEAR(cidCeCalculated[1], 2.23606797749979, 1e-9);
 
-  af::array cidCeResult2 = tsa::features::cidCe(tss, true);
+    af::array cidCeResult2 = tsa::features::cidCe(tss, true);
 
-  double *cidCeCalculated2 = cidCeResult2.host<double>();
+    double *cidCeCalculated2 = cidCeResult2.host<double>();
 
-  ASSERT_NEAR(cidCeCalculated2[0], 1.30930734141595, 1e-9);
-  ASSERT_NEAR(cidCeCalculated2[1], 1.30930734141595, 1e-9);
+    ASSERT_NEAR(cidCeCalculated2[0], 1.30930734141595, 1e-9);
+    ASSERT_NEAR(cidCeCalculated2[1], 1.30930734141595, 1e-9);
 }
 
 TEST(FeaturesTests, CountBelowMean) {
-  af::setBackend(af::Backend::AF_BACKEND_CPU);
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
 
-  double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-  af::array tss(6, 2, data);
+    double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(6, 2, data);
 
-  af::array countBelowMeanResult = tsa::features::countBelowMean(tss);
+    af::array countBelowMeanResult = tsa::features::countBelowMean(tss);
 
-  unsigned int *countBelowMeanCalculated = countBelowMeanResult.host<unsigned int>();
+    unsigned int *countBelowMeanCalculated = countBelowMeanResult.host<unsigned int>();
 
-  ASSERT_EQ(countBelowMeanCalculated[0], 3);
-  ASSERT_EQ(countBelowMeanCalculated[1], 3);
+    ASSERT_EQ(countBelowMeanCalculated[0], 3);
+    ASSERT_EQ(countBelowMeanCalculated[1], 3);
+}
+
+TEST(FeaturesTests, EnergyRatioByChunk) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(6, 2, data);
+
+    af::array energyRatioByChunkResult = tsa::features::energyRatioByChunks(tss, 2, 0);
+
+    double *energyRatioByChunkCalculated = energyRatioByChunkResult.host<double>();
+
+    ASSERT_NEAR(energyRatioByChunkCalculated[0], 0.090909091, 1e-9);
+    ASSERT_NEAR(energyRatioByChunkCalculated[1], 0.330376940, 1e-9);
+
+    af::array energyRatioByChunkResult2 = tsa::features::energyRatioByChunks(tss, 2, 1);
+
+    double *energyRatioByChunkCalculated2 = energyRatioByChunkResult2.host<double>();
+
+    ASSERT_NEAR(energyRatioByChunkCalculated2[0], 0.909090909, 1e-9);
+    ASSERT_NEAR(energyRatioByChunkCalculated2[1], 0.669623060, 1e-9);
 }

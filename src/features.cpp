@@ -8,12 +8,12 @@
 
 af::array tsa::features::absoluteSumOfChanges(af::array tss) {
     long n = tss.dims(0);
-    return af::sum(af::abs(tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span)));
+    return af::sum(af::abs(tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span)), 0);
 }
 
 af::array tsa::features::absEnergy(af::array base){
     array p2 = af::pow(base, 2);
-    af::array sp2 = af::sum(p2);
+    af::array sp2 = af::sum(p2, 0);
     return sp2;
 }
 
@@ -81,4 +81,13 @@ af::array tsa::features::countBelowMean(af::array tss) {
     af::array mean = af::mean(tss, 0);
     af::array belowMean = (tss < af::tile(mean, tss.dims(0))).as(af::dtype::u32);
     return af::sum(belowMean, 0);
+}
+
+af::array tsa::features::energyRatioByChunks(af::array tss, long numSegments, long segmentFocus) {
+    af::array fullSeriesEnergy = tsa::features::absEnergy(tss);
+    long n = tss.dims(0);
+    long segmentLength = n/numSegments;
+    long start = segmentFocus * segmentLength;
+    long end = std::min((segmentFocus + 1) * segmentLength, n);
+    return tsa::features::absEnergy(tss(af::seq(start, end - 1), span)) / fullSeriesEnergy;
 }

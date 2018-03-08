@@ -280,6 +280,20 @@ namespace features {
      */
     af::array countBelowMean(af::array tss);
 
+    /**
+     * @brief Calculates the sum of squares of chunk i out of N chunks expressed as a ratio 
+     * with the sum of squares over the whole series. segmentFocus should be lower
+     * than the number of segments
+     *
+     * @param tss Expects an input array whose dimension zero is the length of the
+     * time series (all the same) and dimension one indicates the number of time
+     * series.
+     * @param numSegments The number of segments to divide the series into
+     * @param segmentFocus The segment number (starting at zero) to return a feature on
+     * @return af::array The energy ratio by chunk of the time series
+     */
+    af::array energyRatioByChunks(af::array tss, long numSegments, long segmentFocus);
+
     // PIP Perceptualy important points
 };
 

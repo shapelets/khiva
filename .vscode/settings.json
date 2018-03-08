@@ -29,6 +29,9 @@
         "stdexcept": "cpp",
         "typeinfo": "cpp",
         "array": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "ios": "cpp"
     }
 }
