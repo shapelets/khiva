@@ -255,6 +255,19 @@ namespace features {
      */
     af::array c3(af::array tss, long lag);
 
+    /**
+     * @brief Calculates an estimate for the time series complexity defined by 
+     * Batista, Gustavo EAPA, et al (2014). (A more complex time series has more peaks,
+     * valleys, etc.)
+     *
+     * @param tss Expects an input array whose dimension zero is the length of the
+     * time series (all the same) and dimension one indicates the number of time
+     * series.
+     * @param zNormalize Controls whether the time series should be z-normalized or not
+     * @return af::array The complexity value for the given time series
+     */
+    af::array cidCe(af::array tss, bool zNormalize = false);
+
     // PIP Perceptualy important points
 };
 

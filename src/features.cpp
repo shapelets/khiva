@@ -66,3 +66,13 @@ af::array tsa::features::c3(af::array tss, long lag) {
     af::array aux = af::shift(tss, 2 * -lag) * af::shift(tss, -lag) * tss;
     return af::mean(aux(af::seq(tss.dims(0) - 2 * lag), span), 0);
 }
+
+af::array tsa::features::cidCe(af::array tss, bool zNormalize) {
+    long n = tss.dims(0);
+    if (zNormalize) {
+        tsa::normalization::znormInPlace(tss);
+    }
+
+    af::array diff = tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span);
+    return af::sqrt(af::sum(diff * diff));
+}

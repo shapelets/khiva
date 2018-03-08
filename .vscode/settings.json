@@ -28,6 +28,7 @@
         "new": "cpp",
         "stdexcept": "cpp",
         "typeinfo": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "*.ipp": "cpp"
     }
 }

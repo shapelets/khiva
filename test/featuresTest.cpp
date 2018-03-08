@@ -124,3 +124,24 @@ TEST(FeaturesTests, C3) {
   ASSERT_EQ(c3Calculated[0], 7.5);
   ASSERT_EQ(c3Calculated[1], 586.5);
 }
+
+TEST(FeaturesTests, CidCe) {
+  af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+  double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+  af::array tss(6, 2, data);
+
+  af::array cidCeResult = tsa::features::cidCe(tss);
+
+  double *cidCeCalculated = cidCeResult.host<double>();
+
+  ASSERT_NEAR(cidCeCalculated[0], 2.23606797749979, 1e-9);
+  ASSERT_NEAR(cidCeCalculated[1], 2.23606797749979, 1e-9);
+
+  af::array cidCeResult2 = tsa::features::cidCe(tss, true);
+
+  double *cidCeCalculated2 = cidCeResult2.host<double>();
+
+  ASSERT_NEAR(cidCeCalculated2[0], 1.30930734141595, 1e-9);
+  ASSERT_NEAR(cidCeCalculated2[1], 1.30930734141595, 1e-9);
+}
