@@ -243,6 +243,18 @@ namespace features {
      */
     af::array autocorrelation(af::array tss, long lag);
 
+    /**
+     * @brief Calculates the Schreiber, T. and Schmitz, A. (1997) measure of non-linearity
+     * for the given time series
+     *
+     * @param tss Expects an input array whose dimension zero is the length of the
+     * time series (all the same) and dimension one indicates the number of time
+     * series.
+     * @param lag The lag
+     * @return af::array The non-linearity value for the given time series
+     */
+    af::array c3(af::array tss, long lag);
+
     // PIP Perceptualy important points
 };
 

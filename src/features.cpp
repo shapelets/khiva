@@ -61,3 +61,8 @@ af::array tsa::features::autocorrelation(af::array tss, long lag) {
     af::array den = (n - lag) * af::var(tss, true, 0);
     return sumProduct / den;
 }
+
+af::array tsa::features::c3(af::array tss, long lag) {
+    af::array aux = af::shift(tss, 2 * -lag) * af::shift(tss, -lag) * tss;
+    return af::mean(aux(af::seq(tss.dims(0) - 2 * lag), span), 0);
+}

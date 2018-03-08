@@ -110,3 +110,17 @@ TEST(FeaturesTests, Autocorrelation) {
   ASSERT_EQ(calculated3Host[1], -1.8);
   ASSERT_EQ(calculated3Host[2], -1.8);
 }
+
+TEST(FeaturesTests, C3) {
+  af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+  double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+  af::array tss(6, 2, data);
+
+  af::array c3Result = tsa::features::c3(tss, 2);
+
+  double *c3Calculated = c3Result.host<double>();
+
+  ASSERT_EQ(c3Calculated[0], 7.5);
+  ASSERT_EQ(c3Calculated[1], 586.5);
+}
