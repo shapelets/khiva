@@ -16,3 +16,9 @@ pipelines:
           - cmake ..
           - make all
           - make test
+  branches:
+    develop:
+      - step:
+          script:
+          - make
+          - make test
