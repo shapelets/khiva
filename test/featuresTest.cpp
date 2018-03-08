@@ -86,7 +86,8 @@ TEST(FeaturesTests, AggregatedLinearTrend)
     ASSERT_EQ(stderrestCalculated, 0.0);
 }
 
-TEST(FeaturesTests, Autocorrelation) {
+TEST(FeaturesTests, Autocorrelation)
+{
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 
     double data[] = {0, 1, 2, 3, 4, 6, 8, 10, 11, 14, 17, 20};
@@ -111,7 +112,8 @@ TEST(FeaturesTests, Autocorrelation) {
     ASSERT_EQ(calculated3Host[2], -1.8);
 }
 
-TEST(FeaturesTests, C3) {
+TEST(FeaturesTests, C3)
+{
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 
     double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
@@ -125,7 +127,8 @@ TEST(FeaturesTests, C3) {
     ASSERT_EQ(c3Calculated[1], 586.5);
 }
 
-TEST(FeaturesTests, CidCe) {
+TEST(FeaturesTests, CidCe)
+{
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 
     double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
@@ -146,7 +149,8 @@ TEST(FeaturesTests, CidCe) {
     ASSERT_NEAR(cidCeCalculated2[1], 1.30930734141595, 1e-9);
 }
 
-TEST(FeaturesTests, CountBelowMean) {
+TEST(FeaturesTests, CountBelowMean)
+{
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 
     double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
@@ -160,7 +164,8 @@ TEST(FeaturesTests, CountBelowMean) {
     ASSERT_EQ(countBelowMeanCalculated[1], 3);
 }
 
-TEST(FeaturesTests, EnergyRatioByChunk) {
+TEST(FeaturesTests, EnergyRatioByChunk)
+{
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 
     double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
@@ -179,4 +184,30 @@ TEST(FeaturesTests, EnergyRatioByChunk) {
 
     ASSERT_NEAR(energyRatioByChunkCalculated2[0], 0.909090909, 1e-9);
     ASSERT_NEAR(energyRatioByChunkCalculated2[1], 0.669623060, 1e-9);
+}
+
+TEST(FeaturesTests, FftCoefficient)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(6, 2, data);
+
+    af::array real, imag, _abs, angle;
+
+    tsa::features::fftCoefficient(tss, 0, real, imag, _abs, angle);
+
+    double *realCalculated = real.host<double>();
+    double *imagCalculated = imag.host<double>();
+    double *_absCalculated = _abs.host<double>();
+    double *angleCalculated = angle.host<double>();
+
+    ASSERT_EQ(realCalculated[0], 15.0);
+    ASSERT_EQ(realCalculated[1], 51.0);
+    ASSERT_EQ(imagCalculated[0], 0.0);
+    ASSERT_EQ(imagCalculated[1], 0.0);
+    ASSERT_EQ(_absCalculated[0], 15.0);
+    ASSERT_EQ(_absCalculated[1], 51.0);
+    ASSERT_EQ(angleCalculated[0], 0.0);
+    ASSERT_EQ(angleCalculated[1], 0.0);
 }

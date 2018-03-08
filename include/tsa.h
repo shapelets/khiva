@@ -294,6 +294,22 @@ namespace features {
      */
     af::array energyRatioByChunks(af::array tss, long numSegments, long segmentFocus);
 
+    /**
+     * @brief Calculates the fourier coefficients of the one-dimensional discrete
+     * Fourier Transform for real input by fast fourier transformation algorithm
+     *
+     * @param tss Expects an input array whose dimension zero is the length of the
+     * time series (all the same) and dimension one indicates the number of time
+     * series.
+     * @param coefficient The coefficient to extract from the FFT
+     * @param real The real part of the coefficient
+     * @param imag The imaginary part of the cofficient
+     * @param abs The absolute value of the coefficient
+     * @param angle The angle of the coefficient
+     */
+    void fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &_abs,
+                        af::array &angle);
+
     // PIP Perceptualy important points
 };
 
