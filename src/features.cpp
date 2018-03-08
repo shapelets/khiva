@@ -48,3 +48,16 @@ void tsa::features::aggregatedLinearTrend(af::array t, long chunkSize, af::array
     af::array aggregateResult = aggregatingOnChunks(t, chunkSize, aggregationFunction);
     tsa::regression::linear(af::range(aggregateResult.dims(0)).as(t.type()), aggregateResult, slope, intercept, rvalue, pvalue, stderrest);
 }
+
+af::array tsa::features::autocorrelation(af::array tss, long lag) {
+    long n = tss.dims(0);
+
+    af::array y1 = tss(af::seq(n - lag), span);
+    af::array y2 = tss(af::seq(lag, n - 1), span);
+    
+    af::array xMean = af::mean(tss, 0);
+
+    af::array sumProduct = af::sum((y1 - af::tile(xMean, n - lag)) * (y2 - af::tile(xMean, n - lag)), 0);
+    af::array den = (n - lag) * af::var(tss, true, 0);
+    return sumProduct / den;
+}

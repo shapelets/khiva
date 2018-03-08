@@ -259,6 +259,18 @@ void aggregatedLinearTrend(af::array t, long chunkSize,
                            af::array &rvalue, af::array &pvalue,
                            af::array &stderrest);
 
+/**
+ * @brief Calculates the autocorrelation of the specified lag for the given time
+ * series
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param lag The lag
+ * @return af::array The autocorrelation value for the given time series
+ */
+af::array autocorrelation(af::array tss, long lag);
+
 // PIP Perceptualy important points
 }; // namespace features
 

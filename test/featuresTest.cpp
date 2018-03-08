@@ -85,3 +85,28 @@ TEST(FeaturesTests, AggregatedLinearTrend)
     ASSERT_EQ(pvalueCalculated, 0.0);
     ASSERT_EQ(stderrestCalculated, 0.0);
 }
+
+TEST(FeaturesTests, Autocorrelation) {
+  af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+  double data[] = {0, 1, 2, 3, 4, 6, 8, 10, 11, 14, 17, 20};
+  af::array tss(4, 3, data);
+
+  af::array calculated2 = tsa::features::autocorrelation(tss, 2);
+
+  double *calculated2Host = calculated2.host<double>();
+
+  // Expected results obtained using tsfresh
+  ASSERT_EQ(calculated2Host[0], -0.6);
+  ASSERT_EQ(calculated2Host[1], -0.6);
+  ASSERT_EQ(calculated2Host[2], -0.6);
+
+  af::array calculated3 = tsa::features::autocorrelation(tss, 3);
+
+  double *calculated3Host = calculated3.host<double>();
+
+  // Expected results obtained using tsfresh
+  ASSERT_EQ(calculated3Host[0], -1.8);
+  ASSERT_EQ(calculated3Host[1], -1.8);
+  ASSERT_EQ(calculated3Host[2], -1.8);
+}
