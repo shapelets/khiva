@@ -268,6 +268,18 @@ namespace features {
      */
     af::array cidCe(af::array tss, bool zNormalize = false);
 
+    /**
+     * @brief Calculates the number of values in the time series that are lower than
+     * the mean
+     *
+     * @param tss Expects an input array whose dimension zero is the length of the
+     * time series (all the same) and dimension one indicates the number of time
+     * series.
+     * @return af::array The number of values in the time series that are lower
+     * than the mean
+     */
+    af::array countBelowMean(af::array tss);
+
     // PIP Perceptualy important points
 };
 

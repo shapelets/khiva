@@ -76,3 +76,9 @@ af::array tsa::features::cidCe(af::array tss, bool zNormalize) {
     af::array diff = tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span);
     return af::sqrt(af::sum(diff * diff));
 }
+
+af::array tsa::features::countBelowMean(af::array tss) {
+    af::array mean = af::mean(tss, 0);
+    af::array belowMean = (tss < af::tile(mean, tss.dims(0))).as(af::dtype::u32);
+    return af::sum(belowMean, 0);
+}

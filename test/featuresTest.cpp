@@ -145,3 +145,17 @@ TEST(FeaturesTests, CidCe) {
   ASSERT_NEAR(cidCeCalculated2[0], 1.30930734141595, 1e-9);
   ASSERT_NEAR(cidCeCalculated2[1], 1.30930734141595, 1e-9);
 }
+
+TEST(FeaturesTests, CountBelowMean) {
+  af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+  double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+  af::array tss(6, 2, data);
+
+  af::array countBelowMeanResult = tsa::features::countBelowMean(tss);
+
+  unsigned int *countBelowMeanCalculated = countBelowMeanResult.host<unsigned int>();
+
+  ASSERT_EQ(countBelowMeanCalculated[0], 3);
+  ASSERT_EQ(countBelowMeanCalculated[1], 3);
+}
