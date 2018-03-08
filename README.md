@@ -25,11 +25,11 @@ In order t contribute to the code base, we follow the next process :
 `git checkout -b feature/exampleFeature`
 3. Develop the new feature on the the new branch. It includes testing and documentation.
 `git commit -a -m "Bla, Bla, Bla";  git push`
-4. Open a Pull Request to merge the feature branch ito develop. Currently, a pull request has to be reviewed at least by one person.
+4. Open a Pull Request to merge the feature branch in to develop. Currently, a pull request has to be reviewed at least by one person.
 5. Finally, delete the feature branch.
 6. Move back to develop branch.
 `git checkout develop`
-7. Pull the latests changes.
+7. Pull the latest changes.
 `git pull`
 
 # Builds
