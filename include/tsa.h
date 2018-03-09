@@ -325,7 +325,16 @@ namespace features {
     #ifdef __cplusplus
     extern "C"{
     #endif
-    
+    /**
+     * @brief Primitive of absEnergy
+     * 
+     * @param time_series Time series concatenated in a single row.
+     * @param time_series_length time_series length (All time series need to have the same length).
+     * @param number_of_time_series Number of time series in time_series.
+     * @param primitive_result Absolute Energy.
+     */
+    void abs_energy(double* time_series, long* time_series_length, long* number_of_time_series, double* primitive_result);
+
     /**
      * @brief Primitive of absoluteSumOfChanges function.
      * 
@@ -340,14 +349,24 @@ namespace features {
      * @brief JNI interface of absoluteSumOfChanges function.
      * 
      * @param timeSeries  Time series concatenated in a single row.
-     * @param concatenatedTimeSeriesLength  Length of timeSeries.
      * @param timeSeriesLength Length of each time series.
      * @param numberOfTimeSeries Number of time series into timeSeries.
-     * @param jResult  Absolute sum of changes.
+     * @param jResult Absolute sum of changes.
      */
-    JNIEXPORT void JNICALL Java_tsa_TSA_absoluteSumOfChanges(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries, jlong concatenatedTimeSeriesLength,
+    JNIEXPORT void JNICALL Java_tsa_TSA_absoluteSumOfChanges(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries,
                                                         jlong timeSeriesLength, jlong numberOfTimeSeries, jdoubleArray jResult);
-                                                        
+
+    /**
+     * @brief JNI interface of absEnergy function.
+     * 
+     * @param timeSeries Time series concatenated in a single row.
+     * @param timeSeriesLength Length of each time series.
+     * @param numberOfTimeSeries Number of time series into timeSeries.
+     * @param jResult Absolute Energy.
+     */
+    JNIEXPORT void JNICALL Java_tsa_TSA_absEnergy(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries,
+                                                        jlong timeSeriesLength, jlong numberOfTimeSeries, jdoubleArray jResult);                                                    
+    
     #ifdef __cplusplus
     }
     #endif
