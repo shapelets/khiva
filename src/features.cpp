@@ -115,6 +115,17 @@ af::array tsa::features::firstLocationOfMinimum(af::array tss) {
     return index.as(tss.type()) / tss.dims(0);
 }
 
+af::array tsa::features::hasDuplicates(af::array tss) {
+    af::array result = af::array(tss.dims(1), af::dtype::b8);
+
+    for(long i = 0; i < tss.dims(1); i++) {
+        af::array uniq = af::setUnique(tss(span, i));
+        result(i) = tss.dims(0) != uniq.dims(0);
+    }
+    
+    return af::transpose(result);
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif

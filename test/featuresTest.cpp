@@ -226,3 +226,18 @@ TEST(FeaturesTests, FirstLocationOfMinimum)
     ASSERT_EQ(firstMinimumCalculated[0], 0.5);
     ASSERT_EQ(firstMinimumCalculated[1], 0.5);
 }
+
+TEST(FeaturesTests, HasDuplicates)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {5, 4, 3, 0, 0, 1, 5, 4, 3, 0, 2, 1};
+    af::array tss(6, 2, data);
+
+    af::array duplicates = tsa::features::hasDuplicates(tss);
+
+    bool *duplicatesCalculated = (bool *)duplicates.host<char>();
+
+    ASSERT_EQ(duplicatesCalculated[0], true);
+    ASSERT_EQ(duplicatesCalculated[1], false);
+}
