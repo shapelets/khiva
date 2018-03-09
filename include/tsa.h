@@ -385,6 +385,26 @@ namespace dimensionality {
     // SAX
     // Principal Components A.
     // Random Projections
+    #ifdef __cplusplus
+    extern "C"{
+    #endif
+    
+    /**
+     * @brief Primitive of absoluteSumOfChanges function.
+     * 
+     * 
+     * @param time_series  Time series concatenated in a single row. 
+     * @param time_series_length time_series length (All time series need to have the same length).
+     * @param number_of_time_series  Number of time series.
+     * @param primitive_result Absolute sum of changes.
+     */
+    void absolute_sum_of_changes(double* time_series, long* time_series_length, long* number_of_time_series, double* primitive_result);
+    
+    #ifdef __cplusplus
+    }
+    #endif
+    
+    
 };
 
 namespace distances {
@@ -604,6 +624,7 @@ namespace matrix {
     #ifdef __cplusplus
     extern "C"{
     #endif
+    
 
     /**
      * @brief Primitive of the findBestNDiscords function.

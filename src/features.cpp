@@ -101,3 +101,17 @@ void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &r
     _abs = af::abs(real);
     angle = af::arg(fftCoefficient);
 }
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+    void absolute_sum_of_changes(double* time_series, long* time_series_length, long* number_of_time_series, double* primitive_result) {
+            af::array result;
+            result = tsa::features::absoluteSumOfChanges(af::array(*time_series_length, *number_of_time_series, time_series));
+            result.host(primitive_result);
+    }
+
+#ifdef __cplusplus
+}
+#endif
