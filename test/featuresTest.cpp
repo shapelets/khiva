@@ -211,3 +211,18 @@ TEST(FeaturesTests, FftCoefficient)
     ASSERT_EQ(angleCalculated[0], 0.0);
     ASSERT_EQ(angleCalculated[1], 0.0);
 }
+
+TEST(FeaturesTests, FirstLocationOfMinimum)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {5, 4, 3, 0, 0, 1, 5, 4, 3, 0, 2, 1};
+    af::array tss(6, 2, data);
+
+    af::array result = tsa::features::firstLocationOfMinimum(tss);
+    
+    double *firstMinimumCalculated = result.host<double>();
+
+    ASSERT_EQ(firstMinimumCalculated[0], 0.5);
+    ASSERT_EQ(firstMinimumCalculated[1], 0.5);
+}

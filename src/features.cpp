@@ -102,6 +102,15 @@ void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &r
     angle = af::arg(fftCoefficient);
 }
 
+af::array tsa::features::firstLocationOfMinimum(af::array tss) {
+    af::array sorted;
+    af::array index = af::tile(af::range(tss.dims(0)), 1, tss.dims(1));
+
+    af::sort(sorted, index, tss, 0);
+
+    return index(0, span).as(tss.type()) / tss.dims(0);
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
