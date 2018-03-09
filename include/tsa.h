@@ -322,6 +322,35 @@ namespace features {
     af::array firstLocationOfMinimum(af::array tss);
 
     // PIP Perceptualy important points
+    #ifdef __cplusplus
+    extern "C"{
+    #endif
+    
+    /**
+     * @brief Primitive of absoluteSumOfChanges function.
+     * 
+     * @param time_series  Time series concatenated in a single row. 
+     * @param time_series_length time_series length (All time series need to have the same length).
+     * @param number_of_time_series  Number of time series.
+     * @param primitive_result Absolute sum of changes.
+     */
+    void absolute_sum_of_changes(double* time_series, long* time_series_length, long* number_of_time_series, double* primitive_result);
+    
+    /**
+     * @brief JNI interface of absoluteSumOfChanges function.
+     * 
+     * @param timeSeries  Time series concatenated in a single row.
+     * @param concatenatedTimeSeriesLength  Length of timeSeries.
+     * @param timeSeriesLength Length of each time series.
+     * @param numberOfTimeSeries Number of time series into timeSeries.
+     * @param jResult  Absolute sum of changes.
+     */
+    JNIEXPORT void JNICALL Java_tsa_TSA_absoluteSumOfChanges(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries, jlong concatenatedTimeSeriesLength,
+                                                        jlong timeSeriesLength, jlong numberOfTimeSeries, jdoubleArray jResult);
+                                                        
+    #ifdef __cplusplus
+    }
+    #endif
 };
 
 namespace dimensionality {
@@ -395,27 +424,7 @@ namespace dimensionality {
     // PAA/PLA
     // SAX
     // Principal Components A.
-    // Random Projections
-    #ifdef __cplusplus
-    extern "C"{
-    #endif
-    
-    /**
-     * @brief Primitive of absoluteSumOfChanges function.
-     * 
-     * 
-     * @param time_series  Time series concatenated in a single row. 
-     * @param time_series_length time_series length (All time series need to have the same length).
-     * @param number_of_time_series  Number of time series.
-     * @param primitive_result Absolute sum of changes.
-     */
-    void absolute_sum_of_changes(double* time_series, long* time_series_length, long* number_of_time_series, double* primitive_result);
-    
-    #ifdef __cplusplus
-    }
-    #endif
-    
-    
+    // Random Projections 
 };
 
 namespace distances {

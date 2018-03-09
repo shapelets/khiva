@@ -121,6 +121,24 @@ extern "C" {
             result.host(primitive_result);
     }
 
+    JNIEXPORT void JNICALL Java_tsa_TSA_absoluteSumOfChanges(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries, jlong concatenatedTimeSeriesLength,
+                                                        jlong timeSeriesLength, jlong numberOfTimeSeries, jdoubleArray jResult) {
+        af::array result;
+        double inputTs[concatenatedTimeSeriesLength];
+
+        env->GetDoubleArrayRegion(timeSeries, 0, concatenatedTimeSeriesLength, &inputTs[0]);
+
+        result = tsa::features::absoluteSumOfChanges(af::array(timeSeriesLength, numberOfTimeSeries, inputTs));
+        
+        double inputCResult[numberOfTimeSeries];
+       
+        result.host(inputCResult);
+
+        env->SetDoubleArrayRegion(jResult, 0, numberOfTimeSeries, &inputCResult[0]);
+
+        return;
+    }
+
 #ifdef __cplusplus
 }
 #endif
