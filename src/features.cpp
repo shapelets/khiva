@@ -103,12 +103,16 @@ void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &r
 }
 
 af::array tsa::features::firstLocationOfMinimum(af::array tss) {
-    af::array sorted;
-    af::array index = af::tile(af::range(tss.dims(0)), 1, tss.dims(1));
+    af::array flipped = af::flip(tss, 0);
 
-    af::sort(sorted, index, tss, 0);
+    af::array minimum;
+    af::array index;
 
-    return index(0, span).as(tss.type()) / tss.dims(0);
+    af::min(minimum, index, flipped, 0);
+
+    index = af::abs(index - tss.dims(0) + 1);
+
+    return index.as(tss.type()) / tss.dims(0);
 }
 
 #ifdef __cplusplus
