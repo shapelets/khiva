@@ -6,13 +6,18 @@
 
 #include <tsa.h>
 
-af::array tsa::statistics::covariance(af::array x, af::array y, bool bias) {
-    long n = x.dims(0);
-    long fact = n - !bias;
+af::array tsa::statistics::covariance(af::array xss, af::array yss) {
+    long n = xss.dims(0);
+    af::array result = af::constant(0, 2, 2, xss.dims(1), xss.type());
 
-    af::array input = af::join(1, x, y);
+    //using a regular for loop since the matmul operation is not supported inside GFOR
+    for(long currentCol = 0; currentCol < xss.dims(1); currentCol++) {
+        af::array input = af::join(1, xss(span, currentCol), yss(span, currentCol));
 
-    input -= af::tile(af::mean(input, 0), n, 1);
+        input -= af::tile(af::mean(input, 0), n, 1, 1);
 
-    return af::matmul(af::transpose(input),af::conjg(input)) / 2;
+        result(span, span, currentCol) = af::matmul(af::transpose(input), af::conjg(input)) / 2;
+    }
+
+    return result;
 }

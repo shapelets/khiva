@@ -736,16 +736,17 @@ namespace matrix {
 
     namespace statistics {
         /**
-         * @brief Returns the covariance matrix of the two input arrays
+         * @brief Returns the covariance matrix of the time series contained in the two input arrays
          * 
-         * @param x First variable with the different observations
-         * @param y Second variable with the different observations
-         * @param bias Default normalization is by (N - 1), where N is the number of
-         * observations given (unbiased estimate). If bias is 1, then
-         * normalization is by N
+         * @param xss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
+         * @param yss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
          * @return af::array The covariance matrix of the variables
          */
-        af::array covariance(af::array x, af::array y, bool bias = false);
+        af::array covariance(af::array xss, af::array yss);
     };
 
     namespace regression {
@@ -754,8 +755,12 @@ namespace matrix {
          * @brief Calculate a linear least-squares regression for two sets of measurements.
          * Both arrays should have the same length
          * 
-         * @param x First sets of measurements 
-         * @param y Second set of measurements
+         * @param xss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
+         * @param yss Expects an input array whose dimension zero is the length of the time 
+         * series (all the same) and dimension one indicates the number of 
+         * time series.
          * @param slope Slope of the regression line
          * @param intercept Intercept of the regression line
          * @param rvalue Correlation coefficient
@@ -764,7 +769,7 @@ namespace matrix {
          * the test statistic
          * @param stderrest Standard error of the estimated gradient
          */
-        void linear(af::array x, af::array y, af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
+        void linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
     };
 };
 

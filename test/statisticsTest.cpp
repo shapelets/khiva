@@ -61,15 +61,17 @@ TEST(StatsTests, Covariance)
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double dataX[] = {-2.1, -1,  4.3};
     af::array x(3, dataX);
+    af::array xss = af::tile(x, 1, 2);
 
     double dataY[] = {3,  1.1,  0.12};
     af::array y(3, dataY);
+    af::array yss = af::tile(y, 1, 2);
 
     double dataExpected[] = {11.70999999, -4.286, -4.286, 2.14413333};
 
-    double *result = tsa::statistics::covariance(x, y).host<double>();
+    double *result = tsa::statistics::covariance(xss, yss).host<double>();
 
-    for(int i = 0; i < 4; i++) {
-        ASSERT_NEAR(dataExpected[i], result[i], 1e-8);
+    for(int i = 0; i < 8; i++) {
+        ASSERT_NEAR(dataExpected[i%4], result[i%4], 1e-8);
     }
 }

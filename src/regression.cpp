@@ -9,24 +9,28 @@
 
 #define EPSILON 1e-20
 
-void tsa::regression::linear(af::array x, af::array y, af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest) {
-    long n = x.dims(0);
+void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest) {
+    long n = xss.dims(0);
 
-    af::array meanX = af::mean(x);
-    af::array meanY = af::mean(y);
+    af::array meanX = af::mean(xss, 0);
+    af::array meanY = af::mean(yss, 0);
 
-    af::array sumSquares = af::flat(tsa::statistics::covariance(x, y, true));
+    af::array sumSquares = tsa::statistics::covariance(xss, yss);
 
-    af::array ssxm = sumSquares(0);
-    af::array ssxym = sumSquares(1);
-    af::array ssyxm = sumSquares(2);
-    af::array ssym = sumSquares(3);
+    af::array ssxm = sumSquares(0, 0, span);
+    ssxm = af::reorder(ssxm, 0, 2, 1, 3);
+    af::array ssxym = sumSquares(0, 1, span);
+    ssxym = af::reorder(ssxym, 0, 2, 1, 3);    
+    af::array ssyxm = sumSquares(1, 0, span);
+    ssyxm = af::reorder(ssyxm, 0, 2, 1, 3);
+    af::array ssym = sumSquares(1, 1, span);
+    ssym = af::reorder(ssym, 0, 2, 1, 3);
 
     af::array rNum = ssxym;
 
     af::array rDen = af::sqrt(ssxm * ssym);
 
-    af::array r = af::array(1, 0.0);
+    af::array r = af::transpose(af::constant(0, xss.dims(1), xss.type()));
     r = (rDen > 0.0) * rNum / rDen;
     r = af::min(r, 1.0);
     r = af::max(r, -1.0);
@@ -42,7 +46,9 @@ void tsa::regression::linear(af::array x, af::array y, af::array &slope, af::arr
     //Using boost to compute the CDF of the T-Student distribution
     //It would be better to move this computation to the GPU
     double *aux = af::abs(t).host<double>();
-    *aux = 2.0 * (1 - boost::math::cdf(dist, *aux));
-    pvalue = af::array(1, aux);
+    for(long i = 0; i < t.dims(1); i++) {
+        aux[i] = 2.0 * (1 - boost::math::cdf(dist, aux[i]));
+    }
+    pvalue = af::array(t.dims(1), aux);
     stderrest = af::sqrt((1 - af::pow(r, 2)) * ssym / ssxm / df);
 }
