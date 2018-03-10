@@ -4,8 +4,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <boost/math/distributions/normal.hpp>
+
 #include <iostream>
+#include <iterator>
+#include <vector>
+#include <boost/math/distributions/normal.hpp>
 #include "tsa.h"
 
 af::array tsa::dimensionality::PAA(array a, int bins)
@@ -154,9 +157,14 @@ void getSegmentOfPoint(float point, std::vector<float> desired_x, int &i_lower, 
     }else if(n == numberIPs){
         return ts;
     }
-
-    float * points_x = ts.col(0).host<float>();
-    float * points_y = ts.col(1).host<float>();
+    
+    // Extracting info from af::array
+    float * h_x = ts.col(0).host<float>();
+    float * h_y = ts.col(1).host<float>();
+  
+    // Converting c-arrays to vectors
+    std::vector<float> points_x(&h_x[0], &h_x[n]);
+    std::vector<float> points_y(&h_y[0], &h_y[n]);
 
     // Allocation vectos for two points
     std::vector<float> desired_x(2);
