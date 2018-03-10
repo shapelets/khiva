@@ -350,7 +350,9 @@ namespace dimensionality {
     std::vector<int> SAX(array a, int alphabet_size);
 
     /**
-     * @brief Calculates the number of Perceptually Important Points in the time series 
+     * @brief Calculates the number of Perceptually Important Points in the time series.
+     * Fu TC, Chung FL, Luk R, and Ng CM (2008) Representing financial time series based on data point
+     * importance. Engineering Applications of Artificial Intelligence, 21(2):277-300 
      *
      * @param pointList Expects an input array whose dimension zero is the length of the
      * time series
@@ -359,8 +361,7 @@ namespace dimensionality {
      */
     af::array PIP(af::array ts, int numberIPs);
 
-    // PAA/PLA
-    // SAX
+    // PLA
     // Principal Components A.
     // Random Projections
 };
