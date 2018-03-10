@@ -75,7 +75,7 @@ namespace simplification {
      * @return a vector with the same dimensions as poinList where the number of points has been 
      * reduced up to numPoints.
      */
-    array visvalingam_simplify(array pointList, int numPoints);          
+    array visvalingam_simplify(array pointList, int numPoints);
 };
 
 namespace regularization {
@@ -450,6 +450,16 @@ namespace dimensionality {
      * @return result An array of symbols.
      */
     std::vector<int> SAX(array a, int alphabet_size);
+
+    /**
+     * @brief Calculates the number of Perceptually Important Points in the time series 
+     *
+     * @param pointList Expects an input array whose dimension zero is the length of the
+     * time series
+     * @param The number of points to return
+     * @return af::array with the numPoints most Perceptually Important
+     */
+    af::array PIP(af::array ts, int numberIPs);
 
     // PAA/PLA
     // SAX
@@ -843,4 +853,3 @@ namespace matrix {
         void linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
     };
 };
-
