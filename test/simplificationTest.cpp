@@ -81,11 +81,7 @@ TEST(SimplificationTests, RamerDouglasPeuckerCPU)
 	pointList.push_back(tsa::simplification::Point(8.0, 9.0));
 	pointList.push_back(tsa::simplification::Point(9.0, 9.0));
 
-	std::cout << "Elements in pointList " << pointList.size() << std::endl;
-
 	pointListOut = tsa::simplification::ramerDouglasPeucker(pointList, 1.0);
-	std::cout << "Elements in pointList " << pointList.size() << std::endl;
-	std::cout << "Elements in pointListOut " << pointListOut.size() << std::endl;
 
 	for(size_t i=0;i< pointListOut.size();i++)
 	{
@@ -113,10 +109,7 @@ TEST(SimplificationTests, VisvalingamCPU)
 	pointList.push_back(tsa::simplification::Point(8.0, 9.0));
 	pointList.push_back(tsa::simplification::Point(9.0, 9.0));
 
-	std::cout << "Elements in pointList " << pointList.size() << std::endl;
-
 	out = tsa::simplification::visvalingam_simplify(pointList, 5);
-	std::cout << "Elements in pointList " << out.size() << std::endl;
 
 	for(size_t i=0;i< out.size();i++){
         ASSERT_EQ(out[i].first, expected[i].first);
