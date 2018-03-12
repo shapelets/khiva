@@ -70,3 +70,27 @@ TEST(DimensionalityTests, SAX)
         EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
 	}
 }
+
+TEST(DimensionalityTests, PIP) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+	float exp_x[] = {0.0, 2.0, 4.0, 5.0, 6.0, 9.0}; 
+	float exp_y[] = {0.0, -0.1, 6.0, 7.0, 8.1, 9.0};
+    float px[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
+    float py[] = {0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+
+    af::array tsx(10, 1, px);
+    af::array tsy(10, 1, py);
+    af::array tss = join(1, tsx, tsy);
+
+	af::array pointsOut = tsa::dimensionality::PIP(tss, 6);
+   
+    float * pox_h = pointsOut.col(0).host<float>();
+    float * poy_h = pointsOut.col(1).host<float>();
+
+	for(size_t i=0; i< 6; i++)
+	{
+        ASSERT_EQ(pox_h[i], exp_x[i]);
+        ASSERT_EQ(poy_h[i], exp_y[i]);
+	}
+}

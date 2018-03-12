@@ -113,7 +113,6 @@ std::vector<tsa::simplification::Point> tsa::simplification::visvalingam_simplif
     
     //One point to be deleted in each iteration
     for(int iter = 0; iter < iterations; iter++){
-		std::cout << "Iteration: " << iter << std::endl;
         for (int p = 0; p < out.size()-2; p++){
             float area = computeTriangleArea(out[p], out[p+1], out[p+2]);
             if(area < min_area){
