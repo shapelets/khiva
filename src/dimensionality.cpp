@@ -37,10 +37,8 @@ std::vector<float> computeBreakpoints(int alphabet_size, float mean_value, float
     boost::math::normal dist(mean_value, std_value);
 
     for(int i = 1; i < alphabet_size; i++){
-        //std::cout << "I: " << i  << " asize: " << alphabet_size << " exp: " << (float)i*(1/(float)alphabet_size) << std::endl;
         float value = quantile(dist, (float)i*(1/(float)alphabet_size));
         res.push_back(value);
-        //std::cout << "VALUE: " << value  << std::endl;
     }
     return res;
 }
