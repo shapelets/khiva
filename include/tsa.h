@@ -47,7 +47,7 @@ namespace simplification {
      * @return array Array with the same dimensions as tss where the time series have been
      * adjusted for zero mean and one as standard deviation.
      */
-    array ramerDouglasPeucker(array pointList, double epsilon);
+    af::array ramerDouglasPeucker(af::array pointList, double epsilon);
 
     /**
      * @brief Simplifies a set of points by applying the visvalingam method (minimun triangle area) 
@@ -75,7 +75,7 @@ namespace simplification {
      * @return a vector with the same dimensions as poinList where the number of points has been 
      * reduced up to numPoints.
      */
-    array visvalingam_simplify(array pointList, int numPoints);          
+    af::array visvalingam_simplify(af::array pointList, int numPoints);
 };
 
 namespace regularization {
@@ -460,10 +460,21 @@ namespace dimensionality {
      * 
      * @return result An array of symbols.
      */
-    std::vector<int> SAX(array a, int alphabet_size);
+    std::vector<int> SAX(af::array a, int alphabet_size);
 
-    // PAA/PLA
-    // SAX
+    /**
+     * @brief Calculates the number of Perceptually Important Points in the time series.
+     * Fu TC, Chung FL, Luk R, and Ng CM (2008) Representing financial time series based on data point
+     * importance. Engineering Applications of Artificial Intelligence, 21(2):277-300 
+     *
+     * @param pointList Expects an input array whose dimension zero is the length of the
+     * time series
+     * @param numberIPs The number of points to return
+     * @return af::array with the numPoints most Perceptually Important
+     */
+    af::array PIP(af::array ts, int numberIPs);
+
+    // PLA
     // Principal Components A.
     // Random Projections 
 };
@@ -854,4 +865,3 @@ namespace matrix {
         void linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
     };
 };
-
