@@ -169,6 +169,20 @@ TEST(FeaturesTests, AggregatedLinearTrendMultipleSeriesMin)
     ASSERT_EQ(stderrestCalculated[1], 0.0);
 }
 
+TEST(FeaturesTests, ApproximateEntropy)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    int m = 4;
+    float r = 0.5;
+    af::array a(10, data);
+
+    float res = tsa::features::approximateEntropy(a, m, r);
+    float expected = 0.13484275341033936;
+
+    ASSERT_NEAR(res, expected, 1e-9);
+}
+
 TEST(FeaturesTests, Autocorrelation)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
