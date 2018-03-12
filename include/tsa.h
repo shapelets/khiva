@@ -47,7 +47,7 @@ namespace simplification {
      * @return array Array with the same dimensions as tss where the time series have been
      * adjusted for zero mean and one as standard deviation.
      */
-    array ramerDouglasPeucker(array pointList, double epsilon);
+    af::array ramerDouglasPeucker(af::array pointList, double epsilon);
 
     /**
      * @brief Simplifies a set of points by applying the visvalingam method (minimun triangle area) 
@@ -75,7 +75,7 @@ namespace simplification {
      * @return a vector with the same dimensions as poinList where the number of points has been 
      * reduced up to numPoints.
      */
-    array visvalingam_simplify(array pointList, int numPoints);
+    af::array visvalingam_simplify(af::array pointList, int numPoints);
 };
 
 namespace regularization {
