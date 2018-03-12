@@ -61,7 +61,7 @@ TEST(FeaturesTests, AbsoluteSumOfChanges)
     ASSERT_EQ(9, hostResult[2]);
 }
 
-TEST(FeaturesTests, AggregatedLinearTrend)
+TEST(FeaturesTests, AggregatedLinearTrendMean)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5};
@@ -84,6 +84,89 @@ TEST(FeaturesTests, AggregatedLinearTrend)
     ASSERT_EQ(rvalueCalculated, 1.0);
     ASSERT_EQ(pvalueCalculated, 0.0);
     ASSERT_EQ(stderrestCalculated, 0.0);
+}
+
+TEST(FeaturesTests, AggregatedLinearTrendMin)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5};
+    af::array tss(12, data);
+
+    af::array slope, intercept, rvalue, pvalue, stderrest;
+
+    tsa::features::aggregatedLinearTrend(tss, 3, af::min, slope, intercept, rvalue, pvalue, stderrest);
+
+    double slopeCalculated, interceptCalculated, rvalueCalculated, pvalueCalculated, stderrestCalculated;
+
+    slope.host(&slopeCalculated);
+    intercept.host(&interceptCalculated);
+    rvalue.host(&rvalueCalculated);
+    pvalue.host(&pvalueCalculated);
+    stderrest.host(&stderrestCalculated);
+
+    ASSERT_EQ(slopeCalculated, 1.0);
+    ASSERT_EQ(interceptCalculated, 2.0);
+    ASSERT_EQ(rvalueCalculated, 1.0);
+    ASSERT_EQ(pvalueCalculated, 0.0);
+    ASSERT_EQ(stderrestCalculated, 0.0);
+}
+
+TEST(FeaturesTests, AggregatedLinearTrendMultipleSeriesMean)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5};
+    af::array t(12, data);
+    af::array tss = af::tile(t, 1, 2);
+
+    af::array slope, intercept, rvalue, pvalue, stderrest;
+
+    tsa::features::aggregatedLinearTrend(tss, 3, af::mean, slope, intercept, rvalue, pvalue, stderrest);
+
+    double *slopeCalculated = slope.host<double>();
+    double *interceptCalculated = intercept.host<double>();
+    double *rvalueCalculated = rvalue.host<double>();
+    double *pvalueCalculated = pvalue.host<double>();
+    double *stderrestCalculated = stderrest.host<double>();
+
+    ASSERT_EQ(slopeCalculated[0], 1.0);
+    ASSERT_EQ(slopeCalculated[1], 1.0);
+    ASSERT_EQ(interceptCalculated[0], 2.0);
+    ASSERT_EQ(interceptCalculated[1], 2.0);
+    ASSERT_EQ(rvalueCalculated[0], 1.0);
+    ASSERT_EQ(rvalueCalculated[1], 1.0);
+    ASSERT_EQ(pvalueCalculated[0], 0.0);
+    ASSERT_EQ(pvalueCalculated[1], 0.0);
+    ASSERT_EQ(stderrestCalculated[0], 0.0);
+    ASSERT_EQ(stderrestCalculated[1], 0.0);
+}
+
+TEST(FeaturesTests, AggregatedLinearTrendMultipleSeriesMin)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5};
+    af::array t(12, data);
+    af::array tss = af::tile(t, 1, 2);
+
+    af::array slope, intercept, rvalue, pvalue, stderrest;
+
+    tsa::features::aggregatedLinearTrend(tss, 3, af::min, slope, intercept, rvalue, pvalue, stderrest);
+
+    double *slopeCalculated = slope.host<double>();
+    double *interceptCalculated = intercept.host<double>();
+    double *rvalueCalculated = rvalue.host<double>();
+    double *pvalueCalculated = pvalue.host<double>();
+    double *stderrestCalculated = stderrest.host<double>();
+
+    ASSERT_EQ(slopeCalculated[0], 1.0);
+    ASSERT_EQ(slopeCalculated[1], 1.0);
+    ASSERT_EQ(interceptCalculated[0], 2.0);
+    ASSERT_EQ(interceptCalculated[1], 2.0);
+    ASSERT_EQ(rvalueCalculated[0], 1.0);
+    ASSERT_EQ(rvalueCalculated[1], 1.0);
+    ASSERT_EQ(pvalueCalculated[0], 0.0);
+    ASSERT_EQ(pvalueCalculated[1], 0.0);
+    ASSERT_EQ(stderrestCalculated[0], 0.0);
+    ASSERT_EQ(stderrestCalculated[1], 0.0);
 }
 
 TEST(FeaturesTests, Autocorrelation)
