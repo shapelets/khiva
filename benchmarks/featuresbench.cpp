@@ -213,6 +213,22 @@ template <af::Backend BE> void HasDuplicates(benchmark::State &state) {
   addMemoryCounters(state);
 }
 
+template <af::Backend BE> void HasDuplicateMin(benchmark::State &state) {
+  af::setBackend(BE);
+
+  auto n = state.range(0);
+  auto m = state.range(1);
+
+  auto t = af::randu(n, m, f64);
+
+  while (state.KeepRunning()) {
+    auto duplicateMin = tsa::features::hasDuplicateMin(t);
+    duplicateMin.eval();
+    af::sync();
+  }
+  addMemoryCounters(state);
+}
+
 BENCHMARK_TEMPLATE(AbsoluteSumOfChanges, af::Backend::AF_BACKEND_OPENCL)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
@@ -319,6 +335,16 @@ BENCHMARK_TEMPLATE(HasDuplicates, af::Backend::AF_BACKEND_OPENCL)
     ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(HasDuplicates, af::Backend::AF_BACKEND_CPU)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(HasDuplicateMin, af::Backend::AF_BACKEND_OPENCL)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(HasDuplicateMin, af::Backend::AF_BACKEND_CPU)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
     ->Unit(benchmark::TimeUnit::kMicrosecond);

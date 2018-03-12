@@ -126,6 +126,12 @@ af::array tsa::features::hasDuplicates(af::array tss) {
     return af::transpose(result);
 }
 
+af::array tsa::features::hasDuplicateMin(af::array tss) {
+    af::array minimum = af::min(tss, 0);
+
+    return af::sum(tss == af::tile(minimum, tss.dims(0)), 0) > 1;
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif

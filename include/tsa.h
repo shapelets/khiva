@@ -332,6 +332,17 @@ namespace features {
      */
     af::array hasDuplicates(af::array tss);
 
+    /**
+     * @brief Calculates if the minimum of input time series is duplicated
+     * 
+     * @param tss Expects an input array whose dimension zero is the length of the
+     * time series (all the same) and dimension one indicates the number of time
+     * series.
+     * @return af::array Array containing True if the minimum of the time series is duplicated
+     * and false otherwise
+     */
+    af::array hasDuplicateMin(af::array tss);
+
     // PIP Perceptualy important points
     #ifdef __cplusplus
     extern "C"{
