@@ -449,7 +449,7 @@ namespace dimensionality {
      * 
      * @return result An array of symbols.
      */
-    std::vector<int> SAX(array a, int alphabet_size);
+    std::vector<int> SAX(af::array a, int alphabet_size);
 
     /**
      * @brief Calculates the number of Perceptually Important Points in the time series.
@@ -458,7 +458,7 @@ namespace dimensionality {
      *
      * @param pointList Expects an input array whose dimension zero is the length of the
      * time series
-     * @param The number of points to return
+     * @param numberIPs The number of points to return
      * @return af::array with the numPoints most Perceptually Important
      */
     af::array PIP(af::array ts, int numberIPs);

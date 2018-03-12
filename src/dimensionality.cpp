@@ -194,7 +194,6 @@ void getSegmentOfPoint(float point, std::vector<float> desired_x, int &i_lower, 
                 }
             }     
         }
-        //if we have found a new point.
         insertPointInDesiredList(points_x[index], points_y[index], position, desired_x, desired_y);
     }
 
