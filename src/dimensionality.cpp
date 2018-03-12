@@ -59,7 +59,7 @@ std::vector<int> generateAlphabet(int alphabet_size)
   return res;
 }
 
-std::vector<int> tsa::dimensionality::SAX(array a, int alphabet_size)
+std::vector<int> tsa::dimensionality::SAX(af::array a, int alphabet_size)
 {
   float mean_value = mean<float>(a);
   float std_value = stdev<float>(a);
