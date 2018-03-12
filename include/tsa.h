@@ -184,7 +184,6 @@ namespace features {
      */
     af::array absEnergy(af::array base);
 
-    // tsfresh
     /**
      * @brief Calculates the sum over the absolute value of consecutive changes in the time series
      * 
@@ -231,6 +230,25 @@ namespace features {
      */
     void aggregatedLinearTrend(af::array t, long chunkSize, af::array (*aggregationFunction)(const af::array&, const dim_t),
                                 af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
+    
+    /**
+     * @brief Calculates ta vectorized Approximate entropy algorithm.
+     * https://en.wikipedia.org/wiki/Approximate_entropy
+     * For short time-series this method is highly dependent on the parameters, but should be stable for N > 2000, 
+     * see: Yentes et al. (2012) - The Appropriate Use of Approximate Entropy and Sample Entropy with Short Data Sets
+     * Other shortcomings and alternatives discussed in:
+     * Richman & Moorman (2000) - Physiological time-series analysis using approximate entropy and sample entropy
+     * 
+     * @param tss Expects an input array whose dimension zero is the length of the time 
+     * series (all the same) and dimension one indicates the number of 
+     * time series.
+     * @param m Length of compared run of data
+     * @param r filtering level, must be positive
+     * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
+     * contains absolute value of consecutive changes in the time series
+     */
+    float approximateEntropy(af::array tss, int m, float r);
+
     /**
      * @brief Calculates the autocorrelation of the specified lag for the given time
      * series
