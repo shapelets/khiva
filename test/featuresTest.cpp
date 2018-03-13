@@ -172,7 +172,7 @@ TEST(FeaturesTests, AggregatedLinearTrendMultipleSeriesMin)
 TEST(FeaturesTests, ApproximateEntropy)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
-    float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     int m = 4;
     float r = 0.5;
     af::array a(10, data);
