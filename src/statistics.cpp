@@ -21,3 +21,26 @@ af::array tsa::statistics::covariance(af::array xss, af::array yss) {
 
     return result;
 }
+
+af::array tsa::statistics::moment(af::array tss, int k) {
+    double n = tss.dims(0);
+
+    return af::sum(af::pow(tss, k), 0) / n;
+}
+
+af::array tsa::statistics::sampleStdev(af::array tss) {
+    double n = tss.dims(0);
+    af::array mean = af::mean(tss, 0);
+
+    return af::sqrt(af::sum(af::pow(tss - af::tile(mean, tss.dims(0)), 2), 0) / (n - 1));
+}
+
+af::array tsa::statistics::kurtosis(af::array tss) {
+    double n = tss.dims(0);
+
+    double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
+    af::array b = af::sum(af::pow((tss - af::tile(af::mean(tss, 0), tss.dims(0))) / af::tile(tsa::statistics::sampleStdev(tss), tss.dims(0)), 4), 0);
+    double c = (3 * std::pow(n - 1, 2)) / ((n - 2) * (n - 3));
+
+    return a * b - c;
+}

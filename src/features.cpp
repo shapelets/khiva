@@ -132,6 +132,10 @@ af::array tsa::features::hasDuplicateMin(af::array tss) {
     return af::sum(tss == af::tile(minimum, tss.dims(0)), 0) > 1;
 }
 
+af::array tsa::features::kurtosis(af::array tss) {
+    return tsa::statistics::kurtosis(tss);
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif

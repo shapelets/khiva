@@ -75,3 +75,54 @@ TEST(StatsTests, Covariance)
         ASSERT_NEAR(dataExpected[i%4], result[i%4], 1e-8);
     }
 }
+
+TEST(StatsTests, Moment)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double dataX[] = {0, 1, 2, 3, 4, 5};
+    af::array x(6, dataX);
+    af::array xss = af::tile(x, 1, 2);
+
+    double dataExpected = 9.166666666;
+
+    double *result = tsa::statistics::moment(xss, 2).host<double>();
+
+    ASSERT_NEAR(result[0], dataExpected, 1e-9);
+    ASSERT_NEAR(result[1], dataExpected, 1e-9);
+
+    dataExpected = 163.1666666666;
+
+    result = tsa::statistics::moment(xss, 4).host<double>();
+
+    ASSERT_NEAR(result[0], dataExpected, 1e-9);
+    ASSERT_NEAR(result[1], dataExpected, 1e-9);
+}
+
+TEST(StatsTests, SampleStdev)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
+    af::array tss(6, 2, data);
+
+    double dataExpected[] = {1.870828693, 12.988456413};
+
+    double *result = tsa::statistics::sampleStdev(tss).host<double>();
+
+    ASSERT_NEAR(result[0], dataExpected[0], 1e-9);
+    ASSERT_NEAR(result[1], dataExpected[1], 1e-9);
+}
+
+TEST(StatsTests, Kurtosis)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
+    af::array tss(6, 2, data);
+
+    double dataExpected[] = {-1.2, -2.66226722};
+
+    double *result = tsa::statistics::kurtosis(tss).host<double>();
+
+    for(int i = 0; i < 2; i++) {
+        ASSERT_NEAR(dataExpected[i], result[i], 1e-8);
+    }
+}

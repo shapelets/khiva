@@ -339,3 +339,18 @@ TEST(FeaturesTests, HasDuplicateMin)
     ASSERT_EQ(duplicateMinCalculated[0], true);
     ASSERT_EQ(duplicateMinCalculated[1], false);
 }
+
+TEST(FeaturesTests, Kurtosis)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
+    af::array tss(6, 2, data);
+
+    double dataExpected[] = {-1.2, -2.66226722};
+
+    double *result = tsa::features::kurtosis(tss).host<double>();
+
+    for(int i = 0; i < 2; i++) {
+        ASSERT_NEAR(dataExpected[i], result[i], 1e-8);
+    }
+}
