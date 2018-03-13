@@ -65,14 +65,15 @@ af::array entropy(af::array tss, int m, float r){
     }
     
     // Calculate the matrix distance
-    af::array distances = af::array(n - m + 1, n - m + 1, tss.dims(1), tss.type());
+    af::array distances = af::constant(af::Inf, n - m + 1, n - m + 1, tss.dims(1), tss.type());
    
     for(int k = 0; k < tss.dims(1); k++) {
+    //gfor (seq k, tss.dims(1)){        
         gfor (seq i, expand.dims(1)){
-            array avec = expand(span, i, k);
+        //for(int i = 0; i < expand.dims(1); i++) {
             for (int j = 0; j < expand.dims(1); j++){
-                array bvec = expand(span, j, k);
-                distances(i, j, k) = af::max(af::abs(avec - bvec));
+            //gfor(seq j, expand.dims(1)) {
+                distances(i, j, k) = af::max(af::abs(expand(span, i, k) - expand(span, j, k)));
             }
         }
     }
