@@ -143,6 +143,12 @@ af::array tsa::features::cidCe(af::array tss, bool zNormalize) {
     return af::sqrt(af::sum(diff * diff));
 }
 
+af::array tsa::features::countAboveMean(af::array tss) {
+    af::array mean = af::mean(tss, 0);
+    af::array aboveMean = (tss > af::tile(mean, tss.dims(0))).as(af::dtype::u32);
+    return af::sum(aboveMean, 0);
+}
+
 af::array tsa::features::countBelowMean(af::array tss) {
     af::array mean = af::mean(tss, 0);
     af::array belowMean = (tss < af::tile(mean, tss.dims(0))).as(af::dtype::u32);
