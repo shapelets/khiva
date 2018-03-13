@@ -157,8 +157,29 @@ extern "C" {
         result.host(primitive_result);
     }
 
+    void c3(double* tss, long* tss_length, long* tss_number_of_tss, long* lag, double* result){
+        af::array primitive_result;
+        primitive_result = tsa::features::c3(af::array(*tss_length, *tss_number_of_tss, tss),*lag);
+        primitive_result.host(result);
+    }
+    
+    JNIEXPORT void JNICALL Java_tsa_TSA_c3(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength, jlong tssNumberOfTss,
+                                             jlong lag, jdoubleArray result){
+        af::array primitive_result;
+        long tssFull_length = tssLength * tssNumberOfTss;
+        double input_tss[tssFull_length];
+        env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+        primitive_result = tsa::features::c3(af::array(tssLength, tssNumberOfTss, input_tss),lag);
+
+        double output_result[tssNumberOfTss];
+        primitive_result.host(output_result);
+        env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+        return;
+    }   
+
     JNIEXPORT void JNICALL Java_tsa_TSA_cidCe(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength, jlong tssNumberOfTss, 
-                                                jboolean zNormalize, jdoubleArray result) {
+                                                jboolean zNormalize, jdoubleArray result){
         af::array primitive_result;
         long tssFull_length = tssLength * tssNumberOfTss;
         double input_tss[tssFull_length];
