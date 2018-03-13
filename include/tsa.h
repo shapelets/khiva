@@ -358,8 +358,20 @@ namespace features {
     #ifdef __cplusplus
     extern "C"{
     #endif
+
     /**
-     * @brief Primitive of absEnergy
+     * @brief Primitive of the cidCe function.
+     * 
+     * @param tss Time series concatenated in a single row. 
+     * @param tss_length tss length (All time series need to have the same length).
+     * @param tss_number_of_tss Number of time series in tss.
+     * @param zNormalize Controls whether the time series should be z-normalized or not.
+     * @param result The complexity value for the given time series.
+     */
+    void cidCe(double* tss_time_series, long* tss_length, long* tss_number_of_tss, bool* zNormalize, double* result);
+
+    /**
+     * @brief Primitive of the absEnergy function.
      * 
      * @param time_series Time series concatenated in a single row.
      * @param time_series_length time_series length (All time series need to have the same length).
@@ -369,7 +381,7 @@ namespace features {
     void abs_energy(double* time_series, long* time_series_length, long* number_of_time_series, double* primitive_result);
 
     /**
-     * @brief Primitive of absoluteSumOfChanges function.
+     * @brief Primitive of the absoluteSumOfChanges function.
      * 
      * @param time_series  Time series concatenated in a single row. 
      * @param time_series_length time_series length (All time series need to have the same length).
@@ -379,7 +391,19 @@ namespace features {
     void absolute_sum_of_changes(double* time_series, long* time_series_length, long* number_of_time_series, double* primitive_result);
     
     /**
-     * @brief JNI interface of absoluteSumOfChanges function.
+     * @brief JNI interface of the cidCe function.
+     * 
+     * @param tss Time series concatenated in a single row. 
+     * @param tssLength tss length (All time series need to have the same length).
+     * @param tssNumberOfTss Number of time series in tss.
+     * @param zNormalize Controls whether the time series should be z-normalized or not.
+     * @param result The complexity value for the given time series.
+     */
+    JNIEXPORT void JNICALL Java_tsa_TSA_cidCe(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength, 
+                                                jlong tssNumberOfTss, jboolean zNormalize, jdoubleArray result);
+    
+    /**
+     * @brief JNI interface of the absoluteSumOfChanges function.
      * 
      * @param timeSeries  Time series concatenated in a single row.
      * @param timeSeriesLength Length of each time series.
@@ -390,7 +414,7 @@ namespace features {
                                                         jlong timeSeriesLength, jlong numberOfTimeSeries, jdoubleArray jResult);
 
     /**
-     * @brief JNI interface of absEnergy function.
+     * @brief JNI interface of the absEnergy function.
      * 
      * @param timeSeries Time series concatenated in a single row.
      * @param timeSeriesLength Length of each time series.

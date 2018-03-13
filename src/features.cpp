@@ -139,6 +139,11 @@ af::array tsa::features::kurtosis(af::array tss) {
 #ifdef __cplusplus
 extern "C" {
 #endif
+    void cidCe(double* tss, long* tss_length, long* tss_number_of_tss, bool* zNormalize, double* result){
+        af::array primitive_result;
+        primitive_result = tsa::features::cidCe(af::array(*tss_length, *tss_number_of_tss, tss), *zNormalize);
+        primitive_result.host(result);
+    }
 
     void abs_energy(double* time_series, long* time_series_length, long* number_of_time_series, double* primitive_result) {
         af::array result;
@@ -152,6 +157,22 @@ extern "C" {
         result.host(primitive_result);
     }
 
+    JNIEXPORT void JNICALL Java_tsa_TSA_cidCe(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength, jlong tssNumberOfTss, 
+                                                jboolean zNormalize, jdoubleArray result) {
+        af::array primitive_result;
+        long tssFull_length = tssLength * tssNumberOfTss;
+        double input_tss[tssFull_length];
+        env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+        primitive_result = tsa::features::cidCe(af::array(tssLength, tssNumberOfTss, input_tss),zNormalize);
+
+        double output_result[tssNumberOfTss];
+        primitive_result.host(output_result);
+        env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+        return;
+    }
+    
+    
     JNIEXPORT void JNICALL Java_tsa_TSA_absEnergy(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries, jlong timeSeriesLength, 
                                                     jlong numberOfTimeSeries, jdoubleArray jResult) {
         af::array result;
