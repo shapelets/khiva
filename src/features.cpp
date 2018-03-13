@@ -49,6 +49,72 @@ void tsa::features::aggregatedLinearTrend(af::array t, long chunkSize, af::array
     tsa::regression::linear(af::tile(af::range(aggregateResult.dims(0)).as(t.type()), 1, t.dims(1)), aggregateResult, slope, intercept, rvalue, pvalue, stderrest);
 }
 
+af::array entropy(af::array tss, int m, float r){
+    long n = tss.dims(0);
+
+    af::array std = af::stdev(tss);
+    std*=r;
+
+    // Creating a set of slinding chunks for all the input time series
+    af::array expand = af::array(m, n - m + 1, tss.dims(1), tss.type());
+    
+    gfor(seq j, tss.dims(1)) {
+        for(int i = 0; i < m; i++) {
+            expand(i, span, j, span) = af::reorder(tss(af::seq(i, n - m + i), j), 1, 0, 3, 2);
+        }
+    }
+
+    const long chunkSizeH = 256;//std::max(128, m);
+    const long chunkSizeV = 256;
+    // Calculate the matrix distance
+    af::array distances = af::constant(af::Inf, chunkSizeV, chunkSizeH, tss.dims(1), tss.type());
+    af::array sum_c = af::constant(0, 1, chunkSizeH, tss.dims(1));
+    af::array sum = af::constant(0, tss.dims(1));
+   
+    for(int i = 0; i < expand.dims(1); i+=chunkSizeH) {
+        long startH = i;
+        long iterationSizeH = std::min(chunkSizeH, n - m + 1 - startH);
+        if(iterationSizeH != chunkSizeH){
+            distances = af::constant(af::Inf, chunkSizeV, iterationSizeH, tss.dims(1), tss.type());
+            sum_c = af::constant(0, 1, iterationSizeH, tss.dims(1));
+        }
+        long endH = startH + iterationSizeH;
+
+        for (int j = 0; j < expand.dims(1); j+=chunkSizeV) { 
+            long startV = j;
+            long iterationSizeV = std::min(chunkSizeV, n - m + 1 - startV);
+            long endV = startV + iterationSizeV;
+            if(iterationSizeV != chunkSizeV){
+                distances = af::constant(af::Inf, iterationSizeV, chunkSizeH, tss.dims(1), tss.type());
+            }
+            gfor (seq k, startV, endV - 1) {
+                af::array aux = af::tile(expand(span, k, span), 1, iterationSizeH);
+                distances = af::reorder(af::max(af::abs(aux - af::tile(expand(span, af::seq(startH, endH - 1), span), 1, 1, 1, iterationSizeV))), 3, 1, 2, 0);
+            }
+            af::array count = distances <= af::tile(af::reorder(std, 0, 2, 1, 3), distances.dims(0), distances.dims(1));
+            sum_c += af::sum(count, 0);
+        }
+        sum += af::reorder(af::sum(af::log(sum_c / (n - m + 1.0)), 1), 2, 0, 1, 3);
+    }
+
+    sum /= (n - m + 1.0);
+
+    return sum;
+}
+
+af::array tsa::features::approximateEntropy(af::array tss, int m, float r){
+    long n = tss.dims(0);
+    if ( r < 0){
+        throw std::invalid_argument("Parameter r must be positive ...");
+    }
+
+    if ( n <= (m + 1)){
+        return 0;
+    }
+
+    return af::abs(entropy(tss, m, r) - entropy(tss, m+1, r));
+}
+
 af::array tsa::features::autocorrelation(af::array tss, long lag) {
     long n = tss.dims(0);
 

@@ -7,7 +7,7 @@
 #include <tsa.h>
 #include <gtest/gtest.h>
 
-TEST(FeatureTests, absEnergy)
+TEST(FeaturesTests, absEnergy)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -23,7 +23,7 @@ TEST(FeatureTests, absEnergy)
     }
 }
 
-TEST(FeatureTests, absEnergy2)
+TEST(FeaturesTests, absEnergy2)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     float data[] = {1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4};
@@ -167,6 +167,26 @@ TEST(FeaturesTests, AggregatedLinearTrendMultipleSeriesMin)
     ASSERT_EQ(pvalueCalculated[1], 0.0);
     ASSERT_EQ(stderrestCalculated[0], 0.0);
     ASSERT_EQ(stderrestCalculated[1], 0.0);
+}
+
+TEST(FeaturesTests, ApproximateEntropy)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    int m = 4;
+    float r = 0.5;
+    af::array a(10, data);
+    a = af::tile(a, 1, 2);
+    a(span, 1) += 10;
+
+    af::array res = tsa::features::approximateEntropy(a, m, r);
+
+    float *resCalculated = res.host<float>();
+
+    float expected[] = {0.13484275341033936, 0.13484275341033936};
+
+    ASSERT_NEAR(resCalculated[0], expected[0], 1e-9);
+    ASSERT_NEAR(resCalculated[1], expected[1], 1e-9);
 }
 
 TEST(FeaturesTests, Autocorrelation)
