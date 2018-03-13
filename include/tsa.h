@@ -232,7 +232,7 @@ namespace features {
                                 af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
     
     /**
-     * @brief Calculates ta vectorized Approximate entropy algorithm.
+     * @brief Calculates a vectorized Approximate entropy algorithm.
      * https://en.wikipedia.org/wiki/Approximate_entropy
      * For short time-series this method is highly dependent on the parameters, but should be stable for N > 2000, 
      * see: Yentes et al. (2012) - The Appropriate Use of Approximate Entropy and Sample Entropy with Short Data Sets
@@ -243,11 +243,11 @@ namespace features {
      * series (all the same) and dimension one indicates the number of 
      * time series.
      * @param m Length of compared run of data
-     * @param r filtering level, must be positive
+     * @param r Filtering level, must be positive
      * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
-     * contains absolute value of consecutive changes in the time series
+     * contains the vectorized Approximate entropy for all the input time series in tss
      */
-    float approximateEntropy(af::array tss, int m, float r);
+    af::array approximateEntropy(af::array tss, int m, float r);
 
     /**
      * @brief Calculates the autocorrelation of the specified lag for the given time
