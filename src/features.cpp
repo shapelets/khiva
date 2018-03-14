@@ -49,7 +49,7 @@ void tsa::features::aggregatedLinearTrend(af::array t, long chunkSize, af::array
     tsa::regression::linear(af::tile(af::range(aggregateResult.dims(0)).as(t.type()), 1, t.dims(1)), aggregateResult, slope, intercept, rvalue, pvalue, stderrest);
 }
 
-af::array entropy(af::array tss, int m, float r){
+af::array entropy(af::array tss, int m, float r) {
     long n = tss.dims(0);
 
     af::array std = af::stdev(tss);
@@ -122,7 +122,7 @@ af::array entropy(af::array tss, int m, float r){
     return sum;
 }
 
-af::array tsa::features::approximateEntropy(af::array tss, int m, float r){
+af::array tsa::features::approximateEntropy(af::array tss, int m, float r) {
     long n = tss.dims(0);
     if ( r < 0){
         throw std::invalid_argument("Parameter r must be positive ...");
@@ -153,7 +153,7 @@ af::array tsa::features::binnedEntropy(af::array tss, int max_bins) {
     int nts = tss.dims(1);
     af:array res = af::constant(0, 1, nts);
 
-    gfor(seq i, nts){
+    gfor(seq i, nts) {
         af::array his = af::histogram(tss(span, i), max_bins);
         af::array probs = his / (float)len;
         af::array aux = probs * af::log(probs);
