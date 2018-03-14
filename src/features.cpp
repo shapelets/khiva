@@ -88,7 +88,7 @@ void tsa::features::aggregatedLinearTrend(af::array t, long chunkSize, af::array
     tsa::regression::linear(af::tile(af::range(aggregateResult.dims(0)).as(t.type()), 1, t.dims(1)), aggregateResult, slope, intercept, rvalue, pvalue, stderrest);
 }
 
-af::array entropy(af::array tss, int m, float r){
+af::array entropy(af::array tss, int m, float r) {
     long n = tss.dims(0);
 
     af::array std = af::stdev(tss);
@@ -161,7 +161,7 @@ af::array entropy(af::array tss, int m, float r){
     return sum;
 }
 
-af::array tsa::features::approximateEntropy(af::array tss, int m, float r){
+af::array tsa::features::approximateEntropy(af::array tss, int m, float r) {
     long n = tss.dims(0);
     if ( r < 0){
         throw std::invalid_argument("Parameter r must be positive ...");
@@ -185,6 +185,21 @@ af::array tsa::features::autocorrelation(af::array tss, long lag) {
     af::array sumProduct = af::sum((y1 - af::tile(xMean, n - lag)) * (y2 - af::tile(xMean, n - lag)), 0);
     af::array den = (n - lag) * af::var(tss, true, 0);
     return sumProduct / den;
+}
+
+af::array tsa::features::binnedEntropy(af::array tss, int max_bins) {
+    int len = tss.dims(0);
+    int nts = tss.dims(1);
+    af:array res = af::constant(0, 1, nts);
+
+    gfor(seq i, nts) {
+        af::array his = af::histogram(tss(span, i), max_bins);
+        af::array probs = his / (float)len;
+        af::array aux = probs * af::log(probs);
+        af::array sum = af::sum(aux, 0);
+        res(0,i) = sum;
+    }
+    return af::abs(res);
 }
 
 af::array tsa::features::c3(af::array tss, long lag) {

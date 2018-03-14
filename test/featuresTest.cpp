@@ -293,6 +293,24 @@ TEST(FeaturesTests, Autocorrelation)
     ASSERT_EQ(calculated3Host[2], -1.8);
 }
 
+TEST(FeaturesTests, BinnedEntropy)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double ts1[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+    double ts2[] = {1, 1, 3, 10, 5, 6, 1, 8, 9, 10, 11, 1, 13, 14, 10, 16, 17, 10, 19, 20};
+    af::array h_data(20, 1, ts1);
+    af::array h_data2(20, 1, ts2);
+    af::array tss = af::join(1, h_data, h_data2);
+
+    af::array output = tsa::features::binnedEntropy(tss, 5);
+    
+    float *h_out = output.host<float>(); 
+    float a[] = {1.6094379124341005, 1.5614694247763998};
+    ASSERT_NEAR(h_out[0], a[0], 1e-9);
+    ASSERT_NEAR(h_out[1], a[1], 1e-6);
+}
+
 TEST(FeaturesTests, C3)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
