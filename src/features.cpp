@@ -55,48 +55,68 @@ af::array entropy(af::array tss, int m, float r){
     af::array std = af::stdev(tss);
     std*=r;
 
-    // Creating a set of slinding chunks for all the input time series
-    af::array expand = af::array(m, n - m + 1, tss.dims(1), tss.type());
-    
-    gfor(seq j, tss.dims(1)) {
-        for(int i = 0; i < m; i++) {
-            expand(i, span, j, span) = af::reorder(tss(af::seq(i, n - m + i), j), 1, 0, 3, 2);
-        }
-    }
+    const long chunkSizeH = 512;
+    const long chunkSizeV = 512;
+    long lastIterationSizeH = chunkSizeH;
+    long lastIterationSizeV = chunkSizeV;
 
-    const long chunkSizeH = 256;//std::max(128, m);
-    const long chunkSizeV = 256;
+    af::array expandH = af::array(m, chunkSizeH, tss.dims(1), tss.type());
+    af::array expandV = af::array(m, chunkSizeV, tss.dims(1), tss.type());
+
     // Calculate the matrix distance
     af::array distances = af::constant(af::Inf, chunkSizeV, chunkSizeH, tss.dims(1), tss.type());
     af::array sum_c = af::constant(0, 1, chunkSizeH, tss.dims(1));
     af::array sum = af::constant(0, tss.dims(1));
-   
-    for(int i = 0; i < expand.dims(1); i+=chunkSizeH) {
+    
+    //it performs a batching (or blocking) in the horizontal direction 
+    for(int i = 0; i < n - m + 1; i+=chunkSizeH) {
         long startH = i;
         long iterationSizeH = std::min(chunkSizeH, n - m + 1 - startH);
-        if(iterationSizeH != chunkSizeH){
+        long endH = startH + iterationSizeH;
+        // if our batching dimension doesn´t match the dimesion aofs the remaining elements, modify dimensions
+        if(iterationSizeH != chunkSizeH || iterationSizeH != lastIterationSizeH){
+            lastIterationSizeH = iterationSizeH;
             distances = af::constant(af::Inf, chunkSizeV, iterationSizeH, tss.dims(1), tss.type());
             sum_c = af::constant(0, 1, iterationSizeH, tss.dims(1));
+            expandH = af::array(m, iterationSizeH, tss.dims(1), tss.type());
         }
-        long endH = startH + iterationSizeH;
 
-        for (int j = 0; j < expand.dims(1); j+=chunkSizeV) { 
+        gfor(seq j, tss.dims(1)) {
+            for(int k = 0; k < m; k++) {
+                expandH(k, span, j, span) = af::reorder(tss(af::seq(i + k, i + k + iterationSizeH - 1), j), 1, 0, 3, 2);
+            }
+        }
+        //it performs a batching (or blocking) in the vertical direction 
+        for (int j = 0; j < n - m + 1; j+=chunkSizeV) { 
             long startV = j;
             long iterationSizeV = std::min(chunkSizeV, n - m + 1 - startV);
             long endV = startV + iterationSizeV;
-            if(iterationSizeV != chunkSizeV){
+            // if our batching dimension doesn´t match the dimesion aofs the remaining elements, modify dimensions
+            if(iterationSizeV != chunkSizeV || iterationSizeV != lastIterationSizeV){
+                lastIterationSizeV = iterationSizeV;
                 distances = af::constant(af::Inf, iterationSizeV, chunkSizeH, tss.dims(1), tss.type());
+                expandV = af::array(m, iterationSizeV, tss.dims(1), tss.type());
             }
-            gfor (seq k, startV, endV - 1) {
-                af::array aux = af::tile(expand(span, k, span), 1, iterationSizeH);
-                distances = af::reorder(af::max(af::abs(aux - af::tile(expand(span, af::seq(startH, endH - 1), span), 1, 1, 1, iterationSizeV))), 3, 1, 2, 0);
+
+            gfor(seq k, tss.dims(1)) {
+                for(int l = 0; l < m; l++) {
+                    expandV(l, span, k, span) = af::reorder(tss(af::seq(j + l, j + l + iterationSizeV - 1), k), 1, 0, 3, 2);
+                }
             }
+            //Get the maximum difference among all dimensions for each timeseries
+            gfor (seq k, iterationSizeV) {
+                af::array aux = af::tile(expandV(span, k, span), 1, iterationSizeH);
+                distances = af::reorder(af::max(af::abs(aux - af::tile(expandH, 1, 1, 1, iterationSizeV))), 3, 1, 2, 0);
+            }
+            //sum the number of elements bigger than the threshhold given by (stdev*r)
             af::array count = distances <= af::tile(af::reorder(std, 0, 2, 1, 3), distances.dims(0), distances.dims(1));
+            // we summarise all partial sums in sum; we accumulate all partial sums for each vertical dimension
             sum_c += af::sum(count, 0);
         }
+        // Finally, we collapse (aggregate) all total sums for each timeseries, we can do it as sum is commutative and associative.
         sum += af::reorder(af::sum(af::log(sum_c / (n - m + 1.0)), 1), 2, 0, 1, 3);
     }
-
+    //Before returning the final value, we divide the total sum for each timeseries by (n - m + 1.0)
     sum /= (n - m + 1.0);
 
     return sum;
