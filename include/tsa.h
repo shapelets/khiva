@@ -262,6 +262,17 @@ namespace features {
     af::array autocorrelation(af::array tss, long lag);
 
     /**
+     * @brief Calculates the binned entropy for the given time series and number of bins
+     *
+     * @param tss Expects an input array whose dimension zero is the length of the
+     * time series (all the same) and dimension one indicates the number of time
+     * series.
+     * @param max_bins The number of bins
+     * @return af::array The binned entropy value for the given time series
+     */
+    af::array binnedEntropy(af::array tss, int max_bins);
+
+    /**
      * @brief Calculates the Schreiber, T. and Schmitz, A. (1997) measure of non-linearity
      * for the given time series
      *

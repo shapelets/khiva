@@ -148,6 +148,21 @@ af::array tsa::features::autocorrelation(af::array tss, long lag) {
     return sumProduct / den;
 }
 
+af::array tsa::features::binnedEntropy(af::array tss, int max_bins){
+    int len = tss.dims(0);
+    int nts = tss.dims(1);
+    af:array res = af::constant(0, 1, nts);
+
+    gfor(seq i, nts){
+        af::array his = af::histogram(tss(span, i), max_bins);
+        af::array probs = his / (float)len;
+        af::array aux = probs * af::log(probs);
+        af::array sum = af::sum(aux, 0);
+        res(0,i) = sum;
+    }
+    return af::abs(res);
+}
+
 af::array tsa::features::c3(af::array tss, long lag) {
     af::array aux = af::shift(tss, 2 * -lag) * af::shift(tss, -lag) * tss;
     return af::mean(aux(af::seq(tss.dims(0) - 2 * lag), span), 0);
