@@ -429,6 +429,29 @@ namespace features {
      * @param primitive_result Absolute sum of changes.
      */
     void absolute_sum_of_changes(double* time_series, long* time_series_length, long* number_of_time_series, double* primitive_result);
+
+    /**
+     * @brief Primitive of the c3 function.
+     * 
+     * @param tss Time series concatenated in a single row.
+     * @param tss_length Time series length (All time series need to have the same length).
+     * @param tss_number_of_tss Number of time series.
+     * @param lag The lag
+     * @param result The non-linearity value for the given time series.
+     */
+    void c3(double* tss, long* tss_length, long* tss_number_of_tss, long* lag, double* result);
+
+    /**
+     * @brief JNI interface of the c3 function.
+     * 
+     * @param tss Time series concatenated in a single row.
+     * @param tssLength Time series length (All time series need to have the same length).
+     * @param tssNumberOfTss Number of time series.
+     * @param lag The lag
+     * @param result The non-linearity value for the given time series.
+     */
+    JNIEXPORT void JNICALL Java_tsa_TSA_c3(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength, jlong tssNumberOfTss,
+                                             jlong lag, jdoubleArray result); 
     
     /**
      * @brief JNI interface of the cidCe function.
