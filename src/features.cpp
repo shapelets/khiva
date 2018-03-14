@@ -228,6 +228,19 @@ af::array tsa::features::kurtosis(af::array tss) {
     return tsa::statistics::kurtosis(tss);
 }
 
+af::array tsa::features::lastLocationOfMaximum(af::array tss) {
+    af::array flipped = af::flip(tss, 0);
+    
+    af::array maximum;
+    af::array index;
+
+    af::max(maximum, index, flipped, 0);
+
+    index = af::abs(index - tss.dims(0) + 1);
+
+    return (index.as(tss.type()) + 1) / tss.dims(0);
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif

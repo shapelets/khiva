@@ -389,3 +389,18 @@ TEST(FeaturesTests, Kurtosis)
         ASSERT_NEAR(dataExpected[i], result[i], 1e-8);
     }
 }
+
+TEST(FeaturesTests, LastLocationOfMaximum)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {0, 4, 3, 5, 5, 1, 0, 4, 3, 2, 5, 1};
+    af::array tss(6, 2, data);
+
+    af::array result = tsa::features::lastLocationOfMaximum(tss);
+    
+    double *lastMaximumCalculated = result.host<double>();
+
+    ASSERT_EQ(lastMaximumCalculated[0], 0.8333333333333334);
+    ASSERT_EQ(lastMaximumCalculated[1], 0.8333333333333334);
+}

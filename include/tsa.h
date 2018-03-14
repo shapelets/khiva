@@ -384,7 +384,17 @@ namespace features {
      */
     af::array kurtosis(af::array tss);
 
-    // PIP Perceptualy important points
+    /**
+     * @brief Calculates the last location of the maximum value of each time series. The position
+     * is calculated relatively to the length of the series
+     * 
+     * @param tss Expects an input array whose dimension zero is the length of the
+     * time series (all the same) and dimension one indicates the number of time
+     * series.
+     * @return af::array The last relative location of the maximum value of each series
+     */
+    af::array lastLocationOfMaximum(af::array tss);
+
     #ifdef __cplusplus
     extern "C"{
     #endif
