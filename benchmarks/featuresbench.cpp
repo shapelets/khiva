@@ -275,6 +275,23 @@ template <af::Backend BE> void Kurtosis(benchmark::State &state) {
   addMemoryCounters(state);
 }
 
+template <af::Backend BE> void LastLocationOfMaximum(benchmark::State &state) {
+  af::setBackend(BE);
+
+  auto n = state.range(0);
+  auto m = state.range(1);
+
+  auto t = af::randu(n, m, f64);
+
+  af::sync();
+  while (state.KeepRunning()) {
+    auto llom = tsa::features::lastLocationOfMaximum(t);
+    llom.eval();
+    af::sync();
+  }
+  addMemoryCounters(state);
+}
+
 template <af::Backend BE> void Length(benchmark::State &state) {
   af::setBackend(BE);
 
@@ -283,6 +300,7 @@ template <af::Backend BE> void Length(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto length = tsa::features::length(t);
     length.eval();
@@ -427,6 +445,16 @@ BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_OPENCL)
     ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_CPU)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(LastLocationOfMaximum, af::Backend::AF_BACKEND_OPENCL)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(LastLocationOfMaximum, af::Backend::AF_BACKEND_CPU)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
     ->Unit(benchmark::TimeUnit::kMicrosecond);
