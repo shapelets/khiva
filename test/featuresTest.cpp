@@ -404,3 +404,18 @@ TEST(FeaturesTests, LastLocationOfMaximum)
     ASSERT_EQ(lastMaximumCalculated[0], 0.8333333333333334);
     ASSERT_EQ(lastMaximumCalculated[1], 0.8333333333333334);
 }
+
+TEST(FeaturesTests, Length)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {0, 4, 3, 5, 5, 1, 0, 4, 3, 2, 5, 1};
+    af::array tss(6, 2, data);
+
+    af::array result = tsa::features::length(tss);
+    
+    int *lengthCalculated = result.host<int>();
+
+    ASSERT_EQ(lengthCalculated[0], 6);
+    ASSERT_EQ(lengthCalculated[1], 6);
+}

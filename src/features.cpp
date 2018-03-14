@@ -73,7 +73,7 @@ af::array entropy(af::array tss, int m, float r){
         long startH = i;
         long iterationSizeH = std::min(chunkSizeH, n - m + 1 - startH);
         long endH = startH + iterationSizeH;
-        // if our batching dimension doesn´t match the dimesion aofs the remaining elements, modify dimensions
+        // if our batching dimension does not match the dimesion of the remaining elements, modify dimensions
         if(iterationSizeH != chunkSizeH || iterationSizeH != lastIterationSizeH){
             lastIterationSizeH = iterationSizeH;
             distances = af::constant(af::Inf, chunkSizeV, iterationSizeH, tss.dims(1), tss.type());
@@ -91,7 +91,7 @@ af::array entropy(af::array tss, int m, float r){
             long startV = j;
             long iterationSizeV = std::min(chunkSizeV, n - m + 1 - startV);
             long endV = startV + iterationSizeV;
-            // if our batching dimension doesn´t match the dimesion aofs the remaining elements, modify dimensions
+            // if our batching dimension does not match the dimension of the remaining elements, modify dimensions
             if(iterationSizeV != chunkSizeV || iterationSizeV != lastIterationSizeV){
                 lastIterationSizeV = iterationSizeV;
                 distances = af::constant(af::Inf, iterationSizeV, chunkSizeH, tss.dims(1), tss.type());
@@ -239,6 +239,11 @@ af::array tsa::features::lastLocationOfMaximum(af::array tss) {
     index = af::abs(index - tss.dims(0) + 1);
 
     return (index.as(tss.type()) + 1) / tss.dims(0);
+}
+
+af::array tsa::features::length(af::array tss) {
+    int n = tss.dims(0);
+    return af::tile(af::array(1, &n), tss.dims(1));
 }
 
 #ifdef __cplusplus
