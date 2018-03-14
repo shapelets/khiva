@@ -16,6 +16,8 @@ template<af::Backend BE> void ZNorm(benchmark::State& state) {
 
   auto n = state.range(0);
   auto ts = af::randu(n);
+
+  af::sync();
   while (state.KeepRunning()) {
     auto normalised = tsa::normalization::znorm(ts, DBL_MIN);
     normalised.eval();
@@ -28,6 +30,8 @@ template<af::Backend BE> void ZNormInPlace(benchmark::State& state) {
 
   auto n = state.range(0);
   auto ts = af::randu(n);
+
+  af::sync();
   while (state.KeepRunning()) {
     tsa::normalization::znormInPlace(ts, DBL_MIN);
     ts.eval();

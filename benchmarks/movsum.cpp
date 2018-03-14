@@ -17,6 +17,7 @@ template<af::Backend BE> void MovingSumConvolve(benchmark::State& state) {
   af::array ts = af::randu(tsLen);
   af::array filter = af::constant(1, m);
 
+  af::sync();
   while (state.KeepRunning()) {
     af::array movSum = af::convolve(ts, filter, AF_CONV_EXPAND);
     movSum(af::seq(m-1, tsLen-1)).eval();
@@ -29,6 +30,8 @@ template<af::Backend BE> void MovingSumScan(benchmark::State& state) {
   auto tsLen = state.range(0);
   auto m = state.range(1);
   af::array ts = af::randu(tsLen);
+
+  af::sync();
   while (state.KeepRunning()) {
     af::array cumsum = af::accum(ts);
     af::array exCumsum = af::scan(ts, 0, AF_BINARY_ADD, false);

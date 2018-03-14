@@ -28,6 +28,7 @@ template <af::Backend BE> void AbsoluteSumOfChanges(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto asoc = tsa::features::absoluteSumOfChanges(t);
     asoc.eval();
@@ -44,6 +45,7 @@ template <af::Backend BE> void AbsEnergy(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto ae = tsa::features::absEnergy(t);
     ae.eval();
@@ -61,6 +63,7 @@ template <af::Backend BE> void AggregatedLinearTrend(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     af::array slope, intercept, rvalue, pvalue, stderrest;
     tsa::features::aggregatedLinearTrend(t, chunkSize, af::mean, slope, intercept, rvalue, pvalue, stderrest);
@@ -81,7 +84,8 @@ template <af::Backend BE> void ApproximateEntropy(benchmark::State &state) {
   auto m = state.range(1);
 
   auto t = af::randu(n, m, f64);
-
+  
+  af::sync();
   while (state.KeepRunning()) {
     auto entropy = tsa::features::approximateEntropy(t, 128, 0.5);
     entropy.eval();
@@ -99,6 +103,7 @@ template <af::Backend BE> void Autocorrelation(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto ac = tsa::features::autocorrelation(t, lag);
     ac.eval();
@@ -116,6 +121,7 @@ template <af::Backend BE> void C3(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto c3 = tsa::features::c3(t, lag);
     c3.eval();
@@ -133,6 +139,7 @@ template <af::Backend BE> void CidCe(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto cidCe = tsa::features::cidCe(t, zNormalize);
     cidCe.eval();
@@ -149,6 +156,7 @@ template <af::Backend BE> void CountBelowMean(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto cbm = tsa::features::countBelowMean(t);
     cbm.eval();
@@ -168,6 +176,7 @@ template <af::Backend BE> void EnergyRatioByChunks(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto cbm = tsa::features::energyRatioByChunks(t, numSegments, segmentFocus);
     cbm.eval();
@@ -185,6 +194,7 @@ template <af::Backend BE> void FftCoefficient(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     af::array real, imag, _abs, angle;
     tsa::features::fftCoefficient(t, coefficient, real, imag, _abs, angle);
@@ -205,6 +215,7 @@ template <af::Backend BE> void FirstLocationOfMinimum(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto first = tsa::features::firstLocationOfMinimum(t);
     first.eval();
@@ -221,6 +232,7 @@ template <af::Backend BE> void HasDuplicates(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto duplicates = tsa::features::hasDuplicates(t);
     duplicates.eval();
@@ -237,6 +249,7 @@ template <af::Backend BE> void HasDuplicateMin(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto duplicateMin = tsa::features::hasDuplicateMin(t);
     duplicateMin.eval();
@@ -253,6 +266,7 @@ template <af::Backend BE> void Kurtosis(benchmark::State &state) {
 
   auto t = af::randu(n, m, f64);
 
+  af::sync();
   while (state.KeepRunning()) {
     auto kurtosis = tsa::features::kurtosis(t);
     kurtosis.eval();

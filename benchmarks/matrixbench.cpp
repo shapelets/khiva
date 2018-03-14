@@ -28,6 +28,8 @@ template <af::Backend BE> void SlidingDotProduct(benchmark::State &state) {
 
   auto t = af::randu(n, f64);
   auto q = t(seq(0, m));
+
+  af::sync();
   while (state.KeepRunning()) {
     auto sdp = tsa::matrix::slidingDotProduct(q, t);
     sdp.eval();
@@ -47,15 +49,13 @@ template <af::Backend BE> void SlidingDotProductParallel(benchmark::State &state
   auto indices = af::range(n - m);
   auto input = af::array(m, n - m, t.type());
 
-  for (int i = 0; i < m; i++)
-  {
+  for (int i = 0; i < m; i++) {
     input(i, span, span, span) = t(seq(i, n - m - 1 + i));
   }
 
-  while (state.KeepRunning())
-  {
-    gfor(seq idx, n - m)
-    {
+  af::sync();
+  while (state.KeepRunning()) {
+    gfor(seq idx, n - m) {
       auto sdp = tsa::matrix::slidingDotProduct(input(span, idx, span, span), t);
       sdp.eval();
     }
@@ -75,8 +75,9 @@ template <af::Backend BE> void MeanStdevAuxiliary(benchmark::State &state) {
   auto q = t(seq(0, m));
   af::array mean;
   af::array stdev;
-  while (state.KeepRunning())
-  {
+
+  af::sync();
+  while (state.KeepRunning()) {
     tsa::matrix::meanStdev(t, a, m, mean, stdev);
     mean.eval();
     stdev.eval();
@@ -96,8 +97,9 @@ template <af::Backend BE> void MeanStdev(benchmark::State &state) {
   auto q = t(seq(0, m));
   af::array mean;
   af::array stdev;
-  while (state.KeepRunning())
-  {
+
+  af::sync();
+  while (state.KeepRunning()) {
     tsa::matrix::meanStdev(t, a, m, mean, stdev);
     mean.eval();
     stdev.eval();
@@ -118,8 +120,8 @@ template <af::Backend BE> void GenerateMask(benchmark::State &state) {
   af::array profile;
   af::array index;
   
-  while (state.KeepRunning())
-  {
+  af::sync();
+  while (state.KeepRunning()) {
     af::array mask = tsa::matrix::generateMask(m, 2048, batchStart, n - m + 1);
     mask.eval();
     af::sync();
@@ -151,8 +153,8 @@ template <af::Backend BE> void CalculateDistanceProfile(benchmark::State &state)
   af::array distance;
   af::array index;
 
-  while (state.KeepRunning())
-  {
+  af::sync();
+  while (state.KeepRunning()) {
     tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
     distance.eval();
     index.eval();
@@ -176,8 +178,7 @@ template <af::Backend BE> void CalculateDistanceProfileParallel(benchmark::State
 
   auto input = af::array(m, n - m + 1, t.type());
 
-  for (int i = 0; i < m; i++)
-  {
+  for (int i = 0; i < m; i++) {
     input(i, span, span, span) = t(seq(i, n - m + i));
   }
 
@@ -186,10 +187,9 @@ template <af::Backend BE> void CalculateDistanceProfileParallel(benchmark::State
 
   af::array mask = tsa::matrix::generateMask(m, n - m + 1, 0, n - m + 1);
 
-  while (state.KeepRunning())
-  {
-    gfor(seq idx, n - m + 1)
-    {
+  af::sync();
+  while (state.KeepRunning()) {
+    gfor(seq idx, n - m + 1) {
       auto q = input(span, idx, span, span);
       auto sumQ = sum(q);
       auto sumQ2 = sum(pow(q, 2));
@@ -221,8 +221,8 @@ template <af::Backend BE> void Mass(benchmark::State &state) {
   tsa::matrix::meanStdev(t, aux, m, mean, stdev);
   af::array mask = tsa::matrix::generateMask(m, 1, 0, n - m + 1);
   
-  while (state.KeepRunning())
-  {
+  af::sync();
+  while (state.KeepRunning()) {
     tsa::matrix::mass(q, t, m, aux, mean, stdev, mask, distance, index);
     distance.eval();
     index.eval();
@@ -244,8 +244,8 @@ template <af::Backend BE> void Stomp(benchmark::State &state) {
   af::array profile;
   af::array index;
 
-  while (state.KeepRunning())
-  {
+  af::sync();
+  while (state.KeepRunning()) {
     tsa::matrix::stomp(ta, tb, m, profile, index);
     profile.eval();
     index.eval();
@@ -270,8 +270,8 @@ template <af::Backend BE> void StompDataCPU(benchmark::State &state) {
   af::array profile;
   af::array index;
 
-  while (state.KeepRunning())
-  {
+  af::sync();
+  while (state.KeepRunning()) {
     tsa::matrix::stomp(af::array(n, t_host), af::array(n, t_host), m, profile, index);
     profile.eval();
     index.eval();
@@ -294,8 +294,8 @@ template <af::Backend BE> void StompWithItself(benchmark::State &state) {
   af::array profile;
   af::array index;
   
-  while (state.KeepRunning())
-  {
+  af::sync();
+  while (state.KeepRunning()) {
     tsa::matrix::stomp(t, m, profile, index);
     profile.eval();
     index.eval();
