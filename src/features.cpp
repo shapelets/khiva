@@ -148,7 +148,7 @@ af::array tsa::features::autocorrelation(af::array tss, long lag) {
     return sumProduct / den;
 }
 
-af::array tsa::features::binnedEntropy(af::array tss, int max_bins){
+af::array tsa::features::binnedEntropy(af::array tss, int max_bins) {
     int len = tss.dims(0);
     int nts = tss.dims(1);
     af:array res = af::constant(0, 1, nts);
