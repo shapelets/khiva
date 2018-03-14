@@ -6,15 +6,54 @@
 
 #include <tsa.h>
 
+af::array tsa::features::absEnergy(af::array base){
+    array p2 = af::pow(base, 2);
+    af::array sp2 = af::sum(p2, 0);
+    return sp2;
+}
+
 af::array tsa::features::absoluteSumOfChanges(af::array tss) {
     long n = tss.dims(0);
     return af::sum(af::abs(tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span)), 0);
 }
 
-af::array tsa::features::absEnergy(af::array base){
-    array p2 = af::pow(base, 2);
-    af::array sp2 = af::sum(p2, 0);
-    return sp2;
+af::array tsa::features::aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array&, const bool, const dim_t)){
+    long n = tss.dims(0);
+    af::array autocorrelations = af::constant(0, n-1, tss.dims(1));
+
+    for(int lag = 1; lag < n; lag++){
+        autocorrelations(lag-1, span) = tsa::features::autocorrelation(tss, lag);
+        if ((lag % 512) == 0){
+            af::sync();
+        }
+    }
+    return aggregationFunction(autocorrelations, true, 0);
+}
+
+af::array tsa::features::aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array&, const int)){
+    long n = tss.dims(0);
+    af::array autocorrelations = af::constant(0, n-1, tss.dims(1));
+
+    for(int lag = 1; lag < n; lag++){
+        autocorrelations(lag-1, span) = tsa::features::autocorrelation(tss, lag);
+        if ((lag % 512) == 0){
+            af::sync();
+        }
+    }
+    return aggregationFunction(autocorrelations, 0);
+}
+
+af::array tsa::features::aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array&, const dim_t)){
+    long n = tss.dims(0);
+    af::array autocorrelations = af::constant(0, n-1, tss.dims(1));
+
+    for(int lag = 1; lag < n; lag++){
+        autocorrelations(lag-1, span) = tsa::features::autocorrelation(tss, lag);
+        if ((lag % 512) == 0){
+            af::sync();
+        }
+    }
+    return aggregationFunction(autocorrelations, 0);
 }
 
 af::array aggregating(af::array input, af::array (*aggregationFunction)(const af::array&, const int)) {
@@ -142,7 +181,7 @@ af::array tsa::features::autocorrelation(af::array tss, long lag) {
     af::array y2 = tss(af::seq(lag, n - 1), span);
     
     af::array xMean = af::mean(tss, 0);
-
+    
     af::array sumProduct = af::sum((y1 - af::tile(xMean, n - lag)) * (y2 - af::tile(xMean, n - lag)), 0);
     af::array den = (n - lag) * af::var(tss, true, 0);
     return sumProduct / den;

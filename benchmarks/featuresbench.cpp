@@ -77,6 +77,24 @@ template <af::Backend BE> void AggregatedLinearTrend(benchmark::State &state) {
   addMemoryCounters(state);
 }
 
+template <af::Backend BE> void AggregatedAutocorrelation(benchmark::State &state) {
+  af::setBackend(BE);
+
+  auto n = state.range(0);
+  auto m = state.range(1);
+
+  auto t = af::randu(n, m, f64);
+
+  af::sync();
+
+  while (state.KeepRunning()) {  
+    af::array output = tsa::features::aggregatedAutocorrelation(t, af::mean);
+    output.eval();
+    af::sync();
+  }
+  addMemoryCounters(state);
+}
+
 template <af::Backend BE> void ApproximateEntropy(benchmark::State &state) {
   af::setBackend(BE);
 
@@ -327,6 +345,16 @@ BENCHMARK_TEMPLATE(AbsEnergy, af::Backend::AF_BACKEND_OPENCL)
 BENCHMARK_TEMPLATE(AbsEnergy, af::Backend::AF_BACKEND_CPU)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(AggregatedAutocorrelation, af::Backend::AF_BACKEND_OPENCL)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 32 << 10}, {1, 32}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(AggregatedAutocorrelation, af::Backend::AF_BACKEND_CPU)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 32 << 10}, {1, 16}})
     ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(AggregatedLinearTrend, af::Backend::AF_BACKEND_OPENCL)

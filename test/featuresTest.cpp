@@ -61,6 +61,84 @@ TEST(FeaturesTests, AbsoluteSumOfChanges)
     ASSERT_EQ(9, hostResult[2]);
 }
 
+TEST(FeaturesTests, AggregatedCorrelationMean)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    af::array tss(6, 2, data);
+
+    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::mean);
+    float * r = res.host<float>();
+    float a[] = {-0.6571428571428571, -0.6571428571428571};
+    ASSERT_NEAR(r[0], a[0], 1e-9);
+    ASSERT_NEAR(r[1], a[1], 1e-9);
+}
+
+TEST(FeaturesTests, AggregatedCorrelationMedian)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    af::array tss(6, 2, data);
+
+    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::median);
+    float * r = res.host<float>();
+    float a[] = {-0.54285717010498047, -0.54285717010498047};
+    ASSERT_NEAR(r[0], a[0], 1e-9);
+    ASSERT_NEAR(r[1], a[1], 1e-9);
+}
+
+TEST(FeaturesTests, AggregatedCorrelationMin)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    af::array tss(6, 2, data);
+
+    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::min);
+    float * r = res.host<float>();
+    float a[] = {-2.142857142857143, -2.142857142857143};
+    ASSERT_NEAR(r[0], a[0], 1e-9);
+    ASSERT_NEAR(r[1], a[1], 1e-9);
+}
+
+TEST(FeaturesTests, AggregatedCorrelationMax)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    af::array tss(6, 2, data);
+
+    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::max);
+    float * r = res.host<float>();
+    float a[] = {0.6, 0.6};
+    ASSERT_NEAR(r[0], a[0], 1e-9);
+    ASSERT_NEAR(r[1], a[1], 1e-9);
+}
+
+TEST(FeaturesTests, AggregatedCorrelationStdev)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    af::array tss(6, 2, data);
+
+    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::stdev);
+    float * r = res.host<float>();
+    float a[] = {0.9744490855905009, 0.9744490855905009};
+    ASSERT_NEAR(r[0], a[0], 1e-7);
+    ASSERT_NEAR(r[1], a[1], 1e-7);
+}
+
+TEST(FeaturesTests, AggregatedCorrelationVar)
+{
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    af::array tss(6, 2, data);
+
+    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::var);
+    float * r = res.host<float>();
+    float a[] = {0.9495510204081633, 0.9495510204081633};
+    ASSERT_NEAR(r[0], a[0], 1e-7);
+    ASSERT_NEAR(r[1], a[1], 1e-7);
+}
+
 TEST(FeaturesTests, AggregatedLinearTrendMean)
 {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
