@@ -488,6 +488,18 @@ TEST(FeaturesTests, Kurtosis) {
     }
 }
 
+TEST(FeaturesTests, LargeStandardDeviation) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {-1, -1, -1, 1, 1, 1, 4, 6, 8, 4, 5, 4};
+    af::array tss(6, 2, data);
+    float r = 0.4;
+
+    bool *result = (bool *)tsa::features::largeStandardDeviation(tss, r).host<char>();
+
+    ASSERT_EQ(result[0], true);
+    ASSERT_EQ(result[1], false);
+}
+
 TEST(FeaturesTests, LastLocationOfMaximum) {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 
