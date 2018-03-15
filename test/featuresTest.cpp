@@ -404,6 +404,20 @@ TEST(FeaturesTests, FftCoefficient) {
     ASSERT_EQ(angleCalculated[1], 0.0);
 }
 
+TEST(FeaturesTests, FirstLocationOfMaximum) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    float data[] = {5, 4, 3, 5, 0, 1, 5, 3, 2, 1, 2, 4, 3, 5, 2, 5, 4, 3, 5, 2};
+    af::array tss(10, 2, data);
+
+    af::array result = tsa::features::firstLocationOfMaximum(tss);
+
+    float *hr = result.host<float>();
+
+    ASSERT_EQ(hr[0], 0.0f);
+    ASSERT_EQ(hr[1], 0.3f);
+}
+
 TEST(FeaturesTests, FirstLocationOfMinimum) {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 
@@ -430,6 +444,20 @@ TEST(FeaturesTests, HasDuplicates) {
 
     ASSERT_EQ(duplicatesCalculated[0], true);
     ASSERT_EQ(duplicatesCalculated[1], false);
+}
+
+TEST(FeaturesTests, HasDuplicateMax) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {5, 4, 3, 0, 5, 1, 5, 4, 3, 0, 2, 1};
+    af::array tss(6, 2, data);
+
+    af::array out = tsa::features::hasDuplicateMax(tss);
+
+    bool *hout = (bool *)out.host<char>();
+
+    ASSERT_EQ(hout[0], true);
+    ASSERT_EQ(hout[1], false);
 }
 
 TEST(FeaturesTests, HasDuplicateMin) {
