@@ -436,6 +436,18 @@ af::array hasDuplicateMin(af::array tss);
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of
  * time series.
+ * @param q The quantile
+ * @return af::array The index mass of quantile q, for each timeseries in tss
+ */
+af::array indexMaxQuantile(af::array tss, float q);
+
+/**
+ * @brief Returns the kurtosis of tss (calculated with the adjusted Fisher-Pearson
+ * standardized moment coefficient G2).
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
  * @return af::array The kurtosis of tss
  */
 af::array kurtosis(af::array tss);

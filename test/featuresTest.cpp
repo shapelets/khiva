@@ -446,6 +446,21 @@ TEST(FeaturesTests, HasDuplicateMin) {
     ASSERT_EQ(duplicateMinCalculated[1], false);
 }
 
+TEST(FeaturesTests, IndexMaxQuantile) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {5, 4, 3, 0, 0, 1, 5, 4, 0, 0, 2, 1};
+    af::array tss(6, 2, data);
+    float q = 0.5;
+
+    af::array result = tsa::features::indexMaxQuantile(tss, q);
+    
+    float *hresult = tss.host<float>();
+    float expected[] = {-1.2, -2.66226722};
+
+    ASSERT_NEAR(expected[0], expected[0], 1e-8);
+    ASSERT_NEAR(expected[1], expected[1], 1e-8);
+}
+
 TEST(FeaturesTests, Kurtosis) {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
