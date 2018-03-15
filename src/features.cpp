@@ -135,7 +135,7 @@ af::array entropy(af::array tss, int m, float r) {
             expandH = af::array(m, iterationSizeH, tss.dims(1), tss.type());
         }
 
-        gfor (af::seq j, tss.dims(1)) {
+        gfor(af::seq j, tss.dims(1)) {
             for (int k = 0; k < m; k++) {
                 expandH(k, span, j, span) = af::reorder(tss(af::seq(i + k, i + k + iterationSizeH - 1), j), 1, 0, 3, 2);
             }
@@ -152,14 +152,14 @@ af::array entropy(af::array tss, int m, float r) {
                 expandV = af::array(m, iterationSizeV, tss.dims(1), tss.type());
             }
 
-            gfor (af::seq k, tss.dims(1)) {
+            gfor(af::seq k, tss.dims(1)) {
                 for (int l = 0; l < m; l++) {
                     expandV(l, span, k, span) =
                         af::reorder(tss(af::seq(j + l, j + l + iterationSizeV - 1), k), 1, 0, 3, 2);
                 }
             }
             // Get the maximum difference among all dimensions for each timeseries
-            gfor (af::seq k, iterationSizeV) {
+            gfor(af::seq k, iterationSizeV) {
                 af::array aux = af::tile(expandV(span, k, span), 1, iterationSizeH);
                 distances = af::reorder(af::max(af::abs(aux - af::tile(expandH, 1, 1, 1, iterationSizeV))), 3, 1, 2, 0);
             }
@@ -297,6 +297,11 @@ af::array tsa::features::hasDuplicates(af::array tss) {
     }
 
     return af::transpose(result);
+}
+
+af::array tsa::features::hasDuplicateMax(af::array tss) {
+    af::array maximum = af::max(tss, 0);
+    return af::sum(tss == af::tile(maximum, tss.dims(0)), 0) > 1;
 }
 
 af::array tsa::features::hasDuplicateMin(af::array tss) {
