@@ -336,6 +336,15 @@ af::array tsa::features::lastLocationOfMaximum(af::array tss) {
     return (index.as(tss.type()) + 1) / tss.dims(0);
 }
 
+af::array tsa::features::lastLocationOfMinimum(af::array tss) {
+    af::array minimum;
+    af::array index;
+
+    af::min(minimum, index, tss, 0);
+
+    return (index.as(tss.type()) + 1) / tss.dims(0);
+}
+
 af::array tsa::features::length(af::array tss) {
     int n = tss.dims(0);
     return af::tile(af::array(1, &n), tss.dims(1));
