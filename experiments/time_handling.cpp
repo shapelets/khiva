@@ -1,9 +1,8 @@
 #include <arrayfire.h>
-#include <iostream>
 #include <chrono>
-#include <string>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
+#include <string>
 
 // std::string asString (const std::chrono::system_clock::time_point& tp)
 // {
@@ -34,9 +33,7 @@
 //     cout << "- is_steady: " << boolalpha << C::is_steady << endl;
 // }
 
-int main()
-{
-
+int main() {
     /*
     Flatten image and weight to 1D.
     map the image pixels to a bin by dividing by the number of bins
@@ -49,7 +46,7 @@ int main()
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 
     long long keys[] = {10000, 10000, 10010, 10010, 10000, 10000, std::numeric_limits<long long>::max()};
-    float data[] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,  std::numeric_limits<float>::quiet_NaN()};
+    float data[] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, std::numeric_limits<float>::quiet_NaN()};
 
     af::array k(7, keys);
     af::array v(7, data);

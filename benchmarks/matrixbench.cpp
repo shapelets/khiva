@@ -8,301 +8,312 @@
 #include <tsa.h>
 
 void addMemoryCounters(benchmark::State &state) {
-  size_t bytes, buffers, lockedBytes, lockedBuffers;
-  //This is already doing an af::sync();
-  af::deviceMemInfo(&bytes, &buffers, &lockedBytes, &lockedBuffers);
+    size_t bytes, buffers, lockedBytes, lockedBuffers;
+    // This is already doing an af::sync();
+    af::deviceMemInfo(&bytes, &buffers, &lockedBytes, &lockedBuffers);
 
-  state.counters["Memory"] = bytes;
-  state.counters["Buffers"] = buffers;
-  state.counters["LockedMemory"] = lockedBytes;
-  state.counters["LockedBuffers"] = lockedBuffers;
+    state.counters["Memory"] = bytes;
+    state.counters["Buffers"] = buffers;
+    state.counters["LockedMemory"] = lockedBytes;
+    state.counters["LockedBuffers"] = lockedBuffers;
 
-  af::deviceGC();
+    af::deviceGC();
 }
 
-template <af::Backend BE> void SlidingDotProduct(benchmark::State &state) {
-  af::setBackend(BE);
+template <af::Backend BE>
+void SlidingDotProduct(benchmark::State &state) {
+    af::setBackend(BE);
 
-  auto n = state.range(0);
-  auto m = state.range(1);
+    auto n = state.range(0);
+    auto m = state.range(1);
 
-  auto t = af::randu(n, f64);
-  auto q = t(seq(0, m));
+    auto t = af::randu(n, f64);
+    auto q = t(seq(0, m));
 
-  af::sync();
-  while (state.KeepRunning()) {
-    auto sdp = tsa::matrix::slidingDotProduct(q, t);
-    sdp.eval();
     af::sync();
-  }
-  addMemoryCounters(state);
-}
-
-template <af::Backend BE> void SlidingDotProductParallel(benchmark::State &state) {
-  af::setBackend(BE);
-
-  auto n = state.range(0);
-  auto m = state.range(1);
-
-  auto t = af::randu(n, f64);
-
-  auto indices = af::range(n - m);
-  auto input = af::array(m, n - m, t.type());
-
-  for (int i = 0; i < m; i++) {
-    input(i, span, span, span) = t(seq(i, n - m - 1 + i));
-  }
-
-  af::sync();
-  while (state.KeepRunning()) {
-    gfor(seq idx, n - m) {
-      auto sdp = tsa::matrix::slidingDotProduct(input(span, idx, span, span), t);
-      sdp.eval();
+    while (state.KeepRunning()) {
+        auto sdp = tsa::matrix::slidingDotProduct(q, t);
+        sdp.eval();
+        af::sync();
     }
-    af::sync();
-  }
-  addMemoryCounters(state);
+    addMemoryCounters(state);
 }
 
-template <af::Backend BE> void MeanStdevAuxiliary(benchmark::State &state) {
-  af::setBackend(BE);
+template <af::Backend BE>
+void SlidingDotProductParallel(benchmark::State &state) {
+    af::setBackend(BE);
 
-  auto n = state.range(0);
-  auto m = state.range(1);
+    auto n = state.range(0);
+    auto m = state.range(1);
 
-  auto t = af::randu(n, f64);
-  af::array a;
-  auto q = t(seq(0, m));
-  af::array mean;
-  af::array stdev;
+    auto t = af::randu(n, f64);
 
-  af::sync();
-  while (state.KeepRunning()) {
+    auto indices = af::range(n - m);
+    auto input = af::array(m, n - m, t.type());
+
+    for (int i = 0; i < m; i++) {
+        input(i, span, span, span) = t(seq(i, n - m - 1 + i));
+    }
+
+    af::sync();
+    while (state.KeepRunning()) {
+        gfor(seq idx, n - m) {
+            auto sdp = tsa::matrix::slidingDotProduct(input(span, idx, span, span), t);
+            sdp.eval();
+        }
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE>
+void MeanStdevAuxiliary(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, f64);
+    af::array a;
+    auto q = t(seq(0, m));
+    af::array mean;
+    af::array stdev;
+
+    af::sync();
+    while (state.KeepRunning()) {
+        tsa::matrix::meanStdev(t, a, m, mean, stdev);
+        mean.eval();
+        stdev.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE>
+void MeanStdev(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, f64);
+    af::array a;
+    auto q = t(seq(0, m));
+    af::array mean;
+    af::array stdev;
+
+    af::sync();
+    while (state.KeepRunning()) {
+        tsa::matrix::meanStdev(t, a, m, mean, stdev);
+        mean.eval();
+        stdev.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE>
+void GenerateMask(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+    auto batchStart = state.range(2);
+
+    auto t = af::randu(n, f64);
+
+    af::array profile;
+    af::array index;
+
+    af::sync();
+    while (state.KeepRunning()) {
+        af::array mask = tsa::matrix::generateMask(m, 2048, batchStart, n - m + 1);
+        mask.eval();
+        af::sync();
+    }
+
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE>
+void CalculateDistanceProfile(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, f64);
+    af::array a;
+    auto q = t(seq(0, m - 1));
+    af::array mean;
+    af::array stdev;
+
     tsa::matrix::meanStdev(t, a, m, mean, stdev);
-    mean.eval();
-    stdev.eval();
+
+    auto qt = tsa::matrix::slidingDotProduct(q, t);
+    af::array mask = tsa::matrix::generateMask(m, 1, 0, n - m + 1);
+
+    auto sumQ = sum(q);
+    auto sumQ2 = sum(pow(q, 2));
+
+    af::array distance;
+    af::array index;
+
     af::sync();
-  }
-  addMemoryCounters(state);
+    while (state.KeepRunning()) {
+        tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
+        distance.eval();
+        index.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
 }
 
-template <af::Backend BE> void MeanStdev(benchmark::State &state) {
-  af::setBackend(BE);
+template <af::Backend BE>
+void CalculateDistanceProfileParallel(benchmark::State &state) {
+    af::setBackend(BE);
 
-  auto n = state.range(0);
-  auto m = state.range(1);
+    auto n = state.range(0);
+    auto m = state.range(1);
 
-  auto t = af::randu(n, f64);
-  af::array a;
-  auto q = t(seq(0, m));
-  af::array mean;
-  af::array stdev;
+    auto t = af::randu(n, f64);
+    af::array a;
+    af::array mean;
+    af::array stdev;
 
-  af::sync();
-  while (state.KeepRunning()) {
     tsa::matrix::meanStdev(t, a, m, mean, stdev);
-    mean.eval();
-    stdev.eval();
+
+    auto input = af::array(m, n - m + 1, t.type());
+
+    for (int i = 0; i < m; i++) {
+        input(i, span, span, span) = t(seq(i, n - m + i));
+    }
+
+    af::array distance;
+    af::array index;
+
+    af::array mask = tsa::matrix::generateMask(m, n - m + 1, 0, n - m + 1);
+
     af::sync();
-  }
-  addMemoryCounters(state);
+    while (state.KeepRunning()) {
+        gfor(seq idx, n - m + 1) {
+            auto q = input(span, idx, span, span);
+            auto sumQ = sum(q);
+            auto sumQ2 = sum(pow(q, 2));
+            auto qt = tsa::matrix::slidingDotProduct(q, t);
+            tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
+            distance.eval();
+            index.eval();
+        }
+        af::sync();
+    }
+    addMemoryCounters(state);
 }
 
-template <af::Backend BE> void GenerateMask(benchmark::State &state) {
-  af::setBackend(BE);
+template <af::Backend BE>
+void Mass(benchmark::State &state) {
+    af::setBackend(BE);
 
-  auto n = state.range(0);
-  auto m = state.range(1);
-  auto batchStart = state.range(2);
+    auto n = state.range(0);
+    auto m = state.range(1);
 
-  auto t = af::randu(n, f64);
+    auto t = af::randu(n, f64);
+    auto q = t(af::seq(0, m - 1));
 
-  af::array profile;
-  af::array index;
-  
-  af::sync();
-  while (state.KeepRunning()) {
-    af::array mask = tsa::matrix::generateMask(m, 2048, batchStart, n - m + 1);
-    mask.eval();
+    af::array distance;
+    af::array index;
+    af::array aux;
+    af::array mean;
+    af::array stdev;
+
+    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
+    af::array mask = tsa::matrix::generateMask(m, 1, 0, n - m + 1);
+
     af::sync();
-  }
+    while (state.KeepRunning()) {
+        tsa::matrix::mass(q, t, m, aux, mean, stdev, mask, distance, index);
+        distance.eval();
+        index.eval();
+        af::sync();
+    }
 
-  addMemoryCounters(state);
+    addMemoryCounters(state);
 }
 
-template <af::Backend BE> void CalculateDistanceProfile(benchmark::State &state) {
-  af::setBackend(BE);
+template <af::Backend BE>
+void Stomp(benchmark::State &state) {
+    af::setBackend(BE);
 
-  auto n = state.range(0);
-  auto m = state.range(1);
+    auto n = state.range(0);
+    auto m = state.range(1);
 
-  auto t = af::randu(n, f64);
-  af::array a;
-  auto q = t(seq(0, m - 1));
-  af::array mean;
-  af::array stdev;
+    auto ta = af::randu(n, f64);
+    auto tb = af::randu(n, f64);
 
-  tsa::matrix::meanStdev(t, a, m, mean, stdev);
+    af::array profile;
+    af::array index;
 
-  auto qt = tsa::matrix::slidingDotProduct(q, t);
-  af::array mask = tsa::matrix::generateMask(m, 1, 0, n - m + 1);
-
-  auto sumQ = sum(q);
-  auto sumQ2 = sum(pow(q, 2));
-
-  af::array distance;
-  af::array index;
-
-  af::sync();
-  while (state.KeepRunning()) {
-    tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
-    distance.eval();
-    index.eval();
     af::sync();
-  }
-  addMemoryCounters(state);
+    while (state.KeepRunning()) {
+        tsa::matrix::stomp(ta, tb, m, profile, index);
+        profile.eval();
+        index.eval();
+        af::sync();
+    }
+
+    addMemoryCounters(state);
 }
 
-template <af::Backend BE> void CalculateDistanceProfileParallel(benchmark::State &state) {
-  af::setBackend(BE);
+template <af::Backend BE>
+void StompDataCPU(benchmark::State &state) {
+    af::setBackend(BE);
 
-  auto n = state.range(0);
-  auto m = state.range(1);
+    auto n = state.range(0);
+    auto m = state.range(1);
 
-  auto t = af::randu(n, f64);
-  af::array a;
-  af::array mean;
-  af::array stdev;
+    std::srand(0);
+    double *t_host = (double *)malloc(n * sizeof(double));
+    for (long i = 0; i < n; i++) {
+        t_host[i] = std::rand();
+    }
 
-  tsa::matrix::meanStdev(t, a, m, mean, stdev);
+    af::array profile;
+    af::array index;
 
-  auto input = af::array(m, n - m + 1, t.type());
-
-  for (int i = 0; i < m; i++) {
-    input(i, span, span, span) = t(seq(i, n - m + i));
-  }
-
-  af::array distance;
-  af::array index;
-
-  af::array mask = tsa::matrix::generateMask(m, n - m + 1, 0, n - m + 1);
-
-  af::sync();
-  while (state.KeepRunning()) {
-    gfor(seq idx, n - m + 1) {
-      auto q = input(span, idx, span, span);
-      auto sumQ = sum(q);
-      auto sumQ2 = sum(pow(q, 2));
-      auto qt = tsa::matrix::slidingDotProduct(q, t);
-      tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
-      distance.eval();
-      index.eval();
-    } 
     af::sync();
-  }
-  addMemoryCounters(state);
+    while (state.KeepRunning()) {
+        tsa::matrix::stomp(af::array(n, t_host), af::array(n, t_host), m, profile, index);
+        profile.eval();
+        index.eval();
+        af::sync();
+    }
+
+    addMemoryCounters(state);
+
+    delete[] t_host;
 }
 
-template <af::Backend BE> void Mass(benchmark::State &state) {
-  af::setBackend(BE);
+template <af::Backend BE>
+void StompWithItself(benchmark::State &state) {
+    af::setBackend(BE);
 
-  auto n = state.range(0);
-  auto m = state.range(1);
+    auto n = state.range(0);
+    auto m = state.range(1);
 
-  auto t = af::randu(n, f64);
-  auto q = t(af::seq(0, m - 1));
+    auto t = af::randu(n, f64);
 
-  af::array distance;
-  af::array index;
-  af::array aux;
-  af::array mean;
-  af::array stdev;
+    af::array profile;
+    af::array index;
 
-  tsa::matrix::meanStdev(t, aux, m, mean, stdev);
-  af::array mask = tsa::matrix::generateMask(m, 1, 0, n - m + 1);
-  
-  af::sync();
-  while (state.KeepRunning()) {
-    tsa::matrix::mass(q, t, m, aux, mean, stdev, mask, distance, index);
-    distance.eval();
-    index.eval();
     af::sync();
-  }
+    while (state.KeepRunning()) {
+        tsa::matrix::stomp(t, m, profile, index);
+        profile.eval();
+        index.eval();
+        af::sync();
+    }
 
-  addMemoryCounters(state);
-}
-
-template <af::Backend BE> void Stomp(benchmark::State &state) {
-  af::setBackend(BE);
-
-  auto n = state.range(0);
-  auto m = state.range(1);
-
-  auto ta = af::randu(n, f64);
-  auto tb = af::randu(n, f64);
-
-  af::array profile;
-  af::array index;
-
-  af::sync();
-  while (state.KeepRunning()) {
-    tsa::matrix::stomp(ta, tb, m, profile, index);
-    profile.eval();
-    index.eval();
-    af::sync();
-  }
-
-  addMemoryCounters(state);
-}
-
-template <af::Backend BE> void StompDataCPU(benchmark::State &state) {
-  af::setBackend(BE);
-
-  auto n = state.range(0);
-  auto m = state.range(1);
-
-  std::srand(0);
-  double *t_host = (double *)malloc(n*sizeof(double));
-  for(long i=0; i < n; i++) {
-    t_host[i] = std::rand();
-  }
-
-  af::array profile;
-  af::array index;
-
-  af::sync();
-  while (state.KeepRunning()) {
-    tsa::matrix::stomp(af::array(n, t_host), af::array(n, t_host), m, profile, index);
-    profile.eval();
-    index.eval();
-    af::sync();
-  }
-
-  addMemoryCounters(state);
-
-  delete [] t_host;
-}  
-
-template <af::Backend BE> void StompWithItself(benchmark::State &state) {
-  af::setBackend(BE);
-
-  auto n = state.range(0);
-  auto m = state.range(1);
-
-  auto t = af::randu(n, f64);
-
-  af::array profile;
-  af::array index;
-  
-  af::sync();
-  while (state.KeepRunning()) {
-    tsa::matrix::stomp(t, m, profile, index);
-    profile.eval();
-    index.eval();
-    af::sync();
-  }
-
-  addMemoryCounters(state);
+    addMemoryCounters(state);
 }
 
 BENCHMARK_TEMPLATE(SlidingDotProduct, af::Backend::AF_BACKEND_OPENCL)
@@ -326,93 +337,93 @@ BENCHMARK_TEMPLATE(SlidingDotProductParallel, af::Backend::AF_BACKEND_CPU)
     ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(MeanStdevAuxiliary, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(8)
+    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(MeanStdevAuxiliary, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(8)
+    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(MeanStdev, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(8)
+    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(MeanStdev, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(8)
+    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(2)
-  ->Ranges({{2<<10, 8<<10}, {128, 512}, {16<<9, 32<<9}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{2 << 10, 8 << 10}, {128, 512}, {16 << 9, 32 << 9}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(2)
-  ->Ranges({{2<<10, 8<<10}, {128, 512}, {16<<9, 32<<9}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{2 << 10, 8 << 10}, {128, 512}, {16 << 9, 32 << 9}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(8)
+    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(8)
-  ->Ranges({{1<<10, 32<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(8)
+    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(CalculateDistanceProfileParallel, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 4<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(CalculateDistanceProfileParallel, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 4<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 4<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 4<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(Stomp, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(2)
-  ->Ranges({{16<<10, 128<<10}, {256, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{16 << 10, 128 << 10}, {256, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(Stomp, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(2)
-  ->Ranges({{16<<10, 128<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{16 << 10, 128 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 16<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 16 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(2)
-  ->Ranges({{1<<10, 16<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 16 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_OPENCL)
-  ->RangeMultiplier(2)
-  ->Ranges({{16<<10, 32<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{16 << 10, 32 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_CPU)
-  ->RangeMultiplier(2)
-  ->Ranges({{16<<10, 32<<10}, {16, 512}})
-  ->Unit(benchmark::TimeUnit::kMicrosecond);
+    ->RangeMultiplier(2)
+    ->Ranges({{16 << 10, 32 << 10}, {16, 512}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_MAIN();

@@ -1,5 +1,5 @@
 // Copyright (c) 2018 Grumpy Cat Software S.L.
-// 
+//
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -9,7 +9,8 @@
 
 #define EPSILON 1e-20
 
-void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest) {
+void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue,
+                             af::array &pvalue, af::array &stderrest) {
     long n = xss.dims(0);
 
     af::array meanX = af::mean(xss, 0);
@@ -20,7 +21,7 @@ void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af:
     af::array ssxm = sumSquares(0, 0, span);
     ssxm = af::reorder(ssxm, 0, 2, 1, 3);
     af::array ssxym = sumSquares(0, 1, span);
-    ssxym = af::reorder(ssxym, 0, 2, 1, 3);    
+    ssxym = af::reorder(ssxym, 0, 2, 1, 3);
     af::array ssyxm = sumSquares(1, 0, span);
     ssyxm = af::reorder(ssyxm, 0, 2, 1, 3);
     af::array ssym = sumSquares(1, 1, span);
@@ -38,15 +39,15 @@ void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af:
 
     long df = n - 2;
     slope = rNum / ssxm;
-    intercept = meanY - slope*meanX;
+    intercept = meanY - slope * meanX;
 
     boost::math::students_t dist(df);
 
-    af::array t = r * af::sqrt(df / ((1.0 - r + EPSILON)*(1.0 + r + EPSILON)));
-    //Using boost to compute the CDF of the T-Student distribution
-    //It would be better to move this computation to the GPU
+    af::array t = r * af::sqrt(df / ((1.0 - r + EPSILON) * (1.0 + r + EPSILON)));
+    // Using boost to compute the CDF of the T-Student distribution
+    // It would be better to move this computation to the GPU
     double *aux = af::abs(t).host<double>();
-    for(long i = 0; i < t.dims(1); i++) {
+    for (long i = 0; i < t.dims(1); i++) {
         aux[i] = 2.0 * (1 - boost::math::cdf(dist, aux[i]));
     }
     pvalue = af::array(t.dims(1), aux);

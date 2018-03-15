@@ -4,18 +4,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include "tsa.h"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
+#include <tsa.h>
 
 // Simple test, does not use gmock
-TEST(DistanceTests, Euclidean)
-{
+TEST(DistanceTests, Euclidean) {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(4, 3, data);
 
     auto result = tsa::distances::euclidean(tss);
-    
+
     // check dimensions
     auto dims = result.dims();
     ASSERT_EQ(dims[0], 3);
@@ -24,7 +23,7 @@ TEST(DistanceTests, Euclidean)
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    double* hostResult = result.host<double>();    
+    double* hostResult = result.host<double>();
     ASSERT_EQ(0.0, hostResult[0]);
     ASSERT_EQ(0.0, hostResult[1]);
     ASSERT_EQ(0.0, hostResult[2]);
@@ -37,14 +36,13 @@ TEST(DistanceTests, Euclidean)
 }
 
 // Simple test, does not use gmock
-TEST(DistanceTests, SquaredEuclidean)
-{
+TEST(DistanceTests, SquaredEuclidean) {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(4, 3, data);
 
     auto result = tsa::distances::squaredEuclidean(tss);
-    
+
     // check dimensions
     auto dims = result.dims();
     ASSERT_EQ(dims[0], 3);
@@ -53,7 +51,7 @@ TEST(DistanceTests, SquaredEuclidean)
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    double* hostResult = result.host<double>();    
+    double* hostResult = result.host<double>();
     ASSERT_EQ(0.0, hostResult[0]);
     ASSERT_EQ(0.0, hostResult[1]);
     ASSERT_EQ(0.0, hostResult[2]);
@@ -64,4 +62,3 @@ TEST(DistanceTests, SquaredEuclidean)
     ASSERT_EQ(64.0, hostResult[7]);
     ASSERT_EQ(0.0, hostResult[8]);
 }
-
