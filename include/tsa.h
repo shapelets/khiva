@@ -931,7 +931,7 @@ void find_best_n_motifs(double *profile, unsigned int *index, long *length_profi
  * @param i Pointer to an initialized array of doubles for storing the index
  * profile.
  */
-void stomp(double *ta, double *tb, int *lta, int *ltb, long *m, double *p, unsigned int *i);
+void stomp(double *ta, double *tb, long *lta, long *ltb, long *m, double *p, unsigned int *i);
 
 /**
  * @brief Primitive of the STOMP self join algorithm.
@@ -944,7 +944,7 @@ void stomp(double *ta, double *tb, int *lta, int *ltb, long *m, double *p, unsig
  * @param i Pointer to an initialized  array of doubles for storing the index
  * profile.
  */
-void stomp_self_join(double *ta, int *lta, long *m, double *p, unsigned int *i);
+void stomp_self_join(double *ta, long *lta, long *m, double *p, unsigned int *i);
 
 /**
  * @brief JNI interface of findBestNMotifs function.
@@ -992,8 +992,8 @@ JNIEXPORT void JNICALL Java_tsa_TSA_findBestNDiscords(JNIEnv *env, jobject thisO
  * @param p initialized Jarray of doubles for storing the distance profile.
  * @param i initialized Jarray of doubles for storing the index profile.
  */
-JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb, jint lta,
-                                          jint ltb, jlong m, jdoubleArray p, jintArray i);
+JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb, jlong lta,
+                                          jlong ltb, jlong m, jdoubleArray p, jintArray i);
 
 /**
  * @brief JNI interface of the STOMP Self Join algorithm.
@@ -1004,7 +1004,7 @@ JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleA
  * @param p Jarray of doubles for storing the distance profile.
  * @param i Jarray of doubles for storing the index profile.
  */
-JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta, jint lta, jlong m,
+JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta, jlong lta, jlong m,
                                                   jdoubleArray p, jintArray i);
 
 #ifdef __cplusplus

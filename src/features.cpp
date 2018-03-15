@@ -362,12 +362,12 @@ JNIEXPORT void JNICALL Java_tsa_TSA_c3(JNIEnv* env, jobject thisObj, jdoubleArra
                                        jlong tssNumberOfTss, jlong lag, jdoubleArray result) {
     af::array primitive_result;
     long tssFull_length = tssLength * tssNumberOfTss;
-    double input_tss[tssFull_length];
+    jdouble input_tss[tssFull_length];
     env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
 
     primitive_result = tsa::features::c3(af::array(tssLength, tssNumberOfTss, input_tss), lag);
 
-    double output_result[tssNumberOfTss];
+    jdouble output_result[tssNumberOfTss];
     primitive_result.host(output_result);
     env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
     return;
@@ -377,12 +377,12 @@ JNIEXPORT void JNICALL Java_tsa_TSA_cidCe(JNIEnv* env, jobject thisObj, jdoubleA
                                           jlong tssNumberOfTss, jboolean zNormalize, jdoubleArray result) {
     af::array primitive_result;
     long tssFull_length = tssLength * tssNumberOfTss;
-    double input_tss[tssFull_length];
+    jdouble input_tss[tssFull_length];
     env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
 
     primitive_result = tsa::features::cidCe(af::array(tssLength, tssNumberOfTss, input_tss), zNormalize);
 
-    double output_result[tssNumberOfTss];
+    jdouble output_result[tssNumberOfTss];
     primitive_result.host(output_result);
     env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
     return;
@@ -392,12 +392,12 @@ JNIEXPORT void JNICALL Java_tsa_TSA_absEnergy(JNIEnv* env, jobject thisObj, jdou
                                               jlong timeSeriesLength, jlong numberOfTimeSeries, jdoubleArray jResult) {
     af::array result;
     long concatenatedTimeSeriesLength = timeSeriesLength * numberOfTimeSeries;
-    double inputTs[concatenatedTimeSeriesLength];
+    jdouble inputTs[concatenatedTimeSeriesLength];
     env->GetDoubleArrayRegion(timeSeries, 0, concatenatedTimeSeriesLength, &inputTs[0]);
 
     result = tsa::features::absEnergy(af::array(timeSeriesLength, numberOfTimeSeries, inputTs));
 
-    double inputCResult[numberOfTimeSeries];
+    jdouble inputCResult[numberOfTimeSeries];
     result.host(inputCResult);
     env->SetDoubleArrayRegion(jResult, 0, numberOfTimeSeries, &inputCResult[0]);
     return;
@@ -408,12 +408,12 @@ JNIEXPORT void JNICALL Java_tsa_TSA_absoluteSumOfChanges(JNIEnv* env, jobject th
                                                          jdoubleArray jResult) {
     af::array result;
     long concatenatedTimeSeriesLength = timeSeriesLength * numberOfTimeSeries;
-    double inputTs[concatenatedTimeSeriesLength];
+    jdouble inputTs[concatenatedTimeSeriesLength];
     env->GetDoubleArrayRegion(timeSeries, 0, concatenatedTimeSeriesLength, &inputTs[0]);
 
     result = tsa::features::absoluteSumOfChanges(af::array(timeSeriesLength, numberOfTimeSeries, inputTs));
 
-    double inputCResult[numberOfTimeSeries];
+    jdouble inputCResult[numberOfTimeSeries];
     result.host(inputCResult);
     env->SetDoubleArrayRegion(jResult, 0, numberOfTimeSeries, &inputCResult[0]);
     return;

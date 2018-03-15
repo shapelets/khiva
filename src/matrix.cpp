@@ -165,7 +165,7 @@ void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
             input(j, span, span, span) = tb(af::seq(i + j, i + j + iterationSize - 1));
         }
 
-        gfor (af::seq idx, iterationSize) {
+        gfor(af::seq idx, iterationSize) {
             af::array distance;
             af::array pidx;
 
@@ -214,7 +214,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
             af::array mean;
             af::array stdev;
             tsa::matrix::meanStdev(taChunk, aux, m, mean, stdev);
-            gfor (af::seq idx, iterationSizeB) {
+            gfor(af::seq idx, iterationSizeB) {
                 af::array distanceTmp;
                 af::array pidxTmp;
 
@@ -263,7 +263,7 @@ void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::
         input(i, span, span, span) = tb(af::seq(i, nb - m + i));
     }
 
-    gfor (af::seq idx, nb - m + 1) {
+    gfor(af::seq idx, nb - m + 1) {
         tsa::matrix::mass(input(span, idx, span, span), ta, m, aux, mean, stdev, profile, index);
     }
     af::sync();
@@ -319,7 +319,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
             af::array stdev;
             tsa::matrix::meanStdev(tChunk, aux, m, mean, stdev);
 
-            gfor (af::seq idx, iterationSizeB) {
+            gfor(af::seq idx, iterationSizeB) {
                 af::array distanceTmp;
                 af::array pidxTmp;
 
@@ -371,7 +371,7 @@ void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
 
     af::array mask = tsa::matrix::generateMask(m, n - m + 1, 0, n - m + 1);
 
-    gfor (af::seq idx, n - m + 1) {
+    gfor(af::seq idx, n - m + 1) {
         tsa::matrix::mass(input(span, idx, span, span), t, m, aux, mean, stdev, mask, profile, index);
     }
     af::sync();
@@ -439,7 +439,7 @@ void find_best_n_motifs(double *profile, unsigned int *index, long *length_profi
     subsequenceIndices.host(subsequence_indices);
 }
 
-void stomp(double *ta, double *tb, int *lta, int *ltb, long *m, double *p, unsigned int *i) {
+void stomp(double *ta, double *tb, long *lta, long *ltb, long *m, double *p, unsigned int *i) {
     af::array distance;
     af::array index;
     tsa::matrix::stomp(array(*lta, ta), array(*ltb, tb), *m, distance, index);
@@ -447,7 +447,7 @@ void stomp(double *ta, double *tb, int *lta, int *ltb, long *m, double *p, unsig
     index.host(i);
 }
 
-void stomp_self_join(double *ta, int *lta, long *m, double *p, unsigned int *i) {
+void stomp_self_join(double *ta, long *lta, long *m, double *p, unsigned int *i) {
     af::array distance;
     af::array index;
     tsa::matrix::stomp(array(*lta, ta), *m, distance, index);
@@ -463,8 +463,8 @@ JNIEXPORT void JNICALL Java_tsa_TSA_findBestNDiscords(JNIEnv *env, jobject thisO
     af::array discordIndices;
     af::array subsequenceIndices;
 
-    double inputP[lengthProfile];
-    int inputI[lengthProfile];
+    jdouble inputP[lengthProfile];
+    jint inputI[lengthProfile];
 
     env->GetDoubleArrayRegion(profile, 0, lengthProfile, &inputP[0]);
     env->GetIntArrayRegion(index, 0, lengthProfile, &inputI[0]);
@@ -472,9 +472,9 @@ JNIEXPORT void JNICALL Java_tsa_TSA_findBestNDiscords(JNIEnv *env, jobject thisO
     tsa::matrix::findBestNDiscords(array(lengthProfile, inputP), array(lengthProfile, inputI), n, discords,
                                    discordIndices, subsequenceIndices);
 
-    double inputDiscords[n];
-    int inputDiscordIndices[n];
-    int inputSubsequenceIndices[n];
+    jdouble inputDiscords[n];
+    jint inputDiscordIndices[n];
+    jint inputSubsequenceIndices[n];
 
     discords.host(inputDiscords);
     discordIndices.host(inputDiscordIndices);
@@ -494,8 +494,8 @@ JNIEXPORT void JNICALL Java_tsa_TSA_findBestNMotifs(JNIEnv *env, jobject thisObj
     af::array motifIndices;
     af::array subsequenceIndices;
 
-    double inputP[lengthProfile];
-    int inputI[lengthProfile];
+    jdouble inputP[lengthProfile];
+    jint inputI[lengthProfile];
 
     env->GetDoubleArrayRegion(profile, 0, lengthProfile, &inputP[0]);
     env->GetIntArrayRegion(index, 0, lengthProfile, &inputI[0]);
@@ -503,9 +503,9 @@ JNIEXPORT void JNICALL Java_tsa_TSA_findBestNMotifs(JNIEnv *env, jobject thisObj
     tsa::matrix::findBestNMotifs(array(lengthProfile, inputP), array(lengthProfile, inputI), n, motifs, motifIndices,
                                  subsequenceIndices);
 
-    double inputMotifs[n];
-    int inputMotifIndices[n];
-    int inputSubsequenceIndices[n];
+    jdouble inputMotifs[n];
+    jint inputMotifIndices[n];
+    jint inputSubsequenceIndices[n];
 
     motifs.host(inputMotifs);
     motifIndices.host(inputMotifIndices);
@@ -518,13 +518,13 @@ JNIEXPORT void JNICALL Java_tsa_TSA_findBestNMotifs(JNIEnv *env, jobject thisObj
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb, jint lta,
-                                          jint ltb, jlong m, jdoubleArray p, jintArray i) {
+JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb, jlong lta,
+                                          jlong ltb, jlong m, jdoubleArray p, jintArray i) {
     af::array distance;
     af::array index;
 
-    double input_ta[lta];
-    double input_tb[ltb];
+    jdouble input_ta[lta];
+    jdouble input_tb[ltb];
 
     env->GetDoubleArrayRegion(ta, 0, lta, &input_ta[0]);
     env->GetDoubleArrayRegion(tb, 0, ltb, &input_tb[0]);
@@ -536,8 +536,8 @@ JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleA
 
     tsa::matrix::stomp(ata, atb, subsequence, distance, index);
 
-    double input_p[ltb - m + 1];
-    int input_i[ltb - m + 1];
+    jdouble input_p[ltb - m + 1];
+    jint input_i[ltb - m + 1];
 
     distance.host(input_p);
     index.host(input_i);
@@ -548,12 +548,12 @@ JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleA
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta, jint lta, jlong m,
+JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta, jlong lta, jlong m,
                                                   jdoubleArray p, jintArray i) {
     af::array distance;
     af::array index;
 
-    double input_ta[lta];
+    jdouble input_ta[lta];
 
     env->GetDoubleArrayRegion(ta, 0, lta, &input_ta[0]);
 
@@ -563,8 +563,8 @@ JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, 
 
     tsa::matrix::stomp(ata, subsequence, distance, index);
 
-    double input_p[lta - m + 1];
-    int input_i[lta - m + 1];
+    jdouble input_p[lta - m + 1];
+    jint input_i[lta - m + 1];
 
     distance.host(input_p);
     index.host(input_i);
