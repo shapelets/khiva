@@ -207,14 +207,14 @@ af::array tsa::features::autocorrelation(af::array tss, long lag) {
 af::array tsa::features::binnedEntropy(af::array tss, int max_bins) {
     int len = tss.dims(0);
     int nts = tss.dims(1);
-    af:array res = af::constant(0, 1, nts);
+    af::array res = af::constant(0, 1, nts);
 
     gfor(seq i, nts) {
         af::array his = af::histogram(tss(span, i), max_bins);
         af::array probs = his / (float)len;
         af::array aux = probs * af::log(probs);
         af::array sum = af::sum(aux, 0);
-        res(0,i) = sum;
+        res(0, i) = sum;
     }
     return af::abs(res);
 }
@@ -263,6 +263,16 @@ void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array& r
     imag = af::imag(fftCoefficient);
     _abs = af::abs(real);
     angle = af::arg(fftCoefficient);
+}
+
+af::array tsa::features::firstLocationOfMaximum(af::array tss) {
+    int len = tss.dims(0);
+    af::array index;
+    af::array maximum;
+
+    af::max(maximum, index, tss, 0);
+
+    return index.as(f32) / len;
 }
 
 af::array tsa::features::firstLocationOfMinimum(af::array tss) {
