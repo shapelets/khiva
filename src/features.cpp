@@ -323,6 +323,10 @@ af::array tsa::features::indexMaxQuantile(af::array tss, float q) {
 
 af::array tsa::features::kurtosis(af::array tss) { return tsa::statistics::kurtosis(tss); }
 
+af::array tsa::features::largeStandardDeviation(af::array tss, float r) {
+    return af::stdev(tss, 0) > (r * (af::max(tss, 0) - af::min(tss, 0)));
+}
+
 af::array tsa::features::lastLocationOfMaximum(af::array tss) {
     af::array flipped = af::flip(tss, 0);
 
