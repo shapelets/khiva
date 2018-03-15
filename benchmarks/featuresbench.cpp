@@ -346,6 +346,25 @@ void HasDuplicateMin(benchmark::State &state) {
 }
 
 template <af::Backend BE>
+void IndexMaxQuantile(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+    float q = 0.8;
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto index = tsa::features::indexMaxQuantile(t, q);
+        index.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE>
 void Kurtosis(benchmark::State &state) {
     af::setBackend(BE);
 
@@ -565,6 +584,16 @@ BENCHMARK_TEMPLATE(HasDuplicateMin, af::Backend::AF_BACKEND_OPENCL)
     ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(HasDuplicateMin, af::Backend::AF_BACKEND_CPU)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(IndexMaxQuantile, af::Backend::AF_BACKEND_OPENCL)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(IndexMaxQuantile, af::Backend::AF_BACKEND_CPU)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
     ->Unit(benchmark::TimeUnit::kMicrosecond);

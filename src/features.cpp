@@ -310,6 +310,17 @@ af::array tsa::features::hasDuplicateMin(af::array tss) {
     return af::sum(tss == af::tile(minimum, tss.dims(0)), 0) > 1;
 }
 
+af::array tsa::features::indexMaxQuantile(af::array tss, float q) {
+    int len = tss.dims(0);
+
+    af::array positives = af::abs(tss);
+    af::array sums = af::sum(positives, 0);
+    af::array acum = af::accum(positives, 0);
+    af::array res = ((firstLocationOfMaximum((acum / af::tile(sums, len)) >= q) * len) + 1) / len;
+
+    return res;
+}
+
 af::array tsa::features::kurtosis(af::array tss) { return tsa::statistics::kurtosis(tss); }
 
 af::array tsa::features::lastLocationOfMaximum(af::array tss) {
