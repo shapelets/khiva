@@ -404,6 +404,20 @@ TEST(FeaturesTests, FftCoefficient) {
     ASSERT_EQ(angleCalculated[1], 0.0);
 }
 
+TEST(FeaturesTests, FirstLocationOfMaximum) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    float data[] = {5, 4, 3, 5, 0, 1, 5, 3, 2, 1, 2, 4, 3, 5, 2, 5, 4, 3, 5, 2};
+    af::array tss(10, 2, data);
+
+    af::array result = tsa::features::firstLocationOfMaximum(tss);
+
+    float *hr = result.host<float>();
+
+    ASSERT_EQ(hr[0], 0.0f);
+    ASSERT_EQ(hr[1], 0.3f);
+}
+
 TEST(FeaturesTests, FirstLocationOfMinimum) {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 

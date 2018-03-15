@@ -397,6 +397,17 @@ void fftCoefficient(af::array tss, long coefficient, af::array &real, af::array 
                     af::array &angle);
 
 /**
+ * @brief Calculates the first relative location of the maximal value for each timeseries.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @return af::array The first relative location of the maximum value to the length of the timeseries,
+ *  for each timeseries.
+ */
+af::array firstLocationOfMaximum(af::array tss);
+
+/**
  * @brief Calculates the first location of the minimal value of each time series. The position
  * is calculated relatively to the length of the series
  *
