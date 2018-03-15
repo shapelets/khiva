@@ -289,6 +289,11 @@ af::array tsa::features::hasDuplicates(af::array tss) {
     return af::transpose(result);
 }
 
+af::array tsa::features::hasDuplicateMax(af::array tss){
+    af::array maximum = af::max(tss, 0);
+    return af::sum(tss == af::tile(maximum, tss.dims(0)), 0) > 1;
+}
+
 af::array tsa::features::hasDuplicateMin(af::array tss) {
     af::array minimum = af::min(tss, 0);
 

@@ -432,6 +432,20 @@ TEST(FeaturesTests, HasDuplicates) {
     ASSERT_EQ(duplicatesCalculated[1], false);
 }
 
+TEST(FeaturesTests, HasDuplicateMax) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {5, 4, 3, 0, 5, 1, 5, 4, 3, 0, 2, 1};
+    af::array tss(6, 2, data);
+
+    af::array out = tsa::features::hasDuplicateMax(tss);
+
+    bool *hout = (bool *)out.host<char>();
+
+    ASSERT_EQ(hout[0], true);
+    ASSERT_EQ(hout[1], false);
+}
+
 TEST(FeaturesTests, HasDuplicateMin) {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 
