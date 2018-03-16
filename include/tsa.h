@@ -495,6 +495,17 @@ af::array lastLocationOfMaximum(af::array tss);
  */
 af::array length(af::array tss);
 
+/**
+ * @brief Calculate a linear least-squares regression for the values of the time series versus the sequence from 0 to
+ * length of the time series minus one.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ */
+void linearTrend(af::array tss, af::array pvalue, af::array &rvalue, af::array &intercept, af::array &slope,
+                 af::array &stderr);
+
 #ifdef __cplusplus
 extern "C" {
 #endif

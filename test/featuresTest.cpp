@@ -530,3 +530,15 @@ TEST(FeaturesTests, Length) {
     ASSERT_EQ(lengthCalculated[0], 6);
     ASSERT_EQ(lengthCalculated[1], 6);
 }
+
+TEST(FeaturesTests, LinearTrend) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {0, 4, 3, 5, 5, 1, 0, 4, 3, 2, 5, 1};
+    af::array tss(6, 2, data);
+
+    af::array pvalue, rvalue, intercept, slope, stderr;
+    tsa::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stderr);
+
+    ASSERT_EQ(6, 6);
+}
