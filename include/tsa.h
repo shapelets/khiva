@@ -632,8 +632,8 @@ void c3(double *tss, long *tss_length, long *tss_number_of_tss, long *lag, doubl
  * @param lag The lag
  * @param result The non-linearity value for the given time series.
  */
-JNIEXPORT void JNICALL Java_tsa_TSA_c3(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                       jlong tssNumberOfTss, jlong lag, jdoubleArray result);
+JNIEXPORT void JNICALL Java_tsa_Features_c3(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                            jlong tssNumberOfTss, jlong lag, jdoubleArray result);
 
 /**
  * @brief JNI interface of the cidCe function.
@@ -644,8 +644,8 @@ JNIEXPORT void JNICALL Java_tsa_TSA_c3(JNIEnv *env, jobject thisObj, jdoubleArra
  * @param zNormalize Controls whether the time series should be z-normalized or not.
  * @param result The complexity value for the given time series.
  */
-JNIEXPORT void JNICALL Java_tsa_TSA_cidCe(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                          jlong tssNumberOfTss, jboolean zNormalize, jdoubleArray result);
+JNIEXPORT void JNICALL Java_tsa_Features_cidCe(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                               jlong tssNumberOfTss, jboolean zNormalize, jdoubleArray result);
 
 /**
  * @brief JNI interface of the absoluteSumOfChanges function.
@@ -655,9 +655,9 @@ JNIEXPORT void JNICALL Java_tsa_TSA_cidCe(JNIEnv *env, jobject thisObj, jdoubleA
  * @param numberOfTimeSeries Number of time series into timeSeries.
  * @param jResult Absolute sum of changes.
  */
-JNIEXPORT void JNICALL Java_tsa_TSA_absoluteSumOfChanges(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries,
-                                                         jlong timeSeriesLength, jlong numberOfTimeSeries,
-                                                         jdoubleArray jResult);
+JNIEXPORT void JNICALL Java_tsa_Features_absoluteSumOfChanges(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries,
+                                                              jlong timeSeriesLength, jlong numberOfTimeSeries,
+                                                              jdoubleArray jResult);
 
 /**
  * @brief JNI interface of the absEnergy function.
@@ -667,8 +667,9 @@ JNIEXPORT void JNICALL Java_tsa_TSA_absoluteSumOfChanges(JNIEnv *env, jobject th
  * @param numberOfTimeSeries Number of time series into timeSeries.
  * @param jResult Absolute Energy.
  */
-JNIEXPORT void JNICALL Java_tsa_TSA_absEnergy(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries,
-                                              jlong timeSeriesLength, jlong numberOfTimeSeries, jdoubleArray jResult);
+JNIEXPORT void JNICALL Java_tsa_Features_absEnergy(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries,
+                                                   jlong timeSeriesLength, jlong numberOfTimeSeries,
+                                                   jdoubleArray jResult);
 
 #ifdef __cplusplus
 }
@@ -1040,6 +1041,25 @@ void stomp(double *ta, double *tb, long *lta, long *ltb, long *m, double *p, uns
 void stomp_self_join(double *ta, long *lta, long *m, double *p, unsigned int *i);
 
 /**
+ * @brief Get the devices info.
+ */
+void info();
+
+/**
+ * @brief Set the back-end.
+ *
+ * @param backend The desired back-end.
+ */
+void set_backend(int *backend);
+
+/**
+ * @brief Set the device.
+ *
+ * @param device The desired device.
+ */
+void set_device(int *device);
+
+/**
  * @brief JNI interface of findBestNMotifs function.
  *
  * @param profile The matrix profile containing the minimum distance of each
@@ -1052,9 +1072,10 @@ void stomp_self_join(double *ta, long *lta, long *m, double *p, unsigned int *i)
  * @param jSubsequenceIndices The indices of the query sequences that produced
  * the minimum reported in the motifs
  */
-JNIEXPORT void JNICALL Java_tsa_TSA_findBestNMotifs(JNIEnv *env, jobject thisObj, jdoubleArray profile, jintArray index,
-                                                    jlong lengthProfile, jlong n, jdoubleArray jMotifDistances,
-                                                    jintArray jMotifIndices, jintArray jSubsequenceIndices);
+JNIEXPORT void JNICALL Java_tsa_Matrix_findBestNMotifs(JNIEnv *env, jobject thisObj, jdoubleArray profile,
+                                                       jintArray index, jlong lengthProfile, jlong n,
+                                                       jdoubleArray jMotifDistances, jintArray jMotifIndices,
+                                                       jintArray jSubsequenceIndices);
 
 /**
  * @brief JNI interface of findBestNDiscords function.
@@ -1069,10 +1090,10 @@ JNIEXPORT void JNICALL Java_tsa_TSA_findBestNMotifs(JNIEnv *env, jobject thisObj
  * @param jSubsequenceIndices The indices of the query sequences that produced
  * the "N" bigger discords.
  */
-JNIEXPORT void JNICALL Java_tsa_TSA_findBestNDiscords(JNIEnv *env, jobject thisObj, jdoubleArray profile,
-                                                      jintArray index, jlong lengthProfile, jlong n,
-                                                      jdoubleArray jDiscordDistances, jintArray jDiscordIndices,
-                                                      jintArray jSubsequenceIndices);
+JNIEXPORT void JNICALL Java_tsa_Matrix_findBestNDiscords(JNIEnv *env, jobject thisObj, jdoubleArray profile,
+                                                         jintArray index, jlong lengthProfile, jlong n,
+                                                         jdoubleArray jDiscordDistances, jintArray jDiscordIndices,
+                                                         jintArray jSubsequenceIndices);
 
 /**
  * @brief JNI interface of the STOMP algorithm.
@@ -1085,8 +1106,8 @@ JNIEXPORT void JNICALL Java_tsa_TSA_findBestNDiscords(JNIEnv *env, jobject thisO
  * @param p initialized Jarray of doubles for storing the distance profile.
  * @param i initialized Jarray of doubles for storing the index profile.
  */
-JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb, jlong lta,
-                                          jlong ltb, jlong m, jdoubleArray p, jintArray i);
+JNIEXPORT void JNICALL Java_tsa_Matrix_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb, jlong lta,
+                                             jlong ltb, jlong m, jdoubleArray p, jintArray i);
 
 /**
  * @brief JNI interface of the STOMP Self Join algorithm.
@@ -1097,8 +1118,27 @@ JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleA
  * @param p Jarray of doubles for storing the distance profile.
  * @param i Jarray of doubles for storing the index profile.
  */
-JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta, jlong lta, jlong m,
-                                                  jdoubleArray p, jintArray i);
+JNIEXPORT void JNICALL Java_tsa_Matrix_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta, jlong lta, jlong m,
+                                                     jdoubleArray p, jintArray i);
+
+/**
+ * @brief JNI interface to get the devices info.
+ */
+JNIEXPORT void JNICALL Java_tsa_Library_info(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief JNI interface to set the back-end.
+ *
+ * @param backend The desired back-end.
+ */
+JNIEXPORT void JNICALL Java_tsa_Library_setBackend(JNIEnv *env, jobject thisObj, jint backend);
+
+/**
+ * @brief JNI interface to set the device.
+ *
+ * @param device The desired device.
+ */
+JNIEXPORT void JNICALL Java_tsa_Library_setDevice(JNIEnv *env, jobject thisObj, jint device);
 
 #ifdef __cplusplus
 }

@@ -455,10 +455,31 @@ void stomp_self_join(double *ta, long *lta, long *m, double *p, unsigned int *i)
     index.host(i);
 }
 
-JNIEXPORT void JNICALL Java_tsa_TSA_findBestNDiscords(JNIEnv *env, jobject thisObj, jdoubleArray profile,
-                                                      jintArray index, jlong lengthProfile, jlong n,
-                                                      jdoubleArray jDiscordDistances, jintArray jDiscordIndices,
-                                                      jintArray jSubsequenceIndices) {
+void info() { af::info(); }
+
+void set_backend(int *backend) {
+    switch (*backend) {
+        case 0:
+            af::setBackend(AF_BACKEND_CPU);
+            break;
+        case 1:
+            af::setBackend(AF_BACKEND_OPENCL);
+            break;
+        case 2:
+            af::setBackend(AF_BACKEND_CUDA);
+            break;
+        default:
+            af::setBackend(AF_BACKEND_CPU);
+            break;
+    }
+}
+
+void set_device(int *device) { af::setDevice(*device); }
+
+JNIEXPORT void JNICALL Java_tsa_Matrix_findBestNDiscords(JNIEnv *env, jobject thisObj, jdoubleArray profile,
+                                                         jintArray index, jlong lengthProfile, jlong n,
+                                                         jdoubleArray jDiscordDistances, jintArray jDiscordIndices,
+                                                         jintArray jSubsequenceIndices) {
     af::array discords;
     af::array discordIndices;
     af::array subsequenceIndices;
@@ -487,9 +508,10 @@ JNIEXPORT void JNICALL Java_tsa_TSA_findBestNDiscords(JNIEnv *env, jobject thisO
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsa_TSA_findBestNMotifs(JNIEnv *env, jobject thisObj, jdoubleArray profile, jintArray index,
-                                                    jlong lengthProfile, jlong n, jdoubleArray jMotifDistances,
-                                                    jintArray jMotifIndices, jintArray jSubsequenceIndices) {
+JNIEXPORT void JNICALL Java_tsa_Matrix_findBestNMotifs(JNIEnv *env, jobject thisObj, jdoubleArray profile,
+                                                       jintArray index, jlong lengthProfile, jlong n,
+                                                       jdoubleArray jMotifDistances, jintArray jMotifIndices,
+                                                       jintArray jSubsequenceIndices) {
     af::array motifs;
     af::array motifIndices;
     af::array subsequenceIndices;
@@ -518,8 +540,8 @@ JNIEXPORT void JNICALL Java_tsa_TSA_findBestNMotifs(JNIEnv *env, jobject thisObj
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb, jlong lta,
-                                          jlong ltb, jlong m, jdoubleArray p, jintArray i) {
+JNIEXPORT void JNICALL Java_tsa_Matrix_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb, jlong lta,
+                                             jlong ltb, jlong m, jdoubleArray p, jintArray i) {
     af::array distance;
     af::array index;
 
@@ -548,8 +570,8 @@ JNIEXPORT void JNICALL Java_tsa_TSA_stomp(JNIEnv *env, jobject thisObj, jdoubleA
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta, jlong lta, jlong m,
-                                                  jdoubleArray p, jintArray i) {
+JNIEXPORT void JNICALL Java_tsa_Matrix_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta, jlong lta, jlong m,
+                                                     jdoubleArray p, jintArray i) {
     af::array distance;
     af::array index;
 
@@ -574,6 +596,26 @@ JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, 
 
     return;
 }
+
+JNIEXPORT void JNICALL Java_tsa_Library_info(JNIEnv *env, jobject thisObj) { af::info(); }
+
+JNIEXPORT void JNICALL Java_tsa_Library_setBackend(JNIEnv *env, jobject thisObj, jint backend) {
+    switch (backend) {
+        case 0:
+            af::setBackend(AF_BACKEND_CPU);
+            break;
+        case 1:
+            af::setBackend(AF_BACKEND_OPENCL);
+            break;
+        case 2:
+            af::setBackend(AF_BACKEND_CUDA);
+            break;
+        default:
+            af::setBackend(AF_BACKEND_CPU);
+            break;
+    }
+}
+JNIEXPORT void JNICALL Java_tsa_Library_setDevice(JNIEnv *env, jobject thisObj, jint device) { af::setDevice(device); }
 
 #ifdef __cplusplus
 }
