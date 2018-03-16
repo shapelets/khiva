@@ -44,7 +44,7 @@ TEST(DimensionalityTests, PAA) {
 
     af::array out = tsa::dimensionality::PAA(a, 5);
 
-    double* out_h = out.host<double>();
+    double *out_h = out.host<double>();
     std::vector<double> expected = {0.05, 2.45, 6.5, 8.55, 9.0};
 
     for (size_t i = 0; i < 5; i++) {
@@ -81,8 +81,8 @@ TEST(DimensionalityTests, PIP) {
 
     af::array pointsOut = tsa::dimensionality::PIP(tss, 6);
 
-    float* pox_h = pointsOut.col(0).host<float>();
-    float* poy_h = pointsOut.col(1).host<float>();
+    float *pox_h = pointsOut.col(0).host<float>();
+    float *poy_h = pointsOut.col(1).host<float>();
 
     for (size_t i = 0; i < 6; i++) {
         ASSERT_EQ(pox_h[i], exp_x[i]);

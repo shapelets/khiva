@@ -642,6 +642,20 @@ TEST(FeaturesTests, LastLocationOfMaximum) {
     ASSERT_EQ(lastMaximumCalculated[1], 0.8333333333333334);
 }
 
+TEST(FeaturesTests, LastLocationOfMinimum) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    float data[] = {0, 4, 3, 5, 5, 1, 0, 4, 3, 2, 5, 1, 4, 5, 1, 2};
+    af::array tss(8, 2, data);
+
+    af::array result = tsa::features::lastLocationOfMinimum(tss);
+
+    float *out = result.host<float>();
+
+    ASSERT_EQ(out[0], 0.875f);
+    ASSERT_EQ(out[1], 0.875f);
+}
+
 TEST(FeaturesTests, Length) {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 

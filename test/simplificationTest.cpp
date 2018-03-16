@@ -10,7 +10,7 @@
 #include <iostream>
 #include <sstream>
 
-std::vector<tsa::simplification::Point> getNextLineAndSplitIntoTokens(std::istream& str_input) {
+std::vector<tsa::simplification::Point> getNextLineAndSplitIntoTokens(std::istream &str_input) {
     std::vector<tsa::simplification::Point> result;
     std::vector<int> dates;
     std::vector<double> values;

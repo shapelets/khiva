@@ -474,6 +474,24 @@ void LastLocationOfMaximum(benchmark::State &state) {
 }
 
 template <af::Backend BE>
+void LastLocationOfMinimum(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto llom = tsa::features::lastLocationOfMaximum(t);
+        llom.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE>
 void Length(benchmark::State &state) {
     af::setBackend(BE);
 
@@ -750,6 +768,16 @@ BENCHMARK_TEMPLATE(LastLocationOfMaximum, af::Backend::AF_BACKEND_OPENCL)
     ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(LastLocationOfMaximum, af::Backend::AF_BACKEND_CPU)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(LastLocationOfMinimum, af::Backend::AF_BACKEND_OPENCL)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(LastLocationOfMinimum, af::Backend::AF_BACKEND_CPU)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
     ->Unit(benchmark::TimeUnit::kMicrosecond);

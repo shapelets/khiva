@@ -9,7 +9,7 @@
 #include <set>
 #include <vector>
 
-void addMemoryCounters(benchmark::State& state) {
+void addMemoryCounters(benchmark::State &state) {
     size_t bytes, buffers, lockedBytes, lockedBuffers;
     // This is already doing an af::sync();
     af::deviceMemInfo(&bytes, &buffers, &lockedBytes, &lockedBuffers);
@@ -23,7 +23,7 @@ void addMemoryCounters(benchmark::State& state) {
 }
 
 template <af::Backend BE>
-void ManualFFT(benchmark::State& state) {
+void ManualFFT(benchmark::State &state) {
     af::setBackend(BE);
 
     auto n = state.range(0);
@@ -48,7 +48,7 @@ void ManualFFT(benchmark::State& state) {
 }
 
 template <af::Backend BE>
-void ExpansionFFT(benchmark::State& state) {
+void ExpansionFFT(benchmark::State &state) {
     af::setBackend(BE);
 
     auto n = state.range(0);
@@ -70,7 +70,7 @@ void ExpansionFFT(benchmark::State& state) {
 }
 
 template <af::Backend BE>
-void ConvolveOp(benchmark::State& state) {
+void ConvolveOp(benchmark::State &state) {
     af::setBackend(BE);
     auto n = state.range(0);
     auto m = state.range(1);
