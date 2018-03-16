@@ -669,3 +669,33 @@ TEST(FeaturesTests, Length) {
     ASSERT_EQ(lengthCalculated[0], 6);
     ASSERT_EQ(lengthCalculated[1], 6);
 }
+
+TEST(FeaturesTests, LinearTrend) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {0, 4, 3, 5, 5, 1, 2, 4, 1, 2, 5, 3};
+    af::array tss(6, 2, data);
+
+    af::array pvalue, rvalue, intercept, slope, stderr;
+    tsa::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stderr);
+
+    double *hpvalue = pvalue.host<double>();
+    ASSERT_NEAR(hpvalue[0], 0.6260380997892747, 1e-8);
+    ASSERT_NEAR(hpvalue[1], 0.5272201945463578, 1e-8);
+
+    double *hrvalue = rvalue.host<double>();
+    ASSERT_NEAR(hrvalue[0], 0.2548235957188128, 1e-8);
+    ASSERT_NEAR(hrvalue[1], 0.3268228676411533, 1e-8);
+
+    double *hintercept = intercept.host<double>();
+    ASSERT_NEAR(hintercept[0], 2.2857142857142856, 1e-8);
+    ASSERT_NEAR(hintercept[1], 2.1904761904761907, 1e-8);
+
+    double *hslope = slope.host<double>();
+    ASSERT_NEAR(hslope[0], 0.2857142857142857, 1e-8);
+    ASSERT_NEAR(hslope[1], 0.2571428571428572, 1e-8);
+
+    double *hstderr = stderr.host<double>();
+    ASSERT_NEAR(hstderr[0], 0.5421047417431507, 1e-8);
+    ASSERT_NEAR(hstderr[1], 0.37179469135129783, 1e-8);
+}
