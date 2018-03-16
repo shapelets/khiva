@@ -6,20 +6,12 @@
 
 #include <tsa.h>
 
-af::array tsa::statistics::covariance(af::array xss, af::array yss) {
-    long n = xss.dims(0);
-    af::array result = af::constant(0, 2, 2, xss.dims(1), xss.type());
+af::array tsa::statistics::covariance(af::array tss, bool unbiased) {
+    long n = tss.dims(0);
 
-    // using a regular for loop since the matmul operation is not supported inside GFOR
-    for (long currentCol = 0; currentCol < xss.dims(1); currentCol++) {
-        af::array input = af::join(1, xss(span, currentCol), yss(span, currentCol));
+    af::array result = tsa::features::crossCovariance(tss, tss) * n / (n - unbiased);
 
-        input -= af::tile(af::mean(input, 0), n, 1, 1);
-
-        result(span, span, currentCol) = af::matmul(af::transpose(input), af::conjg(input)) / 2;
-    }
-
-    return result;
+    return af::reorder(result(0, span, span), 1, 2, 0, 3);
 }
 
 af::array tsa::statistics::moment(af::array tss, int k) {

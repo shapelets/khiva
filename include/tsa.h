@@ -1080,17 +1080,16 @@ JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, 
 
 namespace statistics {
 /**
- * @brief Returns the covariance matrix of the time series contained in the two input arrays
+ * @brief Returns the covariance matrix of the time series contained in tss
  *
  * @param xss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of
  * time series.
- * @param yss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @return af::array The covariance matrix of the variables
+ * @param unbiased Determines whether it divides by n - 1 (if false) or
+ * n (if true)
+ * @return af::array The covariance matrix of the time series
  */
-af::array covariance(af::array xss, af::array yss);
+af::array covariance(af::array tss, bool unbiased = true);
 
 /**
  * @brief Returns the kth moment of the given time series

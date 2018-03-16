@@ -53,22 +53,33 @@ TEST(StatsTests, ComplementaryCDF) {
     ASSERT_NEAR(y, 1 - boost::math::cdf(dist, x), 1e-6);
 }
 
-TEST(StatsTests, Covariance) {
+TEST(StatsTests, CovarianceUnbiased) {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double dataX[] = {-2.1, -1, 4.3};
-    af::array x(3, dataX);
-    af::array xss = af::tile(x, 1, 2);
+    double dataX[] = {-2.1, -1, 4.3, 3, 1.1, 0.12, 3, 1.1, 0.12};
+    af::array tss(3, 3, dataX);
 
-    double dataY[] = {3, 1.1, 0.12};
-    af::array y(3, dataY);
-    af::array yss = af::tile(y, 1, 2);
+    double dataExpected[] = {11.70999999, -4.286, -4.286,     -4.286,    2.14413333,
+                             2.14413333,  -4.286, 2.14413333, 2.14413333};
 
-    double dataExpected[] = {11.70999999, -4.286, -4.286, 2.14413333};
+    double *result = tsa::statistics::covariance(tss, true).host<double>();
 
-    double *result = tsa::statistics::covariance(xss, yss).host<double>();
+    for (int i = 0; i < 9; i++) {
+        ASSERT_NEAR(dataExpected[i], result[i], 1e-8);
+    }
+}
 
-    for (int i = 0; i < 8; i++) {
-        ASSERT_NEAR(dataExpected[i % 4], result[i % 4], 1e-8);
+TEST(StatsTests, CovarianceBiased) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double dataX[] = {-2.1, -1, 4.3, 3, 1.1, 0.12, 3, 1.1, 0.12};
+    af::array tss(3, 3, dataX);
+
+    double dataExpected[] = {7.80666667, -2.85733333, -2.85733333, -2.85733333, 1.42942222,
+                             1.42942222, -2.85733333, 1.42942222,  1.42942222};
+
+    double *result = tsa::statistics::covariance(tss, false).host<double>();
+
+    for (int i = 0; i < 9; i++) {
+        ASSERT_NEAR(dataExpected[i], result[i], 1e-8);
     }
 }
 

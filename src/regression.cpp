@@ -16,7 +16,12 @@ void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af:
     af::array meanX = af::mean(xss, 0);
     af::array meanY = af::mean(yss, 0);
 
-    af::array sumSquares = tsa::statistics::covariance(xss, yss);
+    af::array sumSquares = af::array(2, 2, xss.dims(1), xss.type());
+
+    // Assuming xss and yss contain the same number of time series
+    for (int i = 0; i < xss.dims(1); i++) {
+        sumSquares(span, span, i) = tsa::statistics::covariance(af::join(1, xss(span, i), yss(span, i)));
+    }
 
     af::array ssxm = sumSquares(0, 0, span);
     ssxm = af::reorder(ssxm, 0, 2, 1, 3);
