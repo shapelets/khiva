@@ -118,7 +118,61 @@ void ApproximateEntropy(benchmark::State &state) {
 }
 
 template <af::Backend BE>
-void Autocorrelation(benchmark::State &state) {
+void CrossCovariance(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto cc = tsa::features::crossCovariance(t, t);
+        cc.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE>
+void AutoCovariance(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto ac = tsa::features::autoCovariance(t);
+        ac.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE>
+void CrossCorrelation(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto cc = tsa::features::crossCorrelation(t, t);
+        cc.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE>
+void AutoCorrelation(benchmark::State &state) {
     af::setBackend(BE);
 
     auto n = state.range(0);
@@ -129,7 +183,7 @@ void Autocorrelation(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto ac = tsa::features::autocorrelation(t, lag);
+        auto ac = tsa::features::autoCorrelation(t, lag);
         ac.eval();
         af::sync();
     }
@@ -383,6 +437,25 @@ void Kurtosis(benchmark::State &state) {
 }
 
 template <af::Backend BE>
+void LargeStandardDeviation(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+    float r = 1.5;
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto large = tsa::features::largeStandardDeviation(t, r);
+        large.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE>
 void LastLocationOfMaximum(benchmark::State &state) {
     af::setBackend(BE);
 
@@ -468,12 +541,42 @@ BENCHMARK_TEMPLATE(ApproximateEntropy, af::Backend::AF_BACKEND_CPU)
     ->Ranges({{1 << 10, 512 << 10}, {1, 16}})
     ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Autocorrelation, af::Backend::AF_BACKEND_OPENCL)
+BENCHMARK_TEMPLATE(CrossCovariance, af::Backend::AF_BACKEND_OPENCL)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(CrossCovariance, af::Backend::AF_BACKEND_CPU)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(AutoCovariance, af::Backend::AF_BACKEND_OPENCL)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(AutoCovariance, af::Backend::AF_BACKEND_CPU)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(CrossCorrelation, af::Backend::AF_BACKEND_OPENCL)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(CrossCorrelation, af::Backend::AF_BACKEND_CPU)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(AutoCorrelation, af::Backend::AF_BACKEND_OPENCL)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}, {32, 256}})
     ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Autocorrelation, af::Backend::AF_BACKEND_CPU)
+BENCHMARK_TEMPLATE(AutoCorrelation, af::Backend::AF_BACKEND_CPU)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}, {32, 256}})
     ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -604,6 +707,16 @@ BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_OPENCL)
     ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_CPU)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(LargeStandardDeviation, af::Backend::AF_BACKEND_OPENCL)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(LargeStandardDeviation, af::Backend::AF_BACKEND_CPU)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
     ->Unit(benchmark::TimeUnit::kMicrosecond);

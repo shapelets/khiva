@@ -295,16 +295,60 @@ void aggregatedLinearTrend(af::array t, long chunkSize,
 af::array approximateEntropy(af::array tss, int m, float r);
 
 /**
+ * @brief Calculates the cross-covariance of the given time series
+ *
+ * @param xss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param yss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param unbiased Determines whether it divides by n - lag (if true) or
+ * n (if false)
+ * @return af::array The cross-covariance value for the given time series
+ */
+af::array crossCovariance(af::array xss, af::array yss, bool unbiased = true);
+
+/**
+ * @brief Calculates the auto-covariance the given time series
+ *
+ * @param xss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param unbiased Determines whether it divides by n - lag (if true) or
+ * n (if false)
+ * @return af::array The auto-covariance value for the given time series
+ */
+af::array autoCovariance(af::array xss, bool unbiased = false);
+
+/**
+ * @brief Calculates the cross-correlation of the given time series
+ *
+ * @param xss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param yss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param unbiased Determines whether it divides by n - lag (if true) or
+ * n (if false)
+ * @return af::array The cross-correlation value for the given time series
+ */
+af::array crossCorrelation(af::array xss, af::array yss, bool unbiased = true);
+
+/**
  * @brief Calculates the autocorrelation of the specified lag for the given time
  * series
  *
  * @param tss Expects an input array whose dimension zero is the length of the
  * time series (all the same) and dimension one indicates the number of time
  * series.
- * @param lag The lag
+ * @param maxLag The maximum lag to compute
+ * @param unbiased Determines whether it divides by n - lag (if true) or
+ * n (if false)
  * @return af::array The autocorrelation value for the given time series
  */
-af::array autocorrelation(af::array tss, long lag);
+af::array autoCorrelation(af::array tss, long maxLag, bool unbiased = false);
 
 /**
  * @brief Calculates the binned entropy for the given time series and number of bins
@@ -473,6 +517,16 @@ af::array indexMaxQuantile(af::array tss, float q);
  * @return af::array The kurtosis of tss
  */
 af::array kurtosis(af::array tss);
+
+/**
+ * @brief Checks if the timeseries within tss have a large standard deviation.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @return af::array Array containing True for those timeseries in tss that have a large standard deviation.
+ */
+af::array largeStandardDeviation(af::array tss, float r);
 
 /**
  * @brief Calculates the last location of the maximum value of each time series. The position
@@ -1037,17 +1091,16 @@ JNIEXPORT void JNICALL Java_tsa_TSA_stompSelfJoin(JNIEnv *env, jobject thisObj, 
 
 namespace statistics {
 /**
- * @brief Returns the covariance matrix of the time series contained in the two input arrays
+ * @brief Returns the covariance matrix of the time series contained in tss
  *
  * @param xss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of
  * time series.
- * @param yss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @return af::array The covariance matrix of the variables
+ * @param unbiased Determines whether it divides by n - 1 (if false) or
+ * n (if true)
+ * @return af::array The covariance matrix of the time series
  */
-af::array covariance(af::array xss, af::array yss);
+af::array covariance(af::array tss, bool unbiased = true);
 
 /**
  * @brief Returns the kth moment of the given time series

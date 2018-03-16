@@ -64,8 +64,8 @@ TEST(FeaturesTests, AggregatedCorrelationMean) {
     af::array tss(6, 2, data);
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::mean);
-    float *r = res.host<float>();
-    float a[] = {-0.6571428571428571, -0.6571428571428571};
+    double *r = res.host<double>();
+    double a[] = {-0.6571428571428571, -0.6571428571428571};
     ASSERT_NEAR(r[0], a[0], 1e-9);
     ASSERT_NEAR(r[1], a[1], 1e-9);
 }
@@ -76,10 +76,10 @@ TEST(FeaturesTests, AggregatedCorrelationMedian) {
     af::array tss(6, 2, data);
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::median);
-    float *r = res.host<float>();
-    float a[] = {-0.54285717010498047, -0.54285717010498047};
-    ASSERT_NEAR(r[0], a[0], 1e-9);
-    ASSERT_NEAR(r[1], a[1], 1e-9);
+    double *r = res.host<double>();
+    double a[] = {-0.54285717010498047, -0.54285717010498047};
+    ASSERT_NEAR(r[0], a[0], 1e-7);
+    ASSERT_NEAR(r[1], a[1], 1e-7);
 }
 
 TEST(FeaturesTests, AggregatedCorrelationMin) {
@@ -88,8 +88,8 @@ TEST(FeaturesTests, AggregatedCorrelationMin) {
     af::array tss(6, 2, data);
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::min);
-    float *r = res.host<float>();
-    float a[] = {-2.142857142857143, -2.142857142857143};
+    double *r = res.host<double>();
+    double a[] = {-2.142857142857143, -2.142857142857143};
     ASSERT_NEAR(r[0], a[0], 1e-9);
     ASSERT_NEAR(r[1], a[1], 1e-9);
 }
@@ -100,8 +100,8 @@ TEST(FeaturesTests, AggregatedCorrelationMax) {
     af::array tss(6, 2, data);
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::max);
-    float *r = res.host<float>();
-    float a[] = {0.6, 0.6};
+    double *r = res.host<double>();
+    double a[] = {0.6, 0.6};
     ASSERT_NEAR(r[0], a[0], 1e-9);
     ASSERT_NEAR(r[1], a[1], 1e-9);
 }
@@ -112,10 +112,10 @@ TEST(FeaturesTests, AggregatedCorrelationStdev) {
     af::array tss(6, 2, data);
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::stdev);
-    float *r = res.host<float>();
-    float a[] = {0.9744490855905009, 0.9744490855905009};
-    ASSERT_NEAR(r[0], a[0], 1e-7);
-    ASSERT_NEAR(r[1], a[1], 1e-7);
+    double *r = res.host<double>();
+    double a[] = {0.9744490855905009, 0.9744490855905009};
+    ASSERT_NEAR(r[0], a[0], 1e-9);
+    ASSERT_NEAR(r[1], a[1], 1e-9);
 }
 
 TEST(FeaturesTests, AggregatedCorrelationVar) {
@@ -124,10 +124,10 @@ TEST(FeaturesTests, AggregatedCorrelationVar) {
     af::array tss(6, 2, data);
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::var);
-    float *r = res.host<float>();
-    float a[] = {0.9495510204081633, 0.9495510204081633};
-    ASSERT_NEAR(r[0], a[0], 1e-7);
-    ASSERT_NEAR(r[1], a[1], 1e-7);
+    double *r = res.host<double>();
+    double a[] = {0.9495510204081633, 0.9495510204081633};
+    ASSERT_NEAR(r[0], a[0], 1e-9);
+    ASSERT_NEAR(r[1], a[1], 1e-9);
 }
 
 TEST(FeaturesTests, AggregatedLinearTrendMean) {
@@ -253,29 +253,142 @@ TEST(FeaturesTests, ApproximateEntropy) {
     ASSERT_NEAR(resCalculated[1], expected[1], 1e-9);
 }
 
-TEST(FeaturesTests, Autocorrelation) {
+TEST(FeaturesTests, CrossCovariance) {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
 
-    double data[] = {0, 1, 2, 3, 4, 6, 8, 10, 11, 14, 17, 20};
-    af::array tss(4, 3, data);
+    double data1[] = {0, 1, 2, 3, 10, 11, 12, 13};
+    af::array xss(4, 2, data1);
 
-    af::array calculated2 = tsa::features::autocorrelation(tss, 2);
+    double data2[] = {4, 6, 8, 10, 12, 14, 16, 18, 20, 22};
+    af::array yss(5, 2, data2);
+
+    af::array calculated = tsa::features::crossCovariance(xss, yss, false);
+
+    double *calculatedHost = calculated.host<double>();
+
+    // Expected results obtained using statsmodels
+    for (int i = 0; i < 4; i++) {
+        ASSERT_EQ(calculatedHost[(i * 5)], 2.5);
+        ASSERT_EQ(calculatedHost[(i * 5) + 1], 2.5);
+        ASSERT_EQ(calculatedHost[(i * 5) + 2], 0.25);
+        ASSERT_EQ(calculatedHost[(i * 5) + 3], -1.25);
+        ASSERT_EQ(calculatedHost[(i * 5) + 4], -1.5);
+    }
+}
+
+TEST(FeaturesTests, CrossCovarianceBiased) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data1[] = {0, 1, 2, 3, 10, 11, 12, 13};
+    af::array xss(4, 2, data1);
+
+    double data2[] = {4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24};
+    af::array yss(6, 2, data2);
+
+    af::array calculated = tsa::features::crossCovariance(xss, yss, false);
+
+    double *calculatedHost = calculated.host<double>();
+
+    // Expected results obtained using statsmodels
+    for (int i = 0; i < 2; i++) {
+        ASSERT_EQ(calculatedHost[(i * 12)], 2.5);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 1], 2.499999999, 1e-8);
+        ASSERT_EQ(calculatedHost[(i * 12) + 2], 2.5);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 3], -0.124999999, 1e-8);
+        ASSERT_EQ(calculatedHost[(i * 12) + 4], -1.75);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 5], -1.874999999, 1e-8);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 6], 2.5, 1e-8);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 7], 2.5, 1e-8);
+        ASSERT_EQ(calculatedHost[(i * 12) + 8], -7.25);
+        ASSERT_EQ(calculatedHost[(i * 12) + 9], -5);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 10], -0.666666666, 1e-8);
+        ASSERT_EQ(calculatedHost[(i * 12) + 11], 6.25);
+    }
+}
+
+TEST(FeaturesTests, CrossCovarianceUnbiased) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data1[] = {0, 1, 2, 3, 10, 11, 12, 13};
+    af::array xss(4, 2, data1);
+
+    double data2[] = {4, 6, 8, 10, 14, 16, 18, 20};
+    af::array yss(4, 2, data2);
+
+    af::array calculated = tsa::features::crossCovariance(xss, yss, true);
+
+    double *calculatedHost = calculated.host<double>();
+
+    // Expected results obtained using statsmodels
+    for (int i = 0; i < 4; i++) {
+        ASSERT_EQ(calculatedHost[(i * 4)], 2.5);
+        ASSERT_NEAR(calculatedHost[(i * 4) + 1], 0.833333333, 1e-8);
+        ASSERT_EQ(calculatedHost[(i * 4) + 2], -1.5);
+        ASSERT_EQ(calculatedHost[(i * 4) + 3], -4.5);
+    }
+}
+
+TEST(FeaturesTests, AutoCovariance) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {0, 1, 2, 3, 10, 11, 12, 13};
+    af::array tss(4, 2, data);
+
+    af::array calculated = tsa::features::autoCovariance(tss);
+
+    double *calculatedHost = calculated.host<double>();
+
+    // Expected results obtained using statsmodels
+    ASSERT_EQ(calculatedHost[0], 1.25);
+    ASSERT_EQ(calculatedHost[1], 0.3125);
+    ASSERT_EQ(calculatedHost[2], -0.375);
+    ASSERT_EQ(calculatedHost[3], -0.5625);
+    ASSERT_EQ(calculatedHost[4], 1.25);
+    ASSERT_EQ(calculatedHost[5], 0.3125);
+    ASSERT_EQ(calculatedHost[6], -0.375);
+    ASSERT_EQ(calculatedHost[7], -0.5625);
+}
+
+TEST(FeaturesTests, CrossCorrelation) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data1[] = {0, 1, 2, 3};
+    af::array xs(4, data1);
+
+    double data2[] = {4, 6, 8, 10, 12};
+    af::array ys(5, data2);
+
+    af::array calculated = tsa::features::crossCorrelation(xs, ys, false);
+
+    double *calculatedHost = calculated.host<double>();
+
+    // Expected results obtained using statsmodels
+    ASSERT_NEAR(calculatedHost[0], 0.790569415, 1e-9);
+    ASSERT_NEAR(calculatedHost[1], 0.790569415, 1e-9);
+    ASSERT_NEAR(calculatedHost[2], 0.079056941, 1e-9);
+    ASSERT_NEAR(calculatedHost[3], -0.395284707, 1e-9);
+    ASSERT_NEAR(calculatedHost[4], -0.474341649, 1e-9);
+}
+
+TEST(FeaturesTests, AutoCorrelation) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+
+    double data[] = {0, 1, 2, 3, 10, 11, 12, 13};
+    af::array tss(4, 2, data);
+
+    af::array calculated2 = tsa::features::autoCorrelation(tss, 4);
 
     double *calculated2Host = calculated2.host<double>();
 
     // Expected results obtained using tsfresh
-    ASSERT_EQ(calculated2Host[0], -0.6);
-    ASSERT_EQ(calculated2Host[1], -0.6);
-    ASSERT_EQ(calculated2Host[2], -0.6);
-
-    af::array calculated3 = tsa::features::autocorrelation(tss, 3);
-
-    double *calculated3Host = calculated3.host<double>();
-
-    // Expected results obtained using tsfresh
-    ASSERT_EQ(calculated3Host[0], -1.8);
-    ASSERT_EQ(calculated3Host[1], -1.8);
-    ASSERT_EQ(calculated3Host[2], -1.8);
+    ASSERT_EQ(calculated2Host[0], 1.0);
+    ASSERT_EQ(calculated2Host[1], 0.25);
+    ASSERT_EQ(calculated2Host[2], -0.3);
+    ASSERT_EQ(calculated2Host[3], -0.45);
+    ASSERT_EQ(calculated2Host[4], 1.0);
+    ASSERT_EQ(calculated2Host[5], 0.25);
+    ASSERT_EQ(calculated2Host[6], -0.3);
+    ASSERT_EQ(calculated2Host[7], -0.45);
 }
 
 TEST(FeaturesTests, BinnedEntropy) {
@@ -501,6 +614,18 @@ TEST(FeaturesTests, Kurtosis) {
     for (int i = 0; i < 2; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], 1e-8);
     }
+}
+
+TEST(FeaturesTests, LargeStandardDeviation) {
+    af::setBackend(af::Backend::AF_BACKEND_CPU);
+    double data[] = {-1, -1, -1, 1, 1, 1, 4, 6, 8, 4, 5, 4};
+    af::array tss(6, 2, data);
+    float r = 0.4;
+
+    bool *result = (bool *)tsa::features::largeStandardDeviation(tss, r).host<char>();
+
+    ASSERT_EQ(result[0], true);
+    ASSERT_EQ(result[1], false);
 }
 
 TEST(FeaturesTests, LastLocationOfMaximum) {

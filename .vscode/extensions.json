@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "ms-vscode.cpptools",
+        "vector-of-bool.cmake-tools",
+        "twxs.cmake",
+        "xaver.clang-format",
+        "eamodio.gitlens",
+        "robertohuertasm.vscode-icons"
+    ]
+}
