@@ -556,6 +556,11 @@ af::array length(af::array tss);
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of
  * time series.
+ * @param pvalue The pvalues for all timeseries
+ * @param rvalue The rvalues for all timeseries
+ * @param intercept The intercept values for all timeseries
+ * @param slope The slope for all timeseries
+ * @param stderr The stderr values for all timeseries
  */
 void linearTrend(af::array tss, af::array &pvalue, af::array &rvalue, af::array &intercept, af::array &slope,
                  af::array &stderr);
