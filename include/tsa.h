@@ -557,7 +557,7 @@ af::array length(af::array tss);
  * series (all the same) and dimension one indicates the number of
  * time series.
  */
-void linearTrend(af::array tss, af::array pvalue, af::array &rvalue, af::array &intercept, af::array &slope,
+void linearTrend(af::array tss, af::array &pvalue, af::array &rvalue, af::array &intercept, af::array &slope,
                  af::array &stderr);
 
 #ifdef __cplusplus

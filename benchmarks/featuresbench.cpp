@@ -491,6 +491,29 @@ void Length(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
+template <af::Backend BE>
+void LinearTrend(benchmark::State &state) {
+    af::setBackend(BE);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto tss = af::randu(n, m, f64);
+    af::array pvalue, rvalue, intercept, slope, stderr;
+
+    af::sync();
+    while (state.KeepRunning()) {
+        tsa::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stderr);
+        pvalue.eval();
+        rvalue.eval();
+        intercept.eval();
+        slope.eval();
+        stderr.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
 BENCHMARK_TEMPLATE(AbsoluteSumOfChanges, af::Backend::AF_BACKEND_OPENCL)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
@@ -739,6 +762,16 @@ BENCHMARK_TEMPLATE(Length, af::Backend::AF_BACKEND_OPENCL)
 BENCHMARK_TEMPLATE(Length, af::Backend::AF_BACKEND_CPU)
     ->RangeMultiplier(2)
     ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(LinearTrend, af::Backend::AF_BACKEND_OPENCL)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 32 << 10}, {32, 256}})
+    ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+BENCHMARK_TEMPLATE(LinearTrend, af::Backend::AF_BACKEND_CPU)
+    ->RangeMultiplier(2)
+    ->Ranges({{1 << 10, 128 << 10}, {32, 256}})
     ->Unit(benchmark::TimeUnit::kMicrosecond);
 
 BENCHMARK_MAIN();

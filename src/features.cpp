@@ -363,14 +363,12 @@ af::array tsa::features::length(af::array tss) {
     return af::tile(af::array(1, &n), tss.dims(1));
 }
 
-void tsa::features::linearTrend(af::array tss, af::array pvalue, af::array& rvalue, af::array& intercept,
+void tsa::features::linearTrend(af::array tss, af::array& pvalue, af::array& rvalue, af::array& intercept,
                                 af::array& slope, af::array& stderr) {
     int len = tss.dims(0);
     int ntss = tss.dims(1);
-    af::array yss = af::tile(af::range(len), 1, ntss);
-    af_print(tss);
-    af_print(yss);
-    tsa::regression::linear(tss, yss, slope, intercept, rvalue, pvalue, stderr);
+    af::array yss = af::tile(af::range(len).as(tss.type()), 1, ntss);
+    tsa::regression::linear(yss, tss, slope, intercept, rvalue, pvalue, stderr);
 }
 
 #ifdef __cplusplus
