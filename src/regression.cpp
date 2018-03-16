@@ -51,10 +51,12 @@ void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af:
     af::array t = r * af::sqrt(df / ((1.0 - r + EPSILON) * (1.0 + r + EPSILON)));
     // Using boost to compute the CDF of the T-Student distribution
     // It would be better to move this computation to the GPU
-    double *aux = af::abs(t).host<double>();
+    // Converting to af::dtype::f64 and back to the original type later on
+    // to avoid templating this function and all the ones using it
+    double *aux = af::abs(t).as(af::dtype::f64).host<double>();
     for (long i = 0; i < t.dims(1); i++) {
         aux[i] = 2.0 * (1 - boost::math::cdf(dist, aux[i]));
     }
-    pvalue = af::array(t.dims(1), aux);
+    pvalue = af::array(1, t.dims(1), aux).as(xss.type());
     stderrest = af::sqrt((1 - af::pow(r, 2)) * ssym / ssxm / df);
 }

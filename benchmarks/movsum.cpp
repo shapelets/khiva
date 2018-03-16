@@ -10,7 +10,7 @@
 #include <vector>
 
 template <af::Backend BE>
-void MovingSumConvolve(benchmark::State& state) {
+void MovingSumConvolve(benchmark::State &state) {
     af::setBackend(BE);
     auto tsLen = state.range(0);
     auto m = state.range(1);
@@ -27,7 +27,7 @@ void MovingSumConvolve(benchmark::State& state) {
 }
 
 template <af::Backend BE>
-void MovingSumScan(benchmark::State& state) {
+void MovingSumScan(benchmark::State &state) {
     af::setBackend(BE);
     auto tsLen = state.range(0);
     auto m = state.range(1);

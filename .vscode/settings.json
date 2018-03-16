@@ -34,7 +34,7 @@
         "string_view": "cpp",
         "ios": "cpp"
     },
-    "clang-format.style": "{BasedOnStyle: Google, ColumnLimit: 120, IndentWidth: 4}",
+    "clang-format.style": "{BasedOnStyle: Google, ColumnLimit: 120, IndentWidth: 4, DerivePointerAlignment: false, PointerAlignment: Right}",
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true
 }

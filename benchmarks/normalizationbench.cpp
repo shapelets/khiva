@@ -12,7 +12,7 @@
 #include <vector>
 
 template <af::Backend BE>
-void ZNorm(benchmark::State& state) {
+void ZNorm(benchmark::State &state) {
     af::setBackend(BE);
 
     auto n = state.range(0);
@@ -27,7 +27,7 @@ void ZNorm(benchmark::State& state) {
 }
 
 template <af::Backend BE>
-void ZNormInPlace(benchmark::State& state) {
+void ZNormInPlace(benchmark::State &state) {
     af::setBackend(BE);
 
     auto n = state.range(0);

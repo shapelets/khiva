@@ -19,7 +19,7 @@ af::array tsa::features::absoluteSumOfChanges(af::array tss) {
 }
 
 af::array tsa::features::aggregatedAutocorrelation(af::array tss,
-                                                   af::array (*aggregationFunction)(const af::array&, const bool,
+                                                   af::array (*aggregationFunction)(const af::array &, const bool,
                                                                                     const dim_t)) {
     long n = tss.dims(0);
     af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), span);
@@ -27,29 +27,29 @@ af::array tsa::features::aggregatedAutocorrelation(af::array tss,
 }
 
 af::array tsa::features::aggregatedAutocorrelation(af::array tss,
-                                                   af::array (*aggregationFunction)(const af::array&, const int)) {
+                                                   af::array (*aggregationFunction)(const af::array &, const int)) {
     long n = tss.dims(0);
     af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), span);
     return aggregationFunction(autocorrelations, 0);
 }
 
 af::array tsa::features::aggregatedAutocorrelation(af::array tss,
-                                                   af::array (*aggregationFunction)(const af::array&, const dim_t)) {
+                                                   af::array (*aggregationFunction)(const af::array &, const dim_t)) {
     long n = tss.dims(0);
     af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), span);
     return aggregationFunction(autocorrelations, 0);
 }
 
-af::array aggregating(af::array input, af::array (*aggregationFunction)(const af::array&, const int)) {
+af::array aggregating(af::array input, af::array (*aggregationFunction)(const af::array &, const int)) {
     return aggregationFunction(input, -1);
 }
 
-af::array aggregating(af::array input, af::array (*aggregationFunction)(const af::array&, const dim_t)) {
+af::array aggregating(af::array input, af::array (*aggregationFunction)(const af::array &, const dim_t)) {
     return aggregationFunction(input, -1);
 }
 
 af::array aggregatingOnChunks(af::array input, long chunkSize,
-                              af::array (*aggregationFunction)(const af::array&, const int)) {
+                              af::array (*aggregationFunction)(const af::array &, const int)) {
     long size = (input.dims(0) % chunkSize == 0) ? 0 : chunkSize - input.dims(0) % chunkSize;
     af::array inputChunks = af::join(0, input, af::constant(0, size, input.dims(1), input.type()));
     inputChunks = af::moddims(inputChunks, chunkSize, inputChunks.dims(0) / chunkSize, inputChunks.dims(1));
@@ -57,7 +57,7 @@ af::array aggregatingOnChunks(af::array input, long chunkSize,
 }
 
 af::array aggregatingOnChunks(af::array input, long chunkSize,
-                              af::array (*aggregationFunction)(const af::array&, const dim_t)) {
+                              af::array (*aggregationFunction)(const af::array &, const dim_t)) {
     long size = (input.dims(0) % chunkSize == 0) ? 0 : chunkSize - input.dims(0) % chunkSize;
     af::array inputChunks = af::join(0, input, af::constant(0, size, input.dims(1), input.type()));
     inputChunks = af::moddims(inputChunks, chunkSize, inputChunks.dims(0) / chunkSize, inputChunks.dims(1));
@@ -65,18 +65,18 @@ af::array aggregatingOnChunks(af::array input, long chunkSize,
 }
 
 void tsa::features::aggregatedLinearTrend(af::array t, long chunkSize,
-                                          af::array (*aggregationFunction)(const af::array&, const int),
-                                          af::array& slope, af::array& intercept, af::array& rvalue, af::array& pvalue,
-                                          af::array& stderrest) {
+                                          af::array (*aggregationFunction)(const af::array &, const int),
+                                          af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue,
+                                          af::array &stderrest) {
     af::array aggregateResult = aggregatingOnChunks(t, chunkSize, aggregationFunction);
     af::array x = af::tile(af::range(aggregateResult.dims(0)).as(t.type()), 1, t.dims(1));
     tsa::regression::linear(x, aggregateResult, slope, intercept, rvalue, pvalue, stderrest);
 }
 
 void tsa::features::aggregatedLinearTrend(af::array t, long chunkSize,
-                                          af::array (*aggregationFunction)(const af::array&, const dim_t),
-                                          af::array& slope, af::array& intercept, af::array& rvalue, af::array& pvalue,
-                                          af::array& stderrest) {
+                                          af::array (*aggregationFunction)(const af::array &, const dim_t),
+                                          af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue,
+                                          af::array &stderrest) {
     af::array aggregateResult = aggregatingOnChunks(t, chunkSize, aggregationFunction);
     af::array x = af::tile(af::range(aggregateResult.dims(0)).as(t.type()), 1, t.dims(1));
     tsa::regression::linear(x, aggregateResult, slope, intercept, rvalue, pvalue, stderrest);
@@ -273,8 +273,8 @@ af::array tsa::features::energyRatioByChunks(af::array tss, long numSegments, lo
     return tsa::features::absEnergy(tss(af::seq(start, end - 1), span)) / fullSeriesEnergy;
 }
 
-void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array& real, af::array& imag, af::array& _abs,
-                                   af::array& angle) {
+void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &_abs,
+                                   af::array &angle) {
     af::array fft = af::fft(tss);
     af::array fftCoefficient = fft(coefficient, span);
     real = af::real(fftCoefficient);
@@ -366,32 +366,32 @@ af::array tsa::features::length(af::array tss) {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void cidCe(double* tss, long* tss_length, long* tss_number_of_tss, bool* zNormalize, double* result) {
+void cidCe(double *tss, long *tss_length, long *tss_number_of_tss, bool *zNormalize, double *result) {
     af::array primitive_result;
     primitive_result = tsa::features::cidCe(af::array(*tss_length, *tss_number_of_tss, tss), *zNormalize);
     primitive_result.host(result);
 }
 
-void abs_energy(double* time_series, long* time_series_length, long* number_of_time_series, double* primitive_result) {
+void abs_energy(double *time_series, long *time_series_length, long *number_of_time_series, double *primitive_result) {
     af::array result;
     result = tsa::features::absEnergy(af::array(*time_series_length, *number_of_time_series, time_series));
     result.host(primitive_result);
 }
 
-void absolute_sum_of_changes(double* time_series, long* time_series_length, long* number_of_time_series,
-                             double* primitive_result) {
+void absolute_sum_of_changes(double *time_series, long *time_series_length, long *number_of_time_series,
+                             double *primitive_result) {
     af::array result;
     result = tsa::features::absoluteSumOfChanges(af::array(*time_series_length, *number_of_time_series, time_series));
     result.host(primitive_result);
 }
 
-void c3(double* tss, long* tss_length, long* tss_number_of_tss, long* lag, double* result) {
+void c3(double *tss, long *tss_length, long *tss_number_of_tss, long *lag, double *result) {
     af::array primitive_result;
     primitive_result = tsa::features::c3(af::array(*tss_length, *tss_number_of_tss, tss), *lag);
     primitive_result.host(result);
 }
 
-JNIEXPORT void JNICALL Java_tsa_TSA_c3(JNIEnv* env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+JNIEXPORT void JNICALL Java_tsa_TSA_c3(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
                                        jlong tssNumberOfTss, jlong lag, jdoubleArray result) {
     af::array primitive_result;
     long tssFull_length = tssLength * tssNumberOfTss;
@@ -406,7 +406,7 @@ JNIEXPORT void JNICALL Java_tsa_TSA_c3(JNIEnv* env, jobject thisObj, jdoubleArra
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsa_TSA_cidCe(JNIEnv* env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+JNIEXPORT void JNICALL Java_tsa_TSA_cidCe(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
                                           jlong tssNumberOfTss, jboolean zNormalize, jdoubleArray result) {
     af::array primitive_result;
     long tssFull_length = tssLength * tssNumberOfTss;
@@ -421,7 +421,7 @@ JNIEXPORT void JNICALL Java_tsa_TSA_cidCe(JNIEnv* env, jobject thisObj, jdoubleA
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsa_TSA_absEnergy(JNIEnv* env, jobject thisObj, jdoubleArray timeSeries,
+JNIEXPORT void JNICALL Java_tsa_TSA_absEnergy(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries,
                                               jlong timeSeriesLength, jlong numberOfTimeSeries, jdoubleArray jResult) {
     af::array result;
     long concatenatedTimeSeriesLength = timeSeriesLength * numberOfTimeSeries;
@@ -436,7 +436,7 @@ JNIEXPORT void JNICALL Java_tsa_TSA_absEnergy(JNIEnv* env, jobject thisObj, jdou
     return;
 }
 
-JNIEXPORT void JNICALL Java_tsa_TSA_absoluteSumOfChanges(JNIEnv* env, jobject thisObj, jdoubleArray timeSeries,
+JNIEXPORT void JNICALL Java_tsa_TSA_absoluteSumOfChanges(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries,
                                                          jlong timeSeriesLength, jlong numberOfTimeSeries,
                                                          jdoubleArray jResult) {
     af::array result;

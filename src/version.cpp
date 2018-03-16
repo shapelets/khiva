@@ -6,4 +6,4 @@
 
 #include <tsa.h>
 
-const char* tsa::version() { return VERSION; }
+const char *tsa::version() { return VERSION; }
