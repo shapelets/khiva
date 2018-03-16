@@ -295,16 +295,60 @@ void aggregatedLinearTrend(af::array t, long chunkSize,
 af::array approximateEntropy(af::array tss, int m, float r);
 
 /**
+ * @brief Calculates the cross-covariance of the given time series
+ *
+ * @param xss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param yss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param unbiased Determines whether it divides by n - lag (if true) or
+ * n (if false)
+ * @return af::array The cross-covariance value for the given time series
+ */
+af::array crossCovariance(af::array xss, af::array yss, bool unbiased = true);
+
+/**
+ * @brief Calculates the auto-covariance the given time series
+ *
+ * @param xss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param unbiased Determines whether it divides by n - lag (if true) or
+ * n (if false)
+ * @return af::array The auto-covariance value for the given time series
+ */
+af::array autoCovariance(af::array xss, bool unbiased = false);
+
+/**
+ * @brief Calculates the cross-correlation of the given time series
+ *
+ * @param xss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param yss Expects an input array whose dimension zero is the length of the
+ * time series (all the same) and dimension one indicates the number of time
+ * series.
+ * @param unbiased Determines whether it divides by n - lag (if true) or
+ * n (if false)
+ * @return af::array The cross-correlation value for the given time series
+ */
+af::array crossCorrelation(af::array xss, af::array yss, bool unbiased = true);
+
+/**
  * @brief Calculates the autocorrelation of the specified lag for the given time
  * series
  *
  * @param tss Expects an input array whose dimension zero is the length of the
  * time series (all the same) and dimension one indicates the number of time
  * series.
- * @param lag The lag
+ * @param maxLag The maximum lag to compute
+ * @param unbiased Determines whether it divides by n - lag (if true) or
+ * n (if false)
  * @return af::array The autocorrelation value for the given time series
  */
-af::array autocorrelation(af::array tss, long lag);
+af::array autoCorrelation(af::array tss, long maxLag, bool unbiased = false);
 
 /**
  * @brief Calculates the binned entropy for the given time series and number of bins

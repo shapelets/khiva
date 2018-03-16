@@ -22,42 +22,21 @@ af::array tsa::features::aggregatedAutocorrelation(af::array tss,
                                                    af::array (*aggregationFunction)(const af::array&, const bool,
                                                                                     const dim_t)) {
     long n = tss.dims(0);
-    af::array autocorrelations = af::constant(0, n - 1, tss.dims(1));
-
-    for (int lag = 1; lag < n; lag++) {
-        autocorrelations(lag - 1, span) = tsa::features::autocorrelation(tss, lag);
-        if ((lag % 512) == 0) {
-            af::sync();
-        }
-    }
+    af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), span);
     return aggregationFunction(autocorrelations, true, 0);
 }
 
 af::array tsa::features::aggregatedAutocorrelation(af::array tss,
                                                    af::array (*aggregationFunction)(const af::array&, const int)) {
     long n = tss.dims(0);
-    af::array autocorrelations = af::constant(0, n - 1, tss.dims(1));
-
-    for (int lag = 1; lag < n; lag++) {
-        autocorrelations(lag - 1, span) = tsa::features::autocorrelation(tss, lag);
-        if ((lag % 512) == 0) {
-            af::sync();
-        }
-    }
+    af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), span);
     return aggregationFunction(autocorrelations, 0);
 }
 
 af::array tsa::features::aggregatedAutocorrelation(af::array tss,
                                                    af::array (*aggregationFunction)(const af::array&, const dim_t)) {
     long n = tss.dims(0);
-    af::array autocorrelations = af::constant(0, n - 1, tss.dims(1));
-
-    for (int lag = 1; lag < n; lag++) {
-        autocorrelations(lag - 1, span) = tsa::features::autocorrelation(tss, lag);
-        if ((lag % 512) == 0) {
-            af::sync();
-        }
-    }
+    af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), span);
     return aggregationFunction(autocorrelations, 0);
 }
 
@@ -191,17 +170,56 @@ af::array tsa::features::approximateEntropy(af::array tss, int m, float r) {
     return af::abs(entropy(tss, m, r) - entropy(tss, m + 1, r));
 }
 
-af::array tsa::features::autocorrelation(af::array tss, long lag) {
+af::array tsa::features::crossCovariance(af::array xss, af::array yss, bool unbiased) {
+    long n = xss.dims(0);
+    long nobs = std::max(xss.dims(0), yss.dims(0));
+
+    af::array meanXss = af::mean(xss, 0);
+    af::array meanYss = af::mean(yss, 0);
+
+    af::array xsso = xss - af::tile(meanXss, xss.dims(0));
+    af::array ysso = af::flip(yss, 0) - af::tile(meanYss, yss.dims(0));
+
+    af::array d;
+
+    if (unbiased) {
+        d = af::flip(af::tile((af::range(nobs) + 1.0).as(xss.type()), 1, xss.dims(1)), 0);
+    } else {
+        d = af::constant(n, nobs, xss.dims(1), xss.type());
+    }
+
+    af::array result = af::array(nobs, yss.dims(1), xss.dims(1), xss.type());
+    gfor(af::seq i, xss.dims(1)) {
+        result(span, span, i, span) =
+            af::flip(af::convolve(xsso(span, i), ysso, AF_CONV_EXPAND)(af::seq(nobs), span), 0) / d;
+    }
+
+    return result;
+}
+
+af::array tsa::features::autoCovariance(af::array xss, bool unbiased) {
+    af::array result = af::array(xss.dims(0), xss.dims(1), xss.type());
+    for (int i = 0; i < xss.dims(1); i++) {
+        result(span, i) = tsa::features::crossCovariance(xss(span, i), xss(span, i), unbiased);
+    }
+    return result;
+}
+
+af::array tsa::features::crossCorrelation(af::array xss, af::array yss, bool unbiased) {
+    af::array stdevXss = af::stdev(xss);
+    af::array stdevYss = af::stdev(yss);
+
+    af::array ccov = tsa::features::crossCovariance(xss, yss, unbiased);
+
+    return ccov / af::tile(stdevXss * stdevYss, ccov.dims(0));
+}
+
+af::array tsa::features::autoCorrelation(af::array tss, long maxLag, bool unbiased) {
     long n = tss.dims(0);
 
-    af::array y1 = tss(af::seq(n - lag), span);
-    af::array y2 = tss(af::seq(lag, n - 1), span);
+    af::array acov = tsa::features::autoCovariance(tss, unbiased);
 
-    af::array xMean = af::mean(tss, 0);
-
-    af::array sumProduct = af::sum((y1 - af::tile(xMean, n - lag)) * (y2 - af::tile(xMean, n - lag)), 0);
-    af::array den = (n - lag) * af::var(tss, true, 0);
-    return sumProduct / den;
+    return acov(af::seq(maxLag), span) / af::tile(acov(0, span), maxLag);
 }
 
 af::array tsa::features::binnedEntropy(af::array tss, int max_bins) {
@@ -209,7 +227,7 @@ af::array tsa::features::binnedEntropy(af::array tss, int max_bins) {
     int nts = tss.dims(1);
     af::array res = af::constant(0, 1, nts);
 
-    gfor(seq i, nts) {
+    gfor(af::seq i, nts) {
         af::array his = af::histogram(tss(span, i), max_bins);
         af::array probs = his / (float)len;
         af::array aux = probs * af::log(probs);
