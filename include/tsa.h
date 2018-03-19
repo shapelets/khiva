@@ -576,6 +576,17 @@ af::array length(af::array tss);
 void linearTrend(af::array tss, af::array &pvalue, af::array &rvalue, af::array &intercept, af::array &slope,
                  af::array &stderr);
 
+/**
+ * @brief Calculates the length of the longest consecutive subsequence in tss that is bigger than the mean of tss
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @return af::array the length of the longest consecutive subsequence in the input time series that is bigger than the
+ * mean
+ */
+af::array longestStrikeAboveMean(af::array tss);
+
 #ifdef __cplusplus
 extern "C" {
 #endif

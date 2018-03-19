@@ -642,6 +642,19 @@ void linearTrend() {
     ASSERT_NEAR(hstderr[1], 0.37179469135129783, EPSILON);
 }
 
+void longestStrikeAboveMean() {
+    float data[] = {20, 20, 20, 1, 1, 1, 20, 20, 20, 20, 1, 1, 1, 1, 1, 1, 1, 1, 20, 20,
+                    20, 20, 20, 1, 1, 1, 20, 20, 20, 1,  1, 1, 1, 1, 1, 1, 1, 1, 20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::longestStrikeAboveMean(tss);
+
+    float *longestCalculated = result.host<float>();
+
+    ASSERT_EQ(longestCalculated[0], 4);
+    ASSERT_EQ(longestCalculated[1], 3);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -681,3 +694,4 @@ TSA_TEST(FeaturesTests, LastLocationOfMaximum, lastLocationOfMaximum);
 TSA_TEST(FeaturesTests, LastLocationOfMinimum, lastLocationOfMinimum);
 TSA_TEST(FeaturesTests, Length, length);
 TSA_TEST(FeaturesTests, LinearTrend, linearTrend);
+TSA_TEST(FeaturesTests, LongestStrikeAboveMean, longestStrikeAboveMean);

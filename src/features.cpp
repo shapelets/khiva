@@ -380,6 +380,15 @@ void tsa::features::linearTrend(af::array tss, af::array &pvalue, af::array &rva
     tsa::regression::linear(yss, tss, slope, intercept, rvalue, pvalue, stderr);
 }
 
+af::array tsa::features::longestStrikeAboveMean(af::array tss) {
+    af::array mean = af::mean(tss, 0);
+    af::array aboveMean = (tss > af::tile(mean, tss.dims(0))).as(tss.type());
+
+    af::array scanned = af::scanByKey(aboveMean.as(af::dtype::s32), aboveMean);
+
+    return af::max(scanned, 0);
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
