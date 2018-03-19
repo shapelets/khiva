@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "tsatest.h"
 
 std::vector<tsa::simplification::Point> getNextLineAndSplitIntoTokens(std::istream &str_input) {
     std::vector<tsa::simplification::Point> result;
@@ -56,12 +57,12 @@ void saveVectorToCSV(std::vector<tsa::simplification::Point> out, std::string fi
     }
 }
 
-TEST(SimplificationTests, RamerDouglasPeuckerCPU) {
+void ramerDouglasPeucker() {
     std::vector<tsa::simplification::Point> pointList;
     std::vector<tsa::simplification::Point> pointListOut;
     std::vector<tsa::simplification::Point> expected = {
         tsa::simplification::Point(0.0, 0.0), tsa::simplification::Point(2.0, -0.1),
-        tsa::simplification::Point(3.0, 5.0), tsa::simplification::Point(7.0, 9.0),
+        tsa::simplification::Point(3.0, 5.0), tsa::simplification::Point(6.0, 8.1),
         tsa::simplification::Point(9.0, 9.0)};
 
     pointList.push_back(tsa::simplification::Point(0.0, 0.0));
@@ -83,7 +84,7 @@ TEST(SimplificationTests, RamerDouglasPeuckerCPU) {
     }
 }
 
-TEST(SimplificationTests, VisvalingamCPU) {
+void visvalingam() {
     std::vector<tsa::simplification::Point> pointList;
     std::vector<tsa::simplification::Point> out;
     std::vector<tsa::simplification::Point> expected = {
@@ -109,3 +110,6 @@ TEST(SimplificationTests, VisvalingamCPU) {
         ASSERT_EQ(out[i].second, expected[i].second);
     }
 }
+
+TSA_TEST(SimplificationTests, RamerDouglasPeucker, ramerDouglasPeucker);
+TSA_TEST(SimplificationTests, Visvalingam, visvalingam);

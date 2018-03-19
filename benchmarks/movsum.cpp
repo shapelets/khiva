@@ -8,10 +8,12 @@
 #include <benchmark/benchmark.h>
 #include <set>
 #include <vector>
+#include "tsabenchmark.h"
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void MovingSumConvolve(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
     auto tsLen = state.range(0);
     auto m = state.range(1);
 
@@ -24,11 +26,13 @@ void MovingSumConvolve(benchmark::State &state) {
         movSum(af::seq(m - 1, tsLen - 1)).eval();
         af::sync();
     }
+    addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void MovingSumScan(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
     auto tsLen = state.range(0);
     auto m = state.range(1);
     af::array ts = af::randu(tsLen);
@@ -40,26 +44,43 @@ void MovingSumScan(benchmark::State &state) {
         (cumsum(af::seq(m - 1, tsLen - 1)) - exCumsum(af::seq(0, tsLen - m))).eval();
         af::sync();
     }
+    addMemoryCounters(state);
 }
 
-BENCHMARK_TEMPLATE(MovingSumConvolve, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}, {64, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void cudaBenchmarks() {
+    BENCHMARK_TEMPLATE(MovingSumConvolve, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {64, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(MovingSumConvolve, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}, {64, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(MovingSumScan, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {64, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_TEMPLATE(MovingSumScan, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}, {64, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void openclBenchmarks() {
+    BENCHMARK_TEMPLATE(MovingSumConvolve, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {64, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(MovingSumScan, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}, {64, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(MovingSumScan, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {64, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_MAIN();
+void cpuBenchmarks() {
+    BENCHMARK_TEMPLATE(MovingSumConvolve, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {64, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(MovingSumScan, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {64, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
+
+TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks);

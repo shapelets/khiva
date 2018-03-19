@@ -20,7 +20,7 @@ namespace simplification {
 /**
  * @brief Definition of Point structure to represent 2D points
  */
-typedef std::pair<double, double> Point;
+typedef std::pair<float, float> Point;
 
 /**
  * @brief Simplifies a set of points by applying the RamerDouglasPeucker method

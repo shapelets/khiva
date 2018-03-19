@@ -14,8 +14,5 @@ FOREACH(ONE_TEST_CPP ${ALL_TEST_CPP})
     ADD_EXECUTABLE(${TARGET_NAME} ${ONE_TEST_CPP})
    
     TARGET_LINK_LIBRARIES(${TARGET_NAME} TSALIB gtest gtest_main)
-    gtest_add_tests(TARGET      ${TARGET_NAME}
-                    TEST_SUFFIX .noArgs
-                    TEST_LIST   noArgsTests
-    )
+    gtest_discover_tests(${TARGET_NAME} AUTO)
 ENDFOREACH()

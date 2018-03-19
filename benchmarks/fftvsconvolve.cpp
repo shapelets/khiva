@@ -8,23 +8,12 @@
 #include <benchmark/benchmark.h>
 #include <set>
 #include <vector>
+#include "tsabenchmark.h"
 
-void addMemoryCounters(benchmark::State &state) {
-    size_t bytes, buffers, lockedBytes, lockedBuffers;
-    // This is already doing an af::sync();
-    af::deviceMemInfo(&bytes, &buffers, &lockedBytes, &lockedBuffers);
-
-    state.counters["Memory"] = bytes;
-    state.counters["Buffers"] = buffers;
-    state.counters["LockedMemory"] = lockedBytes;
-    state.counters["LockedBuffers"] = lockedBuffers;
-
-    af::deviceGC();
-}
-
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void ManualFFT(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -47,9 +36,10 @@ void ManualFFT(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void ExpansionFFT(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -69,9 +59,10 @@ void ExpansionFFT(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void ConvolveOp(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
     auto n = state.range(0);
     auto m = state.range(1);
 
@@ -86,34 +77,55 @@ void ConvolveOp(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void cudaBenchmarks() {
+    BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void openclBenchmarks() {
+    BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_MAIN();
+void cpuBenchmarks() {
+    BENCHMARK_TEMPLATE(ConvolveOp, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(ExpansionFFT, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(ManualFFT, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {64, 1 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
+
+TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks);

@@ -6,23 +6,12 @@
 
 #include <benchmark/benchmark.h>
 #include <tsa.h>
+#include "tsabenchmark.h"
 
-void addMemoryCounters(benchmark::State &state) {
-    size_t bytes, buffers, lockedBytes, lockedBuffers;
-    // This is already doing an af::sync();
-    af::deviceMemInfo(&bytes, &buffers, &lockedBytes, &lockedBuffers);
-
-    state.counters["Memory"] = bytes;
-    state.counters["Buffers"] = buffers;
-    state.counters["LockedMemory"] = lockedBytes;
-    state.counters["LockedBuffers"] = lockedBuffers;
-
-    af::deviceGC();
-}
-
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void Linear(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -44,14 +33,25 @@ void Linear(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-BENCHMARK_TEMPLATE(Linear, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 32 << 10}, {4, 64}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void cudaBenchmarks() {
+    BENCHMARK_TEMPLATE(Linear, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 32 << 10}, {4, 64}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_TEMPLATE(Linear, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 32 << 10}, {4, 64}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void openclBenchmarks() {
+    BENCHMARK_TEMPLATE(Linear, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 32 << 10}, {4, 64}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_MAIN();
+void cpuBenchmarks() {
+    BENCHMARK_TEMPLATE(Linear, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 32 << 10}, {4, 64}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
+
+TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks);

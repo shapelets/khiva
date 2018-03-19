@@ -6,23 +6,12 @@
 
 #include <benchmark/benchmark.h>
 #include <tsa.h>
+#include "tsabenchmark.h"
 
-void addMemoryCounters(benchmark::State &state) {
-    size_t bytes, buffers, lockedBytes, lockedBuffers;
-    // This is already doing an af::sync();
-    af::deviceMemInfo(&bytes, &buffers, &lockedBytes, &lockedBuffers);
-
-    state.counters["Memory"] = bytes;
-    state.counters["Buffers"] = buffers;
-    state.counters["LockedMemory"] = lockedBytes;
-    state.counters["LockedBuffers"] = lockedBuffers;
-
-    af::deviceGC();
-}
-
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void Covariance(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -38,9 +27,10 @@ void Covariance(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void Moment(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -57,9 +47,10 @@ void Moment(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void SampleStdev(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -75,9 +66,10 @@ void SampleStdev(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void Kurtosis(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -93,44 +85,70 @@ void Kurtosis(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-BENCHMARK_TEMPLATE(Covariance, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 32 << 10}, {1, 16}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void cudaBenchmarks() {
+    BENCHMARK_TEMPLATE(Covariance, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 32 << 10}, {1, 16}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Covariance, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 32 << 10}, {1, 16}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void openclBenchmarks() {
+    BENCHMARK_TEMPLATE(Covariance, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 32 << 10}, {1, 16}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_MAIN();
+void cpuBenchmarks() {
+    BENCHMARK_TEMPLATE(Covariance, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 32 << 10}, {1, 16}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
+
+TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks);

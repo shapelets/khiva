@@ -6,23 +6,12 @@
 
 #include <benchmark/benchmark.h>
 #include <tsa.h>
+#include "tsabenchmark.h"
 
-void addMemoryCounters(benchmark::State &state) {
-    size_t bytes, buffers, lockedBytes, lockedBuffers;
-    // This is already doing an af::sync();
-    af::deviceMemInfo(&bytes, &buffers, &lockedBytes, &lockedBuffers);
-
-    state.counters["Memory"] = bytes;
-    state.counters["Buffers"] = buffers;
-    state.counters["LockedMemory"] = lockedBytes;
-    state.counters["LockedBuffers"] = lockedBuffers;
-
-    af::deviceGC();
-}
-
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void SlidingDotProduct(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -39,9 +28,10 @@ void SlidingDotProduct(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void SlidingDotProductParallel(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -66,9 +56,10 @@ void SlidingDotProductParallel(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void MeanStdevAuxiliary(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -89,9 +80,10 @@ void MeanStdevAuxiliary(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void MeanStdev(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -112,9 +104,10 @@ void MeanStdev(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void GenerateMask(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -135,9 +128,10 @@ void GenerateMask(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void CalculateDistanceProfile(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -169,9 +163,10 @@ void CalculateDistanceProfile(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void CalculateDistanceProfileParallel(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -210,9 +205,10 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void Mass(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -240,9 +236,10 @@ void Mass(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void Stomp(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -264,9 +261,10 @@ void Stomp(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void StompDataCPU(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -293,9 +291,10 @@ void StompDataCPU(benchmark::State &state) {
     delete[] t_host;
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void StompWithItself(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
@@ -316,114 +315,175 @@ void StompWithItself(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-BENCHMARK_TEMPLATE(SlidingDotProduct, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 128 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void cudaBenchmarks() {
+    BENCHMARK_TEMPLATE(SlidingDotProduct, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 128 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(SlidingDotProduct, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 128 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(SlidingDotProductParallel, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 8 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(SlidingDotProductParallel, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 8 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(MeanStdevAuxiliary, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(SlidingDotProductParallel, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 8 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(MeanStdev, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(MeanStdevAuxiliary, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{2 << 10, 8 << 10}, {128, 512}, {16 << 9, 32 << 9}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(MeanStdevAuxiliary, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(MeanStdev, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(CalculateDistanceProfileParallel, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(MeanStdev, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{2 << 10, 8 << 10}, {128, 512}, {16 << 9, 32 << 9}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 16 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{2 << 10, 8 << 10}, {128, 512}, {16 << 9, 32 << 9}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(Stomp, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16 << 10, 128 << 10}, {256, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void openclBenchmarks() {
+    BENCHMARK_TEMPLATE(SlidingDotProduct, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 128 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(CalculateDistanceProfileParallel, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(SlidingDotProductParallel, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 8 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(CalculateDistanceProfileParallel, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(MeanStdevAuxiliary, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(MeanStdev, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{2 << 10, 8 << 10}, {128, 512}, {16 << 9, 32 << 9}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Stomp, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{16 << 10, 128 << 10}, {256, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(Stomp, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{16 << 10, 128 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(CalculateDistanceProfileParallel, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 16 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{1 << 10, 16 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 16 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(2)
-    ->Ranges({{16 << 10, 32 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(Stomp, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16 << 10, 128 << 10}, {256, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(2)
-    ->Ranges({{16 << 10, 32 << 10}, {16, 512}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_MAIN();
+void cpuBenchmarks() {
+    BENCHMARK_TEMPLATE(SlidingDotProduct, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 128 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(SlidingDotProductParallel, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 8 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(MeanStdevAuxiliary, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(MeanStdev, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{2 << 10, 8 << 10}, {128, 512}, {16 << 9, 32 << 9}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(CalculateDistanceProfileParallel, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Stomp, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16 << 10, 128 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 16 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
+
+TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks);

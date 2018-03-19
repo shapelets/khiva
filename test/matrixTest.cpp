@@ -6,30 +6,27 @@
 
 #include <gtest/gtest.h>
 #include <tsa.h>
+#include "tsatest.h"
 
-#define EPSILON 1e-6
-
-TEST(MatrixTests, SlidingDotProduct) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void slidingDotProduct() {
+    float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(14, data);
 
-    double query[] = {10, 11, 12};
+    float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
 
     af::array sdp = tsa::matrix::slidingDotProduct(q, t);
     ASSERT_EQ(sdp.dims(0), 12);
 
-    double expected[] = {330, 342, 365, 374, 361, 340, 342, 365, 374, 361, 340, 330};
-    double *result = sdp.host<double>();
+    float expected[] = {330, 342, 365, 374, 361, 340, 342, 365, 374, 361, 340, 330};
+    float *result = sdp.host<float>();
     for (int i = 0; i < 12; i++) {
         ASSERT_EQ(result[i], expected[i]);
     }
 }
 
-TEST(MatrixTests, MeanStdev) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void meanStdev() {
+    float data[] = {10, 10, 11, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 11};
     af::array t = af::array(14, data);
 
     long m = 3;
@@ -41,29 +38,36 @@ TEST(MatrixTests, MeanStdev) {
     ASSERT_EQ(mean.dims(0), 12);
     ASSERT_EQ(stdev.dims(0), 12);
 
-    double expectedMean[] = {10,           10.333333333, 11,           11.333333333, 11,           10.333333333,
-                             10.333333333, 11,           11.333333333, 11,           10.333333333, 10};
-    double expectedStdev[] = {0,           0.471404521, 0.816496581, 0.471404521, 0.816496581, 0.471404521,
-                              0.471404521, 0.816496581, 0.471404521, 0.816496581, 0.471404521, 0};
-    double *resultingMean = mean.host<double>();
-    double *resultingStdev = stdev.host<double>();
+    float expectedMean[] = {10.333333333, 10.666666666, 11.333333333, 11.333333333, 11,           10.333333333,
+                            10.333333333, 11,           11.333333333, 11,           10.333333333, 10.333333333};
+    float expectedStdev[] = {0.471404521, 0.471404521, 0.471404521, 0.471404521, 0.816496581, 0.471404521,
+                             0.471404521, 0.816496581, 0.471404521, 0.816496581, 0.471404521, 0.471404521};
+    float *resultingMean = mean.host<float>();
+    float *resultingStdev = stdev.host<float>();
     for (int i = 0; i < 12; i++) {
-        ASSERT_NEAR(resultingMean[i], expectedMean[i], EPSILON);
-        ASSERT_NEAR(resultingStdev[i], expectedStdev[i], EPSILON);
+        ASSERT_NEAR(resultingMean[i], expectedMean[i], EPSILON * 3e3);
+        ASSERT_NEAR(resultingStdev[i], expectedStdev[i], EPSILON * 3e3);
     }
 }
 
-TEST(MatrixTests, GenerateMask) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    tsa::matrix::generateMask(3, 4, 2, 8);
+void generateMask() {
+    af::array mask = tsa::matrix::generateMask(3, 4, 2, 8);
+
+    float *maskCalculated = af::transpose(mask).as(af::dtype::f32).host<float>();
+
+    float maskExpected[] = {0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,
+                            0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0};
+
+    for (int i = 0; i < 32; i++) {
+        ASSERT_EQ(maskCalculated[i], maskExpected[i]);
+    }
 }
 
-TEST(MatrixTests, CalculateDistanceProfile) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void calculateDistanceProfile() {
+    float data[] = {10, 10, 11, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 11};
     af::array t = af::array(14, data);
 
-    double query[] = {10, 11, 12};
+    float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
 
     long m = 3;
@@ -79,23 +83,22 @@ TEST(MatrixTests, CalculateDistanceProfile) {
 
     tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, distance, index);
 
-    double expectedDistance = 19.0552097998;
+    float expectedDistance = 19.0552097998;
     int expectedIndex = 7;
-    double *resultingDistance = distance.host<double>();
+    float *resultingDistance = distance.host<float>();
 
     unsigned int resultingIndex;
     index.host(&resultingIndex);
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
+    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON * 1e1);
     ASSERT_EQ(resultingIndex, expectedIndex);
 }
 
-TEST(MatrixTests, CalculateDistanceProfileMiddle) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void calculateDistanceProfileMiddle() {
+    float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(14, data);
 
-    double query[] = {10, 11, 12};
+    float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
 
     long m = 3;
@@ -114,23 +117,22 @@ TEST(MatrixTests, CalculateDistanceProfileMiddle) {
     tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, mask, distance,
                                           index);
 
-    double expectedDistance = 19.0552097998;
+    float expectedDistance = 19.0552097998;
     int expectedIndex = 7;
-    double *resultingDistance = distance.host<double>();
+    float *resultingDistance = distance.host<float>();
 
     unsigned int resultingIndex;
     index.host(&resultingIndex);
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
+    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON * 1e1);
     ASSERT_EQ(resultingIndex, expectedIndex);
 }
 
-TEST(MatrixTests, MassIgnoreTrivial) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void massIgnoreTrivial() {
+    float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(14, data);
 
-    double query[] = {10, 11, 12};
+    float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
 
     long m = 3;
@@ -149,23 +151,22 @@ TEST(MatrixTests, MassIgnoreTrivial) {
 
     tsa::matrix::mass(q, t, m, aux, mean, stdev, mask, distance, index);
 
-    double expectedDistance = 0.00000004712;
+    float expectedDistance = 0.0;
     int expectedIndex = 7;
-    double *resultingDistance = distance.host<double>();
+    float *resultingDistance = distance.host<float>();
 
     unsigned int resultingIndex;
     index.host(&resultingIndex);
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
+    ASSERT_NEAR(*resultingDistance, expectedDistance, 1e-2);
     ASSERT_EQ(resultingIndex, expectedIndex);
 }
 
-TEST(MatrixTests, MassConsiderTrivial) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void massConsiderTrivial() {
+    float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(14, data);
 
-    double query[] = {10, 11, 12};
+    float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
 
     long m = 3;
@@ -182,20 +183,19 @@ TEST(MatrixTests, MassConsiderTrivial) {
 
     tsa::matrix::mass(q, t, m, aux, mean, stdev, distance, index);
 
-    double expectedDistance = 0.00000004712;
+    float expectedDistance = 0.0;
     int expectedIndex = 7;
-    double *resultingDistance = distance.host<double>();
+    float *resultingDistance = distance.host<float>();
 
     unsigned int resultingIndex;
     index.host(&resultingIndex);
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
+    ASSERT_NEAR(*resultingDistance, expectedDistance, 1e-2);
     ASSERT_EQ(resultingIndex, expectedIndex);
 }
 
-TEST(MatrixTests, StompOneTimeSeries) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void stompOneTimeSeries() {
+    float data[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 11, 10, 11, 10, 10};
     af::array t = af::array(14, data);
 
     long m = 3;
@@ -205,22 +205,21 @@ TEST(MatrixTests, StompOneTimeSeries) {
 
     tsa::matrix::stomp(t, m, distance, index);
 
-    unsigned int expectedIndex[] = {11, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 0};
-    double *resultingDistance = distance.host<double>();
+    unsigned int expectedIndex[] = {6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
+    float *resultingDistance = distance.host<float>();
 
     unsigned int resultingIndex[12];
     index.host(&resultingIndex);
 
     for (int i = 0; i < 12; i++) {
-        ASSERT_NEAR(resultingDistance[i], 0.0, EPSILON);
+        ASSERT_NEAR(resultingDistance[i], 0.0, 1e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
 }
 
-TEST(MatrixTests, StompTwoTimeSeries) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
-    af::array t = af::array(14, data);
+void stompTwoTimeSeries() {
+    float data[] = {10, 10, 11, 11, 10, 11, 10};
+    af::array t = af::array(7, data);
 
     long m = 3;
 
@@ -229,25 +228,26 @@ TEST(MatrixTests, StompTwoTimeSeries) {
 
     tsa::matrix::stomp(t, t, m, distance, index);
 
-    unsigned int expectedIndex[] = {11, 1, 2, 8, 9, 5, 1, 2, 8, 9, 5, 11};
-    double *resultingDistance = distance.host<double>();
+    unsigned int expectedIndex[] = {0, 1, 2, 3, 4};
+    int backend = af::getActiveBackend();
+    int device = af::getDevice();
+    float *resultingDistance = distance.host<float>();
 
-    unsigned int resultingIndex[12];
+    unsigned int resultingIndex[5];
     index.host(&resultingIndex);
 
-    for (int i = 0; i < 12; i++) {
-        ASSERT_NEAR(resultingDistance[i], 0.0, EPSILON);
+    for (int i = 0; i < 5; i++) {
+        ASSERT_NEAR(resultingDistance[i], 0.0, 1e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
 }
 
-TEST(MatrixTests, FindBestMotifs) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data_a[] = {10, 11, 10, 10, 10, 10, 9, 10, 10, 10, 10, 10, 11, 10};
-    af::array ta = af::array(14, data_a);
+void findBestMotifs() {
+    float data_a[] = {10, 10, 10, 10, 10, 10, 9, 10, 10, 10, 10, 10, 11, 10, 9};
+    af::array ta = af::array(15, data_a);
 
-    double data_b[] = {10, 11, 10, 300, 20, 30, 40, 50, 60, 70, 80, 90, 80, 90};
-    af::array tb = af::array(14, data_b);
+    float data_b[] = {10, 11, 10, 9};
+    af::array tb = af::array(4, data_b);
 
     long m = 3;
 
@@ -265,14 +265,14 @@ TEST(MatrixTests, FindBestMotifs) {
     unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
-    ASSERT_EQ(motifsIndicesHost[0], 5);
-    ASSERT_EQ(motifsIndicesHost[1], 0);
+    ASSERT_EQ(motifsIndicesHost[0], 12);
+    ASSERT_EQ(motifsIndicesHost[1], 11);
 
-    ASSERT_EQ(subsequenceIndicesHost[0], 11);
+    ASSERT_EQ(subsequenceIndicesHost[0], 1);
     ASSERT_EQ(subsequenceIndicesHost[1], 0);
 }
 
-TEST(MatrixTests, FindBestDiscords) {
+void findBestDiscords() {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data_a[] = {10, 11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 10};
     af::array ta = af::array(14, data_a);
@@ -299,3 +299,15 @@ TEST(MatrixTests, FindBestDiscords) {
     ASSERT_EQ(subsequenceIndicesHost[0], 0);
     ASSERT_EQ(subsequenceIndicesHost[1], 11);
 }
+
+TSA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct);
+TSA_TEST(MatrixTests, MeanStdev, meanStdev);
+TSA_TEST(MatrixTests, GenerateMask, generateMask);
+TSA_TEST(MatrixTests, CalculateDistanceProfile, calculateDistanceProfile);
+TSA_TEST(MatrixTests, CalculateDistanceProfileMiddle, calculateDistanceProfileMiddle);
+TSA_TEST(MatrixTests, MassIgnoreTrivial, massIgnoreTrivial);
+TSA_TEST(MatrixTests, MassConsiderTrivial, massConsiderTrivial);
+TSA_TEST(MatrixTests, StompOneTimeSeries, stompOneTimeSeries);
+TSA_TEST(MatrixTests, StompTwoTimeSeries, stompTwoTimeSeries);
+TSA_TEST(MatrixTests, FindBestMotifs, findBestMotifs);
+TSA_TEST(MatrixTests, FindBestDiscords, findBestDiscords);

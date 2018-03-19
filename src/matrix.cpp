@@ -58,9 +58,9 @@ void tsa::matrix::meanStdev(af::array t, long m, af::array &mean, af::array &std
     sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1)) - af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1)));
 
     mean = sum_t / m;
-    array mean_t2 = sum_t2 / m;
-    array mean_t_p2 = af::pow(mean, 2);
-    array sigma_t2 = mean_t2 - mean_t_p2;
+    af::array mean_t2 = sum_t2 / m;
+    af::array mean_t_p2 = af::pow(mean, 2);
+    af::array sigma_t2 = mean_t2 - mean_t_p2;
     stdev = af::sqrt(sigma_t2);
 }
 

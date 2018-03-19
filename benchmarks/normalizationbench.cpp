@@ -8,12 +8,12 @@
 #include <benchmark/benchmark.h>
 #include <float.h>
 #include <tsa.h>
-#include <set>
-#include <vector>
+#include "tsabenchmark.h"
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void ZNorm(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto ts = af::randu(n);
@@ -24,11 +24,13 @@ void ZNorm(benchmark::State &state) {
         normalised.eval();
         af::sync();
     }
+    addMemoryCounters(state);
 }
 
-template <af::Backend BE>
+template <af::Backend BE, int D>
 void ZNormInPlace(benchmark::State &state) {
     af::setBackend(BE);
+    af::setDevice(D);
 
     auto n = state.range(0);
     auto ts = af::randu(n);
@@ -39,26 +41,43 @@ void ZNormInPlace(benchmark::State &state) {
         ts.eval();
         af::sync();
     }
+    addMemoryCounters(state);
 }
 
-BENCHMARK_TEMPLATE(ZNorm, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void cudaBenchmarks() {
+    BENCHMARK_TEMPLATE(ZNorm, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(ZNorm, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(ZNormInPlace, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_TEMPLATE(ZNormInPlace, af::Backend::AF_BACKEND_OPENCL)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+void openclBenchmarks() {
+    BENCHMARK_TEMPLATE(ZNorm, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-BENCHMARK_TEMPLATE(ZNormInPlace, af::Backend::AF_BACKEND_CPU)
-    ->RangeMultiplier(8)
-    ->Ranges({{1 << 10, 32 << 10}})
-    ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(ZNormInPlace, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
 
-BENCHMARK_MAIN();
+void cpuBenchmarks() {
+    BENCHMARK_TEMPLATE(ZNorm, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(ZNormInPlace, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(8)
+        ->Ranges({{1 << 10, 32 << 10}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+}
+
+TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks);

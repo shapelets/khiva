@@ -6,6 +6,9 @@
 
 #include <gtest/gtest.h>
 #include <tsa.h>
+#include "tsatest.h"
 
 // Simple test, does not use gmock
-TEST(VersionTest, ExpectedVersion) { ASSERT_STREQ(tsa::version(), "0.0.1"); }
+void versionTest() { ASSERT_STREQ(tsa::version(), "0.0.1"); }
+
+TSA_TEST(VersionTest, VersionTest, versionTest);

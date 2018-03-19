@@ -9,8 +9,9 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "tsatest.h"
 
-TEST(DimensionalityTests, PAA_NORM) {
+void paaNorm() {
     std::vector<tsa::simplification::Point> pointList;
     pointList.push_back(tsa::simplification::Point(0.0, 0.0));
     pointList.push_back(tsa::simplification::Point(1.0, 0.1));
@@ -31,30 +32,26 @@ TEST(DimensionalityTests, PAA_NORM) {
         tsa::simplification::Point(6.75, 8.55), tsa::simplification::Point(8.25, 9.0)};
 
     for (size_t i = 0; i < out.size(); i++) {
-        EXPECT_DOUBLE_EQ(out[i].first, expected[i].first);
-        EXPECT_DOUBLE_EQ(out[i].second, expected[i].second);
+        ASSERT_EQ(out[i].first, expected[i].first);
+        ASSERT_EQ(out[i].second, expected[i].second);
     }
 }
 
-TEST(DimensionalityTests, PAA) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-
-    double pointList[] = {0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+void paa() {
+    float pointList[] = {0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
     af::array a(10, 1, pointList);
 
     af::array out = tsa::dimensionality::PAA(a, 5);
 
-    double *out_h = out.host<double>();
-    std::vector<double> expected = {0.05, 2.45, 6.5, 8.55, 9.0};
+    float *out_h = out.host<float>();
+    std::vector<float> expected = {0.05, 2.45, 6.5, 8.55, 9.0};
 
     for (size_t i = 0; i < 5; i++) {
-        EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
+        ASSERT_EQ(out_h[i], expected[i]);
     }
 }
 
-TEST(DimensionalityTests, SAX) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-
+void sax() {
     float pointList[] = {0.05, 2.45, 6.5, 8.55, 9.0};
     af::array a(5, 1, pointList);
 
@@ -67,9 +64,7 @@ TEST(DimensionalityTests, SAX) {
     }
 }
 
-TEST(DimensionalityTests, PIP) {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-
+void pip() {
     float exp_x[] = {0.0, 2.0, 4.0, 5.0, 6.0, 9.0};
     float exp_y[] = {0.0, -0.1, 6.0, 7.0, 8.1, 9.0};
     float px[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
@@ -89,3 +84,8 @@ TEST(DimensionalityTests, PIP) {
         ASSERT_EQ(poy_h[i], exp_y[i]);
     }
 }
+
+TSA_TEST(DimensionalityTests, PAA_NORM, paaNorm);
+TSA_TEST(DimensionalityTests, PAA, paa);
+TSA_TEST(DimensionalityTests, SAX, sax);
+TSA_TEST(DimensionalityTests, PIP, pip);
