@@ -408,6 +408,108 @@ void c3(double *tss, long *tss_length, long *tss_number_of_tss, long *lag, doubl
     primitive_result.host(result);
 }
 
+void cross_correlation(double *xss, long *xss_length, long *xss_number_of_tss, double *yss, long *yss_length,
+                       long *yss_number_of_tss, bool *unbiased, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::crossCorrelation(af::array(*xss_length, *xss_number_of_tss, xss),
+                                                       af::array(*yss_length, *yss_number_of_tss, yss), *unbiased);
+    primitive_result.host(result);
+}
+
+void auto_covariance(double *xss, long *xss_length, long *xss_number_of_tss, bool *unbiased, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::autoCovariance(af::array(*xss_length, *xss_number_of_tss, xss), *unbiased);
+    primitive_result.host(result);
+}
+
+void cross_covariance(double *xss, long *xss_length, long *xss_number_of_tss, double *yss, long *yss_length,
+                      long *yss_number_of_tss, bool *unbiased, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::crossCovariance(af::array(*xss_length, *xss_number_of_tss, xss),
+                                                      af::array(*yss_length, *yss_number_of_tss, yss), *unbiased);
+    primitive_result.host(result);
+}
+
+void approximate_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *m, float *r, float *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::approximateEntropy(af::array(*tss_length, *tss_number_of_tss, tss), *m, *r);
+    primitive_result.host(result);
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_crossCorrelation(JNIEnv *env, jobject thisObj, jdoubleArray xss,
+                                                          jlong xssLength, jlong xssNumberOfTss, jdoubleArray yss,
+                                                          jlong yssLength, jlong yssNumberOfTss, jboolean unbiased,
+                                                          jdoubleArray result) {
+    af::array primitive_result;
+    long xssFull_length = xssLength * xssNumberOfTss;
+    jdouble input_xss[xssFull_length];
+    env->GetDoubleArrayRegion(xss, 0, xssFull_length, &input_xss[0]);
+    long yssFull_length = yssLength * yssNumberOfTss;
+    jdouble input_yss[yssFull_length];
+    env->GetDoubleArrayRegion(yss, 0, yssFull_length, &input_yss[0]);
+
+    primitive_result = tsa::features::crossCorrelation(af::array(xssLength, xssNumberOfTss, input_xss),
+                                                       af::array(yssLength, yssNumberOfTss, input_yss), unbiased);
+    long output_result_length = std::max(yssLength, xssLength);
+    jdouble output_result[output_result_length];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, output_result_length, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_autoCovariance(JNIEnv *env, jobject thisObj, jdoubleArray xss, jlong xssLength,
+                                                        jlong xssNumberOfTss, jboolean unbiased, jdoubleArray result) {
+    af::array primitive_result;
+    long xssFull_length = xssLength * xssNumberOfTss;
+    jdouble input_xss[xssFull_length];
+    env->GetDoubleArrayRegion(xss, 0, xssFull_length, &input_xss[0]);
+
+    primitive_result = tsa::features::autoCovariance(af::array(xssLength, xssNumberOfTss, input_xss), unbiased);
+    long output_result_length = xssNumberOfTss * xssLength;
+    jdouble output_result[output_result_length];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, output_result_length, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_crossCovariance(JNIEnv *env, jobject thisObj, jdoubleArray xss,
+                                                         jlong xssLength, jlong xssNumberOfTss, jdoubleArray yss,
+                                                         jlong yssLength, jlong yssNumberOfTss, jboolean unbiased,
+                                                         jdoubleArray result) {
+    af::array primitive_result;
+    long xssFull_length = xssLength * xssNumberOfTss;
+    jdouble input_xss[xssFull_length];
+    env->GetDoubleArrayRegion(xss, 0, xssFull_length, &input_xss[0]);
+    long yssFull_length = yssLength * yssNumberOfTss;
+    jdouble input_yss[yssFull_length];
+    env->GetDoubleArrayRegion(yss, 0, yssFull_length, &input_yss[0]);
+
+    primitive_result = tsa::features::crossCovariance(af::array(xssLength, xssNumberOfTss, input_xss),
+                                                      af::array(yssLength, yssNumberOfTss, input_yss), unbiased);
+
+    long output_result_length = xssLength * yssLength;
+    jdouble output_result[output_result_length];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, output_result_length, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_approximateEntropy(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                            jlong tssLength, jlong tssNumberOfTss, jint m, jfloat r,
+                                                            jfloatArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::approximateEntropy(af::array(tssLength, tssNumberOfTss, input_tss), m, r);
+
+    jfloat output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetFloatArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
 JNIEXPORT void JNICALL Java_tsa_Features_c3(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
                                             jlong tssNumberOfTss, jlong lag, jdoubleArray result) {
     af::array primitive_result;
