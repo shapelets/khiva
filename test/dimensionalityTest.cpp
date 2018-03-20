@@ -5,11 +5,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa.h>
+#include <tsa/dimensionality.h>
+#include <tsa/simplification.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include "tsatest.h"
+#include "tsaTest.h"
 
 void paaNorm() {
     std::vector<tsa::simplification::Point> pointList;

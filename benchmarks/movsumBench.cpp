@@ -8,7 +8,7 @@
 #include <benchmark/benchmark.h>
 #include <set>
 #include <vector>
-#include "tsabenchmark.h"
+#include "tsaBenchmark.h"
 
 template <af::Backend BE, int D>
 void MovingSumConvolve(benchmark::State &state) {

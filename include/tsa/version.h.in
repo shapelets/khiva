@@ -13,3 +13,9 @@
 #define VERSION "@VERSION_SHORT@";
 
 #define BUILD_TYPE "@CMAKE_BUILD_TYPE@";
+
+namespace tsa {
+
+const char *version();
+
+};  // namespace tsa

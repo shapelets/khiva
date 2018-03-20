@@ -5,8 +5,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa.h>
-#include "tsatest.h"
+#include <tsa/distances.h>
+#include "tsaTest.h"
 
 // Simple test, does not use gmock
 void euclidean() {

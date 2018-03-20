@@ -4,7 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <tsa.h>
+#include <tsa/normalization.h>
 
 af::array tsa::normalization::znorm(af::array tss, double epsilon) {
     auto mean = af::tile(af::mean(tss, 0), tss.dims(0));

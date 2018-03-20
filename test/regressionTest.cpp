@@ -5,8 +5,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa.h>
-#include "tsatest.h"
+#include <tsa/regression.h>
+#include "tsaTest.h"
 
 void linear() {
     float dataX[] = {0.24580423, 0.59642861, 0.35879163, 0.37891011, 0.02445137,

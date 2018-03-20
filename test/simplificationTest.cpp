@@ -5,11 +5,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa.h>
+#include <tsa/simplification.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include "tsatest.h"
+#include "tsaTest.h"
 
 std::vector<tsa::simplification::Point> getNextLineAndSplitIntoTokens(std::istream &str_input) {
     std::vector<tsa::simplification::Point> result;

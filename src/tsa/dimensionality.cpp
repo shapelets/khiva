@@ -4,13 +4,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <tsa.h>
+#include <tsa/dimensionality.h>
 #include <boost/math/distributions/normal.hpp>
 #include <iostream>
 #include <iterator>
 #include <vector>
 
-af::array tsa::dimensionality::PAA(array a, int bins) {
+af::array tsa::dimensionality::PAA(af::array a, int bins) {
     int n = a.elements();
     int elem_row = n / bins;
     af::array b = af::moddims(a, elem_row, bins);
@@ -51,8 +51,8 @@ std::vector<int> generateAlphabet(int alphabet_size) {
 }
 
 std::vector<int> tsa::dimensionality::SAX(af::array a, int alphabet_size) {
-    float mean_value = mean<float>(a);
-    float std_value = stdev<float>(a);
+    float mean_value = af::mean<float>(a);
+    float std_value = af::stdev<float>(a);
     std::vector<int> aux;
     int n = a.elements();
 

@@ -4,7 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <tsa.h>
+#include <tsa/distances.h>
 
 af::array tsa::distances::squaredEuclidean(af::array tss) {
     // get the number of time series
@@ -15,7 +15,7 @@ af::array tsa::distances::squaredEuclidean(af::array tss) {
 
     // for each time series, calculate in parallel all distances
     for (auto currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
-        gfor(seq otherCol, currentCol + 1, numOfTs - 1) {
+        gfor(af::seq otherCol, currentCol + 1, numOfTs - 1) {
             result(currentCol, otherCol) = af::sum(af::pow(tss(span, currentCol) - tss(span, otherCol), 2));
         }
     }

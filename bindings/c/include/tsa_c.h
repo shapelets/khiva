@@ -4,11 +4,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <gtest/gtest.h>
-#include <tsa.h>
-#include "tsatest.h"
-
-// Simple test, does not use gmock
-void versionTest() { ASSERT_STREQ(tsa::version(), "0.0.1"); }
-
-TSA_TEST(VersionTest, VersionTest, versionTest);
+#include <tsa_c/features.h>
+#include <tsa_c/library.h>
+#include <tsa_c/matrix.h>

@@ -5,8 +5,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa.h>
-#include "tsatest.h"
+#include <tsa/normalization.h>
+#include "tsaTest.h"
 
 void zNorm() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7};

@@ -5,8 +5,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa.h>
-#include "tsatest.h"
+#include <tsa/matrix.h>
+#include "tsaTest.h"
 
 void slidingDotProduct() {
     float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};

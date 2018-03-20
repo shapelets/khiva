@@ -7,8 +7,8 @@
 #include <arrayfire.h>
 #include <benchmark/benchmark.h>
 #include <float.h>
-#include <tsa.h>
-#include "tsabenchmark.h"
+#include <tsa/normalization.h>
+#include "tsaBenchmark.h"
 
 template <af::Backend BE, int D>
 void ZNorm(benchmark::State &state) {

@@ -5,8 +5,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
-#include <tsa.h>
-#include "tsabenchmark.h"
+#include <tsa/matrix.h>
+#include "tsaBenchmark.h"
 
 template <af::Backend BE, int D>
 void SlidingDotProduct(benchmark::State &state) {

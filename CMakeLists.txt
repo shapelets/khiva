@@ -20,6 +20,16 @@ IF(NOT CMAKE_BUILD_TYPE)
       FORCE)
 ENDIF()
 
+# Set the base directory to parent so src and include become
+# equaly visible
+SET(TSALIB_BASE_DIR ${PROJECT_SOURCE_DIR})
+# Define source directory
+SET(TSALIB_SRC "${TSALIB_BASE_DIR}/src")
+# Define include directory
+SET(TSALIB_INC "${TSALIB_BASE_DIR}/include")
+# Library Name
+SET(TSALIB "tsa")
+
 # git support
 INCLUDE(GetGitRevisionDescription)
 
@@ -34,8 +44,12 @@ STRING(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" VERSION_SHA1 "${VERS
 SET(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 # dump version information down to a header file
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/version.h.in
-               ${CMAKE_CURRENT_SOURCE_DIR}/include/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/tsa/version.h.in
+               ${CMAKE_CURRENT_SOURCE_DIR}/include/tsa/version.h)
+
+# dump version to the version test file
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/test/versionTest.cpp.in
+               ${CMAKE_CURRENT_SOURCE_DIR}/test/versionTest.cpp)
 
 # build items in subdirectories
 ADD_SUBDIRECTORY(src)
@@ -47,6 +61,10 @@ ADD_SUBDIRECTORY(experiments)
 ENABLE_TESTING()
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(benchmarks)
+
+# build bindings for c and jni
+ADD_SUBDIRECTORY(bindings)
+
 # build items in subdirectories
 ADD_SUBDIRECTORY(doc)
 

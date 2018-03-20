@@ -5,8 +5,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa.h>
-#include "tsatest.h"
+#include <tsa/statistics.h>
+#include "tsaTest.h"
 
 void covarianceUnbiased() {
     float dataX[] = {-2.1, -1, 4.3, 3, 1.1, 0.12, 3, 1.1, 0.12};

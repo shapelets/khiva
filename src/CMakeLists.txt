@@ -2,8 +2,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
 
 # Find the ArrayFire package.
 FIND_PACKAGE(ArrayFire REQUIRED)
-# Find the JNI package.
-FIND_PACKAGE(JNI REQUIRED)
 # Find the Boost package
 FIND_PACKAGE(Boost REQUIRED)
 
@@ -28,13 +26,9 @@ ADD_DEFINITIONS(-DNOMINMAX)
 # Compile using unified backend
 ADD_DEFINITIONS(-DAF_UNIFIED)
 
-# Set the base directory to parent so src and include become
-# equaly visible
-SET(TSALIB_BASE_DIR "..")
-# Define source directory
-SET(TSALIB_SRC "${TSALIB_BASE_DIR}/src")
-# Define include directory
-SET(TSALIB_INC "${TSALIB_BASE_DIR}/include")
+# Install Variables
+SET(TSA_INSTALL_INC_DIR "/usr/local")
+SET(TSA_INSTALL_LIB_DIR "/usr/local/lib")
 
 # Files to add to compilation
 FILE(GLOB_RECURSE TSALIB_CODE 
@@ -42,23 +36,34 @@ FILE(GLOB_RECURSE TSALIB_CODE
     "${TSALIB_INC}/*.h" )
 
 # The output is a static library
-ADD_LIBRARY(TSALIB STATIC ${TSALIB_CODE})
+ADD_LIBRARY(${TSALIB} STATIC ${TSALIB_CODE})
 
 # Declare include directories
-TARGET_INCLUDE_DIRECTORIES(TSALIB PUBLIC 
+TARGET_INCLUDE_DIRECTORIES(${TSALIB} PUBLIC 
                            ${ArrayFire_INCLUDE_DIRS}
                            ${TSALIB_INC} 
-                           ${JNI_INCLUDE_DIRS}
                            ${Boost_INCLUDE_DIRS})
 
 # Declare compilation libraries
-TARGET_LINK_LIBRARIES(TSALIB
+TARGET_LINK_LIBRARIES(${TSALIB}
                       ${ArrayFire_Unified_LIBRARIES}
                       ${CMAKE_DL_LIBS})
 
 # Add metadata
-SET_TARGET_PROPERTIES(TSALIB PROPERTIES 
+SET_TARGET_PROPERTIES(${TSALIB} PROPERTIES 
     VERSION ${VERSION_SHORT}
     SOVERSION ${VERSION_MAJOR}
     PUBLIC_HEADER "${TSALIB_INC}/tsa.h")
 
+INSTALL(DIRECTORY ${TSALIB_INC} 
+        DESTINATION ${TSA_INSTALL_INC_DIR}
+        COMPONENT headers
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.hpp"
+        PATTERN ".gitignore" EXCLUDE
+)
+
+INSTALL(FILES ${TSALIB_BASE_DIR}/lib/lib${TSALIB}.a 
+        DESTINATION ${TSA_INSTALL_LIB_DIR}
+)
