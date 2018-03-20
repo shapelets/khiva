@@ -109,7 +109,7 @@ void cross_covariance(double *xss, long *xss_length, long *xss_number_of_tss, do
  * @param r Filtering level, must be positive.
  * @param result The vectorized approximate entropy for all the input time series in tss.
  */
-void approximate_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *m, float *r, float *result);
+void approximate_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *m, double *r, double *result);
 
 #ifdef __cplusplus
 }

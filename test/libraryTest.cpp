@@ -9,14 +9,6 @@
 #include "tsaTest.h"
 
 // Simple test, does not use gmock
-void setDeviceTest() {
-    int devices = af::getDeviceCount();
-    for (int i = 0; i < devices; i++) {
-        tsa::library::setDevice(i);
-        ASSERT_EQ(af::getDevice(), i);
-    }
-}
-
 void setBackendTest() {
     int backends = af::getAvailableBackends();
     bool cuda = backends & af::Backend::AF_BACKEND_CUDA;
@@ -39,5 +31,53 @@ void setBackendTest() {
     }
 }
 
-TSA_TEST(LibraryTests, SetDeviceTest, setDeviceTest);
+void getBackendTest() {
+    int backends = tsa::library::getBackends();
+    bool cuda = backends & tsa::library::Backend::TSA_BACKEND_CUDA;
+    bool opencl = backends & tsa::library::Backend::TSA_BACKEND_OPENCL;
+    bool cpu = backends & tsa::library::Backend::TSA_BACKEND_CPU;
+
+    if (cuda) {
+        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_CUDA);
+        ASSERT_EQ(tsa::library::getBackend(), tsa::library::Backend::TSA_BACKEND_CUDA);
+    }
+
+    if (opencl) {
+        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_OPENCL);
+        ASSERT_EQ(tsa::library::getBackend(), tsa::library::Backend::TSA_BACKEND_OPENCL);
+    }
+
+    if (cpu) {
+        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_CPU);
+        ASSERT_EQ(tsa::library::getBackend(), tsa::library::Backend::TSA_BACKEND_CPU);
+    }
+}
+
+void getBackendsTest() {
+    int backends = tsa::library::getBackends();
+    int backendsAF = af::getAvailableBackends();
+
+    ASSERT_EQ(backends, backendsAF);
+}
+
+void setDeviceTest() {
+    int devices = af::getDeviceCount();
+    for (int i = 0; i < devices; i++) {
+        tsa::library::setDevice(i);
+        ASSERT_EQ(af::getDevice(), i);
+    }
+}
+
+void getDeviceTest() {
+    int devices = af::getDeviceCount();
+    for (int i = 0; i < devices; i++) {
+        tsa::library::setDevice(i);
+        ASSERT_EQ(tsa::library::getDevice(), i);
+    }
+}
+
 TSA_TEST(LibraryTests, SetBackendTest, setBackendTest);
+TSA_TEST(LibraryTests, GetBackendTest, getBackendTest);
+TSA_TEST(LibraryTests, GetBackendsTest, getBackendsTest);
+TSA_TEST(LibraryTests, SetDeviceTest, setDeviceTest);
+TSA_TEST(LibraryTests, GetDeviceTest, getDeviceTest);

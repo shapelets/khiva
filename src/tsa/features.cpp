@@ -101,8 +101,8 @@ af::array entropy(af::array tss, int m, float r) {
 
     // Calculate the matrix distance
     af::array distances = af::constant(af::Inf, chunkSizeV, chunkSizeH, tss.dims(1), tss.type());
-    af::array sum_c = af::constant(0, 1, chunkSizeH, tss.dims(1));
-    af::array sum = af::constant(0, tss.dims(1));
+    af::array sum_c = af::constant(0, 1, chunkSizeH, tss.dims(1), tss.type());
+    af::array sum = af::constant(0, tss.dims(1), tss.type());
 
     // it performs a batching (or blocking) in the horizontal direction
     for (int i = 0; i < n - m + 1; i += chunkSizeH) {
@@ -113,7 +113,7 @@ af::array entropy(af::array tss, int m, float r) {
         if (iterationSizeH != chunkSizeH || iterationSizeH != lastIterationSizeH) {
             lastIterationSizeH = iterationSizeH;
             distances = af::constant(af::Inf, chunkSizeV, iterationSizeH, tss.dims(1), tss.type());
-            sum_c = af::constant(0, 1, iterationSizeH, tss.dims(1));
+            sum_c = af::constant(0, 1, iterationSizeH, tss.dims(1), tss.type());
             expandH = af::array(m, iterationSizeH, tss.dims(1), tss.type());
         }
 

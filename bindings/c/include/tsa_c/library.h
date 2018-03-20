@@ -18,11 +18,25 @@ extern "C" {
 void info();
 
 /**
- * @brief Set the back-end.
+ * @brief Set the backend.
  *
- * @param backend The desired back-end.
+ * @param backend The desired backend.
  */
 void set_backend(int *backend);
+
+/**
+ * @brief Get the active backend.
+ *
+ * @param backend The active backend.
+ */
+void get_backend(int *backend);
+
+/**
+ * @brief Get the available backends.
+ *
+ * @param backends The available backends.
+ */
+void get_backends(int *backends);
 
 /**
  * @brief Set the device.
@@ -30,6 +44,13 @@ void set_backend(int *backend);
  * @param device The desired device.
  */
 void set_device(int *device);
+
+/**
+ * @brief Get the active device.
+ *
+ * @param device The active device.
+ */
+void get_device(int *device);
 
 #ifdef __cplusplus
 }

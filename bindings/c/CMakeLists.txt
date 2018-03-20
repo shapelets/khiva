@@ -38,13 +38,11 @@ ADD_LIBRARY(${TSALIB_C} SHARED ${TSALIB_C_CODE})
 
 # Declare include directories
 TARGET_INCLUDE_DIRECTORIES(${TSALIB_C} PUBLIC 
-                           ${ArrayFire_INCLUDE_DIRS}
                            ${TSALIB_INC}
                            ${TSALIB_C_INC})
 
 # Declare compilation libraries
 TARGET_LINK_LIBRARIES(${TSALIB_C}
-                      ${ArrayFire_Unified_LIBRARIES}
                       ${TSALIB}
                       ${CMAKE_DL_LIBS})
 

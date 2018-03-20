@@ -56,9 +56,10 @@ void cross_covariance(double *xss, long *xss_length, long *xss_number_of_tss, do
     primitive_result.host(result);
 }
 
-void approximate_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *m, float *r, float *result) {
+void approximate_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *m, double *r, double *result) {
     af::array primitive_result;
-    primitive_result = tsa::features::approximateEntropy(af::array(*tss_length, *tss_number_of_tss, tss), *m, *r);
+    float r_f = (float)*r;
+    primitive_result = tsa::features::approximateEntropy(af::array(*tss_length, *tss_number_of_tss, tss), *m, r_f);
     primitive_result.host(result);
 }
 

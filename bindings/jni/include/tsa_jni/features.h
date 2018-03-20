@@ -73,8 +73,8 @@ JNIEXPORT void JNICALL Java_tsa_Features_crossCovariance(JNIEnv *env, jobject th
  * @param result The vectorized approximate entropy for all the input time series in tss.
  */
 JNIEXPORT void JNICALL Java_tsa_Features_approximateEntropy(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                            jlong tssLength, jlong tssNumberOfTss, jint m, jfloat r,
-                                                            jfloatArray result);
+                                                            jlong tssLength, jlong tssNumberOfTss, jint m, jdouble r,
+                                                            jdoubleArray result);
 
 /**
  * @brief JNI interface of the c3 function.

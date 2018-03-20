@@ -11,4 +11,10 @@ void tsa::library::backendInfo() { af::info(); }
 
 void tsa::library::setBackend(tsa::library::Backend be) { af::setBackend(static_cast<af::Backend>(be)); }
 
+tsa::library::Backend tsa::library::getBackend() { return static_cast<tsa::library::Backend>(af::getActiveBackend()); }
+
+int tsa::library::getBackends() { return af::getAvailableBackends(); }
+
 void tsa::library::setDevice(int device) { af::setDevice(device); }
+
+int tsa::library::getDevice() { return af::getDevice(); }

@@ -20,11 +20,25 @@ extern "C" {
 JNIEXPORT void JNICALL Java_tsa_Library_info(JNIEnv *env, jobject thisObj);
 
 /**
- * @brief JNI interface to set the back-end.
+ * @brief JNI interface to set the backend.
  *
- * @param backend The desired back-end.
+ * @param backend The desired backend.
  */
 JNIEXPORT void JNICALL Java_tsa_Library_setBackend(JNIEnv *env, jobject thisObj, jint backend);
+
+/**
+ * @brief JNI interface to get the active backend.
+ *
+ * @param backend The active backend.
+ */
+JNIEXPORT void JNICALL Java_tsa_Library_getBackend(JNIEnv *env, jobject thisObj, jint backend);
+
+/**
+ * @brief JNI interface to get the available backends.
+ *
+ * @param backend The available backends.
+ */
+JNIEXPORT void JNICALL Java_tsa_Library_getBackends(JNIEnv *env, jobject thisObj, jint backends);
 
 /**
  * @brief JNI interface to set the device.
@@ -32,6 +46,13 @@ JNIEXPORT void JNICALL Java_tsa_Library_setBackend(JNIEnv *env, jobject thisObj,
  * @param device The desired device.
  */
 JNIEXPORT void JNICALL Java_tsa_Library_setDevice(JNIEnv *env, jobject thisObj, jint device);
+
+/**
+ * @brief JNI interface to get the active device.
+ *
+ * @param device The active device.
+ */
+JNIEXPORT void JNICALL Java_tsa_Library_getDevice(JNIEnv *env, jobject thisObj, jint device);
 
 #ifdef __cplusplus
 }

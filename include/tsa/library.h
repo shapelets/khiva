@@ -27,9 +27,23 @@ void backendInfo();
 /**
  * @brief Set the backend.
  *
- * @param backend The desired back-end.
+ * @param backend The desired backend.
  */
 void setBackend(tsa::library::Backend be);
+
+/**
+ * @brief Get the active backend
+ *
+ * @return tsa::library::Backend The active backend
+ */
+tsa::library::Backend getBackend();
+
+/**
+ * @brief Get the available backends
+ *
+ * @return int The available backends
+ */
+int getBackends();
 
 /**
  * @brief Set the device.
@@ -37,6 +51,13 @@ void setBackend(tsa::library::Backend be);
  * @param device The desired device.
  */
 void setDevice(int device);
+
+/**
+ * @brief Get the active device
+ *
+ * @return int
+ */
+int getDevice();
 
 };  // namespace library
 };  // namespace tsa
