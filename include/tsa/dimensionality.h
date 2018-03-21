@@ -16,12 +16,10 @@ namespace dimensionality {
 
 /**
  * @brief Piecewise Aggregate Approximation. It reduces the dimensionality of the timeseries
- * given by @begin and @last iterators to a number equal to bins. This algorithim divides the
- * whole timeseries in @bins partitions and computes the average of each partition
+ * given by begin and last iterators to a number equal to bins. This algorithim divides the
+ * whole timeseries in bins partitions and computes the average of each partition
  *
- * @param begin iterator to the first element
- *
- * @param last iterator to the last element
+ * @param a Set of points
  *
  * @param bins sets the total number of divisions
  *
@@ -31,8 +29,8 @@ af::array PAA(af::array a, int bins);
 
 /**
  * @brief Piecewise Aggregate Approximation. It reduces the dimensionality of the timeseries
- * given by @begin and @last iterators to a number equal to bins. This algorithim divides the
- * whole timeseries in @bins partitions and computes the average of each partition
+ * given by begin and last iterators to a number equal to bins. This algorithim divides the
+ * whole timeseries in bins partitions and computes the average of each partition
  *
  * @param begin iterator to the first element
  *
@@ -71,9 +69,9 @@ std::vector<tsa::simplification::Point> PAA_CPU(InputIt begin, InputIt last, int
  * @brief Symbolic Aggregate approXimation. It transforms a numeric timeseries into
  * a timeseries of symbols with the same size.
  *
- * @param a, array with the input timeseries
+ * @param a array with the input timeseries
  *
- * @param alphabet_size, number of element within the alphabet
+ * @param alphabet_size number of element within the alphabet
  *
  * @return result An array of symbols.
  */
@@ -84,9 +82,10 @@ std::vector<int> SAX(af::array a, int alphabet_size);
  * Fu TC, Chung FL, Luk R, and Ng CM (2008) Representing financial time series based on data point
  * importance. Engineering Applications of Artificial Intelligence, 21(2):277-300
  *
- * @param pointList Expects an input array whose dimension zero is the length of the
- * time series
+ * @param ts Expects an input array whose dimension zero is the length of the time series
+ *
  * @param numberIPs The number of points to return
+ *
  * @return af::array with the numPoints most Perceptually Important
  */
 af::array PIP(af::array ts, int numberIPs);

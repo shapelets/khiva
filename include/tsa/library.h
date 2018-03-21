@@ -27,7 +27,7 @@ void backendInfo();
 /**
  * @brief Set the backend.
  *
- * @param backend The desired backend.
+ * @param be The desired backend.
  */
 void setBackend(tsa::library::Backend be);
 

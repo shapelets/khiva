@@ -71,8 +71,6 @@ af::array generateMask(long m, long batchSize, long batchStart, long tsLength);
  * @param mask Mask band matrix to filter the trivial match of a subsequence with itself
  * @param distance Resulting minimal distance
  * @param index Position where the minimum is occurring
- * @param batchStart Indicates where the currently computed batch starts. Defaults to 0 for the parallel case. The
- * parameter is used to determine the mask for the trivial matches.
  */
 void calculateDistanceProfile(long m, af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
                               af::array sigma_t, af::array mask, af::array &distance, af::array &index);
@@ -97,8 +95,7 @@ void calculateDistanceProfile(long m, af::array qt, af::array a, af::array sum_q
                               af::array sigma_t, af::array &distance, af::array &index);
 
 /**
- * @brief
- *
+ * @brief Calculate the Mueen distance
  * @param q Array whose first dimension is the length of the query time series
  * and the last dimension is the number of time series to calculate
  * @param t Array with the second time series in the first dimension
@@ -109,8 +106,7 @@ void calculateDistanceProfile(long m, af::array qt, af::array a, af::array sum_q
  * in 'q'
  * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements
  * in 'q'
- * @param ignoreTrivial Boolean value that indicates whether the function should consider the trivial match of
- * a subsequence with itself or not
+ * @param mask specifies the elements that should not be considered in the computation
  * @param distance Resulting minimal distance
  * @param index Position where the minimum is occurring
  */
@@ -182,7 +178,7 @@ void findBestNMotifs(af::array profile, af::array index, long n, af::array &moti
  * @param index The matrix profile index containing where each minimum occurs
  * @param n Number of discords to extract
  * @param discords The distance of the best N discords
- * @param discordIndices The indices of the best N discords
+ * @param discordsIndices The indices of the best N discords
  * @param subsequenceIndices The indices of the query sequences that produced the discords reported in the discords
  * output array
  */
