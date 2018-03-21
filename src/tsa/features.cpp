@@ -276,13 +276,13 @@ af::array tsa::features::energyRatioByChunks(af::array tss, long numSegments, lo
     return tsa::features::absEnergy(tss(af::seq(start, end - 1), span)) / fullSeriesEnergy;
 }
 
-void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &_abs,
+void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &abs,
                                    af::array &angle) {
     af::array fft = af::fft(tss);
     af::array fftCoefficient = fft(coefficient, span);
     real = af::real(fftCoefficient);
     imag = af::imag(fftCoefficient);
-    _abs = af::abs(real);
+    abs = af::abs(real);
     angle = af::arg(fftCoefficient);
 }
 

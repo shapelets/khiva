@@ -1,5 +1,32 @@
 FIND_PACKAGE(Sphinx REQUIRED)
- 
+
+PROJECT(TSALIB_DOC)
+
+# Generating Doxygen Documentation
+# check if Doxygen is installed, add a target to generate API documentation with Doxygen
+FIND_PACKAGE(Doxygen REQUIRED)
+OPTION(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" DOXYGEN_FOUND)
+
+IF(NOT DOXYGEN_FOUND)
+    MESSAGE(FATAL_ERROR "Doxygen is needed to build the documentation.")
+ENDIF()
+
+MESSAGE(${CMAKE_CURRENT_SOURCE_DIR})
+
+SET(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/Doxyfile.in)
+SET(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/doxygen/Doxyfile)
+
+CONFIGURE_FILE(${doxyfile_in} ${doxyfile} @ONLY)
+
+ADD_CUSTOM_TARGET(TSA_doc_doxygen ALL
+    ${DOXYGEN_EXECUTABLE}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen
+    COMMENT "Generating API documentation with Doxygen"
+    )
+
+# INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
+
+# Generating Sphinx Documentation
 IF(NOT DEFINED SPHINX_THEME)
     SET(SPHINX_THEME default)
 ENDIF()
@@ -9,16 +36,16 @@ IF(NOT DEFINED SPHINX_THEME_DIR)
 ENDIF()
  
 # configured documentation tools and intermediate build results
-SET(BINARY_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_build")
+SET(BINARY_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/sphinx/source/_build")
  
 # Sphinx cache with pickled ReST documents
-SET(SPHINX_CACHE_DIR "${CMAKE_CURRENT_BINARY_DIR}/_doctrees")
+SET(SPHINX_CACHE_DIR "${CMAKE_CURRENT_BINARY_DIR}/sphinx/source/_doctrees")
  
 # HTML output directory
-SET(SPHINX_HTML_DIR "${CMAKE_CURRENT_BINARY_DIR}/html")
+SET(SPHINX_HTML_DIR "${CMAKE_CURRENT_BINARY_DIR}/sphinx/build/html")
  
 CONFIGURE_FILE(
-    "${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/sphinx/source/conf.py.in"
     "${BINARY_BUILD_DIR}/conf.py"
     @ONLY)
  
@@ -27,6 +54,6 @@ ADD_CUSTOM_TARGET(TSA_docs ALL
         -q -b html
         -c "${BINARY_BUILD_DIR}"
         -d "${SPHINX_CACHE_DIR}"
-        "${CMAKE_CURRENT_SOURCE_DIR}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/sphinx/source"
         "${SPHINX_HTML_DIR}"
     COMMENT "Building HTML documentation with Sphinx")

@@ -9,3 +9,9 @@ conaninfo.txt
 *CMakeFiles*
 *Makefile
 CMakeCache.txt
+.html
+.xml
+_build/*
+_doctrees/*
+html/*
+
