@@ -17,20 +17,20 @@ JNIEXPORT void JNICALL Java_tsa_Library_setBackend(JNIEnv *env, jobject thisObj,
     tsa::library::setBackend(static_cast<tsa::library::Backend>(backend));
 }
 
-JNIEXPORT void JNICALL Java_tsa_Library_getBackend(JNIEnv *env, jobject thisObj, jint backend) {
-    backend = static_cast<int>(tsa::library::getBackend());
+JNIEXPORT int JNICALL Java_tsa_Library_getBackend(JNIEnv *env, jobject thisObj) {
+    return static_cast<int>(tsa::library::getBackend());
 }
 
-JNIEXPORT void JNICALL Java_tsa_Library_getBackends(JNIEnv *env, jobject thisObj, jint backends) {
-    backends = tsa::library::getBackends();
-}
+JNIEXPORT int JNICALL Java_tsa_Library_getBackends(JNIEnv *env, jobject thisObj) { return tsa::library::getBackends(); }
 
 JNIEXPORT void JNICALL Java_tsa_Library_setDevice(JNIEnv *env, jobject thisObj, jint device) {
     tsa::library::setDevice(device);
 }
 
-JNIEXPORT void JNICALL Java_tsa_Library_getDevice(JNIEnv *env, jobject thisObj, jint device) {
-    device = tsa::library::getDevice();
+JNIEXPORT int JNICALL Java_tsa_Library_getDeviceID(JNIEnv *env, jobject thisObj) { return tsa::library::getDevice(); }
+
+JNIEXPORT int JNICALL Java_tsa_Library_getDeviceCount(JNIEnv *env, jobject thisObj) {
+    return tsa::library::getDeviceCount();
 }
 
 #ifdef __cplusplus

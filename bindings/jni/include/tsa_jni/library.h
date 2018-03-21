@@ -29,16 +29,16 @@ JNIEXPORT void JNICALL Java_tsa_Library_setBackend(JNIEnv *env, jobject thisObj,
 /**
  * @brief JNI interface to get the active backend.
  *
- * @param backend The active backend.
+ * @return The active backend.
  */
-JNIEXPORT void JNICALL Java_tsa_Library_getBackend(JNIEnv *env, jobject thisObj, jint backend);
+JNIEXPORT int JNICALL Java_tsa_Library_getBackend(JNIEnv *env, jobject thisObj);
 
 /**
  * @brief JNI interface to get the available backends.
  *
- * @param backend The available backends.
+ * @return The available backends.
  */
-JNIEXPORT void JNICALL Java_tsa_Library_getBackends(JNIEnv *env, jobject thisObj, jint backends);
+JNIEXPORT int JNICALL Java_tsa_Library_getBackends(JNIEnv *env, jobject thisObj);
 
 /**
  * @brief JNI interface to set the device.
@@ -50,9 +50,16 @@ JNIEXPORT void JNICALL Java_tsa_Library_setDevice(JNIEnv *env, jobject thisObj, 
 /**
  * @brief JNI interface to get the active device.
  *
- * @param device The active device.
+ * @return The active device.
  */
-JNIEXPORT void JNICALL Java_tsa_Library_getDevice(JNIEnv *env, jobject thisObj, jint device);
+JNIEXPORT int JNICALL Java_tsa_Library_getDeviceID(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief JNI interface to get the device count.
+ *
+ * @return The device count.
+ */
+JNIEXPORT int JNICALL Java_tsa_Library_getDeviceCount(JNIEnv *env, jobject thisObj);
 
 #ifdef __cplusplus
 }

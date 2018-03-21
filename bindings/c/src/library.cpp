@@ -21,7 +21,9 @@ void get_backends(int *backends) { *backends = tsa::library::getBackends(); }
 
 void set_device(int *device) { tsa::library::setDevice(*device); }
 
-void get_device(int *device) { *device = tsa::library::getDevice(); }
+void get_device_id(int *device_id) { *device_id = tsa::library::getDevice(); }
+
+void get_device_count(int *device_count) { *device_count = tsa::library::getDeviceCount(); }
 
 #ifdef __cplusplus
 }

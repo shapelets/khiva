@@ -55,9 +55,16 @@ void setDevice(int device);
 /**
  * @brief Get the active device
  *
- * @return int
+ * @return int The active device.
  */
 int getDevice();
+
+/**
+ * @brief Get the device count.
+ *
+ * @return int The device count.
+ */
+int getDeviceCount();
 
 };  // namespace library
 };  // namespace tsa

@@ -76,8 +76,31 @@ void getDeviceTest() {
     }
 }
 
+void getDeviceCountTest() {
+    int backends = tsa::library::getBackends();
+    bool cuda = backends & tsa::library::Backend::TSA_BACKEND_CUDA;
+    bool opencl = backends & tsa::library::Backend::TSA_BACKEND_OPENCL;
+    bool cpu = backends & tsa::library::Backend::TSA_BACKEND_CPU;
+
+    if (cuda) {
+        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_CUDA);
+        ASSERT_EQ(af::getDeviceCount(), tsa::library::getDeviceCount());
+    }
+
+    if (opencl) {
+        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_OPENCL);
+        ASSERT_EQ(af::getDeviceCount(), tsa::library::getDeviceCount());
+    }
+
+    if (cpu) {
+        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_CPU);
+        ASSERT_EQ(af::getDeviceCount(), tsa::library::getDeviceCount());
+    }
+}
+
 TSA_TEST(LibraryTests, SetBackendTest, setBackendTest);
 TSA_TEST(LibraryTests, GetBackendTest, getBackendTest);
 TSA_TEST(LibraryTests, GetBackendsTest, getBackendsTest);
 TSA_TEST(LibraryTests, SetDeviceTest, setDeviceTest);
 TSA_TEST(LibraryTests, GetDeviceTest, getDeviceTest);
+TSA_TEST(LibraryTests, GetDeviceCountTest, getDeviceCountTest);

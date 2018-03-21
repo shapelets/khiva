@@ -18,3 +18,5 @@ int tsa::library::getBackends() { return af::getAvailableBackends(); }
 void tsa::library::setDevice(int device) { af::setDevice(device); }
 
 int tsa::library::getDevice() { return af::getDevice(); }
+
+int tsa::library::getDeviceCount() { return af::getDeviceCount(); }

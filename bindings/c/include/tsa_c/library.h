@@ -50,7 +50,14 @@ void set_device(int *device);
  *
  * @param device The active device.
  */
-void get_device(int *device);
+void get_device_id(int *device_id);
+
+/**
+ * @brief Get the devices count.
+ *
+ * @param device_count The devices count.
+ */
+void get_device_count(int *device_count);
 
 #ifdef __cplusplus
 }
