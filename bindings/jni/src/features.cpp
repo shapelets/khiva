@@ -71,7 +71,7 @@ JNIEXPORT void JNICALL Java_tsa_Features_crossCovariance(JNIEnv *env, jobject th
 
 JNIEXPORT void JNICALL Java_tsa_Features_approximateEntropy(JNIEnv *env, jobject thisObj, jdoubleArray tss,
                                                             jlong tssLength, jlong tssNumberOfTss, jint m, jfloat r,
-                                                            jfloatArray result) {
+                                                            jdoubleArray result) {
     af::array primitive_result;
     long tssFull_length = tssLength * tssNumberOfTss;
     jdouble input_tss[tssFull_length];
@@ -79,9 +79,9 @@ JNIEXPORT void JNICALL Java_tsa_Features_approximateEntropy(JNIEnv *env, jobject
 
     primitive_result = tsa::features::approximateEntropy(af::array(tssLength, tssNumberOfTss, input_tss), m, r);
 
-    jfloat output_result[tssNumberOfTss];
+    jdouble output_result[tssNumberOfTss];
     primitive_result.host(output_result);
-    env->SetFloatArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
     return;
 }
 
