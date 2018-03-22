@@ -9,6 +9,7 @@ conaninfo.txt
 *CMakeFiles*
 *Makefile
 CMakeCache.txt
+<<<<<<< HEAD
 *_build/*
 *_doctrees/*
 doc/doxygen/html/*
@@ -16,3 +17,10 @@ doc/doxygen/latex/*
 doc/doxygen/xml/*
 doc/sphinx/build/html/*
 doc/doxygen/Doxyfile
+=======
+.html
+.xml
+_build/*
+_doctrees/*
+html/*
+>>>>>>> 58dbf2f28ad36e0aed5fc168fa8b3fc14ca4f414
