@@ -15,9 +15,10 @@
 import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-sphinxSourceDir = str(os.path.abspath('..'))
+
 baseDir = str(os.path.abspath('../../../..'))
 docDir = str(os.path.abspath('../../..'))
+sphinxSourceDir = docDir + "/sphinx/source"
 print("baseDir: " + baseDir)
 print("docDir: " + docDir)
 print("sphinxSourceDir: " + sphinxSourceDir)
