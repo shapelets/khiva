@@ -49,7 +49,7 @@ CONFIGURE_FILE(
     "${BINARY_BUILD_DIR}/conf.py"
     @ONLY)
  
-ADD_CUSTOM_TARGET(TSA_docs ALL
+ADD_CUSTOM_TARGET(TSA_doc_sphinx ALL
     ${SPHINX_EXECUTABLE}
         -q -b html
         -c "${BINARY_BUILD_DIR}"
