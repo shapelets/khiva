@@ -15,10 +15,13 @@
 import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-sourceDir = str(os.path.abspath('..'))
+sphinxSourceDir = str(os.path.abspath('..'))
 baseDir = str(os.path.abspath('../../../..'))
-print(sourceDir)
-print(baseDir)
+docDir = str(os.path.abspath('../../..'))
+print("baseDir: " + baseDir)
+print("docDir: " + docDir)
+print("sphinxSourceDir: " + sphinxSourceDir)
+
 
 # -- Project information -----------------------------------------------------
 
@@ -84,14 +87,14 @@ pygments_style = 'sphinx'
 
 # Setup the breathe extension
 breathe_projects = {
-    "My Project": "/Users/antonio.vilches/repositories/tsa/doc/doxygen/xml"
+    "My Project": docDir + "/doxygen/xml"
 }
 breathe_default_project = "My Project"
 
 # Setup the exhale extension
 exhale_args = {
     # These arguments are required
-    "containmentFolder":     sourceDir+"/apiTSA",
+    "containmentFolder":     sphinxSourceDir+"/apiTSA",
     "rootFileName":          "main.rst",
     "rootFileTitle":         "Library API",
     "doxygenStripFromPath":  "..",
