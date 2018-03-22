@@ -13,20 +13,15 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-import sys
+# import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-buildDir = str(os.path.abspath('../../../../'))
+baseDir = str(os.path.abspath('../../../../../'))
+buildDir = baseDir + "/build" 
 docDir = buildDir + "/doc"
 sphinxDir = docDir + "/sphinx"
-sphinxSourceDir = sphinxDir + "/source"
+sphinxSourceDir = baseDir + "/doc/sphinx/source"
 doxygenDir = docDir + "/doxygen"
-
-print(buildDir)
-print(doxygenDir)
-print(sphinxSourceDir)
-print(sys.path)
-
 
 # -- Project information -----------------------------------------------------
 
@@ -57,7 +52,8 @@ extensions = [
     'sphinx.ext.mathjax',
     #'sphinx.ext.imgmath',
     'sphinx.ext.viewcode',
-    'breathe'
+    'breathe',
+    'exhale'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -106,8 +102,8 @@ exhale_args = {
     "createTreeView":        True,
     # TIP: if using the sphinx-bootstrap-theme, you need
     # "treeViewIsBootstrap": True,
-    "exhaleExecutesDoxygen": False,
-    "exhaleDoxygenStdin":    "INPUT= ../include"
+    "exhaleExecutesDoxygen": True,
+    "exhaleDoxygenStdin":    "INPUT=" + baseDir + "/include"
 }
 
 # Tell sphinx what the primary language being documented is.
