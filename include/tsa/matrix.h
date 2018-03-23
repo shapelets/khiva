@@ -48,12 +48,13 @@ void meanStdev(af::array t, long m, af::array &mean, af::array &stdev);
  * @brief Function to generate a band matrix of batchSizeXtsLength with the offset batchStart
  *
  * @param m Subsequence length used to generate a band of m/2 at each side
- * @param batchSize size of the first dimension
- * @param batchStart offset of the band matrix
- * @param tsLength size of the second dimension of the matrix
+ * @param batchSize Size of the first dimension
+ * @param batchStart Offset of the band matrix
+ * @param tsLength Size of the second dimension of the matrix
+ * @param nTimeSeries Number of time series to generate the mask for
  * @return af::array
  */
-af::array generateMask(long m, long batchSize, long batchStart, long tsLength);
+af::array generateMask(long m, long batchSize, long batchStart, long tsLength, long nTimeSeries = 1);
 
 /**
  * @brief Calculates the distance between 'q' and the time series 't', which produced the sliding. Multiple queries can
