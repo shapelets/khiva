@@ -1,7 +1,7 @@
 How to contribute
 =================
 
-We want tsfresh to become the biggest archive of feature extraction methods in python. To achieve this goal, we need
+We want tsa to become the biggest archive of time series analytics methods in python. To achieve this goal, we need
 your help!
 
 All contributions, bug reports, bug fixes, documentation improvements, enhancements and ideas are welcome. If you
@@ -37,49 +37,6 @@ There are two important copyright guidelines:
 Further, there are some technical decisions we made:
 
     6. Clear the Output of iPython notebooks. This improves the readability of related Git diffs.
-
-
-Test framework
-''''''''''''''
-
-After making your changes, you probably want to test your changes locally. To run our comprehensive suite of unit tests
-you have to install all the relevant python packages with
-
-
-.. code::
-
-    cd /path/to/tsfresh
-    pip install -r requirements.txt
-    pip install -r rdocs-requirements.txt
-    pip install -r test-requirements.txt
-    pip install -e .
-
-
-The last command will dynamically link the tsfresh package which means that changes to the code will directly show up
-for example in your test run.
-
-Then, if you have everything installed, you can run the tests with
-
-
-.. code::
-
-    python setup.py test
-
-
-or build the documentation with
-
-
-.. code::
-
-    python setup.py docs
-
-
-
-The finished documentation can be found in the docs/_build/html folder.
-
-On Github we use a Travis CI Folder that runs our test suite every time a commit or pull request is sent. The
-configuration of Travi is controlled by the
-`.travis.yml <https://github.com/blue-yonder/tsfresh/blob/master/.travis.yml>`_ file.
 
 
 We are looking forward to hear from you! =)

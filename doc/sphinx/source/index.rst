@@ -33,16 +33,11 @@ The following chapters will explain the tsfresh package in detail:
    Module Reference <api/modules>
    TSA API <apiTSA/main>
    Data Formats <text/data_formats>
-   List of time series algorithims <text/list_of_algos>
-   Time Series Forecasting <api/forecasting>
-   Time Series dimensionality <api/dimensionality>
-   Time Series classification <api/classification>
-   Time Series Matrix Profile <api/matrix>
-   How to write custom functions <text/how_to_add_custom_functions>
    Parallelization <parallel/main>
    TSA on a cluster <cluster/main>
    Bindings to other languages <bindings/main>
    Examples <examples/main>
+   Benchmarks <benchmarks/main>
    FAQ <text/faq>
    Authors <authors>
    License <license>

@@ -3,14 +3,8 @@
 Data Formats
 ============
 
-tsfresh offers three different options to specify the time series data to be used in the
-:func:`tsfresh.extract_features` function (and all utility functions that expect a time series, e.g. the
-:func:`tsfresh.utilities.dataframe_functions.roll_time_series` function).
-
-Irrespective of the input format, tsfresh will always return the calculated features in the same output format
-described below.
-
-All three input format options consist of :class:`pandas.DataFrame` objects. There are four important column types that
+TSA offers three different options to specify the time series data. All three input format options consist of 
+:class:`pandas.DataFrame` objects. There are four important column types that
 make up those DataFrames. Each will be described with an example from the robot failures dataset
 (see :ref:`quick-start-label`).
 
@@ -47,7 +41,7 @@ In the following we describe the different input formats, that are build on thos
     * A dictionary of flat DataFrames
 
 The difference between a flat and a stacked DataFrame is indicated by specifying or not specifying the parameters
-`column_value` and `column_kind` in the :func:`tsfresh.extract_features` function.
+`column_value` and `column_kind`.
 
 If you do not know which one to choose, you probably want to try out the flat or stacked DataFrame.
 
@@ -207,5 +201,3 @@ It will always be a :class:`pandas.DataFrame` with the following layout
 where the x features are calculated using all x values (independently for A and B), y features using all y values
 and so on.
 
-This form of DataFrame is also the expected input format to the feature selection algorithms (e.g. the
-:func:`tsfresh.select_features` function).
