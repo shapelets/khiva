@@ -124,6 +124,69 @@ JNIEXPORT void JNICALL Java_tsa_Features_absEnergy(JNIEnv *env, jobject thisObj,
                                                    jlong timeSeriesLength, jlong numberOfTimeSeries,
                                                    jdoubleArray jResult);
 
+/**
+ * @brief JNI interface of the autoCorrelation function.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param maxLag The maximum lag to compute.
+ * @param unbiased Determines whether it divides by n - lag (if true) or n ( if false)
+ * @param result The autocorrelation value for the given time series.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_autoCorrelation(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                         jlong tssLength, jlong tssNumberOfTss, jlong maxLag,
+                                                         jboolean unbiased, jdoubleArray result);
+
+/**
+ * @brief JNI interface of the binnedEntropy function.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss NUmber of time series.
+ * @param max_bins The number of bins.
+ * @param result The binned entropy value for the given time series.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_binnedEntropy(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                       jlong tssNumberOfTss, jint max_bins, jdoubleArray result);
+
+/**
+ * @brief JNI interface of the countAboveMean function.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss NUmber of time series.
+ * @param result The number of values in the time series that are higher
+ * than the mean.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_countAboveMean(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                        jlong tssNumberOfTss, jintArray result);
+
+/**
+ * @brief JNI interface of the countBelowMean function.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The number of values in the time series that are lower
+ * than the mean.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_countBelowMean(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                        jlong tssNumberOfTss, jintArray result);
+
+/**
+ * @brief JNI interface of the energyRatioByChunks
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param numSegments The number of segments to divide the series into.
+ * @param segmentFocus The segment number (starting at zero) to return a feature on.
+ * @param result The energy ratio by chunk of the time series.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_energyRatioByChunks(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                             jlong tssLength, jlong tssNumberOfTss, jlong numSegments,
+                                                             jlong segmentFocus, jdoubleArray result);
 #ifdef __cplusplus
 }
 #endif

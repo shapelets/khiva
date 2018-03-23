@@ -147,6 +147,84 @@ JNIEXPORT void JNICALL Java_tsa_Features_absoluteSumOfChanges(JNIEnv *env, jobje
     return;
 }
 
+JNIEXPORT void JNICALL Java_tsa_Features_autoCorrelation(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                         jlong tssLength, jlong tssNumberOfTss, jlong maxLag,
+                                                         jboolean unbiased, jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result =
+        tsa::features::autoCorrelation(af::array(tssLength, tssNumberOfTss, input_tss), maxLag, unbiased);
+
+    jdouble output_result[tssFull_length];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssFull_length, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_binnedEntropy(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                       jlong tssNumberOfTss, jint max_bins, jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::binnedEntropy(af::array(tssLength, tssNumberOfTss, input_tss), max_bins);
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_countAboveMean(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                        jlong tssNumberOfTss, jintArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::countAboveMean(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jint output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetIntArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_countBelowMean(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                        jlong tssNumberOfTss, jintArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::countBelowMean(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jint output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetIntArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_energyRatioByChunks(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                             jlong tssLength, jlong tssNumberOfTss, jlong numSegments,
+                                                             jlong segmentFocus, jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result =
+        tsa::features::energyRatioByChunks(af::array(tssLength, tssNumberOfTss, input_tss), numSegments, segmentFocus);
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
 #ifdef __cplusplus
 }
 #endif

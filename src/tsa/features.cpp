@@ -228,7 +228,7 @@ af::array tsa::features::autoCorrelation(af::array tss, long maxLag, bool unbias
 af::array tsa::features::binnedEntropy(af::array tss, int max_bins) {
     int len = tss.dims(0);
     int nts = tss.dims(1);
-    af::array res = af::constant(0, 1, nts);
+    af::array res = af::constant(0, 1, nts, tss.type());
 
     gfor(af::seq i, nts) {
         af::array his = af::histogram(tss(span, i), max_bins);

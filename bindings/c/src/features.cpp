@@ -63,6 +63,40 @@ void approximate_entropy(double *tss, long *tss_length, long *tss_number_of_tss,
     primitive_result.host(result);
 }
 
+void auto_correlation(double *tss, long *tss_length, long *tss_number_of_tss, long *max_lag, bool *unbiased,
+                      double *result) {
+    af::array primitive_result;
+    primitive_result =
+        tsa::features::autoCorrelation(af::array(*tss_length, *tss_number_of_tss, tss), *max_lag, *unbiased);
+    primitive_result.host(result);
+}
+
+void binned_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *max_bins, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::binnedEntropy(af::array(*tss_length, *tss_number_of_tss, tss), *max_bins);
+    primitive_result.host(result);
+}
+
+void count_above_mean(double *tss, long *tss_length, long *tss_number_of_tss, unsigned int *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::countAboveMean(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void count_below_mean(double *tss, long *tss_length, long *tss_number_of_tss, unsigned int *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::countBelowMean(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void energy_ratio_by_chunks(double *tss, long *tss_length, long *tss_number_of_tss, long *num_segments,
+                            long *segment_focus, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::energyRatioByChunks(af::array(*tss_length, *tss_number_of_tss, tss),
+                                                          *num_segments, *segment_focus);
+    primitive_result.host(result);
+}
+
 #ifdef __cplusplus
 }
 #endif
