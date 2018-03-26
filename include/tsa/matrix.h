@@ -95,20 +95,19 @@ void calculateDistanceProfile(long m, af::array qt, af::array a, af::array sum_q
                               af::array sigma_t, af::array &distance, af::array &index);
 
 /**
- * @brief Calculate the Mueen distance
+ * @brief Calculates the Mueen distance.
  * @param q Array whose first dimension is the length of the query time series
- * and the last dimension is the number of time series to calculate
- * @param t Array with the second time series in the first dimension
- * @param m Subsequence length (required to mask the minimum m/2 positions left and right in case ignoreTrivial is true)
+ * and the last dimension is the number of time series to calculate.
+ * @param t Array with the second time series in the first dimension.
+ * @param m Subsequence length (required to mask the minimum m/2 positions left and right in case ignoreTrivial is
+ * true).
  * @param a Auxiliary array computed using the meanStdev function. This array contains a
- * precomputed fixed value to speed up the distance calculation
- * * @param mean_t Moving average of 't' using a window size equal to the number of elements
- * in 'q'
- * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements
- * in 'q'
- * @param mask specifies the elements that should not be considered in the computation
- * @param distance Resulting minimal distance
- * @param index Position where the minimum is occurring
+ * precomputed fixed value to speed up the distance calculation.
+ * * @param mean_t Moving average of 't' using a window size equal to the number of elements in 'q'.
+ * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements in 'q'.
+ * @param mask Specifies the elements that should not be considered in the computation.
+ * @param distance Resulting minimal distance.
+ * @param index Position where the minimum is occurring.
  */
 void mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::array sigma_t, af::array mask,
           af::array &distance, af::array &index);

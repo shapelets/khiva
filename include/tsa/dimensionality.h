@@ -21,7 +21,7 @@ namespace dimensionality {
  *
  * @param a Set of points
  *
- * @param bins sets the total number of divisions
+ * @param bins Sets the total number of divisions
  *
  * @return result A vector with the reduced dimensionality.
  */
@@ -32,11 +32,11 @@ af::array PAA(af::array a, int bins);
  * given by begin and last iterators to a number equal to bins. This algorithim divides the
  * whole timeseries in bins partitions and computes the average of each partition.
  *
- * @param begin iterator to the first element.
+ * @param begin Iterator to the first element.
  *
- * @param last iterator to the last element.
+ * @param last Iterator to the last element.
  *
- * @param bins sets the total number of divisions.
+ * @param bins Sets the total number of divisions.
  *
  * @return result A vector with the reduced dimensionality.
  */
@@ -86,7 +86,7 @@ std::vector<int> SAX(af::array a, int alphabet_size);
  *
  * @param numberIPs The number of points to be returned.
  *
- * @return Array with the numPoints most Perceptually Important.
+ * @return af::array Array with the numPoints most Perceptually Important.
  */
 af::array PIP(af::array ts, int numberIPs);
 

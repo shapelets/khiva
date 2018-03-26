@@ -3,12 +3,12 @@ FAQ
 
     1. **Does tsa support different time series lengths?**
 
-       Yes, it supports different time series lengths. However, they need to be executed separetely.
+       Yes, it supports different time series lengths. However, they need to be executed separately.
 
     2. **Is it possible to extract features from rolling/shifted time series?**
 
-       Yes, You just have to transform your data into one of the supported tsa :ref:`data-formats-label`.
-       Then, you get a DataFrame with the rolled time series, that you can pass to tsa.
+       Yes, you just have to transform your data into one of the supported TSA :ref:`data-formats-label`.
+       Then, you get a DataFrame with the rolled time series, that you can pass to TSA.
 
     3. **How can I use tsa?**
 
@@ -23,5 +23,4 @@ FAQ
 
     4. **Does tsa support different sampling rates in the time series?**
 
-        Yes! The feature calculators in tsa do not care about the sampling frequency.
-        You will have to use the second input format, the stacked DataFramed (see :ref:`data-formats-label`)
+        Yes! The feature calculators in TSA do not care about the sampling frequency.

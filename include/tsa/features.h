@@ -359,9 +359,8 @@ af::array kurtosis(af::array tss);
  * @brief Checks if the timeseries within tss have a large standard deviation.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @param r threshold value
+ * series (all the same) and dimension one indicates the number of time series.
+ * @param r Threshold value.
  * @return af::array Array containing True for those timeseries in tss that have a large standard deviation.
  */
 af::array largeStandardDeviation(af::array tss, float r);
