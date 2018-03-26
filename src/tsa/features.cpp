@@ -333,7 +333,7 @@ af::array tsa::features::energyRatioByChunks(af::array tss, long numSegments, lo
     return tsa::features::absEnergy(tss(af::seq(start, end - 1), span)) / fullSeriesEnergy;
 }
 
-void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &_abs,
+void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &abs,
                                    af::array &angle) {
     // Calculating the FFT of all the time series contained in tss
     af::array fft = af::fft(tss);
@@ -342,7 +342,7 @@ void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &r
     // Retrieving the real, imaginary, absolute value and angle of the complex number of the given coefficient
     real = af::real(fftCoefficient);
     imag = af::imag(fftCoefficient);
-    _abs = af::abs(real);
+    abs = af::abs(real);
     angle = af::arg(fftCoefficient);
 }
 

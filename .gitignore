@@ -9,3 +9,4 @@ conaninfo.txt
 *CMakeFiles*
 *Makefile
 CMakeCache.txt
+doc/sphinx/source/apiTSA/*
