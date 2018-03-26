@@ -64,8 +64,8 @@ void generateMask() {
 
     float *maskCalculated = af::transpose(mask).as(af::dtype::f32).host<float>();
 
-    float maskExpected[] = {0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,
-                            0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0};
+    float maskExpected[] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0,
+                            0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1};
 
     for (int i = 0; i < 64; i++) {
         ASSERT_EQ(maskCalculated[i % 32], maskExpected[i % 32]);

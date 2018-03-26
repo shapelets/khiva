@@ -26,5 +26,5 @@ af::array tsa::distances::squaredEuclidean(af::array tss) {
 af::array tsa::distances::euclidean(af::array tss) {
     // simply invokes non squared version and completes with
     // an elementwise sqrt operation.
-    return sqrt(squaredEuclidean(tss));
+    return af::sqrt(tsa::distances::squaredEuclidean(tss));
 }
