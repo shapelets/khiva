@@ -436,7 +436,7 @@ af::array longestStrikeBelowMean(af::array tss);
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
- * @return af::array The maximum value of each time serie within tss.
+ * @return af::array The maximum value of each time series within tss.
  */
 af::array maximum(af::array tss);
 };  // namespace features
