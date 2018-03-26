@@ -47,7 +47,7 @@ af::array absoluteSumOfChanges(af::array tss);
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correaltion for each time series.
  */
-af::array aggregatedAutocorrelation(af::array ts,
+af::array aggregatedAutocorrelation(af::array tss,
                                     af::array (*aggregationFunction)(const af::array &, const bool, const dim_t));
 
 /**
@@ -63,7 +63,7 @@ af::array aggregatedAutocorrelation(af::array ts,
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correaltion for each time series.
  */
-af::array aggregatedAutocorrelation(af::array ts, af::array (*aggregationFunction)(const af::array &, const int));
+af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array &, const int));
 
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
@@ -78,7 +78,7 @@ af::array aggregatedAutocorrelation(af::array ts, af::array (*aggregationFunctio
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correaltion for each time series.
  */
-af::array aggregatedAutocorrelation(af::array ts, af::array (*aggregationFunction)(const af::array &, const dim_t));
+af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array &, const dim_t));
 
 /**
  * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
