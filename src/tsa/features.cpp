@@ -391,3 +391,7 @@ af::array tsa::features::longestStrikeAboveMean(af::array tss) {
 
     return af::max(scanned, 0);
 }
+
+af::array tsa::features::meanAbsoluteChange(af::array tss) {
+    return (tsa::features::absoluteSumOfChanges(tss) / tss.dims(0)).as(tss.type());
+}
