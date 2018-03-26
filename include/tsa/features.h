@@ -37,47 +37,46 @@ af::array absoluteSumOfChanges(af::array tss);
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
  * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
- * lags (1 to length of x).
+ * lags (1 to length of x)
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of time series.
- * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags
+ * series (all the same) and dimension one indicates the number of
+ * time series.
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
- * contains the aggregated correaltion for each time series.
+ * contains the aggregated correaltion for each timeseries
  */
-af::array aggregatedAutocorrelation(af::array tss,
+af::array aggregatedAutocorrelation(af::array ts,
                                     af::array (*aggregationFunction)(const af::array &, const bool, const dim_t));
 
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
  * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
- * lags (1 to length of x).
+ * lags (1 to length of x)
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of time series.
- * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
- *
+ * series (all the same) and dimension one indicates the number of
+ * time series.
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
- * contains the aggregated correaltion for each time series.
+ * contains the aggregated correaltion for each timeseries
  */
-af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array &, const int));
+af::array aggregatedAutocorrelation(af::array ts, af::array (*aggregationFunction)(const af::array &, const int));
 
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
  * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
- * lags (1 to length of x).
+ * lags (1 to length of x)
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of time series.
- * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
+ * series (all the same) and dimension one indicates the number of
+ * time series.
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
- * contains the aggregated correaltion for each time series.
+ * contains the aggregated correaltion for each timeseries
  */
-af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array &, const dim_t));
+af::array aggregatedAutocorrelation(af::array ts, af::array (*aggregationFunction)(const af::array &, const dim_t));
 
 /**
  * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
- * over chunks versus the sequence from 0 up to the number of chunks minus one.
+ * over chunks versus the sequence from 0 up to the number of chunks minus one
  *
  * @param t The time series to calculate the features of
  * @param chunkSize The chunkSize used to aggregate the data
@@ -274,7 +273,7 @@ af::array energyRatioByChunks(af::array tss, long numSegments, long segmentFocus
  * @param abs The absolute value of the coefficient
  * @param angle The angle of the coefficient
  */
-void fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &abs,
+void fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &_abs,
                     af::array &angle);
 
 /**
@@ -333,14 +332,13 @@ af::array hasDuplicateMax(af::array tss);
 af::array hasDuplicateMin(af::array tss);
 
 /**
- * @brief Returns the kurtosis of tss (calculated with the adjusted Fisher-Pearson
- * standardized moment coefficient G2).
+ * @brief Calculate the relative index i where q% of the mass of the time series within tss lie left of i.
+ * For example for q = 50% this feature calculator will return the mass center of the time series.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @param q The quantile
- * @return af::array The index mass of quantile q, for each timeseries in tss
+ * @param tss Expects an input array whose dimension zero is the length of the time  * series (all the same)
+ * and dimension one indicates the number of time series.
+ *
+ * @return af::array Therelative indeces i where q% of the mass of the time series lie left of i.
  */
 af::array indexMaxQuantile(af::array tss, float q);
 
@@ -360,7 +358,9 @@ af::array kurtosis(af::array tss);
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of time series.
- * @param r Threshold value.
+ *
+ * @param r The threshold value.
+ *
  * @return af::array Array containing True for those timeseries in tss that have a large standard deviation.
  */
 af::array largeStandardDeviation(af::array tss, float r);
@@ -449,5 +449,15 @@ af::array maximum(af::array tss);
  * @return af::array The mean over the absolute differences between subsequent time series values.
  */
 af::array meanAbsoluteChange(af::array tss);
+
+/**
+ * @brief Calculates mean value of a central approximation of the second derivative for each time series in tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ *
+ * @return af::array The mean value of a central approximation of the second derivative for each time series.
+ */
+af::array meanSecondDerivativeCentral(af::array tss);
 };  // namespace features
 };  // namespace tsa
