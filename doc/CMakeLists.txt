@@ -21,7 +21,7 @@ CONFIGURE_FILE(${doxyfile_in} ${doxyfile} @ONLY)
  
 ADD_CUSTOM_TARGET(TSA_doc_doxygen ALL
     ${DOXYGEN_EXECUTABLE}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen 
     COMMENT "Generating API documentation with Doxygen"
     )
 
@@ -57,6 +57,7 @@ ADD_CUSTOM_TARGET(TSA_doc_sphinx ALL
         -d "${SPHINX_CACHE_DIR}"
         "${CMAKE_CURRENT_SOURCE_DIR}/sphinx/source"
         "${SPHINX_HTML_DIR}"
+    DEPENDS TSA_doc_doxygen
     COMMENT "Building HTML documentation with Sphinx")
 
 # INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)

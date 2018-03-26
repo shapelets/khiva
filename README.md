@@ -10,6 +10,15 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 4. Create `build` folder and, after moving into the new folder, run `cmake ..` 
 5. Run the actual make for your environment.
 
+## Generating documentation
+
+We use `sphinx + doxygen` to generate our documentation. You will need to install the following packages:
+* Sphinx: `brew install sphinx`
+* Doxygen: `brew install doxygen`
+* Read the Docs Theme: `pip install sphinx_rtd_theme`
+* Breathe: `pip install breathe`
+* Exhale: `pip install exhale`
+
 ## Contributing
 
 ### Formatting Style

@@ -1,16 +1,10 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
-// 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
 ============
 TSA Docs
 ============
 
 This is the documentation of **TSA** library.
 
-TSA is a c++ library, that is focused on the efficient execution of timeseries analytics.
+TSA is a c++; time series library, that is focused on the efficient execution of time series analytics.
 It features a large number of methods to perform analytics over time series in order to extract insights from them.
 Further the package contains methods to evaluate the explaining power and importance of time series for
 regression or classification tasks.
@@ -20,7 +14,7 @@ You can jump right into the package by looking into our :ref:`quick-start-label`
 Contents
 ========
 
-The following chapters will explain the tsfresh package in detail:
+The following chapters will explain the TSA package in detail:
 
 .. toctree::
    :caption: Table of Contents
