@@ -25,6 +25,8 @@ typedef std::pair<float, float> Point;
  * depending on the perpendicular distance of the points and epsilon, the greater epsilon,
  * ore points are deleted.
  *
+ * @param pointList Set of input points
+ *
  * @param epsilon It acts as  the threshold value to decide which points should be considered
  * meaningful or not.
  *
@@ -39,6 +41,8 @@ std::vector<tsa::simplification::Point> ramerDouglasPeucker(std::vector<tsa::sim
  * depending on the perpendicular distance of the points and epsilon, the greater epsilon,
  * ore points are deleted.
  *
+ * @param pointList Set of input points
+ *
  * @param epsilon It acts as  the threshold value to decide which points should be considered
  * meaningful or not.
  *
@@ -49,7 +53,7 @@ af::array ramerDouglasPeucker(af::array pointList, double epsilon);
 
 /**
  * @brief Simplifies a set of points by applying the visvalingam method (minimun triangle area)
- * until the number of points is reduced to @num_points_allowed.
+ * until the number of points is reduced to num_points_allowed.
  *
  * @param pointList Expects an input array whose dimension zero is the length of the time
  * series.
@@ -64,7 +68,7 @@ std::vector<tsa::simplification::Point> visvalingam_simplify(std::vector<tsa::si
 
 /**
  * @brief Simplifies a set of points by applying the visvalingam method (minimun triangle area)
- * until the number of points is reduced to @num_points_allowed.
+ * until the number of points is reduced to num_points_allowed.
  *
  * @param pointList Expects an input array whose dimension zero is the length of the time
  * series.

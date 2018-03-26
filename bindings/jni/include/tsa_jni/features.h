@@ -175,7 +175,7 @@ JNIEXPORT void JNICALL Java_tsa_Features_countBelowMean(JNIEnv *env, jobject thi
                                                         jlong tssNumberOfTss, jintArray result);
 
 /**
- * @brief JNI interface of the energyRatioByChunks
+ * @brief JNI interface of the energyRatioByChunks.
  *
  * @param tss Time series concatenated in a single row.
  * @param tssLength Time series length (All time series need to have the same length).
@@ -187,6 +187,68 @@ JNIEXPORT void JNICALL Java_tsa_Features_countBelowMean(JNIEnv *env, jobject thi
 JNIEXPORT void JNICALL Java_tsa_Features_energyRatioByChunks(JNIEnv *env, jobject thisObj, jdoubleArray tss,
                                                              jlong tssLength, jlong tssNumberOfTss, jlong numSegments,
                                                              jlong segmentFocus, jdoubleArray result);
+
+/**
+ * @brief Calculates the first relative location of the maximal value for each time series.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The first relative location of the maximum value to the length of the time series,
+ *  for each time series.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_firstLocationOfMaximum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                jlong tssLength, jlong tssNumberOfTss,
+                                                                jdoubleArray result);
+/**
+ * @brief Calculates the first location of the minimal value of each time series. The position
+ * is calculated relatively to the length of the series.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The first relative location of the minimal value of each series.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_firstLocationOfMinimum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                jlong tssLength, jlong tssNumberOfTss,
+                                                                jdoubleArray result);
+
+/**
+ * @brief Calculates if the input time series contain duplicated elements.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result Array containing True if the time series contains duplicated elements
+ * and false otherwise.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_hasDuplicates(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                       jlong tssNumberOfTss, jdoubleArray result);
+
+/**
+ * @brief Calculates if the maximum within input time series is duplicated.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result Array containing True if the maximum value of the time series is duplicated
+ * and false otherwise.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_hasDuplicateMax(JNIEnv *env, jobject thisObj, jbooleanArray tss,
+                                                         jlong tssLength, jlong tssNumberOfTss, jbooleanArray result);
+
+/**
+ * @brief Calculates the index of the max quantile.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param q The quantile.
+ * @param result The index of the max quantile q.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_indexMaxQuantile(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                          jlong tssLength, jlong tssNumberOfTss, jfloat q,
+                                                          jdoubleArray result);
 #ifdef __cplusplus
 }
 #endif

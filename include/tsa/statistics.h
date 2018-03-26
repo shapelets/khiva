@@ -14,7 +14,7 @@ namespace statistics {
 /**
  * @brief Returns the covariance matrix of the time series contained in tss
  *
- * @param xss Expects an input array whose dimension zero is the length of the time
+ * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of
  * time series.
  * @param unbiased Determines whether it divides by n - 1 (if false) or

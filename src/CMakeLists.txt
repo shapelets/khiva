@@ -1,11 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
-
+PROJECT(TSALIB)
 # Find the ArrayFire package.
 FIND_PACKAGE(ArrayFire REQUIRED)
 # Find the Boost package
 FIND_PACKAGE(Boost REQUIRED)
-
-PROJECT(TSALIB)
 
 # Compile with C++11 support.
 INCLUDE(CheckCXXCompilerFlag)

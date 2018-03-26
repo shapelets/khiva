@@ -333,7 +333,7 @@ af::array tsa::features::energyRatioByChunks(af::array tss, long numSegments, lo
     return tsa::features::absEnergy(tss(af::seq(start, end - 1), span)) / fullSeriesEnergy;
 }
 
-void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &_abs,
+void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &abs,
                                    af::array &angle) {
     // Calculating the FFT of all the time series contained in tss
     af::array fft = af::fft(tss);
@@ -342,18 +342,18 @@ void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &r
     // Retrieving the real, imaginary, absolute value and angle of the complex number of the given coefficient
     real = af::real(fftCoefficient);
     imag = af::imag(fftCoefficient);
-    _abs = af::abs(real);
+    abs = af::abs(real);
     angle = af::arg(fftCoefficient);
 }
 
 af::array tsa::features::firstLocationOfMaximum(af::array tss) {
-    int len = tss.dims(0);
+    float len = tss.dims(0);
     af::array index;
     af::array maximum;
 
     af::max(maximum, index, tss, 0);
 
-    return index.as(f32) / len;
+    return index.as(tss.type()) / len;
 }
 
 af::array tsa::features::firstLocationOfMinimum(af::array tss) {
@@ -403,12 +403,13 @@ af::array tsa::features::hasDuplicateMin(af::array tss) {
 }
 
 af::array tsa::features::indexMaxQuantile(af::array tss, float q) {
-    int len = tss.dims(0);
+    float len = tss.dims(0);
 
     af::array positives = af::abs(tss);
     af::array sums = af::sum(positives, 0);
     af::array acum = af::accum(positives, 0);
-    af::array res = ((firstLocationOfMaximum((acum / af::tile(sums, len)) >= q) * len) + 1) / len;
+    af::array geQ = tsa::features::firstLocationOfMaximum((acum / af::tile(sums, len)) >= q).as(tss.type());
+    af::array res = ((geQ * len) + 1) / len;
 
     return res;
 }
