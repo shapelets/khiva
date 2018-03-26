@@ -42,7 +42,7 @@ af::array absoluteSumOfChanges(af::array tss);
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of time series.
  *
- *  @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
+ * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
  *
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correaltion for each time series.
@@ -73,7 +73,7 @@ af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFuncti
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of time series.
  *
- *  @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
+ * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
  *
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correaltion for each time series.
@@ -341,10 +341,10 @@ af::array hasDuplicateMin(af::array tss);
  * @brief Calculate the relative index i where q% of the mass of the time series within tss lie left of i.
  * For example for q = 50% this feature calculator will return the mass center of the time series.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time  * series (all the same)
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
  * and dimension one indicates the number of time series.
  *
- * @return af::array Therelative indeces i where q% of the mass of the time series lie left of i.
+ * @return af::array The relative indices i where q% of the mass of the time series lie at the left of i.
  */
 af::array indexMaxQuantile(af::array tss, float q);
 
