@@ -635,7 +635,7 @@ void MeanSecondDerivativeCentral(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto longest = tsa::features::meanSecondDerivativeCentral(t);
+        auto meanSDC = tsa::features::meanSecondDerivativeCentral(t);
         longest.eval();
         af::sync();
     }
@@ -1121,6 +1121,7 @@ void cpuBenchmarks() {
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(MeanSecondDerivativeCentral, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
