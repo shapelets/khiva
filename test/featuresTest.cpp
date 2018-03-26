@@ -85,8 +85,8 @@ void aggregatedCorrelationMin() {
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::min);
     float *r = res.host<float>();
     float a[] = {-2.142857142857143, -2.142857142857143};
-    ASSERT_NEAR(r[0], a[0], EPSILON);
-    ASSERT_NEAR(r[1], a[1], EPSILON);
+    ASSERT_NEAR(r[0], a[0], EPSILON * 2);
+    ASSERT_NEAR(r[1], a[1], EPSILON * 2);
 }
 
 void aggregatedCorrelationMax() {

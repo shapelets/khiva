@@ -17,7 +17,9 @@ af::array tsa::features::absEnergy(af::array base) {
 
 af::array tsa::features::absoluteSumOfChanges(af::array tss) {
     long n = tss.dims(0);
+    // Calculating tss(t + 1) - tss(t) from 0 to the length of the time series minus 1
     af::array minus = tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span);
+    // Returning the sum of absolute values of the previous operation
     return af::sum(af::abs(minus), 0);
 }
 
@@ -53,17 +55,31 @@ af::array aggregating(af::array input, af::array (*aggregationFunction)(const af
 
 af::array aggregatingOnChunks(af::array input, long chunkSize,
                               af::array (*aggregationFunction)(const af::array &, const int)) {
+    // Calculating the chunk size to split the input data into. The rest of dividing the input data
+    // length by the chunk size should be zero. In other words, input data length should be multiple
+    // of the chunk size
     long size = (input.dims(0) % chunkSize == 0) ? 0 : chunkSize - input.dims(0) % chunkSize;
+    // If it is not multiple, then pad with zeros at the end
     af::array inputChunks = af::join(0, input, af::constant(0, size, input.dims(1), input.type()));
+    // Modify the array dimensions to split it by the chunk size
     inputChunks = af::moddims(inputChunks, chunkSize, inputChunks.dims(0) / chunkSize, inputChunks.dims(1));
+    // Aggregate the data using the aggregation function specified as parameter, and then reorder
+    // the resulting array to have the number of chunks in the 2nd dimension
     return af::reorder(af::transpose(aggregationFunction(inputChunks, 0)), 0, 2, 1, 3);
 }
 
 af::array aggregatingOnChunks(af::array input, long chunkSize,
                               af::array (*aggregationFunction)(const af::array &, const dim_t)) {
+    // Calculating the chunk size to split the input data into. The rest of dividing the input data
+    // length by the chunk size should be zero. In other words, input data length should be multiple
+    // of the chunk size
     long size = (input.dims(0) % chunkSize == 0) ? 0 : chunkSize - input.dims(0) % chunkSize;
+    // If it is not multiple, then pad with zeros at the end
     af::array inputChunks = af::join(0, input, af::constant(0, size, input.dims(1), input.type()));
+    // Modify the array dimensions to split it by the chunk size
     inputChunks = af::moddims(inputChunks, chunkSize, inputChunks.dims(0) / chunkSize, inputChunks.dims(1));
+    // Aggregate the data using the aggregation function specified as parameter, and then reorder
+    // the resulting array to have the number of chunks in the 2nd dimension
     return af::reorder(af::transpose(aggregationFunction(inputChunks, 0)), 0, 2, 1, 3);
 }
 
@@ -71,8 +87,12 @@ void tsa::features::aggregatedLinearTrend(af::array t, long chunkSize,
                                           af::array (*aggregationFunction)(const af::array &, const int),
                                           af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue,
                                           af::array &stderrest) {
+    // Aggregating the data using the specified chunk size and aggregation function
     af::array aggregateResult = aggregatingOnChunks(t, chunkSize, aggregationFunction);
+    // Preparing the x vector for the linear regression. Tiling it to the number of time series
+    // contained in t
     af::array x = af::tile(af::range(aggregateResult.dims(0)).as(t.type()), 1, t.dims(1));
+    // Calculating the linear regression and storing the results in the parameters passed as reference
     tsa::regression::linear(x, aggregateResult, slope, intercept, rvalue, pvalue, stderrest);
 }
 
@@ -80,8 +100,12 @@ void tsa::features::aggregatedLinearTrend(af::array t, long chunkSize,
                                           af::array (*aggregationFunction)(const af::array &, const dim_t),
                                           af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue,
                                           af::array &stderrest) {
+    // Aggregating the data using the specified chunk size and aggregation function
     af::array aggregateResult = aggregatingOnChunks(t, chunkSize, aggregationFunction);
+    // Preparing the x vector for the linear regression. Tiling it to the number of time series
+    // contained in t
     af::array x = af::tile(af::range(aggregateResult.dims(0)).as(t.type()), 1, t.dims(1));
+    // Calculating the linear regression and storing the results in the parameters passed as reference
     tsa::regression::linear(x, aggregateResult, slope, intercept, rvalue, pvalue, stderrest);
 }
 
@@ -174,25 +198,37 @@ af::array tsa::features::approximateEntropy(af::array tss, int m, float r) {
 }
 
 af::array tsa::features::crossCovariance(af::array xss, af::array yss, bool unbiased) {
+    // To be used as divisor if unbiased is false
     long n = xss.dims(0);
+    // To be used as divisor if unbiased is true and also to determine the size of the output
     long nobs = std::max(xss.dims(0), yss.dims(0));
 
+    // Mean value of each time series contained in xss
     af::array meanXss = af::mean(xss, 0);
+    // Mean value of each time series contained in yss
     af::array meanYss = af::mean(yss, 0);
 
+    // Substracting the mean to all the elements in xss for all the time series
     af::array xsso = xss - af::tile(meanXss, xss.dims(0));
+    // Substracting the mean to all the elements in yss flipped for all the time series.
+    // The flip operation is required because we are using convolve later on
     af::array ysso = af::flip(yss, 0) - af::tile(meanYss, yss.dims(0));
 
     af::array d;
 
+    // Determining which divisor to use
     if (unbiased) {
         d = af::flip(af::tile((af::range(nobs) + 1.0).as(xss.type()), 1, xss.dims(1)), 0);
     } else {
         d = af::constant(n, nobs, xss.dims(1), xss.type());
     }
 
+    // The result is a cube with nobs in the first dimensions, that determines the number of lags.
+    // And the number of time series in yss as 2nd dimension and the number of time series in
+    //  xss as the 3rd dimension
     af::array result = af::array(nobs, yss.dims(1), xss.dims(1), xss.type());
     gfor(af::seq i, xss.dims(1)) {
+        // Flipping the result of the convolve operation because we flipped the input data
         result(span, span, i, span) =
             af::flip(af::convolve(xsso(span, i), ysso, AF_CONV_EXPAND)(af::seq(nobs), span), 0) / d;
     }
@@ -201,27 +237,36 @@ af::array tsa::features::crossCovariance(af::array xss, af::array yss, bool unbi
 }
 
 af::array tsa::features::autoCovariance(af::array xss, bool unbiased) {
+    // Matrix with number of time series in xss as the 1st dimension and the number of time
+    // series in yss as the 2nd dimension
     af::array result = af::array(xss.dims(0), xss.dims(1), xss.type());
-    for (int i = 0; i < xss.dims(1); i++) {
-        result(span, i) = tsa::features::crossCovariance(xss(span, i), xss(span, i), unbiased);
-    }
+    // Calculating all the covariances in parallel, returning only the first slice of
+    // the cube since the others are just calculations that are not required.
+    // With a sequential for loop we would remove such calculations, but it might be slower
+    result = tsa::features::crossCovariance(xss, xss, unbiased)(span, span, 0);
     return result;
 }
 
 af::array tsa::features::crossCorrelation(af::array xss, af::array yss, bool unbiased) {
-    af::array stdevXss = af::stdev(xss);
-    af::array stdevYss = af::stdev(yss);
+    // Standard deviation of the time series in xss
+    af::array stdevXss = af::stdev(xss, 0);
+    // Standard deviation of the time series in yss
+    af::array stdevYss = af::stdev(yss, 0);
 
+    // Cross covariance of the time series contained in css and yss
     af::array ccov = tsa::features::crossCovariance(xss, yss, unbiased);
 
+    // Dviding by the product of their standard deviations
     return ccov / af::tile(stdevXss * stdevYss, ccov.dims(0));
 }
 
 af::array tsa::features::autoCorrelation(af::array tss, long maxLag, bool unbiased) {
     long n = tss.dims(0);
 
+    // Calculating the auto covariance of tss
     af::array acov = tsa::features::autoCovariance(tss, unbiased);
 
+    // Slicing up to maxLag and normalizing by the value of lag 0
     return acov(af::seq(maxLag), span) / af::tile(acov(0, span), maxLag);
 }
 
@@ -241,17 +286,22 @@ af::array tsa::features::binnedEntropy(af::array tss, int max_bins) {
 }
 
 af::array tsa::features::c3(af::array tss, long lag) {
+    // Product of shifting tss 2 * -lag times, with tss shifted -lag times, with the original tss
     af::array aux = af::shift(tss, 2 * -lag) * af::shift(tss, -lag) * tss;
+    // Return the slice of the previous calculation up to the length of the time series minus 2 * lag
     return af::mean(aux(af::seq(tss.dims(0) - 2 * lag), span), 0);
 }
 
 af::array tsa::features::cidCe(af::array tss, bool zNormalize) {
     long n = tss.dims(0);
+    // Apply z-normalization if specified
     if (zNormalize) {
         tsa::normalization::znormInPlace(tss);
     }
 
+    // Calculating tss(t + 1) - tss(t) from 0 to the length of the time series minus 1
     af::array diff = tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span);
+    // Returning the square root of the sum of squares of diff
     return af::sqrt(af::sum(diff * diff));
 }
 
@@ -262,24 +312,34 @@ af::array tsa::features::countAboveMean(af::array tss) {
 }
 
 af::array tsa::features::countBelowMean(af::array tss) {
+    // Calculating the mean of all the time series in tss
     af::array mean = af::mean(tss, 0);
+    // Calculating the elements that are lower than the mean
     af::array belowMean = (tss < af::tile(mean, tss.dims(0))).as(af::dtype::u32);
+    // Sum of all elements below the mean
     return af::sum(belowMean, 0);
 }
 
 af::array tsa::features::energyRatioByChunks(af::array tss, long numSegments, long segmentFocus) {
+    // Calculating the energy of all the time series
     af::array fullSeriesEnergy = tsa::features::absEnergy(tss);
     long n = tss.dims(0);
+    // Calculating the segment length given the length of the time series and the number of segments
     long segmentLength = n / numSegments;
+    // Positioning at the beginning of the segment to focus on
     long start = segmentFocus * segmentLength;
+    // Calculating the end (which should be lower than the length of the time series)
     long end = std::min((segmentFocus + 1) * segmentLength, n);
     return tsa::features::absEnergy(tss(af::seq(start, end - 1), span)) / fullSeriesEnergy;
 }
 
 void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &_abs,
                                    af::array &angle) {
+    // Calculating the FFT of all the time series contained in tss
     af::array fft = af::fft(tss);
+    // Slicing by the given coefficient
     af::array fftCoefficient = fft(coefficient, span);
+    // Retrieving the real, imaginary, absolute value and angle of the complex number of the given coefficient
     real = af::real(fftCoefficient);
     imag = af::imag(fftCoefficient);
     _abs = af::abs(real);
@@ -297,26 +357,35 @@ af::array tsa::features::firstLocationOfMaximum(af::array tss) {
 }
 
 af::array tsa::features::firstLocationOfMinimum(af::array tss) {
+    // Flipping the array because ArrayFire returns the last location of the minimum by default
     af::array flipped = af::flip(tss, 0);
 
     af::array minimum;
     af::array index;
 
+    // Calculating the minimum and the ocurring index
     af::min(minimum, index, flipped, 0);
 
+    // Complementing the index since we flipped the array before
     index = af::abs(index - tss.dims(0) + 1);
 
+    // Dividing by the length of the time series because the result is relative
     return index.as(tss.type()) / tss.dims(0);
 }
 
 af::array tsa::features::hasDuplicates(af::array tss) {
+    // Array with the number of input time series in the 1st dimension of type bool
     af::array result = af::array(tss.dims(1), af::dtype::b8);
 
+    // Doing it sequentially because af::setUnique only works with vectors
     for (long i = 0; i < tss.dims(1); i++) {
+        // Calculating the unique elements for each time series
         af::array uniq = af::setUnique(tss(span, i));
+        // If the number of elements differ, then the time series has duplicates
         result(i) = tss.dims(0) != uniq.dims(0);
     }
 
+    // Transposing the array to match the dimensions of the output
     return af::transpose(result);
 }
 
@@ -326,8 +395,10 @@ af::array tsa::features::hasDuplicateMax(af::array tss) {
 }
 
 af::array tsa::features::hasDuplicateMin(af::array tss) {
+    // Calculating the minimum of each time series contained in tss
     af::array minimum = af::min(tss, 0);
 
+    // Returning if the minimum appears more than once
     return af::sum(tss == af::tile(minimum, tss.dims(0)), 0) > 1;
 }
 
@@ -342,22 +413,29 @@ af::array tsa::features::indexMaxQuantile(af::array tss, float q) {
     return res;
 }
 
-af::array tsa::features::kurtosis(af::array tss) { return tsa::statistics::kurtosis(tss); }
+af::array tsa::features::kurtosis(af::array tss) {
+    // Using the kurtosis function of the statistics namespace
+    return tsa::statistics::kurtosis(tss);
+}
 
 af::array tsa::features::largeStandardDeviation(af::array tss, float r) {
     return af::stdev(tss, 0) > (r * (af::max(tss, 0) - af::min(tss, 0)));
 }
 
 af::array tsa::features::lastLocationOfMaximum(af::array tss) {
+    // Flipping the array because ArrayFire returns the last location of the minimum by default
     af::array flipped = af::flip(tss, 0);
 
     af::array maximum;
     af::array index;
 
+    // Calculating the maximum and the occuring index
     af::max(maximum, index, flipped, 0);
 
+    // Complementing the index since we flipped the array before
     index = af::abs(index - tss.dims(0) + 1);
 
+    // Dividing by the length of the time series because the result is relative
     return (index.as(tss.type()) + 1) / tss.dims(0);
 }
 
@@ -372,6 +450,7 @@ af::array tsa::features::lastLocationOfMinimum(af::array tss) {
 
 af::array tsa::features::length(af::array tss) {
     int n = tss.dims(0);
+    // Returning an array containing as many ns as the number of input time series in tss
     return af::tile(af::array(1, &n), tss.dims(1));
 }
 
@@ -384,11 +463,15 @@ void tsa::features::linearTrend(af::array tss, af::array &pvalue, af::array &rva
 }
 
 af::array tsa::features::longestStrikeAboveMean(af::array tss) {
+    // Calculating the mean of each time series contained in tss
     af::array mean = af::mean(tss, 0);
+    // Checking the elements of tss that are greater than the mean
     af::array aboveMean = (tss > af::tile(mean, tss.dims(0))).as(tss.type());
 
+    // Doing a scan by key with the same array as the values in order to sum the consecutive 1s in the aboveMean array
     af::array scanned = af::scanByKey(aboveMean.as(af::dtype::s32), aboveMean);
 
+    // Returning the maximum of the sum of consecutive 1s
     return af::max(scanned, 0);
 }
 
