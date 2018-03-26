@@ -37,14 +37,13 @@ af::array absoluteSumOfChanges(af::array tss);
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
  * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
- * lags (1 to length of x)
+ * lags (1 to length of x).
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @param aggregationFunction the function to summarise all autocorrelation with deffierent lags
+ * series (all the same) and dimension one indicates the number of time series.
+ * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
- * contains the aggregated correaltion for each timeseries
+ * contains the aggregated correaltion for each time series.
  */
 af::array aggregatedAutocorrelation(af::array tss,
                                     af::array (*aggregationFunction)(const af::array &, const bool, const dim_t));
@@ -52,34 +51,33 @@ af::array aggregatedAutocorrelation(af::array tss,
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
  * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
- * lags (1 to length of x)
+ * lags (1 to length of x).
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @param aggregationFunction the function to summarise all autocorrelation with deffierent lags
+ * series (all the same) and dimension one indicates the number of time series.
+ * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
+ *
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
- * contains the aggregated correaltion for each timeseries
+ * contains the aggregated correaltion for each time series.
  */
 af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array &, const int));
 
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
  * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
- * lags (1 to length of x)
+ * lags (1 to length of x).
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @param aggregationFunction the function to summarise all autocorrelation with deffierent lags
+ * series (all the same) and dimension one indicates the number of time series.
+ * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
- * contains the aggregated correaltion for each timeseries
+ * contains the aggregated correaltion for each time series.
  */
 af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array &, const dim_t));
 
 /**
  * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
- * over chunks versus the sequence from 0 up to the number of chunks minus one
+ * over chunks versus the sequence from 0 up to the number of chunks minus one.
  *
  * @param t The time series to calculate the features of
  * @param chunkSize The chunkSize used to aggregate the data

@@ -1,12 +1,9 @@
 FAQ
 ===
 
-
     1. **Does tsa support different time series lengths?**
 
-       Yes, it supports different time series lengths. However, some feature calculators can demand a minimal length
-       of the time series. If a shorter time series is passed to the calculator, a NaN is returned for those
-       features.
+       Yes, it supports different time series lengths. However, they need to be executed separetely.
 
     2. **Is it possible to extract features from rolling/shifted time series?**
 
@@ -20,7 +17,7 @@ FAQ
        .. code:: Bash
 
            conda create -n ENV_NAME python=VERSION
-           conda install -n ENV_NAME pip requests numpy pandas scipy statsmodels patsy scikit-learn future six tqdm
+           conda install -n ENV_NAME pip requests numpy pandas
            pip install tsa-python
 
 
