@@ -10,6 +10,6 @@
 #include "tsaTest.h"
 
 // Simple test, does not use gmock
-void versionTest() { ASSERT_STREQ(tsa::version(), "0.0.1"); }
+void versionTest() { ASSERT_STREQ(tsa::version(), "0.10.1"); }
 
 TSA_TEST(VersionTest, VersionTest, versionTest);

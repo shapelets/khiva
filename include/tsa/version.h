@@ -7,10 +7,10 @@
 #pragma once
 
 #define VERSION_MAJOR "0";
-#define VERSION_MINOR "0";
+#define VERSION_MINOR "10";
 #define VERSION_PATCH "1";
-#define VERSION_SHA1 ".0-199-g1fd4e47-dirty";
-#define VERSION "0.0.1";
+#define VERSION_SHA1 ".0-23-g7b1207c";
+#define VERSION "0.10.1";
 
 #define BUILD_TYPE "Release";
 
