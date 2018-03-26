@@ -338,7 +338,7 @@ af::array hasDuplicateMax(af::array tss);
 af::array hasDuplicateMin(af::array tss);
 
 /**
- * @brief Calculate the relative index i where q% of the mass of the time series within tss lie left of i.
+ * @brief Calculates the relative index i where q% of the mass of the time series within tss lie at the left of i.
  * For example for q = 50% this feature calculator will return the mass center of the time series.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
