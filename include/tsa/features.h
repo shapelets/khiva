@@ -42,6 +42,8 @@ af::array absoluteSumOfChanges(af::array tss);
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of time series.
  *
+ *  @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
+ *
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correaltion for each time series.
  */
@@ -53,8 +55,10 @@ af::array aggregatedAutocorrelation(af::array ts,
  * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
  * lags (1 to length of x).
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of time series.
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ *
+ * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
  *
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correaltion for each time series.
@@ -68,6 +72,8 @@ af::array aggregatedAutocorrelation(af::array ts, af::array (*aggregationFunctio
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of time series.
+ *
+ *  @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
  *
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correaltion for each time series.
