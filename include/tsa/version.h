@@ -9,7 +9,7 @@
 #define VERSION_MAJOR "0";
 #define VERSION_MINOR "0";
 #define VERSION_PATCH "1";
-#define VERSION_SHA1 ".0-201-gfeaa63c-dirty";
+#define VERSION_SHA1 ".0-222-g5b9069b-dirty";
 #define VERSION "0.0.1";
 
 #define BUILD_TYPE "Release";
