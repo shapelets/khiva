@@ -681,6 +681,19 @@ void maximum() {
     ASSERT_EQ(maximum[1], 30);
 }
 
+void meanAbsoluteChange() {
+    float data[] = {0, 1, 2, 3, 4, 5, 8, 10, 12, 14, 16, 18};
+    af::array tss(6, 2, data);
+
+    af::array result = tsa::features::meanAbsoluteChange(tss);
+
+    // check distances
+    float r = 5.0 / 6.0;
+    float *hostResult = result.host<float>();
+    ASSERT_NEAR(r, hostResult[0], EPSILON);
+    ASSERT_NEAR(r * 2.0, hostResult[1], EPSILON);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -723,3 +736,4 @@ TSA_TEST(FeaturesTests, LinearTrend, linearTrend);
 TSA_TEST(FeaturesTests, LongestStrikeAboveMean, longestStrikeAboveMean);
 TSA_TEST(FeaturesTests, LongestStrikeBelowMean, longestStrikeBelowMean);
 TSA_TEST(FeaturesTests, Maximum, maximum);
+TSA_TEST(FeaturesTests, MeanAbsoluteChange, meanAbsoluteChange);
