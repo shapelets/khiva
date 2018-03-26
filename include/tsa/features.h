@@ -413,19 +413,19 @@ void linearTrend(af::array tss, af::array &pvalue, af::array &rvalue, af::array 
                  af::array &stderr);
 
 /**
- * @brief Calculates the length of the longest consecutive subsequence in tss that is bigger than the mean of tss
+ * @brief Calculates the length of the longest consecutive subsequence in tss that is bigger than the mean of tss.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
+ * series (all the same) and dimension one indicates the number of time series.
  * @return af::array the length of the longest consecutive subsequence in the input time series that is bigger than the
  * mean
  */
 af::array longestStrikeAboveMean(af::array tss);
 
 /**
- * @brief Calculates the length of the longest consecutive subsequence in tss that is below the mean of tss
- * @param tss Expects an input array whose dimension zero is the length of the time seriesv(all the same) and
+ * @brief Calculates the length of the longest consecutive subsequence in tss that is below the mean of tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
  * @ return af::array The length of the longest consecutive subsequence in the input time series that is below the mean.
  */
@@ -434,8 +434,8 @@ af::array longestStrikeBelowMean(af::array tss);
 /**
  * @brief Calculates the maxium value in tss.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of time series.
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
  * @return af::array The maximum value of each time serie within tss.
  */
 af::array maximum(af::array tss);
