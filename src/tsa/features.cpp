@@ -392,6 +392,17 @@ af::array tsa::features::longestStrikeAboveMean(af::array tss) {
     return af::max(scanned, 0);
 }
 
+af::array tsa::features::longestStrikeBelowMean(af::array tss) {
+    af::array mean = af::mean(tss, 0);
+    af::array belowMean = (tss < af::tile(mean, tss.dims(0))).as(tss.type());
+
+    af::array result = af::scanByKey(belowMean.as(af::dtype::s32), belowMean);
+
+    return af::max(result, 0);
+}
+
+af::array tsa::features::maximum(af::array tss) { return af::max(tss, 0); }
+
 af::array tsa::features::meanAbsoluteChange(af::array tss) {
     return (tsa::features::absoluteSumOfChanges(tss) / tss.dims(0)).as(tss.type());
 }
