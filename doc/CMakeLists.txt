@@ -19,7 +19,7 @@ SET(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/doxygen/Doxyfile)
  
 CONFIGURE_FILE(${doxyfile_in} ${doxyfile} @ONLY)
  
-ADD_CUSTOM_TARGET(TSA_doc_doxygen ALL
+ADD_CUSTOM_TARGET(TSA_doc_doxygen
     ${DOXYGEN_EXECUTABLE}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen 
     COMMENT "Generating API documentation with Doxygen"
@@ -50,7 +50,7 @@ CONFIGURE_FILE(
     "${BINARY_BUILD_DIR}/conf.py"
     @ONLY)
  
-ADD_CUSTOM_TARGET(TSA_doc_sphinx ALL
+ADD_CUSTOM_TARGET(TSA_doc_sphinx
     ${SPHINX_EXECUTABLE}
         -q -b html
         -c "${BINARY_BUILD_DIR}"
