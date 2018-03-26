@@ -422,5 +422,16 @@ void linearTrend(af::array tss, af::array &pvalue, af::array &rvalue, af::array 
  * mean
  */
 af::array longestStrikeAboveMean(af::array tss);
+
+/**
+ * @brief Calculates the length of the longest consecutive subsequence in tss that is below the mean of tss
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of time series.
+ * @return af::array the length of the longest consecutive subsequence in the input time series that is below the
+ * mean
+ */
+af::array longestStrikeBelowMean(af::array tss);
+
 };  // namespace features
 };  // namespace tsa
