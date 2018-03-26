@@ -489,3 +489,11 @@ af::array tsa::features::maximum(af::array tss) { return af::max(tss, 0); }
 af::array tsa::features::meanAbsoluteChange(af::array tss) {
     return (tsa::features::absoluteSumOfChanges(tss) / tss.dims(0)).as(tss.type());
 }
+
+af::array tsa::features::meanSecondDerivativeCentral(af::array tss) {
+    long n = tss.dims(0);
+    // Calculating tss(t + 1) - tss(t) from 0 to the length of the time series minus 1
+    af::array minus = tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span);
+    // Returning the sum of absolute values of the previous operation
+    return af::sum(af::abs(minus), 0);
+}
