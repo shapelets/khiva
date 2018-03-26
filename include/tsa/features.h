@@ -432,12 +432,11 @@ af::array longestStrikeAboveMean(af::array tss);
 af::array longestStrikeBelowMean(af::array tss);
 
 /**
- * @brief Calculates the maxium value in tss
+ * @brief Calculates the maxium value in tss.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @return af::array the maximum value of each time serie within tss
+ * series (all the same) and dimension one indicates the number of time series.
+ * @return af::array The maximum value of each time serie within tss.
  */
 af::array maximum(af::array tss);
 };  // namespace features
