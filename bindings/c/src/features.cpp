@@ -97,6 +97,36 @@ void energy_ratio_by_chunks(double *tss, long *tss_length, long *tss_number_of_t
     primitive_result.host(result);
 }
 
+void first_location_of_maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::firstLocationOfMaximum(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void first_location_of_minimum(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::firstLocationOfMinimum(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void has_duplicates(double *tss, long *tss_length, long *tss_number_of_tss, bool *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::hasDuplicates(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void has_duplicate_max(double *tss, long *tss_length, long *tss_number_of_tss, bool *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::hasDuplicateMax(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void index_max_quantile(double *tss, long *tss_length, long *tss_number_of_tss, double *q, double *result) {
+    af::array primitive_result;
+    float q_f = (float)*q;
+    primitive_result = tsa::features::indexMaxQuantile(af::array(*tss_length, *tss_number_of_tss, tss), q_f);
+    primitive_result.host(result);
+}
 #ifdef __cplusplus
 }
 #endif

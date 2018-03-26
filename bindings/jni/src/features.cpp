@@ -225,6 +225,84 @@ JNIEXPORT void JNICALL Java_tsa_Features_energyRatioByChunks(JNIEnv *env, jobjec
     env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
     return;
 }
+
+JNIEXPORT void JNICALL Java_tsa_Features_firstLocationOfMaximum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                jlong tssLength, jlong tssNumberOfTss,
+                                                                jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::firstLocationOfMaximum(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_firstLocationOfMinimum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                jlong tssLength, jlong tssNumberOfTss,
+                                                                jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::firstLocationOfMinimum(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_hasDuplicates(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                       jlong tssNumberOfTss, jbooleanArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::hasDuplicates(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jboolean output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetBooleanArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_hasDuplicateMax(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                         jlong tssLength, jlong tssNumberOfTss, jbooleanArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::hasDuplicateMax(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jboolean output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetBooleanArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_indexMaxQuantile(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                          jlong tssLength, jlong tssNumberOfTss, jfloat q,
+                                                          jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::indexMaxQuantile(af::array(tssLength, tssNumberOfTss, input_tss), q);
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
 #ifdef __cplusplus
 }
 #endif
