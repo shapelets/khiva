@@ -82,7 +82,7 @@ af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFuncti
 
 /**
  * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
- * over chunks versus the sequence from 0 up to the number of chunks minus one
+ * over chunks versus the sequence from 0 up to the number of chunks minus one.
  *
  * @param t The time series to calculate the features of
  * @param chunkSize The chunkSize used to aggregate the data
