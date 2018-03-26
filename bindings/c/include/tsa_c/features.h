@@ -169,6 +169,62 @@ void count_below_mean(double *tss, long *tss_length, long *tss_number_of_tss, un
  */
 void energy_ratio_by_chunks(double *tss, long *tss_length, long *tss_number_of_tss, long *num_segments,
                             long *segment_focus, double *result);
+
+/**
+ * @brief Calculates the first relative location of the maximal value for each time series.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result The first relative location of the maximum value to the length of the time series,
+ *  for each time series.
+ */
+void first_location_of_maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
+
+/**
+ * @brief Calculates the first location of the minimal value of each time series. The position
+ * is calculated relatively to the length of the series.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result The first relative location of the minimal value of each series.
+ */
+void first_location_of_minimum(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
+
+/**
+ * @brief Calculates if the input time series contain duplicated elements.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result Array containing True if the time series contains duplicated elements
+ * and false otherwise.
+ */
+void has_duplicates(double *tss, long *tss_length, long *tss_number_of_tss, bool *result);
+
+/**
+ * @brief Calculates if the maximum within input time series is duplicated.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result Array containing True if the maximum value of the time series is duplicated
+ * and false otherwise.
+ */
+void has_duplicate_max(double *tss, long *tss_length, long *tss_number_of_tss, bool *result);
+
+/**
+ * @brief Calculates the index of the max quantile.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param q The quantile.
+ * @param result The index of the max quantile q.
+ */
+void index_max_quantile(double *tss, long *tss_length, long *tss_number_of_tss, double *q, double *result);
+
 #ifdef __cplusplus
 }
 #endif

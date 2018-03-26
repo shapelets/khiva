@@ -347,13 +347,13 @@ void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &r
 }
 
 af::array tsa::features::firstLocationOfMaximum(af::array tss) {
-    int len = tss.dims(0);
+    float len = tss.dims(0);
     af::array index;
     af::array maximum;
 
     af::max(maximum, index, tss, 0);
 
-    return index.as(f32) / len;
+    return index.as(tss.type()) / len;
 }
 
 af::array tsa::features::firstLocationOfMinimum(af::array tss) {
@@ -403,12 +403,13 @@ af::array tsa::features::hasDuplicateMin(af::array tss) {
 }
 
 af::array tsa::features::indexMaxQuantile(af::array tss, float q) {
-    int len = tss.dims(0);
+    float len = tss.dims(0);
 
     af::array positives = af::abs(tss);
     af::array sums = af::sum(positives, 0);
     af::array acum = af::accum(positives, 0);
-    af::array res = ((firstLocationOfMaximum((acum / af::tile(sums, len)) >= q) * len) + 1) / len;
+    af::array geQ = tsa::features::firstLocationOfMaximum((acum / af::tile(sums, len)) >= q).as(tss.type());
+    af::array res = ((geQ * len) + 1) / len;
 
     return res;
 }
