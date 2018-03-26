@@ -668,6 +668,19 @@ void longestStrikeBelowMean() {
     ASSERT_EQ(longestCalculated[1], 9);
 }
 
+void maximum() {
+    float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
+                    20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::maximum(tss);
+
+    float *maximum = result.host<float>();
+
+    ASSERT_EQ(maximum[0], 50);
+    ASSERT_EQ(maximum[1], 30);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -709,3 +722,4 @@ TSA_TEST(FeaturesTests, Length, length);
 TSA_TEST(FeaturesTests, LinearTrend, linearTrend);
 TSA_TEST(FeaturesTests, LongestStrikeAboveMean, longestStrikeAboveMean);
 TSA_TEST(FeaturesTests, LongestStrikeBelowMean, longestStrikeBelowMean);
+TSA_TEST(FeaturesTests, Maximum, maximum);

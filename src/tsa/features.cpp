@@ -400,3 +400,5 @@ af::array tsa::features::longestStrikeBelowMean(af::array tss) {
 
     return af::max(result, 0);
 }
+
+af::array tsa::features::maximum(af::array tss) { return af::max(tss, 0); }
