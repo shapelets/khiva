@@ -636,7 +636,7 @@ void MeanSecondDerivativeCentral(benchmark::State &state) {
     af::sync();
     while (state.KeepRunning()) {
         auto meanSDC = tsa::features::meanSecondDerivativeCentral(t);
-        longest.eval();
+        meanSDC.eval();
         af::sync();
     }
     addMemoryCounters(state);
