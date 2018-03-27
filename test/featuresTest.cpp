@@ -721,6 +721,19 @@ void minimum() {
     ASSERT_EQ(minimum[1], 2);
 }
 
+void numberCrossingM() {
+    float data[] = {1, 2, 1, 1, -3, -4, 7, 8, 9, 10, -2, 1, -3, 5, 6, 7, -10,
+                    1, 2, 1, 1, -3, -4, 7, 8, 9, 10, -2, 1, -3, 5, 6, 7, -10};
+    af::array tss(17, 2, data);
+
+    af::array result = tsa::features::numberCrossingM(tss, 0);
+
+    float *ncm = result.host<float>();
+
+    ASSERT_EQ(ncm[0], 7);
+    ASSERT_EQ(ncm[1], 7);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -766,3 +779,4 @@ TSA_TEST(FeaturesTests, Maximum, maximum);
 TSA_TEST(FeaturesTests, MeanAbsoluteChange, meanAbsoluteChange);
 TSA_TEST(FeaturesTests, MeanSecondDerivativeCentral, meanSecondDerivativeCentral);
 TSA_TEST(FeaturesTests, Minimum, minimum);
+TSA_TEST(FeatureTests, NumberCrossingM, numberCrossingM);
