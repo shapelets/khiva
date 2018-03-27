@@ -225,6 +225,76 @@ void has_duplicate_max(double *tss, long *tss_length, long *tss_number_of_tss, b
  */
 void index_max_quantile(double *tss, long *tss_length, long *tss_number_of_tss, double *q, double *result);
 
+/**
+ * @brief Returns the kurtosis of tss (calculated with the adjusted Fisher-Pearson
+ * standardized moment coefficient G2).
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result The kurtosis of each tss.
+ */
+void kurtosis(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
+
+/**
+ * @brief Checks if the time series within tss have a large standard deviation.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param r The threshold.
+ * @param result  Array containing True for those time series in tss that have a large standard deviation.
+ */
+void large_standard_deviation(double *tss, long *tss_length, long *tss_number_of_tss, double *r, bool *result);
+
+/**
+ * @brief Calculates the last location of the maximum value of each time series. The position
+ * is calculated relatively to the length of the series.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result The last relative location of the maximum value of each series.
+ */
+void last_location_of_maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
+
+/**
+ * @brief Calculates the last location of the minimum value of each time series. The position
+ * is calculated relatively to the length of the series.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result The last relative location of the minimum value of each series.
+ */
+void last_location_of_minimum(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
+
+/**
+ * @brief Returns the length of the input time series.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result The length of tss.
+ */
+void length(double *tss, long *tss_length, long *tss_number_of_tss, int *result);
+
+/**
+ * @brief Calculate a linear least-squares regression for the values of the time series versus the sequence from 0 to
+ * length of the time series minus one.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param pvalue The pvalues for all time series.
+ * @param rvalue The rvalues for all time series.
+ * @param intercept The intercept values for all time series.
+ * @param slope The slope for all time series.
+ * @param stdrr The stderr values for all time series.
+ */
+void linear_trend(double *tss, long *tss_length, long *tss_number_of_tss, double *pvalue, double *rvalue,
+                  double *intercept, double *slope, double *stdrr);
+
 #ifdef __cplusplus
 }
 #endif

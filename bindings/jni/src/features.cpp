@@ -303,6 +303,122 @@ JNIEXPORT void JNICALL Java_tsa_Features_indexMaxQuantile(JNIEnv *env, jobject t
     env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
     return;
 }
+
+JNIEXPORT void JNICALL Java_tsa_Features_kurtosis(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                  jlong tssNumberOfTss, jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::kurtosis(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_largeStandardDeviation(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                jlong tssLength, jlong tssNumberOfTss, jfloat r,
+                                                                jbooleanArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::largeStandardDeviation(af::array(tssLength, tssNumberOfTss, input_tss), r);
+
+    jboolean output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetBooleanArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_lastLocationOfMaximum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                               jlong tssLength, jlong tssNumberOfTss,
+                                                               jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::lastLocationOfMaximum(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_lastLocationOfMinimum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                               jlong tssLength, jlong tssNumberOfTss,
+                                                               jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::lastLocationOfMinimum(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_length(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                jlong tssNumberOfTss, jintArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::length(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jint output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetIntArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_linearTrend(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                     jlong tssNumberOfTss, jdoubleArray pvalue, jdoubleArray rvalue,
+                                                     jdoubleArray intercept, jdoubleArray slope, jdoubleArray stderr) {
+    af::array primitive_pvalue;
+    af::array primitive_rvalue;
+    af::array primitive_intercept;
+    af::array primitive_slope;
+    af::array primitive_stderr;
+
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    tsa::features::linearTrend(af::array(tssLength, tssNumberOfTss, input_tss), primitive_pvalue, primitive_rvalue,
+                               primitive_intercept, primitive_slope, primitive_stderr);
+
+    jdouble output_pvalue[tssNumberOfTss];
+    jdouble output_rvalue[tssNumberOfTss];
+    jdouble output_intercept[tssNumberOfTss];
+    jdouble output_slope[tssNumberOfTss];
+    jdouble output_stderr[tssNumberOfTss];
+
+    primitive_pvalue.host(output_pvalue);
+    primitive_rvalue.host(output_rvalue);
+    primitive_intercept.host(output_intercept);
+    primitive_slope.host(output_slope);
+    primitive_stderr.host(output_stderr);
+
+    env->SetDoubleArrayRegion(pvalue, 0, tssNumberOfTss, &output_pvalue[0]);
+    env->SetDoubleArrayRegion(rvalue, 0, tssNumberOfTss, &output_rvalue[0]);
+    env->SetDoubleArrayRegion(intercept, 0, tssNumberOfTss, &output_intercept[0]);
+    env->SetDoubleArrayRegion(slope, 0, tssNumberOfTss, &output_slope[0]);
+    env->SetDoubleArrayRegion(stderr, 0, tssNumberOfTss, &output_stderr[0]);
+
+    return;
+}
+
 #ifdef __cplusplus
 }
 #endif

@@ -249,6 +249,85 @@ JNIEXPORT void JNICALL Java_tsa_Features_hasDuplicateMax(JNIEnv *env, jobject th
 JNIEXPORT void JNICALL Java_tsa_Features_indexMaxQuantile(JNIEnv *env, jobject thisObj, jdoubleArray tss,
                                                           jlong tssLength, jlong tssNumberOfTss, jfloat q,
                                                           jdoubleArray result);
+
+/**
+ * @brief Returns the kurtosis of tss (calculated with the adjusted Fisher-Pearson
+ * standardized moment coefficient G2).
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The kurtosis of each tss.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_kurtosis(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                  jlong tssNumberOfTss, jdoubleArray result);
+
+/**
+ * @brief Checks if the time series within tss have a large standard deviation.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param r The threshold.
+ * @param result  Array containing True for those time series in tss that have a large standard deviation.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_largeStandardDeviation(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                jlong tssLength, jlong tssNumberOfTss, jfloat r,
+                                                                jbooleanArray result);
+
+/**
+ * @brief Calculates the last location of the maximum value of each time series. The position
+ * is calculated relatively to the length of the series.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The last relative location of the maximum value of each series.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_lastLocationOfMaximum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                               jlong tssLength, jlong tssNumberOfTss,
+                                                               jdoubleArray result);
+
+/**
+ * @brief Calculates the last location of the minimum value of each time series. The position
+ * is calculated relatively to the length of the series.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The last relative location of the minimum value of each series.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_lastLocationOfMinimum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                               jlong tssLength, jlong tssNumberOfTss,
+                                                               jdoubleArray result);
+
+/**
+ * @brief Returns the length of the input time series.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The length of tss.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_length(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                jlong tssNumberOfTss, jintArray result);
+
+/**
+ * @brief Calculate a linear least-squares regression for the values of the time series versus the sequence from 0 to
+ * length of the time series minus one.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param pvalue The pvalues for all time series.
+ * @param rvalue The rvalues for all time series.
+ * @param intercept The intercept values for all time series.
+ * @param slope The slope for all time series.
+ * @param stdrr The stderr values for all time series.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_linearTrend(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                     jlong tssNumberOfTss, jdoubleArray pvalue, jdoubleArray rvalue,
+                                                     jdoubleArray intercept, jdoubleArray slope, jdoubleArray stderr);
 #ifdef __cplusplus
 }
 #endif
