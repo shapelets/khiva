@@ -41,7 +41,9 @@ af::array absoluteSumOfChanges(af::array tss);
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of time series.
- * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags
+ *
+ * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
+ *
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correaltion for each time series.
  */
@@ -53,8 +55,9 @@ af::array aggregatedAutocorrelation(af::array tss,
  * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
  * lags (1 to length of x).
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of time series.
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ *
  * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
  *
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
@@ -69,7 +72,9 @@ af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFuncti
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of time series.
+ *
  * @param aggregationFunction The function to summarise all autocorrelation with deffierent lags.
+ *
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correaltion for each time series.
  */
@@ -274,7 +279,7 @@ af::array energyRatioByChunks(af::array tss, long numSegments, long segmentFocus
  * @param abs The absolute value of the coefficient
  * @param angle The angle of the coefficient
  */
-void fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &abs,
+void fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &_abs,
                     af::array &angle);
 
 /**
@@ -333,14 +338,15 @@ af::array hasDuplicateMax(af::array tss);
 af::array hasDuplicateMin(af::array tss);
 
 /**
- * @brief Returns the kurtosis of tss (calculated with the adjusted Fisher-Pearson
- * standardized moment coefficient G2).
+ * @brief Calculates the relative index i where q% of the mass of the time series within tss lie at the left of i.
+ * For example for q = 50% this feature calculator will return the mass center of the time series.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @param q The quantile
- * @return af::array The index mass of quantile q, for each timeseries in tss
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ *
+ * @param q The quantile limit
+ *
+ * @return af::array The relative indices i where q% of the mass of the time series lie at the left of i.
  */
 af::array indexMaxQuantile(af::array tss, float q);
 
@@ -356,12 +362,14 @@ af::array indexMaxQuantile(af::array tss, float q);
 af::array kurtosis(af::array tss);
 
 /**
- * @brief Checks if the timeseries within tss have a large standard deviation.
+ * @brief Checks if the time series within tss have a large standard deviation.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of time series.
- * @param r Threshold value.
- * @return af::array Array containing True for those timeseries in tss that have a large standard deviation.
+ *
+ * @param r The threshold value.
+ *
+ * @return af::array Array containing True for those time series in tss that have a large standard deviation.
  */
 af::array largeStandardDeviation(af::array tss, float r);
 
