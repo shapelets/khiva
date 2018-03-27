@@ -624,7 +624,7 @@ void MeanAbsoluteChange(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
-void Minimum(benchmark::State &state) {
+void MeanSecondDerivativeCentral(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
 
@@ -635,8 +635,25 @@ void Minimum(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto longest = tsa::features::minimum(t);
-        longest.eval();
+        auto meanSDC = tsa::features::meanSecondDerivativeCentral(t);
+        meanSDC.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+void Minimum(benchmark::State &state) {
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto minimum = tsa::features::minimum(t);
+        minimum.eval();
         af::sync();
     }
     addMemoryCounters(state);
@@ -796,6 +813,11 @@ void cudaBenchmarks() {
     BENCHMARK_TEMPLATE(MeanAbsoluteChange, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(MeanSecondDerivativeCentral, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(Minimum, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
@@ -960,6 +982,11 @@ void openclBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(MeanSecondDerivativeCentral, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(Minimum, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
@@ -1120,6 +1147,11 @@ void cpuBenchmarks() {
     BENCHMARK_TEMPLATE(MeanAbsoluteChange, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(MeanSecondDerivativeCentral, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(Minimum, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)

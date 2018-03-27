@@ -127,6 +127,49 @@ void index_max_quantile(double *tss, long *tss_length, long *tss_number_of_tss, 
     primitive_result = tsa::features::indexMaxQuantile(af::array(*tss_length, *tss_number_of_tss, tss), q_f);
     primitive_result.host(result);
 }
+
+void kurtosis(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::kurtosis(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void large_standard_deviation(double *tss, long *tss_length, long *tss_number_of_tss, double *r, bool *result) {
+    af::array primitive_result;
+    float r_f = (float)*r;
+    primitive_result = tsa::features::largeStandardDeviation(af::array(*tss_length, *tss_number_of_tss, tss), r_f);
+    primitive_result.host(result);
+}
+
+void last_location_of_maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::lastLocationOfMaximum(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void last_location_of_minimum(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::lastLocationOfMinimum(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void length(double *tss, long *tss_length, long *tss_number_of_tss, int *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::length(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void linear_trend(double *tss, long *tss_length, long *tss_number_of_tss, double *pvalue, double *rvalue,
+                  double *intercept, double *slope, double *stdrr) {
+    af::array primitive_pvalue, primitive_rvalue, primitive_intercept, primitive_slope, primitive_stdrr;
+    tsa::features::linearTrend(af::array(*tss_length, *tss_number_of_tss, tss), primitive_pvalue, primitive_rvalue,
+                               primitive_intercept, primitive_slope, primitive_stdrr);
+    primitive_pvalue.host(pvalue);
+    primitive_rvalue.host(rvalue);
+    primitive_intercept.host(intercept);
+    primitive_slope.host(slope);
+    primitive_stdrr.host(stdrr);
+}
 #ifdef __cplusplus
 }
 #endif
