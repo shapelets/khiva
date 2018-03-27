@@ -715,10 +715,10 @@ void minimum() {
 
     af::array result = tsa::features::minimum(tss);
 
-    float *maximum = result.host<float>();
+    float *minimum = result.host<float>();
 
-    ASSERT_EQ(maximum[0], 1);
-    ASSERT_EQ(maximum[1], 2);
+    ASSERT_EQ(minimum[0], 1);
+    ASSERT_EQ(minimum[1], 2);
 }
 
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);

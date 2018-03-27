@@ -642,7 +642,9 @@ void MeanSecondDerivativeCentral(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
+template <af::Backend BE, int D>
 void Minimum(benchmark::State &state) {
+    af::setBackend(BE);
     af::setDevice(D);
 
     auto n = state.range(0);
