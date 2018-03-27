@@ -450,7 +450,7 @@ af::array maximum(af::array tss);
  */
 af::array meanAbsoluteChange(af::array tss);
 
-/*
+/**
  * @brief Calculates mean value of a central approximation of the second derivative for each time series in tss.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
@@ -458,6 +458,7 @@ af::array meanAbsoluteChange(af::array tss);
  *
  * @return af::array The mean value of a central approximation of the second derivative for each time series.
  */
+af::array meanSecondDerivativeCentral(af::array tss);
 
 /**
  * @brief Calculates the minimum value for each time series within tss.
@@ -468,6 +469,5 @@ af::array meanAbsoluteChange(af::array tss);
  */
 af::array minimum(af::array tss);
 
-af::array meanSecondDerivativeCentral(af::array tss);
 };  // namespace features
 };  // namespace tsa
