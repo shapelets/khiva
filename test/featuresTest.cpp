@@ -695,16 +695,17 @@ void meanAbsoluteChange() {
 }
 
 void meanSecondDerivativeCentral() {
-    float data[] = {1, 2, 3, 4, 5, 8, 10, 12, 14, 16};
+    float data[] = {1, 3, 7, 4, 8, 2, 5, 1, 7, 4};
     af::array tss(5, 2, data);
 
     af::array result = tsa::features::meanSecondDerivativeCentral(tss);
 
     // check distances
-    float r = 54.0 / 5.0;
+    float r0 = 1.0 / 5.0;
+    float r1 = -3.0 / 5.0;
     float *hostResult = result.host<float>();
-    ASSERT_NEAR(2.7000000476837158, hostResult[0], EPSILON);
-    ASSERT_NEAR(r, hostResult[1], EPSILON);
+    ASSERT_NEAR(r0, hostResult[0], EPSILON);
+    ASSERT_NEAR(r1, hostResult[1], EPSILON);
 }
 
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);

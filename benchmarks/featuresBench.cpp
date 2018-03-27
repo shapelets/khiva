@@ -800,7 +800,7 @@ void cudaBenchmarks() {
 
     BENCHMARK_TEMPLATE(MeanSecondDerivativeCentral, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
@@ -962,7 +962,7 @@ void openclBenchmarks() {
 
     BENCHMARK_TEMPLATE(MeanSecondDerivativeCentral, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
@@ -1124,7 +1124,7 @@ void cpuBenchmarks() {
 
     BENCHMARK_TEMPLATE(MeanSecondDerivativeCentral, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 

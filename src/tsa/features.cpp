@@ -493,7 +493,6 @@ af::array tsa::features::meanAbsoluteChange(af::array tss) {
 
 af::array tsa::features::meanSecondDerivativeCentral(af::array tss) {
     int n = tss.dims(0);
-
     // Calculating tss(t + 2) - 2 * tss(t + 1) + tss(t) from 0 to the length of the time series minus - 2
     af::array total = tss(af::seq(0, n - 3), span);
     total -= 2 * tss(af::seq(1, n - 2), span);
