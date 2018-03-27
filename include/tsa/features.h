@@ -344,6 +344,8 @@ af::array hasDuplicateMin(af::array tss);
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
  * and dimension one indicates the number of time series.
  *
+ * @param q The quantile limit
+ *
  * @return af::array The relative indices i where q% of the mass of the time series lie at the left of i.
  */
 af::array indexMaxQuantile(af::array tss, float q);
