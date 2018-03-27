@@ -478,7 +478,7 @@ af::array meanSecondDerivativeCentral(af::array tss);
 af::array minimum(af::array tss);
 
 /**
- * @brief Calculates the number of crossings of x on m. A crossing is defined as two sequential values where the first
+ * @brief Calculates the number of m-crossings. A m-crossing is defined as two sequential values where the first
  * value is lower than m and the next is greater, or viceversa. If you set m to zero, you will get the number of zero
  * crossings.
  *
