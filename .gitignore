@@ -1,7 +1,6 @@
 bin
 build
 .DS_Store
-include/version.h
 conanbuildinfo.cmake
 conanbuildinfo.txt
 conaninfo.txt
@@ -10,3 +9,5 @@ conaninfo.txt
 *Makefile
 CMakeCache.txt
 doc/sphinx/source/apiTSA/*
+include/tsa/version.h
+test/versionTest.cpp
