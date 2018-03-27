@@ -499,3 +499,5 @@ af::array tsa::features::meanSecondDerivativeCentral(af::array tss) {
     total += tss(af::seq(2, n - 1), span);
     return af::sum(total, 0) / (2 * n);
 }
+
+af::array tsa::features::minimum(af::array tss) { return af::min(tss, 0); }

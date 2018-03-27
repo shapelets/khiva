@@ -708,6 +708,19 @@ void meanSecondDerivativeCentral() {
     ASSERT_NEAR(r1, hostResult[1], EPSILON);
 }
 
+void minimum() {
+    float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 13, 15, 5, 16, 20, 20,
+                    20, 20, 20, 2,  19, 4,  20, 20, 20, 4,  15, 6,  30, 7,  9,  18, 4, 10, 20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::minimum(tss);
+
+    float *minimum = result.host<float>();
+
+    ASSERT_EQ(minimum[0], 1);
+    ASSERT_EQ(minimum[1], 2);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -752,3 +765,4 @@ TSA_TEST(FeaturesTests, LongestStrikeBelowMean, longestStrikeBelowMean);
 TSA_TEST(FeaturesTests, Maximum, maximum);
 TSA_TEST(FeaturesTests, MeanAbsoluteChange, meanAbsoluteChange);
 TSA_TEST(FeaturesTests, MeanSecondDerivativeCentral, meanSecondDerivativeCentral);
+TSA_TEST(FeaturesTests, Minimum, minimum);
