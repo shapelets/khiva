@@ -449,5 +449,15 @@ af::array maximum(af::array tss);
  * @return af::array The mean over the absolute differences between subsequent time series values.
  */
 af::array meanAbsoluteChange(af::array tss);
+
+/**
+ * @brief Calculates mean value of a central approximation of the second derivative for each time series in tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ *
+ * @return af::array The mean value of a central approximation of the second derivative for each time series.
+ */
+af::array meanSecondDerivativeCentral(af::array tss);
 };  // namespace features
 };  // namespace tsa

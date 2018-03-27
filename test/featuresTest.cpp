@@ -694,6 +694,20 @@ void meanAbsoluteChange() {
     ASSERT_NEAR(r * 2.0, hostResult[1], EPSILON);
 }
 
+void meanSecondDerivativeCentral() {
+    float data[] = {1, 3, 7, 4, 8, 2, 5, 1, 7, 4};
+    af::array tss(5, 2, data);
+
+    af::array result = tsa::features::meanSecondDerivativeCentral(tss);
+
+    // check distances
+    float r0 = 1.0 / 5.0;
+    float r1 = -3.0 / 5.0;
+    float *hostResult = result.host<float>();
+    ASSERT_NEAR(r0, hostResult[0], EPSILON);
+    ASSERT_NEAR(r1, hostResult[1], EPSILON);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -737,3 +751,4 @@ TSA_TEST(FeaturesTests, LongestStrikeAboveMean, longestStrikeAboveMean);
 TSA_TEST(FeaturesTests, LongestStrikeBelowMean, longestStrikeBelowMean);
 TSA_TEST(FeaturesTests, Maximum, maximum);
 TSA_TEST(FeaturesTests, MeanAbsoluteChange, meanAbsoluteChange);
+TSA_TEST(FeaturesTests, MeanSecondDerivativeCentral, meanSecondDerivativeCentral);
