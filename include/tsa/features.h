@@ -477,5 +477,19 @@ af::array meanSecondDerivativeCentral(af::array tss);
  */
 af::array minimum(af::array tss);
 
+/**
+ * @brief Calculates the number of m-crossings. A m-crossing is defined as two sequential values where the first
+ * value is lower than m and the next is greater, or viceversa. If you set m to zero, you will get the number of zero
+ * crossings.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
+ *
+ * @param m The m value.
+ *
+ * @return af::array The number of m-crossings of each time series within tss.
+ */
+af::array numberCrossingM(af::array tss, int m);
+
 };  // namespace features
 };  // namespace tsa
