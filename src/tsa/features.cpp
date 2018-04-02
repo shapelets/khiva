@@ -338,10 +338,9 @@ af::array cwt(af::array data, af::array widths) {
     int nw = widths.dims(0);
     int len_data = data.dims(0);
     int cols = data.dims(1);
-
     af::array filter;
-    af::array output = af::constant(0, widths.dims(0), data.dims(0), data.dims(1));
-    // Make it parallel
+    af::array output = af::constant(0, widths.dims(0), data.dims(0), data.dims(1), data.type());
+
     for (int i = 0; i < nw; i++) {
         int w = widths(i).scalar<int>();
         int minimum = std::min(10 * w, len_data);

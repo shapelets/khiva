@@ -261,7 +261,7 @@ af::array countBelowMean(af::array tss);
  *
  *  where :math:`a` is the width parameter of the wavelet function.
  *
- *  This feature calculator takes three different parameter: widths, coeff and w. The feature calculator takes all
+ * This feature calculator takes three different parameter: widths, coeff and w. The feature calculator takes all
  * the different widths arrays and then calculates the cwt one time for each different width array. Then the values
  * for the different coefficient for coeff and width w are returned. (For each dic in param one feature is
  * returned).
@@ -269,8 +269,8 @@ af::array countBelowMean(af::array tss);
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
  * and dimension one indicates the number of time series.
  * @param widths Array that contains all different widths.
- * @param coeff. Coefficient of interest.
- * @param w. Width of interest.
+ * @param coeff Coefficient of interest.
+ * @param w Width of interest.
  * @return af::array Result of calculated coefficients.
  */
 af::array cwtCoefficients(af::array tss, af::array widths, int coeff, int w);
