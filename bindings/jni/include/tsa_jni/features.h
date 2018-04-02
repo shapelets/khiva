@@ -328,6 +328,81 @@ JNIEXPORT void JNICALL Java_tsa_Features_length(JNIEnv *env, jobject thisObj, jd
 JNIEXPORT void JNICALL Java_tsa_Features_linearTrend(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
                                                      jlong tssNumberOfTss, jdoubleArray pvalue, jdoubleArray rvalue,
                                                      jdoubleArray intercept, jdoubleArray slope, jdoubleArray stderr);
+
+/**
+ * @brief Calculates if the minimum of the input time series is duplicated
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result Array containing True if the minimum of the time series is duplicated
+ * and false otherwise.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_hasDuplicateMin(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                         jlong tssLength, jlong tssNumberOfTss, jbooleanArray result);
+/**
+ * @brief Calculates the length of the longest consecutive subsequence in tss that is bigger than the mean of tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The length of the longest consecutive subsequence in the input time series that is bigger than the
+ * mean.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_longestStrikeAboveMean(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                jlong tssLength, jlong tssNumberOfTss,
+                                                                jdoubleArray result);
+
+/**
+ * @brief Calculates the length of the longest consecutive subsequence in tss that is below the mean of tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The length of the longest consecutive subsequence in the input time series that is below the mean.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_longestStrikeBelowMean(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                jlong tssLength, jlong tssNumberOfTss,
+                                                                jdoubleArray result);
+
+/**
+ * @brief Calculates the maximum value for each time series within tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The maximum value of each time series within tss.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_maximum(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                 jlong tssNumberOfTss, jdoubleArray result);
+
+/**
+ * @brief Calculates the mean over the absolute differences between subsequent time series values in tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param result The maximum value of each time series within tss.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_meanAbsoluteChange(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                            jlong tssLength, jlong tssNumberOfTss, jdoubleArray result);
+
+/**
+ * @brief Calculates the fourier coefficients of the one-dimensional discrete
+ * Fourier Transform for real input by fast fourier transformation algorithm.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssLength Time series length (All time series need to have the same length).
+ * @param tssNumberOfTss Number of time series.
+ * @param coefficient The coefficient to extract from the FFT.
+ * @param real The real part of the coefficient.
+ * @param imag The imaginary part of the cofficient.
+ * @param absolute The absolute value of the coefficient.
+ * @param angle The angle of the coefficient.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_fftCoefficient(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                        jlong tssNumberOfTss, jlong coefficient, jdoubleArray real,
+                                                        jdoubleArray imag, jdoubleArray absolute, jdoubleArray angle);
 #ifdef __cplusplus
 }
 #endif

@@ -295,6 +295,74 @@ void length(double *tss, long *tss_length, long *tss_number_of_tss, int *result)
 void linear_trend(double *tss, long *tss_length, long *tss_number_of_tss, double *pvalue, double *rvalue,
                   double *intercept, double *slope, double *stdrr);
 
+/**
+ * @brief Calculates if the minimum of the input time series is duplicated
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result Array containing True if the minimum of the time series is duplicated
+ * and false otherwise.
+ */
+void has_duplicate_min(double *tss, long *tss_length, long *tss_number_of_tss, bool *result);
+
+/**
+ * @brief Calculates the length of the longest consecutive subsequence in tss that is bigger than the mean of tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result The length of the longest consecutive subsequence in the input time series that is bigger than the
+ * mean.
+ */
+void longest_strike_above_mean(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
+
+/**
+ * @brief Calculates the length of the longest consecutive subsequence in tss that is below the mean of tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result The length of the longest consecutive subsequence in the input time series that is below the mean.
+ */
+void longest_strike_below_mean(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
+
+/**
+ * @brief Calculates the maximum value for each time series within tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result The maximum value of each time series within tss.
+ */
+void maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
+
+/**
+ * @brief Calculates the mean over the absolute differences between subsequent time series values in tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result The maximum value of each time series within tss.
+ */
+void mean_absolute_change(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
+
+/**
+ * @brief Calculates the fourier coefficients of the one-dimensional discrete
+ * Fourier Transform for real input by fast fourier transformation algorithm.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param coefficient The coefficient to extract from the FFT.
+ * @param real The real part of the coefficient.
+ * @param imag The imaginary part of the cofficient.
+ * @param absolute The absolute value of the coefficient.
+ * @param angle The angle of the coefficient.
+ */
+void fftCoefficient(double *tss, long *tss_length, long *tss_number_of_tss, long *coefficient, double *real,
+                    double *imag, double *absolute, double *angle);
+
 #ifdef __cplusplus
 }
 #endif

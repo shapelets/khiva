@@ -419,6 +419,117 @@ JNIEXPORT void JNICALL Java_tsa_Features_linearTrend(JNIEnv *env, jobject thisOb
     return;
 }
 
+JNIEXPORT void JNICALL Java_tsa_Features_hasDuplicateMin(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                         jlong tssLength, jlong tssNumberOfTss, jbooleanArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::hasDuplicateMin(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jboolean output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetBooleanArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_longestStrikeAboveMean(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                jlong tssLength, jlong tssNumberOfTss,
+                                                                jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::longestStrikeAboveMean(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_longestStrikeBelowMean(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                jlong tssLength, jlong tssNumberOfTss,
+                                                                jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::longestStrikeBelowMean(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_maximum(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                 jlong tssNumberOfTss, jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::maximum(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_meanAbsoluteChange(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                            jlong tssLength, jlong tssNumberOfTss,
+                                                            jdoubleArray result) {
+    af::array primitive_result;
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    primitive_result = tsa::features::meanAbsoluteChange(af::array(tssLength, tssNumberOfTss, input_tss));
+
+    jdouble output_result[tssNumberOfTss];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_fftCoefficient(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
+                                                        jlong tssNumberOfTss, jlong coefficient, jdoubleArray real,
+                                                        jdoubleArray imag, jdoubleArray absolute, jdoubleArray angle) {
+    af::array primitive_real;
+    af::array primitive_imag;
+    af::array primitive_absolute;
+    af::array primitive_angle;
+
+    long tssFull_length = tssLength * tssNumberOfTss;
+    jdouble input_tss[tssFull_length];
+    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+
+    tsa::features::fftCoefficient(af::array(tssLength, tssNumberOfTss, input_tss), coefficient, primitive_real,
+                                  primitive_imag, primitive_absolute, primitive_angle);
+
+    jdouble output_real[tssNumberOfTss];
+    jdouble output_imag[tssNumberOfTss];
+    jdouble output_absolute[tssNumberOfTss];
+    jdouble output_angle[tssNumberOfTss];
+
+    primitive_real.host(output_real);
+    primitive_imag.host(output_imag);
+    primitive_absolute.host(output_absolute);
+    primitive_angle.host(output_angle);
+
+    env->SetDoubleArrayRegion(real, 0, tssNumberOfTss, &output_real[0]);
+    env->SetDoubleArrayRegion(imag, 0, tssNumberOfTss, &output_imag[0]);
+    env->SetDoubleArrayRegion(absolute, 0, tssNumberOfTss, &output_absolute[0]);
+    env->SetDoubleArrayRegion(angle, 0, tssNumberOfTss, &output_angle[0]);
+
+    return;
+}
+
 #ifdef __cplusplus
 }
 #endif

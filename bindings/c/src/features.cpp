@@ -170,6 +170,48 @@ void linear_trend(double *tss, long *tss_length, long *tss_number_of_tss, double
     primitive_slope.host(slope);
     primitive_stdrr.host(stdrr);
 }
+
+void has_duplicate_min(double *tss, long *tss_length, long *tss_number_of_tss, bool *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::hasDuplicateMin(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void longest_strike_above_mean(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::longestStrikeAboveMean(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void longest_strike_below_mean(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::longestStrikeBelowMean(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::maximum(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void mean_absolute_change(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::meanAbsoluteChange(af::array(*tss_length, *tss_number_of_tss, tss));
+    primitive_result.host(result);
+}
+
+void fftCoefficient(double *tss, long *tss_length, long *tss_number_of_tss, long *coefficient, double *real,
+                    double *imag, double *absolute, double *angle) {
+    af::array primitive_real, primitive_imag, primitive_abs, primitive_angle;
+    tsa::features::fftCoefficient(af::array(*tss_length, *tss_number_of_tss, tss), *coefficient, primitive_real,
+                                  primitive_imag, primitive_abs, primitive_angle);
+    primitive_real.host(real);
+    primitive_imag.host(imag);
+    primitive_abs.host(absolute);
+    primitive_angle.host(angle);
+}
+
 #ifdef __cplusplus
 }
 #endif
