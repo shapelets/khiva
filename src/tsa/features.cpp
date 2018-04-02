@@ -4,6 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <math.h>
 #include <tsa/features.h>
 #include <tsa/normalization.h>
 #include <tsa/regression.h>
@@ -318,6 +319,57 @@ af::array tsa::features::countBelowMean(af::array tss) {
     af::array belowMean = (tss < af::tile(mean, tss.dims(0))).as(af::dtype::u32);
     // Sum of all elements below the mean
     return af::sum(belowMean, 0);
+}
+
+af::array ricker(int points, int a) {
+    // Calculating number PI
+    float PIf = std::atan(1) * 4;
+    float A = 2 / (std::sqrt(3 * a) * std::pow(PIf, 0.25));
+    float wsq = std::pow(a, 2);
+    af::array vec = af::range(af::dim4(points)) - ((points - 1) / 2.0);
+    af::array xsq = af::pow(vec, 2);
+    af::array mod = (1 - xsq / wsq);
+    af::array gauss = af::exp(-xsq / (2 * wsq));
+    af::array total = A * mod * gauss;
+    return total;
+}
+
+af::array cwt(af::array data, af::array widths) {
+    int nw = widths.dims(0);
+    int len_data = data.dims(0);
+    int cols = data.dims(1);
+    af::array filter;
+    af::array output = af::constant(0, widths.dims(0), data.dims(0), data.dims(1), data.type());
+
+    for (int i = 0; i < nw; i++) {
+        int w = widths(i).scalar<int>();
+        int minimum = std::min(10 * w, len_data);
+        af::array wavelet_data = ricker(minimum, w);
+        output(i, span, span) = af::moddims(af::convolve(af::reorder(data, 0, 2, 1), wavelet_data), 1, len_data, cols);
+    }
+    return output;
+}
+
+af::array tsa::features::cwtCoefficients(af::array tss, af::array widths, int coeff, int w) {
+    int len = tss.dims(0);
+    int nts = tss.dims(1);
+    if (len < coeff) {
+        return af::constant(af::NaN, 1, nts);
+    }
+    if (len < coeff) {
+        return af::constant(af::NaN, 1, nts);
+    }
+    af::array output = cwt(tss, widths);
+
+    // To find w in widths
+    af::array index;
+    af::array maximum;
+    af::array aux = af::abs(widths - w) * (-1);
+    af::max(maximum, index, aux, 0);
+    // WORKAROUND: Forcing movement of index to CPU mem, just to avoid problems with Intel GPU
+    int i = index.scalar<int>();
+    // Select the corresponding values of coeff and w
+    return af::reorder(output(i, coeff, span), 0, 2, 1);
 }
 
 af::array tsa::features::energyRatioByChunks(af::array tss, long numSegments, long segmentFocus) {
