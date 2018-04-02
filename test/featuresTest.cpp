@@ -734,6 +734,22 @@ void numberCrossingM() {
     ASSERT_EQ(ncm[1], 7);
 }
 
+void cwtCoefficients() {
+    float data[] = {0.1, 0.2, 0.3, 0.1, 0.2, 0.3};
+    int widths[] = {1, 2, 3};
+    af::array data_d(3, 2, data);
+    af::array widths_d(3, 1, widths);
+    af::array result = tsa::features::cwtCoefficients(data_d, widths_d, 2, 2);
+
+    float *cwt = result.host<float>();
+
+    float r0 = 0.26517161726951599;
+    float r1 = 0.26517161726951599;
+
+    ASSERT_NEAR(r0, cwt[0], EPSILON);
+    ASSERT_NEAR(r1, cwt[1], EPSILON);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -780,3 +796,4 @@ TSA_TEST(FeaturesTests, MeanAbsoluteChange, meanAbsoluteChange);
 TSA_TEST(FeaturesTests, MeanSecondDerivativeCentral, meanSecondDerivativeCentral);
 TSA_TEST(FeaturesTests, Minimum, minimum);
 TSA_TEST(FeatureTests, NumberCrossingM, numberCrossingM);
+TSA_TEST(FeatureTests, CwtCoefficients, cwtCoefficients);

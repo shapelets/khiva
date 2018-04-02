@@ -267,6 +267,27 @@ void CountBelowMean(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
+void CwtCoefficients(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+    int data[] = {1, 2, 3, 4, 5};
+    af::array ws(5, 1, data);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto cwt = tsa::features::cwtCoefficients(t, ws, 8, 3);
+        cwt.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
 void EnergyRatioByChunks(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -736,6 +757,11 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(CwtCoefficients, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(C3, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {16, 128}, {32, 256}})
@@ -904,6 +930,11 @@ void openclBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(CountBelowMean, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(CwtCoefficients, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -1086,6 +1117,11 @@ void cpuBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(CountBelowMean, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(CwtCoefficients, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);

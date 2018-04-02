@@ -252,6 +252,29 @@ af::array countAboveMean(af::array tss);
  */
 af::array countBelowMean(af::array tss);
 
+/** @brief Calculates a Continuous wavelet transform for the Ricker wavelet, also known as
+ * the "Mexican hat wavelet" which is defined by:
+ *
+ *  .. math::
+ *      \\frac{2}{\\sqrt{3a} \\pi^{
+ *  \\frac{1} { 4 }}} (1 - \\frac{x^2}{a^2}) exp(-\\frac{x^2}{2a^2})
+ *
+ *  where :math:`a` is the width parameter of the wavelet function.
+ *
+ *  This feature calculator takes three different parameter: widths, coeff and w. The feature calculator takes all
+ * the different widths arrays and then calculates the cwt one time for each different width array. Then the values
+ * for the different coefficient for coeff and width w are returned. (For each dic in param one feature is
+ * returned).
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param widths Array that contains all different widths.
+ * @param coeff. Coefficient of interest.
+ * @param w. Width of interest.
+ * @return af::array Result of calculated coefficients.
+ */
+af::array cwtCoefficients(af::array tss, af::array widths, int coeff, int w);
+
 /**
  * @brief Calculates the sum of squares of chunk i out of N chunks expressed as a ratio
  * with the sum of squares over the whole series. segmentFocus should be lower
@@ -406,8 +429,8 @@ af::array lastLocationOfMinimum(af::array tss);
 af::array length(af::array tss);
 
 /**
- * @brief Calculate a linear least-squares regression for the values of the time series versus the sequence from 0 to
- * length of the time series minus one.
+ * @brief Calculate a linear least-squares regression for the values of the time series versus the sequence from 0
+ * to length of the time series minus one.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of
@@ -426,8 +449,8 @@ void linearTrend(af::array tss, af::array &pvalue, af::array &rvalue, af::array 
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
- * @return af::array the length of the longest consecutive subsequence in the input time series that is bigger than the
- * mean.
+ * @return af::array the length of the longest consecutive subsequence in the input time series that is bigger than
+ * the mean.
  */
 af::array longestStrikeAboveMean(af::array tss);
 
@@ -436,15 +459,16 @@ af::array longestStrikeAboveMean(af::array tss);
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
- * @ return af::array The length of the longest consecutive subsequence in the input time series that is below the mean.
+ * @ return af::array The length of the longest consecutive subsequence in the input time series that is below the
+ * mean.
  */
 af::array longestStrikeBelowMean(af::array tss);
 
 /**
  * @brief Calculates the maxium value for each time series within tss.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
- * one indicates the number of time series.
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
  * @return af::array The maximum value of each time series within tss.
  */
 af::array maximum(af::array tss);
@@ -471,19 +495,19 @@ af::array meanSecondDerivativeCentral(af::array tss);
 /**
  * @brief Calculates the minimum value for each time series within tss.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
- * one indicates the number of time series.
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
  * @return af::array The minimum value of each time series within tss.
  */
 af::array minimum(af::array tss);
 
 /**
  * @brief Calculates the number of m-crossings. A m-crossing is defined as two sequential values where the first
- * value is lower than m and the next is greater, or viceversa. If you set m to zero, you will get the number of zero
- * crossings.
+ * value is lower than m and the next is greater, or viceversa. If you set m to zero, you will get the number of
+ * zero crossings.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
- * one indicates the number of time series.
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
  *
  * @param m The m value.
  *
