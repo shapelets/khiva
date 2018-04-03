@@ -799,7 +799,7 @@ void cudaBenchmarks() {
 
     BENCHMARK_TEMPLATE(FftAggregated, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 128}, {32, 256}})
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(FftCoefficient, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
@@ -981,7 +981,7 @@ void openclBenchmarks() {
 
     BENCHMARK_TEMPLATE(FftAggregated, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 128}, {32, 256}})
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(FftCoefficient, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
@@ -1163,12 +1163,12 @@ void cpuBenchmarks() {
 
     BENCHMARK_TEMPLATE(FftAggregated, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 128}, {32, 256}})
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(FftCoefficient, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 128}, {32, 256}})
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(FirstLocationOfMaximum, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
