@@ -387,6 +387,67 @@ af::array tsa::features::energyRatioByChunks(af::array tss, long numSegments, lo
     return tsa::features::absEnergy(tss(af::seq(start, end - 1), span)) / fullSeriesEnergy;
 }
 
+af::array calculateMoment(af::array tss, int moment) {
+    af::array output;
+    af::array a = af::tile(af::pow(af::range(tss.dims(0)), moment), 1, tss.dims(1));
+    return af::sum(tss * a, 0) / af::sum(tss, 0);
+}
+
+af::array calculateCentroid(af::array tss) { return calculateMoment(tss, 1); }
+
+af::array calculateVariance(af::array tss) { return calculateMoment(tss, 2) - af::pow(calculateCentroid(tss), 2); }
+
+af::array calculateSkew(af::array tss) {
+    // In the limit of a dirac delta, skew should be 0 and variance 0. However, in the discrete limit,
+    // the skew blows up as variance-- > 0, hence return nan when variance is smaller than a resolution of 0.5:
+    af::array variance = calculateVariance(tss);
+    af::array cond = variance < 0.5;
+    af::array b = af::constant(af::NaN, 1, tss.dims(1), tss.type());
+    af::array a =
+        (calculateMoment(tss, 3) - 3 * calculateCentroid(tss) * variance - af::pow(calculateCentroid(tss), 3)) /
+        af::pow(calculateVariance(tss), 1.5).as(tss.type());
+    af::array out = af::select(cond, b, a);
+    return out;
+}
+
+af::array calculateKurtosis(af::array tss) {
+    // In the limit of a dirac delta, kurtosis should be 3 and variance 0. However, in the discrete limit,
+    // the kurtosis blows up as variance-- > 0, hence return nan when variance is smaller than a resolution of 0.5:
+    af::array variance = calculateVariance(tss);
+    af::array cond = variance < 0.5;
+    af::array b = af::constant(af::NaN, 1, tss.dims(1), tss.type());
+    af::array a = (calculateMoment(tss, 4) - 4 * calculateCentroid(tss) * calculateMoment(tss, 3) +
+                   6 * calculateMoment(tss, 2) * af::pow(calculateCentroid(tss), 2) - 3 * calculateCentroid(tss)) /
+                  af::pow(calculateVariance(tss), 2).as(tss.type());
+    af::array out = af::select(cond, b, a);
+    return out;
+}
+
+af::array tsa::features::fftAggregated(af::array tss) {
+    af::array output;
+    af::array fftComputed;
+    // If n is even, the length of the transformed axis is (n/2)+1.
+    // If n is odd, the length is (n + 1) / 2.
+    // The output is Hermitian - symmetric, i.e.the negative frequency terms are just the complex
+    // conjugates of the corresponding positive - frequency terms, and the negative - frequency
+    // terms are therefore redundant
+    if (tss.dims(0) % 2 == 0) {
+        // number of elements is even
+        int n = (tss.dims(0) / 2) + 1;
+        fftComputed = af::abs(af::fft(tss, 0))(af::seq(0, n - 1), span);
+    } else {
+        // number of elements is odd
+        int n = (tss.dims(0) + 1) / 2;
+        fftComputed = af::abs(af::fft(tss, 0))(af::seq(0, n - 1), span);
+    }
+    output = af::constant(0, 4, tss.dims(1));
+    output(0, span) = calculateCentroid(fftComputed);
+    output(1, span) = calculateVariance(fftComputed);
+    output(2, span) = calculateSkew(fftComputed);
+    output(3, span) = calculateKurtosis(fftComputed);
+    return output;
+}
+
 void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &abs,
                                    af::array &angle) {
     // Calculating the FFT of all the time series contained in tss
