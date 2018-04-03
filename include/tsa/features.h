@@ -290,6 +290,18 @@ af::array cwtCoefficients(af::array tss, af::array widths, int coeff, int w);
 af::array energyRatioByChunks(af::array tss, long numSegments, long segmentFocus);
 
 /**
+ * @brief Calculates the spectral centroid(mean), variance, skew, and kurtosis of the absolute fourier transform
+ * spectrum.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ *
+ * @return af::array The spectral centroid (mean), variance, skew, and kurtosis of the absolute fourier transform
+ * spectrum.
+ */
+af::array fftAggregated(af::array tss);
+
+/**
  * @brief Calculates the fourier coefficients of the one-dimensional discrete
  * Fourier Transform for real input by fast fourier transformation algorithm
  *

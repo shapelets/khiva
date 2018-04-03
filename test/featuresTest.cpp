@@ -455,6 +455,29 @@ void energyRatioByChunk() {
     ASSERT_NEAR(energyRatioByChunkCalculated2[1], 0.669623060, EPSILON);
 }
 
+void fftAggregated() {
+    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    af::array tss(10, 2, data);
+
+    af::array fftAgg = tsa::features::fftAggregated(tss);
+
+    float *fft = fftAgg.host<float>();
+    float f1 = 1.135143;
+    float f2 = 2.368324;
+    float f3 = 1.248777;
+    float f4 = 3.642666;
+
+    ASSERT_NEAR(fft[0], f1, EPSILON);
+    ASSERT_NEAR(fft[1], f2, EPSILON);
+    ASSERT_NEAR(fft[2], f3, EPSILON);
+    ASSERT_NEAR(fft[3], f4, EPSILON);
+
+    ASSERT_NEAR(fft[4], f1, EPSILON);
+    ASSERT_NEAR(fft[5], f2, EPSILON);
+    ASSERT_NEAR(fft[6], f3, EPSILON);
+    ASSERT_NEAR(fft[7], f4, EPSILON);
+}
+
 void fftCoefficient() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(6, 2, data);
@@ -776,6 +799,7 @@ TSA_TEST(FeaturesTests, CidCe, cidCe);
 TSA_TEST(FeaturesTests, CountAboveMean, countAboveMean);
 TSA_TEST(FeaturesTests, CountBelowMean, countBelowMean);
 TSA_TEST(FeaturesTests, EnergyRatioByChunk, energyRatioByChunk);
+TSA_TEST(FeaturesTests, FftAggregated, fftAggregated);
 TSA_TEST(FeaturesTests, FftCoefficient, fftCoefficient);
 TSA_TEST(FeaturesTests, FirstLocationOfMaximum, firstLocationOfMaximum);
 TSA_TEST(FeaturesTests, FirstLocationOfMinimum, firstLocationOfMinimum);
