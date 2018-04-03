@@ -482,13 +482,22 @@ af::array longestStrikeBelowMean(af::array tss);
 af::array maxLangevinFixedPoint(af::array tss, int m, float r);
 
 /**
- * @brief Calculates the maxium value for each time series within tss.
+ * @brief Calculates the maximum value for each time series within tss.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
  * @return af::array The maximum value of each time series within tss.
  */
 af::array maximum(af::array tss);
+
+/**
+ * @brief Calculates the mean value for each time series within tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return af::array The mean value of each time series within tss.
+ */
+af::array mean(af::array tss);
 
 /**
  * @brief Calculates the mean over the absolute differences between subsequent time series values in tss.

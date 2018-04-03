@@ -571,6 +571,8 @@ af::array tsa::features::maxLangevinFixedPoint(af::array tss, int m, float r) {
 
 af::array tsa::features::maximum(af::array tss) { return af::max(tss, 0); }
 
+af::array tsa::features::mean(af::array tss) { return af::mean(tss, 0); }
+
 af::array tsa::features::meanAbsoluteChange(af::array tss) {
     return (tsa::features::absoluteSumOfChanges(tss) / tss.dims(0)).as(tss.type());
 }
