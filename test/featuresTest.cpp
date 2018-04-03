@@ -668,6 +668,22 @@ void longestStrikeBelowMean() {
     ASSERT_EQ(longestCalculated[1], 9);
 }
 
+void maxLangevinFixedPoint() {
+    float data[] = {0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5};
+    af::array tss(6, 2, data);
+
+    af::array result = tsa::features::maxLangevinFixedPoint(tss, 7, 2);
+
+    af_print(result);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {4.562970585, 4.562970585};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON * 1e4);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON * 1e4);
+}
+
 void maximum() {
     float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
@@ -791,6 +807,7 @@ TSA_TEST(FeaturesTests, Length, length);
 TSA_TEST(FeaturesTests, LinearTrend, linearTrend);
 TSA_TEST(FeaturesTests, LongestStrikeAboveMean, longestStrikeAboveMean);
 TSA_TEST(FeaturesTests, LongestStrikeBelowMean, longestStrikeBelowMean);
+TSA_TEST_BACKENDS(FeaturesTests, MaxLangevinFixedPoint, maxLangevinFixedPoint, true, true, false, false, false, false);
 TSA_TEST(FeaturesTests, Maximum, maximum);
 TSA_TEST(FeaturesTests, MeanAbsoluteChange, meanAbsoluteChange);
 TSA_TEST(FeaturesTests, MeanSecondDerivativeCentral, meanSecondDerivativeCentral);

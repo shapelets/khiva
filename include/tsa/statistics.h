@@ -55,5 +55,30 @@ af::array sampleStdev(af::array tss);
  * @return af::array The kurtosis of tss
  */
 af::array kurtosis(af::array tss);
+
+/**
+ * @brief Returns values at the given quantile.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @param q Percentile(s) at which to extract score(s). One or many.
+ * @param precision Number of decimals expected.
+ * @return af::array Values at the given quantile.
+ */
+af::array quantile(af::array tss, af::array q, float precision = 1e8);
+
+/**
+ * @brief Discretizes the time series into equal-sized buckets based on sample quantiles.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @param quantiles Number of quantiles to extract. From 0 to 1, step 1/quantiles.
+ * @param precision Number of decimals expected.
+ * @return af::array Matrix with the categories, one category per row, the start of
+ * the category in the first column and the end in the second category.
+ */
+af::array quantilesCut(af::array tss, float quantiles, float precision = 1e-8);
 };  // namespace statistics
 };  // namespace tsa

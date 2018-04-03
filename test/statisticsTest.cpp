@@ -81,8 +81,84 @@ void kurtosis() {
     }
 }
 
+void quantile() {
+    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(6, 2, data);
+
+    float quantiles[] = {0.1, 0.2};
+
+    af::array q = af::array(2, quantiles);
+
+    float *calculated = tsa::statistics::quantile(tss, q).host<float>();
+
+    float expected[] = {0.5, 1.0, 6.5, 7.0};
+
+    ASSERT_EQ(calculated[0], expected[0]);
+    ASSERT_EQ(calculated[1], expected[1]);
+}
+
+void quantilesCut2() {
+    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(6, 2, data);
+
+    float quantiles = 2;
+
+    af::array result = af::transpose(tsa::statistics::quantilesCut(tss, quantiles));
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {-0.00000001, 2.5, -0.00000001, 2.5, -0.00000001, 2.5, 2.5, 5.0,  2.5, 5.0,  2.5, 5.0,
+                        6.0,         8.5, 6.0,         8.5, 6.0,         8.5, 8.5, 11.0, 8.5, 11.0, 8.5, 11.0};
+
+    for (int i = 0; i < 24; i++) {
+        ASSERT_NEAR(expected[i], calculated[i], EPSILON);
+    }
+}
+
+void quantilesCut3() {
+    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(6, 2, data);
+
+    float quantiles = 3;
+
+    af::array result = af::transpose(tsa::statistics::quantilesCut(tss, quantiles));
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {-0.00000001, 1.66666667, -0.00000001, 1.6666667, 1.6666667, 3.3333333,  1.6666667, 3.3333333,
+                        3.3333333,   5.0,        3.3333333,   5.0,       5.9999999, 7.66666667, 5.9999999, 7.6666667,
+                        7.6666667,   9.3333333,  7.6666667,   9.3333333, 9.3333333, 11.0,       9.3333333, 11.0};
+
+    for (int i = 0; i < 24; i++) {
+        ASSERT_NEAR(expected[i], calculated[i], EPSILON);
+    }
+}
+
+void quantilesCut7() {
+    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(6, 2, data);
+
+    float quantiles = 7;
+
+    af::array result = af::transpose(tsa::statistics::quantilesCut(tss, quantiles));
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {0,         0.7142857, 0.7142857, 1.4285715, 1.4285715, 2.1428573,  2.8571429,  3.5714288,
+                        3.5714288, 4.2857146, 4.2857146, 5,         5.9999999, 6.7142857,  6.7142857,  7.4285715,
+                        7.4285715, 8.1428573, 8.8571429, 9.5714288, 9.5714288, 10.2857146, 10.2857146, 11};
+
+    for (int i = 0; i < 24; i++) {
+        ASSERT_NEAR(expected[i], calculated[i], EPSILON);
+    }
+}
+
 TSA_TEST(StatisticsTests, CovarianceUnbiased, covarianceUnbiased);
 TSA_TEST(StatisticsTests, CovarianceBiased, covarianceBiased);
 TSA_TEST(StatisticsTests, Moment, moment);
 TSA_TEST(StatisticsTests, SampleStdev, sampleStdev);
 TSA_TEST(StatisticsTests, Kurtosis, kurtosis);
+TSA_TEST(StatisticsTests, Quantile, quantile);
+TSA_TEST(StatisticsTests, QuantilesCut2, quantilesCut2);
+TSA_TEST(StatisticsTests, QuantilesCut3, quantilesCut3);
+TSA_TEST(StatisticsTests, QuantilesCut7, quantilesCut7);

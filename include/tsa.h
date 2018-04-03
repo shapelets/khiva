@@ -9,8 +9,10 @@
 #include <tsa/distances.h>
 #include <tsa/features.h>
 #include <tsa/library.h>
+#include <tsa/linalg.h>
 #include <tsa/matrix.h>
 #include <tsa/normalization.h>
+#include <tsa/polynomial.h>
 #include <tsa/regression.h>
 #include <tsa/regularization.h>
 #include <tsa/simplification.h>

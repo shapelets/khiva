@@ -302,7 +302,7 @@ af::array energyRatioByChunks(af::array tss, long numSegments, long segmentFocus
  * @param abs The absolute value of the coefficient
  * @param angle The angle of the coefficient
  */
-void fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &_abs,
+void fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &abs,
                     af::array &angle);
 
 /**
@@ -463,6 +463,23 @@ af::array longestStrikeAboveMean(af::array tss);
  * mean.
  */
 af::array longestStrikeBelowMean(af::array tss);
+
+/**
+ * @brief Largest fixed point of dynamics \f$\max_x {h(x)=0}\f$ estimated from polynomial
+ * \f$h(x)\f$, which has been fitted to the deterministic dynamics of Langevin model
+ * \f[
+ *    \dot(x)(t) = h(x(t)) + R \mathcal(N)(0,1)
+ * \f]
+ * as described by
+ * Friedrich et al. (2000): Physics Letters A 271, p. 217-222 *Extracting model equations from experimental data*
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @param m Order of polynom to fit for estimating fixed points of dynamics.
+ * @param r Number of quantiles to use for averaging.
+ * @return af::array Largest fixed point of deterministic dynamics
+ */
+af::array maxLangevinFixedPoint(af::array tss, int m, float r);
 
 /**
  * @brief Calculates the maxium value for each time series within tss.

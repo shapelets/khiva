@@ -607,6 +607,27 @@ void LongestStrikeBelowMean(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
+void MaxLangevinFixedPoint(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+    auto mm = state.range(2);
+    auto r = state.range(3);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto langevin = tsa::features::maxLangevinFixedPoint(t, mm, r);
+        langevin.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
 void Maximum(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -852,6 +873,11 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(MaxLangevinFixedPoint, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 32 << 10}, {1, 2}, {2, 8}, {2, 4}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(Maximum, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
@@ -1027,6 +1053,11 @@ void openclBenchmarks() {
     BENCHMARK_TEMPLATE(LongestStrikeBelowMean, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(MaxLangevinFixedPoint, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 32 << 10}, {1, 2}, {2, 8}, {2, 4}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(Maximum, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
@@ -1205,6 +1236,13 @@ void cpuBenchmarks() {
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    // Commented because the MaxLangevinFixedPoint uses the svd function of Arrayfire, which produces
+    // problems with the static linking of OpenMP that AF does.
+    /*BENCHMARK_TEMPLATE(MaxLangevinFixedPoint, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 32 << 10}, {1, 2}, {2, 8}, {2, 4}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);*/
 
     BENCHMARK_TEMPLATE(Maximum, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)

@@ -7,7 +7,9 @@
 #include <math.h>
 #include <tsa/features.h>
 #include <tsa/normalization.h>
+#include <tsa/polynomial.h>
 #include <tsa/regression.h>
+#include <tsa/regularization.h>
 #include <tsa/statistics.h>
 
 af::array tsa::features::absEnergy(af::array base) {
@@ -535,6 +537,36 @@ af::array tsa::features::longestStrikeBelowMean(af::array tss) {
     af::array result = af::scanByKey(belowMean.as(af::dtype::s32), belowMean);
 
     return af::max(result, 0);
+}
+
+af::array estimateFriedrichCoefficients(af::array tss, int m, float r) {
+    long n = tss.dims(0);
+
+    af::array categories = tsa::statistics::quantilesCut(tss(af::seq(n - 1), span), r);
+
+    af::array x = af::join(1, categories, af::reorder(tss(af::seq(n - 1), span), 0, 2, 1, 3));
+    x = af::join(1, x, af::reorder(af::diff1(tss, 0), 0, 2, 1, 3));
+
+    // Doing the groupBy per input time series in tss (tss are contained along the 2nd dimension).
+    // The groupBy function cannot be applied to all time series in parallel because we do not
+    // know a priori the number of groups in each series.
+
+    af::array result = af::array(m + 1, tss.dims(1));
+
+    for (int i = 0; i < tss.dims(1); i++) {
+        af::array groupped = tsa::regularization::groupBy(x(span, span, i), af::mean, 2, 2);
+        result(span, i) = tsa::polynomial::polyfit(groupped.col(0), groupped.col(1), m);
+    }
+
+    return result;
+}
+
+af::array tsa::features::maxLangevinFixedPoint(af::array tss, int m, float r) {
+    af::array coefficients = estimateFriedrichCoefficients(tss, m, r);
+
+    af::array roots = tsa::polynomial::roots(coefficients);
+
+    return af::max(af::real(roots));
 }
 
 af::array tsa::features::maximum(af::array tss) { return af::max(tss, 0); }
