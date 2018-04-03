@@ -748,6 +748,19 @@ void meanSecondDerivativeCentral() {
     ASSERT_NEAR(r1, hostResult[1], EPSILON);
 }
 
+void median() {
+    float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
+                    20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::median(tss);
+
+    float *median = result.host<float>();
+
+    ASSERT_NEAR(median[0], 20, EPSILON * 2);
+    ASSERT_NEAR(median[1], 18.5, EPSILON * 2);
+}
+
 void minimum() {
     float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 13, 15, 5, 16, 20, 20,
                     20, 20, 20, 2,  19, 4,  20, 20, 20, 4,  15, 6,  30, 7,  9,  18, 4, 10, 20, 20};
@@ -837,6 +850,7 @@ TSA_TEST(FeaturesTests, Mean, mean);
 TSA_TEST(FeaturesTests, MeanAbsoluteChange, meanAbsoluteChange);
 TSA_TEST(FeaturesTests, MeanChange, meanChange);
 TSA_TEST(FeaturesTests, MeanSecondDerivativeCentral, meanSecondDerivativeCentral);
+TSA_TEST(FeaturesTests, Median, median);
 TSA_TEST(FeaturesTests, Minimum, minimum);
-TSA_TEST(FeatureTests, NumberCrossingM, numberCrossingM);
-TSA_TEST(FeatureTests, CwtCoefficients, cwtCoefficients);
+TSA_TEST(FeaturesTests, NumberCrossingM, numberCrossingM);
+TSA_TEST(FeaturesTests, CwtCoefficients, cwtCoefficients);
