@@ -212,6 +212,108 @@ void fftCoefficient(double *tss, long *tss_length, long *tss_number_of_tss, long
     primitive_angle.host(angle);
 }
 
+void aggregated_autocorrelation(double *tss, long *tss_l, long *tss_n, int *aggregation_function, double *result) {
+    af::array primitive_result;
+
+    switch (*aggregation_function) {
+        case 0:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::mean);
+            break;
+        case 1:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::median);
+            break;
+        case 2:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::min);
+            break;
+        case 3:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::max);
+            break;
+        case 4:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::stdev);
+            break;
+        case 5:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::var);
+            break;
+        default:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::mean);
+            break;
+    }
+    primitive_result.host(result);
+}
+
+void aggregated_linear_trend(double *t, long *t_l, long *t_n, long *chunkSize, int *aggregation_function, double *slope,
+                             double *intercept, double *rvalue, double *pvalue, double *stderrest) {
+    af::array primitive_slope;
+    af::array primitive_intercept;
+    af::array primitive_rvalue;
+    af::array primitive_pvalue;
+    af::array primitive_stderrest;
+    switch (*aggregation_function) {
+        case 0:
+            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::mean, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
+            break;
+        case 1:
+            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::median, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
+            break;
+        case 2:
+            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::min, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
+            break;
+        case 3:
+            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::max, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
+            break;
+        case 4:
+            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::stdev, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
+            break;
+        default:
+            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::mean, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
+            break;
+    }
+
+    primitive_slope.host(slope);
+    primitive_intercept.host(intercept);
+    primitive_rvalue.host(rvalue);
+    primitive_pvalue.host(pvalue);
+    primitive_stderrest.host(stderrest);
+}
+
+void cwt_coefficients(double *tss, long *tss_l, long *tss_n, int *widths, long *widths_l, long *widths_n, int *coeff,
+                      int *w, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::cwtCoefficients(af::array(*tss_l, *tss_n, tss),
+                                                      af::array(*widths_l, *widths_n, widths), *coeff, *w);
+    primitive_result.host(result);
+}
+
+void mean_second_derivative_central(double *tss, long *tss_l, long *tss_n, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::meanSecondDerivativeCentral(af::array(*tss_l, *tss_n, tss));
+    primitive_result.host(result);
+}
+
+void minimum(double *tss, long *tss_l, long *tss_n, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::minimum(af::array(*tss_l, *tss_n, tss));
+    primitive_result.host(result);
+}
+
+void number_crossing_m(double *tss, long *tss_l, long *tss_n, int *m, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::numberCrossingM(af::array(*tss_l, *tss_n, tss), *m);
+    primitive_result.host(result);
+}
+
 #ifdef __cplusplus
 }
 #endif

@@ -554,4 +554,6 @@ af::array tsa::features::meanSecondDerivativeCentral(af::array tss) {
 
 af::array tsa::features::minimum(af::array tss) { return af::min(tss, 0); }
 
-af::array tsa::features::numberCrossingM(af::array tss, int m) { return af::sum(af::abs(af::diff1(tss > m)), 0); }
+af::array tsa::features::numberCrossingM(af::array tss, int m) {
+    return af::sum(af::abs(af::diff1(tss > m)), 0).as(tss.type());
+}

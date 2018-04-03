@@ -530,6 +530,161 @@ JNIEXPORT void JNICALL Java_tsa_Features_fftCoefficient(JNIEnv *env, jobject thi
     return;
 }
 
+JNIEXPORT void JNICALL Java_tsa_Features_aggregatedAutocorrelation(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                   jlong tssL, jlong tssN, jint aggregationFunction,
+                                                                   jdoubleArray result) {
+    long tssFL = tssL * tssN;
+    jdouble input_tss[tssFL];
+    env->GetDoubleArrayRegion(tss, 0, tssFL, &input_tss[0]);
+    af::array primitive_result;
+    switch (aggregationFunction) {
+        case 0:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::mean);
+            break;
+        case 1:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::median);
+            break;
+        case 2:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::min);
+            break;
+        case 3:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::max);
+            break;
+        case 4:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::stdev);
+            break;
+        case 5:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::var);
+            break;
+        default:
+            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::mean);
+            break;
+    }
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_aggregatedLinearTrend(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                               jlong tssL, jlong tssN, jlong chunkSize,
+                                                               jint aggregationFunction, jdoubleArray slope,
+                                                               jdoubleArray intercept, jdoubleArray rvalue,
+                                                               jdoubleArray pvalue, jdoubleArray stderrest) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_slope;
+    af::array primitive_intercept;
+    af::array primitive_rvalue;
+    af::array primitive_pvalue;
+    af::array primitive_stderrest;
+    switch (aggregationFunction) {
+        case 0:
+            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::mean, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
+            break;
+        case 1:
+            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::median,
+                                                 primitive_slope, primitive_intercept, primitive_rvalue,
+                                                 primitive_pvalue, primitive_stderrest);
+            break;
+        case 2:
+            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::min, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
+            break;
+        case 3:
+            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::max, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
+            break;
+        case 4:
+            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::stdev,
+                                                 primitive_slope, primitive_intercept, primitive_rvalue,
+                                                 primitive_pvalue, primitive_stderrest);
+            break;
+        default:
+            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::mean, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
+            break;
+    }
+    jdouble output_slope[tssN];
+    primitive_slope.host(output_slope);
+    env->SetDoubleArrayRegion(slope, 0, tssN, &output_slope[0]);
+    jdouble output_intercept[tssN];
+    primitive_intercept.host(output_intercept);
+    env->SetDoubleArrayRegion(intercept, 0, tssN, &output_intercept[0]);
+    jdouble output_rvalue[tssN];
+    primitive_rvalue.host(output_rvalue);
+    env->SetDoubleArrayRegion(rvalue, 0, tssN, &output_rvalue[0]);
+    jdouble output_pvalue[tssN];
+    primitive_pvalue.host(output_pvalue);
+    env->SetDoubleArrayRegion(pvalue, 0, tssN, &output_pvalue[0]);
+    jdouble output_stderrest[tssN];
+    primitive_stderrest.host(output_stderrest);
+    env->SetDoubleArrayRegion(stderrest, 0, tssN, &output_stderrest[0]);
+    return;
+}
+JNIEXPORT void JNICALL Java_tsa_Features_cwtCoefficients(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                         jlong tssN, jintArray widths, jlong widthsL, jlong widthsN,
+                                                         jint coeff, jint w, jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    long widths_fl = widthsL * widthsN;
+    jint input_widths[widths_fl];
+    env->GetIntArrayRegion(widths, 0, widths_fl, &input_widths[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::cwtCoefficients(af::array(tssL, tssN, input_tss),
+                                                      af::array(widthsL, widthsN, input_widths), coeff, w);
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                     jlong tssL, jlong tssN, jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::meanSecondDerivativeCentral(af::array(tssL, tssN, input_tss));
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_minimum(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL, jlong tssN,
+                                                 jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::minimum(af::array(tssL, tssN, input_tss));
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_numberCrossingM(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                         jlong tssN, jint m, jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::numberCrossingM(af::array(tssL, tssN, input_tss), m);
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
 #ifdef __cplusplus
 }
 #endif

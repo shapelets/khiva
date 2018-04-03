@@ -403,6 +403,126 @@ JNIEXPORT void JNICALL Java_tsa_Features_meanAbsoluteChange(JNIEnv *env, jobject
 JNIEXPORT void JNICALL Java_tsa_Features_fftCoefficient(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
                                                         jlong tssNumberOfTss, jlong coefficient, jdoubleArray real,
                                                         jdoubleArray imag, jdoubleArray absolute, jdoubleArray angle);
+
+/**
+ * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
+ * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
+ * lags (1 to length of x).
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param aggregationFunction Function to be used in the aggregation. It receives an integer which indicates the
+ * function to be applied:
+ *          {
+ *              0 : mean,
+ *              1 : median
+ *              2 : min,
+ *              3 : max,
+ *              4 : stdev,
+ *              5 : var,
+ *              default : mean
+ *          }
+ * @param result An array whose values
+ * contains the aggregated correaltion for each time series.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_aggregatedAutocorrelation(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                   jlong tssL, jlong tssN, jint aggregationFunction,
+                                                                   jdoubleArray result);
+
+/**
+ * @brief alculates a linear least-squares regression for values of the time series that were aggregated
+ * over chunks versus the sequence from 0 up to the number of chunks minus one.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param chunkSize The chunkSize used to aggregate the data
+ * @param aggregationFunction Function to be used in the aggregation. It receives an integer which indicates the
+ * function to be applied:
+ *          {
+ *              0 : mean,
+ *              1 : median
+ *              2 : min,
+ *              3 : max,
+ *              4 : stdev,
+ *              default : mean
+ *          }
+ * @param slope Slope of the regression line
+ * @param intercept Intercept of the regression line
+ * @param rvalue Correlation coefficient
+ * @param pvalue Two-sided p-value for a hypothesis test whose null hypothesis is
+ * that the slope is zero, using Wald Test with t-distribution of
+ * the test statistic
+ * @param stderrest Standard error of the estimated gradient
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_aggregatedLinearTrend(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                               jlong tssL, jlong tssN, jlong chunkSize,
+                                                               jint aggregationFunction, jdoubleArray slope,
+                                                               jdoubleArray intercept, jdoubleArray rvalue,
+                                                               jdoubleArray pvalue, jdoubleArray stderrest);
+/**
+ * @brief Calculates a Continuous wavelet transform for the Ricker wavelet, also known as
+ * the "Mexican hat wavelet" which is defined by:
+ *
+ *  .. math::
+ *      \\frac{2}{\\sqrt{3a} \\pi^{
+ *  \\frac{1} { 4 }}} (1 - \\frac{x^2}{a^2}) exp(-\\frac{x^2}{2a^2})
+ *
+ *  where :math:`a` is the width parameter of the wavelet function.
+ *
+ * This feature calculator takes three different parameter: widths, coeff and w. The feature calculator takes all
+ * the different widths arrays and then calculates the cwt one time for each different width array. Then the values
+ * for the different coefficient for coeff and width w are returned. (For each dic in param one feature is
+ * returned).
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param widths Array that contains all different widths.
+ * @param widthsL widths length (All of those ones need to have the same length)
+ * @param widthsN Number of widths.
+ * @param coeff Coefficient of interest.
+ * @param w Width of interest.
+ * @param result Result of calculated coefficients.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_cwtCoefficients(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                         jlong tssN, jintArray widths, jlong widthsL, jlong widthsN,
+                                                         jint coeff, jint w, jdoubleArray result);
+
+/**
+ * @brief Calculates mean value of a central approximation of the second derivative for each time series in tss.
+ *
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param result The mean value of a central approximation of the second derivative for each time series.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                     jlong tssL, jlong tssN, jdoubleArray result);
+/**
+ * @brief Calculates the minimum value for each time series within tss.
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param result The minimum value of each time series within tss.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_minimum(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL, jlong tssN,
+                                                 jdoubleArray result);
+/**
+ * @brief Calculates the number of m-crossings. A m-crossing is defined as two sequential values where the first
+ * value is lower than m and the next is greater, or viceversa. If you set m to zero, you will get the number of
+ * zero crossings.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param m The m value.
+ * @param result The number of m-crossings of each time series within tss.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_numberCrossingM(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                         jlong tssN, jint m, jdoubleArray result);
 #ifdef __cplusplus
 }
 #endif
