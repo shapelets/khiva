@@ -803,6 +803,18 @@ void cwtCoefficients() {
     ASSERT_NEAR(r1, cwt[1], EPSILON);
 }
 
+void numberPeaks() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::numberPeaks(tss, 2);
+
+    float *np = result.host<float>();
+
+    ASSERT_EQ(np[0], 1);
+    ASSERT_EQ(np[1], 1);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -854,3 +866,4 @@ TSA_TEST(FeaturesTests, Median, median);
 TSA_TEST(FeaturesTests, Minimum, minimum);
 TSA_TEST(FeaturesTests, NumberCrossingM, numberCrossingM);
 TSA_TEST(FeaturesTests, CwtCoefficients, cwtCoefficients);
+TSA_TEST(FeaturesTests, NumberPeaks, numberPeaks);

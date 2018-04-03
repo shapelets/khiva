@@ -559,5 +559,17 @@ af::array minimum(af::array tss);
  */
 af::array numberCrossingM(af::array tss, int m);
 
+/**
+ * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$tss\f$. A peak of support
+ * \f$n\f$ is defined as a subsequence of \f$tss\f$ where a value occurs, which is bigger than its \f$n\f$ neighbours to
+ * the left and to the right.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param n The support of the peak.
+ * @return af::array The number of peaks of at least support \f$n\f$.
+ */
+af::array numberPeaks(af::array tss, int n);
+
 };  // namespace features
 };  // namespace tsa

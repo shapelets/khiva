@@ -551,7 +551,7 @@ af::array estimateFriedrichCoefficients(af::array tss, int m, float r) {
     // The groupBy function cannot be applied to all time series in parallel because we do not
     // know a priori the number of groups in each series.
 
-    af::array result = af::array(m + 1, tss.dims(1));
+    af::array result = af::array(m + 1, tss.dims(1), tss.type());
 
     for (int i = 0; i < tss.dims(1); i++) {
         af::array groupped = tsa::regularization::groupBy(x(span, span, i), af::mean, 2, 2);
@@ -597,4 +597,21 @@ af::array tsa::features::minimum(af::array tss) { return af::min(tss, 0); }
 
 af::array tsa::features::numberCrossingM(af::array tss, int m) {
     return af::sum(af::abs(af::diff1(tss > m)), 0).as(tss.type());
+}
+
+af::array tsa::features::numberPeaks(af::array tss, int n) {
+    int length = tss.dims(0);
+
+    af::array tssReduced = tss(af::seq(n, length - n - 1), span);
+
+    // Initializing it to ones
+    af::array res = tssReduced == tssReduced;
+    for (int i = 1; i < n + 1; i++) {
+        af::array rightShifted = af::shift(tss, i)(af::seq(n, length - n - 1), span);
+        af::array leftShifted = af::shift(tss, -i)(af::seq(n, length - n - 1), span);
+
+        res = res & ((tssReduced > rightShifted) & (tssReduced > leftShifted));
+    }
+
+    return af::sum(res.as(tss.type()), 0);
 }
