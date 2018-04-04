@@ -6,4 +6,6 @@
 
 #include <tsa_jni/features.h>
 #include <tsa_jni/library.h>
+#include <tsa_jni/linalg.h>
 #include <tsa_jni/matrix.h>
+#include <tsa_jni/normalization.h>

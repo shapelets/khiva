@@ -6,4 +6,6 @@
 
 #include <tsa_c/features.h>
 #include <tsa_c/library.h>
+#include <tsa_c/linalg.h>
 #include <tsa_c/matrix.h>
+#include <tsa_c/normalization.h>

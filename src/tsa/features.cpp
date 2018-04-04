@@ -629,7 +629,7 @@ af::array tsa::features::maxLangevinFixedPoint(af::array tss, int m, float r) {
 
     af::array roots = tsa::polynomial::roots(coefficients);
 
-    return af::max(af::real(roots));
+    return af::max(af::real(roots)).as(tss.type());
 }
 
 af::array tsa::features::maximum(af::array tss) { return af::max(tss, 0); }

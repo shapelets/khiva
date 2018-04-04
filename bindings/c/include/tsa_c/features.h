@@ -13,17 +13,6 @@ extern "C" {
 #endif
 
 /**
- * @brief Primitive of the cidCe function.
- *
- * @param tss Time series concatenated in a single row.
- * @param tss_length tss length (All time series need to have the same length).
- * @param tss_number_of_tss Number of time series in tss.
- * @param zNormalize Controls whether the time series should be z-normalized or not.
- * @param result The complexity value for the given time series.
- */
-void cidCe(double *tss_time_series, long *tss_length, long *tss_number_of_tss, bool *zNormalize, double *result);
-
-/**
  * @brief Primitive of the absEnergy function.
  *
  * @param time_series Time series concatenated in a single row.
@@ -45,43 +34,67 @@ void absolute_sum_of_changes(double *time_series, long *time_series_length, long
                              double *primitive_result);
 
 /**
- * @brief Primitive of the c3 function.
+ * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
+ * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
+ * lags (1 to length of x).
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param aggregation_function Function to be used in the aggregation. It receives an integer which indicates the
+ * function to be applied:
+ *          {
+ *              0 : mean,
+ *              1 : median
+ *              2 : min,
+ *              3 : max,
+ *              4 : stdev,
+ *              5 : var,
+ *              default : mean
+ *          }
+ * @param result An array whose values contains the aggregated correaltion for each time series.
+ */
+void aggregated_autocorrelation(double *tss, long *tss_l, long *tss_n, int *aggregation_function, double *result);
+
+/**
+ * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
+ * over chunks versus the sequence from 0 up to the number of chunks minus one.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param chunkSize The chunk size used to aggregate the data.
+ * @param aggregation_function Function to be used in the aggregation. It receives an integer which indicates the
+ * function to be applied:
+ *          {
+ *              0 : mean,
+ *              1 : median
+ *              2 : min,
+ *              3 : max,
+ *              4 : stdev,
+ *              default : mean
+ *          }
+ * @param slope Slope of the regression line.
+ * @param intercept Intercept of the regression line.
+ * @param rvalue Correlation coefficient.
+ * @param pvalue Two-sided p-value for a hypothesis test whose null hypothesis is that the slope is zero,
+ * using Wald Test with t-distribution of the test statistic.
+ * @param stderrest Standard error of the estimated gradient.
+ */
+void aggregated_linear_trend(double *t, long *t_l, long *t_n, long *chunkSize, int *aggregation_function, double *slope,
+                             double *intercept, double *rvalue, double *pvalue, double *stderrest);
+
+/**
+ * @brief Primitive of the aproximateEntropy function.
  *
  * @param tss Time series concatenated in a single row.
  * @param tss_length Time series length (All time series need to have the same length).
  * @param tss_number_of_tss Number of time series.
- * @param lag The lag
- * @param result The non-linearity value for the given time series.
+ * @param m Length of compared run of data.
+ * @param r Filtering level, must be positive.
+ * @param result The vectorized approximate entropy for all the input time series in tss.
  */
-void c3(double *tss, long *tss_length, long *tss_number_of_tss, long *lag, double *result);
-
-/**
- * @brief Primitive of the cross_correlation function.
- *
- * @param xss Time series concatenated in a single row.
- * @param xss_length Time series length (All time series need to have the same length).
- * @param xss_number_of_tss Number of time series.
- * @param yss Time series concatenated in a single row.
- * @param yss_length  yss time series length.
- * @param yss_number_of_tss yss Number of time series.
- * @param unbiased Determines whether it divides by n - lag (if true) or
- * n (if false).
- * @param result The cross-correlation value for the given time series.
- */
-void cross_correlation(double *xss, long *xss_length, long *xss_number_of_tss, double *yss, long *yss_length,
-                       long *yss_number_of_tss, bool *unbiased, double *result);
-
-/**
- * @brief Primitive of the autoCovariance function.
- *
- * @param xss Time series concatenated in a single row.
- * @param xss_length Time series length (All time series need to have the same length).
- * @param xss_number_of_tss Number of time series.
- * @param unbiased Determines whether it divides by n - lag (if true) or
- * n (if false).
- * @param result The auto-covariance value for the given time series.
- */
-void auto_covariance(double *xss, long *xss_length, long *xss_number_of_tss, bool *unbiased, double *result);
+void approximate_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *m, double *r, double *result);
 
 /**
  * @brief Primitive of the crossCovariance function.
@@ -100,16 +113,32 @@ void cross_covariance(double *xss, long *xss_length, long *xss_number_of_tss, do
                       long *yss_number_of_tss, bool *unbiased, double *result);
 
 /**
- * @brief Primitive of the aproximateEntropy function.
+ * @brief Primitive of the autoCovariance function.
  *
- * @param tss Time series concatenated in a single row.
- * @param tss_length Time series length (All time series need to have the same length).
- * @param tss_number_of_tss Number of time series.
- * @param m Length of compared run of data.
- * @param r Filtering level, must be positive.
- * @param result The vectorized approximate entropy for all the input time series in tss.
+ * @param xss Time series concatenated in a single row.
+ * @param xss_length Time series length (All time series need to have the same length).
+ * @param xss_number_of_tss Number of time series.
+ * @param unbiased Determines whether it divides by n - lag (if true) or
+ * n (if false).
+ * @param result The auto-covariance value for the given time series.
  */
-void approximate_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *m, double *r, double *result);
+void auto_covariance(double *xss, long *xss_length, long *xss_number_of_tss, bool *unbiased, double *result);
+
+/**
+ * @brief Primitive of the cross_correlation function.
+ *
+ * @param xss Time series concatenated in a single row.
+ * @param xss_length Time series length (All time series need to have the same length).
+ * @param xss_number_of_tss Number of time series.
+ * @param yss Time series concatenated in a single row.
+ * @param yss_length  yss time series length.
+ * @param yss_number_of_tss yss Number of time series.
+ * @param unbiased Determines whether it divides by n - lag (if true) or
+ * n (if false).
+ * @param result The cross-correlation value for the given time series.
+ */
+void cross_correlation(double *xss, long *xss_length, long *xss_number_of_tss, double *yss, long *yss_length,
+                       long *yss_number_of_tss, bool *unbiased, double *result);
 
 /**
  * @brief Primitive of autoCorrelation function.
@@ -136,6 +165,28 @@ void auto_correlation(double *tss, long *tss_length, long *tss_number_of_tss, lo
 void binned_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *max_bins, double *result);
 
 /**
+ * @brief Primitive of the c3 function.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param lag The lag
+ * @param result The non-linearity value for the given time series.
+ */
+void c3(double *tss, long *tss_length, long *tss_number_of_tss, long *lag, double *result);
+
+/**
+ * @brief Primitive of the cidCe function.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length tss length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series in tss.
+ * @param zNormalize Controls whether the time series should be z-normalized or not.
+ * @param result The complexity value for the given time series.
+ */
+void cidCe(double *tss_time_series, long *tss_length, long *tss_number_of_tss, bool *zNormalize, double *result);
+
+/**
  * @brief Primitive of countAboveMean function.
  *
  * @param tss Time series concatenated in a single row.
@@ -158,6 +209,34 @@ void count_above_mean(double *tss, long *tss_length, long *tss_number_of_tss, un
 void count_below_mean(double *tss, long *tss_length, long *tss_number_of_tss, unsigned int *result);
 
 /**
+ * @brief Calculates a Continuous wavelet transform for the Ricker wavelet, also known as
+ * the "Mexican hat wavelet" which is defined by:
+ *
+ *  .. math::
+ *      \\frac{2}{\\sqrt{3a} \\pi^{
+ *  \\frac{1} { 4 }}} (1 - \\frac{x^2}{a^2}) exp(-\\frac{x^2}{2a^2})
+ *
+ *  where :math:`a` is the width parameter of the wavelet function.
+ *
+ * This feature calculator takes three different parameter: widths, coeff and w. The feature calculator takes all
+ * the different widths arrays and then calculates the cwt one time for each different width array. Then the values
+ * for the different coefficient for coeff and width w are returned. (For each dic in param one feature is
+ * returned).
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param widths Array that contains all different widths.
+ * @param widths_l widths length (All of those ones need to have the same length)
+ * @param widths_n Number of widths.
+ * @param coeff Coefficient of interest.
+ * @param w Width of interest.
+ * @param result Result of calculated coefficients.
+ */
+void cwt_coefficients(double *tss, long *tss_l, long *tss_n, int *widths, long *widths_l, long *widths_n, int *coeff,
+                      int *w, double *result);
+
+/**
  * @brief Primitive of energyRatioByChunks function.
  *
  * @param tss Time series concatenated in a single row.
@@ -169,6 +248,22 @@ void count_below_mean(double *tss, long *tss_length, long *tss_number_of_tss, un
  */
 void energy_ratio_by_chunks(double *tss, long *tss_length, long *tss_number_of_tss, long *num_segments,
                             long *segment_focus, double *result);
+
+/**
+ * @brief Calculates the fourier coefficients of the one-dimensional discrete
+ * Fourier Transform for real input by fast fourier transformation algorithm.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param coefficient The coefficient to extract from the FFT.
+ * @param real The real part of the coefficient.
+ * @param imag The imaginary part of the cofficient.
+ * @param absolute The absolute value of the coefficient.
+ * @param angle The angle of the coefficient.
+ */
+void fftCoefficient(double *tss, long *tss_length, long *tss_number_of_tss, long *coefficient, double *real,
+                    double *imag, double *absolute, double *angle);
 
 /**
  * @brief Calculates the first relative location of the maximal value for each time series.
@@ -213,6 +308,17 @@ void has_duplicates(double *tss, long *tss_length, long *tss_number_of_tss, bool
  * and false otherwise.
  */
 void has_duplicate_max(double *tss, long *tss_length, long *tss_number_of_tss, bool *result);
+
+/**
+ * @brief Calculates if the minimum of the input time series is duplicated
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_length Time series length (All time series need to have the same length).
+ * @param tss_number_of_tss Number of time series.
+ * @param result Array containing True if the minimum of the time series is duplicated
+ * and false otherwise.
+ */
+void has_duplicate_min(double *tss, long *tss_length, long *tss_number_of_tss, bool *result);
 
 /**
  * @brief Calculates the index of the max quantile.
@@ -296,17 +402,6 @@ void linear_trend(double *tss, long *tss_length, long *tss_number_of_tss, double
                   double *intercept, double *slope, double *stdrr);
 
 /**
- * @brief Calculates if the minimum of the input time series is duplicated
- *
- * @param tss Time series concatenated in a single row.
- * @param tss_length Time series length (All time series need to have the same length).
- * @param tss_number_of_tss Number of time series.
- * @param result Array containing True if the minimum of the time series is duplicated
- * and false otherwise.
- */
-void has_duplicate_min(double *tss, long *tss_length, long *tss_number_of_tss, bool *result);
-
-/**
  * @brief Calculates the length of the longest consecutive subsequence in tss that is bigger than the mean of tss.
  *
  * @param tss Time series concatenated in a single row.
@@ -328,6 +423,24 @@ void longest_strike_above_mean(double *tss, long *tss_length, long *tss_number_o
 void longest_strike_below_mean(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
 
 /**
+ * @brief Largest fixed point of dynamics \f$\max_x {h(x)=0}\f$ estimated from polynomial
+ * \f$h(x)\f$, which has been fitted to the deterministic dynamics of Langevin model
+ * \f[
+ *    \dot(x)(t) = h(x(t)) + R \mathcal(N)(0,1)
+ * \f]
+ * as described by
+ * Friedrich et al. (2000): Physics Letters A 271, p. 217-222 *Extracting model equations from experimental data.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param m Order of polynom to fit for estimating fixed points of dynamics.
+ * @param r Number of quantiles to use for averaging.
+ * @param result Largest fixed point of deterministic dynamics.
+ */
+void max_langevin_fixed_point(double *tss, long *tss_l, long *tss_n, int *m, double *r, double *result);
+
+/**
  * @brief Calculates the maximum value for each time series within tss.
  *
  * @param tss Time series concatenated in a single row.
@@ -336,6 +449,16 @@ void longest_strike_below_mean(double *tss, long *tss_length, long *tss_number_o
  * @param result The maximum value of each time series within tss.
  */
 void maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
+
+/**
+ * @brief Calculates the mean value for each time series within tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param result The mean value of each time series within tss.
+ */
+void mean(double *tss, long *tss_l, long *tss_n, double *result);
 
 /**
  * @brief Calculates the mean over the absolute differences between subsequent time series values in tss.
@@ -348,99 +471,14 @@ void maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *res
 void mean_absolute_change(double *tss, long *tss_length, long *tss_number_of_tss, double *result);
 
 /**
- * @brief Calculates the fourier coefficients of the one-dimensional discrete
- * Fourier Transform for real input by fast fourier transformation algorithm.
- *
- * @param tss Time series concatenated in a single row.
- * @param tss_length Time series length (All time series need to have the same length).
- * @param tss_number_of_tss Number of time series.
- * @param coefficient The coefficient to extract from the FFT.
- * @param real The real part of the coefficient.
- * @param imag The imaginary part of the cofficient.
- * @param absolute The absolute value of the coefficient.
- * @param angle The angle of the coefficient.
- */
-void fftCoefficient(double *tss, long *tss_length, long *tss_number_of_tss, long *coefficient, double *real,
-                    double *imag, double *absolute, double *angle);
-
-/**
- * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
- * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
- * lags (1 to length of x).
+ * @brief Calculates the mean over the differences between subsequent time series values in tss.
  *
  * @param tss Time series concatenated in a single row.
  * @param tss_l Time series length (All time series need to have the same length).
  * @param tss_n Number of time series.
- * @param aggregation_function Function to be used in the aggregation. It receives an integer which indicates the
- * function to be applied:
- *          {
- *              0 : mean,
- *              1 : median
- *              2 : min,
- *              3 : max,
- *              4 : stdev,
- *              5 : var,
- *              default : mean
- *          }
- * @param result An array whose values contains the aggregated correaltion for each time series.
+ * @param result The mean over the differences between subsequent time series values.
  */
-void aggregated_autocorrelation(double *tss, long *tss_l, long *tss_n, int *aggregation_function, double *result);
-
-/**
- * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
- * over chunks versus the sequence from 0 up to the number of chunks minus one.
- *
- * @param tss Time series concatenated in a single row.
- * @param tss_l Time series length (All time series need to have the same length).
- * @param tss_n Number of time series.
- * @param chunkSize The chunk size used to aggregate the data.
- * @param aggregation_function Function to be used in the aggregation. It receives an integer which indicates the
- * function to be applied:
- *          {
- *              0 : mean,
- *              1 : median
- *              2 : min,
- *              3 : max,
- *              4 : stdev,
- *              default : mean
- *          }
- * @param slope Slope of the regression line.
- * @param intercept Intercept of the regression line.
- * @param rvalue Correlation coefficient.
- * @param pvalue Two-sided p-value for a hypothesis test whose null hypothesis is that the slope is zero,
- * using Wald Test with t-distribution of the test statistic.
- * @param stderrest Standard error of the estimated gradient.
- */
-void aggregated_linear_trend(double *t, long *t_l, long *t_n, long *chunkSize, int *aggregation_function, double *slope,
-                             double *intercept, double *rvalue, double *pvalue, double *stderrest);
-
-/**
- * @brief Calculates a Continuous wavelet transform for the Ricker wavelet, also known as
- * the "Mexican hat wavelet" which is defined by:
- *
- *  .. math::
- *      \\frac{2}{\\sqrt{3a} \\pi^{
- *  \\frac{1} { 4 }}} (1 - \\frac{x^2}{a^2}) exp(-\\frac{x^2}{2a^2})
- *
- *  where :math:`a` is the width parameter of the wavelet function.
- *
- * This feature calculator takes three different parameter: widths, coeff and w. The feature calculator takes all
- * the different widths arrays and then calculates the cwt one time for each different width array. Then the values
- * for the different coefficient for coeff and width w are returned. (For each dic in param one feature is
- * returned).
- *
- * @param tss Time series concatenated in a single row.
- * @param tss_l Time series length (All time series need to have the same length).
- * @param tss_n Number of time series.
- * @param widths Array that contains all different widths.
- * @param widths_l widths length (All of those ones need to have the same length)
- * @param widths_n Number of widths.
- * @param coeff Coefficient of interest.
- * @param w Width of interest.
- * @param result Result of calculated coefficients.
- */
-void cwt_coefficients(double *tss, long *tss_l, long *tss_n, int *widths, long *widths_l, long *widths_n, int *coeff,
-                      int *w, double *result);
+void mean_change(double *tss, long *tss_l, long *tss_n, double *result);
 
 /**
  * @brief Calculates mean value of a central approximation of the second derivative for each time series in tss.
@@ -451,6 +489,16 @@ void cwt_coefficients(double *tss, long *tss_l, long *tss_n, int *widths, long *
  * @param result The mean value of a central approximation of the second derivative for each time series.
  */
 void mean_second_derivative_central(double *tss, long *tss_l, long *tss_n, double *result);
+
+/**
+ * @brief Calculates the median value for each time series within tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param result The median value of each time series within tss.
+ */
+void median(double *tss, long *tss_l, long *tss_n, double *result);
 
 /**
  * @brief Calculates the minimum value for each time series within tss.
