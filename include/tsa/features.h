@@ -583,5 +583,20 @@ af::array numberCrossingM(af::array tss, int m);
  */
 af::array numberPeaks(af::array tss, int n);
 
+/**
+ * @brief Calculates the percentage of unique values, that are present in the time series more than once.
+ * \f[
+ *      len(different values occurring more than once) / len(different values)
+ * \f]
+ * This means the percentage is normalized to the number of unique values, in contrast to the
+ * percentageOfReoccurringValuesToAllValues.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
+ * @return af::array Returns the percentage of unique values, that are present in the time series more than once.
+ */
+af::array percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool isSorted = false);
+
 };  // namespace features
 };  // namespace tsa

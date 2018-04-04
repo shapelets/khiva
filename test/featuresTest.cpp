@@ -838,6 +838,20 @@ void numberPeaks() {
     ASSERT_EQ(np[1], 1);
 }
 
+void percentageOfReoccurringDatapointsToAllDatapoints() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(tss, false);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {0.25, 0.25};
+
+    ASSERT_EQ(calculated[0], expected[0]);
+    ASSERT_EQ(calculated[1], expected[1]);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -891,3 +905,5 @@ TSA_TEST(FeaturesTests, Minimum, minimum);
 TSA_TEST(FeaturesTests, NumberCrossingM, numberCrossingM);
 TSA_TEST(FeaturesTests, CwtCoefficients, cwtCoefficients);
 TSA_TEST(FeaturesTests, NumberPeaks, numberPeaks);
+TSA_TEST(FeaturesTests, PercentageOfReoccurringDatapointsToAllDatapoints,
+         percentageOfReoccurringDatapointsToAllDatapoints);

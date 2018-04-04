@@ -12,6 +12,8 @@
 #include <tsa/regularization.h>
 #include <tsa/statistics.h>
 
+#define BATCH_SIZE 2048
+
 af::array tsa::features::absEnergy(af::array base) {
     array p2 = af::pow(base, 2);
     af::array sp2 = af::sum(p2, 0);
@@ -675,4 +677,32 @@ af::array tsa::features::numberPeaks(af::array tss, int n) {
     }
 
     return af::sum(res.as(tss.type()), 0);
+}
+
+af::array tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool isSorted) {
+    af::array result = af::array(1, tss.dims(1));
+    // Doing it sequentially because the setUnique function can only be used with a vector
+    for (int i = 0; i < tss.dims(1); i++) {
+        af::array unique = af::setUnique(tss(span, i), isSorted);
+        int n = unique.dims(0);
+        // The chunk size cannot be greater than the length of the unique values
+        int chunkSize = std::min(n, BATCH_SIZE);
+        int nChunks = std::ceil((float)n / chunkSize);
+
+        af::array tmpResult = af::array(0, tss.type());
+
+        for (int j = 0; j < n; j += chunkSize) {
+            // The iteration space cannot be greater than what is left (n - j)
+            int iterationSize = std::min(chunkSize, n - j);
+            af::array uniqueChunk = unique(af::seq(j, j + iterationSize - 1));
+
+            af::array tssTiled = af::tile(tss(span, i), 1, uniqueChunk.dims(0));
+            uniqueChunk = af::transpose(af::tile(uniqueChunk, 1, tss.dims(0)));
+
+            tmpResult = af::join(0, tmpResult, af::sum(af::sum(uniqueChunk == tssTiled, 0) > 1, 1).as(tss.type()));
+        }
+        result(i) = af::sum(tmpResult, 0) / (float)unique.dims(0);
+    }
+
+    return result;
 }
