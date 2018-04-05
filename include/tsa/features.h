@@ -610,5 +610,18 @@ af::array percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool i
  */
 af::array quantile(af::array tss, af::array q, float precision = 1e8);
 
+/**
+ * @brief Calculates the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
+ * \f$x\f$.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @param r Number of times that the values should be away from.
+ * @return af::array The ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
+ * \f$x\f$.
+ */
+af::array ratioBeyondRSigma(af::array tss, float r);
+
 };  // namespace features
 };  // namespace tsa

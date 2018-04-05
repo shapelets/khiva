@@ -710,3 +710,12 @@ af::array tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::ar
 af::array tsa::features::quantile(af::array tss, af::array q, float precision) {
     return tsa::statistics::quantile(tss, q, precision);
 }
+
+af::array tsa::features::ratioBeyondRSigma(af::array tss, float r) {
+    float n = tss.dims(0);
+
+    af::array greaterThanRSigma =
+        af::abs(tss - af::tile(af::mean(tss, 0), tss.dims(0))) > af::tile(r * af::stdev(tss, 0), tss.dims(0));
+
+    return af::sum(greaterThanRSigma.as(tss.type()), 0) / n;
+}

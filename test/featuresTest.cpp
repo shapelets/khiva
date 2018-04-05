@@ -863,11 +863,23 @@ void quantile() {
 
     af::array result = tsa::features::quantile(tss, qq);
 
-    af_print(result);
-
     float *calculated = result.host<float>();
 
     float expected[] = {1.79999999, 1.79999999};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+}
+
+void ratioBeyondRSigma() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::ratioBeyondRSigma(tss, 0.5);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {0.7142857142857143, 0.7142857142857143};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
@@ -929,3 +941,4 @@ TSA_TEST(FeaturesTests, NumberPeaks, numberPeaks);
 TSA_TEST(FeaturesTests, PercentageOfReoccurringDatapointsToAllDatapoints,
          percentageOfReoccurringDatapointsToAllDatapoints);
 TSA_TEST(FeaturesTests, Quantile, quantile);
+TSA_TEST(FeaturesTests, RatioBeyondRSigma, ratioBeyondRSigma);
