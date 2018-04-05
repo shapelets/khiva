@@ -61,7 +61,7 @@ af::array kurtosis(af::array tss);
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of
- * time series.
+ * time series. NOTE: the time series should be sorted
  * @param q Percentile(s) at which to extract score(s). One or many.
  * @param precision Number of decimals expected.
  * @return af::array Values at the given quantile.
@@ -73,7 +73,7 @@ af::array quantile(af::array tss, af::array q, float precision = 1e8);
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of
- * time series.
+ * time series. NOTE: the time series should be sorted
  * @param quantiles Number of quantiles to extract. From 0 to 1, step 1/quantiles.
  * @param precision Number of decimals expected.
  * @return af::array Matrix with the categories, one category per row, the start of

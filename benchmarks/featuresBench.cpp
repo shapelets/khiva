@@ -843,6 +843,29 @@ void PercentageOfReoccurringDatapointsToAllDatapoints(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
+template <af::Backend BE, int D>
+void Quantile(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+    float qq[] = {0.5};
+    auto q = af::array(1, qq);
+
+    t = af::sort(t, 0);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto quantile = tsa::features::quantile(t, q);
+        quantile.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
 void cudaBenchmarks() {
     BENCHMARK_TEMPLATE(AbsoluteSumOfChanges, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
@@ -1053,6 +1076,11 @@ void cudaBenchmarks() {
                        CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}, {0, 1}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Quantile, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
@@ -1266,6 +1294,11 @@ void openclBenchmarks() {
                        OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}, {0, 1}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Quantile, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
@@ -1481,6 +1514,11 @@ void cpuBenchmarks() {
                        CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}, {0, 1}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Quantile, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 

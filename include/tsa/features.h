@@ -486,7 +486,7 @@ af::array longestStrikeBelowMean(af::array tss);
  * Friedrich et al. (2000): Physics Letters A 271, p. 217-222 *Extracting model equations from experimental data*
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
- * dimension one indicates the number of time series.
+ * dimension one indicates the number of time series. NOTE: the time series should be sorted
  * @param m Order of polynom to fit for estimating fixed points of dynamics.
  * @param r Number of quantiles to use for averaging.
  * @return af::array Largest fixed point of deterministic dynamics
@@ -597,6 +597,18 @@ af::array numberPeaks(af::array tss, int n);
  * @return af::array Returns the percentage of unique values, that are present in the time series more than once.
  */
 af::array percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool isSorted = false);
+
+/**
+ * @brief Returns values at the given quantile.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @param q Percentile(s) at which to extract score(s). One or many.
+ * @param precision Number of decimals expected.
+ * @return af::array Values at the given quantile.
+ */
+af::array quantile(af::array tss, af::array q, float precision = 1e8);
 
 };  // namespace features
 };  // namespace tsa

@@ -852,6 +852,27 @@ void percentageOfReoccurringDatapointsToAllDatapoints() {
     ASSERT_EQ(calculated[1], expected[1]);
 }
 
+void quantile() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    tss = af::sort(tss, 0);
+
+    float q[] = {0.6};
+    af::array qq = af::array(1, q);
+
+    af::array result = tsa::features::quantile(tss, qq);
+
+    af_print(result);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {1.79999999, 1.79999999};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -907,3 +928,4 @@ TSA_TEST(FeaturesTests, CwtCoefficients, cwtCoefficients);
 TSA_TEST(FeaturesTests, NumberPeaks, numberPeaks);
 TSA_TEST(FeaturesTests, PercentageOfReoccurringDatapointsToAllDatapoints,
          percentageOfReoccurringDatapointsToAllDatapoints);
+TSA_TEST(FeaturesTests, Quantile, quantile);

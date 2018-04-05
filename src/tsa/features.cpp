@@ -706,3 +706,7 @@ af::array tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::ar
 
     return result;
 }
+
+af::array tsa::features::quantile(af::array tss, af::array q, float precision) {
+    return tsa::statistics::quantile(tss, q, precision);
+}
