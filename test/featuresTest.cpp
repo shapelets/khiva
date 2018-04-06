@@ -436,6 +436,22 @@ void countBelowMean() {
     ASSERT_EQ(countBelowMeanCalculated[1], 3);
 }
 
+void cwtCoefficients() {
+    float data[] = {0.1, 0.2, 0.3, 0.1, 0.2, 0.3};
+    int widths[] = {1, 2, 3};
+    af::array data_d(3, 2, data);
+    af::array widths_d(3, 1, widths);
+    af::array result = tsa::features::cwtCoefficients(data_d, widths_d, 2, 2);
+
+    float *cwt = result.host<float>();
+
+    float r0 = 0.26517161726951599;
+    float r1 = 0.26517161726951599;
+
+    ASSERT_NEAR(r0, cwt[0], EPSILON);
+    ASSERT_NEAR(r1, cwt[1], EPSILON);
+}
+
 void energyRatioByChunk() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(6, 2, data);
@@ -810,20 +826,17 @@ void numberCrossingM() {
     ASSERT_EQ(ncm[1], 7);
 }
 
-void cwtCoefficients() {
-    float data[] = {0.1, 0.2, 0.3, 0.1, 0.2, 0.3};
-    int widths[] = {1, 2, 3};
-    af::array data_d(3, 2, data);
-    af::array widths_d(3, 1, widths);
-    af::array result = tsa::features::cwtCoefficients(data_d, widths_d, 2, 2);
+void numberCwtPeaks() {
+    float data[] = {1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1,
+                    1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1};
+    af::array tss(21, 2, data);
 
-    float *cwt = result.host<float>();
+    af::array result = tsa::features::numberCwtPeaks(tss, 2);
 
-    float r0 = 0.26517161726951599;
-    float r1 = 0.26517161726951599;
+    float *np = result.host<float>();
 
-    ASSERT_NEAR(r0, cwt[0], EPSILON);
-    ASSERT_NEAR(r1, cwt[1], EPSILON);
+    ASSERT_EQ(np[0], 1);
+    ASSERT_EQ(np[1], 1);
 }
 
 void numberPeaks() {
@@ -863,6 +876,7 @@ TSA_TEST(FeaturesTests, C3, c3);
 TSA_TEST(FeaturesTests, CidCe, cidCe);
 TSA_TEST(FeaturesTests, CountAboveMean, countAboveMean);
 TSA_TEST(FeaturesTests, CountBelowMean, countBelowMean);
+TSA_TEST(FeaturesTests, CwtCoefficients, cwtCoefficients);
 TSA_TEST(FeaturesTests, EnergyRatioByChunk, energyRatioByChunk);
 TSA_TEST(FeaturesTests, FftAggregated, fftAggregated);
 TSA_TEST(FeaturesTests, FftCoefficient, fftCoefficient);
@@ -889,5 +903,5 @@ TSA_TEST(FeaturesTests, MeanSecondDerivativeCentral, meanSecondDerivativeCentral
 TSA_TEST(FeaturesTests, Median, median);
 TSA_TEST(FeaturesTests, Minimum, minimum);
 TSA_TEST(FeaturesTests, NumberCrossingM, numberCrossingM);
-TSA_TEST(FeaturesTests, CwtCoefficients, cwtCoefficients);
+TSA_TEST(FeaturesTests, NumberCwtPeaks, numberCwtPeaks);
 TSA_TEST(FeaturesTests, NumberPeaks, numberPeaks);

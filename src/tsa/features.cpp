@@ -4,13 +4,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <math.h>
 #include <tsa/features.h>
 #include <tsa/normalization.h>
 #include <tsa/polynomial.h>
 #include <tsa/regression.h>
 #include <tsa/regularization.h>
 #include <tsa/statistics.h>
+#include <cmath>
 
 af::array tsa::features::absEnergy(af::array base) {
     array p2 = af::pow(base, 2);
@@ -324,9 +324,8 @@ af::array tsa::features::countBelowMean(af::array tss) {
 }
 
 af::array ricker(int points, int a) {
-    // Calculating number PI
-    float PIf = std::atan(1) * 4;
-    float A = 2 / (std::sqrt(3 * a) * std::pow(PIf, 0.25));
+    double pi = 3.14159265358979323846264338327950288;
+    float A = 2 / (std::sqrt(3 * a) * std::pow(pi, 0.25));
     float wsq = std::pow(a, 2);
     af::array vec = af::range(af::dim4(points)) - ((points - 1) / 2.0);
     af::array xsq = af::pow(vec, 2);
@@ -658,6 +657,26 @@ af::array tsa::features::minimum(af::array tss) { return af::min(tss, 0); }
 
 af::array tsa::features::numberCrossingM(af::array tss, int m) {
     return af::sum(af::abs(af::diff1(tss > m)), 0).as(tss.type());
+}
+
+af::array identify_ridge_lines(af::array cwt_tss, af::array max_distances, int gap_thresh) {
+    af::array out;
+    return out;
+}
+
+af::array filter_ridge_lines(af::array cwt_dat, af::array ridge_lines, int min_length, min_snr, noise_perc);
+
+af::array tsa::features::numberCwtPeaks(af::array tss, int maxW) {
+    af::array widths = (af::range(af::dim4(maxW)) + 1).as(af::dtype::s32);
+    af::array max_distances = widths / 4.0;
+    int gap_thresh = std::ceil(1);
+    af::array cwt_tss = cwt(tss, widths);
+    af::array ridge_lines = identify_ridge_lines(cwt_tss, max_distances, gap_thresh);
+    af::array filtered = filter_ridge_lines(cwt_dat, ridge_lines, min_length, 1, 10);
+
+    af_print(out);
+
+    return out;
 }
 
 af::array tsa::features::numberPeaks(af::array tss, int n) {
