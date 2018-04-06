@@ -340,6 +340,25 @@ af::array firstLocationOfMaximum(af::array tss);
 af::array firstLocationOfMinimum(af::array tss);
 
 /**
+ * @brief Coefficients of polynomial \f$h(x)\f$, which has been fitted to the deterministic
+ * dynamics of Langevin model:
+ * \f[
+ *    \dot(x)(t) = h(x(t)) + R \mathcal(N)(0,1)
+ * \f]
+ * as described by [1]. For short time-series this method is highly dependent on the parameters.
+ *
+ * [1] Friedrich et al. (2000): Physics Letters A 271, p. 217-222
+ * Extracting model equations from experimental data.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param m Order of polynom to fit for estimating fixed points of dynamics.
+ * @param r Number of quantils to use for averaging.
+ * @return af::array The coefficients for each time series.
+ */
+af::array friedrichCoefficients(af::array tss, int m, float r);
+
+/**
  * @brief Calculates if the input time series contain duplicated elements
  *
  * @param tss Expects an input array whose dimension zero is the length of the
