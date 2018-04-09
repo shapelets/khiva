@@ -276,6 +276,19 @@ JNIEXPORT void JNICALL Java_tsa_Features_energyRatioByChunks(JNIEnv *env, jobjec
                                                              jlong segmentFocus, jdoubleArray result);
 
 /**
+ * @brief Calculates the spectral centroid(mean), variance, skew, and kurtosis of the absolute fourier transform
+ * spectrum.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param result The spectral centroid (mean), variance, skew, and kurtosis of the absolute fourier transform
+ * spectrum.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_fftAggregated(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                       jlong tssN, jdoubleArray result);
+
+/**
  * @brief Calculates the fourier coefficients of the one-dimensional discrete
  * Fourier Transform for real input by fast fourier transformation algorithm.
  *
@@ -581,6 +594,67 @@ JNIEXPORT void JNICALL Java_tsa_Features_minimum(JNIEnv *env, jobject thisObj, j
 JNIEXPORT void JNICALL Java_tsa_Features_numberCrossingM(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
                                                          jlong tssN, jint m, jdoubleArray result);
 
+/**
+ * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$tss\f$. A peak of support
+ * \f$n\f$ is defined as a subsequence of \f$tss\f$ where a value occurs, which is bigger than its \f$n\f$ neighbours to
+ * the left and to the right.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param n The support of the peak.
+ * @param result The number of peaks of at least support \f$n\f$.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_numberPeaks(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                     jlong tssN, jint n, jdoubleArray result);
+
+/**
+ * @brief Calculates the percentage of unique values, that are present in the time series more than once.
+ * \f[
+ *      len(different values occurring more than once) / len(different values)
+ * \f]
+ * This means the percentage is normalized to the number of unique values, in contrast to the
+ * percentageOfReoccurringValuesToAllValues.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
+ * @return Returns the percentage of unique values, that are present in the time series more than once.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_percentageOfReoccurringDatapointsToAllDatapoints(JNIEnv *env, jobject thisObj,
+                                                                                          jdoubleArray tss, jlong tssL,
+                                                                                          jlong tssN, jboolean isSorted,
+                                                                                          jdoubleArray result);
+
+/**
+ * @brief Returns values at the given quantile.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param q Percentile(s) at which to extract score(s). One or many.
+ * @param qL Number of percentiles.
+ * @param precision Number of decimals expected.
+ * @return Values at the given quantile.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_quantile(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                  jlong tssN, jdoubleArray q, jlong qL, jfloat precision,
+                                                  jdoubleArray result);
+
+/**
+ * @brief Calculates the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
+ * \f$x\f$.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param r Number of times that the values should be away from.
+ * @return The ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
+ * \f$x\f$.
+ */
+JNIEXPORT void JNICALL Java_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                           jlong tssN, jfloat r, jdoubleArray result);
 #ifdef __cplusplus
 }
 #endif

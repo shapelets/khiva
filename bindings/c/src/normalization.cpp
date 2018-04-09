@@ -16,6 +16,12 @@ void znorm(double *tss, long *tss_l, long *tss_n, double *epsilon, double *resul
     primitive_result = tsa::normalization::znorm(af::array(*tss_l, *tss_n, tss), *epsilon);
     primitive_result.host(result);
 }
+
+void znorm_in_place(double *tss, long *tss_l, long *tss_n, double *epsilon) {
+    af::array tss_result = af::array(*tss_l, *tss_n, tss);
+    tsa::normalization::znormInPlace(tss_result, *epsilon);
+    tss_result.host(tss);
+}
 #ifdef __cplusplus
 }
 #endif

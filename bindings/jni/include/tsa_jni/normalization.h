@@ -26,6 +26,19 @@ extern "C" {
  */
 JNIEXPORT void JNICALL Java_tsa_Normalization_znorm(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
                                                     jlong tssN, jdouble epsilon, jdoubleArray result);
+
+/**
+ * @brief Adjusts the time series in the given input and performs z-norm
+ * inplace (without allocating further memory).
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tssL Time series length (All time series need to have the same length).
+ * @param tssN Number of time series.
+ * @param epsilon Minimum standard deviation to consider.  It acts a a gatekeeper for
+ * those time series that may be constant or near constant.
+ */
+JNIEXPORT void JNICALL Java_tsa_Normalization_znormInPlace(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                           jlong tssN, jdouble epsilon);
 #ifdef __cplusplus
 }
 #endif

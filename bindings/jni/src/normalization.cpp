@@ -22,6 +22,20 @@ JNIEXPORT void JNICALL Java_tsa_Normalization_znorm(JNIEnv *env, jobject thisObj
     env->SetDoubleArrayRegion(result, 0, tss_n * tss_l, &output_result[0]);
     return;
 }
+
+JNIEXPORT void JNICALL Java_tsa_Normalization_znormInPlace(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                           jlong tssN, jdouble epsilon) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result = af::array(tssL, tssN, input_tss);
+    tsa::normalization::znormInPlace(primitive_result, epsilon);
+    jdouble output_result[tssN * tssL];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(tss, 0, tssN * tssL, &output_result[0]);
+    return;
+}
+
 #ifdef __cplusplus
 }
 #endif

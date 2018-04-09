@@ -182,6 +182,12 @@ void energy_ratio_by_chunks(double *tss, long *tss_length, long *tss_number_of_t
     primitive_result.host(result);
 }
 
+void fft_aggregated(double *tss, long *tss_l, long *tss_n, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::fftAggregated(af::array(*tss_l, *tss_n, tss));
+    primitive_result.host(result);
+}
+
 void fftCoefficient(double *tss, long *tss_length, long *tss_number_of_tss, long *coefficient, double *real,
                     double *imag, double *absolute, double *angle) {
     af::array primitive_real, primitive_imag, primitive_abs, primitive_angle;
@@ -334,9 +340,37 @@ void minimum(double *tss, long *tss_l, long *tss_n, double *result) {
     primitive_result.host(result);
 }
 
+void number_peaks(double *tss, long *tss_l, long *tss_n, int *n, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::numberPeaks(af::array(*tss_l, *tss_n, tss), *n);
+    primitive_result.host(result);
+}
+
 void number_crossing_m(double *tss, long *tss_l, long *tss_n, int *m, double *result) {
     af::array primitive_result;
     primitive_result = tsa::features::numberCrossingM(af::array(*tss_l, *tss_n, tss), *m);
+    primitive_result.host(result);
+}
+
+void percentage_of_reoccurring_datapoints_to_all_datapoints(double *tss, long *tss_l, long *tss_n, bool *is_sorted,
+                                                            double *result) {
+    af::array primitive_result;
+    primitive_result =
+        tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::array(*tss_l, *tss_n, tss), *is_sorted);
+    primitive_result.host(result);
+}
+
+void quantile(double *tss, long *tss_l, long *tss_n, double *q, long *q_l, double *precision, double *result) {
+    af::array primitive_result;
+    float precision_f = (float)*precision;
+    primitive_result = tsa::features::quantile(af::array(*tss_l, *tss_n, tss), af::array(*q_l, q), precision_f);
+    primitive_result.host(result);
+}
+
+void ratio_beyond_r_sigma(double *tss, long *tss_l, long *tss_n, double *r, double *result) {
+    af::array primitive_result;
+    float r_f = (float)*r;
+    primitive_result = tsa::features::ratioBeyondRSigma(af::array(*tss_l, *tss_n, tss), r_f);
     primitive_result.host(result);
 }
 

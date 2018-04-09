@@ -442,7 +442,7 @@ af::array tsa::features::fftAggregated(af::array tss) {
         int n = (tss.dims(0) + 1) / 2;
         fftComputed = af::abs(af::fft(tss, 0))(af::seq(0, n - 1), span);
     }
-    output = af::constant(0, 4, tss.dims(1));
+    output = af::constant(0, 4, tss.dims(1), tss.type());
     output(0, span) = calculateCentroid(fftComputed);
     output(1, span) = calculateVariance(fftComputed);
     output(2, span) = calculateSkew(fftComputed);
@@ -680,7 +680,7 @@ af::array tsa::features::numberPeaks(af::array tss, int n) {
 }
 
 af::array tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool isSorted) {
-    af::array result = af::array(1, tss.dims(1));
+    af::array result = af::array(1, tss.dims(1), tss.type());
     // Doing it sequentially because the setUnique function can only be used with a vector
     for (int i = 0; i < tss.dims(1); i++) {
         af::array unique = af::setUnique(tss(span, i), isSorted);

@@ -343,6 +343,19 @@ JNIEXPORT void JNICALL Java_tsa_Features_energyRatioByChunks(JNIEnv *env, jobjec
     return;
 }
 
+JNIEXPORT void JNICALL Java_tsa_Features_fftAggregated(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                       jlong tssN, jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::fftAggregated(af::array(tssL, tssL, input_tss));
+    jdouble output_result[tssN * tssL];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN * tssL, &output_result[0]);
+    return;
+}
+
 JNIEXPORT void JNICALL Java_tsa_Features_fftCoefficient(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
                                                         jlong tssNumberOfTss, jlong coefficient, jdoubleArray real,
                                                         jdoubleArray imag, jdoubleArray absolute, jdoubleArray angle) {
@@ -733,6 +746,64 @@ JNIEXPORT void JNICALL Java_tsa_Features_numberCrossingM(JNIEnv *env, jobject th
     env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
     af::array primitive_result;
     primitive_result = tsa::features::numberCrossingM(af::array(tssL, tssN, input_tss), m);
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_numberPeaks(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                     jlong tssN, jint n, jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::numberPeaks(af::array(tssL, tssN, input_tss), n);
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_percentageOfReoccurringDatapointsToAllDatapoints(JNIEnv *env, jobject thisObj,
+                                                                                          jdoubleArray tss, jlong tssL,
+                                                                                          jlong tssN, jboolean isSorted,
+                                                                                          jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result =
+        tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::array(tssL, tssN, input_tss), isSorted);
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_quantile(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                  jlong tssN, jdoubleArray q, jlong qL, jfloat precision,
+                                                  jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    jdouble input_q[qL];
+    env->GetDoubleArrayRegion(q, 0, qL, &input_q[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::quantile(af::array(tssL, tssN, input_tss), af::array(qL, input_q), precision);
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                           jlong tssN, jfloat r, jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::ratioBeyondRSigma(af::array(tssL, tssN, input_tss), r);
     jdouble output_result[tssN];
     primitive_result.host(output_result);
     env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
