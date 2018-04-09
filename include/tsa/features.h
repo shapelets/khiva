@@ -640,5 +640,16 @@ af::array ratioBeyondRSigma(af::array tss, float r);
  */
 af::array sampleEntropy(af::array tss);
 
+/**
+ * @brief Calculates the sample skewness of tss (calculated with the adjusted Fisher-Pearson standardized
+ * moment coefficient G1).
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @return af::array Array containing the skewness of each time series in tss.
+ */
+af::array skewness(af::array tss);
+
 };  // namespace features
 };  // namespace tsa

@@ -765,3 +765,5 @@ af::array tsa::features::sampleEntropy(af::array tss) {
 
     return -af::log(A / B);
 }
+
+af::array tsa::features::skewness(af::array tss) { return tsa::statistics::skewness(tss); }
