@@ -913,6 +913,19 @@ void skewness() {
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
 }
 
+void standardDeviation() {
+    float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
+                    20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::standardDeviation(tss);
+
+    float *stdev = result.host<float>();
+
+    ASSERT_NEAR(stdev[0], 12.363150892875165, EPSILON);
+    ASSERT_NEAR(stdev[1], 9.51367436903324, EPSILON);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -972,3 +985,4 @@ TSA_TEST(FeaturesTests, Quantile, quantile);
 TSA_TEST(FeaturesTests, RatioBeyondRSigma, ratioBeyondRSigma);
 TSA_TEST(FeaturesTests, SampleEntropy, sampleEntropy);
 TSA_TEST(FeaturesTests, Skewness, skewness);
+TSA_TEST(FeaturesTests, StandardDeviation, standardDeviation);

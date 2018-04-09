@@ -651,5 +651,14 @@ af::array sampleEntropy(af::array tss);
  */
 af::array skewness(af::array tss);
 
+/**
+ * @brief Calculates the standard deviation of each time series within tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return af::array The standard deviation of each time series within tss.
+ */
+af::array standardDeviation(af::array tss);
+
 };  // namespace features
 };  // namespace tsa

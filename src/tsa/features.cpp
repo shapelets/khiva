@@ -767,3 +767,5 @@ af::array tsa::features::sampleEntropy(af::array tss) {
 }
 
 af::array tsa::features::skewness(af::array tss) { return tsa::statistics::skewness(tss); }
+
+af::array tsa::features::standardDeviation(af::array tss) { return af::stdev(tss, 0); }
