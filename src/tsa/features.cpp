@@ -719,3 +719,49 @@ af::array tsa::features::ratioBeyondRSigma(af::array tss, float r) {
 
     return af::sum(greaterThanRSigma.as(tss.type()), 0) / n;
 }
+
+af::array tsa::features::sampleEntropy(af::array tss) {
+    long n = tss.dims(0);
+
+    af::array std = af::stdev(tss, 0);
+    std *= 0.2;
+
+    const long chunkSize = 32768;
+    long lastIterationSize = chunkSize;
+
+    af::array query = af::array(1, chunkSize, tss.dims(1), tss.type());
+    af::array reference = af::array(1, chunkSize, tss.dims(1), tss.type());
+
+    af::array A = af::constant(0, tss.dims(1), tss.type());
+    af::array B = af::constant(0, tss.dims(1), tss.type());
+
+    // it performs a batching (or blocking) in the horizontal direction
+    for (int i = 0; i < n - 1; i++) {
+        // it performs a batching (or blocking) in the vertical direction
+        for (int j = i + 1; j < n; j += chunkSize) {
+            long iterationSize = std::min(chunkSize, n - j);
+            // if our batching dimension does not match the dimension of the remaining elements, modify dimensions
+            if (iterationSize != chunkSize || iterationSize != lastIterationSize) {
+                lastIterationSize = iterationSize;
+                query = af::array(1, iterationSize, tss.dims(1), tss.type());
+                reference = af::array(1, iterationSize, tss.dims(1), tss.type());
+            }
+
+            query = af::tile(af::reorder(tss(af::seq(i, i), span), 0, 2, 1, 3), 1, iterationSize);
+            reference = af::reorder(tss(af::seq(j, j + iterationSize - 1), span), 2, 0, 1, 3);
+
+            // Get the maximum difference among all dimensions for each time series
+            af::array distances = af::abs(reference - query);
+            // sum the number of elements bigger than the threshhold given by (stdev*r)
+            af::array count = distances <= af::tile(af::reorder(std, 0, 2, 1, 3), distances.dims(0), distances.dims(1));
+            // we summarise all partial sums in sum; we accumulate all partial sums for each vertical dimension
+            A += af::reorder(af::sum(af::sum(count, 0), 1), 2, 0, 1, 3);
+        }
+    }
+
+    float N = n * (n - 1) / 2.0;
+
+    B = af::tile(af::array(1, &N), tss.dims(1)).as(tss.type());
+
+    return -af::log(A / B);
+}

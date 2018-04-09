@@ -885,6 +885,20 @@ void ratioBeyondRSigma() {
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
 }
 
+void sampleEntropy() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::sampleEntropy(tss);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {1.252762968495368, 1.252762968495368};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -942,3 +956,4 @@ TSA_TEST(FeaturesTests, PercentageOfReoccurringDatapointsToAllDatapoints,
          percentageOfReoccurringDatapointsToAllDatapoints);
 TSA_TEST(FeaturesTests, Quantile, quantile);
 TSA_TEST(FeaturesTests, RatioBeyondRSigma, ratioBeyondRSigma);
+TSA_TEST(FeaturesTests, SampleEntropy, sampleEntropy);

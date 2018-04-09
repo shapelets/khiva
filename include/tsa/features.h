@@ -623,5 +623,22 @@ af::array quantile(af::array tss, af::array q, float precision = 1e8);
  */
 af::array ratioBeyondRSigma(af::array tss, float r);
 
+/**
+ * @brief Calculates a vectorized sample entropy algorithm.
+ * https://en.wikipedia.org/wiki/Sample_entropy
+ * https://www.ncbi.nlm.nih.gov/pubmed/10843903?dopt=Abstract
+ * For short time-series this method is highly dependent on the parameters, but should be stable for N > 2000,
+ * see: Yentes et al. (2012) - The Appropriate Use of Approximate Entropy and Sample Entropy with Short Data Sets
+ * Other shortcomings and alternatives discussed in:
+ * Richman & Moorman (2000) - Physiological time-series analysis using approximate entropy and sample entropy.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
+ * contains the vectorized sample entropy for all the input time series in tss.
+ */
+af::array sampleEntropy(af::array tss);
+
 };  // namespace features
 };  // namespace tsa
