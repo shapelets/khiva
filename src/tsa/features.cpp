@@ -769,3 +769,31 @@ af::array tsa::features::sampleEntropy(af::array tss) {
 af::array tsa::features::skewness(af::array tss) { return tsa::statistics::skewness(tss); }
 
 af::array tsa::features::standardDeviation(af::array tss) { return af::stdev(tss, 0); }
+
+af::array tsa::features::sumOfReoccurringDatapoints(af::array tss, bool isSorted) {
+    af::array result = af::array(1, tss.dims(1), tss.type());
+    // Doing it sequentially because the setUnique function can only be used with a vector
+    for (int i = 0; i < tss.dims(1); i++) {
+        af::array unique = af::setUnique(tss(span, i), isSorted);
+        int n = unique.dims(0);
+        // The chunk size cannot be greater than the length of the unique values
+        int chunkSize = std::min(n, BATCH_SIZE);
+
+        af::array counts = af::array(0, tss.type());
+
+        for (int j = 0; j < n; j += chunkSize) {
+            // The iteration space cannot be greater than what is left (n - j)
+            int iterationSize = std::min(chunkSize, n - j);
+            af::array uniqueChunk = unique(af::seq(j, j + iterationSize - 1));
+
+            af::array tssTiled = af::tile(tss(span, i), 1, uniqueChunk.dims(0));
+            uniqueChunk = af::transpose(af::tile(uniqueChunk, 1, tss.dims(0)));
+
+            counts = af::join(0, counts, af::transpose(af::sum(uniqueChunk == tssTiled, 0).as(tss.type())));
+        }
+        counts(counts < 2) = 0.0;
+        result(i) = af::sum(counts * unique, 0);
+    }
+
+    return result;
+}

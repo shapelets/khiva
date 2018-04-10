@@ -926,6 +926,20 @@ void standardDeviation() {
     ASSERT_NEAR(stdev[1], 9.51367436903324, EPSILON);
 }
 
+void sumOfReoccurringDatapoints() {
+    float data[] = {3, 3, 0, 4, 0, 13, 13, 3, 3, 0, 4, 0, 13, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::sumOfReoccurringDatapoints(tss, false);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {32, 32};
+
+    ASSERT_EQ(calculated[0], expected[0]);
+    ASSERT_EQ(calculated[1], expected[1]);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -986,3 +1000,4 @@ TSA_TEST(FeaturesTests, RatioBeyondRSigma, ratioBeyondRSigma);
 TSA_TEST(FeaturesTests, SampleEntropy, sampleEntropy);
 TSA_TEST(FeaturesTests, Skewness, skewness);
 TSA_TEST(FeaturesTests, StandardDeviation, standardDeviation);
+TSA_TEST(FeaturesTests, SumOfReoccurringDatapoints, sumOfReoccurringDatapoints);
