@@ -694,5 +694,15 @@ af::array symmetryLooking(af::array tss, float r);
  */
 af::array valueCount(af::array tss, float v);
 
+/**
+ * @brief Calculates if the variance of tss is greater than the standard deviation. In other words, if the variance of
+ * tss is larger than 1.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return af::array An array denoting if the variance of tss is greater than the standard deviation.
+ */
+af::array varianceLargerThanStandardDeviation(af::array tss);
+
 };  // namespace features
 };  // namespace tsa
