@@ -670,5 +670,19 @@ af::array standardDeviation(af::array tss);
  */
 af::array sumOfReoccurringDatapoints(af::array tss, bool isSorted = false);
 
+/**
+ * @brief Calculates if the distribution of tss *looks symmetric*. This is the case if
+ * \f[
+ *      | mean(tss)-median(tss)| < r * (max(tss)-min(tss))
+ * \f]
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @param r The percentage of the range to compare with.
+ * @return af::array An array denoting if the input time series look symmetric.
+ */
+af::array symmetryLooking(af::array tss, float r);
+
 };  // namespace features
 };  // namespace tsa
