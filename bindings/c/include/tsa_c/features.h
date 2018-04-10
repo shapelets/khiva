@@ -590,6 +590,80 @@ void quantile(double *tss, long *tss_l, long *tss_n, double *q, long *q_n, doubl
  */
 void ratio_beyond_r_sigma(double *tss, long *tss_l, long *tss_n, double *r, double *result);
 
+/**
+ * @brief Calculates a vectorized sample entropy algorithm.
+ * https://en.wikipedia.org/wiki/Sample_entropy
+ * https://www.ncbi.nlm.nih.gov/pubmed/10843903?dopt=Abstract
+ * For short time-series this method is highly dependent on the parameters, but should be stable for N > 2000,
+ * see: Yentes et al. (2012) - The Appropriate Use of Approximate Entropy and Sample Entropy with Short Data Sets
+ * Other shortcomings and alternatives discussed in:
+ * Richman & Moorman (2000) - Physiological time-series analysis using approximate entropy and sample entropy.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param result An array with the same dimensions as tss, whose values (time series in dimension 0)
+ * contains the vectorized sample entropy for all the input time series in tss.
+ */
+void sample_entropy(double *tss, long *tss_l, long *tss_n, double *result);
+
+/**
+ * @brief Calculates the sample skewness of tss (calculated with the adjusted Fisher-Pearson standardized
+ * moment coefficient G1).
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param result Array containing the skewness of each time series in tss.
+ */
+void skewness(double *tss, long *tss_l, long *tss_n, double *result);
+
+/**
+ * @brief Calculates the standard deviation of each time series within tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param result The standard deviation of each time series within tss.
+ */
+void standard_deviation(double *tss, long *tss_l, long *tss_n, double *result);
+
+/**
+ * @brief Calculates the sum of all data points, that are present in the time series more than once.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
+ * @param result Returns the sum of all data points, that are present in the time series more than once.
+ */
+void sum_of_reoccurring_datapoints(double *tss, long *tss_l, long *tss_n, bool *is_sorted, double *result);
+
+/**
+ * @brief Calculates if the distribution of tss *looks symmetric*. This is the case if
+ * \f[
+ *      | mean(tss)-median(tss)| < r * (max(tss)-min(tss))
+ * \f]
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param r The percentage of the range to compare with.
+ * @param result An array denoting if the input time series look symmetric.
+ */
+void symmetry_looking(double *tss, long *tss_l, long *tss_n, double *r, bool *result);
+
+/**
+ * @brief Counts occurrences of value in the time series tss.
+ *
+ * @param tss Time series concatenated in a single row.
+ * @param tss_l Time series length (All time series need to have the same length).
+ * @param tss_n Number of time series.
+ * @param v The value to be counted.
+ * @param result An array containing the count of the given value in each time series.
+ */
+void value_count(int *tss, long *tss_l, long *tss_n, double *v, int *result);
+
 #ifdef __cplusplus
 }
 #endif

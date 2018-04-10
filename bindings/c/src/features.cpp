@@ -374,6 +374,44 @@ void ratio_beyond_r_sigma(double *tss, long *tss_l, long *tss_n, double *r, doub
     primitive_result.host(result);
 }
 
+void sample_entropy(double *tss, long *tss_l, long *tss_n, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::sampleEntropy(af::array(*tss_l, *tss_n, tss));
+    primitive_result.host(result);
+}
+
+void skewness(double *tss, long *tss_l, long *tss_n, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::skewness(af::array(*tss_l, *tss_n, tss));
+    primitive_result.host(result);
+}
+
+void standard_deviation(double *tss, long *tss_l, long *tss_n, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::standardDeviation(af::array(*tss_l, *tss_n, tss));
+    primitive_result.host(result);
+}
+
+void sum_of_reoccurring_datapoints(double *tss, long *tss_l, long *tss_n, bool *is_sorted, double *result) {
+    af::array primitive_result;
+    primitive_result = tsa::features::sumOfReoccurringDatapoints(af::array(*tss_l, *tss_n, tss), *is_sorted);
+    primitive_result.host(result);
+}
+
+void symmetry_looking(double *tss, long *tss_l, long *tss_n, double *r, bool *result) {
+    af::array primitive_result;
+    float r_f = (float)*r;
+    primitive_result = tsa::features::symmetryLooking(af::array(*tss_l, *tss_n, tss), r_f);
+    primitive_result.host(result);
+}
+
+void value_count(int *tss, long *tss_l, long *tss_n, double *v, int *result) {
+    af::array primitive_result;
+    float v_f = (float)*v;
+    primitive_result = tsa::features::valueCount(af::array(*tss_l, *tss_n, tss), v_f);
+    primitive_result.host(result);
+}
+
 #ifdef __cplusplus
 }
 #endif

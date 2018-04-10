@@ -810,6 +810,85 @@ JNIEXPORT void JNICALL Java_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject 
     return;
 }
 
+JNIEXPORT void JNICALL Java_tsa_Features_sampleEntropy(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                       jlong tssN, jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::sampleEntropy(af::array(tssL, tssN, input_tss));
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_skewness(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                  jlong tssN, jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::skewness(af::array(tssL, tssN, input_tss));
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_standardDeviation(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                           jlong tssN, jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::standardDeviation(af::array(tssL, tssN, input_tss));
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject thisObj, jdoubleArray tss,
+                                                                    jlong tssL, jlong tssN, jboolean isSorted,
+                                                                    jdoubleArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::sumOfReoccurringDatapoints(af::array(tssL, tssN, input_tss), isSorted);
+    jdouble output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_symmetryLooking(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                         jlong tssN, jfloat r, jbooleanArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::symmetryLooking(af::array(tssL, tssN, input_tss), r);
+    jboolean output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetBooleanArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
+JNIEXPORT void JNICALL Java_tsa_Features_valueCount(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
+                                                    jlong tssN, jfloat v, jintArray result) {
+    long tss_fl = tssL * tssN;
+    jdouble input_tss[tss_fl];
+    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+    af::array primitive_result;
+    primitive_result = tsa::features::valueCount(af::array(tssL, tssN, input_tss), v);
+    jint output_result[tssN];
+    primitive_result.host(output_result);
+    env->SetIntArrayRegion(result, 0, tssN, &output_result[0]);
+    return;
+}
+
 #ifdef __cplusplus
 }
 #endif
