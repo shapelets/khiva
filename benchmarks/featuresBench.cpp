@@ -820,6 +820,28 @@ void NumberPeaks(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
+void PartialAutocorrelation(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    int lags[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    af::array lags_d(10, 1, lags);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto ncm = tsa::features::partialAutocorrelation(t, lags_d);
+        ncm.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
 void PercentageOfReoccurringDatapointsToAllDatapoints(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -1091,6 +1113,11 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {32, 128}, {2, 32}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(PartialAutocorrelation, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(PercentageOfReoccurringDatapointsToAllDatapoints, af::Backend::AF_BACKEND_CUDA,
                        CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
@@ -1312,6 +1339,11 @@ void openclBenchmarks() {
     BENCHMARK_TEMPLATE(NumberPeaks, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 128}, {2, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(PartialAutocorrelation, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(PercentageOfReoccurringDatapointsToAllDatapoints, af::Backend::AF_BACKEND_OPENCL,
@@ -1537,6 +1569,11 @@ void cpuBenchmarks() {
     BENCHMARK_TEMPLATE(NumberPeaks, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 128}, {2, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(PartialAutocorrelation, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(PercentageOfReoccurringDatapointsToAllDatapoints, af::Backend::AF_BACKEND_CPU,

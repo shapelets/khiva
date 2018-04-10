@@ -679,6 +679,64 @@ af::array tsa::features::numberPeaks(af::array tss, int n) {
     return af::sum(res.as(tss.type()), 0);
 }
 
+af::array levinsonDurbin(af::array acv, int maxlag, bool isACV) {
+    int order = maxlag;
+    af::array result = af::constant(0, order + 1, acv.dims(1), acv.type());
+
+    for (int i = 0; i < acv.dims(1); i++) {
+        // gfor(af::seq i, acv.dims(1)) {
+        af::array phi = af::constant(0, order + 1, order + 1, acv.type());
+        af::array sig = af::constant(0, order + 1, acv.type());
+
+        phi(1, 1) = acv(1, i) / acv(0, i);
+        sig(1) = acv(0, i) - (phi(1, 1) * acv(1, i));
+
+        // First iteration, to avoid problems with negative sequences with 1 element
+        int k = 2;
+        if (k < (order + 1)) {
+            phi(k, k) = (acv(k, i) - af::dot(phi(af::seq(1, k - 1), k - 1), acv(af::seq(1, k - 1), i))) / sig(k - 1);
+            for (int j = 1; j < k; j++) {
+                phi(j, k) = phi(j, k - 1) - (phi(k, k) * phi(k - j, k - 1));
+            }
+            sig(k) = sig(k - 1) * (1.0 - phi(k, k) * phi(k, k));
+        }
+
+        // Second and subsequent iterations
+        for (int k = 3; k < (order + 1); k++) {
+            af::array aux = acv(af::seq(1, k - 1), i);
+            phi(k, k) =
+                (acv(k, i) - af::dot(phi(af::seq(1, k - 1), k - 1), aux(af::seq(aux.dims(0) - 1, 0, -1)))) / sig(k - 1);
+            for (int j = 1; j < k; j++) {
+                phi(j, k) = phi(j, k - 1) - (phi(k, k) * phi(k - j, k - 1));
+            }
+            sig(k) = sig(k - 1) * (1.0 - phi(k, k) * phi(k, k));
+        }
+
+        af::array pac = af::diag(phi);
+        pac(0) = 1.0;
+        result(span, i) = pac;
+    }
+    return result;
+}
+
+af::array tsa::features::partialAutocorrelation(af::array tss, af::array lags) {
+    int n = tss.dims(0);
+    af::array m = af::max(lags, 0);
+    int maxlag = m.scalar<int>();
+
+    af::array ld;
+    if (n < 1) {
+        ld = af::constant(af::NaN, maxlag + 1, tss.dims(1), tss.type());
+    } else {
+        if (n <= maxlag) {
+            maxlag = n - 1;
+        }
+        af::array acv = tsa::features::autoCovariance(tss, true);
+        ld = levinsonDurbin(acv, maxlag, true);
+    }
+    return ld;
+}
+
 af::array tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool isSorted) {
     af::array result = af::array(1, tss.dims(1));
     // Doing it sequentially because the setUnique function can only be used with a vector
