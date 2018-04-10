@@ -809,3 +809,9 @@ af::array tsa::features::symmetryLooking(af::array tss, float r) {
 
     return meanMedianAbsDifference < (r * maxMinDifference);
 }
+
+af::array tsa::features::valueCount(af::array tss, float v) {
+    af::array value = af::tile(af::array(1, &v), tss.dims());
+
+    return af::sum((value == tss).as(af::dtype::u32), 0);
+}

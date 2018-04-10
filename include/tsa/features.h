@@ -684,5 +684,15 @@ af::array sumOfReoccurringDatapoints(af::array tss, bool isSorted = false);
  */
 af::array symmetryLooking(af::array tss, float r);
 
+/**
+ * @brief Counts occurrences of value in the time series tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @param v The value to be counted.
+ * @return af::array An array containing the count of the given value in each time series.
+ */
+af::array valueCount(af::array tss, float v);
+
 };  // namespace features
 };  // namespace tsa

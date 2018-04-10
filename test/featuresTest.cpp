@@ -953,6 +953,19 @@ void symmetryLooking() {
     ASSERT_EQ(sl[1], 0);
 }
 
+void valueCount() {
+    float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
+                    20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::valueCount(tss, 20);
+
+    unsigned int *vc = result.host<unsigned int>();
+
+    ASSERT_EQ(vc[0], 9);
+    ASSERT_EQ(vc[1], 8);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -1015,3 +1028,4 @@ TSA_TEST(FeaturesTests, Skewness, skewness);
 TSA_TEST(FeaturesTests, StandardDeviation, standardDeviation);
 TSA_TEST(FeaturesTests, SumOfReoccurringDatapoints, sumOfReoccurringDatapoints);
 TSA_TEST(FeaturesTests, SymmetryLooking, symmetryLooking);
+TSA_TEST(FeaturesTests, ValueCount, valueCount);
