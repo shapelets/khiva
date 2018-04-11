@@ -711,6 +711,13 @@ af::array tsa::features::quantile(af::array tss, af::array q, float precision) {
     return tsa::statistics::quantile(tss, q, precision);
 }
 
+af::array tsa::features::rangeCount(af::array tss, float min, float max) {
+    af::array mins = (tss > min).as(tss.type());
+    af::array maxs = (tss < max).as(tss.type());
+
+    return af::sum(mins * maxs, 0);
+}
+
 af::array tsa::features::ratioBeyondRSigma(af::array tss, float r) {
     float n = tss.dims(0);
 

@@ -255,11 +255,11 @@ af::array countBelowMean(af::array tss);
 /** @brief Calculates a Continuous wavelet transform for the Ricker wavelet, also known as
  * the "Mexican hat wavelet" which is defined by:
  *
- *  .. math::
+ *  \f[
  *      \\frac{2}{\\sqrt{3a} \\pi^{
  *  \\frac{1} { 4 }}} (1 - \\frac{x^2}{a^2}) exp(-\\frac{x^2}{2a^2})
- *
- *  where :math:`a` is the width parameter of the wavelet function.
+ *  \f]
+ *  where \f$a$\f is the width parameter of the wavelet function.
  *
  * This feature calculator takes three different parameter: widths, coeff and w. The feature calculator takes all
  * the different widths arrays and then calculates the cwt one time for each different width array. Then the values
@@ -478,9 +478,9 @@ af::array longestStrikeBelowMean(af::array tss);
 
 /**
  * @brief Largest fixed point of dynamics \f$\max_x {h(x)=0}\f$ estimated from polynomial
- * \f$h(x)\f$, which has been fitted to the deterministic dynamics of Langevin model
+ * \f$h(x)\f$, which has been fitted to the deterministic dynamics of Langevin model:
  * \f[
- *    \dot(x)(t) = h(x(t)) + R \mathcal(N)(0,1)
+ *    \dot{x}(t) = h(x(t)) + R \mathcal(N)(0,1)
  * \f]
  * as described by
  * Friedrich et al. (2000): Physics Letters A 271, p. 217-222 *Extracting model equations from experimental data*
@@ -586,7 +586,7 @@ af::array numberPeaks(af::array tss, int n);
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
  * \f[
- *      len(different values occurring more than once) / len(different values)
+ *      \frac{len(\textit{different values occurring more than once})}{len(\textit{different values})}
  * \f]
  * This means the percentage is normalized to the number of unique values, in contrast to the
  * percentageOfReoccurringValuesToAllValues.
@@ -609,6 +609,18 @@ af::array percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool i
  * @return af::array Values at the given quantile.
  */
 af::array quantile(af::array tss, af::array q, float precision = 1e8);
+
+/**
+ * @brief Counts observed values within the interval [min, max).
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @param min Value that sets the lower limit.
+ * @param max Value that sets the upper limit.
+ * @return af::array Values at the given range.
+ */
+af::array rangeCount(af::array tss, float min, float max);
 
 /**
  * @brief Calculates the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
