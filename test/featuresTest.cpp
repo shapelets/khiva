@@ -954,6 +954,20 @@ void sumOfReoccurringDatapoints() {
     ASSERT_EQ(calculated[1], expected[1]);
 }
 
+void sumOfReoccurringValues() {
+    float data[] = {4, 4, 6, 6, 7, 4, 7, 7, 8, 8};
+    af::array tss(5, 2, data);
+
+    af::array result = tsa::features::sumOfReoccurringValues(tss, false);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {10, 15};
+
+    ASSERT_EQ(calculated[0], expected[0]);
+    ASSERT_EQ(calculated[1], expected[1]);
+}
+
 void symmetryLooking() {
     float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
@@ -1055,6 +1069,7 @@ TSA_TEST(FeaturesTests, SampleEntropy, sampleEntropy);
 TSA_TEST(FeaturesTests, Skewness, skewness);
 TSA_TEST(FeaturesTests, StandardDeviation, standardDeviation);
 TSA_TEST(FeaturesTests, SumOfReoccurringDatapoints, sumOfReoccurringDatapoints);
+TSA_TEST(FeaturesTests, SumOfReoccurringValues, sumOfReoccurringValues);
 TSA_TEST(FeaturesTests, SymmetryLooking, symmetryLooking);
 TSA_TEST(FeaturesTests, ValueCount, valueCount);
 TSA_TEST(FeaturesTests, VarianceLargerThanStandardDeviation, varianceLargerThanStandardDeviation);
