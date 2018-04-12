@@ -980,6 +980,18 @@ void valueCount() {
     ASSERT_EQ(vc[1], 8);
 }
 
+void variance() {
+    float data[] = {1, 1, -1, -1, 1, 2, -2, -1};
+    af::array tss(4, 2, data);
+
+    af::array result = tsa::features::variance(tss);
+
+    float *v = result.host<float>();
+
+    ASSERT_EQ(v[0], 1.0);
+    ASSERT_EQ(v[1], 2.5);
+}
+
 void varianceLargerThanStandardDeviation() {
     float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
@@ -1057,4 +1069,5 @@ TSA_TEST(FeaturesTests, StandardDeviation, standardDeviation);
 TSA_TEST(FeaturesTests, SumOfReoccurringDatapoints, sumOfReoccurringDatapoints);
 TSA_TEST(FeaturesTests, SymmetryLooking, symmetryLooking);
 TSA_TEST(FeaturesTests, ValueCount, valueCount);
+TSA_TEST(FeaturesTests, Variance, variance);
 TSA_TEST(FeaturesTests, VarianceLargerThanStandardDeviation, varianceLargerThanStandardDeviation);
