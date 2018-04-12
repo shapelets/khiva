@@ -961,9 +961,10 @@ void sumValues() {
     af::array result = tsa::features::sumValues(tss);
 
     float *sv = (float *)result.host<float>();
+    float expected[] = {10.1, -10.2};
 
-    ASSERT_EQ(sv[0], 10.1);
-    ASSERT_EQ(sv[1], -10.2);
+    ASSERT_EQ(sv[0], expected[0]);
+    ASSERT_EQ(sv[1], expected[1]);
 }
 
 void symmetryLooking() {
