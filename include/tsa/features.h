@@ -636,6 +636,20 @@ af::array rangeCount(af::array tss, float min, float max);
 af::array ratioBeyondRSigma(af::array tss, float r);
 
 /**
+ * @brief Calculates a factor which is 1 if all values in the time series occur only once, and below one if this is
+ * not the case. In principle, it just returns:
+ *
+ * \f[
+ *      \frac{\textit{number_unique_values}}{\textit{number_values}}
+ * \f]
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
+ * @return af::array The ratio of unique values with respect to the total number of values.
+ */
+af::array ratioValueNumberToTimeSeriesLength(af::array tss);
+
+/**
  * @brief Calculates a vectorized sample entropy algorithm.
  * https://en.wikipedia.org/wiki/Sample_entropy
  * https://www.ncbi.nlm.nih.gov/pubmed/10843903?dopt=Abstract

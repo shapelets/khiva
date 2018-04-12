@@ -727,6 +727,15 @@ af::array tsa::features::ratioBeyondRSigma(af::array tss, float r) {
     return af::sum(greaterThanRSigma.as(tss.type()), 0) / n;
 }
 
+af::array tsa::features::ratioValueNumberToTimeSeriesLength(af::array tss) {
+    af::array result = af::constant(0, 1, tss.dims(1), tss.type());
+    for (int i = 0; i < tss.dims(1); i++) {
+        int n = af::setUnique(tss(span, i)).dims(0);
+        result(0, i) = n / tss.dims(0);
+    }
+    return result;
+}
+
 af::array tsa::features::sampleEntropy(af::array tss) {
     long n = tss.dims(0);
 
