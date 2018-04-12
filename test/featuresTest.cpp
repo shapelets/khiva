@@ -967,6 +967,19 @@ void symmetryLooking() {
     ASSERT_EQ(sl[1], 0);
 }
 
+void timeReversalAsymmetryStatistic() {
+    float data[] = {1,  2,  3,  4, 5,  6, 7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                    20, 20, 20, 2, 19, 1, 20, 20, 20, 1,  15, 1,  30, 1,  1,  18, 4,  1,  20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::timeReversalAsymmetryStatistic(tss, 2);
+
+    float *r = result.host<float>();
+
+    ASSERT_EQ(r[0], 1052);
+    ASSERT_EQ(r[1], -150.625);
+}
+
 void valueCount() {
     float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
@@ -1056,5 +1069,6 @@ TSA_TEST(FeaturesTests, Skewness, skewness);
 TSA_TEST(FeaturesTests, StandardDeviation, standardDeviation);
 TSA_TEST(FeaturesTests, SumOfReoccurringDatapoints, sumOfReoccurringDatapoints);
 TSA_TEST(FeaturesTests, SymmetryLooking, symmetryLooking);
+TSA_TEST(FeaturesTests, TimeReversalAsymmetryStatistic, timeReversalAsymmetryStatistic);
 TSA_TEST(FeaturesTests, ValueCount, valueCount);
 TSA_TEST(FeaturesTests, VarianceLargerThanStandardDeviation, varianceLargerThanStandardDeviation);

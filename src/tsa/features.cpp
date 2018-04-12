@@ -817,6 +817,19 @@ af::array tsa::features::symmetryLooking(af::array tss, float r) {
     return meanMedianAbsDifference < (r * maxMinDifference);
 }
 
+af::array tsa::features::timeReversalAsymmetryStatistic(af::array tss, int lag) {
+    int n = tss.dims(0);
+    if (n <= (2 * lag)) {
+        throw std::invalid_argument("The size of tss needs to be larger for this lag value ...");
+    }
+
+    af::array l_0 = tss(af::seq(0, n - (2 * lag) - 1), span);
+    af::array l_l = tss(af::seq(lag, n - lag - 1), span);
+    af::array l_2l = tss(af::seq(2 * lag, n - 1), span);
+
+    return af::sum((l_2l * l_2l * l_l) - (l_l * l_0 * l_0), 0) / (n - 2 * lag);
+}
+
 af::array tsa::features::valueCount(af::array tss, float v) {
     af::array value = af::tile(af::array(1, &v), tss.dims());
 
