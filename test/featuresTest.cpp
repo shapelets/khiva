@@ -899,6 +899,20 @@ void ratioBeyondRSigma() {
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
 }
 
+void ratioValueNumberToTimeSeriesLength() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 5, 0, 4, 6, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::ratioValueNumberToTimeSeriesLength(tss);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {4.0 / 7.0, 6.0 / 7.0};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+}
+
 void sampleEntropy() {
     float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
     af::array tss(7, 2, data);
