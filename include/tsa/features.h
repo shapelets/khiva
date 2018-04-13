@@ -636,6 +636,20 @@ af::array rangeCount(af::array tss, float min, float max);
 af::array ratioBeyondRSigma(af::array tss, float r);
 
 /**
+ * @brief Calculates a factor which is 1 if all values in the time series occur only once, and below one if this is
+ * not the case. In principle, it just returns:
+ *
+ * \f[
+ *      \frac{\textit{number_unique_values}}{\textit{number_values}}
+ * \f]
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
+ * @return af::array The ratio of unique values with respect to the total number of values.
+ */
+af::array ratioValueNumberToTimeSeriesLength(af::array tss);
+
+/**
  * @brief Calculates a vectorized sample entropy algorithm.
  * https://en.wikipedia.org/wiki/Sample_entropy
  * https://www.ncbi.nlm.nih.gov/pubmed/10843903?dopt=Abstract
@@ -683,6 +697,15 @@ af::array standardDeviation(af::array tss);
 af::array sumOfReoccurringDatapoints(af::array tss, bool isSorted = false);
 
 /**
+ * @brief Calculates the sum over the time series tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return af::array An array containing the sum of values in each time series.
+ */
+af::array sumValues(af::array tss);
+
+/**
  * @brief Calculates if the distribution of tss *looks symmetric*. This is the case if
  * \f[
  *      | mean(tss)-median(tss)| < r * (max(tss)-min(tss))
@@ -727,6 +750,15 @@ af::array timeReversalAsymmetryStatistic(af::array tss, int lag);
  * @return af::array An array containing the count of the given value in each time series.
  */
 af::array valueCount(af::array tss, float v);
+
+/**
+ * @brief Computes the variance for the time series tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return af::array An array containing the variance in each time series.
+ */
+af::array variance(af::array tss);
 
 /**
  * @brief Calculates if the variance of tss is greater than the standard deviation. In other words, if the variance of

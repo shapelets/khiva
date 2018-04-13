@@ -899,6 +899,20 @@ void ratioBeyondRSigma() {
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
 }
 
+void ratioValueNumberToTimeSeriesLength() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 5, 0, 4, 6, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::ratioValueNumberToTimeSeriesLength(tss);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {4.0 / 7.0, 6.0 / 7.0};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+}
+
 void sampleEntropy() {
     float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
     af::array tss(7, 2, data);
@@ -954,6 +968,19 @@ void sumOfReoccurringDatapoints() {
     ASSERT_EQ(calculated[1], expected[1]);
 }
 
+void sumValues() {
+    float data[] = {1, 2, 3, 4.1, -1.2, -2, -3, -4};
+    af::array tss(4, 2, data);
+
+    af::array result = tsa::features::sumValues(tss);
+
+    float *sv = (float *)result.host<float>();
+    float expected[] = {10.1, -10.2};
+
+    ASSERT_EQ(sv[0], expected[0]);
+    ASSERT_EQ(sv[1], expected[1]);
+}
+
 void symmetryLooking() {
     float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
@@ -991,6 +1018,18 @@ void valueCount() {
 
     ASSERT_EQ(vc[0], 9);
     ASSERT_EQ(vc[1], 8);
+}
+
+void variance() {
+    float data[] = {1, 1, -1, -1, 1, 2, -2, -1};
+    af::array tss(4, 2, data);
+
+    af::array result = tsa::features::variance(tss);
+
+    float *v = result.host<float>();
+
+    ASSERT_EQ(v[0], 1.0);
+    ASSERT_EQ(v[1], 2.5);
 }
 
 void varianceLargerThanStandardDeviation() {
@@ -1068,7 +1107,9 @@ TSA_TEST(FeaturesTests, SampleEntropy, sampleEntropy);
 TSA_TEST(FeaturesTests, Skewness, skewness);
 TSA_TEST(FeaturesTests, StandardDeviation, standardDeviation);
 TSA_TEST(FeaturesTests, SumOfReoccurringDatapoints, sumOfReoccurringDatapoints);
+TSA_TEST(FeaturesTests, SumValues, sumValues);
 TSA_TEST(FeaturesTests, SymmetryLooking, symmetryLooking);
 TSA_TEST(FeaturesTests, TimeReversalAsymmetryStatistic, timeReversalAsymmetryStatistic);
 TSA_TEST(FeaturesTests, ValueCount, valueCount);
+TSA_TEST(FeaturesTests, Variance, variance);
 TSA_TEST(FeaturesTests, VarianceLargerThanStandardDeviation, varianceLargerThanStandardDeviation);

@@ -727,6 +727,15 @@ af::array tsa::features::ratioBeyondRSigma(af::array tss, float r) {
     return af::sum(greaterThanRSigma.as(tss.type()), 0) / n;
 }
 
+af::array tsa::features::ratioValueNumberToTimeSeriesLength(af::array tss) {
+    af::array result = af::constant(0, 1, tss.dims(1), tss.type());
+    for (int i = 0; i < tss.dims(1); i++) {
+        int n = af::setUnique(tss(span, i)).dims(0);
+        result(0, i) = n / tss.dims(0);
+    }
+    return result;
+}
+
 af::array tsa::features::sampleEntropy(af::array tss) {
     long n = tss.dims(0);
 
@@ -805,6 +814,8 @@ af::array tsa::features::sumOfReoccurringDatapoints(af::array tss, bool isSorted
     return result;
 }
 
+af::array tsa::features::sumValues(af::array tss) { return af::sum(tss, 0); }
+
 af::array tsa::features::symmetryLooking(af::array tss, float r) {
     // We need to do this since the min and max functions return different results in the OpenCL and CPU
     // backends.
@@ -835,6 +846,8 @@ af::array tsa::features::valueCount(af::array tss, float v) {
 
     return af::sum((value == tss).as(af::dtype::u32), 0);
 }
+
+af::array tsa::features::variance(af::array tss) { return af::var(tss, true, 0); }
 
 af::array tsa::features::varianceLargerThanStandardDeviation(af::array tss) {
     return af::var(tss, false, 0) > af::stdev(tss, 0);
