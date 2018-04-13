@@ -684,7 +684,6 @@ af::array levinsonDurbin(af::array acv, int maxlag, bool isACV) {
     af::array result = af::constant(0, order + 1, acv.dims(1), acv.type());
 
     for (int i = 0; i < acv.dims(1); i++) {
-        // gfor(af::seq i, acv.dims(1)) {
         af::array phi = af::constant(0, order + 1, order + 1, acv.type());
         af::array sig = af::constant(0, order + 1, acv.type());
 
