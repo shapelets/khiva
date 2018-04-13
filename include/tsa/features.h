@@ -578,7 +578,7 @@ af::array numberCrossingM(af::array tss, int m);
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
  * and dimension one indicates the number of time series.
- * @param maxW The maximum width.
+ * @param maxW The maximum width to consider.
  * @return af::array The number of peaks for each time series.
  */
 af::array numberCwtPeaks(af::array tss, int maxW);

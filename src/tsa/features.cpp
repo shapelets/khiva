@@ -670,9 +670,10 @@ af::array tsa::features::numberCwtPeaks(af::array tss, int maxW) {
     af::array widths = (af::range(af::dim4(maxW)) + 1).as(af::dtype::s32);
     af::array max_distances = widths / 4.0;
     int gap_thresh = std::ceil(1);
+
     af::array cwt_tss = cwt(tss, widths);
     af::array ridge_lines = identify_ridge_lines(cwt_tss, max_distances, gap_thresh);
-    af::array filtered = filter_ridge_lines(cwt_dat, ridge_lines, min_length, 1, 10);
+    af::array filtered = filter_ridge_lines(cwt_tss, ridge_lines, min_length, 1, 10);
 
     af_print(out);
 
