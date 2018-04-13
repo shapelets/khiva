@@ -814,6 +814,23 @@ af::array tsa::features::sumOfReoccurringDatapoints(af::array tss, bool isSorted
     return result;
 }
 
+af::array tsa::features::sumOfReoccurringValues(af::array tss, bool isSorted) {
+    af::array result = af::constant(0, 1, tss.dims(1), tss.type());
+    // Doing it sequentially because the setUnique function can only be used with a vector
+    for (int i = 0; i < tss.dims(1); i++) {
+        array uniques = af::setUnique(tss(span, i), isSorted);
+        int n = uniques.dims(0);
+        af::array tmp = af::constant(0, 1, n, tss.type());
+        // Computing the number of occurrences for each unique value
+        for (int j = 0; j < n; j++) {
+            af::array aux = tss(span, i) == af::tile(uniques(j), tss(span, i).dims(0), 1);
+            tmp(0, j) = af::count(tss(span, i) == af::tile(uniques(j), tss(span, i).dims(0), 1), 0);
+        }
+        result(0, i) = af::sum(uniques(tmp > 1), 0);
+    }
+    return result;
+}
+
 af::array tsa::features::sumValues(af::array tss) { return af::sum(tss, 0); }
 
 af::array tsa::features::symmetryLooking(af::array tss, float r) {

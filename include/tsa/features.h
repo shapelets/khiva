@@ -697,6 +697,16 @@ af::array standardDeviation(af::array tss);
 af::array sumOfReoccurringDatapoints(af::array tss, bool isSorted = false);
 
 /**
+ * @brief Calculates the sum of all values, that are present in the time series more than once.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
+ * @return af::array Returns the sum of all values, that are present in the time series more than once.
+ */
+af::array sumOfReoccurringValues(af::array tss, bool isSorted = false);
+
+/**
  * @brief Calculates the sum over the time series tss.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
