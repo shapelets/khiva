@@ -604,7 +604,7 @@ af::array percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool i
  *      \frac{\textit{number of data points occurring more than once}}{\textit{number of all data points})}
  * \f]
  * This means the percentage is normalized to the number of unique values, in contrast to the
- * percentageOfReoccurringValuesToAllValues.
+ * percentageOfReoccurringDatapointsToAllDatapoints.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
  * and dimension one indicates the number of time series.
