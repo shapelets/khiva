@@ -844,6 +844,25 @@ void PercentageOfReoccurringDatapointsToAllDatapoints(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
+void PercentageOfReoccurringValuesToAllValues(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto p = tsa::features::percentageOfReoccurringValuesToAllValues(t, false);
+        p.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
 void Quantile(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -1350,6 +1369,11 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}, {0, 1}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(PercentageOfReoccurringValuesToAllValues, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 256 << 10}, {2, 8}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(Quantile, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
@@ -1636,6 +1660,12 @@ void openclBenchmarks() {
                        OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}, {0, 1}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(PercentageOfReoccurringValuesToAllValues, af::Backend::AF_BACKEND_OPENCL,
+                       OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 256 << 10}, {2, 8}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(Quantile, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
@@ -1926,6 +1956,11 @@ void cpuBenchmarks() {
                        CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}, {0, 1}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(PercentageOfReoccurringValuesToAllValues, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 256 << 10}, {2, 8}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(Quantile, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
