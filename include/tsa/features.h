@@ -622,9 +622,24 @@ af::array partialAutocorrelation(af::array tss, af::array lags);
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
  * and dimension one indicates the number of time series.
  * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
- * @return af::array Returns the percentage of unique values, that are present in the time series more than once.
+ * @return af::array Returns the percentage of unique data points, that are present in the time series more than once.
  */
 af::array percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool isSorted = false);
+
+/**
+ * @brief Calculates the percentage of unique values, that are present in the time series more than once.
+ * \f[
+ *      \frac{\textit{number of data points occurring more than once}}{\textit{number of all data points})}
+ * \f]
+ * This means the percentage is normalized to the number of unique values, in contrast to the
+ * percentageOfReoccurringDatapointsToAllDatapoints.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
+ * @return af::array Returns the percentage of unique values, that are present in the time series more than once.
+ */
+af::array percentageOfReoccurringValuesToAllValues(af::array tss, bool isSorted = false);
 
 /**
  * @brief Returns values at the given quantile.
