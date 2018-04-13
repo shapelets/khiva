@@ -593,11 +593,11 @@ af::array numberPeaks(af::array tss, int n);
         \\alpha_k = \\frac{ Cov(x_t, x_{t-k} | x_{t-1}, \\ldots, x_{t-k+1})}
         {\\sqrt{ Var(x_t | x_{t-1}, \\ldots, x_{t-k+1}) Var(x_{t-k} | x_{t-1}, \\ldots, x_{t-k+1} )}}
  * \f]
- * with (a) \f$x_t = f(x_{t-1}, \\ldots, x_{t-k+1})\f$ and (b) \f$`x_{t-k} = f(x_{t-1}, \\ldots, x_{t-k+1})\f$
+ * with (a) \f$x_t = f(x_{t-1}, \\ldots, x_{t-k+1})\f$ and (b) \f$ x_{t-k} = f(x_{t-1}, \\ldots, x_{t-k+1})\f$
     being AR(k-1) models that can be fitted by OLS. Be aware that in (a), the regression is done on past values to
-    predict :math:`x_t` whereas in (b), future values are used to calculate the past value :math:`x_{t-k}`.
-    It is said in [1] that "for an AR(p), the partial autocorrelations [ :math:`\\alpha_k` ] will be nonzero for `k<=p`
-    and zero for `k>p`."
+    predict \f$ x_t \f$ whereas in (b), future values are used to calculate the past value \f$x_{t-k}\f$.
+    It is said in [1] that "for an AR(p), the partial autocorrelations \f$ \alpha_k \f$ will be nonzero for \f$ k<=p \f$
+    and zero for \f$ k>p \f$."
 * With this property, it is used to determine the lag of an AR-Process.
 *
 * [1] Box, G. E., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015).
