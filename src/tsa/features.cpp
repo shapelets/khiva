@@ -506,9 +506,7 @@ af::array estimateFriedrichCoefficients(af::array tss, int m, float r) {
 
     for (int i = 0; i < tss.dims(1); i++) {
         af::array groupped = tsa::regularization::groupBy(x(span, span, i), af::mean, 2, 2);
-        // af_print(groupped);
         result(span, i) = tsa::polynomial::polyfit(groupped.col(0), groupped.col(1), m);
-        // af_print(result);
     }
 
     return result;
