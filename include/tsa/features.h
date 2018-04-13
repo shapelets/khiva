@@ -584,6 +584,34 @@ af::array numberCrossingM(af::array tss, int m);
 af::array numberPeaks(af::array tss, int n);
 
 /**
+ * @brief Calculates the value of the partial autocorrelation function at the given lag. The lag \f$k\f$ partial
+ * autocorrelation of a time series \f$\\lbrace x_t, t = 1 \\ldots T \\rbrace\f$ equals the partial correlation of
+ \f$x_t\f$ and \f$x_{t-k}\f$, adjusted for the intermediate variables \f$\\lbrace x_{t-1}, \\ldots, x_{t-k+1}
+ \\rbrace\f$ ([1]). Following [2], it can be defined as:
+ *
+ * \f[
+        \\alpha_k = \\frac{ Cov(x_t, x_{t-k} | x_{t-1}, \\ldots, x_{t-k+1})}
+        {\\sqrt{ Var(x_t | x_{t-1}, \\ldots, x_{t-k+1}) Var(x_{t-k} | x_{t-1}, \\ldots, x_{t-k+1} )}}
+ * \f]
+ * with (a) \f$x_t = f(x_{t-1}, \\ldots, x_{t-k+1})\f$ and (b) \f$ x_{t-k} = f(x_{t-1}, \\ldots, x_{t-k+1})\f$
+    being AR(k-1) models that can be fitted by OLS. Be aware that in (a), the regression is done on past values to
+    predict \f$ x_t \f$ whereas in (b), future values are used to calculate the past value \f$x_{t-k}\f$.
+    It is said in [1] that "for an AR(p), the partial autocorrelations \f$ \alpha_k \f$ will be nonzero for \f$ k<=p \f$
+    and zero for \f$ k>p \f$."
+* With this property, it is used to determine the lag of an AR-Process.
+*
+* [1] Box, G. E., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015).
+* Time series analysis: forecasting and control. John Wiley & Sons.
+* [2] https://onlinecourses.science.psu.edu/stat510/node/62
+*
+* @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+* one indicates the number of time series.
+* @param lags Indicates the lags to be calculated.
+* @return af::array Returns partial autocorrelation for each time series for the given lag.
+*/
+af::array partialAutocorrelation(af::array tss, af::array lags);
+
+/**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
  * \f[
  *      \frac{len(\textit{different values occurring more than once})}{len(\textit{different values})}
