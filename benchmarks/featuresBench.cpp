@@ -906,6 +906,25 @@ void RatioBeyondRSigma(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
+void RatioValueNumberToTimeSeriesLength(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto ratio = tsa::features::ratioValueNumberToTimeSeriesLength(t);
+        ratio.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
 void SampleEntropy(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -1006,6 +1025,25 @@ void SumOfReoccurringValues(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
+void SumValues(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto sv = tsa::features::sumOfReoccurringValues(t);
+        sv.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
 void SymmetryLooking(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -1025,6 +1063,25 @@ void SymmetryLooking(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
+void TimeReversalAsymmetryStatistic(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto tr = tsa::features::timeReversalAsymmetryStatistic(t, 2);
+        tr.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
 void ValueCount(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -1037,6 +1094,25 @@ void ValueCount(benchmark::State &state) {
     af::sync();
     while (state.KeepRunning()) {
         auto vc = tsa::features::valueCount(t, 0.5);
+        vc.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
+void Variance(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto vc = tsa::features::variance(t);
         vc.eval();
         af::sync();
     }
@@ -1289,6 +1365,11 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(RatioValueNumberToTimeSeriesLength, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(SampleEntropy, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {1, 16}})
@@ -1314,12 +1395,27 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(SumValues, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(SymmetryLooking, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(TimeReversalAsymmetryStatistic, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(ValueCount, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Variance, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -1557,6 +1653,11 @@ void openclBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(RatioValueNumberToTimeSeriesLength, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(SampleEntropy, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {1, 16}})
@@ -1582,12 +1683,27 @@ void openclBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(SumValues, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(SymmetryLooking, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(TimeReversalAsymmetryStatistic, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(ValueCount, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Variance, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -1827,6 +1943,11 @@ void cpuBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(RatioValueNumberToTimeSeriesLength, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(SampleEntropy, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {1, 16}})
@@ -1852,12 +1973,27 @@ void cpuBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(SumValues, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(SymmetryLooking, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(TimeReversalAsymmetryStatistic, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 128}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(ValueCount, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Variance, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);

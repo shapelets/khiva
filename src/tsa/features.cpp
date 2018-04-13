@@ -727,6 +727,15 @@ af::array tsa::features::ratioBeyondRSigma(af::array tss, float r) {
     return af::sum(greaterThanRSigma.as(tss.type()), 0) / n;
 }
 
+af::array tsa::features::ratioValueNumberToTimeSeriesLength(af::array tss) {
+    af::array result = af::constant(0, 1, tss.dims(1), tss.type());
+    for (int i = 0; i < tss.dims(1); i++) {
+        int n = af::setUnique(tss(span, i)).dims(0);
+        result(0, i) = n / tss.dims(0);
+    }
+    return result;
+}
+
 af::array tsa::features::sampleEntropy(af::array tss) {
     long n = tss.dims(0);
 
@@ -822,6 +831,8 @@ af::array tsa::features::sumOfReoccurringValues(af::array tss, bool isSorted) {
     return result;
 }
 
+af::array tsa::features::sumValues(af::array tss) { return af::sum(tss, 0); }
+
 af::array tsa::features::symmetryLooking(af::array tss, float r) {
     // We need to do this since the min and max functions return different results in the OpenCL and CPU
     // backends.
@@ -834,11 +845,26 @@ af::array tsa::features::symmetryLooking(af::array tss, float r) {
     return meanMedianAbsDifference < (r * maxMinDifference);
 }
 
+af::array tsa::features::timeReversalAsymmetryStatistic(af::array tss, int lag) {
+    int n = tss.dims(0);
+    if (n <= (2 * lag)) {
+        throw std::invalid_argument("The size of tss needs to be larger for this lag value ...");
+    }
+
+    af::array l_0 = tss(af::seq(0, n - (2 * lag) - 1), span);
+    af::array l_l = tss(af::seq(lag, n - lag - 1), span);
+    af::array l_2l = tss(af::seq(2 * lag, n - 1), span);
+
+    return af::sum((l_2l * l_2l * l_l) - (l_l * l_0 * l_0), 0) / (n - 2 * lag);
+}
+
 af::array tsa::features::valueCount(af::array tss, float v) {
     af::array value = af::tile(af::array(1, &v), tss.dims());
 
     return af::sum((value == tss).as(af::dtype::u32), 0);
 }
+
+af::array tsa::features::variance(af::array tss) { return af::var(tss, true, 0); }
 
 af::array tsa::features::varianceLargerThanStandardDeviation(af::array tss) {
     return af::var(tss, false, 0) > af::stdev(tss, 0);
