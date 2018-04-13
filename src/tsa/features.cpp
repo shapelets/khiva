@@ -832,6 +832,8 @@ af::array tsa::features::valueCount(af::array tss, float v) {
     return af::sum((value == tss).as(af::dtype::u32), 0);
 }
 
+af::array tsa::features::variance(af::array tss) { return af::var(tss, true, 0); }
+
 af::array tsa::features::varianceLargerThanStandardDeviation(af::array tss) {
     return af::var(tss, false, 0) > af::stdev(tss, 0);
 }
