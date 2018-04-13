@@ -1006,6 +1006,25 @@ void SumOfReoccurringDatapoints(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
+void SumValues(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto sv = tsa::features::sumValues(t);
+        sv.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
 void SymmetryLooking(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -1333,6 +1352,11 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}, {0, 1}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(SumValues, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(SymmetryLooking, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
@@ -1604,6 +1628,11 @@ void openclBenchmarks() {
     BENCHMARK_TEMPLATE(SumOfReoccurringDatapoints, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}, {0, 1}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(SumValues, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(SymmetryLooking, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
@@ -1879,6 +1908,11 @@ void cpuBenchmarks() {
     BENCHMARK_TEMPLATE(SumOfReoccurringDatapoints, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {2, 32}, {0, 1}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(SumValues, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(SymmetryLooking, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)

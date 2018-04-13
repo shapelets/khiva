@@ -814,6 +814,8 @@ af::array tsa::features::sumOfReoccurringDatapoints(af::array tss, bool isSorted
     return result;
 }
 
+af::array tsa::features::sumValues(af::array tss) { return af::sum(tss, 0); }
+
 af::array tsa::features::symmetryLooking(af::array tss, float r) {
     // We need to do this since the min and max functions return different results in the OpenCL and CPU
     // backends.
