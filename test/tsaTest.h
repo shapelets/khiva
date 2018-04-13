@@ -20,6 +20,18 @@
         bool opencl = backends & af::Backend::AF_BACKEND_OPENCL;                                               \
         bool cpu = backends & af::Backend::AF_BACKEND_CPU;                                                     \
                                                                                                                \
+        if (cpu && CPU) {                                                                                      \
+            af::setBackend(af::Backend::AF_BACKEND_CPU);                                                       \
+            int devices = (CPUDEVICES) ? af::getDeviceCount() : 1;                                             \
+            for (int i = 0; i < devices; i++) {                                                                \
+                af::setDevice(i);                                                                              \
+                std::cout << "\033[32m[----------]\033[0m CPU backend, device: ";                              \
+                char name[100], platform[100], toolkit[100], compute[100];                                     \
+                af::deviceInfo(name, platform, toolkit, compute);                                              \
+                std::cout << name << " " << platform << std::endl;                                             \
+                FUNCTION_NAME();                                                                               \
+            }                                                                                                  \
+        }                                                                                                      \
         if (cuda && CUDA) {                                                                                    \
             af::setBackend(af::Backend::AF_BACKEND_CUDA);                                                      \
             int devices = (CUDADEVICES) ? af::getDeviceCount() : 1;                                            \
@@ -41,18 +53,6 @@
                 char name[100], platform[100], toolkit[100], compute[100];                                     \
                 af::deviceInfo(name, platform, toolkit, compute);                                              \
                 std::cout << name << std::endl;                                                                \
-                FUNCTION_NAME();                                                                               \
-            }                                                                                                  \
-        }                                                                                                      \
-        if (cpu && CPU) {                                                                                      \
-            af::setBackend(af::Backend::AF_BACKEND_CPU);                                                       \
-            int devices = (CPUDEVICES) ? af::getDeviceCount() : 1;                                             \
-            for (int i = 0; i < devices; i++) {                                                                \
-                af::setDevice(i);                                                                              \
-                std::cout << "\033[32m[----------]\033[0m CPU backend, device: ";                              \
-                char name[100], platform[100], toolkit[100], compute[100];                                     \
-                af::deviceInfo(name, platform, toolkit, compute);                                              \
-                std::cout << name << " " << platform << std::endl;                                             \
                 FUNCTION_NAME();                                                                               \
             }                                                                                                  \
         }                                                                                                      \

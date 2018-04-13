@@ -838,6 +838,35 @@ void numberPeaks() {
     ASSERT_EQ(np[1], 1);
 }
 
+void partialAutocorrelation() {
+    float len = 3000.0;
+    float *input = (float *)malloc(sizeof(float) * len);
+    float step = 1.0 / (len - 1);
+    for (int i = 1; i < len; i++) {
+        input[i] = step * i;
+    }
+
+    af::array ts(3000, 1, input);
+    af::array tss = af::tile(ts, 1, 2);
+
+    int lags[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    af::array lags_d(10, 1, lags);
+
+    af::array result = tsa::features::partialAutocorrelation(tss, lags_d);
+    float *pa = result.col(0).host<float>();
+
+    ASSERT_NEAR(pa[0], 1.0, 1e-3);
+    ASSERT_NEAR(pa[1], 0.9993331432342529, 1e-3);
+    ASSERT_NEAR(pa[2], -0.0006701064994559, 1e-3);
+    ASSERT_NEAR(pa[3], -0.0006701068487018, 1e-3);
+    ASSERT_NEAR(pa[4], -0.0008041285327636, 1e-3);
+    ASSERT_NEAR(pa[5], -0.0005360860959627, 1e-3);
+    ASSERT_NEAR(pa[6], -0.0007371186511591, 1e-3);
+    ASSERT_NEAR(pa[7], -0.0004690756904893, 1e-3);
+    ASSERT_NEAR(pa[8], -0.0008041299879551, 1e-3);
+    ASSERT_NEAR(pa[9], -0.0007371196406893, 1e-3);
+}
+
 void percentageOfReoccurringDatapointsToAllDatapoints() {
     float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
     af::array tss(7, 2, data);
@@ -1126,6 +1155,7 @@ TSA_TEST(FeaturesTests, Minimum, minimum);
 TSA_TEST(FeaturesTests, NumberCrossingM, numberCrossingM);
 TSA_TEST(FeaturesTests, CwtCoefficients, cwtCoefficients);
 TSA_TEST(FeaturesTests, NumberPeaks, numberPeaks);
+TSA_TEST(FeaturesTests, PartialAutocorrelation, partialAutocorrelation);
 TSA_TEST(FeaturesTests, PercentageOfReoccurringDatapointsToAllDatapoints,
          percentageOfReoccurringDatapointsToAllDatapoints);
 TSA_TEST(FeaturesTests, PercentageOfReoccurringValuesToAllValues, percentageOfReoccurringValuesToAllValues);
