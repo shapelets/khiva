@@ -525,6 +525,23 @@ void firstLocationOfMinimum() {
     ASSERT_NEAR(firstMinimumCalculated[1], 0.5, EPSILON);
 }
 
+void friedrichCoefficients() {
+    float data[] = {0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5};
+    af::array tss(6, 2, data);
+
+    int m = 4;
+    float r = 2;
+    af::array result = tsa::features::friedrichCoefficients(tss, m, r);
+
+    float *calculated = result.host<float>();
+
+    ASSERT_NEAR(calculated[0], -0.00099125632550567389, EPSILON);
+    ASSERT_NEAR(calculated[1], -0.0027067768387496471, EPSILON);
+    ASSERT_NEAR(calculated[2], -0.00015192681166809052, EPSILON);
+    ASSERT_NEAR(calculated[3], 0.10512571036815643, EPSILON);
+    ASSERT_NEAR(calculated[4], 0.89872437715530396, EPSILON);
+}
+
 void hasDuplicates() {
     float data[] = {5, 4, 3, 0, 0, 1, 5, 4, 3, 0, 2, 1};
     af::array tss(6, 2, data);
@@ -1132,6 +1149,7 @@ TSA_TEST(FeaturesTests, FftAggregated, fftAggregated);
 TSA_TEST(FeaturesTests, FftCoefficient, fftCoefficient);
 TSA_TEST(FeaturesTests, FirstLocationOfMaximum, firstLocationOfMaximum);
 TSA_TEST(FeaturesTests, FirstLocationOfMinimum, firstLocationOfMinimum);
+TSA_TEST_BACKENDS(FeaturesTests, FriedrichCoefficients, friedrichCoefficients, true, true, false, false, false, false);
 TSA_TEST(FeaturesTests, HasDuplicates, hasDuplicates);
 TSA_TEST(FeaturesTests, HasDuplicateMax, hasDuplicateMax);
 TSA_TEST(FeaturesTests, HasDuplicateMin, hasDuplicateMin);
