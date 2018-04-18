@@ -927,6 +927,19 @@ void skewness() {
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
 }
 
+void spktWelchDensity() {
+    float data[] = {0, 1, 1, 3, 4, 5, 6, 7, 8, 9, 0, 1, 1, 3, 4, 5, 6, 7, 8, 9};
+    af::array tss(10, 2, data);
+
+    af::array result = tsa::features::spktWelchDensity(tss);
+    float *calculated = result.host<float>();
+
+    float expected[] = {3.3333334922790527, 19.865583419799805};
+
+    ASSERT_NEAR(calculated[0], expected[0], 1e-5);
+    ASSERT_NEAR(calculated[1], expected[1], 1e-5);
+}
+
 void standardDeviation() {
     float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
@@ -1053,6 +1066,7 @@ TSA_TEST(FeaturesTests, RangeCount, rangeCount);
 TSA_TEST(FeaturesTests, RatioBeyondRSigma, ratioBeyondRSigma);
 TSA_TEST(FeaturesTests, SampleEntropy, sampleEntropy);
 TSA_TEST(FeaturesTests, Skewness, skewness);
+TSA_TEST(FeaturesTests, SpktWelchDensity, spktWelchDensity);
 TSA_TEST(FeaturesTests, StandardDeviation, standardDeviation);
 TSA_TEST(FeaturesTests, SumOfReoccurringDatapoints, sumOfReoccurringDatapoints);
 TSA_TEST(FeaturesTests, SymmetryLooking, symmetryLooking);
