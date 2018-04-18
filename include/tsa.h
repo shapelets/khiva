@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 // Core header files
+#include <tsa/array.h>
 #include <tsa/dimensionality.h>
 #include <tsa/distances.h>
 #include <tsa/features.h>

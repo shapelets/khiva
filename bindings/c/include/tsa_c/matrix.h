@@ -4,6 +4,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <arrayfire.h>
+
 namespace tsa {
 
 namespace matrix {
@@ -26,8 +28,8 @@ extern "C" {
  * @param subsequence_indices The indices of the query sequences that produced
  * the "N" bigger discords.
  */
-void find_best_n_discords(double *profile, unsigned int *index, long *length_profile, long *n,
-                          double *discord_distances, int *discord_indices, int *subsequence_indices);
+void find_best_n_discords(af_array *profile, af_array *index, long n, af_array *discord_distances,
+                          af_array *discord_indices, af_array *subsequence_indices);
 
 /**
  * @brief Primitive of the findBestNMotifs function.
@@ -42,36 +44,31 @@ void find_best_n_discords(double *profile, unsigned int *index, long *length_pro
  * @param subsequence_indices The indices of the query sequences that produced
  * the minimum reported in the motifs
  */
-void find_best_n_motifs(double *profile, unsigned int *index, long *length_profile, long *n, double *motif_distances,
-                        int *motif_indices, int *subsequence_indices);
+void find_best_n_motifs(af_array *profile, af_array *index, long n, af_array *motif_distances, af_array *motif_indices,
+                        af_array *subsequence_indices);
 
 /**
  * @brief  Primitive of the STOMP algorithm.
  *
- * @param ta Pointer of an array of doubles with the first time series values.
- * @param tb Pointer of an array of doubles with the second time series values.
- * @param lta Pointer to an integer with the length of the first time series.
- * @param ltb Pointer to an integer with the length of the second time series.
+ * @param tssa Query time series
+ * @param tssb Reference time series
  * @param m Pointer to a long with the length of the subsequence.
- * @param p Pointer to an initialized array of doubles for storing the distance
- * profile.
- * @param i Pointer to an initialized array of doubles for storing the index
- * profile.
+ * @param p The matrix profile, which reflects the distance to the closer element of the subsequence
+ * from 'tssa' in 'tssb'.
+ * @param i The matrix profile index, which points to where the previously mentioned minimum is located.
  */
-void stomp(double *ta, double *tb, long *lta, long *ltb, long *m, double *p, unsigned int *i);
+void stomp(af_array *tssa, af_array *tssb, long m, af_array *p, af_array *i);
 
 /**
  * @brief Primitive of the STOMP self join algorithm.
  *
- * @param ta Pointer of an array of doubles with the first time series values.
- * @param lta Pointer to an integer with the length of the first time series.
+ * @param tss Query and reference time series
  * @param m Pointer to a long with the length of the subsequence.
- * @param p Pointer to an initialized  array of doubles for storing the distance
- * profile.
- * @param i Pointer to an initialized  array of doubles for storing the index
- * profile.
+ * @param p The matrix profile, which reflects the distance to the closer element of the subsequence
+ * from 'tss' in a different location of itself
+ * @param i The matrix profile index, which points to where the previously mentioned minimum is located
  */
-void stomp_self_join(double *ta, long *lta, long *m, double *p, unsigned int *i);
+void stomp_self_join(af_array *tss, long m, af_array *p, af_array *i);
 
 #ifdef __cplusplus
 }

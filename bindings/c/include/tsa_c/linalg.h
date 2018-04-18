@@ -4,6 +4,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <arrayfire.h>
+
 namespace tsa {
 
 namespace linalg {
@@ -19,14 +21,11 @@ extern "C" {
  * \f$D\dagger\f$ contains the inverse values of the singular values contained in D if they are not zero, and zero
  * otherwise.
  *
- * @param a A Coefficient matrix containing the coefficients of the linear equation problem to solve.
- * @param a_l Coefficient vectors length (All need to have the same length).
- * @param a_n Number of coefficient vectors.
- * @param b A Vector with the measured values.
- * @param b_l The vector length.
+ * @param a A coefficient matrix containing the coefficients of the linear equation problem to solve.
+ * @param b A vector with the measured values.
  * @param result Contains the solution to the linear equation problem minimizing the norm 2.
  */
-void lls(double *a, long *a_l, long *a_n, double *b, long *b_l, double *result);
+void lls(af_array *a, af_array *b, af_array *result);
 #ifdef __cplusplus
 }
 #endif

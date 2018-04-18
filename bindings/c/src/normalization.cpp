@@ -11,17 +11,18 @@
 extern "C" {
 #endif
 
-void znorm(double *tss, long *tss_l, long *tss_n, double *epsilon, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::normalization::znorm(af::array(*tss_l, *tss_n, tss), *epsilon);
-    primitive_result.host(result);
+void znorm(af_array *array, double epsilon, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::normalization::znorm(var, epsilon).get());
 }
 
-void znorm_in_place(double *tss, long *tss_l, long *tss_n, double *epsilon) {
-    af::array tss_result = af::array(*tss_l, *tss_n, tss);
-    tsa::normalization::znormInPlace(tss_result, *epsilon);
-    tss_result.host(tss);
+void znorm_in_place(af_array *array, double epsilon) {
+    af::array var = af::array(*array);
+    tsa::normalization::znormInPlace(var, epsilon);
+    af_retain_array(array, var.get());
 }
+
 #ifdef __cplusplus
 }
 #endif
