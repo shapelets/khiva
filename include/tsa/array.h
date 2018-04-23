@@ -202,17 +202,5 @@ std::vector<int> getIndexMaxColums(std::vector<T> r) {
     return result;
 }
 
-int indexMinValue(std::vector<int> values) {
-    int result = -1;
-    int minimum = std::numeric_limits<int>::max();
-    for (int i; i < values.size(); i++) {
-        if (values[i] < minimum) {
-            minimum = values[i];
-            result = i;
-        }
-    }
-    return result;
-}
-
 };  // namespace array
 };  // namespace tsa

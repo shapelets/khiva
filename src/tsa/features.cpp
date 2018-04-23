@@ -682,6 +682,18 @@ af::array tsa::features::localMaximals(af::array tss) {
     return result;
 }
 
+int indexMinValue(std::vector<int> values) {
+    int result = -1;
+    int minimum = std::numeric_limits<int>::max();
+    for (int i; i < values.size(); i++) {
+        if (values[i] < minimum) {
+            minimum = values[i];
+            result = i;
+        }
+    }
+    return result;
+}
+
 std::vector<int> subsValueToVector(int a, std::vector<int> v) {
     std::vector<int> res;
     for (auto value : v) {
@@ -758,7 +770,7 @@ std::vector<tsa::features::LineTuple> identifyRidgeLines(af::array cwt_tss, tsa:
             // Otherwise start a new one.
             if (prevRidgeCols.size() > 0) {
                 std::vector<int> diffs = subsValueToVector(col, prevRidgeCols);
-                int closest = tsa::array::indexMinValue(diffs);
+                int closest = indexMinValue(diffs);
                 if (diffs[closest] <= maxDistances.getRow(row).front()) {
                     line = &ridgeLines[closest];
                     filled = true;
