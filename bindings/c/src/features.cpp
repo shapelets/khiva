@@ -4,314 +4,400 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <arrayfire.h>
 #include <tsa/features.h>
+#include <tsa_c/features.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-void cidCe(double *tss, long *tss_length, long *tss_number_of_tss, bool *zNormalize, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::cidCe(af::array(*tss_length, *tss_number_of_tss, tss), *zNormalize);
-    primitive_result.host(result);
+
+void abs_energy(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::absEnergy(var).get());
 }
 
-void abs_energy(double *time_series, long *time_series_length, long *number_of_time_series, double *primitive_result) {
-    af::array result;
-    result = tsa::features::absEnergy(af::array(*time_series_length, *number_of_time_series, time_series));
-    result.host(primitive_result);
+void absolute_sum_of_changes(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::absoluteSumOfChanges(var).get());
 }
 
-void absolute_sum_of_changes(double *time_series, long *time_series_length, long *number_of_time_series,
-                             double *primitive_result) {
-    af::array result;
-    result = tsa::features::absoluteSumOfChanges(af::array(*time_series_length, *number_of_time_series, time_series));
-    result.host(primitive_result);
-}
+void aggregated_autocorrelation(af_array *array, int aggregation_function, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
 
-void c3(double *tss, long *tss_length, long *tss_number_of_tss, long *lag, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::c3(af::array(*tss_length, *tss_number_of_tss, tss), *lag);
-    primitive_result.host(result);
-}
-
-void cross_correlation(double *xss, long *xss_length, long *xss_number_of_tss, double *yss, long *yss_length,
-                       long *yss_number_of_tss, bool *unbiased, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::crossCorrelation(af::array(*xss_length, *xss_number_of_tss, xss),
-                                                       af::array(*yss_length, *yss_number_of_tss, yss), *unbiased);
-    primitive_result.host(result);
-}
-
-void auto_covariance(double *xss, long *xss_length, long *xss_number_of_tss, bool *unbiased, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::autoCovariance(af::array(*xss_length, *xss_number_of_tss, xss), *unbiased);
-    primitive_result.host(result);
-}
-
-void cross_covariance(double *xss, long *xss_length, long *xss_number_of_tss, double *yss, long *yss_length,
-                      long *yss_number_of_tss, bool *unbiased, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::crossCovariance(af::array(*xss_length, *xss_number_of_tss, xss),
-                                                      af::array(*yss_length, *yss_number_of_tss, yss), *unbiased);
-    primitive_result.host(result);
-}
-
-void approximate_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *m, double *r, double *result) {
-    af::array primitive_result;
-    float r_f = (float)*r;
-    primitive_result = tsa::features::approximateEntropy(af::array(*tss_length, *tss_number_of_tss, tss), *m, r_f);
-    primitive_result.host(result);
-}
-
-void auto_correlation(double *tss, long *tss_length, long *tss_number_of_tss, long *max_lag, bool *unbiased,
-                      double *result) {
-    af::array primitive_result;
-    primitive_result =
-        tsa::features::autoCorrelation(af::array(*tss_length, *tss_number_of_tss, tss), *max_lag, *unbiased);
-    primitive_result.host(result);
-}
-
-void binned_entropy(double *tss, long *tss_length, long *tss_number_of_tss, int *max_bins, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::binnedEntropy(af::array(*tss_length, *tss_number_of_tss, tss), *max_bins);
-    primitive_result.host(result);
-}
-
-void count_above_mean(double *tss, long *tss_length, long *tss_number_of_tss, unsigned int *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::countAboveMean(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void count_below_mean(double *tss, long *tss_length, long *tss_number_of_tss, unsigned int *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::countBelowMean(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void energy_ratio_by_chunks(double *tss, long *tss_length, long *tss_number_of_tss, long *num_segments,
-                            long *segment_focus, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::energyRatioByChunks(af::array(*tss_length, *tss_number_of_tss, tss),
-                                                          *num_segments, *segment_focus);
-    primitive_result.host(result);
-}
-
-void first_location_of_maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::firstLocationOfMaximum(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void first_location_of_minimum(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::firstLocationOfMinimum(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void has_duplicates(double *tss, long *tss_length, long *tss_number_of_tss, bool *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::hasDuplicates(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void has_duplicate_max(double *tss, long *tss_length, long *tss_number_of_tss, bool *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::hasDuplicateMax(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void index_max_quantile(double *tss, long *tss_length, long *tss_number_of_tss, double *q, double *result) {
-    af::array primitive_result;
-    float q_f = (float)*q;
-    primitive_result = tsa::features::indexMaxQuantile(af::array(*tss_length, *tss_number_of_tss, tss), q_f);
-    primitive_result.host(result);
-}
-
-void kurtosis(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::kurtosis(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void large_standard_deviation(double *tss, long *tss_length, long *tss_number_of_tss, double *r, bool *result) {
-    af::array primitive_result;
-    float r_f = (float)*r;
-    primitive_result = tsa::features::largeStandardDeviation(af::array(*tss_length, *tss_number_of_tss, tss), r_f);
-    primitive_result.host(result);
-}
-
-void last_location_of_maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::lastLocationOfMaximum(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void last_location_of_minimum(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::lastLocationOfMinimum(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void length(double *tss, long *tss_length, long *tss_number_of_tss, int *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::length(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void linear_trend(double *tss, long *tss_length, long *tss_number_of_tss, double *pvalue, double *rvalue,
-                  double *intercept, double *slope, double *stdrr) {
-    af::array primitive_pvalue, primitive_rvalue, primitive_intercept, primitive_slope, primitive_stdrr;
-    tsa::features::linearTrend(af::array(*tss_length, *tss_number_of_tss, tss), primitive_pvalue, primitive_rvalue,
-                               primitive_intercept, primitive_slope, primitive_stdrr);
-    primitive_pvalue.host(pvalue);
-    primitive_rvalue.host(rvalue);
-    primitive_intercept.host(intercept);
-    primitive_slope.host(slope);
-    primitive_stdrr.host(stdrr);
-}
-
-void has_duplicate_min(double *tss, long *tss_length, long *tss_number_of_tss, bool *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::hasDuplicateMin(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void longest_strike_above_mean(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::longestStrikeAboveMean(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void longest_strike_below_mean(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::longestStrikeBelowMean(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void maximum(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::maximum(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void mean_absolute_change(double *tss, long *tss_length, long *tss_number_of_tss, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::meanAbsoluteChange(af::array(*tss_length, *tss_number_of_tss, tss));
-    primitive_result.host(result);
-}
-
-void fftCoefficient(double *tss, long *tss_length, long *tss_number_of_tss, long *coefficient, double *real,
-                    double *imag, double *absolute, double *angle) {
-    af::array primitive_real, primitive_imag, primitive_abs, primitive_angle;
-    tsa::features::fftCoefficient(af::array(*tss_length, *tss_number_of_tss, tss), *coefficient, primitive_real,
-                                  primitive_imag, primitive_abs, primitive_angle);
-    primitive_real.host(real);
-    primitive_imag.host(imag);
-    primitive_abs.host(absolute);
-    primitive_angle.host(angle);
-}
-
-void aggregated_autocorrelation(double *tss, long *tss_l, long *tss_n, int *aggregation_function, double *result) {
-    af::array primitive_result;
-
-    switch (*aggregation_function) {
+    switch (aggregation_function) {
         case 0:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::mean);
+            af_retain_array(result, tsa::features::aggregatedAutocorrelation(var, af::mean).get());
             break;
         case 1:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::median);
+            af_retain_array(result, tsa::features::aggregatedAutocorrelation(var, af::median).get());
             break;
         case 2:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::min);
+            af_retain_array(result, tsa::features::aggregatedAutocorrelation(var, af::min).get());
             break;
         case 3:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::max);
+            af_retain_array(result, tsa::features::aggregatedAutocorrelation(var, af::max).get());
             break;
         case 4:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::stdev);
+            af_retain_array(result, tsa::features::aggregatedAutocorrelation(var, af::stdev).get());
             break;
         case 5:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::var);
+            af_retain_array(result, tsa::features::aggregatedAutocorrelation(var, af::var).get());
             break;
         default:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(*tss_l, *tss_n, tss), af::mean);
+            af_retain_array(result, tsa::features::aggregatedAutocorrelation(var, af::mean).get());
             break;
     }
-    primitive_result.host(result);
 }
 
-void aggregated_linear_trend(double *t, long *t_l, long *t_n, long *chunkSize, int *aggregation_function, double *slope,
-                             double *intercept, double *rvalue, double *pvalue, double *stderrest) {
+void aggregated_linear_trend(af_array *array, long chunkSize, int aggregation_function, af_array *slope,
+                             af_array *intercept, af_array *rvalue, af_array *pvalue, af_array *stderrest) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
     af::array primitive_slope;
     af::array primitive_intercept;
     af::array primitive_rvalue;
     af::array primitive_pvalue;
     af::array primitive_stderrest;
-    switch (*aggregation_function) {
+
+    switch (aggregation_function) {
         case 0:
-            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::mean, primitive_slope,
-                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
-                                                 primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::mean, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
         case 1:
-            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::median, primitive_slope,
-                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
-                                                 primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::median, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
         case 2:
-            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::min, primitive_slope,
-                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
-                                                 primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::min, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
         case 3:
-            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::max, primitive_slope,
-                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
-                                                 primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::max, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
         case 4:
-            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::stdev, primitive_slope,
-                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
-                                                 primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::stdev, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
         default:
-            tsa::features::aggregatedLinearTrend(af::array(*t_l, *t_n, t), *chunkSize, af::mean, primitive_slope,
-                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
-                                                 primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::mean, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
     }
-
-    primitive_slope.host(slope);
-    primitive_intercept.host(intercept);
-    primitive_rvalue.host(rvalue);
-    primitive_pvalue.host(pvalue);
-    primitive_stderrest.host(stderrest);
+    af_retain_array(slope, primitive_slope.get());
+    af_retain_array(intercept, primitive_intercept.get());
+    af_retain_array(rvalue, primitive_rvalue.get());
+    af_retain_array(pvalue, primitive_pvalue.get());
+    af_retain_array(stderrest, primitive_stderrest.get());
 }
 
-void cwt_coefficients(double *tss, long *tss_l, long *tss_n, int *widths, long *widths_l, long *widths_n, int *coeff,
-                      int *w, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::cwtCoefficients(af::array(*tss_l, *tss_n, tss),
-                                                      af::array(*widths_l, *widths_n, widths), *coeff, *w);
-    primitive_result.host(result);
+void approximate_entropy(af_array *array, int m, float r, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::approximateEntropy(var, m, r).get());
 }
 
-void mean_second_derivative_central(double *tss, long *tss_l, long *tss_n, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::meanSecondDerivativeCentral(af::array(*tss_l, *tss_n, tss));
-    primitive_result.host(result);
+void cross_covariance(af_array *xss, af_array *yss, bool unbiased, af_array *result) {
+    af::array var_xss = af::array(*xss);
+    af_retain_array(xss, var_xss.get());
+    af::array var_yss = af::array(*yss);
+    af_retain_array(yss, var_yss.get());
+    af_retain_array(result, tsa::features::crossCovariance(var_xss, var_yss, unbiased).get());
 }
 
-void minimum(double *tss, long *tss_l, long *tss_n, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::minimum(af::array(*tss_l, *tss_n, tss));
-    primitive_result.host(result);
+void auto_covariance(af_array *array, bool unbiased, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::autoCovariance(var, unbiased).get());
 }
 
-void number_crossing_m(double *tss, long *tss_l, long *tss_n, int *m, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::features::numberCrossingM(af::array(*tss_l, *tss_n, tss), *m);
-    primitive_result.host(result);
+void cross_correlation(af_array *xss, af_array *yss, bool unbiased, af_array *result) {
+    af::array var_xss = af::array(*xss);
+    af_retain_array(xss, var_xss.get());
+    af::array var_yss = af::array(*yss);
+    af_retain_array(yss, var_yss.get());
+    af_retain_array(result, tsa::features::crossCorrelation(var_xss, var_yss, unbiased).get());
+}
+
+void auto_correlation(af_array *array, long max_lag, bool unbiased, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::autoCorrelation(var, max_lag, unbiased).get());
+}
+
+void binned_entropy(af_array *array, int max_bins, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::binnedEntropy(var, max_bins).get());
+}
+
+void c3(af_array *array, long lag, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::c3(var, lag).get());
+}
+
+void cid_ce(af_array *array, bool zNormalize, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::cidCe(var, zNormalize).get());
+}
+
+void count_above_mean(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::countAboveMean(var).get());
+}
+
+void count_below_mean(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::countBelowMean(var).get());
+}
+
+void cwt_coefficients(af_array *array, af_array *width, int coeff, int w, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af::array var_width = af::array(*width);
+    af_retain_array(width, var_width.get());
+    af_retain_array(result, tsa::features::cwtCoefficients(var, var_width, coeff, w).get());
+}
+
+void energy_ratio_by_chunks(af_array *array, long num_segments, long segment_focus, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::energyRatioByChunks(var, num_segments, segment_focus).get());
+}
+
+void fft_aggregated(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::fftAggregated(var).get());
+}
+
+void fftCoefficient(af_array *array, long coefficient, af_array *real, af_array *imag, af_array *absolute,
+                    af_array *angle) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af::array primitive_real, primitive_imag, primitive_abs, primitive_angle;
+    tsa::features::fftCoefficient(var, coefficient, primitive_real, primitive_imag, primitive_abs, primitive_angle);
+    af_retain_array(real, primitive_real.get());
+    af_retain_array(imag, primitive_imag.get());
+    af_retain_array(absolute, primitive_abs.get());
+    af_retain_array(angle, primitive_angle.get());
+}
+
+void first_location_of_maximum(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::firstLocationOfMaximum(var).get());
+}
+
+void first_location_of_minimum(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::firstLocationOfMinimum(var).get());
+}
+
+void has_duplicates(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::hasDuplicates(var).get());
+}
+
+void has_duplicate_max(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::hasDuplicateMax(var).get());
+}
+
+void has_duplicate_min(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::hasDuplicateMin(var).get());
+}
+
+void index_max_quantile(af_array *array, float q, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::indexMaxQuantile(var, q).get());
+}
+
+void kurtosis(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::kurtosis(var).get());
+}
+
+void large_standard_deviation(af_array *array, float r, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::largeStandardDeviation(var, r).get());
+}
+
+void last_location_of_maximum(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::lastLocationOfMaximum(var).get());
+}
+
+void last_location_of_minimum(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::lastLocationOfMinimum(var).get());
+}
+
+void length(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::length(var).get());
+}
+
+void linear_trend(af_array *array, af_array *pvalue, af_array *rvalue, af_array *intercept, af_array *slope,
+                  af_array *stdrr) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af::array primitive_pvalue, primitive_rvalue, primitive_intercept, primitive_slope, primitive_stdrr;
+    tsa::features::linearTrend(var, primitive_pvalue, primitive_rvalue, primitive_intercept, primitive_slope,
+                               primitive_stdrr);
+    af_retain_array(slope, primitive_slope.get());
+    af_retain_array(intercept, primitive_intercept.get());
+    af_retain_array(rvalue, primitive_rvalue.get());
+    af_retain_array(pvalue, primitive_pvalue.get());
+    af_retain_array(stdrr, primitive_stdrr.get());
+}
+
+void longest_strike_above_mean(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::longestStrikeAboveMean(var).get());
+}
+
+void longest_strike_below_mean(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::longestStrikeBelowMean(var).get());
+}
+
+void max_langevin_fixed_point(af_array *array, int m, float r, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::maxLangevinFixedPoint(var, m, r).get());
+}
+
+void maximum(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::maximum(af::array(var)).get());
+}
+
+void mean(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::mean(var).get());
+}
+
+void mean_absolute_change(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::meanAbsoluteChange(var).get());
+}
+
+void mean_change(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::meanChange(var).get());
+}
+
+void mean_second_derivative_central(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::meanSecondDerivativeCentral(var).get());
+}
+
+void median(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::median(var).get());
+}
+
+void minimum(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::minimum(var).get());
+}
+
+void number_peaks(af_array *array, int n, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::numberPeaks(var, n).get());
+}
+
+void number_crossing_m(af_array *array, int m, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::numberCrossingM(var, m).get());
+}
+
+void percentage_of_reoccurring_datapoints_to_all_datapoints(af_array *array, bool is_sorted, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(var, is_sorted).get());
+}
+
+void quantile(af_array *array, af_array *q, float precision, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af::array var_q = af::array(*q);
+    af_retain_array(q, var_q.get());
+    af_retain_array(result, tsa::features::quantile(var, var_q, precision).get());
+}
+
+void ratio_beyond_r_sigma(af_array *array, float r, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::ratioBeyondRSigma(var, r).get());
+}
+
+void sample_entropy(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::sampleEntropy(var).get());
+}
+
+void skewness(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::skewness(var).get());
+}
+
+void standard_deviation(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::standardDeviation(var).get());
+}
+
+void sum_of_reoccurring_datapoints(af_array *array, bool is_sorted, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::sumOfReoccurringDatapoints(var, is_sorted).get());
+}
+
+void symmetry_looking(af_array *array, float r, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::symmetryLooking(var, r).get());
+}
+
+void value_count(af_array *array, float v, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::valueCount(var, v).get());
 }
 
 #ifdef __cplusplus

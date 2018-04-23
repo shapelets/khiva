@@ -22,7 +22,7 @@ void info();
  *
  * @param backend The desired backend.
  */
-void set_backend(int *backend);
+void set_backend(int backend);
 
 /**
  * @brief Get the active backend.
@@ -43,7 +43,7 @@ void get_backends(int *backends);
  *
  * @param device The desired device.
  */
-void set_device(int *device);
+void set_device(int device);
 
 /**
  * @brief Get the active device.

@@ -40,6 +40,14 @@ af::array tsa::statistics::kurtosis(af::array tss) {
     return a * b - c;
 }
 
+af::array tsa::statistics::skewness(af::array tss) {
+    float n = tss.dims(0);
+    af::array tssMinusMean = (tss - af::tile(af::mean(tss, 0), tss.dims(0)));
+    af::array m3 = tsa::statistics::moment(tssMinusMean, 3);
+    af::array s3 = af::pow(tsa::statistics::sampleStdev(tss), 3);
+    return (std::pow(n, 2.0) / ((n - 1) * (n - 2))) * m3 / s3;
+}
+
 af::array tsa::statistics::quantile(af::array tss, af::array q, float precision) {
     long n = tss.dims(0);
 

@@ -81,6 +81,19 @@ void kurtosis() {
     }
 }
 
+void skewness() {
+    float data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
+    af::array tss(6, 2, data);
+
+    float dataExpected[] = {0.0, 0.236177069879499};
+
+    float *result = tsa::statistics::skewness(tss).host<float>();
+
+    for (int i = 0; i < 2; i++) {
+        ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e2);
+    }
+}
+
 void quantile() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(6, 2, data);
@@ -158,6 +171,7 @@ TSA_TEST(StatisticsTests, CovarianceBiased, covarianceBiased);
 TSA_TEST(StatisticsTests, Moment, moment);
 TSA_TEST(StatisticsTests, SampleStdev, sampleStdev);
 TSA_TEST(StatisticsTests, Kurtosis, kurtosis);
+TSA_TEST(StatisticsTests, Skewness, skewness);
 TSA_TEST(StatisticsTests, Quantile, quantile);
 TSA_TEST(StatisticsTests, QuantilesCut2, quantilesCut2);
 TSA_TEST(StatisticsTests, QuantilesCut3, quantilesCut3);

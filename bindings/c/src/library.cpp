@@ -13,13 +13,13 @@ extern "C" {
 
 void info() { tsa::library::backendInfo(); }
 
-void set_backend(int *backend) { tsa::library::setBackend(static_cast<tsa::library::Backend>(*backend)); }
+void set_backend(int backend) { tsa::library::setBackend(static_cast<tsa::library::Backend>(backend)); }
 
 void get_backend(int *backend) { *backend = static_cast<int>(tsa::library::getBackend()); }
 
 void get_backends(int *backends) { *backends = tsa::library::getBackends(); }
 
-void set_device(int *device) { tsa::library::setDevice(*device); }
+void set_device(int device) { tsa::library::setDevice(device); }
 
 void get_device_id(int *device_id) { *device_id = tsa::library::getDevice(); }
 

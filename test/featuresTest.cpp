@@ -541,6 +541,23 @@ void firstLocationOfMinimum() {
     ASSERT_NEAR(firstMinimumCalculated[1], 0.5, EPSILON);
 }
 
+void friedrichCoefficients() {
+    float data[] = {0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5};
+    af::array tss(6, 2, data);
+
+    int m = 4;
+    float r = 2;
+    af::array result = tsa::features::friedrichCoefficients(tss, m, r);
+
+    float *calculated = result.host<float>();
+
+    ASSERT_NEAR(calculated[0], -0.00099125632550567389, EPSILON);
+    ASSERT_NEAR(calculated[1], -0.0027067768387496471, EPSILON);
+    ASSERT_NEAR(calculated[2], -0.00015192681166809052, EPSILON);
+    ASSERT_NEAR(calculated[3], 0.10512571036815643, EPSILON);
+    ASSERT_NEAR(calculated[4], 0.89872437715530396, EPSILON);
+}
+
 void hasDuplicates() {
     float data[] = {5, 4, 3, 0, 0, 1, 5, 4, 3, 0, 2, 1};
     af::array tss(6, 2, data);
@@ -851,6 +868,270 @@ void numberPeaks() {
     ASSERT_EQ(np[1], 1);
 }
 
+void partialAutocorrelation() {
+    float len = 3000.0;
+    float *input = (float *)malloc(sizeof(float) * len);
+    float step = 1.0 / (len - 1);
+    for (int i = 1; i < len; i++) {
+        input[i] = step * i;
+    }
+
+    af::array ts(3000, 1, input);
+    af::array tss = af::tile(ts, 1, 2);
+
+    int lags[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    af::array lags_d(10, 1, lags);
+
+    af::array result = tsa::features::partialAutocorrelation(tss, lags_d);
+    float *pa = result.col(0).host<float>();
+
+    ASSERT_NEAR(pa[0], 1.0, 1e-3);
+    ASSERT_NEAR(pa[1], 0.9993331432342529, 1e-3);
+    ASSERT_NEAR(pa[2], -0.0006701064994559, 1e-3);
+    ASSERT_NEAR(pa[3], -0.0006701068487018, 1e-3);
+    ASSERT_NEAR(pa[4], -0.0008041285327636, 1e-3);
+    ASSERT_NEAR(pa[5], -0.0005360860959627, 1e-3);
+    ASSERT_NEAR(pa[6], -0.0007371186511591, 1e-3);
+    ASSERT_NEAR(pa[7], -0.0004690756904893, 1e-3);
+    ASSERT_NEAR(pa[8], -0.0008041299879551, 1e-3);
+    ASSERT_NEAR(pa[9], -0.0007371196406893, 1e-3);
+}
+
+void percentageOfReoccurringDatapointsToAllDatapoints() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(tss, false);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {0.25, 0.25};
+
+    ASSERT_EQ(calculated[0], expected[0]);
+    ASSERT_EQ(calculated[1], expected[1]);
+}
+
+void percentageOfReoccurringValuesToAllValues() {
+    float data[] = {1, 1, 2, 3, 4, 4, 5, 6, 1, 2, 2, 3, 4, 5, 6, 7};
+    af::array tss(8, 2, data);
+
+    af::array result = tsa::features::percentageOfReoccurringValuesToAllValues(tss, false);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {4.0 / 8.0, 2.0 / 8.0};
+
+    ASSERT_EQ(calculated[0], expected[0]);
+    ASSERT_EQ(calculated[1], expected[1]);
+}
+
+void quantile() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    tss = af::sort(tss, 0);
+
+    float q[] = {0.6};
+    af::array qq = af::array(1, q);
+
+    af::array result = tsa::features::quantile(tss, qq);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {1.79999999, 1.79999999};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+}
+
+void rangeCount() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 5, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::rangeCount(tss, 2, 12);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {2, 3};
+
+    ASSERT_EQ(calculated[0], expected[0]);
+    ASSERT_EQ(calculated[1], expected[1]);
+}
+
+void ratioBeyondRSigma() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::ratioBeyondRSigma(tss, 0.5);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {0.7142857142857143, 0.7142857142857143};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+}
+
+void ratioValueNumberToTimeSeriesLength() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 5, 0, 4, 6, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::ratioValueNumberToTimeSeriesLength(tss);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {4.0 / 7.0, 6.0 / 7.0};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+}
+
+void sampleEntropy() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::sampleEntropy(tss);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {1.252762968495368, 1.252762968495368};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+}
+
+void skewness() {
+    float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::skewness(tss);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {2.038404735373753, 2.038404735373753};
+
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+}
+
+void standardDeviation() {
+    float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
+                    20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::standardDeviation(tss);
+
+    float *stdev = result.host<float>();
+
+    ASSERT_NEAR(stdev[0], 12.363150892875165, EPSILON);
+    ASSERT_NEAR(stdev[1], 9.51367436903324, EPSILON);
+}
+
+void sumOfReoccurringDatapoints() {
+    float data[] = {3, 3, 0, 4, 0, 13, 13, 3, 3, 0, 4, 0, 13, 13};
+    af::array tss(7, 2, data);
+
+    af::array result = tsa::features::sumOfReoccurringDatapoints(tss, false);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {32, 32};
+
+    ASSERT_EQ(calculated[0], expected[0]);
+    ASSERT_EQ(calculated[1], expected[1]);
+}
+
+void sumOfReoccurringValues() {
+    float data[] = {4, 4, 6, 6, 7, 4, 7, 7, 8, 8};
+    af::array tss(5, 2, data);
+
+    af::array result = tsa::features::sumOfReoccurringValues(tss, false);
+
+    float *calculated = result.host<float>();
+
+    float expected[] = {10, 15};
+
+    ASSERT_EQ(calculated[0], expected[0]);
+    ASSERT_EQ(calculated[1], expected[1]);
+}
+
+void sumValues() {
+    float data[] = {1, 2, 3, 4.1, -1.2, -2, -3, -4};
+    af::array tss(4, 2, data);
+
+    af::array result = tsa::features::sumValues(tss);
+
+    float *sv = (float *)result.host<float>();
+    float expected[] = {10.1, -10.2};
+
+    ASSERT_EQ(sv[0], expected[0]);
+    ASSERT_EQ(sv[1], expected[1]);
+}
+
+void symmetryLooking() {
+    float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
+                    20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::symmetryLooking(tss, 0.1);
+
+    bool *sl = (bool *)result.host<char>();
+
+    ASSERT_EQ(sl[0], 1);
+    ASSERT_EQ(sl[1], 0);
+}
+
+void timeReversalAsymmetryStatistic() {
+    float data[] = {1,  2,  3,  4, 5,  6, 7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                    20, 20, 20, 2, 19, 1, 20, 20, 20, 1,  15, 1,  30, 1,  1,  18, 4,  1,  20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::timeReversalAsymmetryStatistic(tss, 2);
+
+    float *r = result.host<float>();
+
+    ASSERT_EQ(r[0], 1052);
+    ASSERT_EQ(r[1], -150.625);
+}
+
+void valueCount() {
+    float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
+                    20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::valueCount(tss, 20);
+
+    unsigned int *vc = result.host<unsigned int>();
+
+    ASSERT_EQ(vc[0], 9);
+    ASSERT_EQ(vc[1], 8);
+}
+
+void variance() {
+    float data[] = {1, 1, -1, -1, 1, 2, -2, -1};
+    af::array tss(4, 2, data);
+
+    af::array result = tsa::features::variance(tss);
+
+    float *v = result.host<float>();
+
+    ASSERT_EQ(v[0], 1.0);
+    ASSERT_EQ(v[1], 2.5);
+}
+
+void varianceLargerThanStandardDeviation() {
+    float data[] = {20, 20, 20, 18, 25, 19, 20, 20, 20, 20, 40, 30, 1,  50, 1, 1,  5, 1, 20, 20,
+                    20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
+    af::array tss(20, 2, data);
+
+    af::array result = tsa::features::varianceLargerThanStandardDeviation(tss);
+
+    bool *vlts = (bool *)result.host<char>();
+
+    ASSERT_EQ(vlts[0], 1);
+    ASSERT_EQ(vlts[1], 1);
+}
+
 TSA_TEST(FeaturesTests, AbsEnergy, absEnergy);
 TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2);
 TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges);
@@ -882,6 +1163,7 @@ TSA_TEST(FeaturesTests, FftAggregated, fftAggregated);
 TSA_TEST(FeaturesTests, FftCoefficient, fftCoefficient);
 TSA_TEST(FeaturesTests, FirstLocationOfMaximum, firstLocationOfMaximum);
 TSA_TEST(FeaturesTests, FirstLocationOfMinimum, firstLocationOfMinimum);
+TSA_TEST_BACKENDS(FeaturesTests, FriedrichCoefficients, friedrichCoefficients, true, true, false, false, false, false);
 TSA_TEST(FeaturesTests, HasDuplicates, hasDuplicates);
 TSA_TEST(FeaturesTests, HasDuplicateMax, hasDuplicateMax);
 TSA_TEST(FeaturesTests, HasDuplicateMin, hasDuplicateMin);
@@ -905,3 +1187,21 @@ TSA_TEST(FeaturesTests, Minimum, minimum);
 TSA_TEST(FeaturesTests, NumberCrossingM, numberCrossingM);
 TSA_TEST(FeaturesTests, NumberCwtPeaks, numberCwtPeaks);
 TSA_TEST(FeaturesTests, NumberPeaks, numberPeaks);
+TSA_TEST(FeaturesTests, PartialAutocorrelation, partialAutocorrelation);
+TSA_TEST(FeaturesTests, PercentageOfReoccurringDatapointsToAllDatapoints,
+         percentageOfReoccurringDatapointsToAllDatapoints);
+TSA_TEST(FeaturesTests, PercentageOfReoccurringValuesToAllValues, percentageOfReoccurringValuesToAllValues);
+TSA_TEST(FeaturesTests, Quantile, quantile);
+TSA_TEST(FeaturesTests, RangeCount, rangeCount);
+TSA_TEST(FeaturesTests, RatioBeyondRSigma, ratioBeyondRSigma);
+TSA_TEST(FeaturesTests, SampleEntropy, sampleEntropy);
+TSA_TEST(FeaturesTests, Skewness, skewness);
+TSA_TEST(FeaturesTests, StandardDeviation, standardDeviation);
+TSA_TEST(FeaturesTests, SumOfReoccurringDatapoints, sumOfReoccurringDatapoints);
+TSA_TEST(FeaturesTests, SumOfReoccurringValues, sumOfReoccurringValues);
+TSA_TEST(FeaturesTests, SumValues, sumValues);
+TSA_TEST(FeaturesTests, SymmetryLooking, symmetryLooking);
+TSA_TEST(FeaturesTests, TimeReversalAsymmetryStatistic, timeReversalAsymmetryStatistic);
+TSA_TEST(FeaturesTests, ValueCount, valueCount);
+TSA_TEST(FeaturesTests, Variance, variance);
+TSA_TEST(FeaturesTests, VarianceLargerThanStandardDeviation, varianceLargerThanStandardDeviation);

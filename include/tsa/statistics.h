@@ -57,11 +57,22 @@ af::array sampleStdev(af::array tss);
 af::array kurtosis(af::array tss);
 
 /**
- * @brief Returns values at the given quantile.
+ * @brief Calculates the sample skewness of tss (calculated with the adjusted Fisher-Pearson standardized
+ * moment coefficient G1).
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of
  * time series.
+ * @return af::array Array containing the skewness of each time series in tss.
+ */
+af::array skewness(af::array tss);
+
+/**
+ * @brief Returns values at the given quantile.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series. NOTE: the time series should be sorted
  * @param q Percentile(s) at which to extract score(s). One or many.
  * @param precision Number of decimals expected.
  * @return af::array Values at the given quantile.
@@ -73,7 +84,7 @@ af::array quantile(af::array tss, af::array q, float precision = 1e8);
  *
  * @param tss Expects an input array whose dimension zero is the length of the time
  * series (all the same) and dimension one indicates the number of
- * time series.
+ * time series. NOTE: the time series should be sorted
  * @param quantiles Number of quantiles to extract. From 0 to 1, step 1/quantiles.
  * @param precision Number of decimals expected.
  * @return af::array Matrix with the categories, one category per row, the start of
