@@ -12,6 +12,11 @@ namespace tsa {
 
 namespace features {
 
+typedef std::tuple<std::vector<int>, std::vector<int>, int> CWTTuple;
+typedef std::tuple<std::vector<int>, std::vector<int>> LineTuple;
+
+#define BATCH_SIZE 2048
+
 /**
  * @brief Calculates the sum over the square values of the timeseries
  *

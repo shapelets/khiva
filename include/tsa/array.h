@@ -202,7 +202,7 @@ std::vector<int> getIndexMaxColums(std::vector<T> r) {
     return result;
 }
 
-int indexOfFirstMinimumValue(std::vector<int> values) {
+int indexMinValue(std::vector<int> values) {
     int result = -1;
     int minimum = std::numeric_limits<int>::max();
     for (int i; i < values.size(); i++) {
