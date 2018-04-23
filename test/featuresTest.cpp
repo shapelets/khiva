@@ -833,10 +833,10 @@ void numberCwtPeaks() {
 
     af::array result = tsa::features::numberCwtPeaks(tss, 2);
 
-    float *np = result.host<float>();
+    float *ncp = result.host<float>();
 
-    ASSERT_EQ(np[0], 1);
-    ASSERT_EQ(np[1], 1);
+    ASSERT_EQ(ncp[0], 2);
+    ASSERT_EQ(ncp[1], 2);
 }
 
 void numberPeaks() {
