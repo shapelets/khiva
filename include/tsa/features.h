@@ -843,10 +843,6 @@ af::array timeReversalAsymmetryStatistic(af::array tss, int lag);
 af::array valueCount(af::array tss, float v);
 
 /**
-<<<<<<< HEAD
- * @brief Calculates if the variance of tss is greater than the standard deviation. In other words, if the variance
- * of tss is larger than 1.
-=======
  * @brief Computes the variance for the time series tss.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
@@ -858,7 +854,6 @@ af::array variance(af::array tss);
 /**
  * @brief Calculates if the variance of tss is greater than the standard deviation. In other words, if the variance of
  * tss is larger than 1.
->>>>>>> 6e2538581596dd9e9bc4454cb0b4f6d05536013d
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
