@@ -340,6 +340,25 @@ af::array firstLocationOfMaximum(af::array tss);
 af::array firstLocationOfMinimum(af::array tss);
 
 /**
+ * @brief Coefficients of polynomial \f$h(x)\f$, which has been fitted to the deterministic
+ * dynamics of Langevin model:
+ * \f[
+ *    \dot(x)(t) = h(x(t)) + R \mathcal(N)(0,1)
+ * \f]
+ * as described by [1]. For short time-series this method is highly dependent on the parameters.
+ *
+ * [1] Friedrich et al. (2000): Physics Letters A 271, p. 217-222
+ * Extracting model equations from experimental data.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param m Order of polynom to fit for estimating fixed points of dynamics.
+ * @param r Number of quantils to use for averaging.
+ * @return af::array The coefficients for each time series.
+ */
+af::array friedrichCoefficients(af::array tss, int m, float r);
+
+/**
  * @brief Calculates if the input time series contain duplicated elements
  *
  * @param tss Expects an input array whose dimension zero is the length of the
@@ -584,6 +603,34 @@ af::array numberCrossingM(af::array tss, int m);
 af::array numberPeaks(af::array tss, int n);
 
 /**
+ * @brief Calculates the value of the partial autocorrelation function at the given lag. The lag \f$k\f$ partial
+ * autocorrelation of a time series \f$\\lbrace x_t, t = 1 \\ldots T \\rbrace\f$ equals the partial correlation of
+ \f$x_t\f$ and \f$x_{t-k}\f$, adjusted for the intermediate variables \f$\\lbrace x_{t-1}, \\ldots, x_{t-k+1}
+ \\rbrace\f$ ([1]). Following [2], it can be defined as:
+ *
+ * \f[
+        \\alpha_k = \\frac{ Cov(x_t, x_{t-k} | x_{t-1}, \\ldots, x_{t-k+1})}
+        {\\sqrt{ Var(x_t | x_{t-1}, \\ldots, x_{t-k+1}) Var(x_{t-k} | x_{t-1}, \\ldots, x_{t-k+1} )}}
+ * \f]
+ * with (a) \f$x_t = f(x_{t-1}, \\ldots, x_{t-k+1})\f$ and (b) \f$ x_{t-k} = f(x_{t-1}, \\ldots, x_{t-k+1})\f$
+    being AR(k-1) models that can be fitted by OLS. Be aware that in (a), the regression is done on past values to
+    predict \f$ x_t \f$ whereas in (b), future values are used to calculate the past value \f$x_{t-k}\f$.
+    It is said in [1] that "for an AR(p), the partial autocorrelations \f$ \alpha_k \f$ will be nonzero for \f$ k<=p \f$
+    and zero for \f$ k>p \f$."
+* With this property, it is used to determine the lag of an AR-Process.
+*
+* [1] Box, G. E., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015).
+* Time series analysis: forecasting and control. John Wiley & Sons.
+* [2] https://onlinecourses.science.psu.edu/stat510/node/62
+*
+* @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+* one indicates the number of time series.
+* @param lags Indicates the lags to be calculated.
+* @return af::array Returns partial autocorrelation for each time series for the given lag.
+*/
+af::array partialAutocorrelation(af::array tss, af::array lags);
+
+/**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
  * \f[
  *      \frac{len(\textit{different values occurring more than once})}{len(\textit{different values})}
@@ -594,9 +641,24 @@ af::array numberPeaks(af::array tss, int n);
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
  * and dimension one indicates the number of time series.
  * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
- * @return af::array Returns the percentage of unique values, that are present in the time series more than once.
+ * @return af::array Returns the percentage of unique data points, that are present in the time series more than once.
  */
 af::array percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool isSorted = false);
+
+/**
+ * @brief Calculates the percentage of unique values, that are present in the time series more than once.
+ * \f[
+ *      \frac{\textit{number of data points occurring more than once}}{\textit{number of all data points})}
+ * \f]
+ * This means the percentage is normalized to the number of unique values, in contrast to the
+ * percentageOfReoccurringDatapointsToAllDatapoints.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
+ * @return af::array Returns the percentage of unique values, that are present in the time series more than once.
+ */
+af::array percentageOfReoccurringValuesToAllValues(af::array tss, bool isSorted = false);
 
 /**
  * @brief Returns values at the given quantile.
@@ -634,6 +696,20 @@ af::array rangeCount(af::array tss, float min, float max);
  * \f$x\f$.
  */
 af::array ratioBeyondRSigma(af::array tss, float r);
+
+/**
+ * @brief Calculates a factor which is 1 if all values in the time series occur only once, and below one if this is
+ * not the case. In principle, it just returns:
+ *
+ * \f[
+ *      \frac{\textit{number_unique_values}}{\textit{number_values}}
+ * \f]
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
+ * @return af::array The ratio of unique values with respect to the total number of values.
+ */
+af::array ratioValueNumberToTimeSeriesLength(af::array tss);
 
 /**
  * @brief Calculates a vectorized sample entropy algorithm.
@@ -702,6 +778,25 @@ af::array standardDeviation(af::array tss);
 af::array sumOfReoccurringDatapoints(af::array tss, bool isSorted = false);
 
 /**
+ * @brief Calculates the sum of all values, that are present in the time series more than once.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
+ * @return af::array Returns the sum of all values, that are present in the time series more than once.
+ */
+af::array sumOfReoccurringValues(af::array tss, bool isSorted = false);
+
+/**
+ * @brief Calculates the sum over the time series tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return af::array An array containing the sum of values in each time series.
+ */
+af::array sumValues(af::array tss);
+
+/**
  * @brief Calculates if the distribution of tss *looks symmetric*. This is the case if
  * \f[
  *      | mean(tss)-median(tss)| < r * (max(tss)-min(tss))
@@ -716,6 +811,28 @@ af::array sumOfReoccurringDatapoints(af::array tss, bool isSorted = false);
 af::array symmetryLooking(af::array tss, float r);
 
 /**
+ * @brief This function calculates the value of:
+ * \f[
+ *      \frac{1}{n-2lag} \sum_{i=0}^{n-2lag} x_{i + 2 \cdot lag}^2 \cdot x_{i + lag} - x_{i + lag} \cdot  x_{i}^2
+ * \f]
+ * which is
+ * \f[
+ *       \\mathbb{E}[L^2(X)^2 \cdot L(X) - L(X) \cdot X^2]
+ * \f]
+ * where \f$ \mathbb{E} \f$ is the mean and \f$ L \f$ is the lag operator. It was proposed in [1] as a promising
+ *  feature to extract from time series.
+ *
+ * [1] Fulcher, B.D., Jones, N.S. (2014). Highly comparative feature-based time-series classification.
+ * Knowledge and Data Engineering, IEEE Transactions on 26, 3026–3037.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @param lag The lag to be computed.
+ * @return af::array An array containing the time reversal asymetry statistic value in each time series.
+ */
+af::array timeReversalAsymmetryStatistic(af::array tss, int lag);
+
+/**
  * @brief Counts occurrences of value in the time series tss.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
@@ -726,8 +843,22 @@ af::array symmetryLooking(af::array tss, float r);
 af::array valueCount(af::array tss, float v);
 
 /**
+<<<<<<< HEAD
  * @brief Calculates if the variance of tss is greater than the standard deviation. In other words, if the variance
  * of tss is larger than 1.
+=======
+ * @brief Computes the variance for the time series tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return af::array An array containing the variance in each time series.
+ */
+af::array variance(af::array tss);
+
+/**
+ * @brief Calculates if the variance of tss is greater than the standard deviation. In other words, if the variance of
+ * tss is larger than 1.
+>>>>>>> 6e2538581596dd9e9bc4454cb0b4f6d05536013d
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.

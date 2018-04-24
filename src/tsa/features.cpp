@@ -490,6 +490,32 @@ af::array tsa::features::firstLocationOfMinimum(af::array tss) {
     return index.as(tss.type()) / tss.dims(0);
 }
 
+af::array estimateFriedrichCoefficients(af::array tss, int m, float r) {
+    long n = tss.dims(0);
+
+    af::array categories = tsa::statistics::quantilesCut(tss(af::seq(n - 1), span), r);
+
+    af::array x = af::join(1, categories, af::reorder(tss(af::seq(n - 1), span), 0, 2, 1, 3));
+    x = af::join(1, x, af::reorder(af::diff1(tss, 0), 0, 2, 1, 3));
+
+    // Doing the groupBy per input time series in tss (tss are contained along the 2nd dimension).
+    // The groupBy function cannot be applied to all time series in parallel because we do not
+    // know a priori the number of groups in each series.
+
+    af::array result = af::array(m + 1, tss.dims(1), tss.type());
+
+    for (int i = 0; i < tss.dims(1); i++) {
+        af::array groupped = tsa::regularization::groupBy(x(span, span, i), af::mean, 2, 2);
+        result(span, i) = tsa::polynomial::polyfit(groupped.col(0), groupped.col(1), m);
+    }
+
+    return result;
+}
+
+af::array tsa::features::friedrichCoefficients(af::array tss, int m, float r) {
+    return estimateFriedrichCoefficients(tss, m, r);
+}
+
 af::array tsa::features::hasDuplicates(af::array tss) {
     // Array with the number of input time series in the 1st dimension of type bool
     af::array result = af::array(tss.dims(1), af::dtype::b8);
@@ -602,28 +628,6 @@ af::array tsa::features::longestStrikeBelowMean(af::array tss) {
     return af::max(result, 0);
 }
 
-af::array estimateFriedrichCoefficients(af::array tss, int m, float r) {
-    long n = tss.dims(0);
-
-    af::array categories = tsa::statistics::quantilesCut(tss(af::seq(n - 1), span), r);
-
-    af::array x = af::join(1, categories, af::reorder(tss(af::seq(n - 1), span), 0, 2, 1, 3));
-    x = af::join(1, x, af::reorder(af::diff1(tss, 0), 0, 2, 1, 3));
-
-    // Doing the groupBy per input time series in tss (tss are contained along the 2nd dimension).
-    // The groupBy function cannot be applied to all time series in parallel because we do not
-    // know a priori the number of groups in each series.
-
-    af::array result = af::array(m + 1, tss.dims(1), tss.type());
-
-    for (int i = 0; i < tss.dims(1); i++) {
-        af::array groupped = tsa::regularization::groupBy(x(span, span, i), af::mean, 2, 2);
-        result(span, i) = tsa::polynomial::polyfit(groupped.col(0), groupped.col(1), m);
-    }
-
-    return result;
-}
-
 af::array tsa::features::maxLangevinFixedPoint(af::array tss, int m, float r) {
     af::array coefficients = estimateFriedrichCoefficients(tss, m, r);
 
@@ -679,6 +683,63 @@ af::array tsa::features::numberPeaks(af::array tss, int n) {
     return af::sum(res.as(tss.type()), 0);
 }
 
+af::array levinsonDurbin(af::array acv, int maxlag, bool isACV) {
+    int order = maxlag;
+    af::array result = af::constant(0, order + 1, acv.dims(1), acv.type());
+
+    for (int i = 0; i < acv.dims(1); i++) {
+        af::array phi = af::constant(0, order + 1, order + 1, acv.type());
+        af::array sig = af::constant(0, order + 1, acv.type());
+
+        phi(1, 1) = acv(1, i) / acv(0, i);
+        sig(1) = acv(0, i) - (phi(1, 1) * acv(1, i));
+
+        // First iteration, to avoid problems with negative sequences with 1 element
+        int k = 2;
+        if (k < (order + 1)) {
+            phi(k, k) = (acv(k, i) - af::dot(phi(af::seq(1, k - 1), k - 1), acv(af::seq(1, k - 1), i))) / sig(k - 1);
+            for (int j = 1; j < k; j++) {
+                phi(j, k) = phi(j, k - 1) - (phi(k, k) * phi(k - j, k - 1));
+            }
+            sig(k) = sig(k - 1) * (1.0 - phi(k, k) * phi(k, k));
+        }
+
+        // Second and subsequent iterations
+        for (int k = 3; k < (order + 1); k++) {
+            af::array aux = acv(af::seq(1, k - 1), i);
+            phi(k, k) =
+                (acv(k, i) - af::dot(phi(af::seq(1, k - 1), k - 1), aux(af::seq(aux.dims(0) - 1, 0, -1)))) / sig(k - 1);
+            for (int j = 1; j < k; j++) {
+                phi(j, k) = phi(j, k - 1) - (phi(k, k) * phi(k - j, k - 1));
+            }
+            sig(k) = sig(k - 1) * (1.0 - phi(k, k) * phi(k, k));
+        }
+
+        af::array pac = af::diag(phi);
+        pac(0) = 1.0;
+        result(span, i) = pac;
+    }
+    return result;
+}
+
+af::array tsa::features::partialAutocorrelation(af::array tss, af::array lags) {
+    int n = tss.dims(0);
+    af::array m = af::max(lags, 0);
+    int maxlag = m.scalar<int>();
+
+    af::array ld;
+    if (n < 1) {
+        ld = af::constant(af::NaN, maxlag + 1, tss.dims(1), tss.type());
+    } else {
+        if (n <= maxlag) {
+            maxlag = n - 1;
+        }
+        af::array acv = tsa::features::autoCovariance(tss, true);
+        ld = levinsonDurbin(acv, maxlag, true);
+    }
+    return ld;
+}
+
 af::array tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::array tss, bool isSorted) {
     af::array result = af::array(1, tss.dims(1), tss.type());
     // Doing it sequentially because the setUnique function can only be used with a vector
@@ -707,6 +768,27 @@ af::array tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::ar
     return result;
 }
 
+af::array tsa::features::percentageOfReoccurringValuesToAllValues(af::array tss, bool isSorted) {
+    af::array result = af::constant(0, 1, tss.dims(1), tss.type());
+    // Doing it sequentially because the setUnique function can only be used with a vector
+    for (int i = 0; i < tss.dims(1); i++) {
+        array uniques = af::setUnique(tss(span, i), isSorted);
+        int n = uniques.dims(0);
+        af::array tmp = af::constant(0, 1, n, tss.type());
+        // Computing the number of occurrences for each unique value
+        for (int j = 0; j < n; j++) {
+            tmp(0, j) = af::count(tss(span, i) == af::tile(uniques(j), tss(span, i).dims(0), 1), 0);
+        }
+        // WORKAROUND: Because of indirect memory access fails on Intel GPU
+        // result(0, i) = af::sum(tmp(0, aux), 1);
+        af::array aux = af::where(tmp - 1);
+        for (int h = 0; h < aux.dims(0); h++) {
+            result(0, i) = result(0, i) + tmp(0, aux(h).scalar<int>());
+        }
+    }
+    return result / tss.dims(0);
+}
+
 af::array tsa::features::quantile(af::array tss, af::array q, float precision) {
     return tsa::statistics::quantile(tss, q, precision);
 }
@@ -725,6 +807,15 @@ af::array tsa::features::ratioBeyondRSigma(af::array tss, float r) {
         af::abs(tss - af::tile(af::mean(tss, 0), tss.dims(0))) > af::tile(r * af::stdev(tss, 0), tss.dims(0));
 
     return af::sum(greaterThanRSigma.as(tss.type()), 0) / n;
+}
+
+af::array tsa::features::ratioValueNumberToTimeSeriesLength(af::array tss) {
+    af::array result = af::constant(0, 1, tss.dims(1), tss.type());
+    for (int i = 0; i < tss.dims(1); i++) {
+        int n = af::setUnique(tss(span, i)).dims(0);
+        result(0, i) = n / tss.dims(0);
+    }
+    return result;
 }
 
 af::array tsa::features::sampleEntropy(af::array tss) {
@@ -902,6 +993,24 @@ af::array tsa::features::sumOfReoccurringDatapoints(af::array tss, bool isSorted
     return result;
 }
 
+af::array tsa::features::sumOfReoccurringValues(af::array tss, bool isSorted) {
+    af::array result = af::constant(0, 1, tss.dims(1), tss.type());
+    // Doing it sequentially because the setUnique function can only be used with a vector
+    for (int i = 0; i < tss.dims(1); i++) {
+        array uniques = af::setUnique(tss(span, i), isSorted);
+        int n = uniques.dims(0);
+        af::array tmp = af::constant(0, 1, n, tss.type());
+        // Computing the number of occurrences for each unique value
+        for (int j = 0; j < n; j++) {
+            tmp(0, j) = af::count(tss(span, i) == af::tile(uniques(j), tss(span, i).dims(0), 1), 0);
+        }
+        result(0, i) = af::sum(uniques(tmp > 1), 0);
+    }
+    return result;
+}
+
+af::array tsa::features::sumValues(af::array tss) { return af::sum(tss, 0); }
+
 af::array tsa::features::symmetryLooking(af::array tss, float r) {
     // We need to do this since the min and max functions return different results in the OpenCL and CPU
     // backends.
@@ -914,11 +1023,26 @@ af::array tsa::features::symmetryLooking(af::array tss, float r) {
     return meanMedianAbsDifference < (r * maxMinDifference);
 }
 
+af::array tsa::features::timeReversalAsymmetryStatistic(af::array tss, int lag) {
+    int n = tss.dims(0);
+    if (n <= (2 * lag)) {
+        throw std::invalid_argument("The size of tss needs to be larger for this lag value ...");
+    }
+
+    af::array l_0 = tss(af::seq(0, n - (2 * lag) - 1), span);
+    af::array l_l = tss(af::seq(lag, n - lag - 1), span);
+    af::array l_2l = tss(af::seq(2 * lag, n - 1), span);
+
+    return af::sum((l_2l * l_2l * l_l) - (l_l * l_0 * l_0), 0) / (n - 2 * lag);
+}
+
 af::array tsa::features::valueCount(af::array tss, float v) {
     af::array value = af::tile(af::array(1, &v), tss.dims());
 
     return af::sum((value == tss).as(af::dtype::u32), 0);
 }
+
+af::array tsa::features::variance(af::array tss) { return af::var(tss, true, 0); }
 
 af::array tsa::features::varianceLargerThanStandardDeviation(af::array tss) {
     return af::var(tss, false, 0) > af::stdev(tss, 0);

@@ -11,10 +11,12 @@
 extern "C" {
 #endif
 
-void lls(double *a, long *a_l, long *a_n, double *b, long *b_l, double *result) {
-    af::array primitive_result;
-    primitive_result = tsa::linalg::lls(af::array(*a_l, *a_n, a), af::array(*b_l, b));
-    primitive_result.host(result);
+void lls(af_array *a, af_array *b, af_array *result) {
+    af::array var_a = af::array(*a);
+    af_retain_array(a, var_a.get());
+    af::array var_b = af::array(*b);
+    af_retain_array(b, var_b.get());
+    af_retain_array(result, tsa::linalg::lls(var_a, var_b).get());
 }
 
 #ifdef __cplusplus
