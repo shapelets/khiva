@@ -106,8 +106,8 @@ class Array {
 
     std::vector<T> getRow(int idx) {
         if (dims > 2) {
-            std::cout << "No way my friend, we only support this function for arrays with 2 dims." << std::endl;
-            std::cout << "Better call Saul, your array has " << dims << " dimensions." << std::endl;
+            std::cout << "We only support this function for arrays with 2 dims." << std::endl;
+            std::cout << "Your array has " << dims << " dimensions." << std::endl;
             exit(0);
         }
 
@@ -120,8 +120,8 @@ class Array {
 
     std::vector<T> getColumn(int idx) {
         if (dims != 2) {
-            std::cout << "No way my friend, we only support this function for arrays with 2 dims." << std::endl;
-            std::cout << "Better call Saul, your array has " << dims << " dimensions." << std::endl;
+            std::cout << "We only support this function for arrays with 2 dims." << std::endl;
+            std::cout << "Your array has " << dims << " dimensions." << std::endl;
             exit(0);
         }
         std::vector<T> res;
@@ -133,8 +133,8 @@ class Array {
 
     T getElement(int row, int column) {
         if (dims != 2) {
-            std::cout << "No way my friend, we only support this function for arrays with 2 dims." << std::endl;
-            std::cout << "Better call Saul, your array has " << dims << " dimensions." << std::endl;
+            std::cout << "We only support this function for arrays with 2 dims." << std::endl;
+            std::cout << "Your array has " << dims << " dimensions." << std::endl;
             exit(0);
         }
 
