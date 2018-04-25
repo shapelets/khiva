@@ -21,7 +21,7 @@ extern "C" {
  * @param result Array with the same dimensions as tss where the time series have been
  * adjusted for zero mean and one as standard deviation.
  */
-void znorm(af_array *tss, double epsilon, af_array *result);
+void znorm(af_array *tss, double *epsilon, af_array *result);
 
 /**
  * @brief Adjusts the time series in the given input and performs z-norm
@@ -33,7 +33,7 @@ void znorm(af_array *tss, double epsilon, af_array *result);
  * @param epsilon Minimum standard deviation to consider.  It acts a a gatekeeper for
  * those Time series that may be constant or near constant.
  */
-void znorm_in_place(af_array *tss, double epsilon);
+void znorm_in_place(af_array *tss, double *epsilon);
 
 #ifdef __cplusplus
 }

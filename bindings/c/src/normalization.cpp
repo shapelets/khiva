@@ -11,15 +11,15 @@
 extern "C" {
 #endif
 
-void znorm(af_array *array, double epsilon, af_array *result) {
+void znorm(af_array *array, double *epsilon, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
-    af_retain_array(result, tsa::normalization::znorm(var, epsilon).get());
+    af_retain_array(result, tsa::normalization::znorm(var, *epsilon).get());
 }
 
-void znorm_in_place(af_array *array, double epsilon) {
+void znorm_in_place(af_array *array, double *epsilon) {
     af::array var = af::array(*array);
-    tsa::normalization::znormInPlace(var, epsilon);
+    tsa::normalization::znormInPlace(var, *epsilon);
     af_retain_array(array, var.get());
 }
 

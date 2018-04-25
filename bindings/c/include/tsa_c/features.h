@@ -52,7 +52,7 @@ void absolute_sum_of_changes(af_array *array, af_array *result);
  *          }
  * @param result An array whose values contains the aggregated correaltion for each time series.
  */
-void aggregated_autocorrelation(af_array *array, int aggregation_function, af_array *result);
+void aggregated_autocorrelation(af_array *array, int *aggregation_function, af_array *result);
 
 /**
  * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
@@ -77,7 +77,7 @@ void aggregated_autocorrelation(af_array *array, int aggregation_function, af_ar
  * using Wald Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
  */
-void aggregated_linear_trend(af_array *array, long chunkSize, int aggregation_function, af_array *slope,
+void aggregated_linear_trend(af_array *array, long *chunkSize, int *aggregation_function, af_array *slope,
                              af_array *intercept, af_array *rvalue, af_array *pvalue, af_array *stderrest);
 
 /**
@@ -95,7 +95,7 @@ void aggregated_linear_trend(af_array *array, long chunkSize, int aggregation_fu
  * @param r Filtering level, must be positive.
  * @param result The vectorized approximate entropy for all the input time series in array.
  */
-void approximate_entropy(af_array *array, int m, float r, af_array *result);
+void approximate_entropy(af_array *array, int *m, float *r, af_array *result);
 
 /**
  * @brief Calculates the cross-covariance of the given time series.
@@ -110,7 +110,7 @@ void approximate_entropy(af_array *array, int m, float r, af_array *result);
  * n (if false).
  * @param result The cross-covariance value for the given time series.
  */
-void cross_covariance(af_array *xss, af_array *yss, bool unbiased, af_array *result);
+void cross_covariance(af_array *xss, af_array *yss, bool *unbiased, af_array *result);
 
 /**
  * @brief Calculates the auto-covariance the given time series.
@@ -122,7 +122,7 @@ void cross_covariance(af_array *xss, af_array *yss, bool unbiased, af_array *res
  * n (if false).
  * @param result The auto-covariance value for the given time series.
  */
-void auto_covariance(af_array *array, bool unbiased, af_array *result);
+void auto_covariance(af_array *array, bool *unbiased, af_array *result);
 
 /**
  * @brief Calculates the cross-correlation of the given time series.
@@ -137,7 +137,7 @@ void auto_covariance(af_array *array, bool unbiased, af_array *result);
  * n (if false).
  * @param result The cross-correlation value for the given time series.
  */
-void cross_correlation(af_array *xss, af_array *yss, bool unbiased, af_array *result);
+void cross_correlation(af_array *xss, af_array *yss, bool *unbiased, af_array *result);
 
 /**
  * @brief Calculates the autocorrelation of the specified lag for the given time
@@ -150,7 +150,7 @@ void cross_correlation(af_array *xss, af_array *yss, bool unbiased, af_array *re
  * @param unbiased Determines whether it divides by n - lag (if true) or n ( if false)
  * @param result The autocorrelation value for the given time series.
  */
-void auto_correlation(af_array *array, long max_lag, bool unbiased, af_array *result);
+void auto_correlation(af_array *array, long *max_lag, bool *unbiased, af_array *result);
 
 /**
  * @brief Calculates the binned entropy for the given time series and number of bins.
@@ -161,7 +161,7 @@ void auto_correlation(af_array *array, long max_lag, bool unbiased, af_array *re
  * @param max_bins The number of bins.
  * @param result The binned entropy value for the given time series.
  */
-void binned_entropy(af_array *array, int max_bins, af_array *result);
+void binned_entropy(af_array *array, int *max_bins, af_array *result);
 
 /**
  * @brief Calculates the Schreiber, T. and Schmitz, A. (1997) measure of non-linearity
@@ -173,7 +173,7 @@ void binned_entropy(af_array *array, int max_bins, af_array *result);
  * @param lag The lag
  * @param result The non-linearity value for the given time series.
  */
-void c3(af_array *array, long lag, af_array *result);
+void c3(af_array *array, long *lag, af_array *result);
 
 /**
  * @brief Calculates an estimate for the time series complexity defined by
@@ -186,7 +186,7 @@ void c3(af_array *array, long lag, af_array *result);
  * @param zNormalize Controls whether the time series should be z-normalized or not.
  * @param result The complexity value for the given time series.
  */
-void cid_ce(af_array *array, bool zNormalize, af_array *result);
+void cid_ce(af_array *array, bool *zNormalize, af_array *result);
 
 /**
  * @brief Calculates the number of values in the time series that are higher than
@@ -234,7 +234,7 @@ void count_below_mean(af_array *array, af_array *result);
  * @param w Width of interest.
  * @param result Result of calculated coefficients.
  */
-void cwt_coefficients(af_array *array, af_array *width, int coeff, int w, af_array *result);
+void cwt_coefficients(af_array *array, af_array *width, int *coeff, int *w, af_array *result);
 
 /**
  * @brief Calculates the sum of squares of chunk i out of N chunks expressed as a ratio
@@ -248,7 +248,7 @@ void cwt_coefficients(af_array *array, af_array *width, int coeff, int w, af_arr
  * @param segment_focus The segment number (starting at zero) to return a feature on.
  * @param result The energy ratio by chunk of the time series.
  */
-void energy_ratio_by_chunks(af_array *array, long num_segments, long segment_focus, af_array *result);
+void energy_ratio_by_chunks(af_array *array, long *num_segments, long *segment_focus, af_array *result);
 
 /**
  * @brief Calculates the spectral centroid(mean), variance, skew, and kurtosis of the absolute fourier transform
@@ -275,7 +275,7 @@ void fft_aggregated(af_array *array, af_array *result);
  * @param absolute The absolute value of the coefficient.
  * @param angle The angle of the coefficient.
  */
-void fft_coefficient(af_array *array, long coefficient, af_array *real, af_array *imag, af_array *absolute,
+void fft_coefficient(af_array *array, long *coefficient, af_array *real, af_array *imag, af_array *absolute,
                      af_array *angle);
 
 /**
@@ -342,7 +342,7 @@ void has_duplicate_min(af_array *array, af_array *result);
  * @param q The quantile.
  * @param result The index of the max quantile q.
  */
-void index_max_quantile(af_array *array, float q, af_array *result);
+void index_max_quantile(af_array *array, float *q, af_array *result);
 
 /**
  * @brief Returns the kurtosis of array (calculated with the adjusted Fisher-Pearson
@@ -364,7 +364,7 @@ void kurtosis(af_array *array, af_array *result);
  * @param r The threshold.
  * @param result  Array containing True for those time series in array that have a large standard deviation.
  */
-void large_standard_deviation(af_array *array, float r, af_array *result);
+void large_standard_deviation(af_array *array, float *r, af_array *result);
 
 /**
  * @brief Calculates the last location of the maximum value of each time series. The position
@@ -451,7 +451,7 @@ void longest_strike_below_mean(af_array *array, af_array *result);
  * @param r Number of quantiles to use for averaging.
  * @param result Largest fixed point of deterministic dynamics.
  */
-void max_langevin_fixed_point(af_array *array, int m, float r, af_array *result);
+void max_langevin_fixed_point(af_array *array, int *m, float *r, af_array *result);
 
 /**
  * @brief Calculates the maximum value for each time series within array.
@@ -534,7 +534,7 @@ void minimum(af_array *array, af_array *result);
  * @param m The m value.
  * @param result The number of m-crossings of each time series within array.
  */
-void number_crossing_m(af_array *array, int m, af_array *result);
+void number_crossing_m(af_array *array, int *m, af_array *result);
 
 /**
  * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$array\f$. A peak of support
@@ -547,7 +547,7 @@ void number_crossing_m(af_array *array, int m, af_array *result);
  * @param n The support of the peak.
  * @param result The number of peaks of at least support \f$n\f$.
  */
-void number_peaks(af_array *array, int n, af_array *result);
+void number_peaks(af_array *array, int *n, af_array *result);
 
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
@@ -563,7 +563,7 @@ void number_peaks(af_array *array, int n, af_array *result);
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the percentage of unique values, that are present in the time series more than once.
  */
-void percentage_of_reoccurring_datapoints_to_all_datapoints(af_array *array, bool is_sorted, af_array *result);
+void percentage_of_reoccurring_datapoints_to_all_datapoints(af_array *array, bool *is_sorted, af_array *result);
 
 /**
  * @brief Returns values at the given quantile.
@@ -575,7 +575,7 @@ void percentage_of_reoccurring_datapoints_to_all_datapoints(af_array *array, boo
  * @param precision Number of decimals expected.
  * @param result Values at the given quantile.
  */
-void quantile(af_array *array, af_array *q, float precision, af_array *result);
+void quantile(af_array *array, af_array *q, float *precision, af_array *result);
 
 /**
  * @brief Calculates the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
@@ -588,7 +588,7 @@ void quantile(af_array *array, af_array *q, float precision, af_array *result);
  * @param result The ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
  * \f$x\f$.
  */
-void ratio_beyond_r_sigma(af_array *array, float r, af_array *result);
+void ratio_beyond_r_sigma(af_array *array, float *r, af_array *result);
 
 /**
  * @brief Calculates a vectorized sample entropy algorithm.
@@ -637,7 +637,7 @@ void standard_deviation(af_array *array, af_array *result);
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the sum of all data points, that are present in the time series more than once.
  */
-void sum_of_reoccurring_datapoints(af_array *array, bool is_sorted, af_array *result);
+void sum_of_reoccurring_datapoints(af_array *array, bool *is_sorted, af_array *result);
 
 /**
  * @brief Calculates if the distribution of array *looks symmetric*. This is the case if
@@ -651,7 +651,7 @@ void sum_of_reoccurring_datapoints(af_array *array, bool is_sorted, af_array *re
  * @param r The percentage of the range to compare with.
  * @param result An array denoting if the input time series look symmetric.
  */
-void symmetry_looking(af_array *array, float r, af_array *result);
+void symmetry_looking(af_array *array, float *r, af_array *result);
 
 /**
  * @brief Counts occurrences of value in the time series array.
@@ -662,7 +662,7 @@ void symmetry_looking(af_array *array, float r, af_array *result);
  * @param v The value to be counted.
  * @param result An array containing the count of the given value in each time series.
  */
-void value_count(af_array *array, float v, af_array *result);
+void value_count(af_array *array, float *v, af_array *result);
 
 #ifdef __cplusplus
 }

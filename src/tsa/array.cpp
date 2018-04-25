@@ -55,7 +55,7 @@ void tsa::array::getData(af::array array, void *data) { array.host(data); }
 
 af::dim4 tsa::array::getDims(af::array array) { return array.dims(); }
 
-void tsa::array::displayArray(af::array array) { af_print(array); }
+void tsa::array::print(af::array array) { af_print(array); }
 
 void tsa::array::deleteArray(af_array array) { af_release_array(array); }
 

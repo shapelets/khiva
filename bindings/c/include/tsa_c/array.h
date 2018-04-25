@@ -19,7 +19,7 @@ extern "C" {
  * @param result Array created.
  * @param type Data type.
  */
-void create_array(void *data, unsigned ndims, dim_t *dims, af_array *result, const int type);
+void create_array(void *data, unsigned *ndims, dim_t *dims, af_array *result, int *type);
 
 /**
  * @brief Retrieves the data from the device to the host.
@@ -38,11 +38,11 @@ void get_data(af_array *array, void *data);
 void get_dims(af_array *array, dim_t *dims);
 
 /**
- * @brief Displays an Array.
+ * @brief Prints an Array.
  *
  * @param array The array to display.
  */
-void display_array(af_array *array);
+void print(af_array *array);
 
 /**
  * @brief Decreases the references count of the given array.

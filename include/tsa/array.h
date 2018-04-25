@@ -40,11 +40,11 @@ void getData(af::array array, void *data);
 af::dim4 getDims(af::array array);
 
 /**
- * @brief Displays an Array.
+ * @brief Prints an Array.
  *
  * @param array The array to display.
  */
-void displayArray(af::array array);
+void print(af::array array);
 
 /**
  * @brief Decreases the references count of the given array.

@@ -12,8 +12,8 @@
 extern "C" {
 #endif
 
-void create_array(void *data, unsigned ndims, dim_t *dims, af_array *result, const int type) {
-    af_retain_array(result, tsa::array::createArray(data, ndims, dims, type).get());
+void create_array(void *data, unsigned *ndims, dim_t *dims, af_array *result, int *type) {
+    af_retain_array(result, tsa::array::createArray(data, *ndims, dims, *type).get());
 }
 
 void get_data(af_array *array, void *data) {
@@ -29,9 +29,9 @@ void get_dims(af_array *array, dim_t *dimens) {
     af_retain_array(array, var.get());
 }
 
-void display_array(af_array *array) {
+void print(af_array *array) {
     af::array var = af::array(*array);
-    tsa::array::displayArray(var);
+    tsa::array::print(var);
     af_retain_array(array, var.get());
 }
 

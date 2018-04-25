@@ -24,7 +24,7 @@ extern "C" {
  * @param subsequence_indices The indices of the query sequences that produced
  * the "N" bigger discords.
  */
-void find_best_n_discords(af_array *profile, af_array *index, long n, af_array *discord_distances,
+void find_best_n_discords(af_array *profile, af_array *index, long *n, af_array *discord_distances,
                           af_array *discord_indices, af_array *subsequence_indices);
 
 /**
@@ -40,7 +40,7 @@ void find_best_n_discords(af_array *profile, af_array *index, long n, af_array *
  * @param subsequence_indices The indices of the query sequences that produced
  * the minimum reported in the motifs
  */
-void find_best_n_motifs(af_array *profile, af_array *index, long n, af_array *motif_distances, af_array *motif_indices,
+void find_best_n_motifs(af_array *profile, af_array *index, long *n, af_array *motif_distances, af_array *motif_indices,
                         af_array *subsequence_indices);
 
 /**
@@ -53,7 +53,7 @@ void find_best_n_motifs(af_array *profile, af_array *index, long n, af_array *mo
  * from 'tssa' in 'tssb'.
  * @param i The matrix profile index, which points to where the previously mentioned minimum is located.
  */
-void stomp(af_array *tssa, af_array *tssb, long m, af_array *p, af_array *i);
+void stomp(af_array *tssa, af_array *tssb, long *m, af_array *p, af_array *i);
 
 /**
  * @brief Primitive of the STOMP self join algorithm.
@@ -64,7 +64,7 @@ void stomp(af_array *tssa, af_array *tssb, long m, af_array *p, af_array *i);
  * from 'tss' in a different location of itself
  * @param i The matrix profile index, which points to where the previously mentioned minimum is located
  */
-void stomp_self_join(af_array *tss, long m, af_array *p, af_array *i);
+void stomp_self_join(af_array *tss, long *m, af_array *p, af_array *i);
 
 #ifdef __cplusplus
 }

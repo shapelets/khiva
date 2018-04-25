@@ -11,7 +11,6 @@
 #include <tsa/regression.h>
 #include <tsa/regularization.h>
 #include <tsa/statistics.h>
-#include <tsa/utils.h>
 #include <cmath>
 
 typedef std::tuple<std::vector<int>, std::vector<int>, int> CWTTuple;
