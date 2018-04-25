@@ -868,7 +868,7 @@ af::array tsa::features::skewness(af::array tss) { return tsa::statistics::skewn
 /**
  *  @brief Return a Hann window.
  *  The Hann window is a taper formed by using a raised cosine or sine-squared with ends that touch
- * zero.
+ *  zero.
  *
  *  The Hann window is defined as:
  * \f[
@@ -906,7 +906,11 @@ af::array hannWindow(int m, bool sym) {
 }
 
 /**
- * This function returns the main frequencies used in FFT.
+ *  @brief returns the main frequencies used in FFT.
+ *  
+ *  @param n The n frequencies to be calculated.
+ *  @param d The divisor to be applied.
+ *  @return af::array The n main frequencies of FFT.
  */
 af::array rfftFreq(int n, float d) {
     float val = 1.0 / (n * d);
@@ -916,7 +920,9 @@ af::array rfftFreq(int n, float d) {
 }
 
 /**
- * This function detrends the timeseries by substructing the mean to all elements of the time series.
+ *  @brief This function detrends the given time series.
+ *  @param data The time series.
+ *  @return af::array The detrended time timeseries.
  */
 af::array detrend(af::array data) {
     af::array result = data - af::tile(af::mean(data, 0), data.dims(0));
@@ -924,9 +930,14 @@ af::array detrend(af::array data) {
 }
 
 /**
- * This is a helper function that does the main FFT calculation for. All input valdiation is performed there,
- * and the data axis is assumed to be the last axis of x. It is not designed to be called externally. The
- * windows are not averaged over; the result from each window is returned.
+ * @brief This is a helper function that does the main FFT calculation. All input valdiation is performed there,
+ * and the data axis is assumed to be the last axis of x. It is not designed to be called externally. 
+ * @param tss The given time series.
+ * @param win The fft windows.
+ * @param nperseg 
+ * @param noverlap Overlapping points.
+ * @param nfft number of ffts points
+ * @return af::array the result from each window is returned.
  */
 af::array fftHelpher(af::array tss, af::array win, int nperseg, int noverlap, int nfft) {
     int step = nperseg - noverlap;
