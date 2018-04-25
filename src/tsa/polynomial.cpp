@@ -11,7 +11,7 @@
 
 af::array vandermonde(af::array x, int order, bool ascending) {
     af::array result = af::array(x.dims(0), order, x.type());
-    gfor(af::seq i, order) { result(span, i) = af::pow(x, i); }
+    gfor(af::seq i, order) { result(af::span, i) = af::pow(x, i); }
     if (!ascending) {
         result = af::flip(result, 1);
     }
@@ -38,11 +38,11 @@ af::array tsa::polynomial::polyfit(af::array x, af::array y, int deg) {
 af::array tsa::polynomial::roots(af::array pp) {
     af::array result = af::array(pp.dims(0) - 1, pp.dims(1), af::dtype::c32);
     for (int i = 0; i < pp.dims(1); i++) {
-        af::array p = pp(span, i);
+        af::array p = pp(af::span, i);
         // Strip leading and trailing zeros
         p = p(p != 0);
 
-        p = (-1 * p(af::seq(1, p.dims(0) - 1), span)) / af::tile(p(0, span), p.dims(0) - 1);
+        p = (-1 * p(af::seq(1, p.dims(0) - 1), af::span)) / af::tile(p(0, af::span), p.dims(0) - 1);
 
         float *coeffs = p.as(af::dtype::f32).host<float>();
 
@@ -56,7 +56,7 @@ af::array tsa::polynomial::roots(af::array pp) {
 
         Eigen::VectorXcf eivals = diag2.eigenvalues();
 
-        result(span, i) = af::array(p.dims(0), (cfloat *)eivals.data());
+        result(af::span, i) = af::array(p.dims(0), (af::cfloat *)eivals.data());
     }
 
     return result;

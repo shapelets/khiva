@@ -12,25 +12,79 @@
 #include <sstream>
 #include "tsaTest.h"
 
+void ramerDouglasPeucker() {
+    std::vector<tsa::dimensionality::Point> pointList;
+    std::vector<tsa::dimensionality::Point> pointListOut;
+    std::vector<tsa::dimensionality::Point> expected = {
+        tsa::dimensionality::Point(0.0, 0.0), tsa::dimensionality::Point(2.0, -0.1),
+        tsa::dimensionality::Point(3.0, 5.0), tsa::dimensionality::Point(6.0, 8.1),
+        tsa::dimensionality::Point(9.0, 9.0)};
+
+    pointList.push_back(tsa::dimensionality::Point(0.0, 0.0));
+    pointList.push_back(tsa::dimensionality::Point(1.0, 0.1));
+    pointList.push_back(tsa::dimensionality::Point(2.0, -0.1));
+    pointList.push_back(tsa::dimensionality::Point(3.0, 5.0));
+    pointList.push_back(tsa::dimensionality::Point(4.0, 6.0));
+    pointList.push_back(tsa::dimensionality::Point(5.0, 7.0));
+    pointList.push_back(tsa::dimensionality::Point(6.0, 8.1));
+    pointList.push_back(tsa::dimensionality::Point(7.0, 9.0));
+    pointList.push_back(tsa::dimensionality::Point(8.0, 9.0));
+    pointList.push_back(tsa::dimensionality::Point(9.0, 9.0));
+
+    pointListOut = tsa::dimensionality::ramerDouglasPeucker(pointList, 1.0);
+
+    for (size_t i = 0; i < pointListOut.size(); i++) {
+        ASSERT_EQ(pointListOut[i].first, expected[i].first);
+        ASSERT_EQ(pointListOut[i].first, expected[i].first);
+    }
+}
+
+void visvalingam() {
+    std::vector<tsa::dimensionality::Point> pointList;
+    std::vector<tsa::dimensionality::Point> out;
+    std::vector<tsa::dimensionality::Point> expected = {
+        tsa::dimensionality::Point(0.0, 0.0), tsa::dimensionality::Point(2.0, -0.1),
+        tsa::dimensionality::Point(5.0, 7.0), tsa::dimensionality::Point(7.0, 9.0),
+        tsa::dimensionality::Point(9.0, 9.0)};
+
+    pointList.push_back(tsa::dimensionality::Point(0.0, 0.0));
+    pointList.push_back(tsa::dimensionality::Point(1.0, 0.1));
+    pointList.push_back(tsa::dimensionality::Point(2.0, -0.1));
+    pointList.push_back(tsa::dimensionality::Point(3.0, 5.0));
+    pointList.push_back(tsa::dimensionality::Point(4.0, 6.0));
+    pointList.push_back(tsa::dimensionality::Point(5.0, 7.0));
+    pointList.push_back(tsa::dimensionality::Point(6.0, 8.1));
+    pointList.push_back(tsa::dimensionality::Point(7.0, 9.0));
+    pointList.push_back(tsa::dimensionality::Point(8.0, 9.0));
+    pointList.push_back(tsa::dimensionality::Point(9.0, 9.0));
+
+    out = tsa::dimensionality::visvalingam(pointList, 5);
+
+    for (size_t i = 0; i < out.size(); i++) {
+        ASSERT_EQ(out[i].first, expected[i].first);
+        ASSERT_EQ(out[i].second, expected[i].second);
+    }
+}
+
 void paaNorm() {
-    std::vector<tsa::simplification::Point> pointList;
-    pointList.push_back(tsa::simplification::Point(0.0, 0.0));
-    pointList.push_back(tsa::simplification::Point(1.0, 0.1));
-    pointList.push_back(tsa::simplification::Point(2.0, -0.1));
-    pointList.push_back(tsa::simplification::Point(3.0, 5.0));
-    pointList.push_back(tsa::simplification::Point(4.0, 6.0));
-    pointList.push_back(tsa::simplification::Point(5.0, 7.0));
-    pointList.push_back(tsa::simplification::Point(6.0, 8.1));
-    pointList.push_back(tsa::simplification::Point(7.0, 9.0));
-    pointList.push_back(tsa::simplification::Point(8.0, 9.0));
-    pointList.push_back(tsa::simplification::Point(9.0, 9.0));
+    std::vector<tsa::dimensionality::Point> pointList;
+    pointList.push_back(tsa::dimensionality::Point(0.0, 0.0));
+    pointList.push_back(tsa::dimensionality::Point(1.0, 0.1));
+    pointList.push_back(tsa::dimensionality::Point(2.0, -0.1));
+    pointList.push_back(tsa::dimensionality::Point(3.0, 5.0));
+    pointList.push_back(tsa::dimensionality::Point(4.0, 6.0));
+    pointList.push_back(tsa::dimensionality::Point(5.0, 7.0));
+    pointList.push_back(tsa::dimensionality::Point(6.0, 8.1));
+    pointList.push_back(tsa::dimensionality::Point(7.0, 9.0));
+    pointList.push_back(tsa::dimensionality::Point(8.0, 9.0));
+    pointList.push_back(tsa::dimensionality::Point(9.0, 9.0));
 
     auto out = tsa::dimensionality::PAA_CPU(pointList.begin(), pointList.end(), 6);
 
-    std::vector<tsa::simplification::Point> expected = {
-        tsa::simplification::Point(0.75, 0.05), tsa::simplification::Point(2.25, -0.1),
-        tsa::simplification::Point(3.75, 5.5),  tsa::simplification::Point(5.25, 7.0),
-        tsa::simplification::Point(6.75, 8.55), tsa::simplification::Point(8.25, 9.0)};
+    std::vector<tsa::dimensionality::Point> expected = {
+        tsa::dimensionality::Point(0.75, 0.05), tsa::dimensionality::Point(2.25, -0.1),
+        tsa::dimensionality::Point(3.75, 5.5),  tsa::dimensionality::Point(5.25, 7.0),
+        tsa::dimensionality::Point(6.75, 8.55), tsa::dimensionality::Point(8.25, 9.0)};
 
     for (size_t i = 0; i < out.size(); i++) {
         ASSERT_EQ(out[i].first, expected[i].first);
@@ -90,3 +144,5 @@ TSA_TEST(DimensionalityTests, PAA_NORM, paaNorm);
 TSA_TEST(DimensionalityTests, PAA, paa);
 TSA_TEST(DimensionalityTests, SAX, sax);
 TSA_TEST(DimensionalityTests, PIP, pip);
+TSA_TEST(SimplificationTests, RamerDouglasPeucker, ramerDouglasPeucker);
+TSA_TEST(SimplificationTests, Visvalingam, visvalingam);

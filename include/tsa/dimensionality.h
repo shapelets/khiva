@@ -4,33 +4,58 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
-#include <tsa/simplification.h>
 #include <vector>
-
-using namespace af;
 
 namespace tsa {
 
 namespace dimensionality {
 
 /**
- * @brief Piecewise Aggregate Approximation. It reduces the dimensionality of the timeseries
- * given by begin and last iterators to a number equal to bins. This algorithim divides the
- * whole timeseries in bins partitions and computes the average of each partition.
+ * @brief Definition of Point structure to represent 2D points.
+ */
+typedef std::pair<float, float> Point;
+
+/**
+ * @brief Reduces a set of points by applying the RamerDouglasPeucker method depending on the perpendicular
+ * distance of the points and epsilon, the greater epsilon, more points are deleted.
  *
- * @param a Set of points
+ * @param pointList Set of input points.
  *
- * @param bins Sets the total number of divisions
+ * @param epsilon It acts as the threshold value to decide which points should be considered meaningful or not.
+ *
+ * @return std:vector<tsa::dimensionality::Point> Array with the same dimensions the selected points.
+ */
+std::vector<Point> ramerDouglasPeucker(std::vector<Point> pointList, double epsilon);
+
+/**
+ * @brief Reduces a set of points by applying the visvalingam method (minimun triangle area) until the number
+ * of points is reduced to numPoints.
+ *
+ * @param pointList Expects an input vector of points.
+ *
+ * @param numPoints Sets the number of points returned after the execution of the method.
+ *
+ * @return std:vector<tsa::dimensionality::Point> where the number of points has been reduced to numPoints.
+ */
+std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
+
+/**
+ * @brief Piecewise Aggregate Approximation. It reduces the dimensionality of the time series given by begin and
+ * last iterators to a number equal to bins. This algorithim divides the whole timeseries in bins partitions and
+ * computes the average of each partition.
+ *
+ * @param a Set of points.
+ *
+ * @param bins Sets the total number of divisions.
  *
  * @return result A vector with the reduced dimensionality.
  */
 af::array PAA(af::array a, int bins);
 
 /**
- * @brief Piecewise Aggregate Approximation. It reduces the dimensionality of the timeseries
- * given by begin and last iterators to a number equal to bins. This algorithim divides the
- * whole timeseries in bins partitions and computes the average of each partition.
+ * @brief Piecewise Aggregate Approximation. It reduces the dimensionality of the time series given by begin and last
+ * iterators to a number equal to bins. This algorithim divides the whole timeseries in bins partitions and computes
+ * the average of each partition.
  *
  * @param begin Iterator to the first element.
  *
@@ -41,14 +66,14 @@ af::array PAA(af::array a, int bins);
  * @return result A vector with the reduced dimensionality.
  */
 template <class InputIt>
-std::vector<tsa::simplification::Point> PAA_CPU(InputIt begin, InputIt last, int bins) {
+std::vector<Point> PAA_CPU(InputIt begin, InputIt last, int bins) {
     double xrange = (*(last - 1)).first - (*begin).first;
     double width_bin = xrange / bins;
     double reduction = bins / xrange;
 
     std::vector<double> sum(bins, 0.0);
     std::vector<int> counter(bins, 0);
-    std::vector<tsa::simplification::Point> result(bins, tsa::simplification::Point(0.0, 0.0));
+    std::vector<Point> result(bins, Point(0.0, 0.0));
 
     // Iterating over the  timeseries
     for (auto i = begin; i != last; i++) {
@@ -66,8 +91,8 @@ std::vector<tsa::simplification::Point> PAA_CPU(InputIt begin, InputIt last, int
 }
 
 /**
- * @brief Symbolic Aggregate approXimation. It transforms a numeric timeseries into
- * a timeseries of symbols with the same size.
+ * @brief Symbolic Aggregate approXimation. It transforms a numeric time series into a time series of symbols with
+ * the same size.
  *
  * @param a Array with the input time series.
  *
