@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <tsa/library.h>
 
-void tsa::library::backendInfo() { af::info(); }
+void tsa::library::backendInfo() { std::cout << std::string(af::infoString()) << std::endl; }
 
 void tsa::library::setBackend(tsa::library::Backend be) { af::setBackend(static_cast<af::Backend>(be)); }
 

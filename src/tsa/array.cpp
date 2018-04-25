@@ -56,3 +56,5 @@ af::dim4 tsa::array::getDims(af::array array) { return array.dims(); }
 void tsa::array::displayArray(af::array array) { af_print(array); }
 
 void tsa::array::deleteArray(af_array array) { af_release_array(array); }
+
+int tsa::array::getType(af::array array) { return array.type(); }

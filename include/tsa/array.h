@@ -14,7 +14,7 @@ typedef af::dtype dtype;
 namespace array {
 
 /**
- * @brief Create an Array object.
+ * @brief Creates an Array object.
  *
  * @param data Data used in order to create the array.
  * @param ndims Number of dimensions of the data.
@@ -33,7 +33,7 @@ af::array createArray(void *data, unsigned ndims, dim_t *dims, const int type);
 void getData(af::array array, void *data);
 
 /**
- * @brief Get the Array dimensions.
+ * @brief Gets the Array dimensions.
  *
  * @param array Array from which to get the dimensions
  * @param dims The dimensions.
@@ -48,10 +48,18 @@ af::dim4 getDims(af::array array);
 void displayArray(af::array array);
 
 /**
- * @brief Decrease the references count of the given array.
+ * @brief Decreases the references count of the given array.
  *
  * @param array The Array to release.
  */
 void deleteArray(af_array array);
+
+/**
+ * @brief Gets the type of the array.
+ *
+ * @param array The array to obtain the type information from.
+ * @return int Value of the Dtype enumeration.
+ */
+int getType(af::array array);
 };  // namespace array
 };  // namespace tsa

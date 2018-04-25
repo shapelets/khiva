@@ -6,10 +6,6 @@
 
 #include <arrayfire.h>
 
-namespace tsa {
-
-namespace matrix {
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -73,5 +69,3 @@ void stomp_self_join(af_array *tss, long m, af_array *p, af_array *i);
 #ifdef __cplusplus
 }
 #endif
-};  // namespace matrix
-};  // namespace tsa
