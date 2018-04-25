@@ -11,7 +11,6 @@ using namespace af;
 namespace tsa {
 
 namespace features {
-
 /**
  * @brief Calculates the sum over the square values of the timeseries
  *
@@ -591,9 +590,33 @@ af::array minimum(af::array tss);
 af::array numberCrossingM(af::array tss, int m);
 
 /**
+ * @brief Calculates all Local Maximals fot the time series in tss.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @return af::array The calculated local maximals for each time series in tss.
+ */
+af::array localMaximals(af::array tss);
+
+/**
+ * @brief This feature calculator searches for different peaks. To do so, the time series is smoothed by a ricker
+ * wavelet and for widths ranging from 1 to maxW. This feature calculator returns the number of peaks that occur at
+ * enough width scales and with sufficiently high Signal-to-Noise-Ratio (SNR).
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param maxW The maximum width to consider.
+ * @return af::array The number of peaks for each time series.
+ */
+af::array numberCwtPeaks(af::array tss, int maxW);
+
+/**
  * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$tss\f$. A peak of support
  * \f$n\f$ is defined as a subsequence of \f$tss\f$ where a value occurs, which is bigger than its \f$n\f$ neighbours to
  * the left and to the right.
+ *
+ * [1] Bioinformatics (2006) 22 (17): 2059-2065. doi: 10.1093/bioinformatics/btl355,
+ * http://bioinformatics.oxfordjournals.org/content/22/17/2059.long
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same)
  * and dimension one indicates the number of time series.

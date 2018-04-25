@@ -8,6 +8,8 @@
 #include <tsa/array.h>
 #include <complex>
 
+using namespace af;
+
 af::dim4 toDim4(const unsigned ndims, const dim_t *const dims) {
     af::dim4 d(1, 1, 1, 1);
 
