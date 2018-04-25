@@ -907,7 +907,7 @@ af::array hannWindow(int m, bool sym) {
 
 /**
  *  @brief returns the main frequencies used in FFT.
- *  
+ *
  *  @param n The n frequencies to be calculated.
  *  @param d The divisor to be applied.
  *  @return af::array The n main frequencies of FFT.
@@ -931,15 +931,15 @@ af::array detrend(af::array data) {
 
 /**
  * @brief This is a helper function that does the main FFT calculation. All input valdiation is performed there,
- * and the data axis is assumed to be the last axis of x. It is not designed to be called externally. 
+ * and the data axis is assumed to be the last axis of x. It is not designed to be called externally.
  * @param tss The given time series.
  * @param win The fft windows.
- * @param nperseg 
+ * @param nperseg
  * @param noverlap Overlapping points.
  * @param nfft number of ffts points
  * @return af::array the result from each window is returned.
  */
-af::array fftHelpher(af::array tss, af::array win, int nperseg, int noverlap, int nfft) {
+af::array fftHelper(af::array tss, af::array win, int nperseg, int noverlap, int nfft) {
     int step = nperseg - noverlap;
     af::array result = af::seq(0, tss.dims(0) - 1);
     result = detrend(result);
@@ -961,7 +961,7 @@ af::array tsa::features::spktWelchDensity(af::array tss) {
 
     af::array out = af::constant(0, tss.dims(0) / 2 + 1, tss.dims(1), tss.type());
     for (int i = 0; i < tss.dims(1); i++) {
-        af::array result = fftHelpher(tss, window, nperseg, noverlap, nfft);
+        af::array result = fftHelper(tss, window, nperseg, noverlap, nfft);
         result = af::conjg(result) * result;
         result *= scale;
         result *= 2;
