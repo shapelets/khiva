@@ -133,7 +133,7 @@ void mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::a
           af::array &index);
 
 /**
- * @brief STAMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
+ * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
  * of 'm'
  *
  * @param ta Query time series
@@ -146,7 +146,7 @@ void mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::a
 void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
 
 /**
- * @brief STAMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
+ * @brief STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
  * of 'm'. This method filters the trivial matches.
  *
  * @param t Query and reference time series

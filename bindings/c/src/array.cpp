@@ -37,6 +37,12 @@ void display_array(af_array *array) {
 
 void delete_array(af_array *array) { tsa::array::deleteArray(*array); }
 
+void get_type(af_array *array, int *t) {
+    af::array var = af::array(*array);
+    *t = tsa::array::getType(var);
+    af_retain_array(array, var.get());
+}
+
 #ifdef __cplusplus
 }
 #endif

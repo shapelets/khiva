@@ -6,10 +6,6 @@
 
 #include <arrayfire.h>
 
-namespace tsa {
-
-namespace normalization {
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -42,5 +38,3 @@ void znorm_in_place(af_array *tss, double epsilon);
 #ifdef __cplusplus
 }
 #endif
-};  // namespace normalization
-};  // namespace tsa

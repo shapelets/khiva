@@ -4,10 +4,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-namespace tsa {
-
-namespace library {
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -62,5 +58,3 @@ void get_device_count(int *device_count);
 #ifdef __cplusplus
 }
 #endif
-};  // namespace library
-};  // namespace tsa

@@ -6,15 +6,12 @@
 
 #include <arrayfire.h>
 
-namespace tsa {
-
-namespace array {
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- * @brief Create an Array object.
+ * @brief Creates an Array object.
  *
  * @param data Data used in order to create the array.
  * @param ndims Number of dimensions of the data.
@@ -33,7 +30,7 @@ void create_array(void *data, unsigned ndims, dim_t *dims, af_array *result, con
 void get_data(af_array *array, void *data);
 
 /**
- * @brief Get the Array dimensions.
+ * @brief Gets the Array dimensions.
  *
  * @param array Array from which to get the dimensions
  * @param dims The dimensions.
@@ -48,14 +45,20 @@ void get_dims(af_array *array, dim_t *dims);
 void display_array(af_array *array);
 
 /**
- * @brief Decrease the references count of the given array.
+ * @brief Decreases the references count of the given array.
  *
  * @param array The Array to release.
  */
 void delete_array(af_array *array);
 
+/**
+ * @brief Gets the type of the array.
+ *
+ * @param array The array to obtain the type information from.
+ * @param type Value of the Dtype enumeration.
+ */
+void get_type(af_array *array, int *t);
+
 #ifdef __cplusplus
 }
 #endif
-};  // namespace array
-};  // namespace tsa

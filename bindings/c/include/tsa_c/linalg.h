@@ -6,10 +6,6 @@
 
 #include <arrayfire.h>
 
-namespace tsa {
-
-namespace linalg {
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -29,5 +25,3 @@ void lls(af_array *a, af_array *b, af_array *result);
 #ifdef __cplusplus
 }
 #endif
-};  // namespace linalg
-};  // namespace tsa

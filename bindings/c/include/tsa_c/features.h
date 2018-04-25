@@ -6,10 +6,6 @@
 
 #include <arrayfire.h>
 
-namespace tsa {
-
-namespace features {
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -279,8 +275,8 @@ void fft_aggregated(af_array *array, af_array *result);
  * @param absolute The absolute value of the coefficient.
  * @param angle The angle of the coefficient.
  */
-void fftCoefficient(af_array *array, long coefficient, af_array *real, af_array *imag, af_array *absolute,
-                    af_array *angle);
+void fft_coefficient(af_array *array, long coefficient, af_array *real, af_array *imag, af_array *absolute,
+                     af_array *angle);
 
 /**
  * @brief Calculates the first relative location of the maximal value for each time series.
@@ -671,5 +667,3 @@ void value_count(af_array *array, float v, af_array *result);
 #ifdef __cplusplus
 }
 #endif
-};  // namespace features
-};  // namespace tsa

@@ -180,7 +180,7 @@ void fft_aggregated(af_array *array, af_array *result) {
     af_retain_array(result, tsa::features::fftAggregated(var).get());
 }
 
-void fftCoefficient(af_array *array, long coefficient, af_array *real, af_array *imag, af_array *absolute,
+void fft_coefficient(af_array *array, long coefficient, af_array *real, af_array *imag, af_array *absolute,
                     af_array *angle) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
