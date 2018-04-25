@@ -1109,6 +1109,114 @@ af::array tsa::features::sampleEntropy(af::array tss) {
 }
 
 af::array tsa::features::skewness(af::array tss) { return tsa::statistics::skewness(tss); }
+/**
+ *  @brief Return a Hann window.
+ *  The Hann window is a taper formed by using a raised cosine or sine-squared with ends that touch
+ *  zero.
+ *
+ *  The Hann window is defined as:
+ * \f[
+ *      w(n) = 0.5 - 0.5 \cos\left(\frac{2\pi{n}}{M-1}\right)
+ *              \qquad 0 \leq n \leq M-1
+ * \f]
+ *  The window was named for Julius von Hann, an Austrian meteorologist. It is also known as the
+ *  Cosine Bell. It is sometimes erroneously referred to as
+ *  the "Hanning" window, from the use of "hann" as a verb in the original
+ *  paper and confusion with the very similar Hamming window.
+ *
+ * @param m Number of points in the output window. If zero or less, an empty array is returned.
+ * @param sym When True, generates a symmetric window, for use in filter design. When
+ * False, generates a periodic window, for use in spectral analysis.
+ * @return af::array The window, with the maximum value normalized to 1 (though the value 1 does
+ * not appear if m is even and sym is True).
+ */
+af::array hannWindow(int m, bool sym) {
+    af::array window;
+    af::array a = af::constant(0.5, 2, 1);
+
+    if (!sym) {
+        window = af::constant(0, m + 1, 1);
+    } else {
+        window = af::constant(0, m, 1);
+    }
+
+    double step = (2 * af::Pi) / (m);
+    af::seq s(-af::Pi, af::Pi, step);
+    array fac = s;
+    for (int k = 0; k < a.dims(0); k++) {
+        window += 0.5 * af::cos(k * fac);
+    }
+    return window(seq(0, m - 1));
+}
+
+/**
+ *  @brief returns the main frequencies used in FFT.
+ *
+ *  @param n The n frequencies to be calculated.
+ *  @param d The divisor to be applied.
+ *  @return af::array The n main frequencies of FFT.
+ */
+af::array rfftFreq(int n, float d) {
+    float val = 1.0 / (n * d);
+    int N = std::floor(n / 2) + 1;
+    af::array results = af::seq(0, N - 1);
+    return results * val;
+}
+
+/**
+ *  @brief This function detrends the given time series.
+ *  @param data The time series.
+ *  @return af::array The detrended time timeseries.
+ */
+af::array detrend(af::array data) {
+    af::array result = data - af::tile(af::mean(data, 0), data.dims(0));
+    return result;
+}
+
+/**
+ * @brief This is a helper function that does the main FFT calculation. All input valdiation is performed there,
+ * and the data axis is assumed to be the last axis of x. It is not designed to be called externally.
+ * @param tss The given time series.
+ * @param win The fft windows.
+ * @param nperseg
+ * @param noverlap Overlapping points.
+ * @param nfft number of ffts points
+ * @return af::array the result from each window is returned.
+ */
+af::array fftHelper(af::array tss, af::array win, int nperseg, int noverlap, int nfft) {
+    int step = nperseg - noverlap;
+    af::array result = af::seq(0, tss.dims(0) - 1);
+    result = detrend(result);
+    result = win * result;
+    result = af::fft(result, 0);
+
+    return result(af::seq(0, result.dims(0) / 2));
+}
+
+af::array tsa::features::spktWelchDensity(af::array tss) {
+    float fs = 1.0;
+    int nperseg = tss.dims(0);
+    int nfft = tss.dims(0);
+    int noverlap = std::floor(nperseg / 2);
+    int nstep = nperseg - noverlap;
+
+    af::array window = hannWindow(tss.dims(0), false);
+    float scale = 1.0 / (fs * af::sum(window * window, 0).scalar<float>());
+
+    af::array out = af::constant(0, tss.dims(0) / 2 + 1, tss.dims(1), tss.type());
+    for (int i = 0; i < tss.dims(1); i++) {
+        af::array result = fftHelper(tss, window, nperseg, noverlap, nfft);
+        result = af::conjg(result) * result;
+        result *= scale;
+        result *= 2;
+        if ((nfft % 2) != 0) {
+            // Last point is unpaired Nyquist freq point, don't double
+            result(result.dims(0) - 1) = result(result.dims(0) - 1) / 2;
+        }
+        out(span, i) = af::real(result);
+    }
+    return out;
+}
 
 af::array tsa::features::standardDeviation(af::array tss) { return af::stdev(tss, 0); }
 
