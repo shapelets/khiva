@@ -9,19 +9,30 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-JNIEXPORT void JNICALL Java_tsa_Linalg_lls(JNIEnv *env, jobject thisObj, jdoubleArray a, jlong aL, jlong aN,
-                                           jdoubleArray b, jlong bL, jdoubleArray result) {
-    long a_fl = aL * aN;
-    jdouble input_a[a_fl];
-    env->GetDoubleArrayRegion(a, 0, a_fl, &input_a[0]);
-    jdouble input_b[bL];
-    env->GetDoubleArrayRegion(b, 0, bL, &input_b[0]);
-    af::array primitive_result;
-    primitive_result = tsa::linalg::lls(af::array(aL, aN, input_a), af::array(bL, input_b));
-    jdouble output_result[aN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, aN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Linalg_lls(JNIEnv *env, jobject thisObj, jlong ref_a, jlong ref_b) {
+    jint l = 3;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr_a = (af_array)ref_a;
+    af::array var_a = af::array(arr_a);
+    af_array arr_b = (af_array)ref_b;
+    af::array var_b = af::array(arr_b);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr_a, var_a.get());
+    af_retain_array(&arr_b, var_b.get());
+
+    af_retain_array(&af_p, tsa::linalg::lls(var_a, var_b).get());
+
+    tmp[0] = (jlong)arr_a;
+    tmp[1] = (jlong)arr_b;
+    tmp[2] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 #ifdef __cplusplus
 }

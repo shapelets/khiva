@@ -6,10 +6,6 @@
 
 #include <jni.h>
 
-namespace tsa {
-
-namespace library {
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -64,5 +60,3 @@ JNIEXPORT int JNICALL Java_tsa_Library_getDeviceCount(JNIEnv *env, jobject thisO
 #ifdef __cplusplus
 }
 #endif
-};  // namespace library
-};  // namespace tsa

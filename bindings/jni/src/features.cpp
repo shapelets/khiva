@@ -11,82 +11,122 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_tsa_Features_absEnergy(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries,
-                                                   jlong timeSeriesLength, jlong numberOfTimeSeries,
-                                                   jdoubleArray jResult) {
-    af::array result;
-    long concatenatedTimeSeriesLength = timeSeriesLength * numberOfTimeSeries;
-    jdouble inputTs[concatenatedTimeSeriesLength];
-    env->GetDoubleArrayRegion(timeSeries, 0, concatenatedTimeSeriesLength, &inputTs[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_absEnergy(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    result = tsa::features::absEnergy(af::array(timeSeriesLength, numberOfTimeSeries, inputTs));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble inputCResult[numberOfTimeSeries];
-    result.host(inputCResult);
-    env->SetDoubleArrayRegion(jResult, 0, numberOfTimeSeries, &inputCResult[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::absEnergy(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_absoluteSumOfChanges(JNIEnv *env, jobject thisObj, jdoubleArray timeSeries,
-                                                              jlong timeSeriesLength, jlong numberOfTimeSeries,
-                                                              jdoubleArray jResult) {
-    af::array result;
-    long concatenatedTimeSeriesLength = timeSeriesLength * numberOfTimeSeries;
-    jdouble inputTs[concatenatedTimeSeriesLength];
-    env->GetDoubleArrayRegion(timeSeries, 0, concatenatedTimeSeriesLength, &inputTs[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_absoluteSumOfChanges(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    result = tsa::features::absoluteSumOfChanges(af::array(timeSeriesLength, numberOfTimeSeries, inputTs));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble inputCResult[numberOfTimeSeries];
-    result.host(inputCResult);
-    env->SetDoubleArrayRegion(jResult, 0, numberOfTimeSeries, &inputCResult[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::absoluteSumOfChanges(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_aggregatedAutocorrelation(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                                   jlong tssL, jlong tssN, jint aggregationFunction,
-                                                                   jdoubleArray result) {
-    long tssFL = tssL * tssN;
-    jdouble input_tss[tssFL];
-    env->GetDoubleArrayRegion(tss, 0, tssFL, &input_tss[0]);
-    af::array primitive_result;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_aggregatedAutocorrelation(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                         jint aggregationFunction) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
     switch (aggregationFunction) {
         case 0:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::mean);
+            af_retain_array(&af_p, tsa::features::aggregatedAutocorrelation(var, af::mean).get());
             break;
         case 1:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::median);
+            af_retain_array(&af_p, tsa::features::aggregatedAutocorrelation(var, af::median).get());
             break;
         case 2:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::min);
+            af_retain_array(&af_p, tsa::features::aggregatedAutocorrelation(var, af::min).get());
+
             break;
         case 3:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::max);
+            af_retain_array(&af_p, tsa::features::aggregatedAutocorrelation(var, af::max).get());
+
             break;
         case 4:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::stdev);
+            af_retain_array(&af_p, tsa::features::aggregatedAutocorrelation(var, af::stdev).get());
+
             break;
         case 5:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::var);
+            af_retain_array(&af_p, tsa::features::aggregatedAutocorrelation(var, af::var).get());
+
             break;
         default:
-            primitive_result = tsa::features::aggregatedAutocorrelation(af::array(tssL, tssN, input_tss), af::mean);
+            af_retain_array(&af_p, tsa::features::aggregatedAutocorrelation(var, af::mean).get());
+
             break;
     }
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_aggregatedLinearTrend(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                               jlong tssL, jlong tssN, jlong chunkSize,
-                                                               jint aggregationFunction, jdoubleArray slope,
-                                                               jdoubleArray intercept, jdoubleArray rvalue,
-                                                               jdoubleArray pvalue, jdoubleArray stderrest) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_aggregatedLinearTrend(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                     jlong chunkSize, jint aggregationFunction) {
+    jint l = 6;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer_slope = 0;
+    af_array af_p_slope = (af_array)raw_pointer_slope;
+
+    jlong raw_pointer_intercept = 0;
+    af_array af_p_intercept = (af_array)raw_pointer_intercept;
+
+    jlong raw_pointer_rvalue = 0;
+    af_array af_p_rvalue = (af_array)raw_pointer_rvalue;
+
+    jlong raw_pointer_pvalue = 0;
+    af_array af_p_pvalue = (af_array)raw_pointer_pvalue;
+
+    jlong raw_pointer_stderrest = 0;
+    af_array af_p_stderrest = (af_array)raw_pointer_stderrest;
+
+    af_retain_array(&arr, var.get());
+
     af::array primitive_slope;
     af::array primitive_intercept;
     af::array primitive_rvalue;
@@ -94,799 +134,1163 @@ JNIEXPORT void JNICALL Java_tsa_Features_aggregatedLinearTrend(JNIEnv *env, jobj
     af::array primitive_stderrest;
     switch (aggregationFunction) {
         case 0:
-            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::mean, primitive_slope,
-                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
-                                                 primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::mean, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
         case 1:
-            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::median,
-                                                 primitive_slope, primitive_intercept, primitive_rvalue,
-                                                 primitive_pvalue, primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::median, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
         case 2:
-            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::min, primitive_slope,
-                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
-                                                 primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::min, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
         case 3:
-            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::max, primitive_slope,
-                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
-                                                 primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::max, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
         case 4:
-            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::stdev,
-                                                 primitive_slope, primitive_intercept, primitive_rvalue,
-                                                 primitive_pvalue, primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::stdev, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
         default:
-            tsa::features::aggregatedLinearTrend(af::array(tssL, tssN, input_tss), chunkSize, af::mean, primitive_slope,
-                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
-                                                 primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, chunkSize, af::mean, primitive_slope, primitive_intercept,
+                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
             break;
     }
-    jdouble output_slope[tssN];
-    primitive_slope.host(output_slope);
-    env->SetDoubleArrayRegion(slope, 0, tssN, &output_slope[0]);
-    jdouble output_intercept[tssN];
-    primitive_intercept.host(output_intercept);
-    env->SetDoubleArrayRegion(intercept, 0, tssN, &output_intercept[0]);
-    jdouble output_rvalue[tssN];
-    primitive_rvalue.host(output_rvalue);
-    env->SetDoubleArrayRegion(rvalue, 0, tssN, &output_rvalue[0]);
-    jdouble output_pvalue[tssN];
-    primitive_pvalue.host(output_pvalue);
-    env->SetDoubleArrayRegion(pvalue, 0, tssN, &output_pvalue[0]);
-    jdouble output_stderrest[tssN];
-    primitive_stderrest.host(output_stderrest);
-    env->SetDoubleArrayRegion(stderrest, 0, tssN, &output_stderrest[0]);
-    return;
+    af_retain_array(&af_p_slope, primitive_slope.get());
+    af_retain_array(&af_p_intercept, primitive_intercept.get());
+    af_retain_array(&af_p_rvalue, primitive_rvalue.get());
+    af_retain_array(&af_p_pvalue, primitive_pvalue.get());
+    af_retain_array(&af_p_stderrest, primitive_stderrest.get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p_slope;
+    tmp[2] = (jlong)af_p_intercept;
+    tmp[3] = (jlong)af_p_rvalue;
+    tmp[4] = (jlong)af_p_pvalue;
+    tmp[5] = (jlong)af_p_stderrest;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_approximateEntropy(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                            jlong tssLength, jlong tssNumberOfTss, jint m, jfloat r,
-                                                            jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_approximateEntropy(JNIEnv *env, jobject thisObj, jlong ref, jint m,
+                                                                  jfloat r) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::approximateEntropy(af::array(tssLength, tssNumberOfTss, input_tss), m, r);
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::approximateEntropy(var, m, r).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_crossCovariance(JNIEnv *env, jobject thisObj, jdoubleArray xss,
-                                                         jlong xssLength, jlong xssNumberOfTss, jdoubleArray yss,
-                                                         jlong yssLength, jlong yssNumberOfTss, jboolean unbiased,
-                                                         jdoubleArray result) {
-    af::array primitive_result;
-    long xssFull_length = xssLength * xssNumberOfTss;
-    jdouble input_xss[xssFull_length];
-    env->GetDoubleArrayRegion(xss, 0, xssFull_length, &input_xss[0]);
-    long yssFull_length = yssLength * yssNumberOfTss;
-    jdouble input_yss[yssFull_length];
-    env->GetDoubleArrayRegion(yss, 0, yssFull_length, &input_yss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_crossCovariance(JNIEnv *env, jobject thisObj, jlong ref_xss,
+                                                               jlong ref_yss, jboolean unbiased) {
+    jint l = 3;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::crossCovariance(af::array(xssLength, xssNumberOfTss, input_xss),
-                                                      af::array(yssLength, yssNumberOfTss, input_yss), unbiased);
+    af_array arr_xss = (af_array)ref_xss;
+    af::array var_xss = af::array(arr_xss);
 
-    long output_result_length = xssLength * yssLength;
-    jdouble output_result[output_result_length];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, output_result_length, &output_result[0]);
-    return;
+    af_retain_array(&arr_xss, var_xss.get());
+
+    af_array arr_yss = (af_array)ref_yss;
+    af::array var_yss = af::array(arr_yss);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&af_p, tsa::features::crossCovariance(var_xss, var_yss, unbiased).get());
+
+    tmp[0] = (jlong)arr_xss;
+    tmp[1] = (jlong)arr_yss;
+    tmp[2] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_autoCovariance(JNIEnv *env, jobject thisObj, jdoubleArray xss, jlong xssLength,
-                                                        jlong xssNumberOfTss, jboolean unbiased, jdoubleArray result) {
-    af::array primitive_result;
-    long xssFull_length = xssLength * xssNumberOfTss;
-    jdouble input_xss[xssFull_length];
-    env->GetDoubleArrayRegion(xss, 0, xssFull_length, &input_xss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_autoCovariance(JNIEnv *env, jobject thisObj, jlong ref,
+                                                              jboolean unbiased) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::autoCovariance(af::array(xssLength, xssNumberOfTss, input_xss), unbiased);
-    long output_result_length = xssNumberOfTss * xssLength;
-    jdouble output_result[output_result_length];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, output_result_length, &output_result[0]);
-    return;
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::autoCovariance(var, unbiased).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_crossCorrelation(JNIEnv *env, jobject thisObj, jdoubleArray xss,
-                                                          jlong xssLength, jlong xssNumberOfTss, jdoubleArray yss,
-                                                          jlong yssLength, jlong yssNumberOfTss, jboolean unbiased,
-                                                          jdoubleArray result) {
-    af::array primitive_result;
-    long xssFull_length = xssLength * xssNumberOfTss;
-    jdouble input_xss[xssFull_length];
-    env->GetDoubleArrayRegion(xss, 0, xssFull_length, &input_xss[0]);
-    long yssFull_length = yssLength * yssNumberOfTss;
-    jdouble input_yss[yssFull_length];
-    env->GetDoubleArrayRegion(yss, 0, yssFull_length, &input_yss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_crossCorrelation(JNIEnv *env, jobject thisObj, jlong ref_xss,
+                                                                jlong ref_yss, jboolean unbiased) {
+    jint l = 3;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::crossCorrelation(af::array(xssLength, xssNumberOfTss, input_xss),
-                                                       af::array(yssLength, yssNumberOfTss, input_yss), unbiased);
-    long output_result_length = std::max(yssLength, xssLength);
-    jdouble output_result[output_result_length];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, output_result_length, &output_result[0]);
-    return;
+    af_array arr_xss = (af_array)ref_xss;
+    af::array var_xss = af::array(arr_xss);
+
+    af_retain_array(&arr_xss, var_xss.get());
+
+    af_array arr_yss = (af_array)ref_yss;
+    af::array var_yss = af::array(arr_yss);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&af_p, tsa::features::crossCorrelation(var_xss, var_yss, unbiased).get());
+
+    tmp[0] = (jlong)arr_xss;
+    tmp[1] = (jlong)arr_yss;
+    tmp[2] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_autoCorrelation(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                         jlong tssLength, jlong tssNumberOfTss, jlong maxLag,
-                                                         jboolean unbiased, jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_autoCorrelation(JNIEnv *env, jobject thisObj, jlong ref, jlong maxLag,
+                                                               jboolean unbiased) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result =
-        tsa::features::autoCorrelation(af::array(tssLength, tssNumberOfTss, input_tss), maxLag, unbiased);
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssFull_length];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssFull_length, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::autoCorrelation(var, maxLag, unbiased).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_binnedEntropy(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                                       jlong tssNumberOfTss, jint max_bins, jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_binnedEntropy(JNIEnv *env, jobject thisObj, jlong ref, jint max_bins) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::binnedEntropy(af::array(tssLength, tssNumberOfTss, input_tss), max_bins);
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::binnedEntropy(var, max_bins).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_c3(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                            jlong tssNumberOfTss, jlong lag, jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_c3(JNIEnv *env, jobject thisObj, jlong ref, jlong lag) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::c3(af::array(tssLength, tssNumberOfTss, input_tss), lag);
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::c3(var, lag).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_cidCe(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                               jlong tssNumberOfTss, jboolean zNormalize, jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_cidCe(JNIEnv *env, jobject thisObj, jlong ref, jboolean zNormalize) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::cidCe(af::array(tssLength, tssNumberOfTss, input_tss), zNormalize);
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::cidCe(var, zNormalize).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_countAboveMean(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                                        jlong tssNumberOfTss, jintArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_countAboveMean(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::countAboveMean(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jint output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetIntArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::countAboveMean(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_countBelowMean(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                                        jlong tssNumberOfTss, jintArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_countBelowMean(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::countBelowMean(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jint output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetIntArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::countBelowMean(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_cwtCoefficients(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                         jlong tssN, jintArray widths, jlong widthsL, jlong widthsN,
-                                                         jint coeff, jint w, jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    long widths_fl = widthsL * widthsN;
-    jint input_widths[widths_fl];
-    env->GetIntArrayRegion(widths, 0, widths_fl, &input_widths[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::cwtCoefficients(af::array(tssL, tssN, input_tss),
-                                                      af::array(widthsL, widthsN, input_widths), coeff, w);
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_cwtCoefficients(JNIEnv *env, jobject thisObj, jlong ref, jlong widths,
+                                                               jint coeff, jint w) {
+    jint l = 3;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    af_array af_w = (af_array)widths;
+    af::array var_w = af::array(af_w);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_w, var_w.get());
+
+    af_retain_array(&af_p, tsa::features::cwtCoefficients(var, var_w, coeff, w).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_w;
+    tmp[2] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_energyRatioByChunks(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                             jlong tssLength, jlong tssNumberOfTss, jlong numSegments,
-                                                             jlong segmentFocus, jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_energyRatioByChunks(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                   jlong numSegments, jlong segmentFocus) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result =
-        tsa::features::energyRatioByChunks(af::array(tssLength, tssNumberOfTss, input_tss), numSegments, segmentFocus);
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::energyRatioByChunks(var, numSegments, segmentFocus).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_fftAggregated(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                       jlong tssN, jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::fftAggregated(af::array(tssL, tssL, input_tss));
-    jdouble output_result[tssN * tssL];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN * tssL, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_fftAggregated(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::fftAggregated(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_fftCoefficient(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                                        jlong tssNumberOfTss, jlong coefficient, jdoubleArray real,
-                                                        jdoubleArray imag, jdoubleArray absolute, jdoubleArray angle) {
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_fftCoefficient(JNIEnv *env, jobject thisObj, jlong ref,
+                                                              jlong coefficient) {
+    jint l = 5;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer_real = 0;
+    af_array af_p_real = (af_array)raw_pointer_real;
+
+    jlong raw_pointer_imag = 0;
+    af_array af_p_imag = (af_array)raw_pointer_imag;
+
+    jlong raw_pointer_absolute = 0;
+    af_array af_p_absolute = (af_array)raw_pointer_absolute;
+
+    jlong raw_pointer_angle = 0;
+    af_array af_p_angle = (af_array)raw_pointer_angle;
+
+    af_retain_array(&arr, var.get());
+
     af::array primitive_real;
     af::array primitive_imag;
     af::array primitive_absolute;
     af::array primitive_angle;
 
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+    tsa::features::fftCoefficient(var, coefficient, primitive_real, primitive_imag, primitive_absolute,
+                                  primitive_angle);
 
-    tsa::features::fftCoefficient(af::array(tssLength, tssNumberOfTss, input_tss), coefficient, primitive_real,
-                                  primitive_imag, primitive_absolute, primitive_angle);
+    af_retain_array(&af_p_real, primitive_real.get());
+    af_retain_array(&af_p_imag, primitive_imag.get());
+    af_retain_array(&af_p_absolute, primitive_absolute.get());
+    af_retain_array(&af_p_angle, primitive_angle.get());
 
-    jdouble output_real[tssNumberOfTss];
-    jdouble output_imag[tssNumberOfTss];
-    jdouble output_absolute[tssNumberOfTss];
-    jdouble output_angle[tssNumberOfTss];
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p_real;
+    tmp[2] = (jlong)af_p_imag;
+    tmp[3] = (jlong)af_p_absolute;
+    tmp[4] = (jlong)af_p_angle;
 
-    primitive_real.host(output_real);
-    primitive_imag.host(output_imag);
-    primitive_absolute.host(output_absolute);
-    primitive_angle.host(output_angle);
-
-    env->SetDoubleArrayRegion(real, 0, tssNumberOfTss, &output_real[0]);
-    env->SetDoubleArrayRegion(imag, 0, tssNumberOfTss, &output_imag[0]);
-    env->SetDoubleArrayRegion(absolute, 0, tssNumberOfTss, &output_absolute[0]);
-    env->SetDoubleArrayRegion(angle, 0, tssNumberOfTss, &output_angle[0]);
-
-    return;
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_firstLocationOfMaximum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                                jlong tssLength, jlong tssNumberOfTss,
-                                                                jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_firstLocationOfMaximum(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::firstLocationOfMaximum(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::firstLocationOfMaximum(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_firstLocationOfMinimum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                                jlong tssLength, jlong tssNumberOfTss,
-                                                                jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_firstLocationOfMinimum(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::firstLocationOfMinimum(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::firstLocationOfMinimum(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_hasDuplicates(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                                       jlong tssNumberOfTss, jbooleanArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_hasDuplicates(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::hasDuplicates(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jboolean output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetBooleanArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::hasDuplicates(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_hasDuplicateMax(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                         jlong tssLength, jlong tssNumberOfTss, jbooleanArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_hasDuplicateMax(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::hasDuplicateMax(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jboolean output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetBooleanArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::hasDuplicateMax(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_hasDuplicateMin(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                         jlong tssLength, jlong tssNumberOfTss, jbooleanArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_hasDuplicateMin(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::hasDuplicateMin(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jboolean output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetBooleanArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::hasDuplicateMin(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_indexMaxQuantile(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                          jlong tssLength, jlong tssNumberOfTss, jfloat q,
-                                                          jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_indexMaxQuantile(JNIEnv *env, jobject thisObj, jlong ref, jfloat q) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::indexMaxQuantile(af::array(tssLength, tssNumberOfTss, input_tss), q);
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::indexMaxQuantile(var, q).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_kurtosis(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                                  jlong tssNumberOfTss, jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_kurtosis(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::kurtosis(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::kurtosis(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_largeStandardDeviation(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                                jlong tssLength, jlong tssNumberOfTss, jfloat r,
-                                                                jbooleanArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_largeStandardDeviation(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                      jfloat r) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::largeStandardDeviation(af::array(tssLength, tssNumberOfTss, input_tss), r);
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jboolean output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetBooleanArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::largeStandardDeviation(var, r).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_lastLocationOfMaximum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                               jlong tssLength, jlong tssNumberOfTss,
-                                                               jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_lastLocationOfMaximum(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::lastLocationOfMaximum(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::lastLocationOfMaximum(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_lastLocationOfMinimum(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                               jlong tssLength, jlong tssNumberOfTss,
-                                                               jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_lastLocationOfMinimum(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::lastLocationOfMinimum(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::lastLocationOfMinimum(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_length(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                                jlong tssNumberOfTss, jintArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_length(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::length(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jint output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetIntArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::length(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_linearTrend(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                                     jlong tssNumberOfTss, jdoubleArray pvalue, jdoubleArray rvalue,
-                                                     jdoubleArray intercept, jdoubleArray slope, jdoubleArray stderr) {
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_linearTrend(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 6;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer_pvalue = 0;
+    af_array af_p_pvalue = (af_array)raw_pointer_pvalue;
+
+    jlong raw_pointer_rvalue = 0;
+    af_array af_p_rvalue = (af_array)raw_pointer_rvalue;
+
+    jlong raw_pointer_intercept = 0;
+    af_array af_p_intercept = (af_array)raw_pointer_intercept;
+
+    jlong raw_pointer_slope = 0;
+    af_array af_p_slope = (af_array)raw_pointer_slope;
+
+    jlong raw_pointer_stderr = 0;
+    af_array af_p_stderr = (af_array)raw_pointer_stderr;
+
+    af_retain_array(&arr, var.get());
+
     af::array primitive_pvalue;
     af::array primitive_rvalue;
     af::array primitive_intercept;
     af::array primitive_slope;
     af::array primitive_stderr;
 
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+    tsa::features::linearTrend(var, primitive_pvalue, primitive_rvalue, primitive_intercept, primitive_slope,
+                               primitive_stderr);
 
-    tsa::features::linearTrend(af::array(tssLength, tssNumberOfTss, input_tss), primitive_pvalue, primitive_rvalue,
-                               primitive_intercept, primitive_slope, primitive_stderr);
+    af_retain_array(&af_p_pvalue, primitive_pvalue.get());
+    af_retain_array(&af_p_rvalue, primitive_rvalue.get());
+    af_retain_array(&af_p_intercept, primitive_intercept.get());
+    af_retain_array(&af_p_slope, primitive_slope.get());
+    af_retain_array(&af_p_stderr, primitive_stderr.get());
 
-    jdouble output_pvalue[tssNumberOfTss];
-    jdouble output_rvalue[tssNumberOfTss];
-    jdouble output_intercept[tssNumberOfTss];
-    jdouble output_slope[tssNumberOfTss];
-    jdouble output_stderr[tssNumberOfTss];
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p_pvalue;
+    tmp[2] = (jlong)af_p_rvalue;
+    tmp[3] = (jlong)af_p_intercept;
+    tmp[4] = (jlong)af_p_slope;
+    tmp[5] = (jlong)af_p_stderr;
 
-    primitive_pvalue.host(output_pvalue);
-    primitive_rvalue.host(output_rvalue);
-    primitive_intercept.host(output_intercept);
-    primitive_slope.host(output_slope);
-    primitive_stderr.host(output_stderr);
-
-    env->SetDoubleArrayRegion(pvalue, 0, tssNumberOfTss, &output_pvalue[0]);
-    env->SetDoubleArrayRegion(rvalue, 0, tssNumberOfTss, &output_rvalue[0]);
-    env->SetDoubleArrayRegion(intercept, 0, tssNumberOfTss, &output_intercept[0]);
-    env->SetDoubleArrayRegion(slope, 0, tssNumberOfTss, &output_slope[0]);
-    env->SetDoubleArrayRegion(stderr, 0, tssNumberOfTss, &output_stderr[0]);
-
-    return;
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_longestStrikeAboveMean(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                                jlong tssLength, jlong tssNumberOfTss,
-                                                                jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_longestStrikeAboveMean(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::longestStrikeAboveMean(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::longestStrikeAboveMean(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_longestStrikeBelowMean(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                                jlong tssLength, jlong tssNumberOfTss,
-                                                                jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_longestStrikeBelowMean(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::longestStrikeBelowMean(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::longestStrikeBelowMean(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_maxLangevinFixedPoint(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                               jlong tssL, jlong tssN, jint m, jfloat r,
-                                                               jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::maxLangevinFixedPoint(af::array(tssL, tssN, input_tss), m, r);
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_maxLangevinFixedPoint(JNIEnv *env, jobject thisObj, jlong ref, jint m,
+                                                                     jfloat r) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::maxLangevinFixedPoint(var, m, r).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_maximum(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssLength,
-                                                 jlong tssNumberOfTss, jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_maximum(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::maximum(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::maximum(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_mean(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL, jlong tssN,
-                                              jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::mean(af::array(tssL, tssN, input_tss));
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_mean(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::mean(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_meanAbsoluteChange(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                            jlong tssLength, jlong tssNumberOfTss,
-                                                            jdoubleArray result) {
-    af::array primitive_result;
-    long tssFull_length = tssLength * tssNumberOfTss;
-    jdouble input_tss[tssFull_length];
-    env->GetDoubleArrayRegion(tss, 0, tssFull_length, &input_tss[0]);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_meanAbsoluteChange(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
 
-    primitive_result = tsa::features::meanAbsoluteChange(af::array(tssLength, tssNumberOfTss, input_tss));
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
 
-    jdouble output_result[tssNumberOfTss];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssNumberOfTss, &output_result[0]);
-    return;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::meanAbsoluteChange(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_meanChange(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                    jlong tssN, jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::meanChange(af::array(tssL, tssN, input_tss));
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_meanChange(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::meanChange(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                                     jlong tssL, jlong tssN, jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::meanSecondDerivativeCentral(af::array(tssL, tssN, input_tss));
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::meanSecondDerivativeCentral(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_median(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL, jlong tssN,
-                                                jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::median(af::array(tssL, tssN, input_tss));
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_median(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::median(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_minimum(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL, jlong tssN,
-                                                 jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::minimum(af::array(tssL, tssN, input_tss));
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_minimum(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::minimum(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_numberCrossingM(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                         jlong tssN, jint m, jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::numberCrossingM(af::array(tssL, tssN, input_tss), m);
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_numberCrossingM(JNIEnv *env, jobject thisObj, jlong ref, jint m) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::numberCrossingM(var, m).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_numberPeaks(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                     jlong tssN, jint n, jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::numberPeaks(af::array(tssL, tssN, input_tss), n);
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_numberPeaks(JNIEnv *env, jobject thisObj, jlong ref, jint n) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::numberPeaks(var, n).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_percentageOfReoccurringDatapointsToAllDatapoints(JNIEnv *env, jobject thisObj,
-                                                                                          jdoubleArray tss, jlong tssL,
-                                                                                          jlong tssN, jboolean isSorted,
-                                                                                          jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result =
-        tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::array(tssL, tssN, input_tss), isSorted);
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_percentageOfReoccurringDatapointsToAllDatapoints(JNIEnv *env,
+                                                                                                jobject thisObj,
+                                                                                                jlong ref,
+                                                                                                jboolean isSorted) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(var, isSorted).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_quantile(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                  jlong tssN, jdoubleArray q, jlong qL, jfloat precision,
-                                                  jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    jdouble input_q[qL];
-    env->GetDoubleArrayRegion(q, 0, qL, &input_q[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::quantile(af::array(tssL, tssN, input_tss), af::array(qL, input_q), precision);
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_quantile(JNIEnv *env, jobject thisObj, jlong ref, jlong q,
+                                                        jfloat precision) {
+    jint l = 3;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+    af_array arr_q = (af_array)q;
+    af::array var_q = af::array(arr_q);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&arr_q, var_q.get());
+
+    af_retain_array(&af_p, tsa::features::quantile(var, var_q, precision).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)arr_q;
+    tmp[2] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                           jlong tssN, jfloat r, jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::ratioBeyondRSigma(af::array(tssL, tssN, input_tss), r);
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject thisObj, jlong ref, jfloat r) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::ratioBeyondRSigma(var, r).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_sampleEntropy(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                       jlong tssN, jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::sampleEntropy(af::array(tssL, tssN, input_tss));
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_sampleEntropy(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::sampleEntropy(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_skewness(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                  jlong tssN, jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::skewness(af::array(tssL, tssN, input_tss));
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_skewness(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::skewness(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_standardDeviation(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                           jlong tssN, jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::standardDeviation(af::array(tssL, tssN, input_tss));
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_standardDeviation(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::standardDeviation(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject thisObj, jdoubleArray tss,
-                                                                    jlong tssL, jlong tssN, jboolean isSorted,
-                                                                    jdoubleArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::sumOfReoccurringDatapoints(af::array(tssL, tssN, input_tss), isSorted);
-    jdouble output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                          jboolean isSorted) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::sumOfReoccurringDatapoints(var, isSorted).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_symmetryLooking(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                         jlong tssN, jfloat r, jbooleanArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::symmetryLooking(af::array(tssL, tssN, input_tss), r);
-    jboolean output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetBooleanArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_symmetryLooking(JNIEnv *env, jobject thisObj, jlong ref, jfloat r) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::symmetryLooking(var, r).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Features_valueCount(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                    jlong tssN, jfloat v, jintArray result) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::features::valueCount(af::array(tssL, tssN, input_tss), v);
-    jint output_result[tssN];
-    primitive_result.host(output_result);
-    env->SetIntArrayRegion(result, 0, tssN, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_valueCount(JNIEnv *env, jobject thisObj, jlong ref, jfloat v) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::valueCount(var, v).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
 #ifdef __cplusplus

@@ -15,7 +15,7 @@ extern "C" {
  *
  * @param data Data used in order to create the array.
  * @param ndims Number of dimensions of the data.
- * @param dims Cardinality of dimesions of the data.
+ * @param dims Cardinality of dimensions of the data.
  * @param result Array created.
  * @param type Data type.
  */
@@ -32,7 +32,7 @@ void get_data(af_array *array, void *data);
 /**
  * @brief Gets the Array dimensions.
  *
- * @param array Array from which to get the dimensions
+ * @param array Array from which to get the dimensions.
  * @param dims The dimensions.
  */
 void get_dims(af_array *array, dim_t *dims);

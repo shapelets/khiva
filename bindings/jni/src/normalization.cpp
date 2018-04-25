@@ -10,30 +10,37 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-JNIEXPORT void JNICALL Java_tsa_Normalization_znorm(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tss_l,
-                                                    jlong tss_n, jdouble epsilon, jdoubleArray result) {
-    long tss_fl = tss_l * tss_n;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result;
-    primitive_result = tsa::normalization::znorm(af::array(tss_l, tss_n, input_tss), epsilon);
-    jdouble output_result[tss_n * tss_l];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(result, 0, tss_n * tss_l, &output_result[0]);
-    return;
+JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_znorm(JNIEnv *env, jobject thisObj, jlong ref, jdouble epsilon) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::normalization::znorm(var, epsilon).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Normalization_znormInPlace(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                           jlong tssN, jdouble epsilon) {
-    long tss_fl = tssL * tssN;
-    jdouble input_tss[tss_fl];
-    env->GetDoubleArrayRegion(tss, 0, tss_fl, &input_tss[0]);
-    af::array primitive_result = af::array(tssL, tssN, input_tss);
-    tsa::normalization::znormInPlace(primitive_result, epsilon);
-    jdouble output_result[tssN * tssL];
-    primitive_result.host(output_result);
-    env->SetDoubleArrayRegion(tss, 0, tssN * tssL, &output_result[0]);
-    return;
+JNIEXPORT jlong JNICALL Java_tsa_Normalization_znormInPlace(JNIEnv *env, jobject thisObj, jlong ref, jdouble epsilon) {
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+    tsa::normalization::znormInPlace(var, epsilon);
+    af_retain_array(&arr, var.get());
+    return (jlong)arr;
 }
 
 #ifdef __cplusplus

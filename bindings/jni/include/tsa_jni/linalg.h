@@ -5,10 +5,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include <jni.h>
 
-namespace tsa {
-
-namespace linalg {
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20,17 +16,11 @@ extern "C" {
  * \f$D\dagger\f$ contains the inverse values of the singular values contained in D if they are not zero, and zero
  * otherwise.
  *
- * @param a A Coefficient matrix containing the coefficients of the linear equation problem to solve.
- * @param aL Coefficient vectors length ( All need to have the same length).
- * @param aN Number of coefficient vectors.
- * @param b A vector with the measured values.
- * @param bL The vector length
- * @param result Contains the solution to the linear equation problem minimizing the norm 2.
+ * @param ref_a A Coefficient matrix containing the coefficients of the linear equation problem to solve.
+ * @param ref_b A vector with the measured values.
+ * @return Updated ref and the solution to the linear equation problem minimizing the norm 2.
  */
-JNIEXPORT void JNICALL Java_tsa_Linalg_lls(JNIEnv *env, jobject thisObj, jdoubleArray a, jlong aL, jlong aN,
-                                           jdoubleArray b, jlong bL, jdoubleArray result);
+JNIEXPORT jlongArray JNICALL Java_tsa_Linalg_lls(JNIEnv *env, jobject thisObj, jlong ref_a, jlong ref_b);
 #ifdef __cplusplus
 }
 #endif
-};  // namespace linalg
-};  // namespace tsa

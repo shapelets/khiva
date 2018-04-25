@@ -12,125 +12,163 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_tsa_Matrix_findBestNDiscords(JNIEnv *env, jobject thisObj, jdoubleArray profile,
-                                                         jintArray index, jlong lengthProfile, jlong n,
-                                                         jdoubleArray jDiscordDistances, jintArray jDiscordIndices,
-                                                         jintArray jSubsequenceIndices) {
+JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_findBestNDiscords(JNIEnv *env, jobject thisObj, jlong ref_profile,
+                                                               jlong ref_index, jlong n) {
+    jint l = 5;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr_profile = (af_array)ref_profile;
+    af::array var_profile = af::array(arr_profile);
+
+    af_array arr_index = (af_array)ref_index;
+    af::array var_index = af::array(arr_index);
+
+    jlong raw_pointer_discord_distances = 0;
+    af_array af_p_discord_distances = (af_array)raw_pointer_discord_distances;
+
+    jlong raw_pointer_discord_indices = 0;
+    af_array af_p_discord_indices = (af_array)raw_pointer_discord_indices;
+
+    jlong raw_pointer_subsequence_indices = 0;
+    af_array af_p_subsequence_indices = (af_array)raw_pointer_subsequence_indices;
+
+    af_retain_array(&arr_profile, var_profile.get());
+    af_retain_array(&arr_index, var_index.get());
+
     af::array discords;
-    af::array discordIndices;
-    af::array subsequenceIndices;
+    af::array discords_indices;
+    af::array subsequence_indices;
 
-    jdouble inputP[lengthProfile];
-    jint inputI[lengthProfile];
+    tsa::matrix::findBestNDiscords(var_profile, var_index, n, discords, discords_indices, subsequence_indices);
 
-    env->GetDoubleArrayRegion(profile, 0, lengthProfile, &inputP[0]);
-    env->GetIntArrayRegion(index, 0, lengthProfile, &inputI[0]);
+    af_retain_array(&af_p_discord_distances, discords.get());
+    af_retain_array(&af_p_discord_indices, discords_indices.get());
+    af_retain_array(&af_p_subsequence_indices, subsequence_indices.get());
 
-    tsa::matrix::findBestNDiscords(af::array(lengthProfile, inputP), af::array(lengthProfile, inputI), n, discords,
-                                   discordIndices, subsequenceIndices);
+    tmp[0] = (jlong)arr_profile;
+    tmp[1] = (jlong)arr_index;
+    tmp[2] = (jlong)af_p_discord_distances;
+    tmp[3] = (jlong)af_p_discord_indices;
+    tmp[4] = (jlong)af_p_subsequence_indices;
 
-    jdouble inputDiscords[n];
-    jint inputDiscordIndices[n];
-    jint inputSubsequenceIndices[n];
-
-    discords.host(inputDiscords);
-    discordIndices.host(inputDiscordIndices);
-    subsequenceIndices.host(inputSubsequenceIndices);
-
-    env->SetDoubleArrayRegion(jDiscordDistances, 0, n, &inputDiscords[0]);
-    env->SetIntArrayRegion(jDiscordIndices, 0, n, &inputDiscordIndices[0]);
-    env->SetIntArrayRegion(jSubsequenceIndices, 0, n, &inputSubsequenceIndices[0]);
-
-    return;
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Matrix_findBestNMotifs(JNIEnv *env, jobject thisObj, jdoubleArray profile,
-                                                       jintArray index, jlong lengthProfile, jlong n,
-                                                       jdoubleArray jMotifDistances, jintArray jMotifIndices,
-                                                       jintArray jSubsequenceIndices) {
+JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_findBestNMotifs(JNIEnv *env, jobject thisObj, jlong ref_profile,
+                                                             jlong ref_index, jlong n) {
+    jint l = 5;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr_profile = (af_array)ref_profile;
+    af::array var_profile = af::array(arr_profile);
+
+    af_array arr_index = (af_array)ref_index;
+    af::array var_index = af::array(arr_index);
+
+    jlong raw_pointer_motif_distances = 0;
+    af_array af_p_motif_distances = (af_array)raw_pointer_motif_distances;
+
+    jlong raw_pointer_motif_indices = 0;
+    af_array af_p_motif_indices = (af_array)raw_pointer_motif_indices;
+
+    jlong raw_pointer_subsequence_indices = 0;
+    af_array af_p_subsequence_indices = (af_array)raw_pointer_subsequence_indices;
+
+    af_retain_array(&arr_profile, var_profile.get());
+    af_retain_array(&arr_index, var_index.get());
+
     af::array motifs;
-    af::array motifIndices;
-    af::array subsequenceIndices;
+    af::array motif_indices;
+    af::array subsequence_indices;
 
-    jdouble inputP[lengthProfile];
-    jint inputI[lengthProfile];
+    tsa::matrix::findBestNMotifs(var_profile, var_index, n, motifs, motif_indices, subsequence_indices);
 
-    env->GetDoubleArrayRegion(profile, 0, lengthProfile, &inputP[0]);
-    env->GetIntArrayRegion(index, 0, lengthProfile, &inputI[0]);
+    af_retain_array(&af_p_motif_distances, motifs.get());
+    af_retain_array(&af_p_motif_indices, motif_indices.get());
+    af_retain_array(&af_p_subsequence_indices, subsequence_indices.get());
 
-    tsa::matrix::findBestNMotifs(af::array(lengthProfile, inputP), af::array(lengthProfile, inputI), n, motifs,
-                                 motifIndices, subsequenceIndices);
+    tmp[0] = (jlong)arr_profile;
+    tmp[1] = (jlong)arr_index;
+    tmp[2] = (jlong)af_p_motif_distances;
+    tmp[3] = (jlong)af_p_motif_indices;
+    tmp[4] = (jlong)af_p_subsequence_indices;
 
-    jdouble inputMotifs[n];
-    jint inputMotifIndices[n];
-    jint inputSubsequenceIndices[n];
-
-    motifs.host(inputMotifs);
-    motifIndices.host(inputMotifIndices);
-    subsequenceIndices.host(inputSubsequenceIndices);
-
-    env->SetDoubleArrayRegion(jMotifDistances, 0, n, &inputMotifs[0]);
-    env->SetIntArrayRegion(jMotifIndices, 0, n, &inputMotifIndices[0]);
-    env->SetIntArrayRegion(jSubsequenceIndices, 0, n, &inputSubsequenceIndices[0]);
-
-    return;
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Matrix_stomp(JNIEnv *env, jobject thisObj, jdoubleArray ta, jdoubleArray tb, jlong lta,
-                                             jlong ltb, jlong m, jdoubleArray p, jintArray i) {
+JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_stomp(JNIEnv *env, jobject thisObj, jlong ref_a, jlong ref_b, jlong m) {
+    jint l = 4;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr_a = (af_array)ref_a;
+    af::array var_a = af::array(arr_a);
+
+    af_array arr_b = (af_array)ref_b;
+    af::array var_b = af::array(arr_b);
+
+    jlong raw_pointer_distance = 0;
+    af_array af_p_distance = (af_array)raw_pointer_distance;
+
+    jlong raw_pointer_index = 0;
+    af_array af_p_index = (af_array)raw_pointer_index;
+
+    af_retain_array(&arr_a, var_a.get());
+    af_retain_array(&arr_b, var_b.get());
+
     af::array distance;
     af::array index;
-
-    jdouble input_ta[lta];
-    jdouble input_tb[ltb];
-
-    env->GetDoubleArrayRegion(ta, 0, lta, &input_ta[0]);
-    env->GetDoubleArrayRegion(tb, 0, ltb, &input_tb[0]);
-
-    af::array ata = af::array(lta, input_ta);
-    af::array atb = af::array(ltb, input_tb);
-
     long subsequence = m;
 
-    tsa::matrix::stomp(ata, atb, subsequence, distance, index);
+    tsa::matrix::stomp(var_a, var_b, subsequence, distance, index);
 
-    jdouble input_p[ltb - m + 1];
-    jint input_i[ltb - m + 1];
+    af_retain_array(&af_p_distance, distance.get());
+    af_retain_array(&af_p_index, index.get());
 
-    distance.host(input_p);
-    index.host(input_i);
+    tmp[0] = (jlong)arr_a;
+    tmp[1] = (jlong)arr_b;
+    tmp[2] = (jlong)af_p_distance;
+    tmp[3] = (jlong)af_p_index;
 
-    env->SetDoubleArrayRegion(p, 0, ltb - m + 1, &input_p[0]);
-    env->SetIntArrayRegion(i, 0, ltb - m + 1, &input_i[0]);
-
-    return;
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
-JNIEXPORT void JNICALL Java_tsa_Matrix_stompSelfJoin(JNIEnv *env, jobject thisObj, jdoubleArray ta, jlong lta, jlong m,
-                                                     jdoubleArray p, jintArray i) {
+JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_stompSelfJoin(JNIEnv *env, jobject thisObj, jlong ref_a, jlong m) {
+    jint l = 3;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr_a = (af_array)ref_a;
+    af::array var_a = af::array(arr_a);
+
+    jlong raw_pointer_distance = 0;
+    af_array af_p_distance = (af_array)raw_pointer_distance;
+
+    jlong raw_pointer_index = 0;
+    af_array af_p_index = (af_array)raw_pointer_index;
+
+    af_retain_array(&arr_a, var_a.get());
+
     af::array distance;
     af::array index;
-
-    jdouble input_ta[lta];
-
-    env->GetDoubleArrayRegion(ta, 0, lta, &input_ta[0]);
-
-    af::array ata = af::array(lta, input_ta);
-
     long subsequence = m;
 
-    tsa::matrix::stomp(ata, subsequence, distance, index);
+    tsa::matrix::stomp(var_a, subsequence, distance, index);
 
-    jdouble input_p[lta - m + 1];
-    jint input_i[lta - m + 1];
+    af_retain_array(&af_p_distance, distance.get());
+    af_retain_array(&af_p_index, index.get());
 
-    distance.host(input_p);
-    index.host(input_i);
+    tmp[0] = (jlong)arr_a;
+    tmp[1] = (jlong)af_p_distance;
+    tmp[2] = (jlong)af_p_index;
 
-    env->SetDoubleArrayRegion(p, 0, lta - m + 1, &input_p[0]);
-    env->SetIntArrayRegion(i, 0, lta - m + 1, &input_i[0]);
-
-    return;
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
 }
 
 #ifdef __cplusplus

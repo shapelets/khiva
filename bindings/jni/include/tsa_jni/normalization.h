@@ -5,10 +5,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include <jni.h>
 
-namespace tsa {
-
-namespace normalization {
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -16,31 +12,27 @@ extern "C" {
 /**
  * @brief Calculates a new set of timeseries with zero mean and standard deviation one.
  *
- * @param tss Time series concatenated in a single row.
- * @param tssL Time series length (All time series need to have the same length).
- * @param tssN Number of time series.
- * @param epsilon Minimum standard deviation to consider.  It acts a a gatekeeper for
- * those time series that may be constant or near constant.
- * @param result Array with the same dimensions as tss where the time series have been
+ * @param ref Expects an input array whose dimension zero is the length of the timeseries (all the same) and dimension
+ * one indicates the number of time series.
+ * @param epsilon Minimum standard deviation to consider. It acts a a gatekeeper for those time series that may be
+ * constant or near constant.
+ * @return The updated ref and the with the same dimensions as ref where the time series have been
  * adjusted for zero mean and one as standard deviation.
  */
-JNIEXPORT void JNICALL Java_tsa_Normalization_znorm(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                    jlong tssN, jdouble epsilon, jdoubleArray result);
+JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_znorm(JNIEnv *env, jobject thisObj, jlong ref, jdouble epsilon);
 
 /**
  * @brief Adjusts the time series in the given input and performs z-norm
  * inplace (without allocating further memory).
  *
- * @param tss Time series concatenated in a single row.
- * @param tssL Time series length (All time series need to have the same length).
- * @param tssN Number of time series.
- * @param epsilon Minimum standard deviation to consider.  It acts a a gatekeeper for
- * those time series that may be constant or near constant.
+ * @param ref Expects an input array whose dimension zero is the length of the timeseries (all the same) and dimension
+ * one indicates the number of time series.
+ * @param epsilon Minimum standard deviation to consider. It acts as a gatekeeper for those time series that may be
+ * constant or near constant.
+ * @return The updated ref.
  */
-JNIEXPORT void JNICALL Java_tsa_Normalization_znormInPlace(JNIEnv *env, jobject thisObj, jdoubleArray tss, jlong tssL,
-                                                           jlong tssN, jdouble epsilon);
+JNIEXPORT jlong JNICALL Java_tsa_Normalization_znormInPlace(JNIEnv *env, jobject thisObj, jlong ref, jdouble epsilon);
+
 #ifdef __cplusplus
 }
 #endif
-};  // namespace normalization
-};  // namespace tsa
