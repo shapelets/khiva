@@ -44,7 +44,7 @@ JNIEXPORT jlong JNICALL Java_tsa_Array_createArrayFromDoubleComplex(JNIEnv *env,
         isfirst = false;
     }
 
-    af_cdouble *tmp = (af_cdouble *)malloc(len * sizeof(af_cdouble));
+    af::af_cdouble *tmp = (af::af_cdouble *)malloc(len * sizeof(af::af_cdouble));
 
     for (int i = 0; i < len; i++) {
         jobject obj = env->GetObjectArrayElement(objs, i);
@@ -80,7 +80,7 @@ JNIEXPORT jlong JNICALL Java_tsa_Array_createArrayFromFloatComplex(JNIEnv *env, 
         isfirst = false;
     }
 
-    af_cfloat *tmp = (af_cfloat *)malloc(len * sizeof(af_cfloat));
+    af::af_cfloat *tmp = (af::af_cfloat *)malloc(len * sizeof(af::af_cfloat));
 
     for (int i = 0; i < len; i++) {
         jobject obj = env->GetObjectArrayElement(objs, i);
@@ -151,7 +151,7 @@ JNIEXPORT jobjectArray JNICALL Java_tsa_Array_getDoubleComplexFromArray(JNIEnv *
 
     result = env->NewObjectArray(elements, cls, NULL);
 
-    af_cdouble *tmp = (af_cdouble *)malloc(sizeof(af_cdouble) * elements);
+    af::af_cdouble *tmp = (af::af_cdouble *)malloc(sizeof(af::af_cdouble) * elements);
     af_array a = (af_array)ref;
     af::array var = af::array(a);
     tsa::array::getData(var, tmp);
@@ -182,7 +182,7 @@ JNIEXPORT jobjectArray JNICALL Java_tsa_Array_getFloatComplexFromArray(JNIEnv *e
 
     result = env->NewObjectArray(elements, cls, NULL);
 
-    af_cfloat *tmp = (af_cfloat *)malloc(sizeof(af_cfloat) * elements);
+    af::af_cfloat *tmp = (af::af_cfloat *)malloc(sizeof(af::af_cfloat) * elements);
     af_array a = (af_array)ref;
     af::array var = af::array(a);
     tsa::array::getData(var, tmp);

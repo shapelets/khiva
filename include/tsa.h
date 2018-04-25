@@ -16,6 +16,5 @@
 #include <tsa/polynomial.h>
 #include <tsa/regression.h>
 #include <tsa/regularization.h>
-#include <tsa/simplification.h>
 #include <tsa/statistics.h>
 #include <tsa/version.h>

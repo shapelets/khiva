@@ -6,8 +6,6 @@
 
 #include <arrayfire.h>
 
-using namespace af;
-
 namespace tsa {
 
 namespace regression {

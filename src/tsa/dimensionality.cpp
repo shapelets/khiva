@@ -6,9 +6,117 @@
 
 #include <tsa/dimensionality.h>
 #include <boost/math/distributions/normal.hpp>
+#include <cmath>
 #include <iostream>
 #include <iterator>
+#include <limits>
+#include <stdexcept>
+#include <utility>
 #include <vector>
+
+double PerpendicularDistance(const tsa::dimensionality::Point &pt, const tsa::dimensionality::Point &lineStart,
+                             const tsa::dimensionality::Point &lineEnd) {
+    double dx = lineEnd.first - lineStart.first;
+    double dy = lineEnd.second - lineStart.second;
+
+    // Normalise
+    double mag = pow(pow(dx, 2.0) + pow(dy, 2.0), 0.5);
+    if (mag > 0.0) {
+        dx /= mag;
+        dy /= mag;
+    }
+
+    double pvx = pt.first - lineStart.first;
+    double pvy = pt.second - lineStart.second;
+
+    // Get dot product (project pv onto normalized direction)
+    double pvdot = dx * pvx + dy * pvy;
+
+    // Scale line direction vector
+    double dsx = pvdot * dx;
+    double dsy = pvdot * dy;
+
+    // Subtract this from pv
+    double ax = pvx - dsx;
+    double ay = pvy - dsy;
+
+    return pow(pow(ax, 2.0) + pow(ay, 2.0), 0.5);
+}
+
+std::vector<tsa::dimensionality::Point> tsa::dimensionality::ramerDouglasPeucker(
+    std::vector<tsa::dimensionality::Point> pointList, double epsilon) {
+    std::vector<tsa::dimensionality::Point> out;
+
+    if (pointList.size() < 2) throw std::invalid_argument("Not enough points to simplify ...");
+
+    // Find the point with the maximum distance from line between start and end
+    double dmax = 0.0;
+    size_t index = 0;
+    size_t end = pointList.size() - 1;
+
+    for (size_t i = 1; i < end; i++) {
+        double d = PerpendicularDistance(pointList[i], pointList[0], pointList[end]);
+        if (d > dmax) {
+            index = i;
+            dmax = d;
+        }
+    }
+
+    // If max distance is greater than epsilon, recursively simplify
+    if (dmax > epsilon) {
+        std::vector<tsa::dimensionality::Point> recResults1;
+        std::vector<tsa::dimensionality::Point> recResults2;
+        std::vector<tsa::dimensionality::Point> firstLine(pointList.begin(), pointList.begin() + index + 1);
+        std::vector<tsa::dimensionality::Point> lastLine(pointList.begin() + index, pointList.end());
+        recResults1 = ramerDouglasPeucker(firstLine, epsilon);
+        recResults2 = ramerDouglasPeucker(lastLine, epsilon);
+
+        // Build the result list
+        out.assign(recResults1.begin(), recResults1.end() - 1);
+        out.insert(out.end(), recResults2.begin(), recResults2.end());
+        if (out.size() < 2) throw std::runtime_error("Problem assembling output");
+    } else {
+        // Just return start and end points
+        out.clear();
+        out.push_back(pointList[0]);
+        out.push_back(pointList[end]);
+    }
+    return out;
+}
+
+float computeTriangleArea(tsa::dimensionality::Point a, tsa::dimensionality::Point b, tsa::dimensionality::Point c) {
+    float res = 0.0;
+
+    float base = std::sqrt(std::pow((c.first - a.first), 2) + std::pow((c.second - a.second), 2));
+    float height = std::abs(b.first - a.first);
+    res = base * height / 2.0;
+
+    return res;
+}
+
+std::vector<tsa::dimensionality::Point> tsa::dimensionality::visvalingam(
+    std::vector<tsa::dimensionality::Point> pointList, int num_points_allowed) {
+    // variables
+    std::vector<tsa::dimensionality::Point> out(pointList.begin(), pointList.end());
+    float min_area = std::numeric_limits<float>::max();
+    int candidate_point = -1;
+    int iterations = out.size() - num_points_allowed;
+
+    // One point to be deleted in each iteration
+    for (int iter = 0; iter < iterations; iter++) {
+        for (int p = 0; p < out.size() - 2; p++) {
+            float area = computeTriangleArea(out[p], out[p + 1], out[p + 2]);
+            if (area < min_area) {
+                min_area = area;
+                candidate_point = p + 1;
+            }
+        }
+        std::vector<tsa::dimensionality::Point>::iterator nth = out.begin() + candidate_point;
+        out.erase(nth);
+        min_area = std::numeric_limits<float>::max();
+    }
+    return out;
+}
 
 af::array tsa::dimensionality::PAA(af::array a, int bins) {
     int n = a.elements();
@@ -72,22 +180,6 @@ std::vector<int> tsa::dimensionality::SAX(af::array a, int alphabet_size) {
         aux.push_back(alpha);
     }
     return aux;
-}
-
-void print_array(float *vec, int n) {
-    std::cout << "s------" << std::endl;
-    for (int i = 0; i < n; i++) {
-        std::cout << vec[i] << std::endl;
-    }
-    std::cout << "e------" << std::endl;
-}
-
-void print_vec(std::vector<float> vec) {
-    std::cout << "s------" << std::endl;
-    for (float i : vec) {
-        std::cout << i << std::endl;
-    }
-    std::cout << "e------" << std::endl;
 }
 
 bool isPointInDesiredList(float point, std::vector<float> desired_x) {

@@ -7,7 +7,6 @@
 #include <arrayfire.h>
 #include <Eigen/Eigenvalues>
 
-using namespace af;
 using namespace Eigen;
 
 namespace tsa {

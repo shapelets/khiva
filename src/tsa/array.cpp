@@ -8,8 +8,6 @@
 #include <tsa/array.h>
 #include <complex>
 
-using namespace af;
-
 af::dim4 toDim4(const unsigned ndims, const dim_t *const dims) {
     af::dim4 d(1, 1, 1, 1);
 
@@ -25,11 +23,11 @@ af::array tsa::array::createArray(void *data, unsigned ndims, dim_t *dims, const
         case tsa::dtype::f32:
             return af::array(d, static_cast<float *>(data));
         case tsa::dtype::c32:
-            return af::array(d, static_cast<cfloat *>(data));
+            return af::array(d, static_cast<af::cfloat *>(data));
         case tsa::dtype::f64:
             return af::array(d, static_cast<double *>(data));
         case tsa::dtype::c64:
-            return af::array(d, static_cast<cdouble *>(data));
+            return af::array(d, static_cast<af::cdouble *>(data));
         case tsa::dtype::b8:
             return af::array(d, static_cast<char *>(data));
         case tsa::dtype::s32:

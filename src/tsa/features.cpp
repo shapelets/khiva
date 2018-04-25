@@ -11,7 +11,6 @@
 #include <tsa/regression.h>
 #include <tsa/regularization.h>
 #include <tsa/statistics.h>
-#include <tsa/utils.h>
 #include <cmath>
 
 typedef std::tuple<std::vector<int>, std::vector<int>, int> CWTTuple;
@@ -28,7 +27,8 @@ af::array tsa::features::absEnergy(af::array base) {
 af::array tsa::features::absoluteSumOfChanges(af::array tss) {
     long n = tss.dims(0);
     // Calculating tss(t + 1) - tss(t) from 0 to the length of the time series minus 1
-    af::array minus = tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span);
+    af::array minus =
+        tss(af::seq(std::min(1L, n - 1), n - 1), af::span) - tss(af::seq(0, std::max(0L, n - 2)), af::span);
     // Returning the sum of absolute values of the previous operation
     return af::sum(af::abs(minus), 0);
 }
@@ -37,21 +37,21 @@ af::array tsa::features::aggregatedAutocorrelation(af::array tss,
                                                    af::array (*aggregationFunction)(const af::array &, const bool,
                                                                                     const dim_t)) {
     long n = tss.dims(0);
-    af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), span);
+    af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), af::span);
     return aggregationFunction(autocorrelations, true, 0);
 }
 
 af::array tsa::features::aggregatedAutocorrelation(af::array tss,
                                                    af::array (*aggregationFunction)(const af::array &, const int)) {
     long n = tss.dims(0);
-    af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), span);
+    af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), af::span);
     return aggregationFunction(autocorrelations, 0);
 }
 
 af::array tsa::features::aggregatedAutocorrelation(af::array tss,
                                                    af::array (*aggregationFunction)(const af::array &, const dim_t)) {
     long n = tss.dims(0);
-    af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), span);
+    af::array autocorrelations = tsa::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), af::span);
     return aggregationFunction(autocorrelations, 0);
 }
 
@@ -153,7 +153,8 @@ af::array entropy(af::array tss, int m, float r) {
 
         gfor(af::seq j, tss.dims(1)) {
             for (int k = 0; k < m; k++) {
-                expandH(k, span, j, span) = af::reorder(tss(af::seq(i + k, i + k + iterationSizeH - 1), j), 1, 0, 3, 2);
+                expandH(k, af::span, j, af::span) =
+                    af::reorder(tss(af::seq(i + k, i + k + iterationSizeH - 1), j), 1, 0, 3, 2);
             }
         }
         // it performs a batching (or blocking) in the vertical direction
@@ -170,13 +171,13 @@ af::array entropy(af::array tss, int m, float r) {
 
             gfor(af::seq k, tss.dims(1)) {
                 for (int l = 0; l < m; l++) {
-                    expandV(l, span, k, span) =
+                    expandV(l, af::span, k, af::span) =
                         af::reorder(tss(af::seq(j + l, j + l + iterationSizeV - 1), k), 1, 0, 3, 2);
                 }
             }
             // Get the maximum difference among all dimensions for each timeseries
             gfor(af::seq k, iterationSizeV) {
-                af::array aux = af::tile(expandV(span, k, span), 1, iterationSizeH);
+                af::array aux = af::tile(expandV(af::span, k, af::span), 1, iterationSizeH);
                 distances = af::reorder(af::max(af::abs(aux - af::tile(expandH, 1, 1, 1, iterationSizeV))), 3, 1, 2, 0);
             }
             // sum the number of elements bigger than the threshhold given by (stdev*r)
@@ -239,8 +240,8 @@ af::array tsa::features::crossCovariance(af::array xss, af::array yss, bool unbi
     af::array result = af::array(nobs, yss.dims(1), xss.dims(1), xss.type());
     gfor(af::seq i, xss.dims(1)) {
         // Flipping the result of the convolve operation because we flipped the input data
-        result(span, span, i, span) =
-            af::flip(af::convolve(xsso(span, i), ysso, AF_CONV_EXPAND)(af::seq(nobs), span), 0) / d;
+        result(af::span, af::span, i, af::span) =
+            af::flip(af::convolve(xsso(af::span, i), ysso, AF_CONV_EXPAND)(af::seq(nobs), af::span), 0) / d;
     }
 
     return result;
@@ -253,7 +254,7 @@ af::array tsa::features::autoCovariance(af::array xss, bool unbiased) {
     // Calculating all the covariances in parallel, returning only the first slice of
     // the cube since the others are just calculations that are not required.
     // With a sequential for loop we would remove such calculations, but it might be slower
-    result = tsa::features::crossCovariance(xss, xss, unbiased)(span, span, 0);
+    result = tsa::features::crossCovariance(xss, xss, unbiased)(af::span, af::span, 0);
     return result;
 }
 
@@ -277,7 +278,7 @@ af::array tsa::features::autoCorrelation(af::array tss, long maxLag, bool unbias
     af::array acov = tsa::features::autoCovariance(tss, unbiased);
 
     // Slicing up to maxLag and normalizing by the value of lag 0
-    return acov(af::seq(maxLag), span) / af::tile(acov(0, span), maxLag);
+    return acov(af::seq(maxLag), af::span) / af::tile(acov(0, af::span), maxLag);
 }
 
 af::array tsa::features::binnedEntropy(af::array tss, int max_bins) {
@@ -286,7 +287,7 @@ af::array tsa::features::binnedEntropy(af::array tss, int max_bins) {
     af::array res = af::constant(0, 1, nts, tss.type());
 
     gfor(af::seq i, nts) {
-        af::array his = af::histogram(tss(span, i), max_bins);
+        af::array his = af::histogram(tss(af::span, i), max_bins);
         af::array probs = his / (float)len;
         af::array aux = probs * af::log(probs);
         af::array sum = af::sum(aux, 0);
@@ -299,7 +300,7 @@ af::array tsa::features::c3(af::array tss, long lag) {
     // Product of shifting tss 2 * -lag times, with tss shifted -lag times, with the original tss
     af::array aux = af::shift(tss, 2 * -lag) * af::shift(tss, -lag) * tss;
     // Return the slice of the previous calculation up to the length of the time series minus 2 * lag
-    return af::mean(aux(af::seq(tss.dims(0) - 2 * lag), span), 0);
+    return af::mean(aux(af::seq(tss.dims(0) - 2 * lag), af::span), 0);
 }
 
 af::array tsa::features::cidCe(af::array tss, bool zNormalize) {
@@ -310,7 +311,8 @@ af::array tsa::features::cidCe(af::array tss, bool zNormalize) {
     }
 
     // Calculating tss(t + 1) - tss(t) from 0 to the length of the time series minus 1
-    af::array diff = tss(af::seq(std::min(1L, n - 1), n - 1), span) - tss(af::seq(0, std::max(0L, n - 2)), span);
+    af::array diff =
+        tss(af::seq(std::min(1L, n - 1), n - 1), af::span) - tss(af::seq(0, std::max(0L, n - 2)), af::span);
     // Returning the square root of the sum of squares of diff
     return af::sqrt(af::sum(diff * diff));
 }
@@ -356,7 +358,8 @@ af::array cwt(af::array data, af::array widths) {
         if (wavelet_data.dims(0) != data.dims(0)) {
             wavelet_data = af::join(0, af::constant(0, 1, wavelet_data.dims(1)), wavelet_data);
         }
-        output(i, span, span) = af::moddims(af::convolve(af::reorder(data, 0, 2, 1), wavelet_data), 1, len_data, cols);
+        output(i, af::span, af::span) =
+            af::moddims(af::convolve(af::reorder(data, 0, 2, 1), wavelet_data), 1, len_data, cols);
     }
     return output;
 }
@@ -380,7 +383,7 @@ af::array tsa::features::cwtCoefficients(af::array tss, af::array widths, int co
     // WORKAROUND: Forcing movement of index to CPU mem, just to avoid problems with Intel GPU
     int i = index.scalar<int>();
     // Select the corresponding values of coeff and w
-    return af::reorder(output(i, coeff, span), 0, 2, 1);
+    return af::reorder(output(i, coeff, af::span), 0, 2, 1);
 }
 
 af::array tsa::features::energyRatioByChunks(af::array tss, long numSegments, long segmentFocus) {
@@ -393,7 +396,7 @@ af::array tsa::features::energyRatioByChunks(af::array tss, long numSegments, lo
     long start = segmentFocus * segmentLength;
     // Calculating the end (which should be lower than the length of the time series)
     long end = std::min((segmentFocus + 1) * segmentLength, n);
-    return tsa::features::absEnergy(tss(af::seq(start, end - 1), span)) / fullSeriesEnergy;
+    return tsa::features::absEnergy(tss(af::seq(start, end - 1), af::span)) / fullSeriesEnergy;
 }
 
 af::array calculateMoment(af::array tss, int moment) {
@@ -443,17 +446,17 @@ af::array tsa::features::fftAggregated(af::array tss) {
     if (tss.dims(0) % 2 == 0) {
         // number of elements is even
         int n = (tss.dims(0) / 2) + 1;
-        fftComputed = af::abs(af::fft(tss, 0))(af::seq(0, n - 1), span);
+        fftComputed = af::abs(af::fft(tss, 0))(af::seq(0, n - 1), af::span);
     } else {
         // number of elements is odd
         int n = (tss.dims(0) + 1) / 2;
-        fftComputed = af::abs(af::fft(tss, 0))(af::seq(0, n - 1), span);
+        fftComputed = af::abs(af::fft(tss, 0))(af::seq(0, n - 1), af::span);
     }
     output = af::constant(0, 4, tss.dims(1), tss.type());
-    output(0, span) = calculateCentroid(fftComputed);
-    output(1, span) = calculateVariance(fftComputed);
-    output(2, span) = calculateSkew(fftComputed);
-    output(3, span) = calculateKurtosis(fftComputed);
+    output(0, af::span) = calculateCentroid(fftComputed);
+    output(1, af::span) = calculateVariance(fftComputed);
+    output(2, af::span) = calculateSkew(fftComputed);
+    output(3, af::span) = calculateKurtosis(fftComputed);
     return output;
 }
 
@@ -462,7 +465,7 @@ void tsa::features::fftCoefficient(af::array tss, long coefficient, af::array &r
     // Calculating the FFT of all the time series contained in tss
     af::array fft = af::fft(tss);
     // Slicing by the given coefficient
-    af::array fftCoefficient = fft(coefficient, span);
+    af::array fftCoefficient = fft(coefficient, af::span);
     // Retrieving the real, imaginary, absolute value and angle of the complex number of the given coefficient
     real = af::real(fftCoefficient);
     imag = af::imag(fftCoefficient);
@@ -500,9 +503,9 @@ af::array tsa::features::firstLocationOfMinimum(af::array tss) {
 af::array estimateFriedrichCoefficients(af::array tss, int m, float r) {
     long n = tss.dims(0);
 
-    af::array categories = tsa::statistics::quantilesCut(tss(af::seq(n - 1), span), r);
+    af::array categories = tsa::statistics::quantilesCut(tss(af::seq(n - 1), af::span), r);
 
-    af::array x = af::join(1, categories, af::reorder(tss(af::seq(n - 1), span), 0, 2, 1, 3));
+    af::array x = af::join(1, categories, af::reorder(tss(af::seq(n - 1), af::span), 0, 2, 1, 3));
     x = af::join(1, x, af::reorder(af::diff1(tss, 0), 0, 2, 1, 3));
 
     // Doing the groupBy per input time series in tss (tss are contained along the 2nd dimension).
@@ -512,8 +515,8 @@ af::array estimateFriedrichCoefficients(af::array tss, int m, float r) {
     af::array result = af::array(m + 1, tss.dims(1), tss.type());
 
     for (int i = 0; i < tss.dims(1); i++) {
-        af::array groupped = tsa::regularization::groupBy(x(span, span, i), af::mean, 2, 2);
-        result(span, i) = tsa::polynomial::polyfit(groupped.col(0), groupped.col(1), m);
+        af::array groupped = tsa::regularization::groupBy(x(af::span, af::span, i), af::mean, 2, 2);
+        result(af::span, i) = tsa::polynomial::polyfit(groupped.col(0), groupped.col(1), m);
     }
 
     return result;
@@ -530,7 +533,7 @@ af::array tsa::features::hasDuplicates(af::array tss) {
     // Doing it sequentially because af::setUnique only works with vectors
     for (long i = 0; i < tss.dims(1); i++) {
         // Calculating the unique elements for each time series
-        af::array uniq = af::setUnique(tss(span, i));
+        af::array uniq = af::setUnique(tss(af::span, i));
         // If the number of elements differ, then the time series has duplicates
         result(i) = tss.dims(0) != uniq.dims(0);
     }
@@ -659,9 +662,9 @@ af::array tsa::features::meanChange(af::array tss) {
 af::array tsa::features::meanSecondDerivativeCentral(af::array tss) {
     int n = tss.dims(0);
     // Calculating tss(t + 2) - 2 * tss(t + 1) + tss(t) from 0 to the length of the time series minus - 2
-    af::array total = tss(af::seq(0, n - 3), span);
-    total -= 2 * tss(af::seq(1, n - 2), span);
-    total += tss(af::seq(2, n - 1), span);
+    af::array total = tss(af::seq(0, n - 3), af::span);
+    total -= 2 * tss(af::seq(1, n - 2), af::span);
+    total += tss(af::seq(2, n - 1), af::span);
     return af::sum(total, 0) / (2 * n);
 }
 
@@ -675,10 +678,10 @@ af::array tsa::features::numberCrossingM(af::array tss, int m) {
 
 af::array tsa::features::localMaximals(af::array tss) {
     af::array plus = af::shift(tss, 0, -1);
-    plus(span, plus.dims(1) - 1, span) = plus(span, plus.dims(1) - 2, span);
+    plus(af::span, plus.dims(1) - 1, af::span) = plus(af::span, plus.dims(1) - 2, af::span);
 
     af::array minus = af::shift(tss, 0, 1);
-    minus(span, 0, span) = minus(span, 1, span);
+    minus(af::span, 0, af::span) = minus(af::span, 1, af::span);
 
     af::array res1 = (tss > plus);
     af::array res2 = (tss > minus);
@@ -892,7 +895,7 @@ af::array tsa::features::numberCwtPeaks(af::array tss, int maxW) {
 
     // Computing one timeseries at a time, due to divergencies in the algorithm
     for (int i = 0; i < tss.dims(1); i++) {
-        af::array cwt_tss = cwt(tss(span, i), widths);
+        af::array cwt_tss = cwt(tss(af::span, i), widths);
 
         std::vector<LineTuple> ridgeLines = identifyRidgeLines(cwt_tss, maxDistances, gapThresh);
 
@@ -913,13 +916,13 @@ af::array tsa::features::numberCwtPeaks(af::array tss, int maxW) {
 af::array tsa::features::numberPeaks(af::array tss, int n) {
     int length = tss.dims(0);
 
-    af::array tssReduced = tss(af::seq(n, length - n - 1), span);
+    af::array tssReduced = tss(af::seq(n, length - n - 1), af::span);
 
     // Initializing it to ones
     af::array res = tssReduced == tssReduced;
     for (int i = 1; i < n + 1; i++) {
-        af::array rightShifted = af::shift(tss, i)(af::seq(n, length - n - 1), span);
-        af::array leftShifted = af::shift(tss, -i)(af::seq(n, length - n - 1), span);
+        af::array rightShifted = af::shift(tss, i)(af::seq(n, length - n - 1), af::span);
+        af::array leftShifted = af::shift(tss, -i)(af::seq(n, length - n - 1), af::span);
 
         res = res & ((tssReduced > rightShifted) & (tssReduced > leftShifted));
     }
@@ -961,7 +964,7 @@ af::array levinsonDurbin(af::array acv, int maxlag, bool isACV) {
 
         af::array pac = af::diag(phi);
         pac(0) = 1.0;
-        result(span, i) = pac;
+        result(af::span, i) = pac;
     }
     return result;
 }
@@ -988,7 +991,7 @@ af::array tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::ar
     af::array result = af::array(1, tss.dims(1), tss.type());
     // Doing it sequentially because the setUnique function can only be used with a vector
     for (int i = 0; i < tss.dims(1); i++) {
-        af::array unique = af::setUnique(tss(span, i), isSorted);
+        af::array unique = af::setUnique(tss(af::span, i), isSorted);
         int n = unique.dims(0);
         // The chunk size cannot be greater than the length of the unique values
         int chunkSize = std::min(n, BATCH_SIZE);
@@ -1001,7 +1004,7 @@ af::array tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(af::ar
             int iterationSize = std::min(chunkSize, n - j);
             af::array uniqueChunk = unique(af::seq(j, j + iterationSize - 1));
 
-            af::array tssTiled = af::tile(tss(span, i), 1, uniqueChunk.dims(0));
+            af::array tssTiled = af::tile(tss(af::span, i), 1, uniqueChunk.dims(0));
             uniqueChunk = af::transpose(af::tile(uniqueChunk, 1, tss.dims(0)));
 
             tmpResult = af::join(0, tmpResult, af::sum(af::sum(uniqueChunk == tssTiled, 0) > 1, 1).as(tss.type()));
@@ -1016,12 +1019,12 @@ af::array tsa::features::percentageOfReoccurringValuesToAllValues(af::array tss,
     af::array result = af::constant(0, 1, tss.dims(1), tss.type());
     // Doing it sequentially because the setUnique function can only be used with a vector
     for (int i = 0; i < tss.dims(1); i++) {
-        af::array uniques = af::setUnique(tss(span, i), isSorted);
+        af::array uniques = af::setUnique(tss(af::span, i), isSorted);
         int n = uniques.dims(0);
         af::array tmp = af::constant(0, 1, n, tss.type());
         // Computing the number of occurrences for each unique value
         for (int j = 0; j < n; j++) {
-            tmp(0, j) = af::count(tss(span, i) == af::tile(uniques(j), tss(span, i).dims(0), 1), 0);
+            tmp(0, j) = af::count(tss(af::span, i) == af::tile(uniques(j), tss(af::span, i).dims(0), 1), 0);
         }
         // WORKAROUND: Because of indirect memory access fails on Intel GPU
         // result(0, i) = af::sum(tmp(0, aux), 1);
@@ -1056,7 +1059,7 @@ af::array tsa::features::ratioBeyondRSigma(af::array tss, float r) {
 af::array tsa::features::ratioValueNumberToTimeSeriesLength(af::array tss) {
     af::array result = af::constant(0, 1, tss.dims(1), tss.type());
     for (int i = 0; i < tss.dims(1); i++) {
-        int n = af::setUnique(tss(span, i)).dims(0);
+        int n = af::setUnique(tss(af::span, i)).dims(0);
         result(0, i) = n / tss.dims(0);
     }
     return result;
@@ -1089,8 +1092,8 @@ af::array tsa::features::sampleEntropy(af::array tss) {
                 reference = af::array(1, iterationSize, tss.dims(1), tss.type());
             }
 
-            query = af::tile(af::reorder(tss(af::seq(i, i), span), 0, 2, 1, 3), 1, iterationSize);
-            reference = af::reorder(tss(af::seq(j, j + iterationSize - 1), span), 2, 0, 1, 3);
+            query = af::tile(af::reorder(tss(af::seq(i, i), af::span), 0, 2, 1, 3), 1, iterationSize);
+            reference = af::reorder(tss(af::seq(j, j + iterationSize - 1), af::span), 2, 0, 1, 3);
 
             // Get the maximum difference among all dimensions for each time series
             af::array distances = af::abs(reference - query);
@@ -1142,11 +1145,11 @@ af::array hannWindow(int m, bool sym) {
 
     double step = (2 * af::Pi) / (m);
     af::seq s(-af::Pi, af::Pi, step);
-    array fac = s;
+    af::array fac = s;
     for (int k = 0; k < a.dims(0); k++) {
         window += 0.5 * af::cos(k * fac);
     }
-    return window(seq(0, m - 1));
+    return window(af::seq(0, m - 1));
 }
 
 /**
@@ -1213,7 +1216,7 @@ af::array tsa::features::spktWelchDensity(af::array tss) {
             // Last point is unpaired Nyquist freq point, don't double
             result(result.dims(0) - 1) = result(result.dims(0) - 1) / 2;
         }
-        out(span, i) = af::real(result);
+        out(af::span, i) = af::real(result);
     }
     return out;
 }
@@ -1224,7 +1227,7 @@ af::array tsa::features::sumOfReoccurringDatapoints(af::array tss, bool isSorted
     af::array result = af::array(1, tss.dims(1), tss.type());
     // Doing it sequentially because the setUnique function can only be used with a vector
     for (int i = 0; i < tss.dims(1); i++) {
-        af::array unique = af::setUnique(tss(span, i), isSorted);
+        af::array unique = af::setUnique(tss(af::span, i), isSorted);
         int n = unique.dims(0);
         // The chunk size cannot be greater than the length of the unique values
         int chunkSize = std::min(n, BATCH_SIZE);
@@ -1236,7 +1239,7 @@ af::array tsa::features::sumOfReoccurringDatapoints(af::array tss, bool isSorted
             int iterationSize = std::min(chunkSize, n - j);
             af::array uniqueChunk = unique(af::seq(j, j + iterationSize - 1));
 
-            af::array tssTiled = af::tile(tss(span, i), 1, uniqueChunk.dims(0));
+            af::array tssTiled = af::tile(tss(af::span, i), 1, uniqueChunk.dims(0));
             uniqueChunk = af::transpose(af::tile(uniqueChunk, 1, tss.dims(0)));
 
             counts = af::join(0, counts, af::transpose(af::sum(uniqueChunk == tssTiled, 0).as(tss.type())));
@@ -1252,12 +1255,12 @@ af::array tsa::features::sumOfReoccurringValues(af::array tss, bool isSorted) {
     af::array result = af::constant(0, 1, tss.dims(1), tss.type());
     // Doing it sequentially because the setUnique function can only be used with a vector
     for (int i = 0; i < tss.dims(1); i++) {
-        af::array uniques = af::setUnique(tss(span, i), isSorted);
+        af::array uniques = af::setUnique(tss(af::span, i), isSorted);
         int n = uniques.dims(0);
         af::array tmp = af::constant(0, 1, n, tss.type());
         // Computing the number of occurrences for each unique value
         for (int j = 0; j < n; j++) {
-            tmp(0, j) = af::count(tss(span, i) == af::tile(uniques(j), tss(span, i).dims(0), 1), 0);
+            tmp(0, j) = af::count(tss(af::span, i) == af::tile(uniques(j), tss(af::span, i).dims(0), 1), 0);
         }
         result(0, i) = af::sum(uniques(tmp > 1), 0);
     }
@@ -1284,9 +1287,9 @@ af::array tsa::features::timeReversalAsymmetryStatistic(af::array tss, int lag) 
         throw std::invalid_argument("The size of tss needs to be larger for this lag value ...");
     }
 
-    af::array l_0 = tss(af::seq(0, n - (2 * lag) - 1), span);
-    af::array l_l = tss(af::seq(lag, n - lag - 1), span);
-    af::array l_2l = tss(af::seq(2 * lag, n - 1), span);
+    af::array l_0 = tss(af::seq(0, n - (2 * lag) - 1), af::span);
+    af::array l_l = tss(af::seq(lag, n - lag - 1), af::span);
+    af::array l_2l = tss(af::seq(2 * lag, n - 1), af::span);
 
     return af::sum((l_2l * l_2l * l_l) - (l_l * l_0 * l_0), 0) / (n - 2 * lag);
 }
