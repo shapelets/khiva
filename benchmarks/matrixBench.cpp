@@ -17,7 +17,7 @@ void SlidingDotProduct(benchmark::State &state) {
     auto m = state.range(1);
 
     auto t = af::randu(n, f64);
-    auto q = t(seq(0, m));
+    auto q = t(af::seq(0, m));
 
     af::sync();
     while (state.KeepRunning()) {
@@ -42,13 +42,13 @@ void SlidingDotProductParallel(benchmark::State &state) {
     auto input = af::array(m, n - m, t.type());
 
     for (int i = 0; i < m; i++) {
-        input(i, span, span, span) = t(seq(i, n - m - 1 + i));
+        input(i, af::span, af::span, af::span) = t(af::seq(i, n - m - 1 + i));
     }
 
     af::sync();
     while (state.KeepRunning()) {
-        gfor(seq idx, n - m) {
-            auto sdp = tsa::matrix::slidingDotProduct(input(span, idx, span, span), t);
+        gfor(af::seq idx, n - m) {
+            auto sdp = tsa::matrix::slidingDotProduct(input(af::span, idx, af::span, af::span), t);
             sdp.eval();
         }
         af::sync();
@@ -66,7 +66,7 @@ void MeanStdevAuxiliary(benchmark::State &state) {
 
     auto t = af::randu(n, f64);
     af::array a;
-    auto q = t(seq(0, m));
+    auto q = t(af::seq(0, m));
     af::array mean;
     af::array stdev;
 
@@ -90,7 +90,7 @@ void MeanStdev(benchmark::State &state) {
 
     auto t = af::randu(n, f64);
     af::array a;
-    auto q = t(seq(0, m));
+    auto q = t(af::seq(0, m));
     af::array mean;
     af::array stdev;
 
@@ -138,7 +138,7 @@ void CalculateDistanceProfile(benchmark::State &state) {
 
     auto t = af::randu(n, f64);
     af::array a;
-    auto q = t(seq(0, m - 1));
+    auto q = t(af::seq(0, m - 1));
     af::array mean;
     af::array stdev;
 
@@ -181,7 +181,7 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
     auto input = af::array(m, n - m + 1, t.type());
 
     for (int i = 0; i < m; i++) {
-        input(i, span, span, span) = t(seq(i, n - m + i));
+        input(i, af::span, af::span, af::span) = t(af::seq(i, n - m + i));
     }
 
     af::array distance;
@@ -191,8 +191,8 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        gfor(seq idx, n - m + 1) {
-            auto q = input(span, idx, span, span);
+        gfor(af::seq idx, n - m + 1) {
+            auto q = input(af::span, idx, af::span, af::span);
             auto sumQ = sum(q);
             auto sumQ2 = sum(pow(q, 2));
             auto qt = tsa::matrix::slidingDotProduct(q, t);

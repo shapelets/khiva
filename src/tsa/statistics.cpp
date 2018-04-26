@@ -12,7 +12,7 @@ af::array tsa::statistics::covariance(af::array tss, bool unbiased) {
 
     af::array result = tsa::features::crossCovariance(tss, tss) * n / (n - unbiased);
 
-    return af::reorder(result(0, span, span), 1, 2, 0, 3);
+    return af::reorder(result(0, af::span, af::span), 1, 2, 0, 3);
 }
 
 af::array tsa::statistics::moment(af::array tss, int k) {
@@ -54,11 +54,11 @@ af::array tsa::statistics::quantile(af::array tss, af::array q, float precision)
     af::array idx = q * (n - 1);
     af::array idxAsInt = idx.as(af::dtype::u32);
 
-    af::array a = af::tile(idxAsInt == idx, 1, tss.dims(1)) * tss(idx, span);
+    af::array a = af::tile(idxAsInt == idx, 1, tss.dims(1)) * tss(idx, af::span);
     af::array fraction = (idx * precision) % precision / precision;
 
-    af::array b = af::tile(idxAsInt != idx, 1, tss.dims(1)) * tss(idxAsInt, span) +
-                  (tss(idxAsInt + 1, span) - tss(idxAsInt, span)) * af::tile(fraction, 1, tss.dims(1));
+    af::array b = af::tile(idxAsInt != idx, 1, tss.dims(1)) * tss(idxAsInt, af::span) +
+                  (tss(idxAsInt + 1, af::span) - tss(idxAsInt, af::span)) * af::tile(fraction, 1, tss.dims(1));
     return a + b;
 }
 
@@ -68,7 +68,7 @@ af::array searchSorted(af::array tss, af::array qs) {
 
     af::array result = af::flip(af::sum(input < qsReordered, 2), 0);
 
-    result(0, span) += 1;
+    result(0, af::span) += 1;
 
     return result;
 }
@@ -81,17 +81,17 @@ af::array tsa::statistics::quantilesCut(af::array tss, float quantiles, float pr
     af::array ss = searchSorted(tss, qs);
 
     af::array qcut = af::array(qs.dims(0) - 1, 2, qs.dims(1), qs.type());
-    qcut(span, 0, span) = af::reorder(qs(af::seq(0, qs.dims(0) - 2), span), 0, 2, 1, 3);
-    qcut(span, 1, span) = af::reorder(qs(af::seq(1, qs.dims(0) - 1), span), 0, 2, 1, 3);
+    qcut(af::span, 0, af::span) = af::reorder(qs(af::seq(0, qs.dims(0) - 2), af::span), 0, 2, 1, 3);
+    qcut(af::span, 1, af::span) = af::reorder(qs(af::seq(1, qs.dims(0) - 1), af::span), 0, 2, 1, 3);
 
-    qcut(0, 0, span) -= precision;
+    qcut(0, 0, af::span) -= precision;
 
     af::array result = af::array(tss.dims(0), 2, tss.dims(1), tss.type());
 
     // With a parallel GFOR we cannot index by the matrix ss. It flattens it by default
     // gfor(af::seq i, tss.dims(1)) {
     for (int i = 0; i < tss.dims(1); i++) {
-        result(span, span, i) = qcut(ss(span, i) - 1, span, i);
+        result(af::span, af::span, i) = qcut(ss(af::span, i) - 1, af::span, i);
     }
 
     return result;

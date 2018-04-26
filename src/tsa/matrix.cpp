@@ -22,7 +22,7 @@ af::array tsa::matrix::slidingDotProduct(af::array q, af::array t) {
     // against all the time series contained in t
     af::array qt = af::real(af::convolve(t, qr, AF_CONV_EXPAND));
 
-    return qt(af::seq(m - 1, n - 1), span, span, span);
+    return qt(af::seq(m - 1, n - 1), af::span, af::span, af::span);
 }
 
 void tsa::matrix::meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &stdev) {
@@ -38,20 +38,20 @@ void tsa::matrix::meanStdev(af::array t, af::array &a, long m, af::array &mean, 
     af::array sum_t2 = af::constant(0, na - m + 1, t.dims(1), t.type());
 
     // Cumulative sum of each subsequence of all the time series contained in t
-    sum_t = cumulative_sum_t(af::seq(m - 1, na - 1), span) -
-            af::join(0, tmp, cumulative_sum_t(af::seq(0, na - m - 1), span));
+    sum_t = cumulative_sum_t(af::seq(m - 1, na - 1), af::span) -
+            af::join(0, tmp, cumulative_sum_t(af::seq(0, na - m - 1), af::span));
     // Cumulative sum of the element-wise square of each subsequence of all the time series contained in t
-    sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1), span) -
-             af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1), span));
+    sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1), af::span) -
+             af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1), af::span));
 
     // Mean of each subsequence of all the time series
     mean = sum_t / m;
     // Mean of the element-wise square of each subsequence of t
-    array mean_t2 = sum_t2 / m;
+    af::array mean_t2 = sum_t2 / m;
     // Square of the mean
-    array mean_t_p2 = af::pow(mean, 2);
+    af::array mean_t_p2 = af::pow(mean, 2);
     // Variance
-    array sigma_t2 = mean_t2 - mean_t_p2;
+    af::array sigma_t2 = mean_t2 - mean_t_p2;
     // Standard deviation
     stdev = af::sqrt(sigma_t2);
 
@@ -73,20 +73,20 @@ void tsa::matrix::meanStdev(af::array t, long m, af::array &mean, af::array &std
     af::array sum_t2 = af::constant(0, na - m + 1, t.dims(1), t.type());
 
     // Cumulative sum of each subsequence of all the time series contained in t
-    sum_t = cumulative_sum_t(af::seq(m - 1, na - 1), span) -
-            af::join(0, tmp, cumulative_sum_t(af::seq(0, na - m - 1), span));
+    sum_t = cumulative_sum_t(af::seq(m - 1, na - 1), af::span) -
+            af::join(0, tmp, cumulative_sum_t(af::seq(0, na - m - 1), af::span));
     // Cumulative sum of the element-wise square of each subsequence of all the time series contained in t
-    sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1), span) -
-             af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1), span));
+    sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1), af::span) -
+             af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1), af::span));
 
     // Mean of each subsequence of all the time series
     mean = sum_t / m;
     // Mean of the element-wise square of each subsequence of t
-    array mean_t2 = sum_t2 / m;
+    af::array mean_t2 = sum_t2 / m;
     // Square of the mean
-    array mean_t_p2 = af::pow(mean, 2);
+    af::array mean_t_p2 = af::pow(mean, 2);
     // Variance
-    array sigma_t2 = mean_t2 - mean_t_p2;
+    af::array sigma_t2 = mean_t2 - mean_t_p2;
     // Standard deviation
     stdev = af::sqrt(sigma_t2);
 }
@@ -246,7 +246,8 @@ void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
 
         // Store all the subsequences of all the time series from t in input
         for (long j = 0; j < m; j++) {
-            input(j, span, span, span) = af::reorder(tb(af::seq(i + j, i + j + iterationSize - 1), span), 2, 0, 1, 3);
+            input(j, af::span, af::span, af::span) =
+                af::reorder(tb(af::seq(i + j, i + j + iterationSize - 1), af::span), 2, 0, 1, 3);
         }
 
         // For all the subsequences in input for the given batch
@@ -255,7 +256,7 @@ void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
             af::array pidx;
 
             // Compute the distance and index profiles using Mueens algorithm for similarity search
-            tsa::matrix::mass(input(span, idx, span, span), ta, m, aux, mean, stdev, distance, pidx);
+            tsa::matrix::mass(input(af::span, idx, af::span, af::span), ta, m, aux, mean, stdev, distance, pidx);
 
             // Concat the profiles of the given chunk to the general result
             profile = join(0, profile, distance);
@@ -301,7 +302,8 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
 
         // Store all the subsequences of all the time series from t in input
         for (long j = 0; j < m; j++) {
-            input(j, span, span, span) = af::reorder(tb(af::seq(i + j, i + j + iterationSizeB - 1), span), 2, 0, 1, 3);
+            input(j, af::span, af::span, af::span) =
+                af::reorder(tb(af::seq(i + j, i + j + iterationSizeB - 1), af::span), 2, 0, 1, 3);
         }
 
         af::array distance = af::array(0, ta.type());
@@ -317,7 +319,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
             long end = start + iterationSizeA - 1;
 
             // Reference time series chunk to compare to
-            af::array taChunk = ta(af::seq(start, end), span);
+            af::array taChunk = ta(af::seq(start, end), af::span);
 
             af::array aux;
             af::array mean;
@@ -330,7 +332,8 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
                 af::array pidxTmp;
 
                 // Compute the distance and index profiles using Mueens algorithm for similarity search
-                tsa::matrix::mass(input(span, idx, span, span), taChunk, m, aux, mean, stdev, distanceTmp, pidxTmp);
+                tsa::matrix::mass(input(af::span, idx, af::span, af::span), taChunk, m, aux, mean, stdev, distanceTmp,
+                                  pidxTmp);
 
                 // Leaving 2nd dimension blank to join the partial results using it
                 distanceTmp = af::reorder(distanceTmp, 0, 2, 1, 3);
@@ -400,13 +403,13 @@ void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::
 
     // Store all the subsequences of all the time series from tb in input
     for (int i = 0; i < m; i++) {
-        input(i, span, span, span) = af::reorder(tb(af::seq(i, nb - m + i), span), 2, 0, 1, 3);
+        input(i, af::span, af::span, af::span) = af::reorder(tb(af::seq(i, nb - m + i), af::span), 2, 0, 1, 3);
     }
 
     // For all the subsequences of tb
     gfor(af::seq idx, nb - m + 1) {
         // Compute the distance and index profiles using Mueens algorithm for similarity search
-        tsa::matrix::mass(input(span, idx, span, span), ta, m, aux, mean, stdev, profile, index);
+        tsa::matrix::mass(input(af::span, idx, af::span, af::span), ta, m, aux, mean, stdev, profile, index);
     }
 
     // Moving the number of time series in tb, which is in the 4th dimension to the 3rd dimension
@@ -460,7 +463,8 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
 
         // Store all the subsequences of all the time series from t in input
         for (long j = 0; j < m; j++) {
-            input(j, span, span, span) = af::reorder(t(af::seq(i + j, i + j + iterationSizeB - 1), span), 2, 0, 1, 3);
+            input(j, af::span, af::span, af::span) =
+                af::reorder(t(af::seq(i + j, i + j + iterationSizeB - 1), af::span), 2, 0, 1, 3);
         }
 
         af::array distance = af::array(0, t.type());
@@ -479,7 +483,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
             long end = start + iterationSizeA - 1;
 
             // Reference time series chunk to compare to
-            af::array tChunk = t(seq(start, end), span);
+            af::array tChunk = t(af::seq(start, end), af::span);
 
             af::array aux;
             af::array mean;
@@ -492,8 +496,9 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
                 af::array pidxTmp;
 
                 // Compute the distance and index profiles using Mueens algorithm for similarity search
-                tsa::matrix::mass(input(span, idx, span, span), tChunk, m, aux, mean, stdev,
-                                  mask(span, af::seq(start, start + iterationSizeA - m), span), distanceTmp, pidxTmp);
+                tsa::matrix::mass(input(af::span, idx, af::span, af::span), tChunk, m, aux, mean, stdev,
+                                  mask(af::span, af::seq(start, start + iterationSizeA - m), af::span), distanceTmp,
+                                  pidxTmp);
 
                 // Leaving 2nd dimension blank to join the partial results using it. Using the diag method because
                 // we only want the distances of a time series with itself
@@ -564,7 +569,7 @@ void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
 
     // Store all the subsequences of all the time series from tb in input
     for (int i = 0; i < m; i++) {
-        input(i, span, span, span) = af::reorder(t(af::seq(i, n - m + i), span), 2, 0, 1, 3);
+        input(i, af::span, af::span, af::span) = af::reorder(t(af::seq(i, n - m + i), af::span), 2, 0, 1, 3);
     }
 
     // Calculating the mask required to filter the trivial matches
@@ -573,7 +578,7 @@ void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
     // For all the subsequences of tb
     gfor(af::seq idx, n - m + 1) {
         // Compute the distance and index profiles using Mueens algorithm for similarity search
-        tsa::matrix::mass(input(span, idx, span, span), t, m, aux, mean, stdev, mask, profile, index);
+        tsa::matrix::mass(input(af::span, idx, af::span, af::span), t, m, aux, mean, stdev, mask, profile, index);
     }
 
     // Using the diag method because
@@ -584,7 +589,7 @@ void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
     af::sync();
 }
 
-void tsa::matrix::stomp(array t, long m, af::array &profile, af::array &index) {
+void tsa::matrix::stomp(af::array t, long m, af::array &profile, af::array &index) {
     if (t.dims(0) > BATCH_SIZE) {
         // Calculates the distance and index profiles using a double batching strategy. First by the number of query
         // sequences from t to compare simultaneously; and second, the chunk size of the reference time series t
@@ -608,7 +613,7 @@ void tsa::matrix::findBestNMotifs(af::array profile, af::array index, long n, af
     af::sort(sortedDistances, sortedIndices, profileTiled, joined, 0, true);
 
     // Taking the best n indices
-    af::array bestNIndices = sortedIndices(af::seq(n), span);
+    af::array bestNIndices = sortedIndices(af::seq(n), af::span);
     // Distance of the best n motifs
     motifs = sortedDistances(af::seq(n));
     // Index of the reference subsequence producing the minimum
@@ -630,7 +635,7 @@ void tsa::matrix::findBestNDiscords(af::array profile, af::array index, long n, 
     af::sort(sortedDistances, sortedIndices, profileTiled, joined, 0, false);
 
     // Taking the best n indices
-    af::array bestNIndices = sortedIndices(af::seq(n), span);
+    af::array bestNIndices = sortedIndices(af::seq(n), af::span);
     // Distance of the best n discords
     discords = sortedDistances(af::seq(n));
     // Index of the reference subsequence producing the maximum

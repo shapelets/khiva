@@ -21,16 +21,16 @@ void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af:
 
     // Assuming xss and yss contain the same number of time series
     for (int i = 0; i < xss.dims(1); i++) {
-        sumSquares(span, span, i) = tsa::statistics::covariance(af::join(1, xss(span, i), yss(span, i)));
+        sumSquares(af::span, af::span, i) = tsa::statistics::covariance(af::join(1, xss(af::span, i), yss(af::span, i)));
     }
 
-    af::array ssxm = sumSquares(0, 0, span);
+    af::array ssxm = sumSquares(0, 0, af::span);
     ssxm = af::reorder(ssxm, 0, 2, 1, 3);
-    af::array ssxym = sumSquares(0, 1, span);
+    af::array ssxym = sumSquares(0, 1, af::span);
     ssxym = af::reorder(ssxym, 0, 2, 1, 3);
-    af::array ssyxm = sumSquares(1, 0, span);
+    af::array ssyxm = sumSquares(1, 0, af::span);
     ssyxm = af::reorder(ssyxm, 0, 2, 1, 3);
-    af::array ssym = sumSquares(1, 1, span);
+    af::array ssym = sumSquares(1, 1, af::span);
     ssym = af::reorder(ssym, 0, 2, 1, 3);
 
     af::array rNum = ssxym;

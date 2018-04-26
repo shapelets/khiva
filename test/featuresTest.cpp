@@ -228,7 +228,7 @@ void approximateEntropy() {
     float r = 0.5;
     af::array a(10, data);
     a = af::tile(a, 1, 2);
-    a(span, 1) += 10;
+    a(af::span, 1) += 10;
 
     af::array res = tsa::features::approximateEntropy(a, m, r);
 

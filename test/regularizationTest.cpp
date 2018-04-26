@@ -54,9 +54,9 @@ void groupByDoubleKeyDoubleValueColumn() {
 
     af::array input = af::constant(0, tss.dims(0) - 1, 4, tss.type());
 
-    input(span, af::seq(2)) += tsa::statistics::quantilesCut(tss(af::seq(5)), 2);
-    input(span, 2) += tss(af::seq(5));
-    input(span, 3) += af::diff1(tss, 0);
+    input(af::span, af::seq(2)) += tsa::statistics::quantilesCut(tss(af::seq(5)), 2);
+    input(af::span, 2) += tss(af::seq(5));
+    input(af::span, 3) += af::diff1(tss, 0);
 
     float expected[] = {1, 3.5, 1, 1};
 

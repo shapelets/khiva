@@ -16,7 +16,7 @@ af::array tsa::distances::squaredEuclidean(af::array tss) {
     // for each time series, calculate in parallel all distances
     for (auto currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
         gfor(af::seq otherCol, currentCol + 1, numOfTs - 1) {
-            result(currentCol, otherCol) = af::sum(af::pow(tss(span, currentCol) - tss(span, otherCol), 2));
+            result(currentCol, otherCol) = af::sum(af::pow(tss(af::span, currentCol) - tss(af::span, otherCol), 2));
         }
     }
 
