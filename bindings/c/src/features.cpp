@@ -204,6 +204,12 @@ void first_location_of_minimum(af_array *array, af_array *result) {
     af_retain_array(result, tsa::features::firstLocationOfMinimum(var).get());
 }
 
+void friedrich_coefficients(af_array *array, int *m, float *r, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::friedrichCoefficients(var, *m, *r).get());
+}
+
 void has_duplicates(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
@@ -272,6 +278,12 @@ void linear_trend(af_array *array, af_array *pvalue, af_array *rvalue, af_array 
     af_retain_array(stdrr, primitive_stdrr.get());
 }
 
+void local_maximals(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::localMaximals(var).get());
+}
+
 void longest_strike_above_mean(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
@@ -338,16 +350,36 @@ void number_crossing_m(af_array *array, int *m, af_array *result) {
     af_retain_array(result, tsa::features::numberCrossingM(var, *m).get());
 }
 
+void number_cwt_peaks(af_array *array, int *max_w, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::numberPeaks(var, *max_w).get());
+}
+
 void number_peaks(af_array *array, int *n, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::numberPeaks(var, *n).get());
 }
 
+void partial_autocorrelation(af_array *array, af_array *lags, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af::array var_lags = af::array(*lags);
+    af_retain_array(lags, var_lags.get());
+    af_retain_array(result, tsa::features::partialAutocorrelation(var, var_lags).get());
+}
+
 void percentage_of_reoccurring_datapoints_to_all_datapoints(af_array *array, bool *is_sorted, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(var, *is_sorted).get());
+}
+
+void percentage_of_reoccurring_values_to_all_values(af_array *array, bool *is_sorted, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::percentageOfReoccurringValuesToAllValues(var, *is_sorted).get());
 }
 
 void quantile(af_array *array, af_array *q, float *precision, af_array *result) {
@@ -358,10 +390,22 @@ void quantile(af_array *array, af_array *q, float *precision, af_array *result) 
     af_retain_array(result, tsa::features::quantile(var, var_q, *precision).get());
 }
 
+void range_count(af_array *array, float *min, float *max, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::rangeCount(var, *min, *max).get());
+}
+
 void ratio_beyond_r_sigma(af_array *array, float *r, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::ratioBeyondRSigma(var, *r).get());
+}
+
+void ratio_value_number_to_time_series_length(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::ratioValueNumberToTimeSeriesLength(var).get());
 }
 
 void sample_entropy(af_array *array, af_array *result) {
@@ -376,6 +420,12 @@ void skewness(af_array *array, af_array *result) {
     af_retain_array(result, tsa::features::skewness(var).get());
 }
 
+void spkt_welch_density(af_array *array, int *coeff, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::spktWelchDensity(var, *coeff).get());
+}
+
 void standard_deviation(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
@@ -388,16 +438,46 @@ void sum_of_reoccurring_datapoints(af_array *array, bool *is_sorted, af_array *r
     af_retain_array(result, tsa::features::sumOfReoccurringDatapoints(var, *is_sorted).get());
 }
 
+void sum_of_reoccurring_values(af_array *array, bool *is_sorted, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::sumOfReoccurringValues(var, *is_sorted).get());
+}
+
+void sum_values(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::sumValues(var).get());
+}
+
 void symmetry_looking(af_array *array, float *r, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::symmetryLooking(var, *r).get());
 }
 
+void time_reversal_asymmetry_statistic(af_array *array, int *lag, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::timeReversalAsymmetryStatistic(var, *lag).get());
+}
+
 void value_count(af_array *array, float *v, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::valueCount(var, *v).get());
+}
+
+void variance(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::variance(var).get());
+}
+
+void variance_larger_than_standard_deviation(af_array *array, af_array *result) {
+    af::array var = af::array(*array);
+    af_retain_array(array, var.get());
+    af_retain_array(result, tsa::features::varianceLargerThanStandardDeviation(var).get());
 }
 
 #ifdef __cplusplus

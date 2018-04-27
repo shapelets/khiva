@@ -616,6 +616,20 @@ void tsa::features::linearTrend(af::array tss, af::array &pvalue, af::array &rva
     tsa::regression::linear(yss, tss, slope, intercept, rvalue, pvalue, stderr);
 }
 
+af::array tsa::features::localMaximals(af::array tss) {
+    af::array plus = af::shift(tss, 0, -1);
+    plus(af::span, plus.dims(1) - 1, af::span) = plus(af::span, plus.dims(1) - 2, af::span);
+
+    af::array minus = af::shift(tss, 0, 1);
+    minus(af::span, 0, af::span) = minus(af::span, 1, af::span);
+
+    af::array res1 = (tss > plus);
+    af::array res2 = (tss > minus);
+    af::array result = (res1 * res2).as(af::dtype::s32);
+
+    return result;
+}
+
 af::array tsa::features::longestStrikeAboveMean(af::array tss) {
     // Calculating the mean of each time series contained in tss
     af::array mean = af::mean(tss, 0);
@@ -674,20 +688,6 @@ af::array tsa::features::minimum(af::array tss) { return af::min(tss, 0); }
 
 af::array tsa::features::numberCrossingM(af::array tss, int m) {
     return af::sum(af::abs(af::diff1(tss > m)), 0).as(tss.type());
-}
-
-af::array tsa::features::localMaximals(af::array tss) {
-    af::array plus = af::shift(tss, 0, -1);
-    plus(af::span, plus.dims(1) - 1, af::span) = plus(af::span, plus.dims(1) - 2, af::span);
-
-    af::array minus = af::shift(tss, 0, 1);
-    minus(af::span, 0, af::span) = minus(af::span, 1, af::span);
-
-    af::array res1 = (tss > plus);
-    af::array res2 = (tss > minus);
-    af::array result = (res1 * res2).as(af::dtype::s32);
-
-    return result;
 }
 
 int indexMinValue(std::vector<int> values) {
@@ -1059,7 +1059,7 @@ af::array tsa::features::ratioBeyondRSigma(af::array tss, float r) {
 af::array tsa::features::ratioValueNumberToTimeSeriesLength(af::array tss) {
     af::array result = af::constant(0, 1, tss.dims(1), tss.type());
     for (int i = 0; i < tss.dims(1); i++) {
-        int n = af::setUnique(tss(af::span, i)).dims(0);
+        float n = af::setUnique(tss(af::span, i)).dims(0);
         result(0, i) = n / tss.dims(0);
     }
     return result;
@@ -1206,9 +1206,9 @@ af::array tsa::features::spktWelchDensity(af::array tss, int coeff) {
     af::array window = hannWindow(tss.dims(0), false);
     float scale = 1.0 / (fs * af::sum(window * window, 0).scalar<float>());
 
-    af::array out = af::constant(0, tss.dims(0) / 2 + 1, tss.dims(1), tss.type());
+    af::array out = af::constant(0, 1, tss.dims(1), tss.type());
     for (int i = 0; i < tss.dims(1); i++) {
-        af::array result = fftHelper(tss, window, nperseg, noverlap, nfft);
+        af::array result = fftHelper(tss, window, nperseg, noverlap, nfft)(coeff, af::span);
         result = af::conjg(result) * result;
         result *= scale;
         result *= 2;

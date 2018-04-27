@@ -872,7 +872,7 @@ void partialAutocorrelation() {
     float len = 3000.0;
     float *input = (float *)malloc(sizeof(float) * len);
     float step = 1.0 / (len - 1);
-    for (int i = 1; i < len; i++) {
+    for (int i = 0; i < len; i++) {
         input[i] = step * i;
     }
 
@@ -1022,7 +1022,7 @@ void spktWelchDensity() {
     af::array result = tsa::features::spktWelchDensity(tss, coeff);
     float *calculated = result.host<float>();
 
-    float expected[] = {3.3333334922790527, 19.865583419799805};
+    float expected[] = {3.3333334922790527, 3.3333334922790527};
 
     ASSERT_NEAR(calculated[0], expected[0], 1e-5);
     ASSERT_NEAR(calculated[1], expected[1], 1e-5);
@@ -1208,6 +1208,7 @@ TSA_TEST(FeaturesTests, PercentageOfReoccurringValuesToAllValues, percentageOfRe
 TSA_TEST(FeaturesTests, Quantile, quantile);
 TSA_TEST(FeaturesTests, RangeCount, rangeCount);
 TSA_TEST(FeaturesTests, RatioBeyondRSigma, ratioBeyondRSigma);
+TSA_TEST(FeaturesTests, RatioValueNumberToTimeSeriesLength, ratioValueNumberToTimeSeriesLength);
 TSA_TEST(FeaturesTests, SampleEntropy, sampleEntropy);
 TSA_TEST(FeaturesTests, Skewness, skewness);
 TSA_TEST(FeaturesTests, SpktWelchDensity, spktWelchDensity);

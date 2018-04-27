@@ -571,6 +571,29 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_firstLocationOfMinimum(JNIEnv *en
     return pointers;
 }
 
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_friedrichCoefficients(JNIEnv *env, jobject thisObj, jlong ref, jint m,
+                                                                     jfloat r) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::friedrichCoefficients(var, m, r).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_hasDuplicates(JNIEnv *env, jobject thisObj, jlong ref) {
     jint l = 2;
     jlong tmp[l];
@@ -821,6 +844,28 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_linearTrend(JNIEnv *env, jobject 
     return pointers;
 }
 
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_localMaximals(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::localMaximals(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_longestStrikeAboveMean(JNIEnv *env, jobject thisObj, jlong ref) {
     jint l = 2;
     jlong tmp[l];
@@ -1064,6 +1109,28 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_numberCrossingM(JNIEnv *env, jobj
     return pointers;
 }
 
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_numberCwtPeaks(JNIEnv *env, jobject thisObj, jlong ref, jint maxW) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::numberCwtPeaks(var, maxW).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_numberPeaks(JNIEnv *env, jobject thisObj, jlong ref, jint n) {
     jint l = 2;
     jlong tmp[l];
@@ -1086,6 +1153,33 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_numberPeaks(JNIEnv *env, jobject 
     return pointers;
 }
 
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_partialAutocorrelation(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                      jlong lags) {
+    jint l = 3;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+    af_array arr_lags = (af_array)lags;
+    af::array var_lags = af::array(arr_lags);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&arr_lags, var_lags.get());
+
+    af_retain_array(&af_p, tsa::features::partialAutocorrelation(var, var_lags).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)arr_lags;
+    tmp[2] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_percentageOfReoccurringDatapointsToAllDatapoints(JNIEnv *env,
                                                                                                 jobject thisObj,
                                                                                                 jlong ref,
@@ -1102,6 +1196,29 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_percentageOfReoccurringDatapoints
 
     af_retain_array(&arr, var.get());
     af_retain_array(&af_p, tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(var, isSorted).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_percentageOfReoccurringValuesToAllValues(JNIEnv *env, jobject thisObj,
+                                                                                        jlong ref, jboolean isSorted) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::percentageOfReoccurringValuesToAllValues(var, isSorted).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -1138,6 +1255,29 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_quantile(JNIEnv *env, jobject thi
     return pointers;
 }
 
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_rangeCount(JNIEnv *env, jobject thisObj, jlong ref, jfloat min,
+                                                          jfloat max) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::rangeCount(var, min, max).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject thisObj, jlong ref, jfloat r) {
     jint l = 2;
     jlong tmp[l];
@@ -1151,6 +1291,29 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jo
 
     af_retain_array(&arr, var.get());
     af_retain_array(&af_p, tsa::features::ratioBeyondRSigma(var, r).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_ratioValueNumberToTimeSeriesLength(JNIEnv *env, jobject thisObj,
+                                                                                  jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::ratioValueNumberToTimeSeriesLength(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -1195,6 +1358,28 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_skewness(JNIEnv *env, jobject thi
 
     af_retain_array(&arr, var.get());
     af_retain_array(&af_p, tsa::features::skewness(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_spktWelchDensity(JNIEnv *env, jobject thisObj, jlong ref, jint coeff) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::spktWelchDensity(var, coeff).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -1249,6 +1434,51 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_sumOfReoccurringDatapoints(JNIEnv
     return pointers;
 }
 
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_sumOfReoccurringValues(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                      jboolean isSorted) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::sumOfReoccurringValues(var, isSorted).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_sumValues(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::sumValues(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_symmetryLooking(JNIEnv *env, jobject thisObj, jlong ref, jfloat r) {
     jint l = 2;
     jlong tmp[l];
@@ -1271,6 +1501,29 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_symmetryLooking(JNIEnv *env, jobj
     return pointers;
 }
 
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_timeReversalAsymmetryStatistic(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                              jint lag) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::timeReversalAsymmetryStatistic(var, lag).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_valueCount(JNIEnv *env, jobject thisObj, jlong ref, jfloat v) {
     jint l = 2;
     jlong tmp[l];
@@ -1284,6 +1537,51 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_valueCount(JNIEnv *env, jobject t
 
     af_retain_array(&arr, var.get());
     af_retain_array(&af_p, tsa::features::valueCount(var, v).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_variance(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::variance(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_varianceLargerThanStandardDeviation(JNIEnv *env, jobject thisObj,
+                                                                                   jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::features::varianceLargerThanStandardDeviation(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;

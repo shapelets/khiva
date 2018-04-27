@@ -206,8 +206,8 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_countBelowMean(JNIEnv *env, jobje
  * the "Mexican hat wavelet" which is defined by:
  *
  *  \f[
- *      \\frac{2}{\\sqrt{3a} \\pi^{
- *  \\frac{1} { 4 }}} (1 - \\frac{x^2}{a^2}) exp(-\\frac{x^2}{2a^2})
+ *      \frac{2}{\sqrt{3a} \pi^{
+ *  \frac{1} { 4 }}} (1 - \frac{x^2}{a^2}) exp(-\frac{x^2}{2a^2})
  *  \f]
  *
  *  where :math:`a` is the width parameter of the wavelet function.
@@ -294,6 +294,26 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_firstLocationOfMaximum(JNIEnv *en
  * @return The updated ref and the first relative location of the minimal value of each series.
  */
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_firstLocationOfMinimum(JNIEnv *env, jobject thisObj, jlong ref);
+
+/**
+ * @brief Coefficients of polynomial \f$h(x)\f$, which has been fitted to the deterministic
+ * dynamics of Langevin model:
+ * \f[
+ *    \dot(x)(t) = h(x(t)) + R \mathcal(N)(0,1)
+ * \f]
+ * as described by [1]. For short time series this method is highly dependent on the parameters.
+ *
+ * [1] Friedrich et al. (2000): Physics Letters A 271, p. 217-222
+ * Extracting model equations from experimental data.
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param m Order of polynom to fit for estimating fixed points of dynamics.
+ * @param r Number of quantils to use for averaging.
+ * @return The updated ref and the coefficients for each time series.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_friedrichCoefficients(JNIEnv *env, jobject thisObj, jlong ref, jint m,
+                                                                     jfloat r);
 
 /**
  * @brief Calculates if the input time series contain duplicated elements.
@@ -404,12 +424,21 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_length(JNIEnv *env, jobject thisO
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_linearTrend(JNIEnv *env, jobject thisObj, jlong ref);
 
 /**
+ * @brief Calculates all Local Maximals fot the time series in ref.
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @return The updated ref and the calculated local maximals for each time series in array.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_localMaximals(JNIEnv *env, jobject thisObj, jlong ref);
+
+/**
  * @brief Calculates the length of the longest consecutive subsequence in ref that is bigger than the mean of ref.
  *
- * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
- * one indicates the number of time series.
- * @return The updated ref and the length of the longest consecutive subsequence in the input time series that is bigger
- * than the mean.
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return The updated ref and the length of the longest consecutive subsequence in the input time series that is
+ * bigger than the mean.
  */
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_longestStrikeAboveMean(JNIEnv *env, jobject thisObj, jlong ref);
 
@@ -516,6 +545,18 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_minimum(JNIEnv *env, jobject this
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_numberCrossingM(JNIEnv *env, jobject thisObj, jlong ref, jint m);
 
 /**
+ * @brief This feature calculator searches for different peaks. To do so, the time series is smoothed by a ricker
+ * wavelet and for widths ranging from 1 to maxW. This feature calculator returns the number of peaks that occur at
+ * enough width scales and with sufficiently high Signal-to-Noise-Ratio (SNR).
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param maxW The maximum width to consider.
+ * @return The updated ref and the number of peaks for each time series.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_numberCwtPeaks(JNIEnv *env, jobject thisObj, jlong ref, jint maxW);
+
+/**
  * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$ref\f$. A peak of support
  * \f$n\f$ is defined as a subsequence of \f$ref\f$ where a value occurs, which is bigger than its \f$n\f$ neighbours to
  * the left and to the right.
@@ -528,12 +569,41 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_numberCrossingM(JNIEnv *env, jobj
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_numberPeaks(JNIEnv *env, jobject thisObj, jlong ref, jint n);
 
 /**
+ * @brief Calculates the value of the partial autocorrelation function at the given lag. The lag \f$k\f$ partial
+ * autocorrelation of a time series \f$\lbrace x_t, t = 1 \ldots T \rbrace\f$ equals the partial correlation of
+ \f$x_t\f$ and \f$x_{t-k}\f$, adjusted for the intermediate variables \f$\lbrace x_{t-1}, \ldots, x_{t-k+1}
+ \rbrace\f$ ([1]). Following [2], it can be defined as:
+ *
+ * \f[
+        \alpha_k = \frac{ Cov(x_t, x_{t-k} | x_{t-1}, \ldots, x_{t-k+1})}
+        {\sqrt{ Var(x_t | x_{t-1}, \ldots, x_{t-k+1}) Var(x_{t-k} | x_{t-1}, \ldots, x_{t-k+1} )}}
+ * \f]
+ * with (a) \f$x_t = f(x_{t-1}, \ldots, x_{t-k+1})\f$ and (b) \f$ x_{t-k} = f(x_{t-1}, \ldots, x_{t-k+1})\f$
+    being AR(k-1) models that can be fitted by OLS. Be aware that in (a), the regression is done on past values to
+    predict \f$ x_t \f$ whereas in (b), future values are used to calculate the past value \f$x_{t-k}\f$.
+    It is said in [1] that "for an AR(p), the partial autocorrelations \f$ \alpha_k \f$ will be nonzero for \f$ k<=p \f$
+    and zero for \f$ k>p \f$."
+* With this property, it is used to determine the lag of an AR-Process.
+*
+* [1] Box, G. E., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015).
+* Time series analysis: forecasting and control. John Wiley & Sons.
+* [2] https://onlinecourses.science.psu.edu/stat510/node/62
+*
+* @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+* one indicates the number of time series.
+* @param lags Indicates the lags to be calculated.
+* @return The updated refs and the partial autocorrelation for each time series for the given lag.
+*/
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_partialAutocorrelation(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                      jlong lags);
+
+/**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
  * \f[
  *      len(different values occurring more than once) / len(different values)
  * \f]
  * This means the percentage is normalized to the number of unique values, in contrast to the
- * percentageOfReoccurringValuesToAllValues.
+ * Java_tsa_Features_percentageOfReoccurringValuesToAllValues.
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
@@ -545,6 +615,22 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_percentageOfReoccurringDatapoints
                                                                                                 jobject thisObj,
                                                                                                 jlong ref,
                                                                                                 jboolean isSorted);
+
+/**
+ * @brief Calculates the percentage of unique values, that are present in the time series more than once.
+ * \f[
+ *      \frac{\textit{number of data points occurring more than once}}{\textit{number of all data points})}
+ * \f]
+ * This means the percentage is normalized to the number of unique values, in contrast to the
+ * Java_tsa_Features_percentageOfReoccurringDatapointsToAllDatapoints.
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
+ * @return The updated ref and the percentage of unique values, that are present in the time series more than once.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_percentageOfReoccurringValuesToAllValues(JNIEnv *env, jobject thisObj,
+                                                                                        jlong ref, jboolean isSorted);
 
 /**
  * @brief Returns values at the given quantile.
@@ -560,6 +646,19 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_quantile(JNIEnv *env, jobject thi
                                                         jfloat precision);
 
 /**
+ * @brief Counts observed values within the interval [min, max).
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time
+ * series (all the same) and dimension one indicates the number of
+ * time series.
+ * @param min Value that sets the lower limit.
+ * @param max Value that sets the upper limit.
+ * @return The updated ref and the values at the given range.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_rangeCount(JNIEnv *env, jobject thisObj, jlong ref, jfloat min,
+                                                          jfloat max);
+
+/**
  * @brief Calculates the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
  * \f$x\f$.
  *
@@ -570,6 +669,22 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_quantile(JNIEnv *env, jobject thi
  * the mean of \f$x\f$.
  */
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject thisObj, jlong ref, jfloat r);
+
+/**
+ * @brief Calculates a factor which is 1 if all values in the time series occur only once, and below one if this is
+ * not the case. In principle, it just returns:
+ *
+ * \f[
+ *      \frac{\textit{number_unique_values}}{\textit{number_values}}
+ * \f]
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return The updated ref and the ratio of unique values with respect to the total number of values.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_ratioValueNumberToTimeSeriesLength(JNIEnv *env, jobject thisObj,
+                                                                                  jlong ref);
+
 /**
  * @brief Calculates a vectorized sample entropy algorithm.
  * https://en.wikipedia.org/wiki/Sample_entropy
@@ -597,6 +712,26 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_sampleEntropy(JNIEnv *env, jobjec
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_skewness(JNIEnv *env, jobject thisObj, jlong ref);
 
 /**
+ * @brief Estimates the cross power spectral density of the time series ref at different frequencies. To do so, the
+ * time series is first shifted from the time domain to the frequency domain.
+ *
+ * Welch's method computes an estimate of the power spectral density by dividing the data into overlapping
+ * segments, computing a modified periodogram for each segment and averaging the periodograms.
+ * [1] P. Welch, "The use of the fast Fourier transform for the estimation of power spectra: A method based on time
+ *  averaging over short, modified periodograms", IEEE Trans. Audio Electroacoust. vol. 15, pp. 70-73, 1967.
+ * [2] M.S. Bartlett, "Periodogram Analysis and Continuous Spectra", Biometrika, vol. 37, pp. 1-16, 1950.
+ * [3] Rabiner, Lawrence R., and B. Gold. "Theory and Application of Digital Signal Processing" Prentice-Hall, pp.
+ * 414-419, 1975.
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @param coeff The coefficient to be returned.
+ * @return The updated ref and the power spectrum of the different
+ * frequencies for each time series in ref.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_spktWelchDensity(JNIEnv *env, jobject thisObj, jlong ref, jint coeff);
+
+/**
  * @brief Calculates the standard deviation of each time series within ref.
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -617,6 +752,26 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_sumOfReoccurringDatapoints(JNIEnv
                                                                           jboolean isSorted);
 
 /**
+ * @brief Calculates the sum of all values, that are present in the time series more than once.
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same)
+ * and dimension one indicates the number of time series.
+ * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
+ * @return The updated ref and the sum of all values, that are present in the time series more than once.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_sumOfReoccurringValues(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                      jboolean isSorted);
+
+/**
+ * @brief Calculates the sum over the time series ref.
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return The updated ref and an array containing the sum of values in each time series.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_sumValues(JNIEnv *env, jobject thisObj, jlong ref);
+
+/**
  * @brief Calculates if the distribution of ref *looks symmetric*. This is the case if
  * \f[
  *      | mean(ref)-median(ref)| < r * (max(ref)-min(ref))
@@ -630,6 +785,29 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_sumOfReoccurringDatapoints(JNIEnv
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_symmetryLooking(JNIEnv *env, jobject thisObj, jlong ref, jfloat r);
 
 /**
+ * @brief This function calculates the value of:
+ * \f[
+ *      \frac{1}{n-2lag} \sum_{i=0}^{n-2lag} x_{i + 2 \cdot lag}^2 \cdot x_{i + lag} - x_{i + lag} \cdot  x_{i}^2
+ * \f]
+ * which is
+ * \f[
+ *       \mathbb{E}[L^2(X)^2 \cdot L(X) - L(X) \cdot X^2]
+ * \f]
+ * where \f$ \mathbb{E} \f$ is the mean and \f$ L \f$ is the lag operator. It was proposed in [1] as a promising
+ *  feature to extract from time series.
+ *
+ * [1] Fulcher, B.D., Jones, N.S. (2014). Highly comparative feature-based time-series classification.
+ * Knowledge and Data Engineering, IEEE Transactions on 26, 3026–3037.
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @param lag The lag to be computed.
+ * @return The updated ref and an array containing the time reversal asymetry statistic value in each time series.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_timeReversalAsymmetryStatistic(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                              jint lag);
+
+/**
  * @brief Counts occurrences of value in the time series ref.
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -638,6 +816,26 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_symmetryLooking(JNIEnv *env, jobj
  * @return The updated ref and an array containing the count of the given value in each time series.
  */
 JNIEXPORT jlongArray JNICALL Java_tsa_Features_valueCount(JNIEnv *env, jobject thisObj, jlong ref, jfloat v);
+
+/**
+ * @brief Computes the variance for the time series ref.
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return The updated ref and an array containing the variance in each time series.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_variance(JNIEnv *env, jobject thisObj, jlong ref);
+
+/**
+ * @brief Calculates if the variance of ref is greater than the standard deviation. In other words, if the variance of
+ * ref is larger than 1.
+ *
+ * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @return The updated ref and an array denoting if the variance of ref is greater than the standard deviation.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_varianceLargerThanStandardDeviation(JNIEnv *env, jobject thisObj,
+                                                                                   jlong ref);
 #ifdef __cplusplus
 }
 #endif
