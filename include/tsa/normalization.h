@@ -82,6 +82,5 @@ af::array decimalScalingNorm(af::array tss);
  */
 void decimalScalingNormInPlace(af::array &tss);
 
-// adaptive normalization
 };  // namespace normalization
 };  // namespace tsa

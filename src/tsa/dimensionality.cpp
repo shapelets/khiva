@@ -128,7 +128,8 @@ af::array tsa::dimensionality::PAA(af::array a, int bins) {
     return result;
 }
 
-std::vector<tsa::dimensionality::Point> PAA(std::vector<tsa::dimensionality::Point> points, int bins) {
+std::vector<tsa::dimensionality::Point> tsa::dimensionality::PAA(std::vector<tsa::dimensionality::Point> points,
+                                                                 int bins) {
     auto begin = points.begin();
     auto last = points.end();
     double xrange = (*(last - 1)).first - (*begin).first;
