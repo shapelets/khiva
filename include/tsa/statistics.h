@@ -10,57 +10,54 @@ namespace tsa {
 
 namespace statistics {
 /**
- * @brief Returns the covariance matrix of the time series contained in tss
+ * @brief Returns the covariance matrix of the time series contained in tss.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @param unbiased Determines whether it divides by n - 1 (if false) or
- * n (if true)
- * @return af::array The covariance matrix of the time series
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
+ * @param unbiased Determines whether it divides by n - 1 (if false) or n (if true).
+ *
+ * @return af::array The covariance matrix of the time series.
  */
 af::array covariance(af::array tss, bool unbiased = true);
 
 /**
- * @brief Returns the kth moment of the given time series
+ * @brief Returns the kth moment of the given time series.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @param k The specific moment to calculate
- * @return af::array The kth moment of the given time series
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
+ * @param k The specific moment to be calculated.
+ *
+ * @return af::array The kth moment of the given time series.
  */
 af::array moment(af::array tss, int k);
 
 /**
- * @brief Estimates standard deviation based on a sample.
- * The standard deviation is calculated using the "n-1" method
+ * @brief Estimates standard deviation based on a sample. The standard deviation is calculated using the "n-1" method.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @return af::array The sample standard deviation
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
+ *
+ * @return af::array The sample standard deviation.
  */
 af::array sampleStdev(af::array tss);
 
 /**
- * @brief Returns the kurtosis of tss (calculated with the adjusted Fisher-Pearson
- * standardized moment coefficient G2).
+ * @brief Returns the kurtosis of tss (calculated with the adjusted Fisher-Pearson standardized moment coefficient G2).
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
- * @return af::array The kurtosis of tss
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
+ *
+ * @return af::array The kurtosis of tss.
  */
 af::array kurtosis(af::array tss);
 
 /**
- * @brief Calculates the sample skewness of tss (calculated with the adjusted Fisher-Pearson standardized
- * moment coefficient G1).
+ * @brief Calculates the sample skewness of tss (calculated with the adjusted Fisher-Pearson standardized moment
+ * coefficient G1).
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series.
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
+ *
  * @return af::array Array containing the skewness of each time series in tss.
  */
 af::array skewness(af::array tss);
@@ -68,11 +65,11 @@ af::array skewness(af::array tss);
 /**
  * @brief Returns values at the given quantile.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series. NOTE: the time series should be sorted
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series. NOTE: the time series should be sorted.
  * @param q Percentile(s) at which to extract score(s). One or many.
  * @param precision Number of decimals expected.
+ *
  * @return af::array Values at the given quantile.
  */
 af::array quantile(af::array tss, af::array q, float precision = 1e8);
@@ -80,13 +77,13 @@ af::array quantile(af::array tss, af::array q, float precision = 1e8);
 /**
  * @brief Discretizes the time series into equal-sized buckets based on sample quantiles.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time
- * series (all the same) and dimension one indicates the number of
- * time series. NOTE: the time series should be sorted
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series. NOTE: the time series should be sorted.
  * @param quantiles Number of quantiles to extract. From 0 to 1, step 1/quantiles.
  * @param precision Number of decimals expected.
- * @return af::array Matrix with the categories, one category per row, the start of
- * the category in the first column and the end in the second category.
+ *
+ * @return af::array Matrix with the categories, one category per row, the start of the category in the first column and
+ * the end in the second category.
  */
 af::array quantilesCut(af::array tss, float quantiles, float precision = 1e-8);
 };  // namespace statistics

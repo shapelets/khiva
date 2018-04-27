@@ -637,7 +637,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_hasDuplicateMin(JNIEnv *env, jobj
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Features_indexMaxQuantile(JNIEnv *env, jobject thisObj, jlong ref, jfloat q) {
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_indexMassQuantile(JNIEnv *env, jobject thisObj, jlong ref, jfloat q) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -649,7 +649,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_indexMaxQuantile(JNIEnv *env, job
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::features::indexMaxQuantile(var, q).get());
+    af_retain_array(&af_p, tsa::features::indexMassQuantile(var, q).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;

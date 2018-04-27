@@ -14,13 +14,13 @@ namespace tsa {
 namespace polynomial {
 
 /**
- * @brief Least squares polynomial fit.
- * Fit a polynomial \f$p(x) = p[0] * x^{deg} + ... + p[deg]\f$ of degree \f$deg\f$ to points \f$(x, y)\f$. Returns a
- * vector of coefficients \f$p\f$ that minimises the squared error.
+ * @brief Least squares polynomial fit. Fit a polynomial \f$p(x) = p[0] * x^{deg} + ... + p[deg]\f$ of degree \f$deg\f$
+ * to points \f$(x, y)\f$. Returns a vector of coefficients \f$p\f$ that minimises the squared error.
  *
  * @param x x-coordinates of the M sample points \f$(x[i], y[i])\f$.
  * @param y y-coordinates of the sample points.
  * @param deg Degree of the fitting polynomial.
+ *
  * @return af::array Polynomial coefficients, highest power first.
  */
 af::array polyfit(af::array x, af::array y, int deg);
@@ -33,7 +33,8 @@ af::array polyfit(af::array x, af::array y, int deg);
  * \f]
  *
  * @param pp Array of polynomial coefficients.
- * @return af::array An array containing the roots of the polynomial.
+ *
+ * @return af::array Containing the roots of the polynomial.
  */
 af::array roots(af::array pp);
 };  // namespace polynomial

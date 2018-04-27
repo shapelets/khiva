@@ -555,7 +555,7 @@ af::array tsa::features::hasDuplicateMin(af::array tss) {
     return af::sum(tss == af::tile(minimum, tss.dims(0)), 0) > 1;
 }
 
-af::array tsa::features::indexMaxQuantile(af::array tss, float q) {
+af::array tsa::features::indexMassQuantile(af::array tss, float q) {
     float len = tss.dims(0);
 
     af::array positives = af::abs(tss);
@@ -1196,7 +1196,7 @@ af::array fftHelper(af::array tss, af::array win, int nperseg, int noverlap, int
     return result(af::seq(0, result.dims(0) / 2));
 }
 
-af::array tsa::features::spktWelchDensity(af::array tss) {
+af::array tsa::features::spktWelchDensity(af::array tss, int coeff) {
     float fs = 1.0;
     int nperseg = tss.dims(0);
     int nfft = tss.dims(0);

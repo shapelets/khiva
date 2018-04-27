@@ -128,6 +128,32 @@ af::array tsa::dimensionality::PAA(af::array a, int bins) {
     return result;
 }
 
+std::vector<tsa::dimensionality::Point> PAA(std::vector<tsa::dimensionality::Point> points, int bins) {
+    auto begin = points.begin();
+    auto last = points.end();
+    double xrange = (*(last - 1)).first - (*begin).first;
+    double width_bin = xrange / bins;
+    double reduction = bins / xrange;
+
+    std::vector<double> sum(bins, 0.0);
+    std::vector<int> counter(bins, 0);
+    std::vector<tsa::dimensionality::Point> result(bins, tsa::dimensionality::Point(0.0, 0.0));
+
+    // Iterating over the  timeseries
+    for (auto i = begin; i != last; i++) {
+        int pos = std::min((*i).first * reduction, (double)(bins - 1));
+        sum[pos] += (*i).second;
+        counter[pos] = counter[pos] + 1;
+    }
+
+    // Compute the average per bin
+    for (int i = 0; i < bins; i++) {
+        result[i].first = (width_bin * i) + (width_bin / 2.0);
+        result[i].second = sum[i] / counter[i];
+    }
+    return result;
+}
+
 std::vector<float> computeBreakpoints(int alphabet_size) {
     std::vector<float> res(alphabet_size - 1);
     boost::math::normal dist(0.0f, 1.0f);

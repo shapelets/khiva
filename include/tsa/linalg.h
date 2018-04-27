@@ -17,8 +17,9 @@ namespace linalg {
  * \f$D\dagger\f$ contains the inverse values of the singular values contained in D if they are not zero, and zero
  * otherwise.
  *
- * @param A A coefficient matrix containing the coefficients of the linear equation problem to solve.
- * @param b A vector with the measured values.
+ * @param A Coefficient matrix containing the coefficients of the linear equation problem to solve.
+ * @param b Vector with the measured values.
+ *
  * @return af::array Contains the solution to the linear equation problem minimizing the norm 2.
  */
 af::array lls(af::array A, af::array b);

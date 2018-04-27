@@ -471,7 +471,7 @@ void HasDuplicateMin(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
-void IndexMaxQuantile(benchmark::State &state) {
+void IndexMassQuantile(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
 
@@ -483,7 +483,7 @@ void IndexMaxQuantile(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto index = tsa::features::indexMaxQuantile(t, q);
+        auto index = tsa::features::indexMassQuantile(t, q);
         index.eval();
         af::sync();
     }
@@ -1037,7 +1037,7 @@ void SpktWelchDensity(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto stdev = tsa::features::spktWelchDensity(t);
+        auto stdev = tsa::features::spktWelchDensity(t, 0);
         stdev.eval();
         af::sync();
     }
@@ -1355,7 +1355,7 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(IndexMaxQuantile, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(IndexMassQuantile, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -1668,7 +1668,7 @@ void openclBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(IndexMaxQuantile, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(IndexMassQuantile, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -1984,7 +1984,7 @@ void cpuBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(IndexMaxQuantile, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(IndexMassQuantile, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {32, 256}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);

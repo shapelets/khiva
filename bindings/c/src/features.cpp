@@ -181,7 +181,7 @@ void fft_aggregated(af_array *array, af_array *result) {
 }
 
 void fft_coefficient(af_array *array, long *coefficient, af_array *real, af_array *imag, af_array *absolute,
-                    af_array *angle) {
+                     af_array *angle) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af::array primitive_real, primitive_imag, primitive_abs, primitive_angle;
@@ -222,10 +222,10 @@ void has_duplicate_min(af_array *array, af_array *result) {
     af_retain_array(result, tsa::features::hasDuplicateMin(var).get());
 }
 
-void index_max_quantile(af_array *array, float *q, af_array *result) {
+void index_mass_quantile(af_array *array, float *q, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
-    af_retain_array(result, tsa::features::indexMaxQuantile(var, *q).get());
+    af_retain_array(result, tsa::features::indexMassQuantile(var, *q).get());
 }
 
 void kurtosis(af_array *array, af_array *result) {

@@ -594,12 +594,12 @@ void hasDuplicateMin() {
     ASSERT_EQ(duplicateMinCalculated[1], false);
 }
 
-void indexMaxQuantile() {
+void indexMassQuantile() {
     float data[] = {5, 4, 3, 0, 0, 1, 5, 4, 0, 0, 2, 1};
     af::array tss(6, 2, data);
     float q = 0.5;
 
-    af::array result = tsa::features::indexMaxQuantile(tss, q);
+    af::array result = tsa::features::indexMassQuantile(tss, q);
 
     float *hresult = result.host<float>();
     float expected[] = {0.333333333, 0.3333333333};
@@ -1017,8 +1017,9 @@ void skewness() {
 void spktWelchDensity() {
     float data[] = {0, 1, 1, 3, 4, 5, 6, 7, 8, 9, 0, 1, 1, 3, 4, 5, 6, 7, 8, 9};
     af::array tss(10, 2, data);
+    int coeff = 0;
 
-    af::array result = tsa::features::spktWelchDensity(tss);
+    af::array result = tsa::features::spktWelchDensity(tss, coeff);
     float *calculated = result.host<float>();
 
     float expected[] = {3.3333334922790527, 19.865583419799805};
@@ -1180,7 +1181,7 @@ TSA_TEST_BACKENDS(FeaturesTests, FriedrichCoefficients, friedrichCoefficients, t
 TSA_TEST(FeaturesTests, HasDuplicates, hasDuplicates);
 TSA_TEST(FeaturesTests, HasDuplicateMax, hasDuplicateMax);
 TSA_TEST(FeaturesTests, HasDuplicateMin, hasDuplicateMin);
-TSA_TEST(FeaturesTests, IndexMaxQuantile, indexMaxQuantile);
+TSA_TEST(FeaturesTests, IndexMassQuantile, indexMassQuantile);
 TSA_TEST(FeaturesTests, Kurtosis, kurtosis);
 TSA_TEST(FeaturesTests, LargeStandardDeviation, largeStandardDeviation);
 TSA_TEST(FeaturesTests, LastLocationOfMaximum, lastLocationOfMaximum);

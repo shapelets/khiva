@@ -79,7 +79,7 @@ void paaNorm() {
     pointList.push_back(tsa::dimensionality::Point(8.0, 9.0));
     pointList.push_back(tsa::dimensionality::Point(9.0, 9.0));
 
-    auto out = tsa::dimensionality::PAA_CPU(pointList.begin(), pointList.end(), 6);
+    auto out = tsa::dimensionality::PAA(pointList, 6);
 
     std::vector<tsa::dimensionality::Point> expected = {
         tsa::dimensionality::Point(0.75, 0.05), tsa::dimensionality::Point(2.25, -0.1),

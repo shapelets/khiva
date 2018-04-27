@@ -32,16 +32,16 @@ void backendInfo();
 void setBackend(tsa::library::Backend be);
 
 /**
- * @brief Get the active backend
+ * @brief Get the active backend.
  *
- * @return tsa::library::Backend The active backend
+ * @return tsa::library::Backend The active backend.
  */
 tsa::library::Backend getBackend();
 
 /**
- * @brief Get the available backends
+ * @brief Get the available backends.
  *
- * @return int The available backends
+ * @return int The available backends.
  */
 int getBackends();
 
@@ -53,7 +53,7 @@ int getBackends();
 void setDevice(int device);
 
 /**
- * @brief Get the active device
+ * @brief Get the active device.
  *
  * @return int The active device.
  */
