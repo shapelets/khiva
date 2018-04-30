@@ -20,7 +20,7 @@ baseDir = str(os.path.abspath('../../../../../'))
 buildDir = baseDir + "/build" 
 docDir = buildDir + "/doc"
 sphinxDir = docDir + "/sphinx"
-sphinxSourceDir = baseDir + "/doc/sphinx/source"
+sphinxSourceDir = sphinxDir + "/source"
 doxygenDir = docDir + "/doxygen"
 
 # -- Project information -----------------------------------------------------
@@ -102,8 +102,7 @@ exhale_args = {
     "createTreeView":        True,
     # TIP: if using the sphinx-bootstrap-theme, you need
     # "treeViewIsBootstrap": True,
-    "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    "INPUT=" + baseDir + "/include"
+    "exhaleExecutesDoxygen": False
 }
 
 # Tell sphinx what the primary language being documented is.

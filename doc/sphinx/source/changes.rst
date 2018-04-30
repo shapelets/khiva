@@ -3,4 +3,4 @@
 CHANGES
 =======
 
-.. include:: ../../../CHANGES.rst
+.. include:: ../../../../CHANGES.rst
