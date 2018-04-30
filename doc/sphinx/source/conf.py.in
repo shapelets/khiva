@@ -97,7 +97,7 @@ exhale_args = {
     "containmentFolder":     sphinxSourceDir + "/apiTSA",
     "rootFileName":          "main.rst",
     "rootFileTitle":         "TSA API",
-    "doxygenStripFromPath":  "..",
+    "doxygenStripFromPath":  "../",
     # Suggested optional arguments
     "createTreeView":        True,
     # TIP: if using the sphinx-bootstrap-theme, you need
