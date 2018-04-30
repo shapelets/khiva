@@ -60,7 +60,7 @@ ADD_CUSTOM_TARGET(TSA_doc_sphinx
         -d "${SPHINX_CACHE_DIR}"
         "${CMAKE_CURRENT_BINARY_DIR}/sphinx/source"
         "${SPHINX_HTML_DIR}"
-    DEPENDS TSA_doc_doxygen MoveSPHINXFILES
+    DEPENDS MoveSPHINXFILES TSA_doc_doxygen
 
     COMMENT "Building HTML documentation with Sphinx")
 
