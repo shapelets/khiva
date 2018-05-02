@@ -802,9 +802,12 @@ af::array skewness(af::array tss);
  * time series is first shifted from the time domain to the frequency domain. Welch's method computes an estimate of the
  * power spectral density by dividing the data into overlapping segments, computing a modified periodogram for each
  * segment and averaging the periodograms.
+ *
  * [1] P. Welch, "The use of the fast Fourier transform for the estimation of power spectra: A method based on time
  * averaging over short, modified periodograms", IEEE Trans. Audio Electroacoust. vol. 15, pp. 70-73, 1967.
+ *
  * [2] M.S. Bartlett, "Periodogram Analysis and Continuous Spectra", Biometrika, vol. 37, pp. 1-16, 1950.
+ *
  * [3] Rabiner, Lawrence R., and B. Gold. "Theory and Application of Digital Signal Processing" Prentice-Hall, pp.
  * 414-419, 1975.
  *
@@ -812,7 +815,7 @@ af::array skewness(af::array tss);
  * one indicates the number of time series.
  * @param coeff The coefficient to be returned.
  *
- * @return af::array Containing the the power spectrum of the different frequencies for each time series in tss.
+ * @return af::array Containing the power spectrum of the different frequencies for each time series in tss.
  */
 af::array spktWelchDensity(af::array tss, int coeff);
 
