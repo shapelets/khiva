@@ -828,7 +828,7 @@ af::array skewness(af::array tss);
  * one indicates the number of time series.
  * @param coeff The coefficient to be returned.
  *
- * @return af::array Containing the the power spectrum of the different frequencies for each time series in tss.
+ * @return af::array Containing the power spectrum of the different frequencies for each time series in tss.
  */
 af::array spktWelchDensity(af::array tss, int coeff);
 

@@ -1206,19 +1206,21 @@ af::array tsa::features::spktWelchDensity(af::array tss, int coeff) {
     af::array window = hannWindow(tss.dims(0), false);
     float scale = 1.0 / (fs * af::sum(window * window, 0).scalar<float>());
 
-    af::array out = af::constant(0, 1, tss.dims(1), tss.type());
+    af::array out = af::constant(0, (tss.dims(0) / 2) + 1, tss.dims(1));
     for (int i = 0; i < tss.dims(1); i++) {
-        af::array result = fftHelper(tss, window, nperseg, noverlap, nfft)(coeff, af::span);
+        af::array result = fftHelper(tss, window, nperseg, noverlap, nfft);
         result = af::conjg(result) * result;
         result *= scale;
         result *= 2;
+        result(0) = result(0) / 2;
+
         if ((nfft % 2) != 0) {
             // Last point is unpaired Nyquist freq point, don't double
             result(result.dims(0) - 1) = result(result.dims(0) - 1) / 2;
         }
         out(af::span, i) = af::real(result);
     }
-    return out;
+    return out(coeff, af::span);
 }
 
 af::array tsa::features::standardDeviation(af::array tss) { return af::stdev(tss, 0); }
