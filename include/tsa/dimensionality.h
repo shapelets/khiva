@@ -95,11 +95,11 @@ std::vector<Point> PAA(std::vector<Point> points, int bins);
  * Discovery. San Diego, CA. June 13.
  *
  * @param a Array with the input time series.
- * @param alphabet_size Number of element within the alphabet.
+ * @param alphabetSize Number of element within the alphabet.
  *
  * @return result An array of symbols.
  */
-std::vector<int> SAX(af::array a, int alphabet_size);
+std::vector<int> SAX(af::array a, int alphabetSize);
 
 /**
  * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.

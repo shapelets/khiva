@@ -9,3 +9,4 @@
 #include <tsa_jni/linalg.h>
 #include <tsa_jni/matrix.h>
 #include <tsa_jni/normalization.h>
+#include <tsa_jni/polynomial.h>

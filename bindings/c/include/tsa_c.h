@@ -10,3 +10,4 @@
 #include <tsa_c/linalg.h>
 #include <tsa_c/matrix.h>
 #include <tsa_c/normalization.h>
+#include <tsa_c/polynomial.h>
