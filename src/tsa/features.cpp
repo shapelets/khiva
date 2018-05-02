@@ -1208,7 +1208,7 @@ af::array tsa::features::spktWelchDensity(af::array tss, int coeff) {
 
     af::array out = af::constant(0, (tss.dims(0) / 2) + 1, tss.dims(1));
     for (int i = 0; i < tss.dims(1); i++) {
-        af::array result = fftHelper(tss, window, nperseg, noverlap, nfft);  //(coeff, af::span);
+        af::array result = fftHelper(tss, window, nperseg, noverlap, nfft);
         result = af::conjg(result) * result;
         result *= scale;
         result *= 2;
