@@ -11,3 +11,4 @@
 #include <tsa_jni/matrix.h>
 #include <tsa_jni/normalization.h>
 #include <tsa_jni/polynomial.h>
+#include <tsa_jni/regression.h>
