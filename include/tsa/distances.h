@@ -47,16 +47,6 @@ double dwt(std::vector<double> a, std::vector<double> b);
 /**
  * @brief Calculates the Dynamic Warping Distance.
  *
- * @param a The input time series of reference.
- * @param b The input query.
- *
- * @return array The resulting distance between a and b.
- */
-double dwt(std::vector<double> a, std::vector<double> b);
-
-/**
- * @brief Calculates the Dynamic Warping Distance.
- *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
  *
