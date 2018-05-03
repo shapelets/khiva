@@ -12,7 +12,7 @@ namespace features {
 /**
  * @brief Calculates the absolute energy of the time series which is the sum over the squared values.
  * \f[
- *      E = \sum_{i=1,\ldots, n} x_i^2.
+ *      E = \sum_{i=1,\ldots, n} x_i^2
  * \f]
  *
  * @param base Expects an input array whose dimension zero is the length of the time series (all the same) and
@@ -26,7 +26,7 @@ af::array absEnergy(af::array base);
 /**
  * @brief Calculates the sum over the absolute value of consecutive changes in the time series.
  * \f[
- *       \sum_{i=1, \ldots, n-1} \mid x_{i+1}- x_i \mid.
+ *       \sum_{i=1, \ldots, n-1} \mid x_{i+1}- x_i \mid
  * \f]
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
@@ -132,9 +132,10 @@ void aggregatedLinearTrend(af::array t, long chunkSize,
  * @brief Calculates a vectorized Approximate entropy algorithm (https://en.wikipedia.org/wiki/Approximate_entropy).
  * For short time series, this method is highly dependent on the parameters, but should be stable for N > 2000,
  * see:
+ *
  * [1] Yentes et al., The Appropriate Use of Approximate Entropy and Sample Entropy with Short Data Sets, (2012).
  * Other shortcomings and alternatives discussed in:
- * Richman & Moorman,Physiological time-series analysis using approximate entropy and sample entropy, (2000).
+ * Richman & Moorman, Physiological time-series analysis using approximate entropy and sample entropy, (2000).
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
@@ -153,6 +154,7 @@ af::array approximateEntropy(af::array tss, int m, float r);
  * \f]
  * where \f$n\f$ is the length of the time series \f$X_i\f$, \f$\sigma^2\f$ its variance and \f$\mu\f$ its mean, \f$l\f$
  * denotes the lag.
+ *
  * [1] https://en.wikipedia.org/wiki/Autocorrelation#Estimation
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -219,6 +221,7 @@ af::array c3(af::array tss, long lag);
  * \f[
  *  \sqrt{ \sum_{i=0}^{n-2lag} ( x_{i} - x_{i+1})^2 }.
  * \f]
+ *
  * [1] Batista, Gustavo EAPA, et al (2014). CID: an efficient complexity-invariant distance for time series.
  * Data Mining and Knowledge Difscovery 28.3 (2014): 634-669.
  *
@@ -370,6 +373,7 @@ af::array firstLocationOfMinimum(af::array tss);
  *    \dot(x)(t) = h(x(t)) + R \mathcal(N)(0,1)
  * \f]
  * as described by [1]. For short time series this method is highly dependent on the parameters.
+ *
  * [1] Friedrich et al., Physics Letters A 271, p. 217-222, Extracting model equations from experimental data, (2000).
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -531,6 +535,7 @@ af::array longestStrikeBelowMean(af::array tss);
  * \f[
  *    \dot{x}(t) = h(x(t)) + R \mathcal(N)(0,1)
  * \f]
+ *
  * [1] Friedrich et al., Extracting model equations from experimental data, Physics Letters A 271, p. 217-222, (2000).
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -580,6 +585,7 @@ af::array meanAbsoluteChange(af::array tss);
  * \f[
  * \frac{1}{n} \sum_{i=1,\ldots, n-1}  x_{i+1} - x_{i}.
  * \f]
+ *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
  *
@@ -650,6 +656,7 @@ af::array numberCwtPeaks(af::array tss, int maxW);
  * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$tss\f$. A peak of support
  * \f$n\f$ is defined as a subsequence of \f$tss\f$ where a value occurs, which is bigger than its \f$n\f$ neighbours to
  * the left and to the right.
+ *
  * [1] Bioinformatics (2006) 22 (17): 2059-2065. doi: 10.1093/bioinformatics/btl355,
  * http://bioinformatics.oxfordjournals.org/content/22/17/2059.long
  *
@@ -673,10 +680,12 @@ af::array numberPeaks(af::array tss, int n);
  * with (a) \f$x_t = f(x_{t-1}, \ldots, x_{t-k+1})\f$ and (b) \f$ x_{t-k} = f(x_{t-1}, \ldots, x_{t-k+1})\f$
  * being AR(k-1) models that can be fitted by OLS. Be aware that in (a), the regression is done on past values to
  * predict \f$ x_t \f$ whereas in (b), future values are used to calculate the past value \f$x_{t-k}\f$.
- * It is said in [1] that "for an AR(p), the partial autocorrelations \f$ \alpha_k \f$ will be nonzero for \f$ k<=p
- * \f$ and zero for \f$ k>p \f$." With this property, it is used to determine the lag of an AR-Process.
+ * It is said in [1] that, for an AR(p), the partial autocorrelations \f$ \alpha_k \f$ will be nonzero for
+ * \f$ k<=p \f$ and zero for \f$ k>p \f$. With this property, it is used to determine the lag of an AR-Process.
+ *
  * [1] Box, G. E., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015). Time series analysis: forecasting and control.
  * John Wiley & Sons.
+ *
  * [2] https://onlinecourses.science.psu.edu/stat510/node/62
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -773,9 +782,13 @@ af::array ratioValueNumberToTimeSeriesLength(af::array tss);
 /**
  * @brief Calculates a vectorized sample entropy algorithm. For short time-series this method is highly dependent on the
  * parameters, but should be stable for N > 2000, see:
+ *
  * [1] Yentes et al., The Appropriate Use of Approximate Entropy and Sample Entropy with Short Data Sets, (2012).
+ *
  * [2] Richman & Moorman,Physiological time-series analysis using approximate entropy and sample entropy, (2000).
+ *
  * [3] https://en.wikipedia.org/wiki/Sample_entropy
+ *
  * [4] https://www.ncbi.nlm.nih.gov/pubmed/10843903?dopt=Abstract
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -802,9 +815,12 @@ af::array skewness(af::array tss);
  * time series is first shifted from the time domain to the frequency domain. Welch's method computes an estimate of the
  * power spectral density by dividing the data into overlapping segments, computing a modified periodogram for each
  * segment and averaging the periodograms.
+ *
  * [1] P. Welch, "The use of the fast Fourier transform for the estimation of power spectra: A method based on time
  * averaging over short, modified periodograms", IEEE Trans. Audio Electroacoust. vol. 15, pp. 70-73, 1967.
+ *
  * [2] M.S. Bartlett, "Periodogram Analysis and Continuous Spectra", Biometrika, vol. 37, pp. 1-16, 1950.
+ *
  * [3] Rabiner, Lawrence R., and B. Gold. "Theory and Application of Digital Signal Processing" Prentice-Hall, pp.
  * 414-419, 1975.
  *
@@ -812,7 +828,7 @@ af::array skewness(af::array tss);
  * one indicates the number of time series.
  * @param coeff The coefficient to be returned.
  *
- * @return af::array Containing the the power spectrum of the different frequencies for each time series in tss.
+ * @return af::array Containing the power spectrum of the different frequencies for each time series in tss.
  */
 af::array spktWelchDensity(af::array tss, int coeff);
 
@@ -883,6 +899,7 @@ af::array symmetryLooking(af::array tss, float r);
  * \f]
  * where \f$ \mathbb{E} \f$ is the mean and \f$ L \f$ is the lag operator. It was proposed in [1] as a promising feature
  * to extract from time series.
+ *
  * [1] Fulcher, B.D., Jones, N.S. (2014). Highly comparative feature-based time-series classification.
  * Knowledge and Data Engineering, IEEE Transactions on 26, 3026–3037.
  *

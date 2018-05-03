@@ -55,9 +55,13 @@ void tsa::matrix::meanStdev(af::array t, af::array &a, long m, af::array &mean, 
     // Standard deviation
     stdev = af::sqrt(sigma_t2);
 
+    double eps = (sigma_t2.type() == 0) ? EPSILON * 1e4 : EPSILON;
+
+    af::array lessThanEpsilon = eps >= sigma_t2;
+    sigma_t2 = lessThanEpsilon * lessThanEpsilon.as(sigma_t2.type()) + !lessThanEpsilon * sigma_t2;
+
     // Auxiliary variable to be used for the distance calculation
-    a = (sum_t2 - 2 * sum_t * mean + m * mean_t_p2) /
-        af::max(sigma_t2, af::constant(EPSILON, sigma_t2.dims(), t.type()));
+    a = (sum_t2 - 2 * sum_t * mean + m * mean_t_p2) / sigma_t2;
 }
 
 void tsa::matrix::meanStdev(af::array t, long m, af::array &mean, af::array &stdev) {
@@ -126,9 +130,11 @@ void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a, af
     af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, batchSize);
 
     // Required to avoid a division by zero when the standard deviation is zero
-    af::array den = af::max(sigma_t_tiled, af::constant(EPSILON, sigma_t_tiled.dims(), qt.type()));
+    double eps = (sigma_t_tiled.type() == 0) ? EPSILON * 1e4 : EPSILON;
+    af::array lessThanEpsilon = eps >= sigma_t_tiled;
+    sigma_t_tiled = lessThanEpsilon * lessThanEpsilon.as(sigma_t_tiled.type()) + !lessThanEpsilon * sigma_t_tiled;
     // Computing the distance
-    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / den) + sum_q2_tiled;
+    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / sigma_t_tiled) + sum_q2_tiled;
     dist = af::sqrt(af::abs(dist));
 
     // The 1st dimension reflects the number of subsequences of the reference time series.
@@ -164,9 +170,11 @@ void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a, af
     af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, batchSize);
 
     // Required to avoid a division by zero when the standard deviation is zero
-    af::array den = af::max(sigma_t_tiled, af::constant(EPSILON, sigma_t_tiled.dims(), qt.type()));
+    double eps = (sigma_t_tiled.type() == 0) ? EPSILON * 1e4 : EPSILON;
+    af::array lessThanEpsilon = eps >= sigma_t_tiled;
+    sigma_t_tiled = lessThanEpsilon * lessThanEpsilon.as(sigma_t_tiled.type()) + !lessThanEpsilon * sigma_t_tiled;
     // Computing the distance
-    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / den) + sum_q2_tiled;
+    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / sigma_t_tiled) + sum_q2_tiled;
     dist = af::sqrt(af::abs(dist));
 
     // The 1st dimension reflects the number of subsequences of the reference time series.

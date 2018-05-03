@@ -24,7 +24,6 @@ The following chapters will explain the TSA package in detail:
    Introduction <text/introduction>
    Getting Started <text/getting_started>
    Quick Start <text/quick_start>
-   Module Reference <api/modules>
    TSA API <apiTSA/main>
    Data Formats <text/data_formats>
    Parallelization <parallel/main>

@@ -36,6 +36,28 @@ void polyfit3() {
     }
 }
 
+void roots() {
+    float coeffs[] = {5, -20, 5, 50, -20, -40};
+    af::array p = af::array(6, coeffs);
+
+    af::array roots = tsa::polynomial::roots(p);
+
+    af::cfloat *calculated = roots.host<af::cfloat>();
+
+    af::cfloat expected[5];
+    expected[0] = af::cfloat(2, 0);
+    expected[1] = af::cfloat(2, 0);
+    expected[2] = af::cfloat(2, 0);
+    expected[3] = af::cfloat(-1, 0);
+    expected[4] = af::cfloat(-1, 0);
+
+    for (int i = 0; i < 5; i++) {
+        ASSERT_NEAR(calculated[i].real, expected[i].real, 1e-2);
+        ASSERT_NEAR(calculated[i].imag, expected[i].imag, 1e-2);
+    }
+}
+
 // Not testing in CPU because the static linking of OpenMP that Arrayfire does makes the test crash
 TSA_TEST_BACKENDS(PolynomialTests, Polyfit1, polyfit1, true, true, false, true, true, false);
 TSA_TEST_BACKENDS(PolynomialTests, Polyfit3, polyfit3, true, true, false, true, true, false);
+TSA_TEST_BACKENDS(PolynomialTests, Roots, roots, true, true, false, true, true, false);

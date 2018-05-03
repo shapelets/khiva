@@ -8,13 +8,17 @@
 
 af::array tsa::normalization::znorm(af::array tss, double epsilon) {
     auto mean = af::tile(af::mean(tss, 0), tss.dims(0));
-    auto stdev = af::tile(af::max(epsilon, af::stdev(tss, 0)), tss.dims(0));
+    auto stdev = af::stdev(tss, 0);
+    auto lessThanEpsilon = epsilon >= stdev;
+    stdev = af::tile(lessThanEpsilon * lessThanEpsilon.as(tss.type()) + !lessThanEpsilon * stdev, tss.dims(0));
     return (tss - mean) / stdev;
 }
 
 void tsa::normalization::znormInPlace(af::array &tss, double epsilon) {
     auto mean = af::tile(af::mean(tss, 0), tss.dims(0));
-    auto stdev = af::tile(af::max(epsilon, af::stdev(tss, 0)), tss.dims(0));
+    auto stdev = af::stdev(tss, 0);
+    auto lessThanEpsilon = epsilon >= stdev;
+    stdev = af::tile(lessThanEpsilon * lessThanEpsilon.as(tss.type()) + !lessThanEpsilon * stdev, tss.dims(0));
     tss -= mean;
     tss /= stdev;
 }
@@ -23,6 +27,8 @@ af::array tsa::normalization::maxMinNorm(af::array tss, double high, double low,
     auto max = af::tile(af::max(tss, 0), tss.dims(0));
     auto min = af::tile(af::min(tss, 0), tss.dims(0));
     auto scale = max - min;
+    auto lessThanEpsilon = epsilon >= scale;
+    scale = lessThanEpsilon * lessThanEpsilon.as(tss.type()) + !lessThanEpsilon * scale;
     return low + (((high - low) * (tss - min)) / scale);
 }
 
@@ -30,6 +36,8 @@ void tsa::normalization::maxMinNormInPlace(af::array &tss, double high, double l
     auto max = af::tile(af::max(tss, 0), tss.dims(0));
     auto min = af::tile(af::min(tss, 0), tss.dims(0));
     auto scale = max - min;
+    auto lessThanEpsilon = epsilon >= scale;
+    scale = lessThanEpsilon * lessThanEpsilon.as(tss.type()) + !lessThanEpsilon * scale;
     tss -= min;
     tss *= (high - low);
     tss /= scale;

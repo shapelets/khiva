@@ -352,7 +352,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Features_hasDuplicateMin(JNIEnv *env, jobj
  * @param q The quantile.
  * @return The updated ref and the index of the max quantile q.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Features_indexMaxQuantile(JNIEnv *env, jobject thisObj, jlong ref, jfloat q);
+JNIEXPORT jlongArray JNICALL Java_tsa_Features_indexMassQuantile(JNIEnv *env, jobject thisObj, jlong ref, jfloat q);
 
 /**
  * @brief Returns the kurtosis of ref (calculated with the adjusted Fisher-Pearson

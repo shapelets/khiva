@@ -1015,14 +1015,14 @@ void skewness() {
 }
 
 void spktWelchDensity() {
-    float data[] = {0, 1, 1, 3, 4, 5, 6, 7, 8, 9, 0, 1, 1, 3, 4, 5, 6, 7, 8, 9};
+    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     af::array tss(10, 2, data);
     int coeff = 0;
 
     af::array result = tsa::features::spktWelchDensity(tss, coeff);
     float *calculated = result.host<float>();
 
-    float expected[] = {3.3333334922790527, 3.3333334922790527};
+    float expected[] = {1.6666667461395264, 1.6666667461395264};
 
     ASSERT_NEAR(calculated[0], expected[0], 1e-5);
     ASSERT_NEAR(calculated[1], expected[1], 1e-5);

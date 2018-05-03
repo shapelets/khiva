@@ -361,7 +361,7 @@ void has_duplicate_min(af_array *array, af_array *result);
  * @param q The quantile.
  * @param result The index of the max quantile q.
  */
-void index_max_quantile(af_array *array, float *q, af_array *result);
+void index_mass_quantile(af_array *array, float *q, af_array *result);
 
 /**
  * @brief Returns the kurtosis of array (calculated with the adjusted Fisher-Pearson
