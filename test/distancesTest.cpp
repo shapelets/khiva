@@ -62,5 +62,78 @@ void squaredEuclidean() {
     ASSERT_EQ(0.0, hostResult[8]);
 }
 
+void dwt() {
+    std::vector<double> a;
+    std::vector<double> b;
+
+    a.push_back(4);
+    a.push_back(4);
+    a.push_back(5);
+    a.push_back(5);
+    a.push_back(6);
+    a.push_back(6);
+    a.push_back(7);
+    a.push_back(7);
+
+    b.push_back(23);
+    b.push_back(4);
+    b.push_back(5);
+    b.push_back(6);
+    b.push_back(7);
+
+    double result = tsa::distances::dwt(a, b);
+
+    ASSERT_EQ(result, 19);
+}
+
+void dwt2() {
+    float data[] = {1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5};
+    af::array tss(5, 5, data);
+
+    af::array result = tsa::distances::dwt(tss);
+
+    // check dimensions
+    auto dims = result.dims();
+    ASSERT_EQ(dims[0], 5);
+    ASSERT_EQ(dims[1], 5);
+    ASSERT_EQ(dims[2], 1);
+    ASSERT_EQ(dims[3], 1);
+
+    // check distances
+    float *hostResult = result.host<float>();
+    int i = 0;
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+
+    ASSERT_EQ(5.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+
+    ASSERT_EQ(10.0, hostResult[i++]);
+    ASSERT_EQ(5.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+
+    ASSERT_EQ(15.0, hostResult[i++]);
+    ASSERT_EQ(10.0, hostResult[i++]);
+    ASSERT_EQ(5.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+
+    ASSERT_EQ(20.0, hostResult[i++]);
+    ASSERT_EQ(15.0, hostResult[i++]);
+    ASSERT_EQ(10.0, hostResult[i++]);
+    ASSERT_EQ(5.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+}
+
 TSA_TEST(DistanceTests, Euclidean, euclidean);
 TSA_TEST(DistanceTests, SquaredEuclidean, squaredEuclidean);
+TSA_TEST(DistanceTests, DWT, dwt);
+TSA_TEST(DistanceTests, DWT2, dwt2);

@@ -140,9 +140,9 @@ void pip() {
     }
 }
 
+TSA_TEST(SimplificationTests, RamerDouglasPeucker, ramerDouglasPeucker);
+TSA_TEST(SimplificationTests, Visvalingam, visvalingam);
 TSA_TEST(DimensionalityTests, PAA_NORM, paaNorm);
 TSA_TEST(DimensionalityTests, PAA, paa);
 TSA_TEST(DimensionalityTests, SAX, sax);
 TSA_TEST(DimensionalityTests, PIP, pip);
-TSA_TEST(SimplificationTests, RamerDouglasPeucker, ramerDouglasPeucker);
-TSA_TEST(SimplificationTests, Visvalingam, visvalingam);
