@@ -27,7 +27,7 @@ double dwt(std::vector<double> a, std::vector<double> b);
  * dimension one indicates the number of time series.
  *
  * @return af::array An upper triangular matrix where each position corresponds to the distance between
- * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 recordd the
+ * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
 af::array dwt(af::array tss);
