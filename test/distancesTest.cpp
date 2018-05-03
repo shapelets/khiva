@@ -8,60 +8,6 @@
 #include <tsa/distances.h>
 #include "tsaTest.h"
 
-// Simple test, does not use gmock
-void euclidean() {
-    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-    af::array tss(4, 3, data);
-
-    auto result = tsa::distances::euclidean(tss);
-
-    // check dimensions
-    auto dims = result.dims();
-    ASSERT_EQ(dims[0], 3);
-    ASSERT_EQ(dims[1], 3);
-    ASSERT_EQ(dims[2], 1);
-    ASSERT_EQ(dims[3], 1);
-
-    // check distances
-    float *hostResult = result.host<float>();
-    ASSERT_EQ(0.0, hostResult[0]);
-    ASSERT_EQ(0.0, hostResult[1]);
-    ASSERT_EQ(0.0, hostResult[2]);
-    ASSERT_EQ(8.0, hostResult[3]);
-    ASSERT_EQ(0.0, hostResult[4]);
-    ASSERT_EQ(0.0, hostResult[5]);
-    ASSERT_EQ(16.0, hostResult[6]);
-    ASSERT_EQ(8.0, hostResult[7]);
-    ASSERT_EQ(0.0, hostResult[8]);
-}
-
-// Simple test, does not use gmock
-void squaredEuclidean() {
-    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-    af::array tss(4, 3, data);
-
-    auto result = tsa::distances::squaredEuclidean(tss);
-
-    // check dimensions
-    auto dims = result.dims();
-    ASSERT_EQ(dims[0], 3);
-    ASSERT_EQ(dims[1], 3);
-    ASSERT_EQ(dims[2], 1);
-    ASSERT_EQ(dims[3], 1);
-
-    // check distances
-    float *hostResult = result.host<float>();
-    ASSERT_EQ(0.0, hostResult[0]);
-    ASSERT_EQ(0.0, hostResult[1]);
-    ASSERT_EQ(0.0, hostResult[2]);
-    ASSERT_EQ(64.0, hostResult[3]);
-    ASSERT_EQ(0.0, hostResult[4]);
-    ASSERT_EQ(0.0, hostResult[5]);
-    ASSERT_EQ(256.0, hostResult[6]);
-    ASSERT_EQ(64.0, hostResult[7]);
-    ASSERT_EQ(0.0, hostResult[8]);
-}
-
 void dwt() {
     std::vector<double> a;
     std::vector<double> b;
@@ -133,7 +79,61 @@ void dwt2() {
     ASSERT_EQ(0.0, hostResult[i++]);
 }
 
-TSA_TEST(DistanceTests, Euclidean, euclidean);
-TSA_TEST(DistanceTests, SquaredEuclidean, squaredEuclidean);
+// Simple test, does not use gmock
+void euclidean() {
+    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(4, 3, data);
+
+    auto result = tsa::distances::euclidean(tss);
+
+    // check dimensions
+    auto dims = result.dims();
+    ASSERT_EQ(dims[0], 3);
+    ASSERT_EQ(dims[1], 3);
+    ASSERT_EQ(dims[2], 1);
+    ASSERT_EQ(dims[3], 1);
+
+    // check distances
+    float *hostResult = result.host<float>();
+    ASSERT_EQ(0.0, hostResult[0]);
+    ASSERT_EQ(0.0, hostResult[1]);
+    ASSERT_EQ(0.0, hostResult[2]);
+    ASSERT_EQ(8.0, hostResult[3]);
+    ASSERT_EQ(0.0, hostResult[4]);
+    ASSERT_EQ(0.0, hostResult[5]);
+    ASSERT_EQ(16.0, hostResult[6]);
+    ASSERT_EQ(8.0, hostResult[7]);
+    ASSERT_EQ(0.0, hostResult[8]);
+}
+
+// Simple test, does not use gmock
+void squaredEuclidean() {
+    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(4, 3, data);
+
+    auto result = tsa::distances::squaredEuclidean(tss);
+
+    // check dimensions
+    auto dims = result.dims();
+    ASSERT_EQ(dims[0], 3);
+    ASSERT_EQ(dims[1], 3);
+    ASSERT_EQ(dims[2], 1);
+    ASSERT_EQ(dims[3], 1);
+
+    // check distances
+    float *hostResult = result.host<float>();
+    ASSERT_EQ(0.0, hostResult[0]);
+    ASSERT_EQ(0.0, hostResult[1]);
+    ASSERT_EQ(0.0, hostResult[2]);
+    ASSERT_EQ(64.0, hostResult[3]);
+    ASSERT_EQ(0.0, hostResult[4]);
+    ASSERT_EQ(0.0, hostResult[5]);
+    ASSERT_EQ(256.0, hostResult[6]);
+    ASSERT_EQ(64.0, hostResult[7]);
+    ASSERT_EQ(0.0, hostResult[8]);
+}
+
 TSA_TEST(DistanceTests, DWT, dwt);
 TSA_TEST(DistanceTests, DWT2, dwt2);
+TSA_TEST(DistanceTests, Euclidean, euclidean);
+TSA_TEST(DistanceTests, SquaredEuclidean, squaredEuclidean);

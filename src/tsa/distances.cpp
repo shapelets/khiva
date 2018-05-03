@@ -7,30 +7,7 @@
 #include <tsa/distances.h>
 #include <limits>
 
-af::array tsa::distances::squaredEuclidean(af::array tss) {
-    // get the number of time series
-    auto numOfTs = tss.dims(1);
-    // the result is a squared matrix of dimensions numOfTs x numOfTs
-    // which is initialised as zero.
-    auto result = af::constant(0, numOfTs, numOfTs, tss.type());
-
-    // for each time series, calculate in parallel all distances
-    for (auto currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
-        gfor(af::seq otherCol, currentCol + 1, numOfTs - 1) {
-            result(currentCol, otherCol) = af::sum(af::pow(tss(af::span, currentCol) - tss(af::span, otherCol), 2));
-        }
-    }
-
-    return result;
-}
-
-af::array tsa::distances::euclidean(af::array tss) {
-    // simply invokes non squared version and completes with
-    // an elementwise sqrt operation.
-    return af::sqrt(tsa::distances::squaredEuclidean(tss));
-}
-
-double euclideanDistance(double x, double y) { return std::sqrt(std::pow((x - y), 2)); }
+double distance(double x, double y) { return std::sqrt(std::pow((x - y), 2)); }
 
 double tsa::distances::dwt(std::vector<double> t0, std::vector<double> t1) {
     int m = t0.size();
@@ -39,23 +16,23 @@ double tsa::distances::dwt(std::vector<double> t0, std::vector<double> t1) {
     // Allocate the cost Matrix
     std::vector<std::vector<double>> cost(m, std::vector<double>(n));
 
-    cost[0][0] = euclideanDistance(t0[0], t1[0]);
+    cost[0][0] = distance(t0[0], t1[0]);
 
     // Calculate the first column
     for (int i = 1; i < m; i++) {
-        cost[i][0] = cost[i - 1][0] + euclideanDistance(t0[i], t1[0]);
+        cost[i][0] = cost[i - 1][0] + distance(t0[i], t1[0]);
     }
 
     // Calculate the first row
     for (int j = 1; j < n; j++) {
-        cost[0][j] = cost[0][j - 1] + euclideanDistance(t0[0], t1[j]);
+        cost[0][j] = cost[0][j - 1] + distance(t0[0], t1[j]);
     }
 
     // Computing the remaining values (we could apply the wavefront parallel pattern, to comput it in parallel)
     for (int i = 1; i < m; i++) {
         for (int j = 1; j < n; j++) {
-            cost[i][j] = std::min(cost[i - 1][j], std::min(cost[i][j - 1], cost[i - 1][j - 1])) +
-                         euclideanDistance(t0[i], t1[j]);
+            cost[i][j] =
+                std::min(cost[i - 1][j], std::min(cost[i][j - 1], cost[i - 1][j - 1])) + distance(t0[i], t1[j]);
         }
     }
 
@@ -108,4 +85,27 @@ af::array tsa::distances::dwt(af::array tss) {
     }
 
     return result;
+}
+
+af::array tsa::distances::squaredEuclidean(af::array tss) {
+    // get the number of time series
+    auto numOfTs = tss.dims(1);
+    // the result is a squared matrix of dimensions numOfTs x numOfTs
+    // which is initialised as zero.
+    auto result = af::constant(0, numOfTs, numOfTs, tss.type());
+
+    // for each time series, calculate in parallel all distances
+    for (auto currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
+        gfor(af::seq otherCol, currentCol + 1, numOfTs - 1) {
+            result(currentCol, otherCol) = af::sum(af::pow(tss(af::span, currentCol) - tss(af::span, otherCol), 2));
+        }
+    }
+
+    return result;
+}
+
+af::array tsa::distances::euclidean(af::array tss) {
+    // simply invokes non squared version and completes with
+    // an elementwise sqrt operation.
+    return af::sqrt(tsa::distances::squaredEuclidean(tss));
 }
