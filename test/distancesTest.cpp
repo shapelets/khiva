@@ -107,6 +107,54 @@ void euclidean() {
 }
 
 // Simple test, does not use gmock
+void hamming() {
+    float data[] = {1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5};
+    af::array tss(5, 5, data);
+
+    af::array result = tsa::distances::hamming(tss);
+
+    // check dimensions
+    auto dims = result.dims();
+    ASSERT_EQ(dims[0], 5);
+    ASSERT_EQ(dims[1], 5);
+    ASSERT_EQ(dims[2], 1);
+    ASSERT_EQ(dims[3], 1);
+
+    // check distances
+    float *hostResult = result.host<float>();
+    int i = 0;
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+
+    ASSERT_EQ(5.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+
+    ASSERT_EQ(10.0, hostResult[i++]);
+    ASSERT_EQ(5.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+
+    ASSERT_EQ(15.0, hostResult[i++]);
+    ASSERT_EQ(10.0, hostResult[i++]);
+    ASSERT_EQ(5.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+
+    ASSERT_EQ(20.0, hostResult[i++]);
+    ASSERT_EQ(15.0, hostResult[i++]);
+    ASSERT_EQ(10.0, hostResult[i++]);
+    ASSERT_EQ(5.0, hostResult[i++]);
+    ASSERT_EQ(0.0, hostResult[i++]);
+}
+
+// Simple test, does not use gmock
 void squaredEuclidean() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(4, 3, data);
@@ -136,4 +184,5 @@ void squaredEuclidean() {
 TSA_TEST(DistanceTests, DWT, dwt);
 TSA_TEST(DistanceTests, DWT2, dwt2);
 TSA_TEST(DistanceTests, Euclidean, euclidean);
+TSA_TEST(DistanceTests, Hamming, hamming);
 TSA_TEST(DistanceTests, SquaredEuclidean, squaredEuclidean);
