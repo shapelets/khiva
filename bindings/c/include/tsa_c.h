@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <tsa_c/array.h>
+#include <tsa_c/distances.h>
 #include <tsa_c/features.h>
 #include <tsa_c/library.h>
 #include <tsa_c/linalg.h>
