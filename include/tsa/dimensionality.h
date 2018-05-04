@@ -14,36 +14,23 @@ namespace dimensionality {
 typedef std::pair<float, float> Point;
 
 /**
- * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve that is
- * approximated by a series of points. It reduces a set of points depending on the perpendicular distance of the points
- * and epsilon, the greater epsilon, more points are deleted.
+ * @brief Piecewise Aggregate Approximation (PAA) approximates a time series \f$X\f$ of length \f$n\f$ into vector
+ * \f$\bar{X}=(\bar{x}_{1},…,\bar{x}_{M})\f$ of any arbitrary length \f$M \leq n\f$ where each of \f$\bar{x_{i}}\f$ is
+ * calculated as follows:
+ * \f[
+ * \bar{x}_{i} = \frac{M}{n} \sum_{j=n/M(i-1)+1}^{(n/M)i} x_{j}.
+ * \f]
+ * Which simply means that in order to reduce the dimensionality from \f$n\f$ to \f$M\f$, we first divide the original
+ * time series into \f$M\f$ equally sized frames and secondly compute the mean values for each frame. The sequence
+ * assembled from the mean values is the PAA approximation (i.e., transform) of the original time series.
+ * \overload std::vector<Point> PAA(std::vector<Point> points, int bins)
  *
- * [1] Urs Ramer, "An iterative procedure for the polygonal approximation of plane curves", Computer Graphics and Image
- * Processing, 1(3), 244–256 (1972) doi:10.1016/S0146-664X(72)80017-0.
+ * @param points Set of points.
+ * @param bins Sets the total number of divisions.
  *
- * [2] David Douglas & Thomas Peucker, "Algorithms for the reduction of the number of points required to represent a
- * digitized line or its caricature", The Canadian Cartographer 10(2), 112–122 (1973) doi:10.3138/FM57-6770-U75U-7727
- *
- * @param pointList Set of input points.
- * @param epsilon It acts as the threshold value to decide which points should be considered meaningful or not.
- *
- * @return std:vector<tsa::dimensionality::Point> with the selected points.
+ * @return result A vector of Points with the reduced dimensionality.
  */
-std::vector<Point> ramerDouglasPeucker(std::vector<Point> pointList, double epsilon);
-
-/**
- * @brief Reduces a set of points by applying the Visvalingam method (minimun triangle area) until the number
- * of points is reduced to numPoints.
- *
- * [1] M. Visvalingam and J. D. Whyatt, Line generalisation by repeated elimination of points,
- * The Cartographic Journal, 1993.
- *
- * @param pointList Expects an input vector of points.
- * @param numPoints Sets the number of points returned after the execution of the method.
- *
- * @return std:vector<tsa::dimensionality::Point> where the number of points has been reduced to numPoints.
- */
-std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
+std::vector<Point> PAA(std::vector<Point> points, int bins);
 
 /**
  * @brief Piecewise Aggregate Approximation (PAA) approximates a time series \f$X\f$ of length \f$n\f$ into vector
@@ -64,23 +51,53 @@ std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
 af::array PAA(af::array a, int bins);
 
 /**
- * @brief Piecewise Aggregate Approximation (PAA) approximates a time series \f$X\f$ of length \f$n\f$ into vector
- * \f$\bar{X}=(\bar{x}_{1},…,\bar{x}_{M})\f$ of any arbitrary length \f$M \leq n\f$ where each of \f$\bar{x_{i}}\f$ is
- * calculated as follows:
- * \f[
- * \bar{x}_{i} = \frac{M}{n} \sum_{j=n/M(i-1)+1}^{(n/M)i} x_{j}.
- * \f]
- * Which simply means that in order to reduce the dimensionality from \f$n\f$ to \f$M\f$, we first divide the original
- * time series into \f$M\f$ equally sized frames and secondly compute the mean values for each frame. The sequence
- * assembled from the mean values is the PAA approximation (i.e., transform) of the original time series.
- * \overload std::vector<Point> PAA(std::vector<Point> points, int bins)
+ * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.
  *
- * @param points Set of points.
- * @param bins Sets the total number of divisions.
+ * [1] Fu TC, Chung FL, Luk R, and Ng CM. Representing financial time series based on data point importance.
+ * Engineering Applications of Artificial Intelligence, 21(2):277-300, 2008.
  *
- * @return result A vector of Points with the reduced dimensionality.
+ * @param ts Expects an input array whose dimension zero is the length of the time series.
+ * @param numberIPs The number of points to be returned.
+ *
+ * @return af::array Array with the most Perceptually Important numPoints .
  */
-std::vector<Point> PAA(std::vector<Point> points, int bins);
+af::array PIP(af::array ts, int numberIPs);
+
+/**
+ * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve that is
+ * approximated by a series of points. It reduces a set of points depending on the perpendicular distance of the points
+ * and epsilon, the greater epsilon, more points are deleted.
+ *
+ * [1] Urs Ramer, "An iterative procedure for the polygonal approximation of plane curves", Computer Graphics and Image
+ * Processing, 1(3), 244–256 (1972) doi:10.1016/S0146-664X(72)80017-0.
+ *
+ * [2] David Douglas & Thomas Peucker, "Algorithms for the reduction of the number of points required to represent a
+ * digitized line or its caricature", The Canadian Cartographer 10(2), 112–122 (1973) doi:10.3138/FM57-6770-U75U-7727
+ *
+ * @param pointList Set of input points.
+ * @param epsilon It acts as the threshold value to decide which points should be considered meaningful or not.
+ *
+ * @return std:vector<tsa::dimensionality::Point> with the selected points.
+ */
+std::vector<Point> ramerDouglasPeucker(std::vector<Point> pointList, double epsilon);
+
+/**
+ * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve that is
+ * approximated by a series of points. It reduces a set of points depending on the perpendicular distance of the points
+ * and epsilon, the greater epsilon, more points are deleted.
+ *
+ * [1] Urs Ramer, "An iterative procedure for the polygonal approximation of plane curves", Computer Graphics and Image
+ * Processing, 1(3), 244–256 (1972) doi:10.1016/S0146-664X(72)80017-0.
+ *
+ * [2] David Douglas & Thomas Peucker, "Algorithms for the reduction of the number of points required to represent a
+ * digitized line or its caricature", The Canadian Cartographer 10(2), 112–122 (1973) doi:10.3138/FM57-6770-U75U-7727
+ *
+ * @param pointList Set of input points.
+ * @param epsilon It acts as the threshold value to decide which points should be considered meaningful or not.
+ *
+ * @return af::array with the selected points.
+ */
+af::array ramerDouglasPeucker(af::array pointList, double epsilon);
 
 /**
  * @brief Symbolic Aggregate approXimation (SAX). It transforms a numeric time series into a time series of symbols with
@@ -102,17 +119,32 @@ std::vector<Point> PAA(std::vector<Point> points, int bins);
 std::vector<int> SAX(af::array a, int alphabetSize);
 
 /**
- * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.
+ * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number
+ * of points is reduced to numPoints.
  *
- * [1] Fu TC, Chung FL, Luk R, and Ng CM. Representing financial time series based on data point importance.
- * Engineering Applications of Artificial Intelligence, 21(2):277-300, 2008.
+ * [1] M. Visvalingam and J. D. Whyatt, Line generalisation by repeated elimination of points,
+ * The Cartographic Journal, 1993.
  *
- * @param ts Expects an input array whose dimension zero is the length of the time series.
- * @param numberIPs The number of points to be returned.
+ * @param pointList Expects an input vector of points.
+ * @param numPoints Sets the number of points returned after the execution of the method.
  *
- * @return af::array Array with the most Perceptually Important numPoints .
+ * @return std:vector<tsa::dimensionality::Point> where the number of points has been reduced to numPoints.
  */
-af::array PIP(af::array ts, int numberIPs);
+std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
+
+/**
+ * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number
+ * of points is reduced to numPoints.
+ *
+ * [1] M. Visvalingam and J. D. Whyatt, Line generalisation by repeated elimination of points,
+ * The Cartographic Journal, 1993.
+ *
+ * @param pointList Expects an input vector of points.
+ * @param numPoints Sets the number of points returned after the execution of the method.
+ *
+ * @return af::array where the number of points has been reduced to numPoints.
+ */
+af::array visvalingam(af::array, int numPoints);
 
 };  // namespace dimensionality
 };  // namespace tsa

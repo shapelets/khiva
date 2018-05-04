@@ -14,76 +14,6 @@
 #include <utility>
 #include <vector>
 
-double PerpendicularDistance(const tsa::dimensionality::Point &pt, const tsa::dimensionality::Point &lineStart,
-                             const tsa::dimensionality::Point &lineEnd) {
-    double dx = lineEnd.first - lineStart.first;
-    double dy = lineEnd.second - lineStart.second;
-
-    // Normalise
-    double mag = pow(pow(dx, 2.0) + pow(dy, 2.0), 0.5);
-    if (mag > 0.0) {
-        dx /= mag;
-        dy /= mag;
-    }
-
-    double pvx = pt.first - lineStart.first;
-    double pvy = pt.second - lineStart.second;
-
-    // Get dot product (project pv onto normalized direction)
-    double pvdot = dx * pvx + dy * pvy;
-
-    // Scale line direction vector
-    double dsx = pvdot * dx;
-    double dsy = pvdot * dy;
-
-    // Subtract this from pv
-    double ax = pvx - dsx;
-    double ay = pvy - dsy;
-
-    return pow(pow(ax, 2.0) + pow(ay, 2.0), 0.5);
-}
-
-std::vector<tsa::dimensionality::Point> tsa::dimensionality::ramerDouglasPeucker(
-    std::vector<tsa::dimensionality::Point> pointList, double epsilon) {
-    std::vector<tsa::dimensionality::Point> out;
-
-    if (pointList.size() < 2) throw std::invalid_argument("Not enough points to simplify ...");
-
-    // Find the point with the maximum distance from line between start and end
-    double dmax = 0.0;
-    size_t index = 0;
-    size_t end = pointList.size() - 1;
-
-    for (size_t i = 1; i < end; i++) {
-        double d = PerpendicularDistance(pointList[i], pointList[0], pointList[end]);
-        if (d > dmax) {
-            index = i;
-            dmax = d;
-        }
-    }
-
-    // If max distance is greater than epsilon, recursively simplify
-    if (dmax > epsilon) {
-        std::vector<tsa::dimensionality::Point> recResults1;
-        std::vector<tsa::dimensionality::Point> recResults2;
-        std::vector<tsa::dimensionality::Point> firstLine(pointList.begin(), pointList.begin() + index + 1);
-        std::vector<tsa::dimensionality::Point> lastLine(pointList.begin() + index, pointList.end());
-        recResults1 = ramerDouglasPeucker(firstLine, epsilon);
-        recResults2 = ramerDouglasPeucker(lastLine, epsilon);
-
-        // Build the result list
-        out.assign(recResults1.begin(), recResults1.end() - 1);
-        out.insert(out.end(), recResults2.begin(), recResults2.end());
-        if (out.size() < 2) throw std::runtime_error("Problem assembling output");
-    } else {
-        // Just return start and end points
-        out.clear();
-        out.push_back(pointList[0]);
-        out.push_back(pointList[end]);
-    }
-    return out;
-}
-
 float computeTriangleArea(tsa::dimensionality::Point a, tsa::dimensionality::Point b, tsa::dimensionality::Point c) {
     float res = 0.0;
 
@@ -92,67 +22,6 @@ float computeTriangleArea(tsa::dimensionality::Point a, tsa::dimensionality::Poi
     res = base * height / 2.0;
 
     return res;
-}
-
-std::vector<tsa::dimensionality::Point> tsa::dimensionality::visvalingam(
-    std::vector<tsa::dimensionality::Point> pointList, int num_points_allowed) {
-    // variables
-    std::vector<tsa::dimensionality::Point> out(pointList.begin(), pointList.end());
-    float min_area = std::numeric_limits<float>::max();
-    int candidate_point = -1;
-    int iterations = out.size() - num_points_allowed;
-
-    // One point to be deleted in each iteration
-    for (int iter = 0; iter < iterations; iter++) {
-        for (int p = 0; p < out.size() - 2; p++) {
-            float area = computeTriangleArea(out[p], out[p + 1], out[p + 2]);
-            if (area < min_area) {
-                min_area = area;
-                candidate_point = p + 1;
-            }
-        }
-        std::vector<tsa::dimensionality::Point>::iterator nth = out.begin() + candidate_point;
-        out.erase(nth);
-        min_area = std::numeric_limits<float>::max();
-    }
-    return out;
-}
-
-af::array tsa::dimensionality::PAA(af::array a, int bins) {
-    int n = a.elements();
-    int elem_row = n / bins;
-    af::array b = af::moddims(a, elem_row, bins);
-    af::array addition = af::sum(b, 0);
-    af::array result = addition / elem_row;
-
-    return result;
-}
-
-std::vector<tsa::dimensionality::Point> tsa::dimensionality::PAA(std::vector<tsa::dimensionality::Point> points,
-                                                                 int bins) {
-    auto begin = points.begin();
-    auto last = points.end();
-    double xrange = (*(last - 1)).first - (*begin).first;
-    double width_bin = xrange / bins;
-    double reduction = bins / xrange;
-
-    std::vector<double> sum(bins, 0.0);
-    std::vector<int> counter(bins, 0);
-    std::vector<tsa::dimensionality::Point> result(bins, tsa::dimensionality::Point(0.0, 0.0));
-
-    // Iterating over the  timeseries
-    for (auto i = begin; i != last; i++) {
-        int pos = std::min((*i).first * reduction, (double)(bins - 1));
-        sum[pos] += (*i).second;
-        counter[pos] = counter[pos] + 1;
-    }
-
-    // Compute the average per bin
-    for (int i = 0; i < bins; i++) {
-        result[i].first = (width_bin * i) + (width_bin / 2.0);
-        result[i].second = sum[i] / counter[i];
-    }
-    return result;
 }
 
 std::vector<float> computeBreakpoints(int alphabet_size) {
@@ -185,28 +54,53 @@ std::vector<int> generateAlphabet(int alphabet_size) {
     return res;
 }
 
-std::vector<int> tsa::dimensionality::SAX(af::array a, int alphabet_size) {
-    float mean_value = af::mean<float>(a);
-    float std_value = af::stdev<float>(a);
-    std::vector<int> aux;
-    int n = a.elements();
+double PerpendicularDistance(const tsa::dimensionality::Point &pt, const tsa::dimensionality::Point &lineStart,
+                             const tsa::dimensionality::Point &lineEnd) {
+    double dx = lineEnd.first - lineStart.first;
+    double dy = lineEnd.second - lineStart.second;
 
-    std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
-    std::vector<int> alphabet = generateAlphabet(alphabet_size);
-    float *a_h = a.host<float>();
-
-    for (int i = 0; i < n; i++) {
-        int j = 0;
-        int alpha = alphabet[0];
-
-        while ((j < breakingpoints.size()) && (a_h[i] > breakingpoints[j])) {
-            j++;
-        }
-
-        alpha = alphabet[j];
-        aux.push_back(alpha);
+    // Normalise
+    double mag = pow(pow(dx, 2.0) + pow(dy, 2.0), 0.5);
+    if (mag > 0.0) {
+        dx /= mag;
+        dy /= mag;
     }
-    return aux;
+
+    double pvx = pt.first - lineStart.first;
+    double pvy = pt.second - lineStart.second;
+
+    // Get dot product (project pv onto normalized direction)
+    double pvdot = dx * pvx + dy * pvy;
+
+    // Scale line direction vector
+    double dsx = pvdot * dx;
+    double dsy = pvdot * dy;
+
+    // Subtract this from pv
+    double ax = pvx - dsx;
+    double ay = pvy - dsy;
+
+    return pow(pow(ax, 2.0) + pow(ay, 2.0), 0.5);
+}
+
+float verticalDistance(float p_x, float p_y, float start_x, float start_y, float end_x, float end_y) {
+    float res = 0.0;
+    float dy = end_y - start_y;
+    float dx = end_x - start_x;
+    float m = dy / dx;
+    float line_y = p_x * m + start_x;
+    res = std::abs(std::abs(p_y) - std::abs(line_y));
+
+    return res;
+}
+
+void insertPointInDesiredList(float x, float y, int position, std::vector<float> &desired_x,
+                              std::vector<float> &desired_y) {
+    auto it_x = desired_x.begin();
+    auto it_y = desired_y.begin();
+
+    desired_x.insert(it_x + position, x);
+    desired_y.insert(it_y + position, y);
 }
 
 bool isPointInDesiredList(float point, std::vector<float> desired_x) {
@@ -231,24 +125,41 @@ void getSegmentOfPoint(float point, std::vector<float> desired_x, int &i_lower, 
     }
 }
 
-float verticalDistance(float p_x, float p_y, float start_x, float start_y, float end_x, float end_y) {
-    float res = 0.0;
-    float dy = end_y - start_y;
-    float dx = end_x - start_x;
-    float m = dy / dx;
-    float line_y = p_x * m + start_x;
-    res = std::abs(std::abs(p_y) - std::abs(line_y));
+std::vector<tsa::dimensionality::Point> tsa::dimensionality::PAA(std::vector<tsa::dimensionality::Point> points,
+                                                                 int bins) {
+    auto begin = points.begin();
+    auto last = points.end();
+    double xrange = (*(last - 1)).first - (*begin).first;
+    double width_bin = xrange / bins;
+    double reduction = bins / xrange;
 
-    return res;
+    std::vector<double> sum(bins, 0.0);
+    std::vector<int> counter(bins, 0);
+    std::vector<tsa::dimensionality::Point> result(bins, tsa::dimensionality::Point(0.0, 0.0));
+
+    // Iterating over the  timeseries
+    for (auto i = begin; i != last; i++) {
+        int pos = std::min((*i).first * reduction, (double)(bins - 1));
+        sum[pos] += (*i).second;
+        counter[pos] = counter[pos] + 1;
+    }
+
+    // Compute the average per bin
+    for (int i = 0; i < bins; i++) {
+        result[i].first = (width_bin * i) + (width_bin / 2.0);
+        result[i].second = sum[i] / counter[i];
+    }
+    return result;
 }
 
-void insertPointInDesiredList(float x, float y, int position, std::vector<float> &desired_x,
-                              std::vector<float> &desired_y) {
-    auto it_x = desired_x.begin();
-    auto it_y = desired_y.begin();
+af::array tsa::dimensionality::PAA(af::array a, int bins) {
+    int n = a.elements();
+    int elem_row = n / bins;
+    af::array b = af::moddims(a, elem_row, bins);
+    af::array addition = af::sum(b, 0);
+    af::array result = addition / elem_row;
 
-    desired_x.insert(it_x + position, x);
-    desired_y.insert(it_y + position, y);
+    return result;
 }
 
 af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
@@ -311,4 +222,151 @@ af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
     af::array res = af::join(1, tsx, tsy);
 
     return res;
+}
+
+std::vector<tsa::dimensionality::Point> tsa::dimensionality::ramerDouglasPeucker(
+    std::vector<tsa::dimensionality::Point> pointList, double epsilon) {
+    std::vector<tsa::dimensionality::Point> out;
+
+    if (pointList.size() < 2) throw std::invalid_argument("Not enough points to simplify ...");
+
+    // Find the point with the maximum distance from line between start and end
+    double dmax = 0.0;
+    size_t index = 0;
+    size_t end = pointList.size() - 1;
+
+    for (size_t i = 1; i < end; i++) {
+        double d = PerpendicularDistance(pointList[i], pointList[0], pointList[end]);
+        if (d > dmax) {
+            index = i;
+            dmax = d;
+        }
+    }
+
+    // If max distance is greater than epsilon, recursively simplify
+    if (dmax > epsilon) {
+        std::vector<tsa::dimensionality::Point> recResults1;
+        std::vector<tsa::dimensionality::Point> recResults2;
+        std::vector<tsa::dimensionality::Point> firstLine(pointList.begin(), pointList.begin() + index + 1);
+        std::vector<tsa::dimensionality::Point> lastLine(pointList.begin() + index, pointList.end());
+        recResults1 = ramerDouglasPeucker(firstLine, epsilon);
+        recResults2 = ramerDouglasPeucker(lastLine, epsilon);
+
+        // Build the result list
+        out.assign(recResults1.begin(), recResults1.end() - 1);
+        out.insert(out.end(), recResults2.begin(), recResults2.end());
+        if (out.size() < 2) throw std::runtime_error("Problem assembling output");
+    } else {
+        // Just return start and end points
+        out.clear();
+        out.push_back(pointList[0]);
+        out.push_back(pointList[end]);
+    }
+    return out;
+}
+
+af::array tsa::dimensionality::ramerDouglasPeucker(af::array pointList, double epsilon) {
+    std::vector<tsa::dimensionality::Point> points;
+    float *x = pointList.col(0).host<float>();
+    float *y = pointList.col(1).host<float>();
+
+    for (int i = 0; i < pointList.dims(0); i++) {
+        points.push_back(std::make_pair(x[i], y[i]));
+    }
+
+    std::vector<tsa::dimensionality::Point> rPoints = tsa::dimensionality::ramerDouglasPeucker(points, epsilon);
+    af::array out = af::constant(0, rPoints.size(), 2);
+
+    std::vector<float> vx(rPoints.size(), 0);
+    std::vector<float> vy(rPoints.size(), 0);
+
+    for (int i = 0; i < rPoints.size(); i++) {
+        vx[i] = rPoints[i].first;
+        vy[i] = rPoints[i].second;
+    }
+
+    float *ax = &vx[0];
+    float *ay = &vy[0];
+
+    af::array ox(rPoints.size(), ax);
+    af::array oy(rPoints.size(), ay);
+
+    return af::join(1, ox, oy);
+}
+
+std::vector<int> tsa::dimensionality::SAX(af::array a, int alphabet_size) {
+    float mean_value = af::mean<float>(a);
+    float std_value = af::stdev<float>(a);
+    std::vector<int> aux;
+    int n = a.elements();
+
+    std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
+    std::vector<int> alphabet = generateAlphabet(alphabet_size);
+    float *a_h = a.host<float>();
+
+    for (int i = 0; i < n; i++) {
+        int j = 0;
+        int alpha = alphabet[0];
+
+        while ((j < breakingpoints.size()) && (a_h[i] > breakingpoints[j])) {
+            j++;
+        }
+
+        alpha = alphabet[j];
+        aux.push_back(alpha);
+    }
+    return aux;
+}
+
+std::vector<tsa::dimensionality::Point> tsa::dimensionality::visvalingam(
+    std::vector<tsa::dimensionality::Point> pointList, int num_points_allowed) {
+    // variables
+    std::vector<tsa::dimensionality::Point> out(pointList.begin(), pointList.end());
+    float min_area = std::numeric_limits<float>::max();
+    int candidate_point = -1;
+    int iterations = out.size() - num_points_allowed;
+
+    // One point to be deleted in each iteration
+    for (int iter = 0; iter < iterations; iter++) {
+        for (int p = 0; p < out.size() - 2; p++) {
+            float area = computeTriangleArea(out[p], out[p + 1], out[p + 2]);
+            if (area < min_area) {
+                min_area = area;
+                candidate_point = p + 1;
+            }
+        }
+        std::vector<tsa::dimensionality::Point>::iterator nth = out.begin() + candidate_point;
+        out.erase(nth);
+        min_area = std::numeric_limits<float>::max();
+    }
+    return out;
+}
+
+af::array tsa::dimensionality::visvalingam(af::array pointList, int numPoints) {
+    std::vector<tsa::dimensionality::Point> points;
+    float *x = pointList.col(0).host<float>();
+    float *y = pointList.col(1).host<float>();
+
+    for (int i = 0; i < pointList.dims(0); i++) {
+        points.push_back(std::make_pair(x[i], y[i]));
+    }
+
+    std::vector<tsa::dimensionality::Point> rPoints = tsa::dimensionality::visvalingam(points, numPoints);
+    af::array out = af::constant(0, rPoints.size(), 2);
+
+    std::vector<float> vx(rPoints.size(), 0);
+    std::vector<float> vy(rPoints.size(), 0);
+
+    for (int i = 0; i < rPoints.size(); i++) {
+        vx[i] = rPoints[i].first;
+        vy[i] = rPoints[i].second;
+    }
+
+    float *ax = &vx[0];
+    float *ay = &vy[0];
+
+    af::array ox(rPoints.size(), ax);
+    af::array oy(rPoints.size(), ay);
+
+    return af::join(1, ox, oy);
 }
