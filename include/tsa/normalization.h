@@ -103,7 +103,7 @@ void meanNormInPlace(af::array &tss);
 af::array znorm(af::array tss, double epsilon = 0.00000001);
 
 /**
- * @brief Adjusts the time series in the given input and performs z-norm inplace (without allocating further memory)
+ * @brief Adjusts the time series in the given input and performs z-norm inplace (without allocating further memory).
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
