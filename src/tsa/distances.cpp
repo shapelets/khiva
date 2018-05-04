@@ -104,7 +104,7 @@ af::array tsa::distances::hamming(af::array tss) {
     for (auto currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
         gfor(af::seq otherCol, currentCol + 1, numOfTs - 1) {
             result(currentCol, otherCol) =
-                af::sum(((tss(af::span, currentCol) - tss(af::span, otherCol)) < 0).as(af::dtype::s32));
+                af::sum((tss(af::span, currentCol) != tss(af::span, otherCol)).as(af::dtype::s32));
         }
     }
     return result;
