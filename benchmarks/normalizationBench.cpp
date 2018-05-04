@@ -20,7 +20,7 @@ void DecimalScalingNorm(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto normalised = tsa::normalization::maxMinNorm(ts, DBL_MIN);
+        auto normalised = tsa::normalization::decimalScalingNorm(ts, DBL_MIN);
         normalised.eval();
         af::sync();
     }
@@ -37,7 +37,7 @@ void DecimalScalingNormInPlace(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::normalization::maxMinNormInPlace(ts, DBL_MIN);
+        tsa::normalization::decimalScalingNormInPlace(ts, DBL_MIN);
         ts.eval();
         af::sync();
     }
@@ -88,7 +88,7 @@ void MeanNorm(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto normalised = tsa::normalization::maxMinNorm(ts, DBL_MIN);
+        auto normalised = tsa::normalization::meanNorm(ts, DBL_MIN);
         normalised.eval();
         af::sync();
     }
@@ -105,7 +105,7 @@ void MeanNormInPlace(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::normalization::maxMinNormInPlace(ts, DBL_MIN);
+        tsa::normalization::meanNormInPlace(ts, DBL_MIN);
         ts.eval();
         af::sync();
     }

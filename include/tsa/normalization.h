@@ -94,7 +94,7 @@ void meanNormInPlace(af::array &tss);
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
- * @param epsilon Minimum standard deviation to consider.  It acts as a gatekeeper for those time series that may be
+ * @param epsilon Minimum standard deviation to consider. It acts as a gatekeeper for those time series that may be
  * constant or near constant.
  *
  * @return af::array With the same dimensions as tss where the time series have been adjusted for zero mean and one as
