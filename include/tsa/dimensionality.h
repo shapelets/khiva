@@ -23,7 +23,6 @@ typedef std::pair<float, float> Point;
  * Which simply means that in order to reduce the dimensionality from \f$n\f$ to \f$M\f$, we first divide the original
  * time series into \f$M\f$ equally sized frames and secondly compute the mean values for each frame. The sequence
  * assembled from the mean values is the PAA approximation (i.e., transform) of the original time series.
- * \overload std::vector<Point> PAA(std::vector<Point> points, int bins)
  *
  * @param points Set of points.
  * @param bins Sets the total number of divisions.
