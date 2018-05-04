@@ -11,30 +11,6 @@ namespace tsa {
 namespace distances {
 
 /**
- * @brief Calculates euclidean distances between time series.
- *
- * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
- * dimension one indicates the number of time series.
- *
- * @return af::array An upper triangular matrix where each position corresponds to the distance between two
- * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
- * between time series 0 and time series 1.
- */
-af::array euclidean(af::array tss);
-
-/**
- * @brief Calculates non squared version of the euclidean distance.
- *
- * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
- * dimension one indicates the number of time series.
- *
- * @return array An upper triangular matrix where each position corresponds to the distance between two time series.
- * Diagonal elements will be zero. For example: Position row 0 column 1 recordd the distance between time series 0
- * and time series 1.
- */
-af::array squaredEuclidean(af::array tss);
-
-/**
  * @brief Calculates the Dynamic Warping Distance.
  *
  * @param a The input time series of reference.
@@ -51,10 +27,58 @@ double dwt(std::vector<double> a, std::vector<double> b);
  * dimension one indicates the number of time series.
  *
  * @return af::array An upper triangular matrix where each position corresponds to the distance between
- * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 recordd the
+ * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
 af::array dwt(af::array tss);
+
+/**
+ * @brief Calculates euclidean distances between time series.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ *
+ * @return af::array An upper triangular matrix where each position corresponds to the distance between two
+ * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
+ * between time series 0 and time series 1.
+ */
+af::array euclidean(af::array tss);
+
+/**
+ * @brief Calculates hamming distances between time series.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ *
+ * @return af::array An upper triangular matrix where each position corresponds to the distance between two
+ * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
+ * between time series 0 and time series 1.
+ */
+af::array hamming(af::array tss);
+
+/**
+ * @brief Calculates manhattan distances between time series.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ *
+ * @return af::array An upper triangular matrix where each position corresponds to the distance between two
+ * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
+ * between time series 0 and time series 1.
+ */
+af::array manhattan(af::array tss);
+
+/**
+ * @brief Calculates non squared version of the euclidean distance.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ *
+ * @return array An upper triangular matrix where each position corresponds to the distance between two time series.
+ * Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between time series 0
+ * and time series 1.
+ */
+af::array squaredEuclidean(af::array tss);
 
 };  // namespace distances
 };  // namespace tsa
