@@ -62,11 +62,41 @@ af::array maxMinNorm(af::array tss, double high = 1.0, double low = 0.0, double 
 void maxMinNormInPlace(af::array &tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
 
 /**
- * @brief Normalizes the given time series according to its maximum value and adjusts each value within the range
- * (-1, 1).
+ * @brief Normalizes the given time series according to its maximum-minimum value and its mean. It follows the following
+ * formulae:
+ *
+ * \f[
+ * \acute{x} = \frac{x - mean(x)}{max(x) - min(x)}.
+ * \f]
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
+ *
+ * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0) have been
+ * normalized by substracting the mean from each number and dividing each number by \f$ max(x) - min(x)\f$, in the
+ * time series.
+ */
+af::array meanNorm(af::array tss);
+
+/**
+ * @brief Normalizes the given time series according to its maximum-minimum value and its mean. It follows the following
+ * formulae:
+ *
+ * \f[
+ * \acute{x} = \frac{x - mean(x)}{max(x) - min(x)}.
+ * \f]
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
+ * one indicates the number of time series.
+ */
+void meanNormInPlace(af::array &tss);
+
+/**
+ * @brief Normalizes the given time series according to its maximum value and adjusts each value within the range
+ * (-1, 1).
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
  *
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0) have been
  * normalized by dividing each number by 10^j, where j is the number of integer digits of the max number in the time
@@ -77,8 +107,8 @@ af::array decimalScalingNorm(af::array tss);
 /**
  * @brief Same as decimalScalingNorm, but it performs the operation in place, without allocating further memory.
  *
- * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
- * one indicates the number of time series.
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
  */
 void decimalScalingNormInPlace(af::array &tss);
 
