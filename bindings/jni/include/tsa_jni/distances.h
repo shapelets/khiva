@@ -29,10 +29,22 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Distances_euclidean(JNIEnv *env, jobject t
  * dimension one indicates the number of time series.
  *
  * @return result The updated reference and an upper triangular matrix where each position corresponds to the distance
- * between two time series. Diagonal elements will be zero. For example: Position row 0 column 1 recordd the distance
+ * between two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
 JNIEXPORT jlongArray JNICALL Java_tsa_Distances_squaredEuclidean(JNIEnv *env, jobject thisObj, jlong ref);
+
+/**
+ * @brief Calculates the Dynamic Time Warping Distance.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ *
+ * @return result The updated ref and an upper triangular matrix where each position corresponds to the distance between
+ * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
+ * distance between time series 0 and time series 1.
+ */
+JNIEXPORT jlongArray JNICALL Java_tsa_Distances_dtw(JNIEnv *env, jobject thisObj, jlong ref);
 
 #ifdef __cplusplus
 }

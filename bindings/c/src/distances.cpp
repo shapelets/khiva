@@ -24,6 +24,12 @@ void squared_euclidean(af_array *tss, af_array *result) {
     af_retain_array(result, tsa::distances::squaredEuclidean(var).get());
 }
 
+void dtw(af_array *tss, af_array *result) {
+    af::array var = af::array(*tss);
+    af_retain_array(tss, var.get());
+    af_retain_array(result, tsa::distances::dtw(var).get());
+}
+
 #ifdef __cplusplus
 }
 #endif
