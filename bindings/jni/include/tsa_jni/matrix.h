@@ -23,8 +23,8 @@ extern "C" {
  *           - The indices of the query sequences that produced
  *             the minimum reported in the motifs
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_findBestNMotifs(JNIEnv *env, jobject thisObj, jlong ref_profile,
-                                                             jlong ref_index, jlong n);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNMotifs(JNIEnv *env, jobject thisObj,
+                                                                          jlong ref_profile, jlong ref_index, jlong n);
 
 /**
  * @brief This function extracts the best N motifs from a previously calculated matrix profile.
@@ -39,8 +39,9 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_findBestNMotifs(JNIEnv *env, jobjec
  *          - The indices of the query sequences that produced
  *              the "N" bigger discords.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_findBestNDiscords(JNIEnv *env, jobject thisObj, jlong ref_profile,
-                                                               jlong ref_index, jlong n);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNDiscords(JNIEnv *env, jobject thisObj,
+                                                                            jlong ref_profile, jlong ref_index,
+                                                                            jlong n);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
@@ -53,7 +54,8 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_findBestNDiscords(JNIEnv *env, jobj
  *          - The distance profile.
  *          - The index profile.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_stomp(JNIEnv *env, jobject thisObj, jlong ref_a, jlong ref_b, jlong m);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stomp(JNIEnv *env, jobject thisObj, jlong ref_a, jlong ref_b,
+                                                                jlong m);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
@@ -66,7 +68,8 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_stomp(JNIEnv *env, jobject thisObj,
  *            from 't' in a different location of itself.
  *          - The matrix profile index, which points to where the previously mentioned minimum is located.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Matrix_stompSelfJoin(JNIEnv *env, jobject thisObj, jlong ref_a, jlong m);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stompSelfJoin(JNIEnv *env, jobject thisObj, jlong ref_a,
+                                                                        jlong m);
 
 #ifdef __cplusplus
 }

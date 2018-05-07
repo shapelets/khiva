@@ -10,17 +10,17 @@
 extern "C" {
 #endif
 
-#define CREATE_T_ARRAY(Ty, ty, dty)                                                                              \
-    JNIEXPORT jlong JNICALL Java_tsa_Array_createArrayFrom##Ty(JNIEnv *env, jobject thisObj, j##ty##Array elems, \
-                                                               jlongArray dims) {                                \
-        af_array ret = 0;                                                                                        \
-        jlong *dimptr = env->GetLongArrayElements(dims, 0);                                                      \
-        dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};                                           \
-        void *inptr = (void *)env->Get##Ty##ArrayElements(elems, 0);                                             \
-        af_retain_array(&ret, tsa::array::createArray(inptr, 4, tdims, dty).get());                              \
-        env->ReleaseLongArrayElements(dims, dimptr, 0);                                                          \
-        env->Release##Ty##ArrayElements(elems, (j##ty *)inptr, 0);                                               \
-        return jlong(ret);                                                                                       \
+#define CREATE_T_ARRAY(Ty, ty, dty)                                                                                \
+    JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_createArrayFrom##Ty(JNIEnv *env, jobject thisObj,          \
+                                                                            j##ty##Array elems, jlongArray dims) { \
+        af_array ret = 0;                                                                                          \
+        jlong *dimptr = env->GetLongArrayElements(dims, 0);                                                        \
+        dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};                                             \
+        void *inptr = (void *)env->Get##Ty##ArrayElements(elems, 0);                                               \
+        af_retain_array(&ret, tsa::array::createArray(inptr, 4, tdims, dty).get());                                \
+        env->ReleaseLongArrayElements(dims, dimptr, 0);                                                            \
+        env->Release##Ty##ArrayElements(elems, (j##ty *)inptr, 0);                                                 \
+        return jlong(ret);                                                                                         \
     }
 CREATE_T_ARRAY(Float, float, tsa::dtype::f32)
 CREATE_T_ARRAY(Double, double, tsa::dtype::f64)
@@ -32,8 +32,8 @@ CREATE_T_ARRAY(Byte, byte, tsa::dtype::u8)
 
 #undef CREATE_T_ARRAY
 
-JNIEXPORT jlong JNICALL Java_tsa_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass clazz, jobjectArray objs,
-                                                                    jlongArray dims) {
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass clazz,
+                                                                                 jobjectArray objs, jlongArray dims) {
     af_array ret = 0;
     jlong *dimptr = env->GetLongArrayElements(dims, 0);
     jint len = env->GetArrayLength(objs);
@@ -43,7 +43,7 @@ JNIEXPORT jlong JNICALL Java_tsa_Array_createArrayFromDoubleComplex(JNIEnv *env,
     static bool isfirst = true;
 
     if (isfirst) {
-        cls = env->FindClass("tsa/DoubleComplex");
+        cls = env->FindClass("com/gcatsoft/tsa/DoubleComplex");
         re = env->GetFieldID(cls, "real", "D");
         im = env->GetFieldID(cls, "imag", "D");
         isfirst = false;
@@ -63,13 +63,13 @@ JNIEXPORT jlong JNICALL Java_tsa_Array_createArrayFromDoubleComplex(JNIEnv *env,
     dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
     af_retain_array(&ret, tsa::array::createArray(af_array(tmp), 4, tdims, tsa::dtype::c64).get());
 
-    free(tmp);
+    delete[] tmp;
     env->ReleaseLongArrayElements(dims, dimptr, 0);
     return jlong(ret);
 }
 
-JNIEXPORT jlong JNICALL Java_tsa_Array_createArrayFromFloatComplex(JNIEnv *env, jclass clazz, jobjectArray objs,
-                                                                   jlongArray dims) {
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_createArrayFromFloatComplex(JNIEnv *env, jclass clazz,
+                                                                                jobjectArray objs, jlongArray dims) {
     af_array ret = 0;
     jlong *dimptr = env->GetLongArrayElements(dims, 0);
     jint len = env->GetArrayLength(objs);
@@ -79,7 +79,7 @@ JNIEXPORT jlong JNICALL Java_tsa_Array_createArrayFromFloatComplex(JNIEnv *env, 
     static bool isfirst = true;
 
     if (isfirst) {
-        cls = env->FindClass("tsa/FloatComplex");
+        cls = env->FindClass("com/gcatsoft/tsa/FloatComplex");
         re = env->GetFieldID(cls, "real", "F");
         im = env->GetFieldID(cls, "imag", "F");
         isfirst = false;
@@ -99,16 +99,16 @@ JNIEXPORT jlong JNICALL Java_tsa_Array_createArrayFromFloatComplex(JNIEnv *env, 
     dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
     af_retain_array(&ret, tsa::array::createArray(af_array(tmp), 4, tdims, tsa::dtype::c32).get());
 
-    free(tmp);
+    delete[] tmp;
     env->ReleaseLongArrayElements(dims, dimptr, 0);
     return jlong(ret);
 }
 
-JNIEXPORT void JNICALL Java_tsa_Array_deleteArray(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT void JNICALL Java_com_gcatsoft_tsa_Array_deleteArray(JNIEnv *env, jobject thisObj, jlong ref) {
     tsa::array::deleteArray((void *)&ref);
 }
 
-JNIEXPORT jint JNICALL Java_tsa_Array_getType(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jint JNICALL Java_com_gcatsoft_tsa_Array_getType(JNIEnv *env, jobject thisObj, jlong ref) {
     af_array a = (af_array)ref;
     af::array var = af::array(a);
     jint t = tsa::array::getType(var);
@@ -120,7 +120,8 @@ JNIEXPORT jint JNICALL Java_tsa_Array_getType(JNIEnv *env, jobject thisObj, jlon
 }
 
 #define GET_T_FROM_ARRAY(Ty, ty)                                                                                \
-    JNIEXPORT j##ty##Array JNICALL Java_tsa_Array_get##Ty##FromArray(JNIEnv *env, jobject thisObj, jlong ref) { \
+    JNIEXPORT j##ty##Array JNICALL Java_com_gcatsoft_tsa_Array_get##Ty##FromArray(JNIEnv *env, jobject thisObj, \
+                                                                                  jlong ref) {                  \
         j##ty##Array result;                                                                                    \
         dim_t elements = 0;                                                                                     \
         af_get_elements(&elements, (void *)ref);                                                                \
@@ -145,12 +146,13 @@ GET_T_FROM_ARRAY(Short, short)
 GET_T_FROM_ARRAY(Byte, byte)
 #undef GET_T_FROM_ARRAY
 
-JNIEXPORT jobjectArray JNICALL Java_tsa_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj,
+                                                                                     jlong ref) {
     jobjectArray result;
     dim_t elements = 0;
     (af_get_elements(&elements, (void *)(ref)));
 
-    jclass cls = env->FindClass("tsa/DoubleComplex");
+    jclass cls = env->FindClass("com/gcatsoft/tsa/DoubleComplex");
     jmethodID id = env->GetMethodID(cls, "<init>", "(DD)V");
     if (id == NULL) return NULL;
 
@@ -172,16 +174,17 @@ JNIEXPORT jobjectArray JNICALL Java_tsa_Array_getDoubleComplexFromArray(JNIEnv *
         env->SetObjectArrayElement(result, i, obj);
     }
 
-    free(tmp);
+    delete[] tmp;
     return result;
 }
 
-JNIEXPORT jobjectArray JNICALL Java_tsa_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj,
+                                                                                    jlong ref) {
     jobjectArray result;
     dim_t elements = 0;
     (af_get_elements(&elements, (void *)(ref)));
 
-    jclass cls = env->FindClass("tsa/FloatComplex");
+    jclass cls = env->FindClass("com/gcatsoft/tsa/FloatComplex");
     jmethodID id = env->GetMethodID(cls, "<init>", "(FF)V");
     if (id == NULL) return NULL;
 
@@ -203,11 +206,11 @@ JNIEXPORT jobjectArray JNICALL Java_tsa_Array_getFloatComplexFromArray(JNIEnv *e
         env->SetObjectArrayElement(result, i, obj);
     }
 
-    free(tmp);
+    delete[] tmp;
     return result;
 }
 
-JNIEXPORT jlong JNICALL Java_tsa_Array_print(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_print(JNIEnv *env, jobject thisObj, jlong ref) {
     af_array a = (af_array)ref;
     af::array var = af::array(a);
     tsa::array::print(var);
@@ -215,7 +218,7 @@ JNIEXPORT jlong JNICALL Java_tsa_Array_print(JNIEnv *env, jobject thisObj, jlong
     return jlong(a);
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Array_getDims(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_getDims(JNIEnv *env, jobject thisObj, jlong ref) {
     af_array a = (af_array)ref;
     af::array var = af::array(a);
     af::dim4 d = tsa::array::getDims(var);

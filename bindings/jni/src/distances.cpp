@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Distances_euclidean(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_euclidean(JNIEnv *env, jobject thisObj, jlong ref) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -33,7 +33,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Distances_euclidean(JNIEnv *env, jobject t
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Distances_squaredEuclidean(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_squaredEuclidean(JNIEnv *env, jobject thisObj, jlong ref) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -54,7 +54,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Distances_squaredEuclidean(JNIEnv *env, jo
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Distances_dtw(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_dtw(JNIEnv *env, jobject thisObj, jlong ref) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);

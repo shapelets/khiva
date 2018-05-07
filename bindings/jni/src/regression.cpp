@@ -12,7 +12,8 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Regression_linear(JNIEnv *env, jobject thisObj, jlong ref_xss, jlong ref_yss) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regression_linear(JNIEnv *env, jobject thisObj, jlong ref_xss,
+                                                                     jlong ref_yss) {
     jint l = 7;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);

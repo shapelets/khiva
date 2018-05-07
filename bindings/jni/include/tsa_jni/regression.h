@@ -28,7 +28,8 @@ extern "C" {
  *          stderrest Standard error of the estimated gradient.
  *      }
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Regression_linear(JNIEnv *env, jobject thisObj, jlong ref_xss, jlong ref_yss);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regression_linear(JNIEnv *env, jobject thisObj, jlong ref_xss,
+                                                                     jlong ref_yss);
 
 #ifdef __cplusplus
 }

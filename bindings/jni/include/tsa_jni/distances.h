@@ -20,7 +20,7 @@ extern "C" {
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between
  * time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Distances_euclidean(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_euclidean(JNIEnv *env, jobject thisObj, jlong ref);
 
 /**
  * @brief Calculates non squared version of the euclidean distance.
@@ -32,7 +32,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Distances_euclidean(JNIEnv *env, jobject t
  * between two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Distances_squaredEuclidean(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_squaredEuclidean(JNIEnv *env, jobject thisObj, jlong ref);
 
 /**
  * @brief Calculates the Dynamic Time Warping Distance.
@@ -44,7 +44,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Distances_squaredEuclidean(JNIEnv *env, jo
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Distances_dtw(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_dtw(JNIEnv *env, jobject thisObj, jlong ref);
 
 #ifdef __cplusplus
 }

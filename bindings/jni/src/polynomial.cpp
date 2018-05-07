@@ -11,8 +11,8 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Polynomial_polyfit(JNIEnv *env, jobject thisObj, jlong refX, jlong refY,
-                                                         jint deg) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_polyfit(JNIEnv *env, jobject thisObj, jlong refX,
+                                                                      jlong refY, jint deg) {
     jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -38,7 +38,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Polynomial_polyfit(JNIEnv *env, jobject th
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Polynomial_roots(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_roots(JNIEnv *env, jobject thisObj, jlong ref) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);

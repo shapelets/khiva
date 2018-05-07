@@ -12,8 +12,8 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_covariance(JNIEnv *env, jobject thisObj, jlong ref,
-                                                            jboolean unbiased) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_covariance(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                         jboolean unbiased) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -34,7 +34,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_covariance(JNIEnv *env, jobject
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_moment(JNIEnv *env, jobject thisObj, jlong ref, jint k) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_moment(JNIEnv *env, jobject thisObj, jlong ref, jint k) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -55,7 +55,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_moment(JNIEnv *env, jobject thi
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_sampleStdev(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_sampleStdev(JNIEnv *env, jobject thisObj, jlong ref) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -76,7 +76,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_sampleStdev(JNIEnv *env, jobjec
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_kurtosis(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_kurtosis(JNIEnv *env, jobject thisObj, jlong ref) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -97,7 +97,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_kurtosis(JNIEnv *env, jobject t
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_skewness(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_skewness(JNIEnv *env, jobject thisObj, jlong ref) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -118,8 +118,8 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_skewness(JNIEnv *env, jobject t
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_quantile(JNIEnv *env, jobject thisObj, jlong ref, jlong ref_q,
-                                                          jfloat precision) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantile(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                       jlong ref_q, jfloat precision) {
     jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -143,8 +143,8 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_quantile(JNIEnv *env, jobject t
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_quantilesCut(JNIEnv *env, jobject thisObj, jlong ref, jfloat quantiles,
-                                                              jfloat precision) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantilesCut(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                           jfloat quantiles, jfloat precision) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);

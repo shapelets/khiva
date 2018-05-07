@@ -10,7 +10,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_znorm(JNIEnv *env, jobject thisObj, jlong ref, jdouble epsilon) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Normalization_znorm(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                       jdouble epsilon) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -32,7 +33,8 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_znorm(JNIEnv *env, jobject t
     return pointers;
 }
 
-JNIEXPORT jlong JNICALL Java_tsa_Normalization_znormInPlace(JNIEnv *env, jobject thisObj, jlong ref, jdouble epsilon) {
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Normalization_znormInPlace(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                         jdouble epsilon) {
     af_array arr = (af_array)ref;
     af::array var = af::array(arr);
 
@@ -43,8 +45,9 @@ JNIEXPORT jlong JNICALL Java_tsa_Normalization_znormInPlace(JNIEnv *env, jobject
     return (jlong)arr;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_maxMinNorm(JNIEnv *env, jobject thisObj, jlong ref, jdouble high,
-                                                               jdouble low, jdouble epsilon) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Normalization_maxMinNorm(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                            jdouble high, jdouble low,
+                                                                            jdouble epsilon) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -66,8 +69,9 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_maxMinNorm(JNIEnv *env, jobj
     return pointers;
 }
 
-JNIEXPORT jlong JNICALL Java_tsa_Normalization_maxMinNormInPlace(JNIEnv *env, jobject thisObj, jlong ref, jdouble high,
-                                                                 jdouble low, jdouble epsilon) {
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Normalization_maxMinNormInPlace(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                              jdouble high, jdouble low,
+                                                                              jdouble epsilon) {
     af_array arr = (af_array)ref;
     af::array var = af::array(arr);
 
@@ -78,7 +82,8 @@ JNIEXPORT jlong JNICALL Java_tsa_Normalization_maxMinNormInPlace(JNIEnv *env, jo
     return (jlong)arr;
 }
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_decimalScalingNorm(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Normalization_decimalScalingNorm(JNIEnv *env, jobject thisObj,
+                                                                                    jlong ref) {
     jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -100,7 +105,8 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_decimalScalingNorm(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlong JNICALL Java_tsa_Normalization_decimalScalingNormInPlace(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Normalization_decimalScalingNormInPlace(JNIEnv *env, jobject thisObj,
+                                                                                      jlong ref) {
     af_array arr = (af_array)ref;
     af::array var = af::array(arr);
 

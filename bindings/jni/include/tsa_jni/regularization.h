@@ -33,9 +33,9 @@ extern "C" {
  *
  * @return The updated ref and an array with the values of the group keys aggregated using the aggregationFunction.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Regularization_groupBy(JNIEnv *env, jobject thisObj, jlong ref,
-                                                             jint aggregationFunction, jint nColumnsKey,
-                                                             jint nColumnsValue);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regularization_groupBy(JNIEnv *env, jobject thisObj, jlong ref,
+                                                                          jint aggregationFunction, jint nColumnsKey,
+                                                                          jint nColumnsValue);
 
 #ifdef __cplusplus
 }

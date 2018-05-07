@@ -20,7 +20,7 @@ extern "C" {
  * @return The updated ref and an array with the same dimensions as ref where the time series have been
  * adjusted for zero mean and one as standard deviation.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_znorm(JNIEnv *env, jobject thisObj, jlong ref, jdouble epsilon);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Normalization_znorm(JNIEnv *env, jobject thisObj, jlong ref, jdouble epsilon);
 
 /**
  * @brief Adjusts the time series in the given input and performs z-norm
@@ -32,7 +32,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_znorm(JNIEnv *env, jobject t
  * constant or near constant.
  * @return The updated ref.
  */
-JNIEXPORT jlong JNICALL Java_tsa_Normalization_znormInPlace(JNIEnv *env, jobject thisObj, jlong ref, jdouble epsilon);
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Normalization_znormInPlace(JNIEnv *env, jobject thisObj, jlong ref, jdouble epsilon);
 
 /**
  * @brief Normalizes the given time series according to its minimum and maximum value and adjusts each value within the
@@ -47,11 +47,11 @@ JNIEXPORT jlong JNICALL Java_tsa_Normalization_znormInPlace(JNIEnv *env, jobject
  * @return The updated ref and an array with the same dimensions as ref, whose values (time series in dimension 0) have
  * been normalized by maximum and minimum values, and scaled as per high and low parameters.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_maxMinNorm(JNIEnv *env, jobject thisObj, jlong ref, jdouble high,
-                                                               jdouble low, jdouble epsilon);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Normalization_maxMinNorm(JNIEnv *env, jobject thisObj, jlong ref, jdouble high,
+                                                                            jdouble low, jdouble epsilon);
 
 /**
- * @brief Same as Java_tsa_Normalization_maxMinNorm, but it performs the operation in place, without allocating further
+ * @brief Same as Java_com_gcatsoft_tsa_Normalization_maxMinNorm, but it performs the operation in place, without allocating further
  * memory.
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -62,8 +62,8 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_maxMinNorm(JNIEnv *env, jobj
  * between min and max values in the ref.
  * @return The updated ref.
  */
-JNIEXPORT jlong JNICALL Java_tsa_Normalization_maxMinNormInPlace(JNIEnv *env, jobject thisObj, jlong ref, jdouble high,
-                                                                 jdouble low, jdouble epsilon);
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Normalization_maxMinNormInPlace(JNIEnv *env, jobject thisObj, jlong ref, jdouble high,
+                                                                              jdouble low, jdouble epsilon);
 
 /**
  * @brief Normalizes the given time series according to its maximum value and adjusts each value within the range
@@ -75,17 +75,17 @@ JNIEXPORT jlong JNICALL Java_tsa_Normalization_maxMinNormInPlace(JNIEnv *env, jo
  * been normalized by dividing each number by 10^j, where j is the number of integer digits of the max number in the
  * time series.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Normalization_decimalScalingNorm(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Normalization_decimalScalingNorm(JNIEnv *env, jobject thisObj, jlong ref);
 
 /**
- * @brief Same as Java_tsa_Normalization_decimalScalingNorm, but it performs the operation in place, without allocating
+ * @brief Same as Java_com_gcatsoft_tsa_Normalization_decimalScalingNorm, but it performs the operation in place, without allocating
  * further memory.
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
  * @return The updated ref.
  */
-JNIEXPORT jlong JNICALL Java_tsa_Normalization_decimalScalingNormInPlace(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Normalization_decimalScalingNormInPlace(JNIEnv *env, jobject thisObj, jlong ref);
 
 #ifdef __cplusplus
 }

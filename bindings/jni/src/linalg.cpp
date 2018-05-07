@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_tsa_Linalg_lls(JNIEnv *env, jobject thisObj, jlong ref_a, jlong ref_b) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Linalg_lls(JNIEnv *env, jobject thisObj, jlong ref_a, jlong ref_b) {
     jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);

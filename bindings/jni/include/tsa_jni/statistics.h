@@ -19,7 +19,7 @@ extern "C" {
  *
  * @return The updated ref and a ref to the covariance matrix of the time series.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_covariance(JNIEnv *env, jobject thisObj, jlong ref, jboolean unbiased);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_covariance(JNIEnv *env, jobject thisObj, jlong ref, jboolean unbiased);
 
 /**
  * @brief Calculates the kth moment of the given time series.
@@ -30,7 +30,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_covariance(JNIEnv *env, jobject
  *
  * @return The updated ref and a ref to the kth moment of the given time series.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_moment(JNIEnv *env, jobject thisObj, jlong ref, jint k);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_moment(JNIEnv *env, jobject thisObj, jlong ref, jint k);
 
 /**
  * @brief Estimates standard deviation based on a sample. The standard deviation is calculated using the "n-1" method.
@@ -39,7 +39,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_moment(JNIEnv *env, jobject thi
  * one indicates the number of time series.
  * @return The updated ref and a ref to the sample standard deviation.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_sampleStdev(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_sampleStdev(JNIEnv *env, jobject thisObj, jlong ref);
 
 /**
  * @brief Calculates the kurtosis of tss (calculated with the adjusted Fisher-Pearson standardized moment coefficient
@@ -50,7 +50,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_sampleStdev(JNIEnv *env, jobjec
  *
  * @return The updated ref and a ref to the kurtosis of tss.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_kurtosis(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_kurtosis(JNIEnv *env, jobject thisObj, jlong ref);
 
 /**
  * @brief Calculates the sample skewness of tss (calculated with the adjusted Fisher-Pearson standardized moment
@@ -61,7 +61,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_kurtosis(JNIEnv *env, jobject t
  *
  * @return The updated ref and a ref to an array containing the skewness of each time series in tss.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_skewness(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_skewness(JNIEnv *env, jobject thisObj, jlong ref);
 
 /**
  * @brief Calculates the values at the given quantile.
@@ -73,8 +73,8 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_skewness(JNIEnv *env, jobject t
  *
  * @return Updated refs and a ref to the values at the given quantile.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_quantile(JNIEnv *env, jobject thisObj, jlong ref, jlong ref_q,
-                                                          jfloat precision);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantile(JNIEnv *env, jobject thisObj, jlong ref, jlong ref_q,
+                                                                       jfloat precision);
 
 /**
  * @brief Discretizes the time series into equal-sized buckets based on sample quantiles.
@@ -87,8 +87,8 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_quantile(JNIEnv *env, jobject t
  * @return The updated ref and a ref to a matrix with the categories, one category per row, the start of the
  * category in the first column and the end in the second category.
  */
-JNIEXPORT jlongArray JNICALL Java_tsa_Statistics_quantilesCut(JNIEnv *env, jobject thisObj, jlong ref, jfloat quantiles,
-                                                              jfloat precision);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantilesCut(JNIEnv *env, jobject thisObj, jlong ref, jfloat quantiles,
+                                                                           jfloat precision);
 
 #ifdef __cplusplus
 }
