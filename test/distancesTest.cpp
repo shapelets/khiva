@@ -8,7 +8,7 @@
 #include <tsa/distances.h>
 #include "tsaTest.h"
 
-void dwt() {
+void dtw() {
     std::vector<double> a;
     std::vector<double> b;
 
@@ -27,16 +27,16 @@ void dwt() {
     b.push_back(6);
     b.push_back(7);
 
-    double result = tsa::distances::dwt(a, b);
+    double result = tsa::distances::dtw(a, b);
 
     ASSERT_EQ(result, 19);
 }
 
-void dwt2() {
+void dtw2() {
     float data[] = {1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5};
     af::array tss(5, 5, data);
 
-    af::array result = tsa::distances::dwt(tss);
+    af::array result = tsa::distances::dtw(tss);
 
     // check dimensions
     auto dims = result.dims();
@@ -227,8 +227,8 @@ void squaredEuclidean() {
     ASSERT_EQ(0.0, hostResult[8]);
 }
 
-TSA_TEST(DistanceTests, DWT, dwt);
-TSA_TEST(DistanceTests, DWT2, dwt2);
+TSA_TEST(DistanceTests, DTW, dtw);
+TSA_TEST(DistanceTests, DTW2, dtw2);
 TSA_TEST(DistanceTests, Euclidean, euclidean);
 TSA_TEST(DistanceTests, Hamming, hamming);
 TSA_TEST(DistanceTests, Manhattam, manhattan);

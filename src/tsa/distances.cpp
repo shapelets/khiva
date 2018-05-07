@@ -9,7 +9,7 @@
 
 double distance(double x, double y) { return std::sqrt(std::pow((x - y), 2)); }
 
-double tsa::distances::dwt(std::vector<double> t0, std::vector<double> t1) {
+double tsa::distances::dtw(std::vector<double> t0, std::vector<double> t1) {
     int m = t0.size();
     int n = t1.size();
 
@@ -41,7 +41,7 @@ double tsa::distances::dwt(std::vector<double> t0, std::vector<double> t1) {
 
 af::array distance(af::array a, af::array bss) { return af::sqrt(af::pow(af::tile(a, 1, bss.dims(1)) - bss, 2)); }
 
-af::array dwtInternal(af::array a, af::array bss) {
+af::array dtwInternal(af::array a, af::array bss) {
     int m = a.dims(0);
     int n = bss.dims(0);
 
@@ -69,7 +69,7 @@ af::array dwtInternal(af::array a, af::array bss) {
     return af::reorder(cost(m - 1, n - 1, af::span), 0, 2, 1, 3);
 }
 
-af::array tsa::distances::dwt(af::array tss) {
+af::array tsa::distances::dtw(af::array tss) {
     // get the number of time series
     auto numOfTs = tss.dims(1);
     // the result is a squared matrix of dimensions numOfTs x numOfTs
@@ -80,7 +80,7 @@ af::array tsa::distances::dwt(af::array tss) {
     for (int currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
         gfor(af::seq otherCol, currentCol + 1, numOfTs - 1) {
             result(currentCol, otherCol) =
-                dwtInternal(tss(af::span, currentCol), af::reorder(tss(af::span, otherCol), 0, 3, 1, 2));
+                dtwInternal(tss(af::span, currentCol), af::reorder(tss(af::span, otherCol), 0, 3, 1, 2));
         }
     }
 

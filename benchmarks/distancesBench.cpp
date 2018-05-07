@@ -9,7 +9,8 @@
 #include "tsaBenchmark.h"
 
 template <af::Backend BE, int D>
-void DWT(benchmark::State &state) {
+void DTW(benchmark::State &state)
+{
     af::setBackend(BE);
     af::setDevice(D);
 
@@ -19,8 +20,9 @@ void DWT(benchmark::State &state) {
     auto t = af::randu(n, m, f64);
 
     af::sync();
-    while (state.KeepRunning()) {
-        auto dwt = tsa::distances::dwt(t);
+    while (state.KeepRunning())
+    {
+        auto dwt = tsa::distances::dtw(t);
         dwt.eval();
         af::sync();
     }
@@ -28,7 +30,8 @@ void DWT(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
-void Euclidean(benchmark::State &state) {
+void Euclidean(benchmark::State &state)
+{
     af::setBackend(BE);
     af::setDevice(D);
 
@@ -38,7 +41,8 @@ void Euclidean(benchmark::State &state) {
     auto t = af::randu(n, m, f64);
 
     af::sync();
-    while (state.KeepRunning()) {
+    while (state.KeepRunning())
+    {
         auto dwt = tsa::distances::euclidean(t);
         dwt.eval();
         af::sync();
@@ -47,7 +51,8 @@ void Euclidean(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
-void Hamming(benchmark::State &state) {
+void Hamming(benchmark::State &state)
+{
     af::setBackend(BE);
     af::setDevice(D);
 
@@ -57,7 +62,8 @@ void Hamming(benchmark::State &state) {
     auto t = af::randu(n, m, f64);
 
     af::sync();
-    while (state.KeepRunning()) {
+    while (state.KeepRunning())
+    {
         auto dwt = tsa::distances::hamming(t);
         dwt.eval();
         af::sync();
@@ -66,7 +72,8 @@ void Hamming(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
-void Manhattan(benchmark::State &state) {
+void Manhattan(benchmark::State &state)
+{
     af::setBackend(BE);
     af::setDevice(D);
 
@@ -76,7 +83,8 @@ void Manhattan(benchmark::State &state) {
     auto t = af::randu(n, m, f64);
 
     af::sync();
-    while (state.KeepRunning()) {
+    while (state.KeepRunning())
+    {
         auto dwt = tsa::distances::manhattan(t);
         dwt.eval();
         af::sync();
@@ -85,7 +93,8 @@ void Manhattan(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
-void SquaredEuclidean(benchmark::State &state) {
+void SquaredEuclidean(benchmark::State &state)
+{
     af::setBackend(BE);
     af::setDevice(D);
 
@@ -95,7 +104,8 @@ void SquaredEuclidean(benchmark::State &state) {
     auto t = af::randu(n, m, f64);
 
     af::sync();
-    while (state.KeepRunning()) {
+    while (state.KeepRunning())
+    {
         auto dwt = tsa::distances::squaredEuclidean(t);
         dwt.eval();
         af::sync();
@@ -103,8 +113,9 @@ void SquaredEuclidean(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-void cudaBenchmarks() {
-    BENCHMARK_TEMPLATE(DWT, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+void cudaBenchmarks()
+{
+    BENCHMARK_TEMPLATE(DTW, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -130,8 +141,9 @@ void cudaBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-void openclBenchmarks() {
-    BENCHMARK_TEMPLATE(DWT, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+void openclBenchmarks()
+{
+    BENCHMARK_TEMPLATE(DTW, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -157,8 +169,9 @@ void openclBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-void cpuBenchmarks() {
-    BENCHMARK_TEMPLATE(DWT, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+void cpuBenchmarks()
+{
+    BENCHMARK_TEMPLATE(DTW, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
