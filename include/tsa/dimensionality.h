@@ -143,7 +143,7 @@ std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
  *
  * @return af::array where the number of points has been reduced to numPoints.
  */
-af::array visvalingam(af::array, int numPoints);
+af::array visvalingam(af::array pointList, int numPoints);
 
 };  // namespace dimensionality
 };  // namespace tsa

@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <tsa/library.h>
+#include <tsa/version.h>
 #include <tsa_c/library.h>
 
 #ifdef __cplusplus
@@ -24,6 +25,8 @@ void set_device(int *device) { tsa::library::setDevice(*device); }
 void get_device_id(int *device_id) { *device_id = tsa::library::getDevice(); }
 
 void get_device_count(int *device_count) { *device_count = tsa::library::getDeviceCount(); }
+
+void version(char **v) { strcpy(*v, tsa::version()); }
 
 #ifdef __cplusplus
 }

@@ -57,6 +57,13 @@ JNIEXPORT int JNICALL Java_tsa_Library_getDeviceID(JNIEnv *env, jobject thisObj)
  */
 JNIEXPORT int JNICALL Java_tsa_Library_getDeviceCount(JNIEnv *env, jobject thisObj);
 
+/**
+ * @brief Returns a string with the current version of the library
+ *
+ * @return A byte array with the current version of the library.
+ */
+JNIEXPORT jbyteArray JNICALL Java_tsa_Library_version(JNIEnv *env, jobject thisObj);
+
 #ifdef __cplusplus
 }
 #endif

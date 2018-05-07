@@ -14,4 +14,5 @@
 #include <tsa_c/normalization.h>
 #include <tsa_c/polynomial.h>
 #include <tsa_c/regression.h>
+#include <tsa_c/regularization.h>
 #include <tsa_c/statistics.h>

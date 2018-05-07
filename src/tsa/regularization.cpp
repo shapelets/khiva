@@ -16,7 +16,7 @@ af::array tsa::regularization::groupBy(af::array in, af::array (*aggregationFunc
     af::array minus = in(af::seq(1, n - 1), keyColumns) - in(af::seq(0, n - 2), keyColumns);
     af::array groupKeysMask = af::anyTrue(af::join(0, af::constant(1, 1, nColumnsKey, minus.type()), minus) != 0, 1);
     af::array groupKeys = in(groupKeysMask, keyColumns);
-    af::array values = af::constant(0, groupKeys.dims(0), nColumnsValue);
+    af::array values = af::constant(0, groupKeys.dims(0), nColumnsValue, in.type());
 
     // GFOR cannot be used because the WHERE clause (implicit when using a mask)
     // cannot be used inside
@@ -41,7 +41,7 @@ af::array tsa::regularization::groupBy(af::array in,
     af::array minus = in(af::seq(1, n - 1), keyColumns) - in(af::seq(0, n - 2), keyColumns);
     af::array groupKeysMask = af::anyTrue(af::join(0, af::constant(1, 1, nColumnsKey, minus.type()), minus) != 0, 1);
     af::array groupKeys = in(groupKeysMask, keyColumns);
-    af::array values = af::constant(0, groupKeys.dims(0), nColumnsValue);
+    af::array values = af::constant(0, groupKeys.dims(0), nColumnsValue, in.type());
 
     // GFOR cannot be used because the WHERE clause (implicit when using a mask)
     // cannot be used inside
@@ -65,7 +65,7 @@ af::array tsa::regularization::groupBy(af::array in, af::array (*aggregationFunc
     af::array minus = in(af::seq(1, n - 1), keyColumns) - in(af::seq(0, n - 2), keyColumns);
     af::array groupKeysMask = af::anyTrue(af::join(0, af::constant(1, 1, nColumnsKey, minus.type()), minus) != 0, 1);
     af::array groupKeys = in(groupKeysMask, keyColumns);
-    af::array values = af::constant(0, groupKeys.dims(0), nColumnsValue);
+    af::array values = af::constant(0, groupKeys.dims(0), nColumnsValue, in.type());
 
     // GFOR cannot be used because the WHERE clause (implicit when using a mask)
     // cannot be used inside

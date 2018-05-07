@@ -55,6 +55,13 @@ void get_device_id(int *device_id);
  */
 void get_device_count(int *device_count);
 
+/**
+ * @brief Returns a string with the current version of the library.
+ *
+ * @param v A previously malloced character array where to copy the version.
+ */
+void version(char **v);
+
 #ifdef __cplusplus
 }
 #endif

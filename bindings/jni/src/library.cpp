@@ -4,7 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <string.h>
 #include <tsa/library.h>
+#include <tsa/version.h>
 #include <tsa_jni/library.h>
 
 #ifdef __cplusplus
@@ -31,6 +33,15 @@ JNIEXPORT int JNICALL Java_tsa_Library_getDeviceID(JNIEnv *env, jobject thisObj)
 
 JNIEXPORT int JNICALL Java_tsa_Library_getDeviceCount(JNIEnv *env, jobject thisObj) {
     return tsa::library::getDeviceCount();
+}
+
+JNIEXPORT jbyteArray JNICALL Java_tsa_Library_version(JNIEnv *env, jobject thisObj) {
+    const char *v = tsa::version();
+    size_t l = strlen(v);
+    jbyteArray result = env->NewByteArray(l);
+    env->SetByteArrayRegion(result, 0, l, (jbyte *)v);
+
+    return result;
 }
 
 #ifdef __cplusplus
