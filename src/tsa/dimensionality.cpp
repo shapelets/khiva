@@ -153,11 +153,11 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::PAA(std::vector<tsa
 }
 
 af::array tsa::dimensionality::PAA(af::array a, int bins) {
-    int n = a.elements();
+    int n = a.dims(0);
     int elem_row = n / bins;
-    af::array b = af::moddims(a, elem_row, bins);
+    af::array b = af::moddims(a, elem_row, bins, a.dims(1));
     af::array addition = af::sum(b, 0);
-    af::array result = addition / elem_row;
+    af::array result = af::reorder(addition / elem_row, 1, 2, 0, 3);
 
     return result;
 }
@@ -167,7 +167,7 @@ af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
     int end = n - 1;
 
     if (n < 2) {
-        throw std::invalid_argument("We can´t delete all those important points");
+        throw std::invalid_argument("We canÂ´t delete all those important points");
     } else if (n == numberIPs) {
         return ts;
     }
@@ -294,28 +294,40 @@ af::array tsa::dimensionality::ramerDouglasPeucker(af::array pointList, double e
     return af::join(1, ox, oy);
 }
 
-std::vector<int> tsa::dimensionality::SAX(af::array a, int alphabet_size) {
-    float mean_value = af::mean<float>(a);
-    float std_value = af::stdev<float>(a);
-    std::vector<int> aux;
-    int n = a.elements();
+af::array tsa::dimensionality::SAX(af::array a, int alphabet_size) {
+    af::array result = af::constant(0, a.dims(), af::dtype::s32);
+    for (int k = 0; k < a.dims(1); k++) {
+        float mean_value = af::mean<float>(a);
+        float std_value = af::stdev<float>(a);
+        std::vector<int> aux;
+        int n = a.dims(0);
 
-    std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
-    std::vector<int> alphabet = generateAlphabet(alphabet_size);
-    float *a_h = a.host<float>();
+        std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
+        std::vector<int> alphabet = generateAlphabet(alphabet_size);
+        float *a_h = a.host<float>();
 
-    for (int i = 0; i < n; i++) {
-        int j = 0;
-        int alpha = alphabet[0];
+        for (int i = 0; i < n; i++) {
+            int j = 0;
+            int alpha = alphabet[0];
 
-        while ((j < breakingpoints.size()) && (a_h[i] > breakingpoints[j])) {
-            j++;
+            while ((j < breakingpoints.size()) && (a_h[i] > breakingpoints[j])) {
+                j++;
+            }
+
+            alpha = alphabet[j];
+            aux.push_back(alpha);
         }
 
-        alpha = alphabet[j];
-        aux.push_back(alpha);
+        // Int pointer to the vector data
+        int *auxx = &aux[0];
+
+        // from c-array to af::array
+        af::array res(aux.size(), 1, auxx);
+
+        result(af::span, k) += res;
     }
-    return aux;
+
+    return result;
 }
 
 std::vector<tsa::dimensionality::Point> tsa::dimensionality::visvalingam(

@@ -63,9 +63,9 @@ af::array PAA(af::array a, int bins);
 af::array PIP(af::array ts, int numberIPs);
 
 /**
- * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve that is
- * approximated by a series of points. It reduces a set of points depending on the perpendicular distance of the points
- * and epsilon, the greater epsilon, more points are deleted.
+ * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve
+ * that is approximated by a series of points. It reduces a set of points depending on the perpendicular distance of the
+ * points and epsilon, the greater epsilon, more points are deleted.
  *
  * [1] Urs Ramer, "An iterative procedure for the polygonal approximation of plane curves", Computer Graphics and Image
  * Processing, 1(3), 244–256 (1972) doi:10.1016/S0146-664X(72)80017-0.
@@ -81,9 +81,9 @@ af::array PIP(af::array ts, int numberIPs);
 std::vector<Point> ramerDouglasPeucker(std::vector<Point> pointList, double epsilon);
 
 /**
- * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve that is
- * approximated by a series of points. It reduces a set of points depending on the perpendicular distance of the points
- * and epsilon, the greater epsilon, more points are deleted.
+ * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve
+ * that is approximated by a series of points. It reduces a set of points depending on the perpendicular distance of the
+ * points and epsilon, the greater epsilon, more points are deleted.
  *
  * [1] Urs Ramer, "An iterative procedure for the polygonal approximation of plane curves", Computer Graphics and Image
  * Processing, 1(3), 244–256 (1972) doi:10.1016/S0146-664X(72)80017-0.
@@ -115,7 +115,7 @@ af::array ramerDouglasPeucker(af::array pointList, double epsilon);
  *
  * @return result An array of symbols.
  */
-std::vector<int> SAX(af::array a, int alphabetSize);
+af::array SAX(af::array a, int alphabetSize);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number

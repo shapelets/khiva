@@ -1,3 +1,4 @@
+// Copyright (c) 2018 Grumpy Cat Software S.L.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,6 +10,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 JNIEXPORT jlongArray JNICALL Java_tsa_Linalg_lls(JNIEnv *env, jobject thisObj, jlong ref_a, jlong ref_b) {
     jint l = 3;
     jlong tmp[l];
@@ -34,6 +36,7 @@ JNIEXPORT jlongArray JNICALL Java_tsa_Linalg_lls(JNIEnv *env, jobject thisObj, j
 
     return pointers;
 }
+
 #ifdef __cplusplus
 }
 #endif

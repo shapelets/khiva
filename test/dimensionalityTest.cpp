@@ -120,14 +120,14 @@ void ramerDouglasPeucker2() {
 }
 
 void sax() {
-    float pointList[] = {0.05, 2.45, 6.5, 8.55, 9.0};
-    af::array a(5, 1, pointList);
+    float pointList[] = {0.05, 2.45, 6.5, 8.55, 9.0, 0.05, 2.45, 6.5, 8.55, 9.0};
+    af::array a(5, 2, pointList);
 
-    std::vector<int> out_h = tsa::dimensionality::SAX(a, 3);
+    int *out_h = tsa::dimensionality::SAX(a, 3).host<int>();
 
-    std::vector<int> expected = {0, 0, 1, 2, 2};
+    int expected[] = {0, 0, 1, 2, 2, 0, 0, 1, 2, 2};
 
-    for (size_t i = 0; i < 5; i++) {
+    for (size_t i = 0; i < 10; i++) {
         EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
     }
 }
