@@ -16,11 +16,11 @@ void DecimalScalingNorm(benchmark::State &state) {
     af::setDevice(D);
 
     auto n = state.range(0);
-    auto ts = af::randu(n);
+    auto tss = af::randu(n);
 
     af::sync();
     while (state.KeepRunning()) {
-        auto normalised = tsa::normalization::decimalScalingNorm(ts, DBL_MIN);
+        auto normalised = tsa::normalization::decimalScalingNorm(tss);
         normalised.eval();
         af::sync();
     }
@@ -33,12 +33,12 @@ void DecimalScalingNormInPlace(benchmark::State &state) {
     af::setDevice(D);
 
     auto n = state.range(0);
-    auto ts = af::randu(n);
+    auto tss = af::randu(n);
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::normalization::decimalScalingNormInPlace(ts, DBL_MIN);
-        ts.eval();
+        tsa::normalization::decimalScalingNormInPlace(tss);
+        tss.eval();
         af::sync();
     }
     addMemoryCounters(state);
@@ -84,11 +84,11 @@ void MeanNorm(benchmark::State &state) {
     af::setDevice(D);
 
     auto n = state.range(0);
-    auto ts = af::randu(n);
+    auto tss = af::randu(n);
 
     af::sync();
     while (state.KeepRunning()) {
-        auto normalised = tsa::normalization::meanNorm(ts, DBL_MIN);
+        auto normalised = tsa::normalization::meanNorm(tss);
         normalised.eval();
         af::sync();
     }
@@ -101,12 +101,12 @@ void MeanNormInPlace(benchmark::State &state) {
     af::setDevice(D);
 
     auto n = state.range(0);
-    auto ts = af::randu(n);
+    auto tss = af::randu(n);
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::normalization::meanNormInPlace(ts, DBL_MIN);
-        ts.eval();
+        tsa::normalization::meanNormInPlace(tss);
+        tss.eval();
         af::sync();
     }
     addMemoryCounters(state);

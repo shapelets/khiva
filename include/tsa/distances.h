@@ -11,17 +11,17 @@ namespace tsa {
 namespace distances {
 
 /**
- * @brief Calculates the Dynamic Warping Distance.
+ * @brief Calculates the Dynamic Time Warping Distance.
  *
  * @param a The input time series of reference.
  * @param b The input query.
  *
  * @return array The resulting distance between a and b.
  */
-double dwt(std::vector<double> a, std::vector<double> b);
+double dtw(std::vector<double> a, std::vector<double> b);
 
 /**
- * @brief Calculates the Dynamic Warping Distance.
+ * @brief Calculates the Dynamic Time Warping Distance.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
@@ -30,7 +30,7 @@ double dwt(std::vector<double> a, std::vector<double> b);
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
-af::array dwt(af::array tss);
+af::array dtw(af::array tss);
 
 /**
  * @brief Calculates euclidean distances between time series.

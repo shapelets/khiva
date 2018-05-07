@@ -9,7 +9,7 @@
 #include "tsaBenchmark.h"
 
 template <af::Backend BE, int D>
-void DWT(benchmark::State &state) {
+void DTW(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
 
@@ -20,7 +20,7 @@ void DWT(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto dwt = tsa::distances::dwt(t);
+        auto dwt = tsa::distances::dtw(t);
         dwt.eval();
         af::sync();
     }
@@ -104,7 +104,7 @@ void SquaredEuclidean(benchmark::State &state) {
 }
 
 void cudaBenchmarks() {
-    BENCHMARK_TEMPLATE(DWT, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(DTW, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -131,7 +131,7 @@ void cudaBenchmarks() {
 }
 
 void openclBenchmarks() {
-    BENCHMARK_TEMPLATE(DWT, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(DTW, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -158,7 +158,7 @@ void openclBenchmarks() {
 }
 
 void cpuBenchmarks() {
-    BENCHMARK_TEMPLATE(DWT, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(DTW, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
