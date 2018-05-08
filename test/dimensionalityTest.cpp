@@ -73,6 +73,7 @@ void pip() {
 }
 
 void pla() {
+    float maxError = 1.0;
     std::vector<tsa::dimensionality::Point> pointList;
     pointList.push_back(tsa::dimensionality::Point(0.0, 0.0));
     pointList.push_back(tsa::dimensionality::Point(1.0, 0.1));
@@ -85,17 +86,62 @@ void pla() {
     pointList.push_back(tsa::dimensionality::Point(8.0, 9.0));
     pointList.push_back(tsa::dimensionality::Point(9.0, 9.0));
 
-    auto out = tsa::dimensionality::PLA(pointList);
+    auto out = tsa::dimensionality::PLA(pointList, maxError);
 
     std::vector<tsa::dimensionality::Point> expected = {
-        tsa::dimensionality::Point(0.75, 0.05), tsa::dimensionality::Point(2.25, -0.1),
-        tsa::dimensionality::Point(3.75, 5.5),  tsa::dimensionality::Point(5.25, 7.0),
-        tsa::dimensionality::Point(6.75, 8.55), tsa::dimensionality::Point(8.25, 9.0)};
+        tsa::dimensionality::Point(0.0, 0.0), tsa::dimensionality::Point(2.0, -0.1),
+        tsa::dimensionality::Point(3.0, 5.0), tsa::dimensionality::Point(7.0, 9.0),
+        tsa::dimensionality::Point(9.0, 9.0)};
 
-    for (size_t i = 0; i < out.size(); i++) {
-        ASSERT_EQ(out[i].first, expected[i].first);
-        ASSERT_EQ(out[i].second, expected[i].second);
-    }
+    ASSERT_EQ(out[0].first, expected[0].first);
+    ASSERT_EQ(out[0].second, expected[0].second);
+
+    ASSERT_EQ(out[1].first, expected[1].first);
+    ASSERT_EQ(out[1].second, expected[1].second);
+
+    ASSERT_EQ(out[2].first, expected[2].first);
+    ASSERT_EQ(out[2].second, expected[2].second);
+
+    ASSERT_EQ(out[3].first, expected[3].first);
+    ASSERT_EQ(out[3].second, expected[3].second);
+
+    ASSERT_EQ(out[4].first, expected[4].first);
+    ASSERT_EQ(out[4].second, expected[4].second);
+}
+
+void pla2() {
+    float maxError = 1.0;
+    float px[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
+    float py[] = {0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+
+    af::array tsx(10, 1, px);
+    af::array tsy(10, 1, py);
+    af::array tss = join(1, tsx, tsy);
+
+    std::vector<tsa::dimensionality::Point> expected = {
+        tsa::dimensionality::Point(0.0, 0.0), tsa::dimensionality::Point(2.0, -0.1),
+        tsa::dimensionality::Point(3.0, 5.0), tsa::dimensionality::Point(7.0, 9.0),
+        tsa::dimensionality::Point(9.0, 9.0)};
+
+    auto out = tsa::dimensionality::PLA(tss, maxError);
+
+    float *pox_h = out.col(0).host<float>();
+    float *poy_h = out.col(1).host<float>();
+
+    ASSERT_EQ(pox_h[0], expected[0].first);
+    ASSERT_EQ(poy_h[0], expected[0].second);
+
+    ASSERT_EQ(pox_h[1], expected[1].first);
+    ASSERT_EQ(poy_h[1], expected[1].second);
+
+    ASSERT_EQ(pox_h[2], expected[2].first);
+    ASSERT_EQ(poy_h[2], expected[2].second);
+
+    ASSERT_EQ(pox_h[3], expected[3].first);
+    ASSERT_EQ(poy_h[3], expected[3].second);
+
+    ASSERT_EQ(pox_h[4], expected[4].first);
+    ASSERT_EQ(poy_h[4], expected[4].second);
 }
 
 void ramerDouglasPeucker() {
@@ -207,6 +253,7 @@ TSA_TEST(DimensionalityTests, PAA, paa);
 TSA_TEST(DimensionalityTests, PAA_NORM, paaNorm);
 TSA_TEST(DimensionalityTests, PIP, pip);
 TSA_TEST(DimensionalityTests, PLA, pla);
+TSA_TEST(DimensionalityTests, PLA2, pla2);
 TSA_TEST(DimensionalityTests, RamerDouglasPeucker, ramerDouglasPeucker);
 TSA_TEST(DimensionalityTests, RamerDouglasPeucker2, ramerDouglasPeucker2);
 TSA_TEST(DimensionalityTests, SAX, sax);

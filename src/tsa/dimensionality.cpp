@@ -224,6 +224,77 @@ af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
     return res;
 }
 
+float calculateError(std::vector<tsa::dimensionality::Point> ts, int start, int end) {
+    float res = 0;
+
+    tsa::dimensionality::Point p1 = ts[start];
+    tsa::dimensionality::Point p2 = ts[end];
+
+    // We use the point-slope equation for the middle points between start and end: y = mx - mx_1 + y_1
+    // where m = (y_2 - y_1) / (x_2 - x_1)
+    float m = (p2.second - p1.second) / (p2.first - p1.first);
+    for (int i = start; i <= end; i++) {
+        res += std::pow(ts[i].second - (m * (ts[i].first - p1.first) + p1.second), 2);
+    }
+
+    return res;
+}
+
+std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLA(std::vector<tsa::dimensionality::Point> ts,
+                                                                 float maxError) {
+    std::vector<tsa::dimensionality::Point> result;
+
+    int anchor = 0;
+    int i = 0;
+    result.push_back(ts[anchor]);
+
+    // We haven´t explored the whole time series
+    while (anchor < (ts.size() - 1)) {
+        i = 1;
+        while (((anchor + i) < ts.size()) && (calculateError(ts, anchor, anchor + i) < maxError)) {
+            i = i + 1;
+        }
+        if ((anchor + i - 1) < ts.size()) {
+            result.push_back(ts[anchor + i - 1]);
+        }
+        anchor += i - 1;
+    }
+    result.push_back(ts[anchor]);
+
+    return result;
+}
+
+af::array tsa::dimensionality::PLA(af::array ts, float maxError) {
+
+     // Extracting info from af::array
+    float *h_x = ts.col(0).host<float>();
+    float *h_y = ts.col(1).host<float>();
+
+    std::vector<tsa::dimensionality::Point> points;
+
+    // Creating a vector of Points
+    for(int i=0; i < ts.dims(0); i++){
+        points.push_back(std::make_pair(h_x[i], h_y[i]));
+    }
+
+    std::vector<tsa::dimensionality::Point> reducedPoints = tsa::dimensionality::PLA(points, maxError);
+    float *x = (float *) malloc(sizeof(float)* reducedPoints.size());
+    float *y = (float *) malloc(sizeof(float)* reducedPoints.size());
+
+    // Converting from vector to array
+    for(int i =0; i < reducedPoints.size(); i++){
+        x[i] = reducedPoints[i].first;
+        y[i] = reducedPoints[i].second;
+    }
+
+    // from c-array to af::array
+    af::array tsx(reducedPoints.size(), 1, x);
+    af::array tsy(reducedPoints.size(), 1, y);
+    af::array res = af::join(1, tsx, tsy);
+
+    return res;
+}
+
 std::vector<tsa::dimensionality::Point> tsa::dimensionality::ramerDouglasPeucker(
     std::vector<tsa::dimensionality::Point> pointList, double epsilon) {
     std::vector<tsa::dimensionality::Point> out;
