@@ -33,27 +33,6 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_euclidean(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_squaredEuclidean(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
-    jlong tmp[l];
-    jlongArray pointers = env->NewLongArray(l);
-
-    af_array arr = (af_array)ref;
-    af::array var = af::array(arr);
-
-    jlong raw_pointer = 0;
-    af_array af_p = (af_array)raw_pointer;
-
-    af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::distances::squaredEuclidean(var).get());
-
-    tmp[0] = (jlong)arr;
-    tmp[1] = (jlong)af_p;
-
-    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
-    return pointers;
-}
-
 JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_dtw(JNIEnv *env, jobject thisObj, jlong ref) {
     jint l = 2;
     jlong tmp[l];
@@ -67,6 +46,69 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_dtw(JNIEnv *env, jo
 
     af_retain_array(&arr, var.get());
     af_retain_array(&af_p, tsa::distances::dtw(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_hamming(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::distances::hamming(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_manhattan(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::distances::manhattan(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_squaredEuclidean(JNIEnv *env, jobject thisObj, jlong ref) {
+    jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::distances::squaredEuclidean(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;

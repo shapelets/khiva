@@ -11,15 +11,15 @@
 extern "C" {
 #endif
 
-void znorm(af_array *tss, double *epsilon, af_array *result) {
+void decimal_scaling_norm(af_array *tss, af_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::normalization::znorm(var, *epsilon).get());
+    af_retain_array(result, tsa::normalization::decimalScalingNorm(var).get());
 }
 
-void znorm_in_place(af_array *tss, double *epsilon) {
+void decimal_scaling_norm_in_place(af_array *tss) {
     af::array var = af::array(*tss);
-    tsa::normalization::znormInPlace(var, *epsilon);
+    tsa::normalization::decimalScalingNormInPlace(var);
     af_retain_array(tss, var.get());
 }
 
@@ -35,15 +35,27 @@ void max_min_norm_in_place(af_array *tss, double *high, double *low, double *eps
     af_retain_array(tss, var.get());
 }
 
-void decimal_scaling_norm(af_array *tss, af_array *result) {
+void mean_norm(af_array *tss, af_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::normalization::decimalScalingNorm(var).get());
+    af_retain_array(result, tsa::normalization::meanNorm(var).get());
 }
 
-void decimal_scaling_norm_in_place(af_array *tss) {
+void mean_norm_in_place(af_array *tss) {
     af::array var = af::array(*tss);
-    tsa::normalization::decimalScalingNormInPlace(var);
+    tsa::normalization::meanNormInPlace(var);
+    af_retain_array(tss, var.get());
+}
+
+void znorm(af_array *tss, double *epsilon, af_array *result) {
+    af::array var = af::array(*tss);
+    af_retain_array(tss, var.get());
+    af_retain_array(result, tsa::normalization::znorm(var, *epsilon).get());
+}
+
+void znorm_in_place(af_array *tss, double *epsilon) {
+    af::array var = af::array(*tss);
+    tsa::normalization::znormInPlace(var, *epsilon);
     af_retain_array(tss, var.get());
 }
 

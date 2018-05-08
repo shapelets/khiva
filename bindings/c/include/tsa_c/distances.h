@@ -11,6 +11,17 @@ extern "C" {
 #endif
 
 /**
+ * @brief Calculates the Dynamic Time Warping Distance.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @param result An upper triangular matrix where each position corresponds to the distance between
+ * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
+ * distance between time series 0 and time series 1.
+ */
+void dtw(af_array *tss, af_array *result);
+
+/**
  * @brief Calculates euclidean distances between time series.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
@@ -23,7 +34,30 @@ extern "C" {
 void euclidean(af_array *tss, af_array *result);
 
 /**
- * @brief Calculates non squared version of the euclidean distance.
+ * @brief Calculates Hamming distances between time series.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @param result An upper triangular matrix where each position corresponds to the distance between two
+ * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
+ * between time series 0 and time series 1.
+ */
+void hamming(af_array *tss, af_array *result);
+
+/**
+ * @brief Calculates Manhattan distances between time series.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ *
+ * @param result An upper triangular matrix where each position corresponds to the distance between two
+ * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
+ * between time series 0 and time series 1.
+ */
+void manhattan(af_array *tss, af_array *result);
+
+/**
+ * @brief Calculates the non squared version of the euclidean distance.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
@@ -33,17 +67,6 @@ void euclidean(af_array *tss, af_array *result);
  * and time series 1.
  */
 void squared_euclidean(af_array *tss, af_array *result);
-
-/**
- * @brief Calculates the Dynamic Time Warping Distance.
- *
- * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
- * dimension one indicates the number of time series.
- * @param result An upper triangular matrix where each position corresponds to the distance between
- * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
- * distance between time series 0 and time series 1.
- */
-void dtw(af_array *tss, af_array *result);
 
 #ifdef __cplusplus
 }
