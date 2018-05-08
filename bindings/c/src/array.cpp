@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
+#include <cstring>
 #include <tsa/array.h>
 #include <tsa_c/array.h>
 

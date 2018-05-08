@@ -6,7 +6,6 @@
 
 #include <gtest/gtest.h>
 #include <tsa/dimensionality.h>
-#include <tsa/simplification.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
