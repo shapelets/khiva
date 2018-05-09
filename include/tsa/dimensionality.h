@@ -13,6 +13,8 @@ namespace dimensionality {
 
 typedef std::pair<float, float> Point;
 
+typedef std::pair<int, int> Segment;
+
 /**
  * @brief Piecewise Aggregate Approximation (PAA) approximates a time series \f$X\f$ of length \f$n\f$ into vector
  * \f$\bar{X}=(\bar{x}_{1},…,\bar{x}_{M})\f$ of any arbitrary length \f$M \leq n\f$ where each of \f$\bar{x_{i}}\f$ is
@@ -63,7 +65,7 @@ af::array PAA(af::array a, int bins);
 af::array PIP(af::array ts, int numberIPs);
 
 /**
- * @brief Applies the Piecewise Linear Approximation (PLA) to the time series.
+ * @brief Applies the Piecewise Linear Approximation (PLA BottomUP) to the time series.
  *
  * [1] Zhu Y, Wu D, Li Sh (2007). A Piecewise Linear Representation Method of Time Series Based on Feature Points.
  * Knowledge-Based Intelligent Information and Engineering Systems 4693:1066-1072.
@@ -73,21 +75,48 @@ af::array PIP(af::array ts, int numberIPs);
  *
  * @return std::vector Vector with the reduced number of points.
  */
-std::vector<Point> PLA(std::vector<Point> ts, float maxError);
+std::vector<Point> PLABottomUp(std::vector<Point> ts, float maxError);
 
 /**
- * @brief Applies the Piecewise Linear Approximation (PLA) to the time series.
+ * @brief Applies the Piecewise Linear Approximation (PLA BottomUP) to the time series.
  *
  * [1] Zhu Y, Wu D, Li Sh (2007). A Piecewise Linear Representation Method of Time Series Based on Feature Points.
  * Knowledge-Based Intelligent Information and Engineering Systems 4693:1066-1072.
  *
- * @param ts Expects an af::array containing the set of points to be reduced. The first component of the points in 
+ * @param ts Expects an af::array containing the set of points to be reduced. The first component of the points in
  * the first column and the second component of the points in the second column.
  * @param maxError The maximum aproximatin error allowed.
  *
  * @return af::array with the reduced number of points.
  */
-af::array PLA(af::array ts, float maxError);
+af::array PLABottomUp(af::array ts, float maxError);
+
+/**
+ * @brief Applies the Piecewise Linear Approximation (PLA Sliding Window) to the time series.
+ *
+ * [1] Zhu Y, Wu D, Li Sh (2007). A Piecewise Linear Representation Method of Time Series Based on Feature Points.
+ * Knowledge-Based Intelligent Information and Engineering Systems 4693:1066-1072.
+ *
+ * @param ts Expects an input vector containing the set of points to be reduced.
+ * @param maxError The maximum aproximatin error allowed.
+ *
+ * @return std::vector Vector with the reduced number of points.
+ */
+std::vector<Point> PLASlidingWindow(std::vector<Point> ts, float maxError);
+
+/**
+ * @brief Applies the Piecewise Linear Approximation (PLA Sliding Window) to the time series.
+ *
+ * [1] Zhu Y, Wu D, Li Sh (2007). A Piecewise Linear Representation Method of Time Series Based on Feature Points.
+ * Knowledge-Based Intelligent Information and Engineering Systems 4693:1066-1072.
+ *
+ * @param ts Expects an af::array containing the set of points to be reduced. The first component of the points in
+ * the first column and the second component of the points in the second column.
+ * @param maxError The maximum aproximatin error allowed.
+ *
+ * @return af::array with the reduced number of points.
+ */
+af::array PLASlidingWindow(af::array ts, float maxError);
 
 /**
  * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve

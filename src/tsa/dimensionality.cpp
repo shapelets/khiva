@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <tsa/dimensionality.h>
+#include <algorithm>
 #include <boost/math/distributions/normal.hpp>
 #include <cmath>
 #include <iostream>
@@ -240,13 +241,96 @@ float calculateError(std::vector<tsa::dimensionality::Point> ts, int start, int 
     return res;
 }
 
-std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLA(std::vector<tsa::dimensionality::Point> ts,
-                                                                 float maxError) {
+tsa::dimensionality::Segment merge(tsa::dimensionality::Segment s1, tsa::dimensionality::Segment s2) {
+    tsa::dimensionality::Segment res;
+
+    res.first = s1.first;
+    res.second = s2.second;
+
+    return res;
+}
+
+std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLABottomUp(std::vector<Point> ts, float maxError) {
+    std::vector<tsa::dimensionality::Segment> segments;
+    std::vector<float> mergeCost;
+
+    // Allocating vector of segments
+    for (int i = 0; i < ts.size() - 1; i = i + 2) {
+        segments.push_back(std::make_pair(i, i + 1));
+    }
+
+    for (int i = 0; i < segments.size() - 1; i++) {
+        mergeCost.push_back(calculateError(ts, segments[i].first, segments[i + 1].second));
+    }
+
+    // Calculate minimum, calculating in advance
+    std::vector<float>::iterator minCost = std::min_element(std::begin(mergeCost), std::end(mergeCost));
+    while ((segments.size() > 2) && (*minCost < maxError)) {
+        // We have to merge
+        int index = std::distance(std::begin(mergeCost), minCost);
+
+        // Merge candidate segments
+        segments[index] = merge(segments[index], segments[index + 1]);
+
+        // Delete fused segment
+        segments.erase(segments.begin() + index + 1);
+        mergeCost.erase(mergeCost.begin() + index + 1);
+
+        // Calculate new cost
+        mergeCost[index] = calculateError(ts, segments[index].first, segments[index + 1].second);
+        mergeCost[index - 1] = calculateError(ts, segments[index - 1].first, segments[index].second);
+
+        // Calculate new minimum
+        minCost = std::min_element(std::begin(mergeCost), std::end(mergeCost));
+    }
+
+    // Build a polyline from a set of segments
     std::vector<tsa::dimensionality::Point> result;
+    for (int i = 0; i < segments.size(); i++) {
+        result.push_back(ts[segments[i].first]);
+        result.push_back(ts[segments[i].second]);
+    }
+
+    return result;
+}
+
+af::array tsa::dimensionality::PLABottomUp(af::array ts, float maxError) {
+    // Extracting info from af::array
+    float *h_x = ts.col(0).host<float>();
+    float *h_y = ts.col(1).host<float>();
+
+    std::vector<tsa::dimensionality::Point> points;
+
+    // Creating a vector of Points
+    for (int i = 0; i < ts.dims(0); i++) {
+        points.push_back(std::make_pair(h_x[i], h_y[i]));
+    }
+
+    std::vector<tsa::dimensionality::Point> reducedPoints = tsa::dimensionality::PLABottomUp(points, maxError);
+    float *x = (float *)malloc(sizeof(float) * reducedPoints.size());
+    float *y = (float *)malloc(sizeof(float) * reducedPoints.size());
+
+    // Converting from vector to array
+    for (int i = 0; i < reducedPoints.size(); i++) {
+        x[i] = reducedPoints[i].first;
+        y[i] = reducedPoints[i].second;
+    }
+
+    // from c-array to af::array
+    af::array tsx(reducedPoints.size(), 1, x);
+    af::array tsy(reducedPoints.size(), 1, y);
+    af::array res = af::join(1, tsx, tsy);
+
+    return res;
+}
+
+std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLASlidingWindow(
+    std::vector<tsa::dimensionality::Point> ts, float maxError) {
+    std::vector<tsa::dimensionality::Point> result;
+    std::vector<tsa::dimensionality::Segment> segments;
 
     int anchor = 0;
-    int i = 0;
-    result.push_back(ts[anchor]);
+    int i;
 
     // We haven´t explored the whole time series
     while (anchor < (ts.size() - 1)) {
@@ -254,35 +338,42 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLA(std::vector<tsa
         while (((anchor + i) < ts.size()) && (calculateError(ts, anchor, anchor + i) < maxError)) {
             i = i + 1;
         }
-        if ((anchor + i - 1) < ts.size()) {
-            result.push_back(ts[anchor + i - 1]);
+
+        if ((anchor + i) == (ts.size() - 1)) {
+            segments.push_back(std::make_pair(anchor, anchor + i));
+        } else {
+            segments.push_back(std::make_pair(anchor, anchor + i - 1));
         }
-        anchor += i - 1;
+        anchor += i;
     }
-    result.push_back(ts[anchor]);
+
+    // Build a polyline from a set of segments
+    for (int i = 0; i < segments.size(); i++) {
+        result.push_back(ts[segments[i].first]);
+        result.push_back(ts[segments[i].second]);
+    }
 
     return result;
 }
 
-af::array tsa::dimensionality::PLA(af::array ts, float maxError) {
-
-     // Extracting info from af::array
+af::array tsa::dimensionality::PLASlidingWindow(af::array ts, float maxError) {
+    // Extracting info from af::array
     float *h_x = ts.col(0).host<float>();
     float *h_y = ts.col(1).host<float>();
 
     std::vector<tsa::dimensionality::Point> points;
 
     // Creating a vector of Points
-    for(int i=0; i < ts.dims(0); i++){
+    for (int i = 0; i < ts.dims(0); i++) {
         points.push_back(std::make_pair(h_x[i], h_y[i]));
     }
 
-    std::vector<tsa::dimensionality::Point> reducedPoints = tsa::dimensionality::PLA(points, maxError);
-    float *x = (float *) malloc(sizeof(float)* reducedPoints.size());
-    float *y = (float *) malloc(sizeof(float)* reducedPoints.size());
+    std::vector<tsa::dimensionality::Point> reducedPoints = tsa::dimensionality::PLASlidingWindow(points, maxError);
+    float *x = (float *)malloc(sizeof(float) * reducedPoints.size());
+    float *y = (float *)malloc(sizeof(float) * reducedPoints.size());
 
     // Converting from vector to array
-    for(int i =0; i < reducedPoints.size(); i++){
+    for (int i = 0; i < reducedPoints.size(); i++) {
         x[i] = reducedPoints[i].first;
         y[i] = reducedPoints[i].second;
     }
