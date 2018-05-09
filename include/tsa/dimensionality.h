@@ -71,7 +71,7 @@ af::array PIP(af::array ts, int numberIPs);
  * Knowledge-Based Intelligent Information and Engineering Systems 4693:1066-1072.
  *
  * @param ts Expects an input vector containing the set of points to be reduced.
- * @param maxError The maximum aproximation error allowed.
+ * @param maxError The maximum approximation error allowed.
  *
  * @return std::vector Vector with the reduced number of points.
  */
@@ -85,7 +85,7 @@ std::vector<Point> PLABottomUp(std::vector<Point> ts, float maxError);
  *
  * @param ts Expects an af::array containing the set of points to be reduced. The first component of the points in
  * the first column and the second component of the points in the second column.
- * @param maxError The maximum aproximation error allowed.
+ * @param maxError The maximum approximation error allowed.
  *
  * @return af::array with the reduced number of points.
  */
@@ -98,7 +98,7 @@ af::array PLABottomUp(af::array ts, float maxError);
  * Knowledge-Based Intelligent Information and Engineering Systems 4693:1066-1072.
  *
  * @param ts Expects an input vector containing the set of points to be reduced.
- * @param maxError The maximum aproximation error allowed.
+ * @param maxError The maximum approximation error allowed.
  *
  * @return std::vector Vector with the reduced number of points.
  */
@@ -112,7 +112,7 @@ std::vector<Point> PLASlidingWindow(std::vector<Point> ts, float maxError);
  *
  * @param ts Expects an af::array containing the set of points to be reduced. The first component of the points in
  * the first column and the second component of the points in the second column.
- * @param maxError The maximum aproximation error allowed.
+ * @param maxError The maximum approximation error allowed.
  *
  * @return af::array with the reduced number of points.
  */
