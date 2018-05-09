@@ -60,7 +60,7 @@ af::array PAA(af::array a, int bins);
  * @param ts Expects an input array whose dimension zero is the length of the time series.
  * @param numberIPs The number of points to be returned.
  *
- * @return af::array with the most Perceptually Important numPoints.
+ * @return af::array Array with the most Perceptually Important numPoints.
  */
 af::array PIP(af::array ts, int numberIPs);
 
