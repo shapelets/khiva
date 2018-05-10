@@ -84,46 +84,64 @@ double PerpendicularDistance(const tsa::dimensionality::Point &pt, const tsa::di
     return pow(pow(ax, 2.0) + pow(ay, 2.0), 0.5);
 }
 
-float verticalDistance(float p_x, float p_y, float start_x, float start_y, float end_x, float end_y) {
+/**
+ * @brief We compute the vertical distance of the point p w.r.t. the line that connects start and end points.
+ * We use the point-slope equiation to solve it.
+ */
+float verticalDistance(tsa::dimensionality::Point p, tsa::dimensionality::Point start, tsa::dimensionality::Point end) {
     float res = 0.0;
-    float dy = end_y - start_y;
-    float dx = end_x - start_x;
+    float dy = end.second - start.second;
+    float dx = end.first - start.first;
     float m = dy / dx;
-    float line_y = p_x * m + start_x;
-    res = std::abs(std::abs(p_y) - std::abs(line_y));
+    float line_y = (p.first - start.first) * m + start.second;
+    res = (p.second - line_y) * (p.second - line_y);
 
     return res;
 }
 
-void insertPointInDesiredList(float x, float y, int position, std::vector<float> &desired_x,
-                              std::vector<float> &desired_y) {
-    auto it_x = desired_x.begin();
-    auto it_y = desired_y.begin();
-
-    desired_x.insert(it_x + position, x);
-    desired_y.insert(it_y + position, y);
+/**
+ * @brief This function just inserts a point in the given position of a vector.
+ */
+void insertPointBetweenSelected(tsa::dimensionality::Point p, int position,
+                                std::vector<tsa::dimensionality::Point> &selected) {
+    auto it = selected.begin();
+    selected.insert(it + position, p);
 }
 
-bool isPointInDesiredList(float point, std::vector<float> desired_x) {
+/**
+ * @brief This function just checks if the given point is already in the vector.
+ */
+bool isPointInDesiredList(tsa::dimensionality::Point point, std::vector<tsa::dimensionality::Point> selected) {
     bool found = false;
-    for (float e : desired_x) {
-        if (e == point) {
+    for (int i = 0; i < selected.size(); i++) {
+        // We just compare the horinzontal component as it is unique
+        if (selected[i].first == point.first) {
             found = true;
             break;
         }
     }
     return found;
 }
-
-void getSegmentOfPoint(float point, std::vector<float> desired_x, int &i_lower, int &i_upper) {
-    // We do not check the first element, as it is fixed and set to the first element of the timeseries
-    for (int i = 1; i < desired_x.size(); i++) {
-        if (point < desired_x[i]) {
-            i_lower = i - 1;
-            i_upper = i;
-            break;
+/**
+ * @brief This function calculates the segment indices that we need to compare the point.
+ */
+std::pair<int, int> getSegmentFromSelected(tsa::dimensionality::Point point,
+                                           std::vector<tsa::dimensionality::Point> selected) {
+    int lower, upper;
+    // We do not check the first element, as it is fixed and set to the first element of the time series
+    int i = 0;
+    bool rebased = false;
+    while (!rebased && (i < selected.size() - 1)) {
+        // We check points until point.first > selected[i]
+        if (point.first > selected[i].first) {
+            lower = i;
+            upper = i + 1;
+        } else {
+            rebased = true;
         }
+        i++;
     }
+    return std::make_pair(lower, upper);
 }
 
 std::vector<tsa::dimensionality::Point> tsa::dimensionality::PAA(std::vector<tsa::dimensionality::Point> points,
@@ -168,8 +186,8 @@ af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
     int end = n - 1;
 
     if (n < 2) {
-        throw std::invalid_argument("We canÂ´t delete all those important points");
-    } else if (n == numberIPs) {
+        throw std::invalid_argument("We can't delete all those important points");
+    } else if (n <= numberIPs) {
         return ts;
     }
 
@@ -177,49 +195,54 @@ af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
     float *h_x = ts.col(0).host<float>();
     float *h_y = ts.col(1).host<float>();
 
-    // Converting c-arrays to vectors
-    std::vector<float> points_x(&h_x[0], &h_x[n]);
-    std::vector<float> points_y(&h_y[0], &h_y[n]);
+    // Converting c-arrays to vector of points
+    std::vector<Point> points;
+    for (int i = 0; i < n; i++) {
+        points.push_back(std::make_pair(h_x[i], h_y[i]));
+    }
 
-    // Allocation vectos for two points
-    std::vector<float> desired_x(2);
-    std::vector<float> desired_y(2);
-    desired_x[0] = points_x[0];
-    desired_y[0] = points_y[0];
-    desired_x[1] = points_x[end];
-    desired_y[1] = points_y[end];
+    // Allocating vectors for selected points
+    std::vector<tsa::dimensionality::Point> selected;
+    selected.push_back(points[0]);
+    selected.push_back(points[end]);
 
-    // we have to find (numberIPs - 2) points, as we have already included P[0] nad P[end].
+    // we have to find (numberIPs - 2) points, as we have already included P[0] and P[end].
     // Number of passes over the collection
     for (int p = 0; p < (numberIPs - 2); p++) {
         float dmax = -1.0;
         int index = -1;
-        int position;
+        int position = -1;
 
         // Find the next PIP
-        for (size_t i = 1; i < end; i++) {
+        for (int i = 1; i < end; i++) {
             int i_lower, i_upper;
-            if (!isPointInDesiredList(points_x[i], desired_x)) {
-                getSegmentOfPoint(points_x[i], desired_x, i_lower, i_upper);
-                float d = verticalDistance(points_x[i], points_y[i], desired_x[i_lower], desired_y[i_lower],
-                                           desired_x[i_upper], desired_y[i_upper]);
+            // We first check if the point is already in the list.
+            if (!isPointInDesiredList(points[i], selected)) {
+                // segment contains the indices of the selected points which are the boundaries for the point i.
+                std::pair<int, int> segment = getSegmentFromSelected(points[i], selected);
+                float d = verticalDistance(points[i], selected[segment.first], selected[segment.second]);
+                // We store the point with the maxium distance to the line that connects the segment.
                 if (d > dmax) {
                     index = i;
                     dmax = d;
-                    position = i_upper;
+                    position = segment.second;
                 }
             }
         }
-        insertPointInDesiredList(points_x[index], points_y[index], position, desired_x, desired_y);
+        insertPointBetweenSelected(points[index], position, selected);
     }
 
     // Converting from vector to array
-    float *x = &desired_x[0];
-    float *y = &desired_y[0];
+    float *x = (float *)malloc(sizeof(float) * selected.size());
+    float *y = (float *)malloc(sizeof(float) * selected.size());
+    for (int i = 0; i < selected.size(); i++) {
+        x[i] = selected[i].first;
+        y[i] = selected[i].second;
+    }
 
     // from c-array to af::array
-    af::array tsx(desired_x.size(), 1, x);
-    af::array tsy(desired_y.size(), 1, y);
+    af::array tsx(selected.size(), 1, x);
+    af::array tsy(selected.size(), 1, y);
     af::array res = af::join(1, tsx, tsy);
 
     return res;
