@@ -11,7 +11,8 @@
 extern "C" {
 #endif
 
-void group_by(af_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value, af_array *result) {
+TSAAPI void group_by(af_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
+                     af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
 

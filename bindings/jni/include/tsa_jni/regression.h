@@ -18,6 +18,7 @@ extern "C" {
  * dimension one indicates the number of time series.
  * @param ref_yss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
+ *
  * @return An array with the updated refs and refs to:
  *      {
  *          slope Slope of the regression line.
@@ -28,7 +29,7 @@ extern "C" {
  *          stderrest Standard error of the estimated gradient.
  *      }
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regression_linear(JNIEnv *env, jobject thisObj, jlong ref_xss,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regression_linear(JNIEnv *env, jobject, jlong ref_xss,
                                                                      jlong ref_yss);
 
 #ifdef __cplusplus

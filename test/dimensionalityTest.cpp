@@ -12,13 +12,13 @@
 #include "tsaTest.h"
 
 void paa() {
-    float pointList[] = {0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array a(10, 1, pointList);
 
     af::array out = tsa::dimensionality::PAA(a, 5);
 
     float *out_h = out.host<float>();
-    std::vector<float> expected = {0.05, 2.45, 6.5, 8.55, 9.0};
+    std::vector<float> expected = {0.05f, 2.45f, 6.5f, 8.55f, 9.0f};
 
     for (size_t i = 0; i < 5; i++) {
         ASSERT_EQ(out_h[i], expected[i]);
@@ -27,23 +27,23 @@ void paa() {
 
 void paaNorm() {
     std::vector<tsa::dimensionality::Point> pointList;
-    pointList.push_back(tsa::dimensionality::Point(0.0, 0.0));
-    pointList.push_back(tsa::dimensionality::Point(1.0, 0.1));
-    pointList.push_back(tsa::dimensionality::Point(2.0, -0.1));
-    pointList.push_back(tsa::dimensionality::Point(3.0, 5.0));
-    pointList.push_back(tsa::dimensionality::Point(4.0, 6.0));
-    pointList.push_back(tsa::dimensionality::Point(5.0, 7.0));
-    pointList.push_back(tsa::dimensionality::Point(6.0, 8.1));
-    pointList.push_back(tsa::dimensionality::Point(7.0, 9.0));
-    pointList.push_back(tsa::dimensionality::Point(8.0, 9.0));
-    pointList.push_back(tsa::dimensionality::Point(9.0, 9.0));
+    pointList.push_back(tsa::dimensionality::Point(0.0f, 0.0f));
+    pointList.push_back(tsa::dimensionality::Point(1.0f, 0.1f));
+    pointList.push_back(tsa::dimensionality::Point(2.0f, -0.1f));
+    pointList.push_back(tsa::dimensionality::Point(3.0f, 5.0f));
+    pointList.push_back(tsa::dimensionality::Point(4.0f, 6.0f));
+    pointList.push_back(tsa::dimensionality::Point(5.0f, 7.0f));
+    pointList.push_back(tsa::dimensionality::Point(6.0f, 8.1f));
+    pointList.push_back(tsa::dimensionality::Point(7.0f, 9.0f));
+    pointList.push_back(tsa::dimensionality::Point(8.0f, 9.0f));
+    pointList.push_back(tsa::dimensionality::Point(9.0f, 9.0f));
 
     auto out = tsa::dimensionality::PAA(pointList, 6);
 
     std::vector<tsa::dimensionality::Point> expected = {
-        tsa::dimensionality::Point(0.75, 0.05), tsa::dimensionality::Point(2.25, -0.1),
-        tsa::dimensionality::Point(3.75, 5.5),  tsa::dimensionality::Point(5.25, 7.0),
-        tsa::dimensionality::Point(6.75, 8.55), tsa::dimensionality::Point(8.25, 9.0)};
+        tsa::dimensionality::Point(0.75, 0.05), tsa::dimensionality::Point(2.25, -0.1f),
+        tsa::dimensionality::Point(3.75, 5.5),  tsa::dimensionality::Point(5.25, 7.0f),
+        tsa::dimensionality::Point(6.75, 8.55), tsa::dimensionality::Point(8.25, 9.0f)};
 
     for (size_t i = 0; i < out.size(); i++) {
         ASSERT_EQ(out[i].first, expected[i].first);
@@ -52,10 +52,10 @@ void paaNorm() {
 }
 
 void pip() {
-    float exp_x[] = {0.0, 2.0, 3.0, 6.0, 7.0, 9.0};
-    float exp_y[] = {0.0, -0.1, 5.0, 8.1, 9.0, 9.0};
-    float px[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
-    float py[] = {0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+    float exp_x[] = {0.0f, 2.0f, 3.0f, 6.0f, 7.0f, 9.0f};
+    float exp_y[] = {0.0f, -0.1f, 5.0f, 8.1f, 9.0f, 9.0f};
+    float px[] = {0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f};
+    float py[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
 
     af::array tsx(10, 1, px);
     af::array tsy(10, 1, py);
@@ -121,8 +121,8 @@ void plaBottomUp() {
 
 void plaBottomUp2() {
     float maxError = 1.0;
-    float px[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
-    float py[] = {0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+    float px[] = {0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f};
+    float py[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
 
     af::array tsx(10, 1, px);
     af::array tsy(10, 1, py);
@@ -204,9 +204,9 @@ void plaSlidingWindow() {
 }
 
 void plaSlidingWindow2() {
-    float maxError = 1.0;
-    float px[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
-    float py[] = {0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+    float maxError = 1.0f;
+    float px[] = {0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f};
+    float py[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
 
     af::array tsx(10, 1, px);
     af::array tsy(10, 1, py);
@@ -245,20 +245,20 @@ void ramerDouglasPeucker() {
     std::vector<tsa::dimensionality::Point> pointList;
     std::vector<tsa::dimensionality::Point> pointListOut;
     std::vector<tsa::dimensionality::Point> expected = {
-        tsa::dimensionality::Point(0.0, 0.0), tsa::dimensionality::Point(2.0, -0.1),
-        tsa::dimensionality::Point(3.0, 5.0), tsa::dimensionality::Point(6.0, 8.1),
-        tsa::dimensionality::Point(9.0, 9.0)};
+        tsa::dimensionality::Point(0.0f, 0.0f), tsa::dimensionality::Point(2.0f, -0.1f),
+        tsa::dimensionality::Point(3.0f, 5.0f), tsa::dimensionality::Point(6.0f, 8.1f),
+        tsa::dimensionality::Point(9.0f, 9.0f)};
 
-    pointList.push_back(tsa::dimensionality::Point(0.0, 0.0));
-    pointList.push_back(tsa::dimensionality::Point(1.0, 0.1));
-    pointList.push_back(tsa::dimensionality::Point(2.0, -0.1));
-    pointList.push_back(tsa::dimensionality::Point(3.0, 5.0));
-    pointList.push_back(tsa::dimensionality::Point(4.0, 6.0));
-    pointList.push_back(tsa::dimensionality::Point(5.0, 7.0));
-    pointList.push_back(tsa::dimensionality::Point(6.0, 8.1));
-    pointList.push_back(tsa::dimensionality::Point(7.0, 9.0));
-    pointList.push_back(tsa::dimensionality::Point(8.0, 9.0));
-    pointList.push_back(tsa::dimensionality::Point(9.0, 9.0));
+    pointList.push_back(tsa::dimensionality::Point(0.0f, 0.0f));
+    pointList.push_back(tsa::dimensionality::Point(1.0f, 0.1f));
+    pointList.push_back(tsa::dimensionality::Point(2.0f, -0.1f));
+    pointList.push_back(tsa::dimensionality::Point(3.0f, 5.0f));
+    pointList.push_back(tsa::dimensionality::Point(4.0f, 6.0f));
+    pointList.push_back(tsa::dimensionality::Point(5.0f, 7.0f));
+    pointList.push_back(tsa::dimensionality::Point(6.0f, 8.1f));
+    pointList.push_back(tsa::dimensionality::Point(7.0f, 9.0f));
+    pointList.push_back(tsa::dimensionality::Point(8.0f, 9.0f));
+    pointList.push_back(tsa::dimensionality::Point(9.0f, 9.0f));
 
     pointListOut = tsa::dimensionality::ramerDouglasPeucker(pointList, 1.0);
 
@@ -269,13 +269,13 @@ void ramerDouglasPeucker() {
 }
 
 void ramerDouglasPeucker2() {
-    float pointList[] = {0.0, 1.0, 2.0,  3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0,
-                         0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+    float pointList[] = {0.0f, 1.0f, 2.0f,  3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f,
+                         0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array points(10, 2, pointList);
     std::vector<tsa::dimensionality::Point> expected = {
-        tsa::dimensionality::Point(0.0, 0.0), tsa::dimensionality::Point(2.0, -0.1),
-        tsa::dimensionality::Point(3.0, 5.0), tsa::dimensionality::Point(6.0, 8.1),
-        tsa::dimensionality::Point(9.0, 9.0)};
+        tsa::dimensionality::Point(0.0f, 0.0f), tsa::dimensionality::Point(2.0f, -0.1f),
+        tsa::dimensionality::Point(3.0f, 5.0f), tsa::dimensionality::Point(6.0f, 8.1f),
+        tsa::dimensionality::Point(9.0f, 9.0f)};
 
     af::array res = tsa::dimensionality::ramerDouglasPeucker(points, 1.0);
     float *points_x = res.col(0).host<float>();
@@ -288,7 +288,7 @@ void ramerDouglasPeucker2() {
 }
 
 void sax() {
-    float pointList[] = {0.05, 2.45, 6.5, 8.55, 9.0, 0.05, 2.45, 6.5, 8.55, 9.0};
+    float pointList[] = {0.05f, 2.45f, 6.5f, 8.55f, 9.0f, 0.05f, 2.45f, 6.5f, 8.55f, 9.0f};
     af::array a(5, 2, pointList);
 
     int *out_h = tsa::dimensionality::SAX(a, 3).host<int>();
@@ -304,20 +304,20 @@ void visvalingam() {
     std::vector<tsa::dimensionality::Point> pointList;
     std::vector<tsa::dimensionality::Point> out;
     std::vector<tsa::dimensionality::Point> expected = {
-        tsa::dimensionality::Point(0.0, 0.0), tsa::dimensionality::Point(2.0, -0.1),
-        tsa::dimensionality::Point(5.0, 7.0), tsa::dimensionality::Point(7.0, 9.0),
-        tsa::dimensionality::Point(9.0, 9.0)};
+        tsa::dimensionality::Point(0.0f, 0.0f), tsa::dimensionality::Point(2.0f, -0.1f),
+        tsa::dimensionality::Point(5.0f, 7.0f), tsa::dimensionality::Point(7.0f, 9.0f),
+        tsa::dimensionality::Point(9.0f, 9.0f)};
 
-    pointList.push_back(tsa::dimensionality::Point(0.0, 0.0));
-    pointList.push_back(tsa::dimensionality::Point(1.0, 0.1));
-    pointList.push_back(tsa::dimensionality::Point(2.0, -0.1));
-    pointList.push_back(tsa::dimensionality::Point(3.0, 5.0));
-    pointList.push_back(tsa::dimensionality::Point(4.0, 6.0));
-    pointList.push_back(tsa::dimensionality::Point(5.0, 7.0));
-    pointList.push_back(tsa::dimensionality::Point(6.0, 8.1));
-    pointList.push_back(tsa::dimensionality::Point(7.0, 9.0));
-    pointList.push_back(tsa::dimensionality::Point(8.0, 9.0));
-    pointList.push_back(tsa::dimensionality::Point(9.0, 9.0));
+    pointList.push_back(tsa::dimensionality::Point(0.0f, 0.0f));
+    pointList.push_back(tsa::dimensionality::Point(1.0f, 0.1f));
+    pointList.push_back(tsa::dimensionality::Point(2.0f, -0.1f));
+    pointList.push_back(tsa::dimensionality::Point(3.0f, 5.0f));
+    pointList.push_back(tsa::dimensionality::Point(4.0f, 6.0f));
+    pointList.push_back(tsa::dimensionality::Point(5.0f, 7.0f));
+    pointList.push_back(tsa::dimensionality::Point(6.0f, 8.1f));
+    pointList.push_back(tsa::dimensionality::Point(7.0f, 9.0f));
+    pointList.push_back(tsa::dimensionality::Point(8.0f, 9.0f));
+    pointList.push_back(tsa::dimensionality::Point(9.0f, 9.0f));
 
     out = tsa::dimensionality::visvalingam(pointList, 5);
 
@@ -328,13 +328,13 @@ void visvalingam() {
 }
 
 void visvalingam2() {
-    float pointList[] = {0.0, 1.0, 2.0,  3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0,
-                         0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+    float pointList[] = {0.0f, 1.0f, 2.0f,  3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f,
+                         0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array points(10, 2, pointList);
     std::vector<tsa::dimensionality::Point> expected = {
-        tsa::dimensionality::Point(0.0, 0.0), tsa::dimensionality::Point(2.0, -0.1),
-        tsa::dimensionality::Point(5.0, 7.0), tsa::dimensionality::Point(7.0, 9.0),
-        tsa::dimensionality::Point(9.0, 9.0)};
+        tsa::dimensionality::Point(0.0f, 0.0f), tsa::dimensionality::Point(2.0f, -0.1f),
+        tsa::dimensionality::Point(5.0f, 7.0f), tsa::dimensionality::Point(7.0f, 9.0f),
+        tsa::dimensionality::Point(9.0f, 9.0f)};
 
     af::array res = tsa::dimensionality::visvalingam(points, 5);
     float *points_x = res.col(0).host<float>();

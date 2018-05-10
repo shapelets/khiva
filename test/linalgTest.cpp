@@ -53,7 +53,7 @@ void llsMoreVariables() {
 
     float *calculated = x.host<float>();
 
-    float expected[] = {0.3934987, 0.2968349, 0.0290847};
+    float expected[] = {0.3934987f, 0.2968349f, 0.0290847f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);

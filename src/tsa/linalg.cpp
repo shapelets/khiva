@@ -17,8 +17,8 @@ af::array tsa::linalg::lls(af::array A, af::array b) {
 
     af::array S_dagger = (S != 0).as(S.type()) * af::inverse(S);
 
-    long missingRows = A.dims(1) - S.dims(0);
-    long missingColumns = A.dims(0) - S.dims(0);
+    long missingRows = static_cast<long>(A.dims(1) - S.dims(0));
+    long missingColumns = static_cast<long>(A.dims(0) - S.dims(0));
     af::array toPadRows = af::constant(0, missingRows, A.dims(0), A.type());
     af::array toPadColumns = af::constant(0, A.dims(1), missingColumns, A.type());
 

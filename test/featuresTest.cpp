@@ -62,7 +62,7 @@ void aggregatedCorrelationMean() {
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::mean);
     float *r = res.host<float>();
-    float a[] = {-0.6571428571428571, -0.6571428571428571};
+    float a[] = {-0.6571428571428571f, -0.6571428571428571f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
     ASSERT_NEAR(r[1], a[1], EPSILON);
 }
@@ -84,7 +84,7 @@ void aggregatedCorrelationMin() {
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::min);
     float *r = res.host<float>();
-    float a[] = {-2.142857142857143, -2.142857142857143};
+    float a[] = {-2.142857142857143f, -2.142857142857143f};
     ASSERT_NEAR(r[0], a[0], EPSILON * 2);
     ASSERT_NEAR(r[1], a[1], EPSILON * 2);
 }
@@ -95,7 +95,7 @@ void aggregatedCorrelationMax() {
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::max);
     float *r = res.host<float>();
-    float a[] = {0.6, 0.6};
+    float a[] = {0.6f, 0.6f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
     ASSERT_NEAR(r[1], a[1], EPSILON);
 }
@@ -106,7 +106,7 @@ void aggregatedCorrelationStdev() {
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::stdev);
     float *r = res.host<float>();
-    float a[] = {0.9744490855905009, 0.9744490855905009};
+    float a[] = {0.9744490855905009f, 0.9744490855905009f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
     ASSERT_NEAR(r[1], a[1], EPSILON);
 }
@@ -117,7 +117,7 @@ void aggregatedCorrelationVar() {
 
     af::array res = tsa::features::aggregatedAutocorrelation(tss, af::var);
     float *r = res.host<float>();
-    float a[] = {0.9495510204081633, 0.9495510204081633};
+    float a[] = {0.9495510204081633f, 0.9495510204081633f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
     ASSERT_NEAR(r[1], a[1], EPSILON);
 }
@@ -376,7 +376,7 @@ void binnedEntropy() {
     af::array output = tsa::features::binnedEntropy(tss, 5);
 
     float *h_out = output.host<float>();
-    float a[] = {1.6094379124341005, 1.5614694247763998};
+    float a[] = {1.6094379124341005f, 1.5614694247763998f};
     ASSERT_NEAR(h_out[0], a[0], EPSILON);
     ASSERT_NEAR(h_out[1], a[1], EPSILON);
 }
@@ -437,7 +437,7 @@ void countBelowMean() {
 }
 
 void cwtCoefficients() {
-    float data[] = {0.1, 0.2, 0.3, 0.1, 0.2, 0.3};
+    float data[] = {0.1f, 0.2f, 0.3f, 0.1f, 0.2f, 0.3f};
     int widths[] = {1, 2, 3};
     af::array data_d(3, 2, data);
     af::array widths_d(3, 1, widths);
@@ -478,10 +478,10 @@ void fftAggregated() {
     af::array fftAgg = tsa::features::fftAggregated(tss);
 
     float *fft = fftAgg.host<float>();
-    float f1 = 1.135143;
-    float f2 = 2.368324;
-    float f3 = 1.248777;
-    float f4 = 3.642666;
+    float f1 = 1.135143f;
+    float f2 = 2.368324f;
+    float f3 = 1.248777f;
+    float f4 = 3.642666f;
 
     ASSERT_NEAR(fft[0], f1, EPSILON);
     ASSERT_NEAR(fft[1], f2, EPSILON);
@@ -602,7 +602,7 @@ void indexMassQuantile() {
     af::array result = tsa::features::indexMassQuantile(tss, q);
 
     float *hresult = result.host<float>();
-    float expected[] = {0.333333333, 0.3333333333};
+    float expected[] = {0.333333333f, 0.3333333333f};
 
     ASSERT_NEAR(hresult[0], expected[0], EPSILON);
     ASSERT_NEAR(hresult[1], expected[1], EPSILON);
@@ -612,7 +612,7 @@ void kurtosis() {
     float data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
     af::array tss(6, 2, data);
 
-    float dataExpected[] = {-1.2, -2.66226722};
+    float dataExpected[] = {-1.2f, -2.66226722f};
 
     float *result = tsa::features::kurtosis(tss).host<float>();
 
@@ -624,7 +624,7 @@ void kurtosis() {
 void largeStandardDeviation() {
     float data[] = {-1, -1, -1, 1, 1, 1, 4, 6, 8, 4, 5, 4};
     af::array tss(6, 2, data);
-    float r = 0.4;
+    float r = 0.4f;
 
     bool *result = (bool *)tsa::features::largeStandardDeviation(tss, r).host<char>();
 
@@ -674,8 +674,8 @@ void linearTrend() {
     float data[] = {0, 4, 3, 5, 5, 1, 2, 4, 1, 2, 5, 3};
     af::array tss(6, 2, data);
 
-    af::array pvalue, rvalue, intercept, slope, stderr;
-    tsa::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stderr);
+    af::array pvalue, rvalue, intercept, slope, stder;
+    tsa::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stder);
 
     float *hpvalue = pvalue.host<float>();
     ASSERT_NEAR(hpvalue[0], 0.6260380997892747, EPSILON);
@@ -693,9 +693,9 @@ void linearTrend() {
     ASSERT_NEAR(hslope[0], 0.2857142857142857, EPSILON);
     ASSERT_NEAR(hslope[1], 0.2571428571428572, EPSILON);
 
-    float *hstderr = stderr.host<float>();
-    ASSERT_NEAR(hstderr[0], 0.5421047417431507, EPSILON);
-    ASSERT_NEAR(hstderr[1], 0.37179469135129783, EPSILON);
+    float *hstder = stder.host<float>();
+    ASSERT_NEAR(hstder[0], 0.5421047417431507, EPSILON);
+    ASSERT_NEAR(hstder[1], 0.37179469135129783, EPSILON);
 }
 
 void longestStrikeAboveMean() {
@@ -732,7 +732,7 @@ void maxLangevinFixedPoint() {
 
     float *calculated = result.host<float>();
 
-    float expected[] = {4.562970585, 4.562970585};
+    float expected[] = {4.562970585f, 4.562970585f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON * 1e4);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON * 1e4);
@@ -771,7 +771,7 @@ void meanAbsoluteChange() {
     af::array result = tsa::features::meanAbsoluteChange(tss);
 
     // check distances
-    float r = 5.0 / 6.0;
+    float r = 5.0f / 6.0f;
     float *hostResult = result.host<float>();
     ASSERT_NEAR(r, hostResult[0], EPSILON);
     ASSERT_NEAR(r * 2.0, hostResult[1], EPSILON);
@@ -784,7 +784,7 @@ void meanChange() {
     af::array result = tsa::features::meanChange(tss);
 
     // check distances
-    float r = 5.0 / 6.0;
+    float r = 5.0f / 6.0f;
     float *hostResult = result.host<float>();
     ASSERT_NEAR(r, hostResult[0], EPSILON);
     ASSERT_NEAR(r * 2.0, hostResult[1], EPSILON);
@@ -797,8 +797,8 @@ void meanSecondDerivativeCentral() {
     af::array result = tsa::features::meanSecondDerivativeCentral(tss);
 
     // check distances
-    float r0 = 1.0 / 5.0;
-    float r1 = -3.0 / 5.0;
+    float r0 = 1.0f / 5.0f;
+    float r1 = -3.0f / 5.0f;
     float *hostResult = result.host<float>();
     ASSERT_NEAR(r0, hostResult[0], EPSILON);
     ASSERT_NEAR(r1, hostResult[1], EPSILON);
@@ -870,8 +870,8 @@ void numberPeaks() {
 
 void partialAutocorrelation() {
     float len = 3000.0;
-    float *input = (float *)malloc(sizeof(float) * len);
-    float step = 1.0 / (len - 1);
+    float *input = (float *)malloc(sizeof(float) * static_cast<size_t>(len));
+    float step = 1.0f / (len - 1);
     for (int i = 0; i < len; i++) {
         input[i] = step * i;
     }
@@ -931,14 +931,14 @@ void quantile() {
 
     tss = af::sort(tss, 0);
 
-    float q[] = {0.6};
+    float q[] = {0.6f};
     af::array qq = af::array(1, q);
 
     af::array result = tsa::features::quantile(tss, qq);
 
     float *calculated = result.host<float>();
 
-    float expected[] = {1.79999999, 1.79999999};
+    float expected[] = {1.79999999f, 1.79999999f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
@@ -966,7 +966,7 @@ void ratioBeyondRSigma() {
 
     float *calculated = result.host<float>();
 
-    float expected[] = {0.7142857142857143, 0.7142857142857143};
+    float expected[] = {0.7142857142857143f, 0.7142857142857143f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
@@ -980,7 +980,7 @@ void ratioValueNumberToTimeSeriesLength() {
 
     float *calculated = result.host<float>();
 
-    float expected[] = {4.0 / 7.0, 6.0 / 7.0};
+    float expected[] = {4.0f / 7.0f, 6.0f / 7.0f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
@@ -994,7 +994,7 @@ void sampleEntropy() {
 
     float *calculated = result.host<float>();
 
-    float expected[] = {1.252762968495368, 1.252762968495368};
+    float expected[] = {1.252762968495368f, 1.252762968495368f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
@@ -1008,7 +1008,7 @@ void skewness() {
 
     float *calculated = result.host<float>();
 
-    float expected[] = {2.038404735373753, 2.038404735373753};
+    float expected[] = {2.038404735373753f, 2.038404735373753f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
@@ -1070,13 +1070,13 @@ void sumOfReoccurringValues() {
 }
 
 void sumValues() {
-    float data[] = {1, 2, 3, 4.1, -1.2, -2, -3, -4};
+    float data[] = {1, 2, 3, 4.1f, -1.2f, -2, -3, -4};
     af::array tss(4, 2, data);
 
     af::array result = tsa::features::sumValues(tss);
 
     float *sv = (float *)result.host<float>();
-    float expected[] = {10.1, -10.2};
+    float expected[] = {10.1f, -10.2f};
 
     ASSERT_EQ(sv[0], expected[0]);
     ASSERT_EQ(sv[1], expected[1]);
@@ -1087,7 +1087,7 @@ void symmetryLooking() {
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::symmetryLooking(tss, 0.1);
+    af::array result = tsa::features::symmetryLooking(tss, 0.1f);
 
     bool *sl = (bool *)result.host<char>();
 

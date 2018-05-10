@@ -17,9 +17,10 @@ extern "C" {
  * @param x x-coordinates of the M sample points \f$(x[i], y[i])\f$.
  * @param y y-coordinates of the sample points.
  * @param deg Degree of the fitting polynomial.
+ *
  * @return The updated refs and an array with the polynomial coefficients, highest power first.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_polyfit(JNIEnv *env, jobject thisObj, jlong refX, jlong refY,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY,
                                                                       jint deg);
 
 /**
@@ -31,9 +32,10 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_polyfit(JNIEnv *en
  * \f]
  *
  * @param pp Array of polynomial coefficients.
+ *
  * @return The updated ref and an array containing the roots of the polynomial.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_roots(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_roots(JNIEnv *env, jobject, jlong ref);
 
 #ifdef __cplusplus
 }

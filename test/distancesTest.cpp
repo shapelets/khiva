@@ -48,35 +48,35 @@ void dtw2() {
     // check distances
     float *hostResult = result.host<float>();
     int i = 0;
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(10.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(10.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(15.0, hostResult[i++]);
-    ASSERT_EQ(10.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(15.0f, hostResult[i++]);
+    ASSERT_EQ(10.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(20.0, hostResult[i++]);
-    ASSERT_EQ(15.0, hostResult[i++]);
-    ASSERT_EQ(10.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(20.0f, hostResult[i++]);
+    ASSERT_EQ(15.0f, hostResult[i++]);
+    ASSERT_EQ(10.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 }
 
 // Simple test, does not use gmock
@@ -95,15 +95,15 @@ void euclidean() {
 
     // check distances
     float *hostResult = result.host<float>();
-    ASSERT_EQ(0.0, hostResult[0]);
-    ASSERT_EQ(0.0, hostResult[1]);
-    ASSERT_EQ(0.0, hostResult[2]);
-    ASSERT_EQ(8.0, hostResult[3]);
-    ASSERT_EQ(0.0, hostResult[4]);
-    ASSERT_EQ(0.0, hostResult[5]);
-    ASSERT_EQ(16.0, hostResult[6]);
-    ASSERT_EQ(8.0, hostResult[7]);
-    ASSERT_EQ(0.0, hostResult[8]);
+    ASSERT_EQ(0.0f, hostResult[0]);
+    ASSERT_EQ(0.0f, hostResult[1]);
+    ASSERT_EQ(0.0f, hostResult[2]);
+    ASSERT_EQ(8.0f, hostResult[3]);
+    ASSERT_EQ(0.0f, hostResult[4]);
+    ASSERT_EQ(0.0f, hostResult[5]);
+    ASSERT_EQ(16.0f, hostResult[6]);
+    ASSERT_EQ(8.0f, hostResult[7]);
+    ASSERT_EQ(0.0f, hostResult[8]);
 }
 
 void hamming() {
@@ -122,35 +122,35 @@ void hamming() {
     // check distances
     float *hostResult = result.host<float>();
     int i = 0;
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 }
 
 void manhattan() {
@@ -169,35 +169,35 @@ void manhattan() {
     // check distances
     float *hostResult = result.host<float>();
     int i = 0;
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(10.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(10.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(15.0, hostResult[i++]);
-    ASSERT_EQ(10.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(15.0f, hostResult[i++]);
+    ASSERT_EQ(10.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 
-    ASSERT_EQ(20.0, hostResult[i++]);
-    ASSERT_EQ(15.0, hostResult[i++]);
-    ASSERT_EQ(10.0, hostResult[i++]);
-    ASSERT_EQ(5.0, hostResult[i++]);
-    ASSERT_EQ(0.0, hostResult[i++]);
+    ASSERT_EQ(20.0f, hostResult[i++]);
+    ASSERT_EQ(15.0f, hostResult[i++]);
+    ASSERT_EQ(10.0f, hostResult[i++]);
+    ASSERT_EQ(5.0f, hostResult[i++]);
+    ASSERT_EQ(0.0f, hostResult[i++]);
 }
 
 // Simple test, does not use gmock
@@ -216,15 +216,15 @@ void squaredEuclidean() {
 
     // check distances
     float *hostResult = result.host<float>();
-    ASSERT_EQ(0.0, hostResult[0]);
-    ASSERT_EQ(0.0, hostResult[1]);
-    ASSERT_EQ(0.0, hostResult[2]);
-    ASSERT_EQ(64.0, hostResult[3]);
-    ASSERT_EQ(0.0, hostResult[4]);
-    ASSERT_EQ(0.0, hostResult[5]);
-    ASSERT_EQ(256.0, hostResult[6]);
-    ASSERT_EQ(64.0, hostResult[7]);
-    ASSERT_EQ(0.0, hostResult[8]);
+    ASSERT_EQ(0.0f, hostResult[0]);
+    ASSERT_EQ(0.0f, hostResult[1]);
+    ASSERT_EQ(0.0f, hostResult[2]);
+    ASSERT_EQ(64.0f, hostResult[3]);
+    ASSERT_EQ(0.0f, hostResult[4]);
+    ASSERT_EQ(0.0f, hostResult[5]);
+    ASSERT_EQ(256.0f, hostResult[6]);
+    ASSERT_EQ(64.0f, hostResult[7]);
+    ASSERT_EQ(0.0f, hostResult[8]);
 }
 
 TSA_TEST(DistanceTests, DTW, dtw);

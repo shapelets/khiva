@@ -12,7 +12,7 @@
 
 void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue,
                              af::array &pvalue, af::array &stderrest) {
-    long n = xss.dims(0);
+    long n = static_cast<long>(xss.dims(0));
 
     af::array meanX = af::mean(xss, 0);
     af::array meanY = af::mean(yss, 0);
@@ -21,7 +21,8 @@ void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af:
 
     // Assuming xss and yss contain the same number of time series
     for (int i = 0; i < xss.dims(1); i++) {
-        sumSquares(af::span, af::span, i) = tsa::statistics::covariance(af::join(1, xss(af::span, i), yss(af::span, i)));
+        sumSquares(af::span, af::span, i) =
+            tsa::statistics::covariance(af::join(1, xss(af::span, i), yss(af::span, i)));
     }
 
     af::array ssxm = sumSquares(0, 0, af::span);
@@ -56,7 +57,7 @@ void tsa::regression::linear(af::array xss, af::array yss, af::array &slope, af:
     // to avoid templating this function and all the ones using it
     float *aux = af::abs(t).as(af::dtype::f32).host<float>();
     for (long i = 0; i < t.dims(1); i++) {
-        aux[i] = 2.0 * (1 - boost::math::cdf(dist, aux[i]));
+        aux[i] = 2.0f * (1.0f - static_cast<float>(boost::math::cdf(dist, aux[i])));
     }
     pvalue = af::array(1, t.dims(1), aux).as(xss.type());
     stderrest = af::sqrt((1 - af::pow(r, 2)) * ssym / ssxm / df);

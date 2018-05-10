@@ -155,7 +155,7 @@ void CalculateDistanceProfile(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
+        tsa::matrix::calculateDistanceProfile(qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
         distance.eval();
         index.eval();
         af::sync();
@@ -196,7 +196,7 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
             auto sumQ = sum(q);
             auto sumQ2 = sum(pow(q, 2));
             auto qt = tsa::matrix::slidingDotProduct(q, t);
-            tsa::matrix::calculateDistanceProfile(m, qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
+            tsa::matrix::calculateDistanceProfile(qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
             distance.eval();
             index.eval();
         }
@@ -227,7 +227,7 @@ void Mass(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::matrix::mass(q, t, m, aux, mean, stdev, mask, distance, index);
+        tsa::matrix::mass(q, t, aux, mean, stdev, mask, distance, index);
         distance.eval();
         index.eval();
         af::sync();

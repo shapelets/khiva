@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
+#include <tsa_c/defines.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,7 +20,7 @@ extern "C" {
  * @param deg Degree of the fitting polynomial.
  * @param result Polynomial coefficients, highest power first.
  */
-void polyfit(af_array *x, af_array *y, int *deg, af_array *result);
+TSAAPI void polyfit(af_array *x, af_array *y, int *deg, af_array *result);
 
 /**
  * @brief Calculates the roots of a polynomial with coefficients given in \f$p\f$. The values in the rank-1 array
@@ -31,7 +32,7 @@ void polyfit(af_array *x, af_array *y, int *deg, af_array *result);
  * @param pp Array of polynomial coefficients.
  * @param result Array containing the roots of the polynomial.
  */
-void roots(af_array *p, af_array *result);
+TSAAPI void roots(af_array *p, af_array *result);
 
 #ifdef __cplusplus
 }

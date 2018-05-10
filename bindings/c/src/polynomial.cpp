@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-void polyfit(af_array *x, af_array *y, int *deg, af_array *result) {
+TSAAPI void polyfit(af_array *x, af_array *y, int *deg, af_array *result) {
     af::array xx = af::array(*x);
     af_retain_array(x, xx.get());
     af::array yy = af::array(*y);
@@ -21,7 +21,7 @@ void polyfit(af_array *x, af_array *y, int *deg, af_array *result) {
     af_retain_array(result, tsa::polynomial::polyfit(xx, yy, *deg).get());
 }
 
-void roots(af_array *p, af_array *result) {
+TSAAPI void roots(af_array *p, af_array *result) {
     af::array var = af::array(*p);
     af_retain_array(p, var.get());
     af_retain_array(result, tsa::polynomial::roots(var).get());

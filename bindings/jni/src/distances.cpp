@@ -12,8 +12,8 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_euclidean(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_euclidean(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -33,8 +33,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_euclidean(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_dtw(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_dtw(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -54,8 +54,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_dtw(JNIEnv *env, jo
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_hamming(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_hamming(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -75,8 +75,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_hamming(JNIEnv *env
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_manhattan(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_manhattan(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -96,8 +96,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_manhattan(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_squaredEuclidean(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 

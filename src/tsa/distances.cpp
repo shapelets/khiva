@@ -5,13 +5,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <tsa/distances.h>
+#include <algorithm>
 #include <limits>
 
 double distance(double x, double y) { return std::sqrt(std::pow((x - y), 2)); }
 
 double tsa::distances::dtw(std::vector<double> t0, std::vector<double> t1) {
-    int m = t0.size();
-    int n = t1.size();
+    int m = static_cast<int>(t0.size());
+    int n = static_cast<int>(t1.size());
 
     // Allocate the cost Matrix
     std::vector<std::vector<double>> cost(m, std::vector<double>(n));
@@ -39,11 +40,13 @@ double tsa::distances::dtw(std::vector<double> t0, std::vector<double> t1) {
     return cost[m - 1][n - 1];
 }
 
-af::array distance(af::array a, af::array bss) { return af::sqrt(af::pow(af::tile(a, 1, bss.dims(1)) - bss, 2)); }
+af::array distance(af::array a, af::array bss) {
+    return af::sqrt(af::pow(af::tile(a, 1, static_cast<const unsigned int>(bss.dims(1))) - bss, 2));
+}
 
 af::array dtwInternal(af::array a, af::array bss) {
-    int m = a.dims(0);
-    int n = bss.dims(0);
+    int m = static_cast<int>(a.dims(0));
+    int n = static_cast<int>(bss.dims(0));
 
     // Allocate the cost Matrix:
     af::array cost = af::constant(0, m, n, bss.dims(1));
@@ -78,7 +81,7 @@ af::array tsa::distances::dtw(af::array tss) {
 
     // for each time series, calculate in parallel all distances
     for (int currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
-        gfor(af::seq otherCol, currentCol + 1, numOfTs - 1) {
+        gfor(af::seq otherCol, currentCol + 1, static_cast<double>(numOfTs - 1)) {
             result(currentCol, otherCol) =
                 dtwInternal(tss(af::span, currentCol), af::reorder(tss(af::span, otherCol), 0, 3, 1, 2));
         }
@@ -102,7 +105,7 @@ af::array tsa::distances::hamming(af::array tss) {
 
     // for each time series, calculate in parallel all distances
     for (auto currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
-        gfor(af::seq otherCol, currentCol + 1, numOfTs - 1) {
+        gfor(af::seq otherCol, currentCol + 1, static_cast<double>(numOfTs - 1)) {
             result(currentCol, otherCol) =
                 af::sum((tss(af::span, currentCol) != tss(af::span, otherCol)).as(af::dtype::s32));
         }
@@ -119,7 +122,7 @@ af::array tsa::distances::manhattan(af::array tss) {
 
     // for each time series, calculate in parallel all distances
     for (auto currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
-        gfor(af::seq otherCol, currentCol + 1, numOfTs - 1) {
+        gfor(af::seq otherCol, currentCol + 1, static_cast<double>(numOfTs - 1)) {
             result(currentCol, otherCol) = af::sum(af::abs(tss(af::span, currentCol) - tss(af::span, otherCol)));
         }
     }
@@ -135,7 +138,7 @@ af::array tsa::distances::squaredEuclidean(af::array tss) {
 
     // for each time series, calculate in parallel all distances
     for (auto currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
-        gfor(af::seq otherCol, currentCol + 1, numOfTs - 1) {
+        gfor(af::seq otherCol, currentCol + 1, static_cast<double>(numOfTs - 1)) {
             result(currentCol, otherCol) = af::sum(af::pow(tss(af::span, currentCol) - tss(af::span, otherCol), 2));
         }
     }

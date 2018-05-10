@@ -43,10 +43,20 @@ void meanStdev() {
     ASSERT_EQ(stdev.dims(0), 12);
     ASSERT_EQ(stdev.dims(1), 2);
 
-    float expectedMean[] = {10.333333333, 10.666666666, 11.333333333, 11.333333333, 11,           10.333333333,
-                            10.333333333, 11,           11.333333333, 11,           10.333333333, 10.333333333};
-    float expectedStdev[] = {0.471404521, 0.471404521, 0.471404521, 0.471404521, 0.816496581, 0.471404521,
-                             0.471404521, 0.816496581, 0.471404521, 0.816496581, 0.471404521, 0.471404521};
+    float expectedMean[] = {10.333333333f,
+                            10.666666666f,
+                            11.333333333f,
+                            11.333333333f,
+                            11,
+                            10.333333333f,
+                            10.333333333f,
+                            11,
+                            11.333333333f,
+                            11,
+                            10.333333333f,
+                            10.333333333f};
+    float expectedStdev[] = {0.471404521f, 0.471404521f, 0.471404521f, 0.471404521f, 0.816496581f, 0.471404521f,
+                             0.471404521f, 0.816496581f, 0.471404521f, 0.816496581f, 0.471404521f, 0.471404521f};
     float *resultingMean = mean.host<float>();
     float *resultingStdev = stdev.host<float>();
     for (int i = 0; i < 24; i++) {
@@ -91,10 +101,10 @@ void calculateDistanceProfile() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::calculateDistanceProfile(m, qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, distance,
+    tsa::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, distance,
                                           index);
 
-    float expectedDistance = 19.0552097998;
+    float expectedDistance = 19.0552097998f;
     int expectedIndex = 7;
 
     ASSERT_EQ(distance.dims(), af::dim4(1, 2, 1, 1));
@@ -132,10 +142,10 @@ void calculateDistanceProfileMiddle() {
 
     af::array mask = tsa::matrix::generateMask(m, 1, 0, 12, 2);
 
-    tsa::matrix::calculateDistanceProfile(m, qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, mask,
+    tsa::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, mask,
                                           distance, index);
 
-    float expectedDistance = 19.0552097998;
+    float expectedDistance = 19.0552097998f;
     int expectedIndex = 7;
 
     ASSERT_EQ(distance.dims(), af::dim4(1, 2, 1, 1));
@@ -173,7 +183,7 @@ void massIgnoreTrivial() {
 
     af::array mask = tsa::matrix::generateMask(m, 1, 0, 12, 2);
 
-    tsa::matrix::mass(q, tss, m, aux, mean, stdev, mask, distance, index);
+    tsa::matrix::mass(q, tss, aux, mean, stdev, mask, distance, index);
 
     float expectedDistance = 0.0;
     int expectedIndex = 7;
@@ -211,7 +221,7 @@ void massConsiderTrivial() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::mass(q, tss, m, aux, mean, stdev, distance, index);
+    tsa::matrix::mass(q, tss, aux, mean, stdev, distance, index);
 
     float expectedDistance = 0.0;
     int expectedIndex = 7;
@@ -412,11 +422,10 @@ void findBestDiscords() {
 
     tsa::matrix::findBestNDiscords(distance, index, 2, discords, discordsIndices, subsequenceIndices);
 
-    unsigned int *discordsIndicesHost = discordsIndices.host<unsigned int>();
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
-    ASSERT_EQ(subsequenceIndicesHost[0], 9);
-    ASSERT_EQ(subsequenceIndicesHost[1], 0);
+    ASSERT_EQ(subsequenceIndicesHost[0], 0);
+    ASSERT_EQ(subsequenceIndicesHost[1], 9);
 }
 
 TSA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct);

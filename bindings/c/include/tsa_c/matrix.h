@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
+#include <tsa_c/defines.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,24 +25,24 @@ extern "C" {
  * @param subsequence_indices The indices of the query sequences that produced
  * the "N" bigger discords.
  */
-void find_best_n_discords(af_array *profile, af_array *index, long *n, af_array *discord_distances,
-                          af_array *discord_indices, af_array *subsequence_indices);
+TSAAPI void find_best_n_discords(af_array *profile, af_array *index, long *n, af_array *discord_distances,
+                                 af_array *discord_indices, af_array *subsequence_indices);
 
 /**
  * @brief Primitive of the findBestNMotifs function.
  *
  * @param profile The matrix profile containing the minimum distance of each
- * subsequence
- * @param index The matrix profile index containing where each minimum occurs
- * @param length_profile Length of the matrix profile
- * @param n Number of motifs to extract
- * @param motif_distances The distance of the best N motifs
- * @param motif_indices The indices of the best N motifs
+ * subsequence.
+ * @param index The matrix profile index containing where each minimum occurs.
+ * @param length_profile Length of the matrix profile.
+ * @param n Number of motifs to extract.
+ * @param motif_distances The distance of the best N motifs.
+ * @param motif_indices The indices of the best N motifs.
  * @param subsequence_indices The indices of the query sequences that produced
- * the minimum reported in the motifs
+ * the minimum reported in the motifs.
  */
-void find_best_n_motifs(af_array *profile, af_array *index, long *n, af_array *motif_distances, af_array *motif_indices,
-                        af_array *subsequence_indices);
+TSAAPI void find_best_n_motifs(af_array *profile, af_array *index, long *n, af_array *motif_distances,
+                               af_array *motif_indices, af_array *subsequence_indices);
 
 /**
  * @brief  Primitive of the STOMP algorithm.
@@ -51,9 +52,9 @@ void find_best_n_motifs(af_array *profile, af_array *index, long *n, af_array *m
  * @param m Pointer to a long with the length of the subsequence.
  * @param p The matrix profile, which reflects the distance to the closer element of the subsequence
  * from 'tssa' in 'tssb'.
- * @param i The matrix profile index, which points to where the previously mentioned minimum is located.
+ * @param i The matrix profile index, which points to where the aforementioned minimum is located.
  */
-void stomp(af_array *tssa, af_array *tssb, long *m, af_array *p, af_array *i);
+TSAAPI void stomp(af_array *tssa, af_array *tssb, long *m, af_array *p, af_array *i);
 
 /**
  * @brief Primitive of the STOMP self join algorithm.
@@ -62,9 +63,9 @@ void stomp(af_array *tssa, af_array *tssb, long *m, af_array *p, af_array *i);
  * @param m Pointer to a long with the length of the subsequence.
  * @param p The matrix profile, which reflects the distance to the closer element of the subsequence
  * from 'tss' in a different location of itself
- * @param i The matrix profile index, which points to where the previously mentioned minimum is located
+ * @param i The matrix profile index, which points to where the aforementioned minimum is located
  */
-void stomp_self_join(af_array *tss, long *m, af_array *p, af_array *i);
+TSAAPI void stomp_self_join(af_array *tss, long *m, af_array *p, af_array *i);
 
 #ifdef __cplusplus
 }

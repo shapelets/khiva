@@ -80,10 +80,10 @@ void addMemoryCounters(benchmark::State &state) {
     // This is already doing an af::sync();
     af::deviceMemInfo(&bytes, &buffers, &lockedBytes, &lockedBuffers);
 
-    state.counters["Memory"] = bytes;
-    state.counters["Buffers"] = buffers;
-    state.counters["LockedMemory"] = lockedBytes;
-    state.counters["LockedBuffers"] = lockedBuffers;
+    state.counters["Memory"] = static_cast<double>(bytes);
+    state.counters["Buffers"] = static_cast<double>(buffers);
+    state.counters["LockedMemory"] = static_cast<double>(lockedBytes);
+    state.counters["LockedBuffers"] = static_cast<double>(lockedBuffers);
 
     af::deviceGC();
 }

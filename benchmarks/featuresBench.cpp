@@ -477,7 +477,7 @@ void IndexMassQuantile(benchmark::State &state) {
 
     auto n = state.range(0);
     auto m = state.range(1);
-    float q = 0.8;
+    float q = 0.8f;
 
     auto t = af::randu(n, m, f64);
 
@@ -595,16 +595,16 @@ void LinearTrend(benchmark::State &state) {
     auto m = state.range(1);
 
     auto tss = af::randu(n, m, f64);
-    af::array pvalue, rvalue, intercept, slope, stderr;
+    af::array pvalue, rvalue, intercept, slope, stder;
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stderr);
+        tsa::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stder);
         pvalue.eval();
         rvalue.eval();
         intercept.eval();
         slope.eval();
-        stderr.eval();
+        stder.eval();
         af::sync();
     }
     addMemoryCounters(state);
@@ -656,7 +656,7 @@ void MaxLangevinFixedPoint(benchmark::State &state) {
     auto n = state.range(0);
     auto m = state.range(1);
     auto mm = state.range(2);
-    auto r = state.range(3);
+    auto r = static_cast<float>(state.range(3));
 
     auto t = af::randu(n, m, f64);
 
@@ -937,8 +937,8 @@ void RangeCount(benchmark::State &state) {
     auto n = state.range(0);
     auto m = state.range(1);
     auto t = af::randu(n, m, f64);
-    float minimum = 0.2;
-    float maximum = 0.8;
+    float minimum = 0.2f;
+    float maximum = 0.8f;
 
     af::sync();
     while (state.KeepRunning()) {
@@ -1137,7 +1137,7 @@ void SymmetryLooking(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto sl = tsa::features::symmetryLooking(t, 0.1);
+        auto sl = tsa::features::symmetryLooking(t, 0.1f);
         sl.eval();
         af::sync();
     }

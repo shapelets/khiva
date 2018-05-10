@@ -14,7 +14,7 @@ extern "C" {
  * @brief Group by operation in the input array using nColumnsKey columns as group keys and nColumnsValue columns as
  * values. The data is expected to be sorted. The aggregation function determines the operation to aggregate the values.
  *
- * @param ref Expects an input array whose dimension zero is the length of the time
+ * @param ref Expects an input array whose dimension zero is the length of the time.
  * series (all the same) and dimension one indicates the number of time series.
  * @param aggregationFunction Function to be used in the aggregation. It receives an integer which indicates the
  * function to be applied:
@@ -33,7 +33,7 @@ extern "C" {
  *
  * @return The updated ref and an array with the values of the group keys aggregated using the aggregationFunction.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regularization_groupBy(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
                                                                           jint aggregationFunction, jint nColumnsKey,
                                                                           jint nColumnsValue);
 

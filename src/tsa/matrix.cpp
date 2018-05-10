@@ -6,14 +6,15 @@
 
 #include <tsa/matrix.h>
 #include <tsa/normalization.h>
+#include <algorithm>
 #include <limits>
 
 #define BATCH_SIZE 2048
 #define EPSILON 1e-8
 
 af::array tsa::matrix::slidingDotProduct(af::array q, af::array t) {
-    long n = t.dims(0);
-    long m = q.dims(0);
+    long n = static_cast<long>(t.dims(0));
+    long m = static_cast<long>(q.dims(0));
 
     // Flipping all the query sequences contained in q
     af::array qr = af::flip(q, 0);
@@ -26,7 +27,7 @@ af::array tsa::matrix::slidingDotProduct(af::array q, af::array t) {
 }
 
 void tsa::matrix::meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &stdev) {
-    long na = t.dims(0);
+    long na = static_cast<long>(t.dims(0));
 
     // Cumulative sum of all the time series contained in t
     af::array cumulative_sum_t = af::accum(t, 0);
@@ -65,7 +66,7 @@ void tsa::matrix::meanStdev(af::array t, af::array &a, long m, af::array &mean, 
 }
 
 void tsa::matrix::meanStdev(af::array t, long m, af::array &mean, af::array &stdev) {
-    long na = t.dims(0);
+    long na = static_cast<long>(t.dims(0));
 
     // Cumulative sum of all the time series contained in t
     af::array cumulative_sum_t = af::accum(t, 0);
@@ -96,7 +97,7 @@ void tsa::matrix::meanStdev(af::array t, long m, af::array &mean, af::array &std
 }
 
 af::array tsa::matrix::generateMask(long m, long batchSize, long batchStart, long tsLength, long nTimeSeries) {
-    long bandSize = std::ceil(m / 2.0) + 1;
+    long bandSize = static_cast<long>(std::ceil(m / 2.0)) + 1;
 
     int tmp = batchStart > 0;
     // Identity matrix of batch or band size (the max of both) rows and
@@ -115,12 +116,12 @@ af::array tsa::matrix::generateMask(long m, long batchSize, long batchStart, lon
     return mask;
 }
 
-void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a, af::array sum_q, af::array sum_q2,
+void tsa::matrix::calculateDistanceProfile(af::array qt, af::array a, af::array sum_q, af::array sum_q2,
                                            af::array mean_t, af::array sigma_t, af::array mask, af::array &distance,
                                            af::array &index) {
-    long batchSize = qt.dims(3);
-    long tsLength = qt.dims(0);
-    long nTimeSeries = qt.dims(1);
+    long batchSize = static_cast<long>(qt.dims(3));
+    long tsLength = static_cast<long>(qt.dims(0));
+    long nTimeSeries = static_cast<long>(qt.dims(1));
 
     // Tiling the input data to match the batch size, the time series length and the number of time series
     af::array a_tiled = af::tile(a, 1, 1, 1, batchSize);
@@ -156,11 +157,11 @@ void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a, af
     af::min(distance, index, dist, 2);
 }
 
-void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a, af::array sum_q, af::array sum_q2,
+void tsa::matrix::calculateDistanceProfile(af::array qt, af::array a, af::array sum_q, af::array sum_q2,
                                            af::array mean_t, af::array sigma_t, af::array &distance, af::array &index) {
-    long batchSize = qt.dims(3);
-    long tsLength = qt.dims(0);
-    long nTimeSeries = qt.dims(1);
+    long batchSize = static_cast<long>(qt.dims(3));
+    long tsLength = static_cast<long>(qt.dims(0));
+    long nTimeSeries = static_cast<long>(qt.dims(1));
 
     // Tiling the input data to match the batch size, the time series length and the number of time series
     af::array a_tiled = af::tile(a, 1, 1, 1, batchSize);
@@ -186,26 +187,7 @@ void tsa::matrix::calculateDistanceProfile(long m, af::array qt, af::array a, af
     af::min(distance, index, dist, 2);
 }
 
-void tsa::matrix::mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::array sigma_t,
-                       af::array mask, af::array &distance, af::array &index) {
-    // Normalizing the query sequence. q can contain query sequences from multiple series
-    q = tsa::normalization::znorm(q, EPSILON);
-
-    // Sliding dot product of the subsequence q of all the query time series against all the reference time series
-    // contained in t
-    af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    // Cumulative sum of all the elements contained in q (for each time series, that is why it is done using the first
-    // dimension)
-    af::array sum_q = af::sum(q, 0);
-    // Cumulative sum of squares of all the elements contained in q (for each time series, that is why it is done using
-    // the first dimension)
-    af::array sum_q2 = af::sum(af::pow(q, 2), 0);
-
-    // Calculate the distance and index profiles for all the combinations of query sequences and reference time series
-    tsa::matrix::calculateDistanceProfile(m, qt, a, sum_q, sum_q2, mean_t, sigma_t, mask, distance, index);
-}
-
-void tsa::matrix::mass(af::array q, af::array t, long m, af::array a, af::array mean_t, af::array sigma_t,
+void tsa::matrix::mass(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array mask,
                        af::array &distance, af::array &index) {
     // Normalizing the query sequence. q can contain query sequences from multiple series
     q = tsa::normalization::znorm(q, EPSILON);
@@ -221,11 +203,30 @@ void tsa::matrix::mass(af::array q, af::array t, long m, af::array a, af::array 
     af::array sum_q2 = af::sum(af::pow(q, 2), 0);
 
     // Calculate the distance and index profiles for all the combinations of query sequences and reference time series
-    tsa::matrix::calculateDistanceProfile(m, qt, a, sum_q, sum_q2, mean_t, sigma_t, distance, index);
+    tsa::matrix::calculateDistanceProfile(qt, a, sum_q, sum_q2, mean_t, sigma_t, mask, distance, index);
+}
+
+void tsa::matrix::mass(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array &distance,
+                       af::array &index) {
+    // Normalizing the query sequence. q can contain query sequences from multiple series
+    q = tsa::normalization::znorm(q, EPSILON);
+
+    // Sliding dot product of the subsequence q of all the query time series against all the reference time series
+    // contained in t
+    af::array qt = tsa::matrix::slidingDotProduct(q, t);
+    // Cumulative sum of all the elements contained in q (for each time series, that is why it is done using the first
+    // dimension)
+    af::array sum_q = af::sum(q, 0);
+    // Cumulative sum of squares of all the elements contained in q (for each time series, that is why it is done using
+    // the first dimension)
+    af::array sum_q2 = af::sum(af::pow(q, 2), 0);
+
+    // Calculate the distance and index profiles for all the combinations of query sequences and reference time series
+    tsa::matrix::calculateDistanceProfile(qt, a, sum_q, sum_q2, mean_t, sigma_t, distance, index);
 }
 
 void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::array &profile, af::array &index) {
-    long nb = tb.dims(0);
+    long nb = static_cast<long>(tb.dims(0));
 
     af::array aux;
     af::array mean;
@@ -264,7 +265,7 @@ void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
             af::array pidx;
 
             // Compute the distance and index profiles using Mueens algorithm for similarity search
-            tsa::matrix::mass(input(af::span, idx, af::span, af::span), ta, m, aux, mean, stdev, distance, pidx);
+            tsa::matrix::mass(input(af::span, idx, af::span, af::span), ta, aux, mean, stdev, distance, pidx);
 
             // Concat the profiles of the given chunk to the general result
             profile = join(0, profile, distance);
@@ -283,10 +284,10 @@ void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
 
 void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_size_b, long batch_size_a,
                               af::array &profile, af::array &index) {
-    long nb = tb.dims(0);
-    long na = ta.dims(0);
-    long nTimeSeriesA = ta.dims(1);
-    long nTimeSeriesB = tb.dims(1);
+    long nb = static_cast<long>(tb.dims(0));
+    long na = static_cast<long>(ta.dims(0));
+    long nTimeSeriesA = static_cast<long>(ta.dims(1));
+    long nTimeSeriesB = static_cast<long>(tb.dims(1));
 
     profile = af::array(0, ta.type());
     index = af::array(0, af::dtype::u32);
@@ -340,7 +341,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
                 af::array pidxTmp;
 
                 // Compute the distance and index profiles using Mueens algorithm for similarity search
-                tsa::matrix::mass(input(af::span, idx, af::span, af::span), taChunk, m, aux, mean, stdev, distanceTmp,
+                tsa::matrix::mass(input(af::span, idx, af::span, af::span), taChunk, aux, mean, stdev, distanceTmp,
                                   pidxTmp);
 
                 // Leaving 2nd dimension blank to join the partial results using it
@@ -368,19 +369,21 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
         idx = af::reorder(idx, 0, 2, 3, 1);
 
         // Auxiliary variables to add to the index in order to obtain the real index where the minimum occurs
-        af::array toSum = af::seq(0, (nTimeSeriesA * nTimeSeriesB - 1) * distance.dims(1), distance.dims(1));
+        af::array toSum = af::seq(0, (nTimeSeriesA * nTimeSeriesB - 1) * static_cast<double>(distance.dims(1)),
+                                  static_cast<double>(distance.dims(1)));
         af::array aux = af::transpose(toSum).as(idx.type());
         aux = af::moddims(aux, 1, idx.dims(1), idx.dims(2), 1);
-        aux = af::tile(aux, idx.dims(0));
+        aux = af::tile(aux, static_cast<const unsigned int>(idx.dims(0)));
 
         // Adding the offset to the intermediate index
         idx += aux;
 
         af::dim4 dims = min.dims();
-        float sliceStride = dims[0];
+        float sliceStride = static_cast<float>(dims[0]);
 
         // Offset inside the batch
-        af::array bidx = af::tile(af::iota(af::dim4(dims[0])), 1, idx.dims(1), nTimeSeriesB);
+        af::array bidx =
+            af::tile(af::iota(af::dim4(dims[0])), 1, static_cast<const unsigned int>(idx.dims(1)), nTimeSeriesB);
 
         // Flat array containing the real indices to obtain from the index profile
         af::array flatIndices = af::flat(idx * sliceStride + bidx);
@@ -397,7 +400,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
 }
 
 void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
-    long nb = tb.dims(0);
+    long nb = static_cast<long>(tb.dims(0));
 
     af::array aux;
     af::array mean;
@@ -417,7 +420,7 @@ void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::
     // For all the subsequences of tb
     gfor(af::seq idx, nb - m + 1) {
         // Compute the distance and index profiles using Mueens algorithm for similarity search
-        tsa::matrix::mass(input(af::span, idx, af::span, af::span), ta, m, aux, mean, stdev, profile, index);
+        tsa::matrix::mass(input(af::span, idx, af::span, af::span), ta, aux, mean, stdev, profile, index);
     }
 
     // Moving the number of time series in tb, which is in the 4th dimension to the 3rd dimension
@@ -446,8 +449,8 @@ void tsa::matrix::stomp(af::array ta, af::array tb, long m, af::array &profile, 
 
 void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch_size_a, af::array &profile,
                               af::array &index) {
-    long n = t.dims(0);
-    long nTimeSeries = t.dims(1);
+    long n = static_cast<long>(t.dims(0));
+    long nTimeSeries = static_cast<long>(t.dims(1));
 
     profile = af::array(0, t.type());
     index = af::array(0, af::dtype::u32);
@@ -504,7 +507,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
                 af::array pidxTmp;
 
                 // Compute the distance and index profiles using Mueens algorithm for similarity search
-                tsa::matrix::mass(input(af::span, idx, af::span, af::span), tChunk, m, aux, mean, stdev,
+                tsa::matrix::mass(input(af::span, idx, af::span, af::span), tChunk, aux, mean, stdev,
                                   mask(af::span, af::seq(start, start + iterationSizeA - m), af::span), distanceTmp,
                                   pidxTmp);
 
@@ -534,15 +537,16 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
         idx = af::reorder(idx, 0, 2, 1, 3);
 
         // Auxiliary variables to add to the index in order to obtain the real index where the minimum occurs
-        af::array toSum = af::seq(0, (nTimeSeries - 1) * distance.dims(1), distance.dims(1));
+        af::array toSum = af::seq(0, (nTimeSeries - 1) * static_cast<double>(distance.dims(1)),
+                                  static_cast<double>(distance.dims(1)));
         af::array aux = af::transpose(toSum).as(idx.type());
-        aux = af::tile(aux, idx.dims(0));
+        aux = af::tile(aux, static_cast<const unsigned int>(idx.dims(0)));
 
         // Adding the offset to the intermediate index
         idx += aux;
 
         af::dim4 dims = min.dims();
-        float sliceStride = dims[0];
+        float sliceStride = static_cast<float>(dims[0]);
 
         // Offset inside the batch
         af::array bidx = af::tile(af::iota(af::dim4(dims[0])), 1, nTimeSeries);
@@ -562,8 +566,8 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
 }
 
 void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
-    long n = t.dims(0);
-    long nTimeSeries = t.dims(1);
+    long n = static_cast<long>(t.dims(0));
+    long nTimeSeries = static_cast<long>(t.dims(1));
 
     af::array aux;
     af::array mean;
@@ -586,7 +590,7 @@ void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
     // For all the subsequences of tb
     gfor(af::seq idx, n - m + 1) {
         // Compute the distance and index profiles using Mueens algorithm for similarity search
-        tsa::matrix::mass(input(af::span, idx, af::span, af::span), t, m, aux, mean, stdev, mask, profile, index);
+        tsa::matrix::mass(input(af::span, idx, af::span, af::span), t, aux, mean, stdev, mask, profile, index);
     }
 
     // Using the diag method because

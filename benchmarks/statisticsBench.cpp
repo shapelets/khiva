@@ -112,7 +112,7 @@ void Quantile(benchmark::State &state) {
     auto n = state.range(0);
     auto m = state.range(1);
 
-    float qs[] = {0.3, 0.4, 0.5, 0.99};
+    float qs[] = {0.3f, 0.4f, 0.5f, 0.99f};
     auto q = af::array(4, qs);
 
     auto t = af::randu(n, m, f64);
@@ -133,7 +133,7 @@ void QuantilesCut(benchmark::State &state) {
 
     auto n = state.range(0);
     auto m = state.range(1);
-    auto qs = state.range(2);
+    auto qs = static_cast<float>(state.range(2));
 
     auto t = af::randu(n, m, f64);
 

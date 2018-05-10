@@ -17,7 +17,7 @@ extern "C" {
  * series (all the same) and dimension one indicates the number of time series.
  * @return Updated ref and the Absolute Energy Array reference.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absEnergy(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absEnergy(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the sum over the absolute value of consecutive changes in the time series.
@@ -27,7 +27,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absEnergy(JNIEnv *en
  * @return Updated ref and the reference to an array with the same dimensions as the ref array, whose values (time
  * series in dimension 0) contains absolute value of consecutive changes in the time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absoluteSumOfChanges(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absoluteSumOfChanges(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
@@ -49,7 +49,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absoluteSumOfChanges
  *          }
  * @return Updated reference and an array whose values contains the aggregated correaltion for each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedAutocorrelation(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedAutocorrelation(JNIEnv *env, jobject, jlong ref,
                                                                                       jint aggregationFunction);
 
 /**
@@ -80,8 +80,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedAutocorrel
  *             stderrest Standard error of the estimated gradient
  *         }
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedLinearTrend(JNIEnv *env, jobject thisObj, jlong ref,
-                                                                                  jlong chunkSize, jint aggregationFunction);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedLinearTrend(JNIEnv *env, jobject, jlong ref,
+                                                                                  jlong chunkSize,
+                                                                                  jint aggregationFunction);
 
 /**
  * @brief Calculates a vectorized Approximate entropy algorithm.
@@ -97,7 +98,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedLinearTren
  * @param r Filtering level, must be positive.
  * @return The updated ref and the vectorized approximate entropy for all the input time series in ref Array.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_approximateEntropy(JNIEnv *env, jobject thisObj, jlong ref, jint m,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_approximateEntropy(JNIEnv *env, jobject, jlong ref, jint m,
                                                                                jdouble r);
 
 /**
@@ -111,7 +112,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_approximateEntropy(J
  * n (if false).
  * @return The updated refs and the cross-covariance value for the given time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCovariance(JNIEnv *env, jobject thisObj, jlong ref_xss,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCovariance(JNIEnv *env, jobject, jlong ref_xss,
                                                                             jlong ref_yss, jboolean unbiased);
 
 /**
@@ -123,7 +124,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCovariance(JNIE
  * n (if false).
  * @return The updated ref and the auto-covariance value for the given time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCovariance(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCovariance(JNIEnv *env, jobject, jlong ref,
                                                                            jboolean unbiased);
 
 /**
@@ -136,7 +137,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCovariance(JNIEn
  * @param unbiased Determines whether it divides by n - lag (if true) or n (if false).
  * @return The updated refs and the cross-correlation value for the given time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCorrelation(JNIEnv *env, jobject thisObj, jlong ref_xss,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCorrelation(JNIEnv *env, jobject, jlong ref_xss,
                                                                              jlong ref_yss, jboolean unbiased);
 
 /**
@@ -145,11 +146,11 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCorrelation(JNI
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
  * @param maxLag The maximum lag to compute.
- * @param unbiased Determines whether it divides by n - lag (if true) or n ( if false)
+ * @param unbiased Determines whether it divides by n - lag (if true) or n (if false).
  * @return The updated ref and the autocorrelation value for the given time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCorrelation(JNIEnv *env, jobject thisObj, jlong ref, jlong maxLag,
-                                                                            jboolean unbiased);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCorrelation(JNIEnv *env, jobject, jlong ref,
+                                                                            jlong maxLag, jboolean unbiased);
 /**
  * @brief Calculates the binned entropy for the given time series and number of bins.
  *
@@ -158,7 +159,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCorrelation(JNIE
  * @param max_bins The number of bins.
  * @return The updated ref and the binned entropy value for the given time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_binnedEntropy(JNIEnv *env, jobject thisObj, jlong ref, jint max_bins);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_binnedEntropy(JNIEnv *env, jobject, jlong ref,
+                                                                          jint max_bins);
 
 /**
  * @brief Calculates the Schreiber, T. and Schmitz, A. (1997) measure of non-linearity
@@ -166,10 +168,10 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_binnedEntropy(JNIEnv
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
- * @param lag The lag
+ * @param lag The lag.
  * @return The updated ref and the non-linearity value for the given time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_c3(JNIEnv *env, jobject thisObj, jlong ref, jlong lag);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_c3(JNIEnv *env, jobject, jlong ref, jlong lag);
 
 /**
  * @brief Calculates an estimate for the time series complexity defined by Batista, Gustavo EAPA, et al (2014). (A more
@@ -180,7 +182,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_c3(JNIEnv *env, jobj
  * @param zNormalize Controls whether the time series should be z-normalized or not.
  * @return The updated ref and the complexity value for the given time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cidCe(JNIEnv *env, jobject thisObj, jlong ref, jboolean zNormalize);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cidCe(JNIEnv *env, jobject, jlong ref, jboolean zNormalize);
 
 /**
  * @brief Calculates the number of values in the time series that are higher than the mean.
@@ -190,7 +192,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cidCe(JNIEnv *env, j
  * @return The updated ref and the number of values in the time series that are higher
  * than the mean.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countAboveMean(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countAboveMean(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the number of values in the time series that are lower than the mean.
@@ -199,7 +201,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countAboveMean(JNIEn
  * one indicates the number of time series.
  * @return The updated ref and the number of values in the time series that are lower than the mean.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countBelowMean(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countBelowMean(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates a Continuous wavelet transform for the Ricker wavelet, also known as
@@ -224,8 +226,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countBelowMean(JNIEn
  * @param w Width of interest.
  * @return Updated refs and the result of calculated coefficients.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cwtCoefficients(JNIEnv *env, jobject thisObj, jlong ref, jlong ref_w,
-                                                                            jint coeff, jint w);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cwtCoefficients(JNIEnv *env, jobject, jlong ref,
+                                                                            jlong ref_w, jint coeff, jint w);
 
 /**
  * @brief Calculates the sum of squares of chunk i out of N chunks expressed as a ratio
@@ -238,7 +240,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cwtCoefficients(JNIE
  * @param segmentFocus The segment number (starting at zero) to return a feature on.
  * @return The updated ref and the energy ratio by chunk of the time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_energyRatioByChunks(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_energyRatioByChunks(JNIEnv *env, jobject, jlong ref,
                                                                                 jlong numSegments, jlong segmentFocus);
 
 /**
@@ -255,7 +257,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_energyRatioByChunks(
  *                  kurtosis kurtosis of the absolute fourier transform spectrum.
  *              }
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftAggregated(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftAggregated(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the fourier coefficients of the one-dimensional discrete
@@ -272,7 +274,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftAggregated(JNIEnv
  *              angle The angle of the coefficient.
  *          }
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftCoefficient(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftCoefficient(JNIEnv *env, jobject, jlong ref,
                                                                            jlong coefficient);
 
 /**
@@ -283,7 +285,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftCoefficient(JNIEn
  * @return The updated ref and the first relative location of the maximum value to the length of the time series,
  *  for each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMaximum(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMaximum(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the first location of the minimal value of each time series. The position
@@ -293,7 +295,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMaxim
  * one indicates the number of time series.
  * @return The updated ref and the first relative location of the minimal value of each series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMinimum(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMinimum(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Coefficients of polynomial \f$h(x)\f$, which has been fitted to the deterministic
@@ -312,8 +314,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMinim
  * @param r Number of quantils to use for averaging.
  * @return The updated ref and the coefficients for each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_friedrichCoefficients(JNIEnv *env, jobject thisObj, jlong ref, jint m,
-                                                                                  jfloat r);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_friedrichCoefficients(JNIEnv *env, jobject, jlong ref,
+                                                                                  jint m, jfloat r);
 
 /**
  * @brief Calculates if the input time series contain duplicated elements.
@@ -323,7 +325,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_friedrichCoefficient
  * @return The updated ref and the array containing True if the time series contains duplicated elements
  * and false otherwise.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicates(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicates(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates if the maximum within input time series is duplicated.
@@ -333,7 +335,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicates(JNIEnv
  * @return The updated ref and an array containing True if the maximum value of the time series is duplicated
  * and false otherwise.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMax(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMax(JNIEnv *env, jobject, jlong ref);
 /**
  * @brief Calculates if the minimum of the input time series is duplicated
  *
@@ -342,7 +344,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMax(JNIE
  * @return The updated ref and the array containing True if the minimum of the time series is duplicated
  * and false otherwise.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMin(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMin(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the index of the max quantile.
@@ -352,7 +354,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMin(JNIE
  * @param q The quantile.
  * @return The updated ref and the index of the max quantile q.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_indexMassQuantile(JNIEnv *env, jobject thisObj, jlong ref, jfloat q);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_indexMassQuantile(JNIEnv *env, jobject, jlong ref,
+                                                                              jfloat q);
 
 /**
  * @brief Returns the kurtosis of ref (calculated with the adjusted Fisher-Pearson
@@ -362,7 +365,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_indexMassQuantile(JN
  * one indicates the number of time series.
  * @return The updated ref and the kurtosis of each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_kurtosis(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_kurtosis(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Checks if the time series within ref have a large standard deviation.
@@ -373,7 +376,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_kurtosis(JNIEnv *env
  * @return  The updated ref and an array containing True for those time series in ref that have a large standard
  * deviation.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_largeStandardDeviation(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_largeStandardDeviation(JNIEnv *env, jobject, jlong ref,
                                                                                    jfloat r);
 
 /**
@@ -384,7 +387,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_largeStandardDeviati
  * one indicates the number of time series.
  * @return The updated ref and the last relative location of the maximum value of each series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMaximum(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMaximum(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the last location of the minimum value of each time series. The position
@@ -392,18 +395,18 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMaximu
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
- * @return The updated ref and the last relative location of the minimum value of each series.
+ * @return The updated ref and the last relative location of the minimum value of each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMinimum(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMinimum(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Returns the length of the input time series.
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
- * @return THe updated ref and the length of ref.
+ * @return The updated ref and the length of ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_length(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_length(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates a linear least-squares regression for the values of the time series versus the sequence from 0 to
@@ -421,7 +424,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_length(JNIEnv *env, 
  *                  stdrr The stderr values for all time series.
  *              }
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_linearTrend(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_linearTrend(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates all Local Maximals fot the time series in ref.
@@ -430,7 +433,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_linearTrend(JNIEnv *
  * and dimension one indicates the number of time series.
  * @return The updated ref and the calculated local maximals for each time series in array.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_localMaximals(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_localMaximals(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the length of the longest consecutive subsequence in ref that is bigger than the mean of ref.
@@ -440,7 +443,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_localMaximals(JNIEnv
  * @return The updated ref and the length of the longest consecutive subsequence in the input time series that is
  * bigger than the mean.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeAboveMean(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeAboveMean(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the length of the longest consecutive subsequence in ref that is below the mean of ref.
@@ -450,7 +453,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeAboveMe
  * @return The updated ref and the length of the longest consecutive subsequence in the input time series that is below
  * the mean.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeBelowMean(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeBelowMean(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Computes the Largest fixed point of dynamics \f$\max_x {h(x)=0}\f$ estimated from polynomial
@@ -467,8 +470,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeBelowMe
  * @param r Number of quantiles to use for averaging.
  * @return The updated ref and the largest fixed point of deterministic dynamics.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maxLangevinFixedPoint(JNIEnv *env, jobject thisObj, jlong ref, jint m,
-                                                                                  jfloat r);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maxLangevinFixedPoint(JNIEnv *env, jobject, jlong ref,
+                                                                                  jint m, jfloat r);
 
 /**
  * @brief Calculates the maximum value for each time series within ref.
@@ -477,7 +480,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maxLangevinFixedPoin
  * one indicates the number of time series.
  * @return The updated ref and the maximum value of each time series within ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maximum(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maximum(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the mean value for each time series within ref.
@@ -486,7 +489,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maximum(JNIEnv *env,
  * one indicates the number of time series.
  * @return The updated ref and the mean value of each time series within ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_mean(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_mean(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the mean over the absolute differences between subsequent time series values in ref.
@@ -495,7 +498,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_mean(JNIEnv *env, jo
  * one indicates the number of time series.
  * @return The updated ref and the maximum value of each time series within ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanAbsoluteChange(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanAbsoluteChange(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the mean over the differences between subsequent time series values in ref.
@@ -504,7 +507,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanAbsoluteChange(J
  * one indicates the number of time series.
  * @return The updated ref and the mean over the differences between subsequent time series values.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanChange(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanChange(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates mean value of a central approximation of the second derivative for each time series in ref.
@@ -513,7 +516,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanChange(JNIEnv *e
  * one indicates the number of time series.
  * @return The updated ref and the mean value of a central approximation of the second derivative for each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject,
+                                                                                        jlong ref);
 
 /**
  * @brief Calculates the median value for each time series within ref.
@@ -522,7 +526,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanSecondDerivative
  * one indicates the number of time series.
  * @return The updated ref and the median value of each time series within ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_median(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_median(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the minimum value for each time series within ref.
@@ -530,7 +534,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_median(JNIEnv *env, 
  * one indicates the number of time series.
  * @return The updated ref and the minimum value of each time series within ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_minimum(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_minimum(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the number of m-crossings. A m-crossing is defined as two sequential values where the first
@@ -542,7 +546,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_minimum(JNIEnv *env,
  * @param m The m value.
  * @return The updated ref and the number of m-crossings of each time series within ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCrossingM(JNIEnv *env, jobject thisObj, jlong ref, jint m);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCrossingM(JNIEnv *env, jobject, jlong ref, jint m);
 
 /**
  * @brief This feature calculator searches for different peaks. To do so, the time series is smoothed by a ricker
@@ -554,7 +558,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCrossingM(JNIE
  * @param maxW The maximum width to consider.
  * @return The updated ref and the number of peaks for each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCwtPeaks(JNIEnv *env, jobject thisObj, jlong ref, jint maxW);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCwtPeaks(JNIEnv *env, jobject, jlong ref, jint maxW);
 
 /**
  * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$ref\f$. A peak of support
@@ -566,23 +570,23 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCwtPeaks(JNIEn
  * @param n The support of the peak.
  * @return The updated ref and the number of peaks of at least support \f$n\f$.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberPeaks(JNIEnv *env, jobject thisObj, jlong ref, jint n);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberPeaks(JNIEnv *env, jobject, jlong ref, jint n);
 
 /**
- * @brief Calculates the value of the partial autocorrelation function at the given lag. The lag \f$k\f$ partial
- * autocorrelation of a time series \f$\lbrace x_t, t = 1 \ldots T \rbrace\f$ equals the partial correlation of
- \f$x_t\f$ and \f$x_{t-k}\f$, adjusted for the intermediate variables \f$\lbrace x_{t-1}, \ldots, x_{t-k+1}
- \rbrace\f$ ([1]). Following [2], it can be defined as:
- *
- * \f[
-        \alpha_k = \frac{ Cov(x_t, x_{t-k} | x_{t-1}, \ldots, x_{t-k+1})}
-        {\sqrt{ Var(x_t | x_{t-1}, \ldots, x_{t-k+1}) Var(x_{t-k} | x_{t-1}, \ldots, x_{t-k+1} )}}
- * \f]
- * with (a) \f$x_t = f(x_{t-1}, \ldots, x_{t-k+1})\f$ and (b) \f$ x_{t-k} = f(x_{t-1}, \ldots, x_{t-k+1})\f$
-    being AR(k-1) models that can be fitted by OLS. Be aware that in (a), the regression is done on past values to
-    predict \f$ x_t \f$ whereas in (b), future values are used to calculate the past value \f$x_{t-k}\f$.
-    It is said in [1] that "for an AR(p), the partial autocorrelations \f$ \alpha_k \f$ will be nonzero for \f$ k<=p \f$
-    and zero for \f$ k>p \f$."
+* @brief Calculates the value of the partial autocorrelation function at the given lag. The lag \f$k\f$ partial
+* autocorrelation of a time series \f$\lbrace x_t, t = 1 \ldots T \rbrace\f$ equals the partial correlation of
+\f$x_t\f$ and \f$x_{t-k}\f$, adjusted for the intermediate variables \f$\lbrace x_{t-1}, \ldots, x_{t-k+1}
+\rbrace\f$ ([1]). Following [2], it can be defined as:
+*
+* \f[
+\alpha_k = \frac{ Cov(x_t, x_{t-k} | x_{t-1}, \ldots, x_{t-k+1})}
+{\sqrt{ Var(x_t | x_{t-1}, \ldots, x_{t-k+1}) Var(x_{t-k} | x_{t-1}, \ldots, x_{t-k+1} )}}
+* \f]
+* with (a) \f$x_t = f(x_{t-1}, \ldots, x_{t-k+1})\f$ and (b) \f$ x_{t-k} = f(x_{t-1}, \ldots, x_{t-k+1})\f$
+being AR(k-1) models that can be fitted by OLS. Be aware that in (a), the regression is done on past values to
+predict \f$ x_t \f$ whereas in (b), future values are used to calculate the past value \f$x_{t-k}\f$.
+It is said in [1] that "for an AR(p), the partial autocorrelations \f$ \alpha_k \f$ will be nonzero for \f$ k<=p \f$
+and zero for \f$ k>p \f$."
 * With this property, it is used to determine the lag of an AR-Process.
 *
 * [1] Box, G. E., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015).
@@ -594,7 +598,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberPeaks(JNIEnv *
 * @param lags Indicates the lags to be calculated.
 * @return The updated refs and the partial autocorrelation for each time series for the given lag.
 */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_partialAutocorrelation(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_partialAutocorrelation(JNIEnv *env, jobject, jlong ref,
                                                                                    jlong lags);
 
 /**
@@ -611,10 +615,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_partialAutocorrelati
  * @return The updated ref and the percentage of unique values, that are present in the time series more than
  * once.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_percentageOfReoccurringDatapointsToAllDatapoints(JNIEnv *env,
-                                                                                                             jobject thisObj,
-                                                                                                             jlong ref,
-                                                                                                             jboolean isSorted);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_percentageOfReoccurringDatapointsToAllDatapoints(
+    JNIEnv *env, jobject, jlong ref, jboolean isSorted);
 
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
@@ -629,8 +631,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_percentageOfReoccurr
  * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
  * @return The updated ref and the percentage of unique values, that are present in the time series more than once.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_percentageOfReoccurringValuesToAllValues(JNIEnv *env, jobject thisObj,
-                                                                                                     jlong ref, jboolean isSorted);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_percentageOfReoccurringValuesToAllValues(JNIEnv *env,
+                                                                                                     jobject, jlong ref,
+                                                                                                     jboolean isSorted);
 
 /**
  * @brief Returns values at the given quantile.
@@ -642,7 +645,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_percentageOfReoccurr
  * @param precision Number of decimals expected.
  * @return The updated ref and the values at the given quantile.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_quantile(JNIEnv *env, jobject thisObj, jlong ref, jlong ref_q,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
                                                                      jfloat precision);
 
 /**
@@ -655,7 +658,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_quantile(JNIEnv *env
  * @param max Value that sets the upper limit.
  * @return The updated ref and the values at the given range.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_rangeCount(JNIEnv *env, jobject thisObj, jlong ref, jfloat min,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_rangeCount(JNIEnv *env, jobject, jlong ref, jfloat min,
                                                                        jfloat max);
 
 /**
@@ -668,7 +671,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_rangeCount(JNIEnv *e
  * @return The updated ref and the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from
  * the mean of \f$x\f$.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject thisObj, jlong ref, jfloat r);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject, jlong ref,
+                                                                              jfloat r);
 
 /**
  * @brief Calculates a factor which is 1 if all values in the time series occur only once, and below one if this is
@@ -682,7 +686,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioBeyondRSigma(JN
  * dimension one indicates the number of time series.
  * @return The updated ref and the ratio of unique values with respect to the total number of values.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioValueNumberToTimeSeriesLength(JNIEnv *env, jobject thisObj,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioValueNumberToTimeSeriesLength(JNIEnv *env, jobject,
                                                                                                jlong ref);
 
 /**
@@ -699,7 +703,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioValueNumberToTi
  * @return The updated ref and an array with the same dimensions as ref, whose values (time series in dimension
  * 0) contains the vectorized sample entropy for all the input time series in ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sampleEntropy(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sampleEntropy(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the sample skewness of ref (calculated with the adjusted Fisher-Pearson standardized
@@ -709,7 +713,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sampleEntropy(JNIEnv
  * one indicates the number of time series.
  * @return The updated ref and an array containing the skewness of each time series in ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_skewness(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_skewness(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Estimates the cross power spectral density of the time series ref at different frequencies. To do so, the
@@ -729,7 +733,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_skewness(JNIEnv *env
  * @return The updated ref and the power spectrum of the different
  * frequencies for each time series in ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_spktWelchDensity(JNIEnv *env, jobject thisObj, jlong ref, jint coeff);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_spktWelchDensity(JNIEnv *env, jobject, jlong ref,
+                                                                             jint coeff);
 
 /**
  * @brief Calculates the standard deviation of each time series within ref.
@@ -738,7 +743,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_spktWelchDensity(JNI
  * one indicates the number of time series.
  * @return The updated ref and the standard deviation of each time series within ref.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_standardDeviation(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_standardDeviation(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the sum of all data points, that are present in the time series more than once.
@@ -748,7 +753,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_standardDeviation(JN
  * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
  * @return The updated ref and the sum of all data points, that are present in the time series more than once.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject, jlong ref,
                                                                                        jboolean isSorted);
 
 /**
@@ -759,7 +764,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringData
  * @param isSorted Indicates if the input time series is sorted or not. Defaults to false.
  * @return The updated ref and the sum of all values, that are present in the time series more than once.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringValues(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringValues(JNIEnv *env, jobject, jlong ref,
                                                                                    jboolean isSorted);
 
 /**
@@ -769,7 +774,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringValu
  * dimension one indicates the number of time series.
  * @return The updated ref and an array containing the sum of values in each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumValues(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumValues(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates if the distribution of ref *looks symmetric*. This is the case if
@@ -782,7 +787,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumValues(JNIEnv *en
  * @param r The percentage of the range to compare with.
  * @return The updated ref and an array denoting if the input time series look symmetric.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_symmetryLooking(JNIEnv *env, jobject thisObj, jlong ref, jfloat r);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_symmetryLooking(JNIEnv *env, jobject, jlong ref, jfloat r);
 
 /**
  * @brief This function calculates the value of:
@@ -804,8 +809,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_symmetryLooking(JNIE
  * @param lag The lag to be computed.
  * @return The updated ref and an array containing the time reversal asymetry statistic value in each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_timeReversalAsymmetryStatistic(JNIEnv *env, jobject thisObj, jlong ref,
-                                                                                           jint lag);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_timeReversalAsymmetryStatistic(JNIEnv *env, jobject,
+                                                                                           jlong ref, jint lag);
 
 /**
  * @brief Counts occurrences of value in the time series ref.
@@ -815,7 +820,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_timeReversalAsymmetr
  * @param v The value to be counted.
  * @return The updated ref and an array containing the count of the given value in each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_valueCount(JNIEnv *env, jobject thisObj, jlong ref, jfloat v);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_valueCount(JNIEnv *env, jobject, jlong ref, jfloat v);
 
 /**
  * @brief Computes the variance for the time series ref.
@@ -824,7 +829,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_valueCount(JNIEnv *e
  * dimension one indicates the number of time series.
  * @return The updated ref and an array containing the variance in each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_variance(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_variance(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates if the variance of ref is greater than the standard deviation. In other words, if the variance of
@@ -834,7 +839,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_variance(JNIEnv *env
  * dimension one indicates the number of time series.
  * @return The updated ref and an array denoting if the variance of ref is greater than the standard deviation.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_varianceLargerThanStandardDeviation(JNIEnv *env, jobject thisObj,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_varianceLargerThanStandardDeviation(JNIEnv *env, jobject,
                                                                                                 jlong ref);
 #ifdef __cplusplus
 }

@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
+#include <tsa_c/defines.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,7 +22,8 @@ extern "C" {
  * @param b A vector with the measured values.
  * @param result Contains the solution to the linear equation problem minimizing the norm 2.
  */
-void lls(af_array *a, af_array *b, af_array *result);
+TSAAPI void lls(af_array *a, af_array *b, af_array *result);
+
 #ifdef __cplusplus
 }
 #endif

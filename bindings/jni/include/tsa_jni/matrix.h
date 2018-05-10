@@ -16,32 +16,31 @@ extern "C" {
  * @param ref_profile The matrix profile containing the minimum distance of each
  * subsequence.
  * @param ref_index The matrix profile index containing where each minimum occurs.
- * @param n Number of motifs to extract
+ * @param n Number of motifs to extract.
  * @return The updated ref_profile and ref_index and references to:
- *           - The distance of the best N motifs
- *           - The indices of the best N motifs
+ *           - The distance of the best N motifs.
+ *           - The indices of the best N motifs.
  *           - The indices of the query sequences that produced
- *             the minimum reported in the motifs
+ *             the minimum reported in the motifs.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNMotifs(JNIEnv *env, jobject thisObj,
-                                                                          jlong ref_profile, jlong ref_index, jlong n);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
+                                                                          jlong ref_index, jlong n);
 
 /**
  * @brief This function extracts the best N motifs from a previously calculated matrix profile.
  *
  * @param ref_profile The matrix profile containing the minimum distance of each
- * subsequence
- * @param ref_index The matrix profile index containing where each maximum occurs
- * @param n Number of discords to extract
+ * subsequence.
+ * @param ref_index The matrix profile index containing where each maximum occurs.
+ * @param n Number of discords to extract.
  * @return The updated ref_profile and ref_index and references to:
- *          - The distance of the best N discords
- *          - The indices of the best N discords
+ *          - The distance of the best N discords.
+ *          - The indices of the best N discords.
  *          - The indices of the query sequences that produced
- *              the "N" bigger discords.
+ *            the "N" bigger discords.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNDiscords(JNIEnv *env, jobject thisObj,
-                                                                            jlong ref_profile, jlong ref_index,
-                                                                            jlong n);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
+                                                                            jlong ref_index, jlong n);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
@@ -54,7 +53,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNDiscords(JNIE
  *          - The distance profile.
  *          - The index profile.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stomp(JNIEnv *env, jobject thisObj, jlong ref_a, jlong ref_b,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stomp(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
                                                                 jlong m);
 
 /**
@@ -66,10 +65,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stomp(JNIEnv *env, job
  * @return The updated ref_a and references to:
  *          - The matrix profile, which reflects the distance to the closer element of the subsequence
  *            from 't' in a different location of itself.
- *          - The matrix profile index, which points to where the previously mentioned minimum is located.
+ *          - The matrix profile index, which points to where the aforementioned minimum is located.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stompSelfJoin(JNIEnv *env, jobject thisObj, jlong ref_a,
-                                                                        jlong m);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m);
 
 #ifdef __cplusplus
 }

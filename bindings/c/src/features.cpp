@@ -12,19 +12,19 @@
 extern "C" {
 #endif
 
-void abs_energy(af_array *array, af_array *result) {
+TSAAPI void abs_energy(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::absEnergy(var).get());
 }
 
-void absolute_sum_of_changes(af_array *array, af_array *result) {
+TSAAPI void absolute_sum_of_changes(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::absoluteSumOfChanges(var).get());
 }
 
-void aggregated_autocorrelation(af_array *array, int *aggregation_function, af_array *result) {
+TSAAPI void aggregated_autocorrelation(af_array *array, int *aggregation_function, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
 
@@ -53,8 +53,8 @@ void aggregated_autocorrelation(af_array *array, int *aggregation_function, af_a
     }
 }
 
-void aggregated_linear_trend(af_array *array, long *chunkSize, int *aggregation_function, af_array *slope,
-                             af_array *intercept, af_array *rvalue, af_array *pvalue, af_array *stderrest) {
+TSAAPI void aggregated_linear_trend(af_array *array, long *chunkSize, int *aggregation_function, af_array *slope,
+                                    af_array *intercept, af_array *rvalue, af_array *pvalue, af_array *stderrest) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af::array primitive_slope;
@@ -96,13 +96,13 @@ void aggregated_linear_trend(af_array *array, long *chunkSize, int *aggregation_
     af_retain_array(stderrest, primitive_stderrest.get());
 }
 
-void approximate_entropy(af_array *array, int *m, float *r, af_array *result) {
+TSAAPI void approximate_entropy(af_array *array, int *m, float *r, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::approximateEntropy(var, *m, *r).get());
 }
 
-void cross_covariance(af_array *xss, af_array *yss, bool *unbiased, af_array *result) {
+TSAAPI void cross_covariance(af_array *xss, af_array *yss, bool *unbiased, af_array *result) {
     af::array var_xss = af::array(*xss);
     af_retain_array(xss, var_xss.get());
     af::array var_yss = af::array(*yss);
@@ -110,13 +110,13 @@ void cross_covariance(af_array *xss, af_array *yss, bool *unbiased, af_array *re
     af_retain_array(result, tsa::features::crossCovariance(var_xss, var_yss, *unbiased).get());
 }
 
-void auto_covariance(af_array *array, bool *unbiased, af_array *result) {
+TSAAPI void auto_covariance(af_array *array, bool *unbiased, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::autoCovariance(var, *unbiased).get());
 }
 
-void cross_correlation(af_array *xss, af_array *yss, bool *unbiased, af_array *result) {
+TSAAPI void cross_correlation(af_array *xss, af_array *yss, bool *unbiased, af_array *result) {
     af::array var_xss = af::array(*xss);
     af_retain_array(xss, var_xss.get());
     af::array var_yss = af::array(*yss);
@@ -124,43 +124,43 @@ void cross_correlation(af_array *xss, af_array *yss, bool *unbiased, af_array *r
     af_retain_array(result, tsa::features::crossCorrelation(var_xss, var_yss, *unbiased).get());
 }
 
-void auto_correlation(af_array *array, long *max_lag, bool *unbiased, af_array *result) {
+TSAAPI void auto_correlation(af_array *array, long *max_lag, bool *unbiased, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::autoCorrelation(var, *max_lag, *unbiased).get());
 }
 
-void binned_entropy(af_array *array, int *max_bins, af_array *result) {
+TSAAPI void binned_entropy(af_array *array, int *max_bins, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::binnedEntropy(var, *max_bins).get());
 }
 
-void c3(af_array *array, long *lag, af_array *result) {
+TSAAPI void c3(af_array *array, long *lag, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::c3(var, *lag).get());
 }
 
-void cid_ce(af_array *array, bool *zNormalize, af_array *result) {
+TSAAPI void cid_ce(af_array *array, bool *zNormalize, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::cidCe(var, *zNormalize).get());
 }
 
-void count_above_mean(af_array *array, af_array *result) {
+TSAAPI void count_above_mean(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::countAboveMean(var).get());
 }
 
-void count_below_mean(af_array *array, af_array *result) {
+TSAAPI void count_below_mean(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::countBelowMean(var).get());
 }
 
-void cwt_coefficients(af_array *array, af_array *width, int *coeff, int *w, af_array *result) {
+TSAAPI void cwt_coefficients(af_array *array, af_array *width, int *coeff, int *w, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af::array var_width = af::array(*width);
@@ -168,20 +168,20 @@ void cwt_coefficients(af_array *array, af_array *width, int *coeff, int *w, af_a
     af_retain_array(result, tsa::features::cwtCoefficients(var, var_width, *coeff, *w).get());
 }
 
-void energy_ratio_by_chunks(af_array *array, long *num_segments, long *segment_focus, af_array *result) {
+TSAAPI void energy_ratio_by_chunks(af_array *array, long *num_segments, long *segment_focus, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::energyRatioByChunks(var, *num_segments, *segment_focus).get());
 }
 
-void fft_aggregated(af_array *array, af_array *result) {
+TSAAPI void fft_aggregated(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::fftAggregated(var).get());
 }
 
-void fft_coefficient(af_array *array, long *coefficient, af_array *real, af_array *imag, af_array *absolute,
-                     af_array *angle) {
+TSAAPI void fft_coefficient(af_array *array, long *coefficient, af_array *real, af_array *imag, af_array *absolute,
+                            af_array *angle) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af::array primitive_real, primitive_imag, primitive_abs, primitive_angle;
@@ -192,80 +192,80 @@ void fft_coefficient(af_array *array, long *coefficient, af_array *real, af_arra
     af_retain_array(angle, primitive_angle.get());
 }
 
-void first_location_of_maximum(af_array *array, af_array *result) {
+TSAAPI void first_location_of_maximum(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::firstLocationOfMaximum(var).get());
 }
 
-void first_location_of_minimum(af_array *array, af_array *result) {
+TSAAPI void first_location_of_minimum(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::firstLocationOfMinimum(var).get());
 }
 
-void friedrich_coefficients(af_array *array, int *m, float *r, af_array *result) {
+TSAAPI void friedrich_coefficients(af_array *array, int *m, float *r, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::friedrichCoefficients(var, *m, *r).get());
 }
 
-void has_duplicates(af_array *array, af_array *result) {
+TSAAPI void has_duplicates(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::hasDuplicates(var).get());
 }
 
-void has_duplicate_max(af_array *array, af_array *result) {
+TSAAPI void has_duplicate_max(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::hasDuplicateMax(var).get());
 }
 
-void has_duplicate_min(af_array *array, af_array *result) {
+TSAAPI void has_duplicate_min(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::hasDuplicateMin(var).get());
 }
 
-void index_mass_quantile(af_array *array, float *q, af_array *result) {
+TSAAPI void index_mass_quantile(af_array *array, float *q, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::indexMassQuantile(var, *q).get());
 }
 
-void kurtosis(af_array *array, af_array *result) {
+TSAAPI void kurtosis(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::kurtosis(var).get());
 }
 
-void large_standard_deviation(af_array *array, float *r, af_array *result) {
+TSAAPI void large_standard_deviation(af_array *array, float *r, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::largeStandardDeviation(var, *r).get());
 }
 
-void last_location_of_maximum(af_array *array, af_array *result) {
+TSAAPI void last_location_of_maximum(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::lastLocationOfMaximum(var).get());
 }
 
-void last_location_of_minimum(af_array *array, af_array *result) {
+TSAAPI void last_location_of_minimum(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::lastLocationOfMinimum(var).get());
 }
 
-void length(af_array *array, af_array *result) {
+TSAAPI void length(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::length(var).get());
 }
 
-void linear_trend(af_array *array, af_array *pvalue, af_array *rvalue, af_array *intercept, af_array *slope,
-                  af_array *stdrr) {
+TSAAPI void linear_trend(af_array *array, af_array *pvalue, af_array *rvalue, af_array *intercept, af_array *slope,
+                         af_array *stdrr) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af::array primitive_pvalue, primitive_rvalue, primitive_intercept, primitive_slope, primitive_stdrr;
@@ -278,91 +278,91 @@ void linear_trend(af_array *array, af_array *pvalue, af_array *rvalue, af_array 
     af_retain_array(stdrr, primitive_stdrr.get());
 }
 
-void local_maximals(af_array *array, af_array *result) {
+TSAAPI void local_maximals(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::localMaximals(var).get());
 }
 
-void longest_strike_above_mean(af_array *array, af_array *result) {
+TSAAPI void longest_strike_above_mean(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::longestStrikeAboveMean(var).get());
 }
 
-void longest_strike_below_mean(af_array *array, af_array *result) {
+TSAAPI void longest_strike_below_mean(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::longestStrikeBelowMean(var).get());
 }
 
-void max_langevin_fixed_point(af_array *array, int *m, float *r, af_array *result) {
+TSAAPI void max_langevin_fixed_point(af_array *array, int *m, float *r, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::maxLangevinFixedPoint(var, *m, *r).get());
 }
 
-void maximum(af_array *array, af_array *result) {
+TSAAPI void maximum(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::maximum(af::array(var)).get());
 }
 
-void mean(af_array *array, af_array *result) {
+TSAAPI void mean(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::mean(var).get());
 }
 
-void mean_absolute_change(af_array *array, af_array *result) {
+TSAAPI void mean_absolute_change(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::meanAbsoluteChange(var).get());
 }
 
-void mean_change(af_array *array, af_array *result) {
+TSAAPI void mean_change(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::meanChange(var).get());
 }
 
-void mean_second_derivative_central(af_array *array, af_array *result) {
+TSAAPI void mean_second_derivative_central(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::meanSecondDerivativeCentral(var).get());
 }
 
-void median(af_array *array, af_array *result) {
+TSAAPI void median(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::median(var).get());
 }
 
-void minimum(af_array *array, af_array *result) {
+TSAAPI void minimum(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::minimum(var).get());
 }
 
-void number_crossing_m(af_array *array, int *m, af_array *result) {
+TSAAPI void number_crossing_m(af_array *array, int *m, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::numberCrossingM(var, *m).get());
 }
 
-void number_cwt_peaks(af_array *array, int *max_w, af_array *result) {
+TSAAPI void number_cwt_peaks(af_array *array, int *max_w, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::numberPeaks(var, *max_w).get());
 }
 
-void number_peaks(af_array *array, int *n, af_array *result) {
+TSAAPI void number_peaks(af_array *array, int *n, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::numberPeaks(var, *n).get());
 }
 
-void partial_autocorrelation(af_array *array, af_array *lags, af_array *result) {
+TSAAPI void partial_autocorrelation(af_array *array, af_array *lags, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af::array var_lags = af::array(*lags);
@@ -370,19 +370,19 @@ void partial_autocorrelation(af_array *array, af_array *lags, af_array *result) 
     af_retain_array(result, tsa::features::partialAutocorrelation(var, var_lags).get());
 }
 
-void percentage_of_reoccurring_datapoints_to_all_datapoints(af_array *array, bool *is_sorted, af_array *result) {
+TSAAPI void percentage_of_reoccurring_datapoints_to_all_datapoints(af_array *array, bool *is_sorted, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(var, *is_sorted).get());
 }
 
-void percentage_of_reoccurring_values_to_all_values(af_array *array, bool *is_sorted, af_array *result) {
+TSAAPI void percentage_of_reoccurring_values_to_all_values(af_array *array, bool *is_sorted, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::percentageOfReoccurringValuesToAllValues(var, *is_sorted).get());
 }
 
-void quantile(af_array *array, af_array *q, float *precision, af_array *result) {
+TSAAPI void quantile(af_array *array, af_array *q, float *precision, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af::array var_q = af::array(*q);
@@ -390,91 +390,91 @@ void quantile(af_array *array, af_array *q, float *precision, af_array *result) 
     af_retain_array(result, tsa::features::quantile(var, var_q, *precision).get());
 }
 
-void range_count(af_array *array, float *min, float *max, af_array *result) {
+TSAAPI void range_count(af_array *array, float *min, float *max, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::rangeCount(var, *min, *max).get());
 }
 
-void ratio_beyond_r_sigma(af_array *array, float *r, af_array *result) {
+TSAAPI void ratio_beyond_r_sigma(af_array *array, float *r, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::ratioBeyondRSigma(var, *r).get());
 }
 
-void ratio_value_number_to_time_series_length(af_array *array, af_array *result) {
+TSAAPI void ratio_value_number_to_time_series_length(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::ratioValueNumberToTimeSeriesLength(var).get());
 }
 
-void sample_entropy(af_array *array, af_array *result) {
+TSAAPI void sample_entropy(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::sampleEntropy(var).get());
 }
 
-void skewness(af_array *array, af_array *result) {
+TSAAPI void skewness(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::skewness(var).get());
 }
 
-void spkt_welch_density(af_array *array, int *coeff, af_array *result) {
+TSAAPI void spkt_welch_density(af_array *array, int *coeff, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::spktWelchDensity(var, *coeff).get());
 }
 
-void standard_deviation(af_array *array, af_array *result) {
+TSAAPI void standard_deviation(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::standardDeviation(var).get());
 }
 
-void sum_of_reoccurring_datapoints(af_array *array, bool *is_sorted, af_array *result) {
+TSAAPI void sum_of_reoccurring_datapoints(af_array *array, bool *is_sorted, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::sumOfReoccurringDatapoints(var, *is_sorted).get());
 }
 
-void sum_of_reoccurring_values(af_array *array, bool *is_sorted, af_array *result) {
+TSAAPI void sum_of_reoccurring_values(af_array *array, bool *is_sorted, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::sumOfReoccurringValues(var, *is_sorted).get());
 }
 
-void sum_values(af_array *array, af_array *result) {
+TSAAPI void sum_values(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::sumValues(var).get());
 }
 
-void symmetry_looking(af_array *array, float *r, af_array *result) {
+TSAAPI void symmetry_looking(af_array *array, float *r, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::symmetryLooking(var, *r).get());
 }
 
-void time_reversal_asymmetry_statistic(af_array *array, int *lag, af_array *result) {
+TSAAPI void time_reversal_asymmetry_statistic(af_array *array, int *lag, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::timeReversalAsymmetryStatistic(var, *lag).get());
 }
 
-void value_count(af_array *array, float *v, af_array *result) {
+TSAAPI void value_count(af_array *array, float *v, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::valueCount(var, *v).get());
 }
 
-void variance(af_array *array, af_array *result) {
+TSAAPI void variance(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::variance(var).get());
 }
 
-void variance_larger_than_standard_deviation(af_array *array, af_array *result) {
+TSAAPI void variance_larger_than_standard_deviation(af_array *array, af_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
     af_retain_array(result, tsa::features::varianceLargerThanStandardDeviation(var).get());

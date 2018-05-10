@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
+#include <tsa_c/defines.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,8 +26,8 @@ extern "C" {
  * Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
  */
-void linear(af_array *xss, af_array *yss, af_array *slope, af_array *intercept, af_array *rvalue, af_array *pvalue,
-            af_array *stderrest);
+TSAAPI void linear(af_array *xss, af_array *yss, af_array *slope, af_array *intercept, af_array *rvalue,
+                   af_array *pvalue, af_array *stderrest);
 
 #ifdef __cplusplus
 }

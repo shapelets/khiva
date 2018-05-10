@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
+#include <tsa_c/defines.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,7 +34,8 @@ extern "C" {
  *
  * @param result An array with the values of the group keys aggregated using the aggregation_function.
  */
-void group_by(af_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value, af_array *result);
+TSAAPI void group_by(af_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
+                     af_array *result);
 
 #ifdef __cplusplus
 }

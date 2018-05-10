@@ -16,7 +16,7 @@ void decimalScalingNorm() {
 
     ASSERT_EQ(tss.dims(), result.dims());
 
-    float expected[] = {0.0, 0.1, -0.2, 0.3, 0.4, 0.5, 0.6, -0.7};
+    float expected[] = {0.0f, 0.1f, -0.2f, 0.3f, 0.4f, 0.5f, 0.6f, -0.7f};
     float *host = result.host<float>();
     for (int i = 0; i < 8; i++) {
         ASSERT_NEAR(host[i], expected[i], EPSILON);
@@ -29,7 +29,7 @@ void decimalScalingNormInPlace() {
 
     tsa::normalization::decimalScalingNormInPlace(tss);
 
-    float expected[] = {0.0, 0.1, -0.2, 0.3, 0.4, 0.5, 0.6, -0.7};
+    float expected[] = {0.0f, 0.1f, -0.2f, 0.3f, 0.4f, 0.5f, 0.6f, -0.7f};
     float *host = tss.host<float>();
     for (int i = 0; i < 8; i++) {
         ASSERT_NEAR(host[i], expected[i], EPSILON);
@@ -44,7 +44,7 @@ void maxMinNorm() {
 
     ASSERT_EQ(tss.dims(), result.dims());
 
-    float expected[] = {1.0, 1.3333333333333, 1.66666667, 2.0};
+    float expected[] = {1.0f, 1.3333333333333f, 1.66666667f, 2.0f};
     float *host_col1 = result.col(0).host<float>();
     float *host_col2 = result.col(1).host<float>();
     for (int i = 0; i < 4; i++) {
@@ -59,7 +59,7 @@ void maxMinNormInPlace() {
 
     tsa::normalization::maxMinNormInPlace(tss, 2.0, 1.0);
 
-    float expected[] = {1.0, 1.3333333333333, 1.66666667, 2.0};
+    float expected[] = {1.0f, 1.3333333333333f, 1.66666667f, 2.0f};
     float *host_col1 = tss.col(0).host<float>();
     float *host_col2 = tss.col(1).host<float>();
     for (int i = 0; i < 4; i++) {
@@ -74,8 +74,8 @@ void meanNorm() {
 
     auto res = tsa::normalization::meanNorm(tss);
 
-    float expected[] = {-0.5, -0.166666667, 0.166666667, 0.5};
-    float expected2[] = {-0.5, -0.166666667, 0.166666667, 0.5};
+    float expected[] = {-0.5f, -0.166666667f, 0.166666667f, 0.5f};
+    float expected2[] = {-0.5f, -0.166666667f, 0.166666667f, 0.5f};
 
     float *host_col1 = res.col(0).host<float>();
     float *host_col2 = res.col(1).host<float>();
@@ -99,8 +99,8 @@ void meanNormInPlace() {
 
     tsa::normalization::meanNormInPlace(tss);
 
-    float expected[] = {-0.5, -0.166666667, 0.166666667, 0.5};
-    float expected2[] = {-0.5, -0.166666667, 0.166666667, 0.5};
+    float expected[] = {-0.5f, -0.166666667f, 0.166666667f, 0.5f};
+    float expected2[] = {-0.5f, -0.166666667f, 0.166666667f, 0.5f};
 
     float *host_col1 = tss.col(0).host<float>();
     float *host_col2 = tss.col(1).host<float>();
@@ -126,7 +126,7 @@ void zNorm() {
 
     ASSERT_EQ(tss.dims(), result.dims());
 
-    float expected[] = {-1.341640786499870, -0.447213595499958, 0.447213595499958, 1.341640786499870};
+    float expected[] = {-1.341640786499870f, -0.447213595499958f, 0.447213595499958f, 1.341640786499870f};
     float *host_col1 = result.col(0).host<float>();
     float *host_col2 = result.col(1).host<float>();
     for (int i = 0; i < 4; i++) {
@@ -141,7 +141,7 @@ void zNormInPlace() {
 
     tsa::normalization::znormInPlace(tss);
 
-    float expected[] = {-1.341640786499870, -0.447213595499958, 0.447213595499958, 1.341640786499870};
+    float expected[] = {-1.341640786499870f, -0.447213595499958f, 0.447213595499958f, 1.341640786499870f};
     float *host_col1 = tss.col(0).host<float>();
     float *host_col2 = tss.col(1).host<float>();
     for (int i = 0; i < 4; i++) {

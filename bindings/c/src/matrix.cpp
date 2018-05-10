@@ -12,8 +12,8 @@
 extern "C" {
 #endif
 
-void find_best_n_discords(af_array *profile, af_array *index, long *n, af_array *discord_distances,
-                          af_array *discord_indices, af_array *subsequence_indices) {
+TSAAPI void find_best_n_discords(af_array *profile, af_array *index, long *n, af_array *discord_distances,
+                                 af_array *discord_indices, af_array *subsequence_indices) {
     af::array var_profile = af::array(*profile);
     af::array var_index = af::array(*index);
     af_retain_array(profile, var_profile.get());
@@ -28,8 +28,8 @@ void find_best_n_discords(af_array *profile, af_array *index, long *n, af_array 
     af_retain_array(subsequence_indices, subsequenceIndices.get());
 }
 
-void find_best_n_motifs(af_array *profile, af_array *index, long *n, af_array *motif_distances, af_array *motif_indices,
-                        af_array *subsequence_indices) {
+TSAAPI void find_best_n_motifs(af_array *profile, af_array *index, long *n, af_array *motif_distances,
+                               af_array *motif_indices, af_array *subsequence_indices) {
     af::array var_profile = af::array(*profile);
     af::array var_index = af::array(*index);
     af_retain_array(profile, var_profile.get());
@@ -44,7 +44,7 @@ void find_best_n_motifs(af_array *profile, af_array *index, long *n, af_array *m
     af_retain_array(subsequence_indices, subsequenceIndices.get());
 }
 
-void stomp(af_array *tssa, af_array *tssb, long *m, af_array *p, af_array *i) {
+TSAAPI void stomp(af_array *tssa, af_array *tssb, long *m, af_array *p, af_array *i) {
     af::array var_tssa = af::array(*tssa);
     af::array var_tssb = af::array(*tssb);
     af_retain_array(tssa, var_tssa.get());
@@ -57,7 +57,7 @@ void stomp(af_array *tssa, af_array *tssb, long *m, af_array *p, af_array *i) {
     af_retain_array(i, index.get());
 }
 
-void stomp_self_join(af_array *tss, long *m, af_array *p, af_array *i) {
+TSAAPI void stomp_self_join(af_array *tss, long *m, af_array *p, af_array *i) {
     af::array var_tss = af::array(*tss);
     af_retain_array(tss, var_tss.get());
 

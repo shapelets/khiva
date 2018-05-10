@@ -11,8 +11,8 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absEnergy(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absEnergy(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -32,9 +32,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absEnergy(JNIEnv *en
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absoluteSumOfChanges(JNIEnv *env, jobject thisObj,
-                                                                                 jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absoluteSumOfChanges(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -54,10 +53,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_absoluteSumOfChanges
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedAutocorrelation(JNIEnv *env, jobject thisObj,
-                                                                                      jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedAutocorrelation(JNIEnv *env, jobject, jlong ref,
                                                                                       jint aggregationFunction) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -103,10 +101,10 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedAutocorrel
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedLinearTrend(JNIEnv *env, jobject thisObj,
-                                                                                  jlong ref, jlong chunkSize,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedLinearTrend(JNIEnv *env, jobject, jlong ref,
+                                                                                  jlong chunkSize,
                                                                                   jint aggregationFunction) {
-    jint l = 6;
+    const jint l = 6;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -137,28 +135,34 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedLinearTren
     af::array primitive_stderrest;
     switch (aggregationFunction) {
         case 0:
-            tsa::features::aggregatedLinearTrend(var, chunkSize, af::mean, primitive_slope, primitive_intercept,
-                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, static_cast<long>(chunkSize), af::mean, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
             break;
         case 1:
-            tsa::features::aggregatedLinearTrend(var, chunkSize, af::median, primitive_slope, primitive_intercept,
-                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, static_cast<long>(chunkSize), af::median, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
             break;
         case 2:
-            tsa::features::aggregatedLinearTrend(var, chunkSize, af::min, primitive_slope, primitive_intercept,
-                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, static_cast<long>(chunkSize), af::min, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
             break;
         case 3:
-            tsa::features::aggregatedLinearTrend(var, chunkSize, af::max, primitive_slope, primitive_intercept,
-                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, static_cast<long>(chunkSize), af::max, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
             break;
         case 4:
-            tsa::features::aggregatedLinearTrend(var, chunkSize, af::stdev, primitive_slope, primitive_intercept,
-                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, static_cast<long>(chunkSize), af::stdev, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
             break;
         default:
-            tsa::features::aggregatedLinearTrend(var, chunkSize, af::mean, primitive_slope, primitive_intercept,
-                                                 primitive_rvalue, primitive_pvalue, primitive_stderrest);
+            tsa::features::aggregatedLinearTrend(var, static_cast<long>(chunkSize), af::mean, primitive_slope,
+                                                 primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                 primitive_stderrest);
             break;
     }
     af_retain_array(&af_p_slope, primitive_slope.get());
@@ -178,9 +182,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_aggregatedLinearTren
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_approximateEntropy(JNIEnv *env, jobject thisObj, jlong ref,
-                                                                               jint m, jfloat r) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_approximateEntropy(JNIEnv *env, jobject, jlong ref, jint m,
+                                                                               jfloat r) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -200,9 +204,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_approximateEntropy(J
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCovariance(JNIEnv *env, jobject thisObj, jlong ref_xss,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCovariance(JNIEnv *env, jobject, jlong ref_xss,
                                                                             jlong ref_yss, jboolean unbiased) {
-    jint l = 3;
+    const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -227,9 +231,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCovariance(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCovariance(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCovariance(JNIEnv *env, jobject, jlong ref,
                                                                            jboolean unbiased) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -250,10 +254,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCovariance(JNIEn
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCorrelation(JNIEnv *env, jobject thisObj,
-                                                                             jlong ref_xss, jlong ref_yss,
-                                                                             jboolean unbiased) {
-    jint l = 3;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCorrelation(JNIEnv *env, jobject, jlong ref_xss,
+                                                                             jlong ref_yss, jboolean unbiased) {
+    const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -278,9 +281,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_crossCorrelation(JNI
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCorrelation(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCorrelation(JNIEnv *env, jobject, jlong ref,
                                                                             jlong maxLag, jboolean unbiased) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -291,7 +294,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCorrelation(JNIE
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::features::autoCorrelation(var, maxLag, unbiased).get());
+    af_retain_array(&af_p, tsa::features::autoCorrelation(var, static_cast<long>(maxLag), unbiased).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -301,9 +304,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_autoCorrelation(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_binnedEntropy(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_binnedEntropy(JNIEnv *env, jobject, jlong ref,
                                                                           jint max_bins) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -324,8 +327,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_binnedEntropy(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_c3(JNIEnv *env, jobject thisObj, jlong ref, jlong lag) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_c3(JNIEnv *env, jobject, jlong ref, jlong lag) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -336,7 +339,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_c3(JNIEnv *env, jobj
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::features::c3(var, lag).get());
+    af_retain_array(&af_p, tsa::features::c3(var, static_cast<long>(lag)).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -346,9 +349,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_c3(JNIEnv *env, jobj
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cidCe(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cidCe(JNIEnv *env, jobject, jlong ref,
                                                                   jboolean zNormalize) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -369,8 +372,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cidCe(JNIEnv *env, j
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countAboveMean(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countAboveMean(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -391,8 +394,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countAboveMean(JNIEn
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countBelowMean(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countBelowMean(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -413,9 +416,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_countBelowMean(JNIEn
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cwtCoefficients(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cwtCoefficients(JNIEnv *env, jobject, jlong ref,
                                                                             jlong widths, jint coeff, jint w) {
-    jint l = 3;
+    const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -442,9 +445,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_cwtCoefficients(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_energyRatioByChunks(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_energyRatioByChunks(JNIEnv *env, jobject, jlong ref,
                                                                                 jlong numSegments, jlong segmentFocus) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -455,7 +458,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_energyRatioByChunks(
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::features::energyRatioByChunks(var, numSegments, segmentFocus).get());
+    af_retain_array(
+        &af_p,
+        tsa::features::energyRatioByChunks(var, static_cast<long>(numSegments), static_cast<long>(segmentFocus)).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -465,8 +470,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_energyRatioByChunks(
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftAggregated(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftAggregated(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -487,9 +492,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftAggregated(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftCoefficient(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftCoefficient(JNIEnv *env, jobject, jlong ref,
                                                                            jlong coefficient) {
-    jint l = 5;
+    const jint l = 5;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -515,8 +520,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftCoefficient(JNIEn
     af::array primitive_absolute;
     af::array primitive_angle;
 
-    tsa::features::fftCoefficient(var, coefficient, primitive_real, primitive_imag, primitive_absolute,
-                                  primitive_angle);
+    tsa::features::fftCoefficient(var, static_cast<long>(coefficient), primitive_real, primitive_imag,
+                                  primitive_absolute, primitive_angle);
 
     af_retain_array(&af_p_real, primitive_real.get());
     af_retain_array(&af_p_imag, primitive_imag.get());
@@ -533,9 +538,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_fftCoefficient(JNIEn
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMaximum(JNIEnv *env, jobject thisObj,
-                                                                                   jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMaximum(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -556,9 +560,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMaxim
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMinimum(JNIEnv *env, jobject thisObj,
-                                                                                   jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMinimum(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -579,9 +582,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_firstLocationOfMinim
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_friedrichCoefficients(JNIEnv *env, jobject thisObj,
-                                                                                  jlong ref, jint m, jfloat r) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_friedrichCoefficients(JNIEnv *env, jobject, jlong ref,
+                                                                                  jint m, jfloat r) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -602,8 +605,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_friedrichCoefficient
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicates(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicates(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -624,8 +627,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicates(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMax(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMax(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -646,8 +649,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMax(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMin(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMin(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -668,9 +671,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_hasDuplicateMin(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_indexMassQuantile(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_indexMassQuantile(JNIEnv *env, jobject, jlong ref,
                                                                               jfloat q) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -691,8 +694,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_indexMassQuantile(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_kurtosis(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_kurtosis(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -713,9 +716,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_kurtosis(JNIEnv *env
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_largeStandardDeviation(JNIEnv *env, jobject thisObj,
-                                                                                   jlong ref, jfloat r) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_largeStandardDeviation(JNIEnv *env, jobject, jlong ref,
+                                                                                   jfloat r) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -736,9 +739,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_largeStandardDeviati
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMaximum(JNIEnv *env, jobject thisObj,
-                                                                                  jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMaximum(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -759,9 +761,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMaximu
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMinimum(JNIEnv *env, jobject thisObj,
-                                                                                  jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMinimum(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -782,8 +783,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_lastLocationOfMinimu
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_length(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_length(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -804,8 +805,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_length(JNIEnv *env, 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_linearTrend(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 6;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_linearTrend(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 6;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -855,8 +856,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_linearTrend(JNIEnv *
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_localMaximals(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_localMaximals(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -877,9 +878,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_localMaximals(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeAboveMean(JNIEnv *env, jobject thisObj,
-                                                                                   jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeAboveMean(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -900,9 +900,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeAboveMe
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeBelowMean(JNIEnv *env, jobject thisObj,
-                                                                                   jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeBelowMean(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -923,9 +922,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_longestStrikeBelowMe
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maxLangevinFixedPoint(JNIEnv *env, jobject thisObj,
-                                                                                  jlong ref, jint m, jfloat r) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maxLangevinFixedPoint(JNIEnv *env, jobject, jlong ref,
+                                                                                  jint m, jfloat r) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -946,8 +945,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maxLangevinFixedPoin
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maximum(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maximum(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -968,8 +967,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_maximum(JNIEnv *env,
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_mean(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_mean(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -990,9 +989,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_mean(JNIEnv *env, jo
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanAbsoluteChange(JNIEnv *env, jobject thisObj,
-                                                                               jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanAbsoluteChange(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1013,8 +1011,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanAbsoluteChange(J
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanChange(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanChange(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1035,9 +1033,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanChange(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject thisObj,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject,
                                                                                         jlong ref) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1058,8 +1056,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_meanSecondDerivative
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_median(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_median(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1080,8 +1078,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_median(JNIEnv *env, 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_minimum(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_minimum(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1102,9 +1100,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_minimum(JNIEnv *env,
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCrossingM(JNIEnv *env, jobject thisObj, jlong ref,
-                                                                            jint m) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCrossingM(JNIEnv *env, jobject, jlong ref, jint m) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1125,9 +1122,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCrossingM(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCwtPeaks(JNIEnv *env, jobject thisObj, jlong ref,
-                                                                           jint maxW) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCwtPeaks(JNIEnv *env, jobject, jlong ref, jint maxW) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1148,9 +1144,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberCwtPeaks(JNIEn
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberPeaks(JNIEnv *env, jobject thisObj, jlong ref,
-                                                                        jint n) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberPeaks(JNIEnv *env, jobject, jlong ref, jint n) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1171,9 +1166,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_numberPeaks(JNIEnv *
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_partialAutocorrelation(JNIEnv *env, jobject thisObj,
-                                                                                   jlong ref, jlong lags) {
-    jint l = 3;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_partialAutocorrelation(JNIEnv *env, jobject, jlong ref,
+                                                                                   jlong lags) {
+    const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1199,8 +1194,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_partialAutocorrelati
 }
 
 JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_percentageOfReoccurringDatapointsToAllDatapoints(
-    JNIEnv *env, jobject thisObj, jlong ref, jboolean isSorted) {
-    jint l = 2;
+    JNIEnv *env, jobject, jlong ref, jboolean isSorted) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1222,8 +1217,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_percentageOfReoccurr
 }
 
 JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_percentageOfReoccurringValuesToAllValues(
-    JNIEnv *env, jobject thisObj, jlong ref, jboolean isSorted) {
-    jint l = 2;
+    JNIEnv *env, jobject, jlong ref, jboolean isSorted) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1244,9 +1239,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_percentageOfReoccurr
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_quantile(JNIEnv *env, jobject thisObj, jlong ref, jlong q,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_quantile(JNIEnv *env, jobject, jlong ref, jlong q,
                                                                      jfloat precision) {
-    jint l = 3;
+    const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1271,9 +1266,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_quantile(JNIEnv *env
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_rangeCount(JNIEnv *env, jobject thisObj, jlong ref,
-                                                                       jfloat min, jfloat max) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_rangeCount(JNIEnv *env, jobject, jlong ref, jfloat min,
+                                                                       jfloat max) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1294,9 +1289,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_rangeCount(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioBeyondRSigma(JNIEnv *env, jobject, jlong ref,
                                                                               jfloat r) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1317,10 +1312,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioBeyondRSigma(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioValueNumberToTimeSeriesLength(JNIEnv *env,
-                                                                                               jobject thisObj,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioValueNumberToTimeSeriesLength(JNIEnv *env, jobject,
                                                                                                jlong ref) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1341,8 +1335,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_ratioValueNumberToTi
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sampleEntropy(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sampleEntropy(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1363,8 +1357,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sampleEntropy(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_skewness(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_skewness(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1385,9 +1379,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_skewness(JNIEnv *env
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_spktWelchDensity(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_spktWelchDensity(JNIEnv *env, jobject, jlong ref,
                                                                              jint coeff) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1408,8 +1402,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_spktWelchDensity(JNI
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_standardDeviation(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_standardDeviation(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1430,9 +1424,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_standardDeviation(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject thisObj,
-                                                                                       jlong ref, jboolean isSorted) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject, jlong ref,
+                                                                                       jboolean isSorted) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1453,9 +1447,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringData
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringValues(JNIEnv *env, jobject thisObj,
-                                                                                   jlong ref, jboolean isSorted) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringValues(JNIEnv *env, jobject, jlong ref,
+                                                                                   jboolean isSorted) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1476,8 +1470,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumOfReoccurringValu
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumValues(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumValues(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1498,9 +1492,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_sumValues(JNIEnv *en
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_symmetryLooking(JNIEnv *env, jobject thisObj, jlong ref,
-                                                                            jfloat r) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_symmetryLooking(JNIEnv *env, jobject, jlong ref, jfloat r) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1521,9 +1514,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_symmetryLooking(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_timeReversalAsymmetryStatistic(JNIEnv *env, jobject thisObj,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_timeReversalAsymmetryStatistic(JNIEnv *env, jobject,
                                                                                            jlong ref, jint lag) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1544,9 +1537,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_timeReversalAsymmetr
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_valueCount(JNIEnv *env, jobject thisObj, jlong ref,
-                                                                       jfloat v) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_valueCount(JNIEnv *env, jobject, jlong ref, jfloat v) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1567,8 +1559,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_valueCount(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_variance(JNIEnv *env, jobject thisObj, jlong ref) {
-    jint l = 2;
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_variance(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -1589,10 +1581,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_variance(JNIEnv *env
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_varianceLargerThanStandardDeviation(JNIEnv *env,
-                                                                                                jobject thisObj,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Features_varianceLargerThanStandardDeviation(JNIEnv *env, jobject,
                                                                                                 jlong ref) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 

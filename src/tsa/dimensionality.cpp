@@ -20,7 +20,7 @@ float computeTriangleArea(tsa::dimensionality::Point a, tsa::dimensionality::Poi
 
     float base = std::sqrt(std::pow((c.first - a.first), 2) + std::pow((c.second - a.second), 2));
     float height = std::abs(b.first - a.first);
-    res = base * height / 2.0;
+    res = base * height / 2.0f;
 
     return res;
 }
@@ -30,7 +30,7 @@ std::vector<float> computeBreakpoints(int alphabet_size) {
     boost::math::normal dist(0.0f, 1.0f);
 
     for (int i = 1; i < alphabet_size; i++) {
-        float value = quantile(dist, (float)i * (1 / (float)alphabet_size));
+        float value = static_cast<float>(quantile(dist, (float)i * (1 / (float)alphabet_size)));
         res.push_back(value);
     }
     return res;
@@ -41,7 +41,7 @@ std::vector<float> computeBreakpoints(int alphabet_size, float mean_value, float
     boost::math::normal dist(mean_value, std_value);
 
     for (int i = 1; i < alphabet_size; i++) {
-        float value = quantile(dist, (float)i * (1 / (float)alphabet_size));
+        float value = static_cast<float>(quantile(dist, (float)i * (1 / (float)alphabet_size)));
         res.push_back(value);
     }
     return res;
@@ -148,32 +148,32 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::PAA(std::vector<tsa
                                                                  int bins) {
     auto begin = points.begin();
     auto last = points.end();
-    double xrange = (*(last - 1)).first - (*begin).first;
-    double width_bin = xrange / bins;
-    double reduction = bins / xrange;
+    float xrange = (*(last - 1)).first - (*begin).first;
+    float width_bin = xrange / bins;
+    float reduction = bins / xrange;
 
-    std::vector<double> sum(bins, 0.0);
+    std::vector<float> sum(bins, 0.0);
     std::vector<int> counter(bins, 0);
     std::vector<tsa::dimensionality::Point> result(bins, tsa::dimensionality::Point(0.0, 0.0));
 
     // Iterating over the  timeseries
     for (auto i = begin; i != last; i++) {
-        int pos = std::min((*i).first * reduction, (double)(bins - 1));
+        int pos = static_cast<int>(std::min((*i).first * reduction, (float)(bins - 1)));
         sum[pos] += (*i).second;
         counter[pos] = counter[pos] + 1;
     }
 
     // Compute the average per bin
     for (int i = 0; i < bins; i++) {
-        result[i].first = (width_bin * i) + (width_bin / 2.0);
+        result[i].first = (width_bin * i) + (width_bin / 2.0f);
         result[i].second = sum[i] / counter[i];
     }
     return result;
 }
 
 af::array tsa::dimensionality::PAA(af::array a, int bins) {
-    int n = a.dims(0);
-    int elem_row = n / bins;
+    dim_t n = a.dims(0);
+    dim_t elem_row = n / bins;
     af::array b = af::moddims(a, elem_row, bins, a.dims(1));
     af::array addition = af::sum(b, 0);
     af::array result = af::reorder(addition / elem_row, 1, 2, 0, 3);
@@ -182,8 +182,8 @@ af::array tsa::dimensionality::PAA(af::array a, int bins) {
 }
 
 af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
-    int n = ts.dims(0);
-    int end = n - 1;
+    dim_t n = ts.dims(0);
+    int end = static_cast<int>(n - 1);
 
     if (n < 2) {
         throw std::invalid_argument("We can't delete all those important points");
@@ -215,15 +215,14 @@ af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
 
         // Find the next PIP
         for (int i = 1; i < end; i++) {
-            int i_lower, i_upper;
             // We first check if the point is already in the list.
             if (!isPointInDesiredList(points[i], selected)) {
                 // segment contains the indices of the selected points which are the boundaries for the point i.
                 std::pair<int, int> segment = getSegmentFromSelected(points[i], selected);
                 float d = verticalDistance(points[i], selected[segment.first], selected[segment.second]);
-                // We store the point with the maxium distance to the line that connects the segment.
+                // We store the point with the maximum distance to the line that connects the segment.
                 if (d > dmax) {
-                    index = i;
+                    index = static_cast<int>(i);
                     dmax = d;
                     position = segment.second;
                 }
@@ -290,7 +289,7 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLABottomUp(std::ve
     std::vector<float>::iterator minCost = std::min_element(std::begin(mergeCost), std::end(mergeCost));
     while ((segments.size() > 2) && (*minCost < maxError)) {
         // We have to merge
-        int index = std::distance(std::begin(mergeCost), minCost);
+        int index = static_cast<int>(std::distance(std::begin(mergeCost), minCost));
 
         // Merge candidate segments
         segments[index] = merge(segments[index], segments[index + 1]);
@@ -371,9 +370,9 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLASlidingWindow(
     }
 
     // Build a polyline from a set of segments
-    for (int i = 0; i < segments.size(); i++) {
-        result.push_back(ts[segments[i].first]);
-        result.push_back(ts[segments[i].second]);
+    for (int j = 0; j < segments.size(); j++) {
+        result.push_back(ts[segments[j].first]);
+        result.push_back(ts[segments[j].second]);
     }
 
     return result;
@@ -485,7 +484,7 @@ af::array tsa::dimensionality::SAX(af::array a, int alphabet_size) {
         float mean_value = af::mean<float>(a);
         float std_value = af::stdev<float>(a);
         std::vector<int> aux;
-        int n = a.dims(0);
+        dim_t n = a.dims(0);
 
         std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
         std::vector<int> alphabet = generateAlphabet(alphabet_size);
@@ -521,7 +520,7 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::visvalingam(
     std::vector<tsa::dimensionality::Point> out(pointList.begin(), pointList.end());
     float min_area = std::numeric_limits<float>::max();
     int candidate_point = -1;
-    int iterations = out.size() - num_points_allowed;
+    int iterations = static_cast<int>(out.size()) - num_points_allowed;
 
     // One point to be deleted in each iteration
     for (int iter = 0; iter < iterations; iter++) {

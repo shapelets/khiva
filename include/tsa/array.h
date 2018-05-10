@@ -96,10 +96,10 @@ class Array {
      * @param in The input af::array.
      */
     Array(af::array in) {
-        x = in.dims(0);
-        y = in.dims(1);
-        w = in.dims(2);
-        z = in.dims(3);
+        x = static_cast<int>(in.dims(0));
+        y = static_cast<int>(in.dims(1));
+        w = static_cast<int>(in.dims(2));
+        z = static_cast<int>(in.dims(3));
         data = in.host<T>();
         dims = in.numdims();
         af::sync();

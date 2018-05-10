@@ -27,7 +27,7 @@ extern "C" {
  * @return The updated ref and an array with the x-coordinates and y-coordinates of the selected points (x in column 0
  * and y in column 1).
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject, jlong ref,
                                                                                       jdouble epsilon);
 
 /**
@@ -43,7 +43,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_ramerDouglasPe
  * @return The updated ref and an array with the x-coordinates and y-coordinates of the selected points (x in column 0
  * and y in column 1).
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_visvalingam(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref,
                                                                               jint numPoints);
 
 /**
@@ -62,7 +62,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_visvalingam(JN
  *
  * @return The updated ref and an array of points with the reduced dimensionality.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_paa(JNIEnv *env, jobject thisObj, jlong ref, jint bins);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_paa(JNIEnv *env, jobject, jlong ref, jint bins);
 
 /**
  * @brief Symbolic Aggregate approXimation (SAX). It transforms a numeric time series into a time series of symbols with
@@ -81,7 +81,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_paa(JNIEnv *en
  *
  * @return The updated ref and an array of symbols.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_sax(JNIEnv *env, jobject thisObj, jlong ref, jint alphabetSize);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_sax(JNIEnv *env, jobject, jlong ref,
+                                                                      jint alphabetSize);
 
 /**
  * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.
@@ -94,7 +95,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_sax(JNIEnv *en
  *
  * @return The updated ref and an array with the most Perceptually Important numberIPs.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_pip(JNIEnv *env, jobject thisObj, jlong ref, jint numberIPs);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_pip(JNIEnv *env, jobject, jlong ref, jint numberIPs);
 
 #ifdef __cplusplus
 }

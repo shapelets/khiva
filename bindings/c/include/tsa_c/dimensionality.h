@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
+#include <tsa_c/defines.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,10 +27,10 @@ extern "C" {
  * @param res_points Array with the x-coordinates and y-coordinates of the selected points (x in column 0 and y in
  * column 1).
  */
-void ramer_douglas_peucker(af_array *points, double *epsilon, af_array *res_points);
+TSAAPI void ramer_douglas_peucker(af_array *points, double *epsilon, af_array *res_points);
 
 /**
- * @brief Reduces a set of points by applying the Visvalingam method (minimun triangle area) until the number
+ * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number
  * of points is reduced to numPoints.
  *
  * [1] M. Visvalingam and J. D. Whyatt, Line generalisation by repeated elimination of points,
@@ -41,7 +42,7 @@ void ramer_douglas_peucker(af_array *points, double *epsilon, af_array *res_poin
  * @param res_points Array with the x-coordinates and y-coordinates of the selected points (x in column 0 and y in
  * column 1).
  */
-void visvalingam(af_array *points, int *num_points, af_array *res_points);
+TSAAPI void visvalingam(af_array *points, int *num_points, af_array *res_points);
 
 /**
  * @brief Piecewise Aggregate Approximation (PAA) approximates a time series \f$X\f$ of length \f$n\f$ into vector
@@ -58,7 +59,7 @@ void visvalingam(af_array *points, int *num_points, af_array *res_points);
  * @param bins Sets the total number of divisions.
  * @param result An array of points with the reduced dimensionality.
  */
-void paa(af_array *a, int *bins, af_array *result);
+TSAAPI void paa(af_array *a, int *bins, af_array *result);
 
 /**
  * @brief Symbolic Aggregate approXimation (SAX). It transforms a numeric time series into a time series of symbols with
@@ -76,7 +77,7 @@ void paa(af_array *a, int *bins, af_array *result);
  * @param alphabet_size Number of element within the alphabet.
  * @param result An array of symbols.
  */
-void sax(af_array *a, int *alphabet_size, af_array *result);
+TSAAPI void sax(af_array *a, int *alphabet_size, af_array *result);
 
 /**
  * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.
@@ -88,7 +89,7 @@ void sax(af_array *a, int *alphabet_size, af_array *result);
  * @param number_ips The number of points to be returned.
  * @param result Array with the most Perceptually Important number_ips.
  */
-void pip(af_array *a, int *number_ips, af_array *result);
+TSAAPI void pip(af_array *a, int *number_ips, af_array *result);
 
 #ifdef __cplusplus
 }

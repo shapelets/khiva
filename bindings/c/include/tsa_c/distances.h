@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
+#include <tsa_c/defines.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,7 +20,7 @@ extern "C" {
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
-void dtw(af_array *tss, af_array *result);
+TSAAPI void dtw(af_array *tss, af_array *result);
 
 /**
  * @brief Calculates euclidean distances between time series.
@@ -31,7 +32,7 @@ void dtw(af_array *tss, af_array *result);
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-void euclidean(af_array *tss, af_array *result);
+TSAAPI void euclidean(af_array *tss, af_array *result);
 
 /**
  * @brief Calculates Hamming distances between time series.
@@ -42,7 +43,7 @@ void euclidean(af_array *tss, af_array *result);
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-void hamming(af_array *tss, af_array *result);
+TSAAPI void hamming(af_array *tss, af_array *result);
 
 /**
  * @brief Calculates Manhattan distances between time series.
@@ -54,7 +55,7 @@ void hamming(af_array *tss, af_array *result);
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-void manhattan(af_array *tss, af_array *result);
+TSAAPI void manhattan(af_array *tss, af_array *result);
 
 /**
  * @brief Calculates the non squared version of the euclidean distance.
@@ -66,7 +67,7 @@ void manhattan(af_array *tss, af_array *result);
  * Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between time series 0
  * and time series 1.
  */
-void squared_euclidean(af_array *tss, af_array *result);
+TSAAPI void squared_euclidean(af_array *tss, af_array *result);
 
 #ifdef __cplusplus
 }

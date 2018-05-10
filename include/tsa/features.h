@@ -493,10 +493,10 @@ af::array length(af::array tss);
  * @param rvalue The rvalues for all time series.
  * @param intercept The intercept values for all time series.
  * @param slope The slope for all time series.
- * @param stderr The stderr values for all time series.
+ * @param stder The stderr values for all time series.
  */
 void linearTrend(af::array tss, af::array &pvalue, af::array &rvalue, af::array &intercept, af::array &slope,
-                 af::array &stderr);
+                 af::array &stder);
 
 /**
  * @brief Calculates all Local Maximals for the time series in tss.

@@ -67,15 +67,24 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
             "name": "Win32",
             "includePath": [
                 "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include",
+                "C:/Program Files/ArrayFire/v3/include",
                 "${workspaceRoot}/include",
                 "${workspaceRoot}/bindings/c/include",
-                "${workspaceRoot}/bindings/jni/include"
+                "${workspaceRoot}/bindings/jni/include",
+                "${env.HOMEPATH}/.conan/data/google-benchmark/1.3.0/mpusz/stable/package/c0ce45254319aff4a1adf6848b4be029da558e79/include",
+                "${env.HOMEPATH}/.conan/data/gtest/1.8.0/bincrafters/stable/package/3f7b6d42d6c995a23d193db1f844ed23ae943226/include",
+                "C:/.conan/ifup3mkq/1/include",
+                "${env.HOMEPATH}/.conan/data/eigen/3.3.4/conan/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include",
+                "${env.JAVA_HOME}/include",
+                "${env.JAVA_HOME}/include/win32"
             ],
             "defines": [
                 "_DEBUG",
@@ -86,14 +95,23 @@
             "browse": {
                 "path": [
                     "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*",
+                    "C:/Program Files/ArrayFire/v3/include",
                     "${workspaceRoot}/include",
                     "${workspaceRoot}/bindings/c/include",
-                    "${workspaceRoot}/bindings/jni/include"
+                    "${workspaceRoot}/bindings/jni/include",
+                    "${env.HOMEPATH}/.conan/data/google-benchmark/1.3.0/mpusz/stable/package/c0ce45254319aff4a1adf6848b4be029da558e79/include",
+                    "${env.HOMEPATH}/.conan/data/gtest/1.8.0/bincrafters/stable/package/3f7b6d42d6c995a23d193db1f844ed23ae943226/include",
+                    "C:/.conan/ifup3mkq/1/include",
+                    "${env.HOMEPATH}/.conan/data/eigen/3.3.4/conan/stable/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include",
+                    "${env.JAVA_HOME}/include",
+                    "${env.JAVA_HOME}/include/win32"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         }
     ],
-    "version": 3
+    "version": 4
 }

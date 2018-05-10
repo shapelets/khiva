@@ -51,6 +51,17 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/tsa/version.h.in
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/test/versionTest.cpp.in
                ${CMAKE_CURRENT_SOURCE_DIR}/test/versionTest.cpp)
 
+IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # Turn compiler warnings up to 11
+    STRING(REGEX REPLACE "[-/]W[1-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+ENDIF()
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+      SET(CMAKE_INSTALL_PREFIX "C:/Program Files/TSA/")
+ENDIF()
+
 # build items in subdirectories
 ADD_SUBDIRECTORY(src)
 

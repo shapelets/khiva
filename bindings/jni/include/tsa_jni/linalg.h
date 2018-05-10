@@ -21,7 +21,7 @@ extern "C" {
  * @param ref_b A vector with the measured values.
  * @return Updated ref and the solution to the linear equation problem minimizing the norm 2.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Linalg_lls(JNIEnv *env, jobject thisObj, jlong ref_a, jlong ref_b);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Linalg_lls(JNIEnv *env, jobject, jlong ref_a, jlong ref_b);
 
 #ifdef __cplusplus
 }

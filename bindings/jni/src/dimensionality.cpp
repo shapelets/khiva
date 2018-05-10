@@ -11,9 +11,9 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject thisObj,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject,
                                                                                       jlong ref, jdouble epsilon) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -33,9 +33,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_ramerDouglasPe
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_visvalingam(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref,
                                                                               jint numPoints) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -55,9 +55,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_visvalingam(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_paa(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_paa(JNIEnv *env, jobject, jlong ref,
                                                                       jint bins) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -77,9 +77,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_paa(JNIEnv *en
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_sax(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_sax(JNIEnv *env, jobject, jlong ref,
                                                                       jint alphabetSize) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
@@ -99,9 +99,9 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_sax(JNIEnv *en
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_pip(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_pip(JNIEnv *env, jobject, jlong ref,
                                                                       jint numberIPs) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 

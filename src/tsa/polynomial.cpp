@@ -25,11 +25,11 @@ af::array tsa::polynomial::polyfit(af::array x, af::array y, int deg) {
 
     af::array scale = af::max(af::sqrt(af::sum(lhs * lhs, 0)), EPSILON);
 
-    lhs /= af::tile(scale, lhs.dims(0));
+    lhs /= af::tile(scale, static_cast<const unsigned int>(lhs.dims(0)));
 
     af::array c = tsa::linalg::lls(lhs, rhs);
     c = af::transpose(c);
-    c /= af::tile(scale, c.dims(0));
+    c /= af::tile(scale, static_cast<const unsigned int>(c.dims(0)));
     c = af::transpose(c);
 
     return c;
@@ -42,7 +42,8 @@ af::array tsa::polynomial::roots(af::array pp) {
         // Strip leading and trailing zeros
         p = p(p != 0);
 
-        p = (-1 * p(af::seq(1, p.dims(0) - 1), af::span)) / af::tile(p(0, af::span), p.dims(0) - 1);
+        p = (-1 * p(af::seq(1, static_cast<double>(p.dims(0)) - 1), af::span)) /
+            af::tile(p(0, af::span), static_cast<const unsigned int>(p.dims(0)) - 1);
 
         float *coeffs = p.as(af::dtype::f32).host<float>();
 
@@ -50,7 +51,7 @@ af::array tsa::polynomial::roots(af::array pp) {
         Eigen::MatrixXf diag = vec.asDiagonal();
 
         Eigen::MatrixXf diag2(diag.rows(), diag.cols());
-        int rest = diag.rows() - 1;
+        int rest = static_cast<int>(diag.rows()) - 1;
         diag2.topRows(1) = Eigen::Map<Eigen::MatrixXf>(coeffs, 1, p.dims(0));
         diag2.bottomRows(rest) = diag.topRows(rest);
 

@@ -11,10 +11,10 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regularization_groupBy(JNIEnv *env, jobject thisObj, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
                                                                           jint aggregationFunction, jint nColumnsKey,
                                                                           jint nColumnsValue) {
-    jint l = 2;
+    const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 

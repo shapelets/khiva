@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-void lls(af_array *a, af_array *b, af_array *result) {
+TSAAPI void lls(af_array *a, af_array *b, af_array *result) {
     af::array var_a = af::array(*a);
     af_retain_array(a, var_a.get());
     af::array var_b = af::array(*b);

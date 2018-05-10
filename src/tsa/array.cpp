@@ -33,17 +33,17 @@ af::array tsa::array::createArray(void *data, unsigned ndims, dim_t *dims, const
         case tsa::dtype::s32:
             return af::array(d, static_cast<int *>(data));
         case tsa::dtype::u32:
-            return af::array(d, static_cast<uint *>(data));
+            return af::array(d, static_cast<unsigned int *>(data));
         case tsa::dtype::u8:
             return af::array(d, static_cast<unsigned char *>(data));
         case tsa::dtype::s64:
-            return af::array(d, static_cast<intl *>(data));
+            return af::array(d, static_cast<long long *>(data));
         case tsa::dtype::u64:
-            return af::array(d, static_cast<uintl *>(data));
+            return af::array(d, static_cast<unsigned long long *>(data));
         case tsa::dtype::s16:
             return af::array(d, static_cast<short *>(data));
         case tsa::dtype::u16:
-            return af::array(d, static_cast<ushort *>(data));
+            return af::array(d, static_cast<unsigned short *>(data));
         default:
             return af::array(d, static_cast<float *>(data));
     }

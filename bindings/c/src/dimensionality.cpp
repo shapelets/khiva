@@ -11,31 +11,31 @@
 extern "C" {
 #endif
 
-void ramer_douglas_peucker(af_array *points, double *epsilon, af_array *res_points) {
+TSAAPI void ramer_douglas_peucker(af_array *points, double *epsilon, af_array *res_points) {
     af::array var = af::array(*points);
     af_retain_array(points, var.get());
     af_retain_array(res_points, tsa::dimensionality::ramerDouglasPeucker(var, *epsilon).get());
 }
 
-void visvalingam(af_array *points, int *num_points, af_array *res_points) {
+TSAAPI void visvalingam(af_array *points, int *num_points, af_array *res_points) {
     af::array var = af::array(*points);
     af_retain_array(points, var.get());
     af_retain_array(res_points, tsa::dimensionality::visvalingam(var, *num_points).get());
 }
 
-void paa(af_array *a, int *bins, af_array *result) {
+TSAAPI void paa(af_array *a, int *bins, af_array *result) {
     af::array var = af::array(*a);
     af_retain_array(a, var.get());
     af_retain_array(result, tsa::dimensionality::PAA(var, *bins).get());
 }
 
-void sax(af_array *a, int *alphabet_size, af_array *result) {
+TSAAPI void sax(af_array *a, int *alphabet_size, af_array *result) {
     af::array var = af::array(*a);
     af_retain_array(a, var.get());
     af_retain_array(result, tsa::dimensionality::SAX(var, *alphabet_size).get());
 }
 
-void pip(af_array *a, int *number_ips, af_array *result) {
+TSAAPI void pip(af_array *a, int *number_ips, af_array *result) {
     af::array var = af::array(*a);
     af_retain_array(a, var.get());
     af_retain_array(result, tsa::dimensionality::PIP(var, *number_ips).get());

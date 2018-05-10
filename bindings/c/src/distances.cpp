@@ -12,31 +12,31 @@
 extern "C" {
 #endif
 
-void euclidean(af_array *tss, af_array *result) {
+TSAAPI void euclidean(af_array *tss, af_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, tsa::distances::euclidean(var).get());
 }
 
-void dtw(af_array *tss, af_array *result) {
+TSAAPI void dtw(af_array *tss, af_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, tsa::distances::dtw(var).get());
 }
 
-void hamming(af_array *tss, af_array *result) {
+TSAAPI void hamming(af_array *tss, af_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, tsa::distances::hamming(var).get());
 }
 
-void manhattan(af_array *tss, af_array *result) {
+TSAAPI void manhattan(af_array *tss, af_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, tsa::distances::manhattan(var).get());
 }
 
-void squared_euclidean(af_array *tss, af_array *result) {
+TSAAPI void squared_euclidean(af_array *tss, af_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, tsa::distances::squaredEuclidean(var).get());
