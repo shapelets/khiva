@@ -130,11 +130,14 @@ std::pair<int, int> getSegmentFromSelected(tsa::dimensionality::Point point,
     int lower, upper;
     // We do not check the first element, as it is fixed and set to the first element of the time series
     int i = 0;
-    while (i < selected.size() - 1) {
+    bool rebased = false;
+    while (!rebased && (i < selected.size() - 1)) {
         // We check points until point.first > selected[i]
         if (point.first > selected[i].first) {
             lower = i;
             upper = i + 1;
+        } else {
+            rebased = true;
         }
         i++;
     }
@@ -215,6 +218,7 @@ af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
             int i_lower, i_upper;
             // We first check if the point is already in the list.
             if (!isPointInDesiredList(points[i], selected)) {
+                // segment contains the indices of the selected points which are the boundaries for the point i.
                 std::pair<int, int> segment = getSegmentFromSelected(points[i], selected);
                 float d = verticalDistance(points[i], selected[segment.first], selected[segment.second]);
                 // We store the point with the maxium distance to the line that connects the segment.
