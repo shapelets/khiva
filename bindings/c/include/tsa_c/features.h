@@ -4,7 +4,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
 #include <tsa_c/defines.h>
 
 #ifdef __cplusplus
@@ -20,7 +19,7 @@ extern "C" {
  * @param result An array with the same dimensions as array, whose values (time series in dimension 0)
  * contains the sum of the squares values in the time series.
  */
-TSAAPI void abs_energy(af_array *array, af_array *result);
+TSAAPI void abs_energy(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the sum over the absolute value of consecutive changes in the time series.
@@ -31,7 +30,7 @@ TSAAPI void abs_energy(af_array *array, af_array *result);
  * @param result An array with the same dimensions as array, whose values (time series in dimension 0)
  * contains absolute value of consecutive changes in the time series.
  */
-TSAAPI void absolute_sum_of_changes(af_array *array, af_array *result);
+TSAAPI void absolute_sum_of_changes(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
@@ -53,7 +52,7 @@ TSAAPI void absolute_sum_of_changes(af_array *array, af_array *result);
  *          }
  * @param result An array whose values contains the aggregated correaltion for each time series.
  */
-TSAAPI void aggregated_autocorrelation(af_array *array, int *aggregation_function, af_array *result);
+TSAAPI void aggregated_autocorrelation(tsa_array *array, int *aggregation_function, tsa_array *result);
 
 /**
  * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
@@ -78,8 +77,8 @@ TSAAPI void aggregated_autocorrelation(af_array *array, int *aggregation_functio
  * using Wald Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
  */
-TSAAPI void aggregated_linear_trend(af_array *array, long *chunkSize, int *aggregation_function, af_array *slope,
-                                    af_array *intercept, af_array *rvalue, af_array *pvalue, af_array *stderrest);
+TSAAPI void aggregated_linear_trend(tsa_array *array, long *chunkSize, int *aggregation_function, tsa_array *slope,
+                                    tsa_array *intercept, tsa_array *rvalue, tsa_array *pvalue, tsa_array *stderrest);
 
 /**
  * @brief Calculates a vectorized Approximate entropy algorithm.
@@ -96,7 +95,7 @@ TSAAPI void aggregated_linear_trend(af_array *array, long *chunkSize, int *aggre
  * @param r Filtering level, must be positive.
  * @param result The vectorized approximate entropy for all the input time series in array.
  */
-TSAAPI void approximate_entropy(af_array *array, int *m, float *r, af_array *result);
+TSAAPI void approximate_entropy(tsa_array *array, int *m, float *r, tsa_array *result);
 
 /**
  * @brief Calculates the cross-covariance of the given time series.
@@ -111,7 +110,7 @@ TSAAPI void approximate_entropy(af_array *array, int *m, float *r, af_array *res
  * n (if false).
  * @param result The cross-covariance value for the given time series.
  */
-TSAAPI void cross_covariance(af_array *xss, af_array *yss, bool *unbiased, af_array *result);
+TSAAPI void cross_covariance(tsa_array *xss, tsa_array *yss, bool *unbiased, tsa_array *result);
 
 /**
  * @brief Calculates the auto-covariance the given time series.
@@ -123,7 +122,7 @@ TSAAPI void cross_covariance(af_array *xss, af_array *yss, bool *unbiased, af_ar
  * n (if false).
  * @param result The auto-covariance value for the given time series.
  */
-TSAAPI void auto_covariance(af_array *array, bool *unbiased, af_array *result);
+TSAAPI void auto_covariance(tsa_array *array, bool *unbiased, tsa_array *result);
 
 /**
  * @brief Calculates the cross-correlation of the given time series.
@@ -138,7 +137,7 @@ TSAAPI void auto_covariance(af_array *array, bool *unbiased, af_array *result);
  * n (if false).
  * @param result The cross-correlation value for the given time series.
  */
-TSAAPI void cross_correlation(af_array *xss, af_array *yss, bool *unbiased, af_array *result);
+TSAAPI void cross_correlation(tsa_array *xss, tsa_array *yss, bool *unbiased, tsa_array *result);
 
 /**
  * @brief Calculates the autocorrelation of the specified lag for the given time.
@@ -151,7 +150,7 @@ TSAAPI void cross_correlation(af_array *xss, af_array *yss, bool *unbiased, af_a
  * @param unbiased Determines whether it divides by n - lag (if true) or n ( if false)
  * @param result The autocorrelation value for the given time series.
  */
-TSAAPI void auto_correlation(af_array *array, long *max_lag, bool *unbiased, af_array *result);
+TSAAPI void auto_correlation(tsa_array *array, long *max_lag, bool *unbiased, tsa_array *result);
 
 /**
  * @brief Calculates the binned entropy for the given time series and number of bins.
@@ -162,7 +161,7 @@ TSAAPI void auto_correlation(af_array *array, long *max_lag, bool *unbiased, af_
  * @param max_bins The number of bins.
  * @param result The binned entropy value for the given time series.
  */
-TSAAPI void binned_entropy(af_array *array, int *max_bins, af_array *result);
+TSAAPI void binned_entropy(tsa_array *array, int *max_bins, tsa_array *result);
 
 /**
  * @brief Calculates the Schreiber, T. and Schmitz, A. (1997) measure of non-linearity
@@ -174,7 +173,7 @@ TSAAPI void binned_entropy(af_array *array, int *max_bins, af_array *result);
  * @param lag The lag
  * @param result The non-linearity value for the given time series.
  */
-TSAAPI void c3(af_array *array, long *lag, af_array *result);
+TSAAPI void c3(tsa_array *array, long *lag, tsa_array *result);
 
 /**
  * @brief Calculates an estimate for the time series complexity defined by
@@ -187,7 +186,7 @@ TSAAPI void c3(af_array *array, long *lag, af_array *result);
  * @param zNormalize Controls whether the time series should be z-normalized or not.
  * @param result The complexity value for the given time series.
  */
-TSAAPI void cid_ce(af_array *array, bool *zNormalize, af_array *result);
+TSAAPI void cid_ce(tsa_array *array, bool *zNormalize, tsa_array *result);
 
 /**
  * @brief Calculates the number of values in the time series that are higher than
@@ -199,7 +198,7 @@ TSAAPI void cid_ce(af_array *array, bool *zNormalize, af_array *result);
  * @param result The number of values in the time series that are higher
  * than the mean.
  */
-TSAAPI void count_above_mean(af_array *array, af_array *result);
+TSAAPI void count_above_mean(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the number of values in the time series that are lower than
@@ -211,7 +210,7 @@ TSAAPI void count_above_mean(af_array *array, af_array *result);
  * @param result The number of values in the time series that are lower
  * than the mean.
  */
-TSAAPI void count_below_mean(af_array *array, af_array *result);
+TSAAPI void count_below_mean(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates a Continuous wavelet transform for the Ricker wavelet, also known as
@@ -235,7 +234,7 @@ TSAAPI void count_below_mean(af_array *array, af_array *result);
  * @param w Width of interest.
  * @param result Result of calculated coefficients.
  */
-TSAAPI void cwt_coefficients(af_array *array, af_array *width, int *coeff, int *w, af_array *result);
+TSAAPI void cwt_coefficients(tsa_array *array, tsa_array *width, int *coeff, int *w, tsa_array *result);
 
 /**
  * @brief Calculates the sum of squares of chunk i out of N chunks expressed as a ratio.
@@ -249,7 +248,7 @@ TSAAPI void cwt_coefficients(af_array *array, af_array *width, int *coeff, int *
  * @param segment_focus The segment number (starting at zero) to return a feature on.
  * @param result The energy ratio by chunk of the time series.
  */
-TSAAPI void energy_ratio_by_chunks(af_array *array, long *num_segments, long *segment_focus, af_array *result);
+TSAAPI void energy_ratio_by_chunks(tsa_array *array, long *num_segments, long *segment_focus, tsa_array *result);
 
 /**
  * @brief Calculates the spectral centroid(mean), variance, skew, and kurtosis of the absolute fourier transform
@@ -261,7 +260,7 @@ TSAAPI void energy_ratio_by_chunks(af_array *array, long *num_segments, long *se
  * @param result The spectral centroid (mean), variance, skew, and kurtosis of the absolute fourier transform
  * spectrum.
  */
-TSAAPI void fft_aggregated(af_array *array, af_array *result);
+TSAAPI void fft_aggregated(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the fourier coefficients of the one-dimensional discrete
@@ -276,8 +275,8 @@ TSAAPI void fft_aggregated(af_array *array, af_array *result);
  * @param absolute The absolute value of the coefficient.
  * @param angle The angle of the coefficient.
  */
-TSAAPI void fft_coefficient(af_array *array, long *coefficient, af_array *real, af_array *imag, af_array *absolute,
-                            af_array *angle);
+TSAAPI void fft_coefficient(tsa_array *array, long *coefficient, tsa_array *real, tsa_array *imag, tsa_array *absolute,
+                            tsa_array *angle);
 
 /**
  * @brief Calculates the first relative location of the maximal value for each time series.
@@ -288,7 +287,7 @@ TSAAPI void fft_coefficient(af_array *array, long *coefficient, af_array *real, 
  * @param result The first relative location of the maximum value to the length of the time series,
  *  for each time series.
  */
-TSAAPI void first_location_of_maximum(af_array *array, af_array *result);
+TSAAPI void first_location_of_maximum(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the first location of the minimal value of each time series. The position
@@ -299,7 +298,7 @@ TSAAPI void first_location_of_maximum(af_array *array, af_array *result);
  * series.
  * @param result The first relative location of the minimal value of each series.
  */
-TSAAPI void first_location_of_minimum(af_array *array, af_array *result);
+TSAAPI void first_location_of_minimum(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Coefficients of polynomial \f$h(x)\f$, which has been fitted to the deterministic
@@ -318,7 +317,7 @@ TSAAPI void first_location_of_minimum(af_array *array, af_array *result);
  * @param r Number of quantils to use for averaging.
  * @param result The coefficients for each time series.
  */
-TSAAPI void friedrich_coefficients(af_array *array, int *m, float *r, af_array *result);
+TSAAPI void friedrich_coefficients(tsa_array *array, int *m, float *r, tsa_array *result);
 
 /**
  * @brief Calculates if the input time series contain duplicated elements.
@@ -329,7 +328,7 @@ TSAAPI void friedrich_coefficients(af_array *array, int *m, float *r, af_array *
  * @param result Array containing True if the time series contains duplicated elements
  * and false otherwise.
  */
-TSAAPI void has_duplicates(af_array *array, af_array *result);
+TSAAPI void has_duplicates(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates if the maximum within input time series is duplicated.
@@ -340,7 +339,7 @@ TSAAPI void has_duplicates(af_array *array, af_array *result);
  * @param result Array containing True if the maximum value of the time series is duplicated
  * and false otherwise.
  */
-TSAAPI void has_duplicate_max(af_array *array, af_array *result);
+TSAAPI void has_duplicate_max(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates if the minimum of the input time series is duplicated.
@@ -351,7 +350,7 @@ TSAAPI void has_duplicate_max(af_array *array, af_array *result);
  * @param result Array containing True if the minimum of the time series is duplicated
  * and false otherwise.
  */
-TSAAPI void has_duplicate_min(af_array *array, af_array *result);
+TSAAPI void has_duplicate_min(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the index of the max quantile.
@@ -362,7 +361,7 @@ TSAAPI void has_duplicate_min(af_array *array, af_array *result);
  * @param q The quantile.
  * @param result The index of the max quantile q.
  */
-TSAAPI void index_mass_quantile(af_array *array, float *q, af_array *result);
+TSAAPI void index_mass_quantile(tsa_array *array, float *q, tsa_array *result);
 
 /**
  * @brief Returns the kurtosis of array (calculated with the adjusted Fisher-Pearson
@@ -373,7 +372,7 @@ TSAAPI void index_mass_quantile(af_array *array, float *q, af_array *result);
  * series.
  * @param result The kurtosis of each array.
  */
-TSAAPI void kurtosis(af_array *array, af_array *result);
+TSAAPI void kurtosis(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Checks if the time series within array have a large standard deviation.
@@ -384,7 +383,7 @@ TSAAPI void kurtosis(af_array *array, af_array *result);
  * @param r The threshold.
  * @param result  Array containing True for those time series in array that have a large standard deviation.
  */
-TSAAPI void large_standard_deviation(af_array *array, float *r, af_array *result);
+TSAAPI void large_standard_deviation(tsa_array *array, float *r, tsa_array *result);
 
 /**
  * @brief Calculates the last location of the maximum value of each time series. The position
@@ -395,7 +394,7 @@ TSAAPI void large_standard_deviation(af_array *array, float *r, af_array *result
  * series.
  * @param result The last relative location of the maximum value of each series.
  */
-TSAAPI void last_location_of_maximum(af_array *array, af_array *result);
+TSAAPI void last_location_of_maximum(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the last location of the minimum value of each time series. The position
@@ -406,7 +405,7 @@ TSAAPI void last_location_of_maximum(af_array *array, af_array *result);
  * series.
  * @param result The last relative location of the minimum value of each series.
  */
-TSAAPI void last_location_of_minimum(af_array *array, af_array *result);
+TSAAPI void last_location_of_minimum(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Returns the length of the input time series.
@@ -416,7 +415,7 @@ TSAAPI void last_location_of_minimum(af_array *array, af_array *result);
  * series.
  * @param result The length of the time series.
  */
-TSAAPI void length(af_array *array, af_array *result);
+TSAAPI void length(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculate a linear least-squares regression for the values of the time series versus the sequence from 0 to
@@ -431,8 +430,8 @@ TSAAPI void length(af_array *array, af_array *result);
  * @param slope The slope for all time series.
  * @param stdrr The stderr values for all time series.
  */
-TSAAPI void linear_trend(af_array *array, af_array *pvalue, af_array *rvalue, af_array *intercept, af_array *slope,
-                         af_array *stdrr);
+TSAAPI void linear_trend(tsa_array *array, tsa_array *pvalue, tsa_array *rvalue, tsa_array *intercept, tsa_array *slope,
+                         tsa_array *stdrr);
 
 /**
  * @brief Calculates all Local Maximals fot the time series in array.
@@ -441,7 +440,7 @@ TSAAPI void linear_trend(af_array *array, af_array *pvalue, af_array *rvalue, af
  * and dimension one indicates the number of time series.
  * @param result The calculated local maximals for each time series in array.
  */
-TSAAPI void local_maximals(af_array *array, af_array *result);
+TSAAPI void local_maximals(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the length of the longest consecutive subsequence in array that is bigger than the mean of array.
@@ -452,7 +451,7 @@ TSAAPI void local_maximals(af_array *array, af_array *result);
  * @param result The length of the longest consecutive subsequence in the input time series that is bigger than the
  * mean.
  */
-TSAAPI void longest_strike_above_mean(af_array *array, af_array *result);
+TSAAPI void longest_strike_above_mean(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the length of the longest consecutive subsequence in array that is below the mean of array.
@@ -462,7 +461,7 @@ TSAAPI void longest_strike_above_mean(af_array *array, af_array *result);
  * series.
  * @param result The length of the longest consecutive subsequence in the input time series that is below the mean.
  */
-TSAAPI void longest_strike_below_mean(af_array *array, af_array *result);
+TSAAPI void longest_strike_below_mean(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Largest fixed point of dynamics \f$\max_x {h(x)=0}\f$ estimated from polynomial
@@ -480,7 +479,7 @@ TSAAPI void longest_strike_below_mean(af_array *array, af_array *result);
  * @param r Number of quantiles to use for averaging.
  * @param result Largest fixed point of deterministic dynamics.
  */
-TSAAPI void max_langevin_fixed_point(af_array *array, int *m, float *r, af_array *result);
+TSAAPI void max_langevin_fixed_point(tsa_array *array, int *m, float *r, tsa_array *result);
 
 /**
  * @brief Calculates the maximum value for each time series within array.
@@ -490,7 +489,7 @@ TSAAPI void max_langevin_fixed_point(af_array *array, int *m, float *r, af_array
  * series.
  * @param result The maximum value of each time series within array.
  */
-TSAAPI void maximum(af_array *array, af_array *result);
+TSAAPI void maximum(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the mean value for each time series within array.
@@ -500,7 +499,7 @@ TSAAPI void maximum(af_array *array, af_array *result);
  * series.
  * @param result The mean value of each time series within array.
  */
-TSAAPI void mean(af_array *array, af_array *result);
+TSAAPI void mean(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the mean over the absolute differences between subsequent time series values in array.
@@ -510,7 +509,7 @@ TSAAPI void mean(af_array *array, af_array *result);
  * series.
  * @param result The maximum value of each time series within array.
  */
-TSAAPI void mean_absolute_change(af_array *array, af_array *result);
+TSAAPI void mean_absolute_change(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the mean over the differences between subsequent time series values in array.
@@ -520,7 +519,7 @@ TSAAPI void mean_absolute_change(af_array *array, af_array *result);
  * series.
  * @param result The mean over the differences between subsequent time series values.
  */
-TSAAPI void mean_change(af_array *array, af_array *result);
+TSAAPI void mean_change(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates mean value of a central approximation of the second derivative for each time series in array.
@@ -530,7 +529,7 @@ TSAAPI void mean_change(af_array *array, af_array *result);
  * series.
  * @param result The mean value of a central approximation of the second derivative for each time series.
  */
-TSAAPI void mean_second_derivative_central(af_array *array, af_array *result);
+TSAAPI void mean_second_derivative_central(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the median value for each time series within array.
@@ -540,7 +539,7 @@ TSAAPI void mean_second_derivative_central(af_array *array, af_array *result);
  * series.
  * @param result The median value of each time series within array.
  */
-TSAAPI void median(af_array *array, af_array *result);
+TSAAPI void median(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the minimum value for each time series within array.
@@ -550,7 +549,7 @@ TSAAPI void median(af_array *array, af_array *result);
  * series.
  * @param result The minimum value of each time series within array.
  */
-TSAAPI void minimum(af_array *array, af_array *result);
+TSAAPI void minimum(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the number of m-crossings. A m-crossing is defined as two sequential values where the first
@@ -563,7 +562,7 @@ TSAAPI void minimum(af_array *array, af_array *result);
  * @param m The m value.
  * @param result The number of m-crossings of each time series within array.
  */
-TSAAPI void number_crossing_m(af_array *array, int *m, af_array *result);
+TSAAPI void number_crossing_m(tsa_array *array, int *m, tsa_array *result);
 
 /**
  * @brief This feature calculator searches for different peaks. To do so, the time series is smoothed by a ricker
@@ -575,7 +574,7 @@ TSAAPI void number_crossing_m(af_array *array, int *m, af_array *result);
  * @param max_w The maximum width to consider.
  * @param result The number of peaks for each time series.
  */
-TSAAPI void number_cwt_peaks(af_array *array, int *max_w, af_array *result);
+TSAAPI void number_cwt_peaks(tsa_array *array, int *max_w, tsa_array *result);
 
 /**
  * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$array\f$. A peak of support
@@ -588,7 +587,7 @@ TSAAPI void number_cwt_peaks(af_array *array, int *max_w, af_array *result);
  * @param n The support of the peak.
  * @param result The number of peaks of at least support \f$n\f$.
  */
-TSAAPI void number_peaks(af_array *array, int *n, af_array *result);
+TSAAPI void number_peaks(tsa_array *array, int *n, tsa_array *result);
 
 /**
  * @brief Calculates the value of the partial autocorrelation function at the given lag. The lag \f$k\f$ partial
@@ -616,7 +615,7 @@ TSAAPI void number_peaks(af_array *array, int *n, af_array *result);
  * @param lags Indicates the lags to be calculated.
  * @param result Returns partial autocorrelation for each time series for the given lag.
  */
-TSAAPI void partial_autocorrelation(af_array *array, af_array *lags, af_array *result);
+TSAAPI void partial_autocorrelation(tsa_array *array, tsa_array *lags, tsa_array *result);
 
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
@@ -632,7 +631,8 @@ TSAAPI void partial_autocorrelation(af_array *array, af_array *lags, af_array *r
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the percentage of unique values, that are present in the time series more than once.
  */
-TSAAPI void percentage_of_reoccurring_datapoints_to_all_datapoints(af_array *array, bool *is_sorted, af_array *result);
+TSAAPI void percentage_of_reoccurring_datapoints_to_all_datapoints(tsa_array *array, bool *is_sorted,
+                                                                   tsa_array *result);
 
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
@@ -647,7 +647,7 @@ TSAAPI void percentage_of_reoccurring_datapoints_to_all_datapoints(af_array *arr
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the percentage of unique values, that are present in the time series more than once.
  */
-TSAAPI void percentage_of_reoccurring_values_to_all_values(af_array *array, bool *is_sorted, af_array *result);
+TSAAPI void percentage_of_reoccurring_values_to_all_values(tsa_array *array, bool *is_sorted, tsa_array *result);
 
 /**
  * @brief Returns values at the given quantile.
@@ -659,7 +659,7 @@ TSAAPI void percentage_of_reoccurring_values_to_all_values(af_array *array, bool
  * @param precision Number of decimals expected.
  * @param result Values at the given quantile.
  */
-TSAAPI void quantile(af_array *array, af_array *q, float *precision, af_array *result);
+TSAAPI void quantile(tsa_array *array, tsa_array *q, float *precision, tsa_array *result);
 
 /**
  * @brief Counts observed values within the interval [min, max).
@@ -671,7 +671,7 @@ TSAAPI void quantile(af_array *array, af_array *q, float *precision, af_array *r
  * @param max Value that sets the upper limit.
  * @param result Values at the given range.
  */
-TSAAPI void range_count(af_array *array, float *min, float *max, af_array *result);
+TSAAPI void range_count(tsa_array *array, float *min, float *max, tsa_array *result);
 
 /**
  * @brief Calculates the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
@@ -684,7 +684,7 @@ TSAAPI void range_count(af_array *array, float *min, float *max, af_array *resul
  * @param result The ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
  * \f$x\f$.
  */
-TSAAPI void ratio_beyond_r_sigma(af_array *array, float *r, af_array *result);
+TSAAPI void ratio_beyond_r_sigma(tsa_array *array, float *r, tsa_array *result);
 
 /**
  * @brief Calculates a factor which is 1 if all values in the time series occur only once, and below one if this is
@@ -698,7 +698,7 @@ TSAAPI void ratio_beyond_r_sigma(af_array *array, float *r, af_array *result);
  * dimension one indicates the number of time series.
  * @param result The ratio of unique values with respect to the total number of values.
  */
-TSAAPI void ratio_value_number_to_time_series_length(af_array *array, af_array *result);
+TSAAPI void ratio_value_number_to_time_series_length(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates a vectorized sample entropy algorithm.
@@ -715,7 +715,7 @@ TSAAPI void ratio_value_number_to_time_series_length(af_array *array, af_array *
  * @param result An array with the same dimensions as array, whose values (time series in dimension 0)
  * contains the vectorized sample entropy for all the input time series in array.
  */
-TSAAPI void sample_entropy(af_array *array, af_array *result);
+TSAAPI void sample_entropy(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the sample skewness of array (calculated with the adjusted Fisher-Pearson standardized
@@ -726,7 +726,7 @@ TSAAPI void sample_entropy(af_array *array, af_array *result);
  * series.
  * @param result Array containing the skewness of each time series in array.
  */
-TSAAPI void skewness(af_array *array, af_array *result);
+TSAAPI void skewness(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Estimates the cross power spectral density of the time series array at different frequencies. To do so, the
@@ -746,7 +746,7 @@ TSAAPI void skewness(af_array *array, af_array *result);
  * @param result Array containing the power spectrum of the different frequencies for each time series in
  * array.
  */
-TSAAPI void spkt_welch_density(af_array *array, int *coeff, af_array *result);
+TSAAPI void spkt_welch_density(tsa_array *array, int *coeff, tsa_array *result);
 
 /**
  * @brief Calculates the standard deviation of each time series within array.
@@ -756,7 +756,7 @@ TSAAPI void spkt_welch_density(af_array *array, int *coeff, af_array *result);
  * series.
  * @param result The standard deviation of each time series within array.
  */
-TSAAPI void standard_deviation(af_array *array, af_array *result);
+TSAAPI void standard_deviation(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates the sum of all data points, that are present in the time series more than once.
@@ -767,7 +767,7 @@ TSAAPI void standard_deviation(af_array *array, af_array *result);
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the sum of all data points, that are present in the time series more than once.
  */
-TSAAPI void sum_of_reoccurring_datapoints(af_array *array, bool *is_sorted, af_array *result);
+TSAAPI void sum_of_reoccurring_datapoints(tsa_array *array, bool *is_sorted, tsa_array *result);
 
 /**
  * @brief Calculates the sum of all values, that are present in the time series more than once.
@@ -777,7 +777,7 @@ TSAAPI void sum_of_reoccurring_datapoints(af_array *array, bool *is_sorted, af_a
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the sum of all values, that are present in the time series more than once.
  */
-TSAAPI void sum_of_reoccurring_values(af_array *array, bool *is_sorted, af_array *result);
+TSAAPI void sum_of_reoccurring_values(tsa_array *array, bool *is_sorted, tsa_array *result);
 
 /**
  * @brief Calculates the sum over the time series array.
@@ -786,7 +786,7 @@ TSAAPI void sum_of_reoccurring_values(af_array *array, bool *is_sorted, af_array
  * dimension one indicates the number of time series.
  * @param result An array containing the sum of values in each time series.
  */
-TSAAPI void sum_values(af_array *array, af_array *result);
+TSAAPI void sum_values(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates if the distribution of array *looks symmetric*. This is the case if
@@ -800,7 +800,7 @@ TSAAPI void sum_values(af_array *array, af_array *result);
  * @param r The percentage of the range to compare with.
  * @param result An array denoting if the input time series look symmetric.
  */
-TSAAPI void symmetry_looking(af_array *array, float *r, af_array *result);
+TSAAPI void symmetry_looking(tsa_array *array, float *r, tsa_array *result);
 
 /**
  * @brief This function calculates the value of:
@@ -822,7 +822,7 @@ TSAAPI void symmetry_looking(af_array *array, float *r, af_array *result);
  * @param lag The lag to be computed.
  * @param result An array containing the time reversal asymetry statistic value in each time series.
  */
-TSAAPI void time_reversal_asymmetry_statistic(af_array *array, int *lag, af_array *result);
+TSAAPI void time_reversal_asymmetry_statistic(tsa_array *array, int *lag, tsa_array *result);
 
 /**
  * @brief Counts occurrences of value in the time series array.
@@ -833,7 +833,7 @@ TSAAPI void time_reversal_asymmetry_statistic(af_array *array, int *lag, af_arra
  * @param v The value to be counted.
  * @param result An array containing the count of the given value in each time series.
  */
-TSAAPI void value_count(af_array *array, float *v, af_array *result);
+TSAAPI void value_count(tsa_array *array, float *v, tsa_array *result);
 
 /**
  * @brief Computes the variance for the time series array.
@@ -842,7 +842,7 @@ TSAAPI void value_count(af_array *array, float *v, af_array *result);
  * dimension one indicates the number of time series.
  * @param result An array containing the variance in each time series.
  */
-TSAAPI void variance(af_array *array, af_array *result);
+TSAAPI void variance(tsa_array *array, tsa_array *result);
 
 /**
  * @brief Calculates if the variance of array is greater than the standard deviation. In other words, if the variance of
@@ -852,7 +852,7 @@ TSAAPI void variance(af_array *array, af_array *result);
  * dimension one indicates the number of time series.
  * @param result An array denoting if the variance of array is greater than the standard deviation.
  */
-TSAAPI void variance_larger_than_standard_deviation(af_array *array, af_array *result);
+TSAAPI void variance_larger_than_standard_deviation(tsa_array *array, tsa_array *result);
 
 #ifdef __cplusplus
 }

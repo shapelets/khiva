@@ -4,7 +4,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
 #include <tsa_c/defines.h>
 
 #ifdef __cplusplus
@@ -20,7 +19,7 @@ extern "C" {
  * @param result Array created.
  * @param type Data type.
  */
-TSAAPI void create_array(void *data, unsigned *ndims, dim_t *dims, af_array *result, int *type);
+TSAAPI void create_array(void *data, unsigned *ndims, long long *dims, tsa_array *result, int *type);
 
 /**
  * @brief Retrieves the data from the device to the host.
@@ -28,7 +27,7 @@ TSAAPI void create_array(void *data, unsigned *ndims, dim_t *dims, af_array *res
  * @param array The Array that contains the data to be retrieved.
  * @param data Pointer to previously allocated memory in the host.
  */
-TSAAPI void get_data(af_array *array, void *data);
+TSAAPI void get_data(tsa_array *array, void *data);
 
 /**
  * @brief Gets the Array dimensions.
@@ -36,21 +35,21 @@ TSAAPI void get_data(af_array *array, void *data);
  * @param array Array from which to get the dimensions.
  * @param dims The dimensions.
  */
-TSAAPI void get_dims(af_array *array, long long *dims);
+TSAAPI void get_dims(tsa_array *array, long long *dims);
 
 /**
  * @brief Prints an Array.
  *
  * @param array The array to display.
  */
-TSAAPI void print(af_array *array);
+TSAAPI void print(tsa_array *array);
 
 /**
  * @brief Decreases the references count of the given array.
  *
  * @param array The Array to release.
  */
-TSAAPI void delete_array(af_array *array);
+TSAAPI void delete_array(tsa_array *array);
 
 /**
  * @brief Gets the type of the array.
@@ -58,7 +57,7 @@ TSAAPI void delete_array(af_array *array);
  * @param array The array to obtain the type information from.
  * @param type Value of the Dtype enumeration.
  */
-TSAAPI void get_type(af_array *array, int *t);
+TSAAPI void get_type(tsa_array *array, int *t);
 
 #ifdef __cplusplus
 }

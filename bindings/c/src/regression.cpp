@@ -12,8 +12,8 @@
 extern "C" {
 #endif
 
-TSAAPI void linear(af_array *xss, af_array *yss, af_array *slope, af_array *intercept, af_array *rvalue,
-                   af_array *pvalue, af_array *stderrest) {
+TSAAPI void linear(tsa_array *xss, tsa_array *yss, tsa_array *slope, tsa_array *intercept, tsa_array *rvalue,
+                   tsa_array *pvalue, tsa_array *stderrest) {
     af::array var_xss = af::array(*xss);
     af::array var_yss = af::array(*yss);
     af_retain_array(xss, var_xss.get());

@@ -4,7 +4,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
 #include <tsa_c/defines.h>
 
 #ifdef __cplusplus
@@ -25,8 +24,8 @@ extern "C" {
  * @param subsequence_indices The indices of the query sequences that produced
  * the "N" bigger discords.
  */
-TSAAPI void find_best_n_discords(af_array *profile, af_array *index, long *n, af_array *discord_distances,
-                                 af_array *discord_indices, af_array *subsequence_indices);
+TSAAPI void find_best_n_discords(tsa_array *profile, tsa_array *index, long *n, tsa_array *discord_distances,
+                                 tsa_array *discord_indices, tsa_array *subsequence_indices);
 
 /**
  * @brief Primitive of the findBestNMotifs function.
@@ -41,8 +40,8 @@ TSAAPI void find_best_n_discords(af_array *profile, af_array *index, long *n, af
  * @param subsequence_indices The indices of the query sequences that produced
  * the minimum reported in the motifs.
  */
-TSAAPI void find_best_n_motifs(af_array *profile, af_array *index, long *n, af_array *motif_distances,
-                               af_array *motif_indices, af_array *subsequence_indices);
+TSAAPI void find_best_n_motifs(tsa_array *profile, tsa_array *index, long *n, tsa_array *motif_distances,
+                               tsa_array *motif_indices, tsa_array *subsequence_indices);
 
 /**
  * @brief  Primitive of the STOMP algorithm.
@@ -54,7 +53,7 @@ TSAAPI void find_best_n_motifs(af_array *profile, af_array *index, long *n, af_a
  * from 'tssa' in 'tssb'.
  * @param i The matrix profile index, which points to where the aforementioned minimum is located.
  */
-TSAAPI void stomp(af_array *tssa, af_array *tssb, long *m, af_array *p, af_array *i);
+TSAAPI void stomp(tsa_array *tssa, tsa_array *tssb, long *m, tsa_array *p, tsa_array *i);
 
 /**
  * @brief Primitive of the STOMP self join algorithm.
@@ -65,7 +64,7 @@ TSAAPI void stomp(af_array *tssa, af_array *tssb, long *m, af_array *p, af_array
  * from 'tss' in a different location of itself
  * @param i The matrix profile index, which points to where the aforementioned minimum is located
  */
-TSAAPI void stomp_self_join(af_array *tss, long *m, af_array *p, af_array *i);
+TSAAPI void stomp_self_join(tsa_array *tss, long *m, tsa_array *p, tsa_array *i);
 
 #ifdef __cplusplus
 }

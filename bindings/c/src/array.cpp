@@ -13,32 +13,32 @@
 extern "C" {
 #endif
 
-TSAAPI void create_array(void *data, unsigned *ndims, dim_t *dims, af_array *result, int *type) {
+TSAAPI void create_array(void *data, unsigned *ndims, long long *dims, tsa_array *result, int *type) {
     af_retain_array(result, tsa::array::createArray(data, *ndims, dims, *type).get());
 }
 
-TSAAPI void get_data(af_array *array, void *data) {
+TSAAPI void get_data(tsa_array *array, void *data) {
     af::array var = af::array(*array);
     tsa::array::getData(var, data);
     af_retain_array(array, var.get());
 }
 
-TSAAPI void get_dims(af_array *array, long long *dimens) {
+TSAAPI void get_dims(tsa_array *array, long long *dimens) {
     af::array var = af::array(*array);
     af::dim4 d = tsa::array::getDims(var);
     memcpy(dimens, d.dims, sizeof(d.dims));
     af_retain_array(array, var.get());
 }
 
-TSAAPI void print(af_array *array) {
+TSAAPI void print(tsa_array *array) {
     af::array var = af::array(*array);
     tsa::array::print(var);
     af_retain_array(array, var.get());
 }
 
-TSAAPI void delete_array(af_array *array) { tsa::array::deleteArray(*array); }
+TSAAPI void delete_array(tsa_array *array) { tsa::array::deleteArray(*array); }
 
-TSAAPI void get_type(af_array *array, int *t) {
+TSAAPI void get_type(tsa_array *array, int *t) {
     af::array var = af::array(*array);
     *t = tsa::array::getType(var);
     af_retain_array(array, var.get());

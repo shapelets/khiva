@@ -4,6 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <arrayfire.h>
 #include <tsa/normalization.h>
 #include <tsa_c/normalization.h>
 
@@ -11,49 +12,49 @@
 extern "C" {
 #endif
 
-TSAAPI void decimal_scaling_norm(af_array *tss, af_array *result) {
+TSAAPI void decimal_scaling_norm(tsa_array *tss, tsa_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, tsa::normalization::decimalScalingNorm(var).get());
 }
 
-TSAAPI void decimal_scaling_norm_in_place(af_array *tss) {
+TSAAPI void decimal_scaling_norm_in_place(tsa_array *tss) {
     af::array var = af::array(*tss);
     tsa::normalization::decimalScalingNormInPlace(var);
     af_retain_array(tss, var.get());
 }
 
-TSAAPI void max_min_norm(af_array *tss, double *high, double *low, double *epsilon, af_array *result) {
+TSAAPI void max_min_norm(tsa_array *tss, double *high, double *low, double *epsilon, tsa_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, tsa::normalization::maxMinNorm(var, *high, *low, *epsilon).get());
 }
 
-TSAAPI void max_min_norm_in_place(af_array *tss, double *high, double *low, double *epsilon) {
+TSAAPI void max_min_norm_in_place(tsa_array *tss, double *high, double *low, double *epsilon) {
     af::array var = af::array(*tss);
     tsa::normalization::maxMinNormInPlace(var, *high, *low, *epsilon);
     af_retain_array(tss, var.get());
 }
 
-TSAAPI void mean_norm(af_array *tss, af_array *result) {
+TSAAPI void mean_norm(tsa_array *tss, tsa_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, tsa::normalization::meanNorm(var).get());
 }
 
-TSAAPI void mean_norm_in_place(af_array *tss) {
+TSAAPI void mean_norm_in_place(tsa_array *tss) {
     af::array var = af::array(*tss);
     tsa::normalization::meanNormInPlace(var);
     af_retain_array(tss, var.get());
 }
 
-TSAAPI void znorm(af_array *tss, double *epsilon, af_array *result) {
+TSAAPI void znorm(tsa_array *tss, double *epsilon, tsa_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, tsa::normalization::znorm(var, *epsilon).get());
 }
 
-TSAAPI void znorm_in_place(af_array *tss, double *epsilon) {
+TSAAPI void znorm_in_place(tsa_array *tss, double *epsilon) {
     af::array var = af::array(*tss);
     tsa::normalization::znormInPlace(var, *epsilon);
     af_retain_array(tss, var.get());

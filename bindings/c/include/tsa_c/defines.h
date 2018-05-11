@@ -11,3 +11,5 @@
 #else
 #define TSAAPI __attribute__((visibility("default")))
 #endif
+
+typedef void *tsa_array;

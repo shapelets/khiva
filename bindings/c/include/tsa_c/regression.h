@@ -4,7 +4,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
 #include <tsa_c/defines.h>
 
 #ifdef __cplusplus
@@ -26,8 +25,8 @@ extern "C" {
  * Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
  */
-TSAAPI void linear(af_array *xss, af_array *yss, af_array *slope, af_array *intercept, af_array *rvalue,
-                   af_array *pvalue, af_array *stderrest);
+TSAAPI void linear(tsa_array *xss, tsa_array *yss, tsa_array *slope, tsa_array *intercept, tsa_array *rvalue,
+                   tsa_array *pvalue, tsa_array *stderrest);
 
 #ifdef __cplusplus
 }

@@ -4,6 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <arrayfire.h>
 #include <tsa/regularization.h>
 #include <tsa_c/regularization.h>
 
@@ -11,8 +12,8 @@
 extern "C" {
 #endif
 
-TSAAPI void group_by(af_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
-                     af_array *result) {
+TSAAPI void group_by(tsa_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
+                     tsa_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
 

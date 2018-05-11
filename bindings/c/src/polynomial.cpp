@@ -6,26 +6,30 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <arrayfire.h>
 #include <tsa/polynomial.h>
 #include <tsa_c/polynomial.h>
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-TSAAPI void polyfit(af_array *x, af_array *y, int *deg, af_array *result) {
-    af::array xx = af::array(*x);
-    af_retain_array(x, xx.get());
-    af::array yy = af::array(*y);
-    af_retain_array(y, yy.get());
-    af_retain_array(result, tsa::polynomial::polyfit(xx, yy, *deg).get());
-}
+    TSAAPI void polyfit(tsa_array *x, tsa_array *y, int *deg, tsa_array *result)
+    {
+        af::array xx = af::array(*x);
+        af_retain_array(x, xx.get());
+        af::array yy = af::array(*y);
+        af_retain_array(y, yy.get());
+        af_retain_array(result, tsa::polynomial::polyfit(xx, yy, *deg).get());
+    }
 
-TSAAPI void roots(af_array *p, af_array *result) {
-    af::array var = af::array(*p);
-    af_retain_array(p, var.get());
-    af_retain_array(result, tsa::polynomial::roots(var).get());
-}
+    TSAAPI void roots(tsa_array *p, tsa_array *result)
+    {
+        af::array var = af::array(*p);
+        af_retain_array(p, var.get());
+        af_retain_array(result, tsa::polynomial::roots(var).get());
+    }
 
 #ifdef __cplusplus
 }

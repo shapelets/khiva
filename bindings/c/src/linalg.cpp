@@ -4,6 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <arrayfire.h>
 #include <tsa/linalg.h>
 #include <tsa_c/linalg.h>
 
@@ -11,7 +12,7 @@
 extern "C" {
 #endif
 
-TSAAPI void lls(af_array *a, af_array *b, af_array *result) {
+TSAAPI void lls(tsa_array *a, tsa_array *b, tsa_array *result) {
     af::array var_a = af::array(*a);
     af_retain_array(a, var_a.get());
     af::array var_b = af::array(*b);
