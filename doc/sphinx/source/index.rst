@@ -32,19 +32,19 @@ You can jump right into the package by looking into our :ref:`chapter-gettingsta
    API <api/main>
    Bindings to other languages <bindings/main>
    Authors <authors>
-   License <license>
-   Changelog <changes>
 
 Cite Us
 =======
 
-If you use TSA Library for a publication, please cite it as::
+If you use TSA Library for a publication, please cite it as:
 
-    @misc{tsa-library, 
-    author = "David Cuesta and Justo Ruiz and Oscar Torreno and Antonio Vilches", 
-    title = "TSA Library", 
-    howpublished = "\url{http://shapelets.io/tsa}"
-    }
+.. code-block:: bash
+
+     @misc{tsa-library, 
+        author = "David Cuesta and Justo Ruiz and Oscar Torreno and Antonio Vilches", 
+        title = "TSA Library", 
+        howpublished = "\url{http://shapelets.io/tsa}"
+     }
 
 .. rubric:: Footnotes
 
