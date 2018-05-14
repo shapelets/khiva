@@ -31,12 +31,9 @@ You can jump right into the package by looking into our :ref:`chapter-gettingsta
    Getting Started <gettingStarted>
    API <api/main>
    Bindings to other languages <bindings/main>
-   Examples <examples/main>
    Authors <authors>
    License <license>
    Changelog <changes>
-   Faq <faq>
-   How to contribute <how_to_contribute>
 
 Cite Us
 =======

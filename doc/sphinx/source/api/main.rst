@@ -35,4 +35,6 @@ This is the list of namespaces that comprise the TSA library.
 * :ref:`namespace-regularization-label` 
 * :ref:`namespace-statistics-label` 
 
+.. doxygenfunction: tsa::dimensionality::PIP
+
 
