@@ -9,7 +9,7 @@
 // http://msdn.microsoft.com/en-us/library/3y1sfaz2%28v=VS.80%29.aspx
 #define TSAAPI __declspec(dllexport)
 #else
-#define TSAAPI __attribute__((visibility("default")))
+#define TSAAPI
 #endif
 
 typedef void *tsa_array;

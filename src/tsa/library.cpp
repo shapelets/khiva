@@ -6,6 +6,7 @@
 
 #include <arrayfire.h>
 #include <tsa/library.h>
+#include <iostream>
 
 void tsa::library::backendInfo() { std::cout << std::string(af::infoString()) << std::endl; }
 

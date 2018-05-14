@@ -9,6 +9,7 @@
 
 #include <arrayfire.h>
 #include <benchmark/benchmark.h>
+#include <iostream>
 
 // Removing Google benchmark MAIN macro to force using ours
 #undef BENCHMARK_MAIN
