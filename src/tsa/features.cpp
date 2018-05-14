@@ -698,7 +698,7 @@ af::array tsa::features::numberCrossingM(af::array tss, int m) {
 int indexMinValue(std::vector<int> values) {
     int result = -1;
     int minimum = std::numeric_limits<int>::max();
-    for (int i = 0; i < values.size(); i++) {
+    for (size_t i = 0; i < values.size(); i++) {
         if (values[i] < minimum) {
             minimum = values[i];
             result = i;
@@ -857,7 +857,7 @@ std::vector<LineTuple> filterFunction(std::vector<LineTuple> ridgeLines, std::ve
     std::vector<LineTuple> res;
 
     for (auto line : ridgeLines) {
-        if (std::get<0>(line).size() >= minLength) {
+        if (static_cast<int>(std::get<0>(line).size()) >= minLength) {
             float snr = std::abs(cwt.getElement(std::get<0>(line).front(), std::get<1>(line).front()) /
                                  noises[std::get<1>(line).front()]);
             if (snr >= minSnr) {
@@ -881,7 +881,7 @@ std::vector<LineTuple> filterRidgeLines(af::array cwtDat, std::vector<LineTuple>
     std::vector<float> rowOne = cwtValues.getRow(0);
     std::vector<float> noises(rowOne.size());
 
-    for (int i = 0; i < rowOne.size(); i++) {
+    for (int i = 0; i < static_cast<int>(rowOne.size()); i++) {
         int windowStart = std::max(i - hfWindow, 0);
         int windowEnd = std::min(i + hfWindow + odd, numPoints);
         noises[i] = scoreAtPercentile(rowOne, windowStart, windowEnd, noisePerc);

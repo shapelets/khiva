@@ -113,7 +113,7 @@ void insertPointBetweenSelected(tsa::dimensionality::Point p, int position,
  */
 bool isPointInDesiredList(tsa::dimensionality::Point point, std::vector<tsa::dimensionality::Point> selected) {
     bool found = false;
-    for (int i = 0; i < selected.size(); i++) {
+    for (size_t i = 0; i < selected.size(); i++) {
         // We just compare the horinzontal component as it is unique
         if (selected[i].first == point.first) {
             found = true;
@@ -129,7 +129,7 @@ std::pair<int, int> getSegmentFromSelected(tsa::dimensionality::Point point,
                                            std::vector<tsa::dimensionality::Point> selected) {
     int lower, upper;
     // We do not check the first element, as it is fixed and set to the first element of the time series
-    int i = 0;
+    size_t i = 0;
     bool rebased = false;
     while (!rebased && (i < selected.size() - 1)) {
         // We check points until point.first > selected[i]
@@ -234,7 +234,7 @@ af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
     // Converting from vector to array
     float *x = (float *)malloc(sizeof(float) * selected.size());
     float *y = (float *)malloc(sizeof(float) * selected.size());
-    for (int i = 0; i < selected.size(); i++) {
+    for (size_t i = 0; i < selected.size(); i++) {
         x[i] = selected[i].first;
         y[i] = selected[i].second;
     }
@@ -243,6 +243,9 @@ af::array tsa::dimensionality::PIP(af::array ts, int numberIPs) {
     af::array tsx(selected.size(), 1, x);
     af::array tsy(selected.size(), 1, y);
     af::array res = af::join(1, tsx, tsy);
+
+    free(x);
+    free(y);
 
     return res;
 }
@@ -277,11 +280,11 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLABottomUp(std::ve
     std::vector<float> mergeCost;
 
     // Allocating vector of segments
-    for (int i = 0; i < ts.size() - 1; i = i + 2) {
+    for (size_t i = 0; i < ts.size() - 1; i = i + 2) {
         segments.push_back(std::make_pair(i, i + 1));
     }
 
-    for (int i = 0; i < segments.size() - 1; i++) {
+    for (size_t i = 0; i < segments.size() - 1; i++) {
         mergeCost.push_back(calculateError(ts, segments[i].first, segments[i + 1].second));
     }
 
@@ -308,7 +311,7 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLABottomUp(std::ve
 
     // Build a polyline from a set of segments
     std::vector<tsa::dimensionality::Point> result;
-    for (int i = 0; i < segments.size(); i++) {
+    for (size_t i = 0; i < segments.size(); i++) {
         result.push_back(ts[segments[i].first]);
         result.push_back(ts[segments[i].second]);
     }
@@ -333,7 +336,7 @@ af::array tsa::dimensionality::PLABottomUp(af::array ts, float maxError) {
     float *y = (float *)malloc(sizeof(float) * reducedPoints.size());
 
     // Converting from vector to array
-    for (int i = 0; i < reducedPoints.size(); i++) {
+    for (size_t i = 0; i < reducedPoints.size(); i++) {
         x[i] = reducedPoints[i].first;
         y[i] = reducedPoints[i].second;
     }
@@ -343,6 +346,9 @@ af::array tsa::dimensionality::PLABottomUp(af::array ts, float maxError) {
     af::array tsy(reducedPoints.size(), 1, y);
     af::array res = af::join(1, tsx, tsy);
 
+    free(x);
+    free(y);
+
     return res;
 }
 
@@ -351,8 +357,8 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLASlidingWindow(
     std::vector<tsa::dimensionality::Point> result;
     std::vector<tsa::dimensionality::Segment> segments;
 
-    int anchor = 0;
-    int i;
+    size_t anchor = 0;
+    size_t i;
 
     // We haven´t explored the whole time series
     while (anchor < (ts.size() - 1)) {
@@ -370,7 +376,7 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLASlidingWindow(
     }
 
     // Build a polyline from a set of segments
-    for (int j = 0; j < segments.size(); j++) {
+    for (size_t j = 0; j < segments.size(); j++) {
         result.push_back(ts[segments[j].first]);
         result.push_back(ts[segments[j].second]);
     }
@@ -395,7 +401,7 @@ af::array tsa::dimensionality::PLASlidingWindow(af::array ts, float maxError) {
     float *y = (float *)malloc(sizeof(float) * reducedPoints.size());
 
     // Converting from vector to array
-    for (int i = 0; i < reducedPoints.size(); i++) {
+    for (size_t i = 0; i < reducedPoints.size(); i++) {
         x[i] = reducedPoints[i].first;
         y[i] = reducedPoints[i].second;
     }
@@ -404,6 +410,9 @@ af::array tsa::dimensionality::PLASlidingWindow(af::array ts, float maxError) {
     af::array tsx(reducedPoints.size(), 1, x);
     af::array tsy(reducedPoints.size(), 1, y);
     af::array res = af::join(1, tsx, tsy);
+
+    free(x);
+    free(y);
 
     return res;
 }
@@ -464,7 +473,7 @@ af::array tsa::dimensionality::ramerDouglasPeucker(af::array pointList, double e
     std::vector<float> vx(rPoints.size(), 0);
     std::vector<float> vy(rPoints.size(), 0);
 
-    for (int i = 0; i < rPoints.size(); i++) {
+    for (size_t i = 0; i < rPoints.size(); i++) {
         vx[i] = rPoints[i].first;
         vy[i] = rPoints[i].second;
     }
@@ -491,7 +500,7 @@ af::array tsa::dimensionality::SAX(af::array a, int alphabet_size) {
         float *a_h = a.host<float>();
 
         for (int i = 0; i < n; i++) {
-            int j = 0;
+            size_t j = 0;
             int alpha = alphabet[0];
 
             while ((j < breakingpoints.size()) && (a_h[i] > breakingpoints[j])) {
@@ -524,7 +533,7 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::visvalingam(
 
     // One point to be deleted in each iteration
     for (int iter = 0; iter < iterations; iter++) {
-        for (int p = 0; p < out.size() - 2; p++) {
+        for (size_t p = 0; p < out.size() - 2; p++) {
             float area = computeTriangleArea(out[p], out[p + 1], out[p + 2]);
             if (area < min_area) {
                 min_area = area;
@@ -553,7 +562,7 @@ af::array tsa::dimensionality::visvalingam(af::array pointList, int numPoints) {
     std::vector<float> vx(rPoints.size(), 0);
     std::vector<float> vy(rPoints.size(), 0);
 
-    for (int i = 0; i < rPoints.size(); i++) {
+    for (size_t i = 0; i < rPoints.size(); i++) {
         vx[i] = rPoints[i].first;
         vy[i] = rPoints[i].second;
     }

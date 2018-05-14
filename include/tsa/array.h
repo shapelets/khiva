@@ -323,7 +323,7 @@ template <typename T>
 std::vector<int> getIndexMaxColums(std::vector<T> r) {
     std::vector<int> result;
 
-    for (int i = 0; i < r.size(); i++) {
+    for (unsigned long i = 0; i < r.size(); i++) {
         if (r[i] == 1) {
             result.push_back(i);
         }
