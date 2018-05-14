@@ -26,8 +26,10 @@ Tools:
 
 * A Build manager to control the compilation process `CMake <https://cmake.org/download/>`_.
 * A dependency manager `Conan <https://conan.io/>`_.
-* `Python <https://www.python.org/downloads/>`_ (Preferably version 3.X).
+* `Python 3 <https://www.python.org/downloads/>`_.
+* `Pip3 <https://pypi.org/project/pip/>`_.
 * Documentation builders `Doxygen <http:://www.doxygen.org>`_ and `sphinx <http://www.sphinx-doc.org/en/master/usage/installation.html>`_.
+* `Graphviz and Dot <https://graphviz.gitlab.io/download/>`_.
 * A C++ compiler, it can be either `Clang <http://releases.llvm.org/download.html>`_, `GCC <https://gcc.gnu.org/install/binaries.html>`_ or `Visual Studio C++ Compiler <https://www.visualstudio.com/es>`_.
 
 .. NOTE ::
@@ -49,42 +51,7 @@ Linux
 
 We will use `Ubuntu 16.04 LTS <http://www.ubuntu.com>`_ as our example linux distribution.
 
-Start by installing all the dependencies.
-
-.. code-block:: bash
-
-     # git
-     sudo apt-get install git
-     
-     # CMake
-     sudo apt-get install cmake
-     
-     # Google Test
-     sudo apt-get install libgtest-dev
-     
-     # Google Benchmark
-     git clone https://github.com/google/benchmark.git
-     cd benchmark
-     mkdir build
-     cd build
-     cmake .. -DCMAKE_BUILD_TYPE=RELEASE
-     make
-     sudo make install
-
-     # Eigen3
-     sudo apt-get install libeigen3-dev
-     
-     # Boost
-     sudo apt-get install libboost-all-dev
-     
-     # Arrayfire
-     wget http://arrayfire.s3.amazonaws.com/3.6.0/ArrayFire-no-gl-v3.6.0_Linux_x86_84.sh
-     ./Arrayfire_*_Linux_x86_64.sh --include-subdir --prefix=/opt
-     echo /opt/arrayfire/lib > /etc/ld.so.conf.d/arrayfire.conf
-     sudo ldconfig
-
-
-Once we have installed all dependencies, we are ready to build and install TSA. First go to the directory 
+Once we have installed all TSA dependencies, we are ready to build and install TSA. First go to the directory 
 where the source code is stored.
 
 .. code-block:: bash
@@ -96,16 +63,45 @@ where the source code is stored.
 
 It will install the library in ``/usr/local/lib`` and ``/usr/local/include`` folders.
 
+In the case of Linux installations, it is also require to add the Arrayfire lib folder to the environment variable  LD_LIBRARY_PATH.
+
+.. code-block:: bash
+
+   export LD_LIBRARY_PATH="/pathToArrayfire/arrayfire/lib:$LD_LIBRARY_PATH"
+
 
 Mac Os
 ======
 .. _section-installation-mac:
 
-TODO
+Once we have installed all TSA dependencies, we are ready to build and install TSA. First go to the directory 
+where the source code is stored:
+
+.. code-block:: bash
+
+    mkdir build
+    cd build
+    cmake ..
+    make install
+
+It will install the library in ``/usr/local/lib`` and ``/usr/local/include`` folders.
+No more steps are needed for Mac Os.
 
 
 Windows
 =======
 .. _section-installation-windows:
 
-Windows is not yet supported, we are working on it.
+First, we need to add the folders that contains the binaries of Graphviz, Dot and Doxygen to the environment variable PATH.
+Once we have installed all TSA dependencies, we are ready to build and install TSA. So, go to the directory where the 
+source code is stored and proceed as follows:
+
+.. code-block:: bash
+
+    mkdir build
+    cd build
+    cmake ..
+    make install
+
+It will install the library in ``C:/Program Files/TSA/lib`` and ``C:/Program Files/TSA/include`` folders.
+No more steps are needed for Mac Os.
