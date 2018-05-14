@@ -11,52 +11,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject,
-                                                                                      jlong ref, jdouble epsilon) {
-    const jint l = 2;
-    jlong tmp[l];
-    jlongArray pointers = env->NewLongArray(l);
-
-    af_array arr = (af_array)ref;
-    af::array var = af::array(arr);
-
-    jlong raw_pointer = 0;
-    af_array af_p = (af_array)raw_pointer;
-
-    af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::dimensionality::ramerDouglasPeucker(var, epsilon).get());
-
-    tmp[0] = (jlong)arr;
-    tmp[1] = (jlong)af_p;
-
-    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
-    return pointers;
-}
-
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref,
-                                                                              jint numPoints) {
-    const jint l = 2;
-    jlong tmp[l];
-    jlongArray pointers = env->NewLongArray(l);
-
-    af_array arr = (af_array)ref;
-    af::array var = af::array(arr);
-
-    jlong raw_pointer = 0;
-    af_array af_p = (af_array)raw_pointer;
-
-    af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::dimensionality::visvalingam(var, numPoints).get());
-
-    tmp[0] = (jlong)arr;
-    tmp[1] = (jlong)af_p;
-
-    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
-    return pointers;
-}
-
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_paa(JNIEnv *env, jobject, jlong ref,
-                                                                      jint bins) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_paa(JNIEnv *env, jobject, jlong ref, jint bins) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -69,6 +24,93 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_paa(JNIEnv *en
 
     af_retain_array(&arr, var.get());
     af_retain_array(&af_p, tsa::dimensionality::PAA(var, bins).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_pip(JNIEnv *env, jobject, jlong ref, jint numberIPs) {
+    const jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::dimensionality::PIP(var, numberIPs).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref,
+                                                                              jfloat maxError) {
+    const jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::dimensionality::PLABottomUp(var, maxError).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_PLASlidingWindow(JNIEnv *env, jobject, jlong ref,
+                                                                                   jfloat maxError) {
+    const jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::dimensionality::PLASlidingWindow(var, maxError).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject, jlong ref,
+                                                                                      jdouble epsilon) {
+    const jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::dimensionality::ramerDouglasPeucker(var, epsilon).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -99,8 +141,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_sax(JNIEnv *en
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_pip(JNIEnv *env, jobject, jlong ref,
-                                                                      jint numberIPs) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref,
+                                                                              jint numPoints) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -112,7 +154,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Dimensionality_pip(JNIEnv *en
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::dimensionality::PIP(var, numberIPs).get());
+    af_retain_array(&af_p, tsa::dimensionality::visvalingam(var, numPoints).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
