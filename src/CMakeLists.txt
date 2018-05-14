@@ -31,9 +31,6 @@ ADD_DEFINITIONS(-DAF_UNIFIED)
 
 # Install Variables
 SET(TSA_INSTALL_INC_DIR ".")
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-      SET(TSA_INSTALL_INC_DIR "include")
-ENDIF()
 SET(TSA_INSTALL_LIB_DIR "lib")
 
 # Files to add to compilation
