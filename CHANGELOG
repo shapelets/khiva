@@ -16,21 +16,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Regression namespace.
 - Regularization namespace.
 - Support for Windows and Linux (Ubuntu 16.04 LTS).
+- Documentation using breathe.
+- Async. memory management.
 
 ### Removed
 - Simplification namespace.
-
-## [0.2.0] - 2018-04-03
-### Added
-- New Features Algorithms.
-- Documentation is build by using Sphinx with Doxygen, Breathe and Exhale.
-- Binding for Python, R, Java.
-- Matrix namespace.
-- Distances namespace.
-- Simplification namespace.
-
-### Changed
-- Improving Benchmark Suite to run across all available devices
 
 ## [0.1.0] - 2018-03-03
 ### Added
@@ -40,8 +30,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Implementation of Simplification algorithms (Visvalingam and PIP).
 - Benchmarks Suite (based on Google Benchmark).
 - Test Suite (Google Test).
+- New Features Algorithms.
+- Binding for Python, R, Java.
+- Matrix namespace.
+- Distances namespace.
+- Simplification namespace.
 
 [Unreleased]: https://bitbucket.org/gcatsoft/tsa/branch/develop
-[0.2.0]: https://bitbucket.org/gcatsoft/tsa/branches/compare/develop%0Dv0.0.2.0
 [0.1.0]: https://bitbucket.org/gcatsoft/tsa/branches/compare/develop%0Dv0.0.1.0
 
