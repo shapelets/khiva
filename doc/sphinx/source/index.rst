@@ -6,15 +6,15 @@ This is the documentation of **TSA** library.
 
 TSA [#f1]_ is an open source C++ library which focus on providing efficient algorithms to perform analytics over 
 time series of data. It can be used to extract insights from one or a group of time series. The large number of 
-available methods allows us to understand the nature of each time series. Based on that analytics, the user can 
-reduce dimensionality, find out recurrent motifs or discords, understand the seasonality or trend from given time
+available methods allow us to understand the nature of each time series. Based on that analytics, the user can 
+reduce dimensionality, find out recurrent motifs or discords, understand the seasonality or trend from a given time
 series, forecasting and detect anomalies. 
 
-It is a novel project that wants to provides a mean for analysis time series at scale. Our vision is that this kind
+It is a novel project that wants to provide a mean for time series analytics at scale. Our vision is that this kind
 of analytics can be exploit in a wide range of use cases across several industries, like finance, energy, e-health,
 IOT, application performance monitoring (APM), music industry, etc.  
 
-It is just the begging, so keep tuned, more features are coming ...  
+It is just the beginning, so keep tuned, more features are coming ...  
 
 `shapelets-tsa@googlegroups.com
 <https://groups.google.com/forum/?fromgroups#!forum/shapelets-tsa>`_ is the place for discussions and questions about 

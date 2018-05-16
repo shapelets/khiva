@@ -33,12 +33,12 @@ In order to install the tsa-java binding of the library, you would need to fetch
 
     git clone https://avrgcs@bitbucket.org/gcatsoft/tsa-java.git
 
-Once you have downloded the code, you have to move to the source code directory and execute the following commands:
+Once you have downloaded the code, you have to move to the source code directory and execute the following commands:
 
 .. code-block:: bash
 
+    cd path_to_java_tsa_dir
     mvn install
-    mvn test
     mvn javadoc:javadoc
 
 If all steps finished as expected, you should be able to use the TSA from your java projects.
@@ -52,7 +52,7 @@ In order to install the tsa-r binding of the library, you would need to fetch th
 
     git clone https://avrgcs@bitbucket.org/gcatsoft/tsa-r.git
 
-IAfter downloading the code, you would need to open an R console and execute the following commands, to set the work directory and 
+After downloading the code, you would need to open an R console and execute the following commands, to set the work directory and 
 install the TSA binding:
 
 .. code-block:: bash

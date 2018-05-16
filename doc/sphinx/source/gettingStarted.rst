@@ -51,7 +51,7 @@ Linux
 
 We will use `Ubuntu 16.04 LTS <http://www.ubuntu.com>`_ as our example linux distribution.
 
-Once we have installed all TSA dependencies, we are ready to build and install TSA. First go to the directory 
+Once we have installed all TSA dependencies, we are ready to build and install TSA. First, go to the directory 
 where the source code is stored.
 
 .. code-block:: bash
@@ -74,7 +74,7 @@ Mac Os
 ======
 .. _section-installation-mac:
 
-Once we have installed all TSA dependencies, we are ready to build and install TSA. First go to the directory 
+Once we have installed all TSA dependencies, we are ready to build and install TSA. First, go to the directory 
 where the source code is stored:
 
 .. code-block:: bash
