@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 - Simplification namespace.
 
-## [0.1.0] - 2018-03-03
+## [0.0.1] - 2018-03-03
 ### Added
 - We have set Arrayfire as an abstraction layer to run on top of accelerators that are able to run OpenCL.
 - Implementation of STOMP method.
@@ -37,5 +37,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Simplification namespace.
 
 [Unreleased]: https://bitbucket.org/gcatsoft/tsa/branch/develop
-[0.1.0]: https://bitbucket.org/gcatsoft/tsa/branches/compare/develop%0Dv0.0.1.0
+[0.0.1]: https://bitbucket.org/gcatsoft/tsa/branches/compare/develop%0Dv0.0.1.0
 

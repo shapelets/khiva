@@ -63,14 +63,15 @@ where the source code is stored.
 
 It will install the library in ``/usr/local/lib`` and ``/usr/local/include`` folders.
 
-In the case of Linux installations, it is also require to add the Arrayfire lib folder to the environment variable  LD_LIBRARY_PATH.
+In case ArrayFire is not installed in the system default directories, it is also required to add the Arrayfire lib folder 
+to the environment variable  LD_LIBRARY_PATH.
 
 .. code-block:: bash
 
    export LD_LIBRARY_PATH="/pathToArrayfire/arrayfire/lib:$LD_LIBRARY_PATH"
 
 
-Mac Os
+Mac OS
 ======
 .. _section-installation-mac:
 
@@ -85,14 +86,12 @@ where the source code is stored:
     make install
 
 It will install the library in ``/usr/local/lib`` and ``/usr/local/include`` folders.
-No more steps are needed for Mac Os.
-
 
 Windows
 =======
 .. _section-installation-windows:
 
-First, we need to add the folders that contains the binaries of Graphviz, Dot and Doxygen to the environment variable PATH.
+First, we need to ensure the Graphviz, Dot and Doxygen binaries are included in the environment variable PATH.
 Once we have installed all TSA dependencies, we are ready to build and install TSA. So, go to the directory where the 
 source code is stored and proceed as follows:
 
@@ -104,4 +103,3 @@ source code is stored and proceed as follows:
     make install
 
 It will install the library in ``C:/Program Files/TSA/lib`` and ``C:/Program Files/TSA/include`` folders.
-No more steps are needed for Mac Os.
