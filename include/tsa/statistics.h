@@ -68,11 +68,11 @@ af::array skewness(af::array tss);
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series. NOTE: the time series should be sorted.
  * @param q Percentile(s) at which to extract score(s). One or many.
- * @param precision Number of decimals expected.
+ * @param precision Number of decimals expected.                                        
  *
  * @return af::array Values at the given quantile.
  */
-af::array quantile(af::array tss, af::array q, float precision = 1e8);
+af::array quantile(af::array tss, af::array q, float precision = 100000000);
 
 /**
  * @brief Discretizes the time series into equal-sized buckets based on sample quantiles.
@@ -85,6 +85,6 @@ af::array quantile(af::array tss, af::array q, float precision = 1e8);
  * @return af::array Matrix with the categories, one category per row, the start of the category in the first column and
  * the end in the second category.
  */
-af::array quantilesCut(af::array tss, float quantiles, float precision = 1e-8);
+af::array quantilesCut(af::array tss, float quantiles, float precision = 0.00000001);
 };  // namespace statistics
 };  // namespace tsa

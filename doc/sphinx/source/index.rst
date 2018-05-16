@@ -1,45 +1,51 @@
-============
-TSA Docs
-============
+===========================
+TSA (Time Series Analytics)
+===========================
 
 This is the documentation of **TSA** library.
 
-TSA is a c++; time series library, that is focused on the efficient execution of time series analytics.
-It features a large number of methods to perform analytics over time series in order to extract insights from them.
-Further the package contains methods to evaluate the explaining power and importance of time series for
-regression or classification tasks.
+TSA [#f1]_ is an open source C++ library which focus on providing efficient algorithms to perform analytics over 
+time series of data. It can be used to extract insights from one or a group of time series. The large number of 
+available methods allow us to understand the nature of each time series. Based on that analytics, the user can 
+reduce dimensionality, find out recurrent motifs or discords, understand the seasonality or trend from a given time
+series, forecasting and detect anomalies. 
 
-You can jump right into the package by looking into our :ref:`quick-start-label`.
+It is a novel project that wants to provide a mean for time series analytics at scale. Our vision is that this kind
+of analytics can be exploit in a wide range of use cases across several industries, like finance, energy, e-health,
+IOT, application performance monitoring (APM), music industry, etc.  
 
-Contents
-========
+It is just the beginning, so keep tuned, more features are coming ...  
 
-The following chapters will explain the TSA package in detail:
+`shapelets-tsa@googlegroups.com
+<https://groups.google.com/forum/?fromgroups#!forum/shapelets-tsa>`_ is the place for discussions and questions about 
+TSA library. We use the `GitHub Issue Tracker <https://github.com/shapelets/tsa/issues>`_ to manage bug reports 
+and feature requests.
+
+You can jump right into the package by looking into our :ref:`chapter-gettingstarted`.
 
 .. toctree::
    :caption: Table of Contents
-   :maxdepth: 2
-   :numbered:
+   :maxdepth: 1
+   :hidden:
 
-   Introduction <text/introduction>
-   Getting Started <text/getting_started>
-   Quick Start <text/quick_start>
-   TSA API <apiTSA/main>
-   Data Formats <text/data_formats>
-   Parallelization <parallel/main>
-   TSA on a cluster <cluster/main>
+   Getting Started <gettingStarted>
+   API <api/main>
    Bindings to other languages <bindings/main>
-   Examples <examples/main>
-   Benchmarks <benchmarks/main>
-   FAQ <text/faq>
    Authors <authors>
-   License <license>
-   Changelog <changes>
-   How to contribute <text/how_to_contribute>
 
-Indices and tables
-==================
+Cite Us
+=======
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+If you use TSA Library for a publication, please cite it as:
+
+.. code-block:: bash
+
+     @misc{tsa-library, 
+        author = "David Cuesta and Justo Ruiz and Oscar Torreno and Antonio Vilches", 
+        title = "TSA Library", 
+        howpublished = "\url{http://shapelets.io/tsa}"
+     }
+
+.. rubric:: Footnotes
+
+.. [#f1] Time series analysis comprises methods for analyzing time series data in order to extract meaningful statistics and other characteristics of the data (Source `Wikipedia <https://en.wikipedia.org/wiki/Time_series>`_).

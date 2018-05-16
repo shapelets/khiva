@@ -738,7 +738,7 @@ af::array percentageOfReoccurringValuesToAllValues(af::array tss, bool isSorted 
  *
  * @return af::array Values at the given quantile.
  */
-af::array quantile(af::array tss, af::array q, float precision = 1e8);
+af::array quantile(af::array tss, af::array q, float precision = 100000000);
 
 /**
  * @brief Counts observed values within the interval [min, max).
