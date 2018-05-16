@@ -29,21 +29,16 @@ af::array tsa::matrix::slidingDotProduct(af::array q, af::array t) {
 void tsa::matrix::meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &stdev) {
     long na = static_cast<long>(t.dims(0));
 
-    // Cumulative sum of all the time series contained in t
-    af::array cumulative_sum_t = af::accum(t, 0);
-    // Cumulative sum of the square of all the time series contained in t
-    af::array cumulative_sum_t2 = af::accum(af::pow(t, 2), 0);
-
     af::array tmp = af::constant(0, 1, t.dims(1), t.type());
-    af::array sum_t = af::constant(0, na - m + 1, t.dims(1), t.type());
-    af::array sum_t2 = af::constant(0, na - m + 1, t.dims(1), t.type());
 
-    // Cumulative sum of each subsequence of all the time series contained in t
-    sum_t = cumulative_sum_t(af::seq(m - 1, na - 1), af::span) -
-            af::join(0, tmp, cumulative_sum_t(af::seq(0, na - m - 1), af::span));
+    // Cumulative sum of all the time series contained in t
+    af::array cumulative_sum_t = af::join(0, tmp, af::accum(t, 0));
+    // Cumulative sum of the square of all the time series contained in t
+    af::array cumulative_sum_t2 = af::join(0, tmp, af::accum(af::pow(t, 2), 0));
+
+    af::array sum_t = cumulative_sum_t(af::seq(m, na), af::span) - cumulative_sum_t(af::seq(0, na - m), af::span);
     // Cumulative sum of the element-wise square of each subsequence of all the time series contained in t
-    sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1), af::span) -
-             af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1), af::span));
+    af::array sum_t2 = cumulative_sum_t2(af::seq(m, na), af::span) - cumulative_sum_t2(af::seq(0, na - m), af::span);
 
     // Mean of each subsequence of all the time series
     mean = sum_t / m;
@@ -68,21 +63,16 @@ void tsa::matrix::meanStdev(af::array t, af::array &a, long m, af::array &mean, 
 void tsa::matrix::meanStdev(af::array t, long m, af::array &mean, af::array &stdev) {
     long na = static_cast<long>(t.dims(0));
 
-    // Cumulative sum of all the time series contained in t
-    af::array cumulative_sum_t = af::accum(t, 0);
-    // Cumulative sum of the square of all the time series contained in t
-    af::array cumulative_sum_t2 = af::accum(af::pow(t, 2), 0);
-
     af::array tmp = af::constant(0, 1, t.dims(1), t.type());
-    af::array sum_t = af::constant(0, na - m + 1, t.dims(1), t.type());
-    af::array sum_t2 = af::constant(0, na - m + 1, t.dims(1), t.type());
 
-    // Cumulative sum of each subsequence of all the time series contained in t
-    sum_t = cumulative_sum_t(af::seq(m - 1, na - 1), af::span) -
-            af::join(0, tmp, cumulative_sum_t(af::seq(0, na - m - 1), af::span));
+    // Cumulative sum of all the time series contained in t
+    af::array cumulative_sum_t = af::join(0, tmp, af::accum(t, 0));
+    // Cumulative sum of the square of all the time series contained in t
+    af::array cumulative_sum_t2 = af::join(0, tmp, af::accum(af::pow(t, 2), 0));
+
+    af::array sum_t = cumulative_sum_t(af::seq(m, na), af::span) - cumulative_sum_t(af::seq(0, na - m), af::span);
     // Cumulative sum of the element-wise square of each subsequence of all the time series contained in t
-    sum_t2 = cumulative_sum_t2(af::seq(m - 1, na - 1), af::span) -
-             af::join(0, tmp, cumulative_sum_t2(af::seq(0, na - m - 1), af::span));
+    af::array sum_t2 = cumulative_sum_t2(af::seq(m, na), af::span) - cumulative_sum_t2(af::seq(0, na - m), af::span);
 
     // Mean of each subsequence of all the time series
     mean = sum_t / m;
@@ -296,6 +286,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
     long chunkSizeB = std::min(nb - m + 1, batch_size_b);
     // The chunk size cannot be greater than the length of the input time series ta
     long chunkSizeA = std::min(na, batch_size_a);
+    chunkSizeA = std::max(m, chunkSizeA);
 
     // Array that will hold all the query sequences for the given chunk. One per column
     af::array input = af::array(m, chunkSizeB, nTimeSeriesB, tb.type());
@@ -319,7 +310,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
         af::array pidx = af::array(0, af::dtype::u32);
 
         // Splitting the reference time series
-        for (long k = 0; k < (na + m - 1); k += chunkSizeA) {
+        for (long k = 0; k < (na - m + 1); k += chunkSizeA) {
             // Start of the given time series chunk
             long start = k / chunkSizeA * (chunkSizeA - m + 1);
             // The iteration space cannot be greater than what is left (na - start)
@@ -459,6 +450,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
     long chunkSizeB = std::min(n - m + 1, batch_size_b);
     // The chunk size cannot be greater than the length of the input time series ta
     long chunkSizeA = std::min(n, batch_size_a);
+    chunkSizeA = std::max(m, chunkSizeA);
 
     // Array that will hold all the query sequences for the given chunk. One per column
     af::array input = af::array(m, chunkSizeB, nTimeSeries, t.type());
@@ -485,7 +477,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
         af::array mask = tsa::matrix::generateMask(m, iterationSizeB, i, n - m + 1, nTimeSeries);
 
         // Splitting the reference time series
-        for (long k = 0; k < (n + m - 1); k += chunkSizeA) {
+        for (long k = 0; k < (n - m + 1); k += chunkSizeA) {
             // Start of the given time series chunk
             long start = k / chunkSizeA * (chunkSizeA - m + 1);
             // The iteration space cannot be greater than what is left (na - start)

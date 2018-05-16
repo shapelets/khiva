@@ -23,7 +23,7 @@ void slidingDotProduct() {
     float expected[] = {330, 342, 365, 374, 361, 340, 342, 365, 374, 361, 340, 330};
     float *result = sdp.host<float>();
     for (int i = 0; i < 24; i++) {
-        ASSERT_EQ(result[i % 12], expected[i % 12]);
+        ASSERT_EQ(result[i], expected[i % 12]);
     }
 }
 
@@ -60,9 +60,35 @@ void meanStdev() {
     float *resultingMean = mean.host<float>();
     float *resultingStdev = stdev.host<float>();
     for (int i = 0; i < 24; i++) {
-        ASSERT_NEAR(resultingMean[i % 12], expectedMean[i % 12], EPSILON * 3e3);
-        ASSERT_NEAR(resultingStdev[i % 12], expectedStdev[i % 12], EPSILON * 3e3);
+        ASSERT_NEAR(resultingMean[i], expectedMean[i % 12], EPSILON * 3e3);
+        ASSERT_NEAR(resultingStdev[i], expectedStdev[i % 12], EPSILON * 3e3);
     }
+}
+
+void meanStdevMEqualsLength() {
+    float data[] = {10, 10, 11, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 11};
+    af::array t = af::array(14, data);
+    af::array tss = af::tile(t, 1, 2);
+
+    long m = 14;
+    af::array mean;
+    af::array stdev;
+
+    tsa::matrix::meanStdev(tss, m, mean, stdev);
+
+    ASSERT_EQ(mean.dims(0), 1);
+    ASSERT_EQ(mean.dims(1), 2);
+    ASSERT_EQ(stdev.dims(0), 1);
+    ASSERT_EQ(stdev.dims(1), 2);
+
+    float expectedMean[] = {10.714285f};
+    float expectedStdev[] = {0.699862f};
+    float *resultingMean = mean.host<float>();
+    float *resultingStdev = stdev.host<float>();
+    ASSERT_NEAR(resultingMean[0], expectedMean[0], EPSILON * 3e3);
+    ASSERT_NEAR(resultingMean[1], expectedMean[0], EPSILON * 3e3);
+    ASSERT_NEAR(resultingStdev[0], expectedStdev[0], EPSILON * 3e3);
+    ASSERT_NEAR(resultingStdev[1], expectedStdev[0], EPSILON * 3e3);
 }
 
 void generateMask() {
@@ -78,7 +104,7 @@ void generateMask() {
                             0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1};
 
     for (int i = 0; i < 64; i++) {
-        ASSERT_EQ(maskCalculated[i % 32], maskExpected[i % 32]);
+        ASSERT_EQ(maskCalculated[i], maskExpected[i % 32]);
     }
 }
 
@@ -371,6 +397,31 @@ void stompConsiderTrivialMultipleSeries() {
     }
 }
 
+void stompConsiderTrivialMultipleSeriesBigM() {
+    af::array ta = af::randn(4096, 3);
+
+    af::array tb = ta;
+
+    long m = 4096;
+
+    af::array distance;
+    af::array index;
+
+    tsa::matrix::stomp(ta, tb, m, distance, index);
+
+    float *resultingDistance = distance.host<float>();
+
+    unsigned int resultingIndex[9];
+    index.host(&resultingIndex);
+
+    for (int i = 0; i < 9; i++) {
+        if (i % 4 == 0) {
+            ASSERT_NEAR(resultingDistance[i], 0.0, 1e-1);
+            ASSERT_EQ(resultingIndex[i], 0);
+        }
+    }
+}
+
 void findBestMotifs() {
     float data_a[] = {10, 10, 10, 10, 10, 10, 9, 10, 10, 10, 10, 10, 11, 10, 9};
     af::array ta = af::array(15, data_a);
@@ -430,6 +481,7 @@ void findBestDiscords() {
 
 TSA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct);
 TSA_TEST(MatrixTests, MeanStdev, meanStdev);
+TSA_TEST(MatrixTests, MeanStdevMEqualsLength, meanStdevMEqualsLength);
 TSA_TEST(MatrixTests, GenerateMask, generateMask);
 TSA_TEST(MatrixTests, CalculateDistanceProfile, calculateDistanceProfile);
 TSA_TEST(MatrixTests, CalculateDistanceProfileMiddle, calculateDistanceProfileMiddle);
@@ -440,5 +492,6 @@ TSA_TEST(MatrixTests, StompIgnoreTrivialMultipleSeries, stompIgnoreTrivialMultip
 TSA_TEST(MatrixTests, StompConsiderTrivialOneSeries, stompConsiderTrivialOneSeries);
 TSA_TEST(MatrixTests, StompConsiderTrivialOneSeries2, stompConsiderTrivialOneSeries2);
 TSA_TEST(MatrixTests, StompConsiderTrivialMultipleSeries, stompConsiderTrivialMultipleSeries);
+TSA_TEST(MatrixTests, StompConsiderTrivialMultipleSeriesBigM, stompConsiderTrivialMultipleSeriesBigM);
 TSA_TEST(MatrixTests, FindBestMotifs, findBestMotifs);
 TSA_TEST(MatrixTests, FindBestDiscords, findBestDiscords);
