@@ -68,5 +68,5 @@ void linearMultipleTimeSeries() {
     ASSERT_NEAR(stderrest_host[1], 0.412351891, EPSILON);
 }
 
-TSA_TEST(RegressionTests, Linear, linear);
-TSA_TEST(RegressionTests, LinearMultipleTimeSeries, linearMultipleTimeSeries);
+TSA_TEST(RegressionTests, Linear, linear)
+TSA_TEST(RegressionTests, LinearMultipleTimeSeries, linearMultipleTimeSeries)

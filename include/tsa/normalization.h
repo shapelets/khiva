@@ -112,5 +112,5 @@ af::array znorm(af::array tss, double epsilon = 0.00000001);
  */
 void znormInPlace(af::array &tss, double epsilon = 0.00000001);
 
-};  // namespace normalization
-};  // namespace tsa
+}  // namespace normalization
+}  // namespace tsa

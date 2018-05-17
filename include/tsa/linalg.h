@@ -23,5 +23,6 @@ namespace linalg {
  * @return af::array Contains the solution to the linear equation problem minimizing the norm 2.
  */
 af::array lls(af::array A, af::array b);
-};  // namespace linalg
-};  // namespace tsa
+
+}  // namespace linalg
+}  // namespace tsa

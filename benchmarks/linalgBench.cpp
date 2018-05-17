@@ -45,4 +45,4 @@ void cpuBenchmarks() {
     // Empty cpu benchmarks because of the OpenMP static linking problem caused by Arrayfire
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks);
+TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

@@ -18,4 +18,4 @@ namespace tsa {
 
 const char *version();
 
-};  // namespace tsa
+} // namespace tsa

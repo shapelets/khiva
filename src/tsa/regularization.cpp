@@ -22,7 +22,7 @@ af::array tsa::regularization::groupBy(af::array in, af::array (*aggregationFunc
     // cannot be used inside
     // gfor(af::seq i, groupKeys.dims(0)) {
     for (int i = 0; i < groupKeys.dims(0); i++) {
-        af::array tiledGroupKey = af::tile(groupKeys(i, af::span), static_cast<const unsigned int>(in.dims(0)));
+        af::array tiledGroupKey = af::tile(groupKeys(i, af::span), static_cast<unsigned int>(in.dims(0)));
         af::array valuesMask = af::allTrue(in(af::span, keyColumns) == tiledGroupKey, 1);
         values(i, af::span) += aggregationFunction(in(valuesMask, valuesColumns), 0);
     }
@@ -47,7 +47,7 @@ af::array tsa::regularization::groupBy(af::array in,
     // cannot be used inside
     // gfor(af::seq i, groupKeys.dims(0)) {
     for (int i = 0; i < groupKeys.dims(0); i++) {
-        af::array tiledGroupKey = af::tile(groupKeys(i, af::span), static_cast<const unsigned int>(in.dims(0)));
+        af::array tiledGroupKey = af::tile(groupKeys(i, af::span), static_cast<unsigned int>(in.dims(0)));
         af::array valuesMask = af::allTrue(in(af::span, keyColumns) == tiledGroupKey, 1);
         values(i) += aggregationFunction(in(valuesMask, valuesColumns), true, 0);
     }
@@ -71,7 +71,7 @@ af::array tsa::regularization::groupBy(af::array in, af::array (*aggregationFunc
     // cannot be used inside
     // gfor(af::seq i, groupKeys.dims(0)) {
     for (int i = 0; i < groupKeys.dims(0); i++) {
-        af::array tiledGroupKey = af::tile(groupKeys(i, af::span), static_cast<const unsigned int>(in.dims(0)));
+        af::array tiledGroupKey = af::tile(groupKeys(i, af::span), static_cast<unsigned int>(in.dims(0)));
         af::array valuesMask = af::allTrue(in(af::span, keyColumns) == tiledGroupKey, 1);
         values(i) += aggregationFunction(in(valuesMask, valuesColumns), 0);
     }

@@ -80,5 +80,5 @@ af::array manhattan(af::array tss);
  */
 af::array squaredEuclidean(af::array tss);
 
-};  // namespace distances
-};  // namespace tsa
+}  // namespace distances
+}  // namespace tsa

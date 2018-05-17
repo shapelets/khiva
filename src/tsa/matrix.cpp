@@ -97,14 +97,14 @@ af::array tsa::matrix::generateMask(long m, long batchSize, long batchStart, lon
         // tsLength + band size columns
         af::array identity = af::identity(std::max(batchSize, bandSize) + bandSize, tsLength + bandSize - 1);
         // Shifting the identity matrix to the batch start position
-        identity = af::shift(identity, 0, batchStart - tmp, 0);
+        identity = af::shift(identity, 0, static_cast<int>(batchStart - tmp), 0);
 
         // Calculating the band matrix using the convolve function
         af::array mask = af::convolve2(identity, af::constant(1, bandSize, bandSize)) > 0;
         mask = mask(af::seq(tmp, batchSize - 1 + tmp), af::seq(tsLength));
 
         // Tiling the same mask to all the time series
-        mask = af::tile(mask, 1, 1, nTimeSeries);
+        mask = af::tile(mask, 1, 1, static_cast<unsigned int>(nTimeSeries));
 
         return mask;
     } else {
@@ -112,12 +112,12 @@ af::array tsa::matrix::generateMask(long m, long batchSize, long batchStart, lon
         af::array tmp =
             af::transpose(af::join(0, af::constant(1, 2 * (bandSize - 1) + 1), af::constant(0, tsLength - 1)));
         for (int i = 0; i < batchSize; i++) {
-            af::array tmp2 = af::shift(tmp, 0, i + batchStart);
+            af::array tmp2 = af::shift(tmp, 0, i + static_cast<int>(batchStart));
             mask(i, af::span) = tmp2(af::seq(bandSize - 1, tsLength + bandSize - 2));
         }
 
         // Tiling the same mask to all the time series
-        mask = af::tile(mask, 1, 1, nTimeSeries);
+        mask = af::tile(mask, 1, 1, static_cast<unsigned int>(nTimeSeries));
 
         return mask;
     }
@@ -131,11 +131,13 @@ void tsa::matrix::calculateDistanceProfile(af::array qt, af::array a, af::array 
     long nTimeSeries = static_cast<long>(qt.dims(1));
 
     // Tiling the input data to match the batch size, the time series length and the number of time series
-    af::array a_tiled = af::tile(a, 1, 1, 1, batchSize);
-    af::array sum_q_tiled = af::tile(sum_q, tsLength, nTimeSeries);
-    af::array sum_q2_tiled = af::tile(sum_q2, tsLength, nTimeSeries);
-    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, batchSize);
-    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, batchSize);
+    af::array a_tiled = af::tile(a, 1, 1, 1, static_cast<unsigned int>(batchSize));
+    af::array sum_q_tiled =
+        af::tile(sum_q, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
+    af::array sum_q2_tiled =
+        af::tile(sum_q2, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
+    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
+    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
 
     // Required to avoid a division by zero when the standard deviation is zero
     double eps = (sigma_t_tiled.type() == 0) ? EPSILON * 1e4 : EPSILON;
@@ -171,11 +173,13 @@ void tsa::matrix::calculateDistanceProfile(af::array qt, af::array a, af::array 
     long nTimeSeries = static_cast<long>(qt.dims(1));
 
     // Tiling the input data to match the batch size, the time series length and the number of time series
-    af::array a_tiled = af::tile(a, 1, 1, 1, batchSize);
-    af::array sum_q_tiled = af::tile(sum_q, tsLength, nTimeSeries);
-    af::array sum_q2_tiled = af::tile(sum_q2, tsLength, nTimeSeries);
-    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, batchSize);
-    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, batchSize);
+    af::array a_tiled = af::tile(a, 1, 1, 1, static_cast<unsigned int>(batchSize));
+    af::array sum_q_tiled =
+        af::tile(sum_q, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
+    af::array sum_q2_tiled =
+        af::tile(sum_q2, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
+    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
+    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
 
     // Required to avoid a division by zero when the standard deviation is zero
     double eps = (sigma_t_tiled.type() == 0) ? EPSILON * 1e4 : EPSILON;
@@ -262,7 +266,7 @@ void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
 
         // Store all the subsequences of all the time series from t in input
         for (long j = 0; j < m; j++) {
-            input(j, af::span, af::span, af::span) =
+            input(static_cast<int>(j), af::span, af::span, af::span) =
                 af::reorder(tb(af::seq(i + j, i + j + iterationSize - 1), af::span), 2, 0, 1, 3);
         }
 
@@ -319,7 +323,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
 
         // Store all the subsequences of all the time series from t in input
         for (long j = 0; j < m; j++) {
-            input(j, af::span, af::span, af::span) =
+            input(static_cast<int>(j), af::span, af::span, af::span) =
                 af::reorder(tb(af::seq(i + j, i + j + iterationSizeB - 1), af::span), 2, 0, 1, 3);
         }
 
@@ -381,7 +385,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
                                   static_cast<double>(distance.dims(1)));
         af::array aux = af::transpose(toSum).as(idx.type());
         aux = af::moddims(aux, 1, idx.dims(1), idx.dims(2), 1);
-        aux = af::tile(aux, static_cast<const unsigned int>(idx.dims(0)));
+        aux = af::tile(aux, static_cast<unsigned int>(idx.dims(0)));
 
         // Adding the offset to the intermediate index
         idx += aux;
@@ -390,8 +394,8 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
         float sliceStride = static_cast<float>(dims[0]);
 
         // Offset inside the batch
-        af::array bidx =
-            af::tile(af::iota(af::dim4(dims[0])), 1, static_cast<const unsigned int>(idx.dims(1)), nTimeSeriesB);
+        af::array bidx = af::tile(af::iota(af::dim4(dims[0])), 1, static_cast<unsigned int>(idx.dims(1)),
+                                  static_cast<unsigned int>(nTimeSeriesB));
 
         // Flat array containing the real indices to obtain from the index profile
         af::array flatIndices = af::flat(idx * sliceStride + bidx);
@@ -483,7 +487,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
 
         // Store all the subsequences of all the time series from t in input
         for (long j = 0; j < m; j++) {
-            input(j, af::span, af::span, af::span) =
+            input(static_cast<int>(j), af::span, af::span, af::span) =
                 af::reorder(t(af::seq(i + j, i + j + iterationSizeB - 1), af::span), 2, 0, 1, 3);
         }
 
@@ -549,7 +553,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
         af::array toSum = af::seq(0, (nTimeSeries - 1) * static_cast<double>(distance.dims(1)),
                                   static_cast<double>(distance.dims(1)));
         af::array aux = af::transpose(toSum).as(idx.type());
-        aux = af::tile(aux, static_cast<const unsigned int>(idx.dims(0)));
+        aux = af::tile(aux, static_cast<unsigned int>(idx.dims(0)));
 
         // Adding the offset to the intermediate index
         idx += aux;
@@ -558,7 +562,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
         float sliceStride = static_cast<float>(dims[0]);
 
         // Offset inside the batch
-        af::array bidx = af::tile(af::iota(af::dim4(dims[0])), 1, nTimeSeries);
+        af::array bidx = af::tile(af::iota(af::dim4(dims[0])), 1, static_cast<unsigned int>(nTimeSeries));
 
         // Flat array containing the real indices to obtain from the index profile
         af::array flatIndices = af::flat(idx * sliceStride + bidx);

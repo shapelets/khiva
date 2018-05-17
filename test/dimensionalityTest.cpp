@@ -346,15 +346,15 @@ void visvalingam2() {
     }
 }
 
-TSA_TEST(DimensionalityTests, PAA, paa);
-TSA_TEST(DimensionalityTests, PAA_NORM, paaNorm);
-TSA_TEST(DimensionalityTests, PIP, pip);
-TSA_TEST(DimensionalityTests, PLABottomUp, plaBottomUp);
-TSA_TEST(DimensionalityTests, PLABottomUp2, plaBottomUp2);
-TSA_TEST(DimensionalityTests, PLASlidingWindow, plaSlidingWindow);
-TSA_TEST(DimensionalityTests, PLASlidingWindow2, plaSlidingWindow2);
-TSA_TEST(DimensionalityTests, RamerDouglasPeucker, ramerDouglasPeucker);
-TSA_TEST(DimensionalityTests, RamerDouglasPeucker2, ramerDouglasPeucker2);
-TSA_TEST(DimensionalityTests, SAX, sax);
-TSA_TEST(DimensionalityTests, Visvalingam, visvalingam);
-TSA_TEST(DimensionalityTests, Visvalingam2, visvalingam2);
+TSA_TEST(DimensionalityTests, PAA, paa)
+TSA_TEST(DimensionalityTests, PAA_NORM, paaNorm)
+TSA_TEST(DimensionalityTests, PIP, pip)
+TSA_TEST(DimensionalityTests, PLABottomUp, plaBottomUp)
+TSA_TEST(DimensionalityTests, PLABottomUp2, plaBottomUp2)
+TSA_TEST(DimensionalityTests, PLASlidingWindow, plaSlidingWindow)
+TSA_TEST(DimensionalityTests, PLASlidingWindow2, plaSlidingWindow2)
+TSA_TEST(DimensionalityTests, RamerDouglasPeucker, ramerDouglasPeucker)
+TSA_TEST(DimensionalityTests, RamerDouglasPeucker2, ramerDouglasPeucker2)
+TSA_TEST(DimensionalityTests, SAX, sax)
+TSA_TEST(DimensionalityTests, Visvalingam, visvalingam)
+TSA_TEST(DimensionalityTests, Visvalingam2, visvalingam2)

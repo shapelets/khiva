@@ -51,5 +51,6 @@ af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array
  */
 af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array &, const dim_t), int nColumnsKey = 1,
                   int nColumnsValue = 1);
-};  // namespace regularization
-};  // namespace tsa
+
+}  // namespace regularization
+}  // namespace tsa

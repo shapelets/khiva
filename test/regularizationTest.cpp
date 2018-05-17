@@ -69,10 +69,10 @@ void groupByDoubleKeyDoubleValueColumn() {
 
 // Testing only in the first available device
 TSA_TEST_BACKENDS(RegularizationTests, GroupBySingleKeyColumn, groupBySingleKeyColumn, true, true, true, false, false,
-                  false);
+                  false)
 TSA_TEST_BACKENDS(RegularizationTests, GroupByDoubleKeyColumn, groupByDoubleKeyColumn, true, true, true, false, false,
-                  false);
+                  false)
 TSA_TEST_BACKENDS(RegularizationTests, GroupByDoubleKeyColumn2, groupByDoubleKeyColumn2, true, true, true, false, false,
-                  false);
+                  false)
 TSA_TEST_BACKENDS(RegularizationTests, GroupByDoubleKeyDoubleValueColumn, groupByDoubleKeyDoubleValueColumn, true, true,
-                  true, false, false, false);
+                  true, false, false, false)

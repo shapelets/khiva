@@ -66,5 +66,5 @@ int getDevice();
  */
 int getDeviceCount();
 
-};  // namespace library
-};  // namespace tsa
+}  // namespace library
+}  // namespace tsa

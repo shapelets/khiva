@@ -98,9 +98,9 @@ void getDeviceCountTest() {
     }
 }
 
-TSA_TEST(LibraryTests, SetBackendTest, setBackendTest);
-TSA_TEST(LibraryTests, GetBackendTest, getBackendTest);
-TSA_TEST(LibraryTests, GetBackendsTest, getBackendsTest);
-TSA_TEST(LibraryTests, SetDeviceTest, setDeviceTest);
-TSA_TEST(LibraryTests, GetDeviceTest, getDeviceTest);
-TSA_TEST(LibraryTests, GetDeviceCountTest, getDeviceCountTest);
+TSA_TEST(LibraryTests, SetBackendTest, setBackendTest)
+TSA_TEST(LibraryTests, GetBackendTest, getBackendTest)
+TSA_TEST(LibraryTests, GetBackendsTest, getBackendsTest)
+TSA_TEST(LibraryTests, SetDeviceTest, setDeviceTest)
+TSA_TEST(LibraryTests, GetDeviceTest, getDeviceTest)
+TSA_TEST(LibraryTests, GetDeviceCountTest, getDeviceCountTest)

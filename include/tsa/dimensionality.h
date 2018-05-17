@@ -201,5 +201,5 @@ std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
  */
 af::array visvalingam(af::array pointList, int numPoints);
 
-};  // namespace dimensionality
-};  // namespace tsa
+}  // namespace dimensionality
+}  // namespace tsa

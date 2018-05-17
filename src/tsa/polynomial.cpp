@@ -25,11 +25,11 @@ af::array tsa::polynomial::polyfit(af::array x, af::array y, int deg) {
 
     af::array scale = af::max(af::sqrt(af::sum(lhs * lhs, 0)), EPSILON);
 
-    lhs /= af::tile(scale, static_cast<const unsigned int>(lhs.dims(0)));
+    lhs /= af::tile(scale, static_cast<unsigned int>(lhs.dims(0)));
 
     af::array c = tsa::linalg::lls(lhs, rhs);
     c = af::transpose(c);
-    c /= af::tile(scale, static_cast<const unsigned int>(c.dims(0)));
+    c /= af::tile(scale, static_cast<unsigned int>(c.dims(0)));
     c = af::transpose(c);
 
     return c;
@@ -43,7 +43,7 @@ af::array tsa::polynomial::roots(af::array pp) {
         p = p(p != 0);
 
         p = (-1 * p(af::seq(1, static_cast<double>(p.dims(0)) - 1), af::span)) /
-            af::tile(p(0, af::span), static_cast<const unsigned int>(p.dims(0)) - 1);
+            af::tile(p(0, af::span), static_cast<unsigned int>(p.dims(0)) - 1);
 
         float *coeffs = p.as(af::dtype::f32).host<float>();
 

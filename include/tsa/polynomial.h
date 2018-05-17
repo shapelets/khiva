@@ -37,5 +37,6 @@ af::array polyfit(af::array x, af::array y, int deg);
  * @return af::array Containing the roots of the polynomial.
  */
 af::array roots(af::array pp);
-};  // namespace polynomial
-};  // namespace tsa
+
+}  // namespace polynomial
+}  // namespace tsa

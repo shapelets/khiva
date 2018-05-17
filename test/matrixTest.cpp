@@ -479,19 +479,19 @@ void findBestDiscords() {
     ASSERT_EQ(subsequenceIndicesHost[1], 9);
 }
 
-TSA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct);
-TSA_TEST(MatrixTests, MeanStdev, meanStdev);
-TSA_TEST(MatrixTests, MeanStdevMEqualsLength, meanStdevMEqualsLength);
-TSA_TEST(MatrixTests, GenerateMask, generateMask);
-TSA_TEST(MatrixTests, CalculateDistanceProfile, calculateDistanceProfile);
-TSA_TEST(MatrixTests, CalculateDistanceProfileMiddle, calculateDistanceProfileMiddle);
-TSA_TEST(MatrixTests, MassIgnoreTrivial, massIgnoreTrivial);
-TSA_TEST(MatrixTests, MassConsiderTrivial, massConsiderTrivial);
-TSA_TEST(MatrixTests, StompIgnoreTrivialOneSeries, stompIgnoreTrivialOneSeries);
-TSA_TEST(MatrixTests, StompIgnoreTrivialMultipleSeries, stompIgnoreTrivialMultipleSeries);
-TSA_TEST(MatrixTests, StompConsiderTrivialOneSeries, stompConsiderTrivialOneSeries);
-TSA_TEST(MatrixTests, StompConsiderTrivialOneSeries2, stompConsiderTrivialOneSeries2);
-TSA_TEST(MatrixTests, StompConsiderTrivialMultipleSeries, stompConsiderTrivialMultipleSeries);
-TSA_TEST(MatrixTests, StompConsiderTrivialMultipleSeriesBigM, stompConsiderTrivialMultipleSeriesBigM);
-TSA_TEST(MatrixTests, FindBestMotifs, findBestMotifs);
-TSA_TEST(MatrixTests, FindBestDiscords, findBestDiscords);
+TSA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct)
+TSA_TEST(MatrixTests, MeanStdev, meanStdev)
+TSA_TEST(MatrixTests, MeanStdevMEqualsLength, meanStdevMEqualsLength)
+TSA_TEST(MatrixTests, GenerateMask, generateMask)
+TSA_TEST(MatrixTests, CalculateDistanceProfile, calculateDistanceProfile)
+TSA_TEST(MatrixTests, CalculateDistanceProfileMiddle, calculateDistanceProfileMiddle)
+TSA_TEST(MatrixTests, MassIgnoreTrivial, massIgnoreTrivial)
+TSA_TEST(MatrixTests, MassConsiderTrivial, massConsiderTrivial)
+TSA_TEST(MatrixTests, StompIgnoreTrivialOneSeries, stompIgnoreTrivialOneSeries)
+TSA_TEST(MatrixTests, StompIgnoreTrivialMultipleSeries, stompIgnoreTrivialMultipleSeries)
+TSA_TEST(MatrixTests, StompConsiderTrivialOneSeries, stompConsiderTrivialOneSeries)
+TSA_TEST(MatrixTests, StompConsiderTrivialOneSeries2, stompConsiderTrivialOneSeries2)
+TSA_TEST(MatrixTests, StompConsiderTrivialMultipleSeries, stompConsiderTrivialMultipleSeries)
+TSA_TEST(MatrixTests, StompConsiderTrivialMultipleSeriesBigM, stompConsiderTrivialMultipleSeriesBigM)
+TSA_TEST(MatrixTests, FindBestMotifs, findBestMotifs)
+TSA_TEST(MatrixTests, FindBestDiscords, findBestDiscords)

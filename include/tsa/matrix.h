@@ -174,5 +174,6 @@ void findBestNMotifs(af::array profile, af::array index, long n, af::array &moti
  */
 void findBestNDiscords(af::array profile, af::array index, long n, af::array &discords, af::array &discordsIndices,
                        af::array &subsequenceIndices);
-};  // namespace matrix
-};  // namespace tsa
+
+}  // namespace matrix
+}  // namespace tsa

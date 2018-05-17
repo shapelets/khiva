@@ -127,15 +127,15 @@ bool isPointInDesiredList(tsa::dimensionality::Point point, std::vector<tsa::dim
  */
 std::pair<int, int> getSegmentFromSelected(tsa::dimensionality::Point point,
                                            std::vector<tsa::dimensionality::Point> selected) {
-    int lower, upper;
+    int lower = 0, upper = 0;
     // We do not check the first element, as it is fixed and set to the first element of the time series
     size_t i = 0;
     bool rebased = false;
     while (!rebased && (i < selected.size() - 1)) {
         // We check points until point.first > selected[i]
         if (point.first > selected[i].first) {
-            lower = i;
-            upper = i + 1;
+            lower = static_cast<int>(i);
+            upper = static_cast<int>(i + 1);
         } else {
             rebased = true;
         }
@@ -363,7 +363,8 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::PLASlidingWindow(
     // We haven´t explored the whole time series
     while (anchor < (ts.size() - 1)) {
         i = 1;
-        while (((anchor + i) < ts.size()) && (calculateError(ts, anchor, anchor + i) < maxError)) {
+        while (((anchor + i) < ts.size()) &&
+               (calculateError(ts, static_cast<int>(anchor), static_cast<int>(anchor + i)) < maxError)) {
             i = i + 1;
         }
 
@@ -537,7 +538,7 @@ std::vector<tsa::dimensionality::Point> tsa::dimensionality::visvalingam(
             float area = computeTriangleArea(out[p], out[p + 1], out[p + 2]);
             if (area < min_area) {
                 min_area = area;
-                candidate_point = p + 1;
+                candidate_point = static_cast<int>(p + 1);
             }
         }
         std::vector<tsa::dimensionality::Point>::iterator nth = out.begin() + candidate_point;

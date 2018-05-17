@@ -169,13 +169,13 @@ void quantilesCut7() {
     }
 }
 
-TSA_TEST(StatisticsTests, CovarianceUnbiased, covarianceUnbiased);
-TSA_TEST(StatisticsTests, CovarianceBiased, covarianceBiased);
-TSA_TEST(StatisticsTests, Moment, moment);
-TSA_TEST(StatisticsTests, SampleStdev, sampleStdev);
-TSA_TEST(StatisticsTests, Kurtosis, kurtosis);
-TSA_TEST(StatisticsTests, Skewness, skewness);
-TSA_TEST(StatisticsTests, Quantile, quantile);
-TSA_TEST(StatisticsTests, QuantilesCut2, quantilesCut2);
-TSA_TEST(StatisticsTests, QuantilesCut3, quantilesCut3);
-TSA_TEST(StatisticsTests, QuantilesCut7, quantilesCut7);
+TSA_TEST(StatisticsTests, CovarianceUnbiased, covarianceUnbiased)
+TSA_TEST(StatisticsTests, CovarianceBiased, covarianceBiased)
+TSA_TEST(StatisticsTests, Moment, moment)
+TSA_TEST(StatisticsTests, SampleStdev, sampleStdev)
+TSA_TEST(StatisticsTests, Kurtosis, kurtosis)
+TSA_TEST(StatisticsTests, Skewness, skewness)
+TSA_TEST(StatisticsTests, Quantile, quantile)
+TSA_TEST(StatisticsTests, QuantilesCut2, quantilesCut2)
+TSA_TEST(StatisticsTests, QuantilesCut3, quantilesCut3)
+TSA_TEST(StatisticsTests, QuantilesCut7, quantilesCut7)

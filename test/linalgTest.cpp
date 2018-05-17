@@ -61,6 +61,6 @@ void llsMoreVariables() {
 }
 
 // Not testing in CPU because the static linking of OpenMP that Arrayfire does makes the test crash
-TSA_TEST_BACKENDS(LinAlgTests, Lls, lls, true, true, false, true, true, false);
-TSA_TEST_BACKENDS(LinAlgTests, LlsMoreEquations, llsMoreEquations, true, true, false, true, true, false);
-TSA_TEST_BACKENDS(LinAlgTests, LlsMoreVariables, llsMoreVariables, true, true, false, true, true, false);
+TSA_TEST_BACKENDS(LinAlgTests, Lls, lls, true, true, false, true, true, false)
+TSA_TEST_BACKENDS(LinAlgTests, LlsMoreEquations, llsMoreEquations, true, true, false, true, true, false)
+TSA_TEST_BACKENDS(LinAlgTests, LlsMoreVariables, llsMoreVariables, true, true, false, true, true, false)

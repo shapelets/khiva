@@ -27,5 +27,6 @@ namespace regression {
  */
 void linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue,
             af::array &stderrest);
-};  // namespace regression
-};  // namespace tsa
+
+}  // namespace regression
+}  // namespace tsa

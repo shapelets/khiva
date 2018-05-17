@@ -150,11 +150,11 @@ void zNormInPlace() {
     }
 }
 
-TSA_TEST(NormalizationTests, DecimalScalingNorm, decimalScalingNorm);
-TSA_TEST(NormalizationTests, DecimalScalingNormInPlace, decimalScalingNormInPlace);
-TSA_TEST(NormalizationTests, MaxMinNorm, maxMinNorm);
-TSA_TEST(NormalizationTests, MaxMinNormInPlace, maxMinNormInPlace);
-TSA_TEST(NormalizationTests, MeanNorm, meanNorm);
-TSA_TEST(NormalizationTests, MeanNormInPlace, meanNormInPlace);
-TSA_TEST(NormalizationTests, ZNorm, zNorm);
-TSA_TEST(NormalizationTests, ZNormInPlace, zNormInPlace);
+TSA_TEST(NormalizationTests, DecimalScalingNorm, decimalScalingNorm)
+TSA_TEST(NormalizationTests, DecimalScalingNormInPlace, decimalScalingNormInPlace)
+TSA_TEST(NormalizationTests, MaxMinNorm, maxMinNorm)
+TSA_TEST(NormalizationTests, MaxMinNormInPlace, maxMinNormInPlace)
+TSA_TEST(NormalizationTests, MeanNorm, meanNorm)
+TSA_TEST(NormalizationTests, MeanNormInPlace, meanNormInPlace)
+TSA_TEST(NormalizationTests, ZNorm, zNorm)
+TSA_TEST(NormalizationTests, ZNormInPlace, zNormInPlace)

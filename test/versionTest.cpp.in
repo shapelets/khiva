@@ -12,4 +12,4 @@
 // Simple test, does not use gmock
 void versionTest() { ASSERT_STREQ(tsa::version(), "@VERSION_SHORT@"); }
 
-TSA_TEST(VersionTest, VersionTest, versionTest);
+TSA_TEST(VersionTest, VersionTest, versionTest)

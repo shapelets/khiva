@@ -58,6 +58,6 @@ void roots() {
 }
 
 // Not testing in CPU because the static linking of OpenMP that Arrayfire does makes the test crash
-TSA_TEST_BACKENDS(PolynomialTests, Polyfit1, polyfit1, true, true, false, true, true, false);
-TSA_TEST_BACKENDS(PolynomialTests, Polyfit3, polyfit3, true, true, false, true, true, false);
-TSA_TEST_BACKENDS(PolynomialTests, Roots, roots, true, true, false, true, true, false);
+TSA_TEST_BACKENDS(PolynomialTests, Polyfit1, polyfit1, true, true, false, true, true, false)
+TSA_TEST_BACKENDS(PolynomialTests, Polyfit3, polyfit3, true, true, false, true, true, false)
+TSA_TEST_BACKENDS(PolynomialTests, Roots, roots, true, true, false, true, true, false)

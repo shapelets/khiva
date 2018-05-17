@@ -227,9 +227,9 @@ void squaredEuclidean() {
     ASSERT_EQ(0.0f, hostResult[8]);
 }
 
-TSA_TEST(DistanceTests, DTW, dtw);
-TSA_TEST(DistanceTests, DTW2, dtw2);
-TSA_TEST(DistanceTests, Euclidean, euclidean);
-TSA_TEST(DistanceTests, Hamming, hamming);
-TSA_TEST(DistanceTests, Manhattam, manhattan);
-TSA_TEST(DistanceTests, SquaredEuclidean, squaredEuclidean);
+TSA_TEST(DistanceTests, DTW, dtw)
+TSA_TEST(DistanceTests, DTW2, dtw2)
+TSA_TEST(DistanceTests, Euclidean, euclidean)
+TSA_TEST(DistanceTests, Hamming, hamming)
+TSA_TEST(DistanceTests, Manhattam, manhattan)
+TSA_TEST(DistanceTests, SquaredEuclidean, squaredEuclidean)

@@ -943,5 +943,5 @@ af::array variance(af::array tss);
  */
 af::array varianceLargerThanStandardDeviation(af::array tss);
 
-};  // namespace features
-};  // namespace tsa
+}  // namespace features
+}  // namespace tsa

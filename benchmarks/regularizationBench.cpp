@@ -90,4 +90,4 @@ void cpuBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks);
+TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

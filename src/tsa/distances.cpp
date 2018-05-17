@@ -41,7 +41,7 @@ double tsa::distances::dtw(std::vector<double> t0, std::vector<double> t1) {
 }
 
 af::array distance(af::array a, af::array bss) {
-    return af::sqrt(af::pow(af::tile(a, 1, static_cast<const unsigned int>(bss.dims(1))) - bss, 2));
+    return af::sqrt(af::pow(af::tile(a, 1, static_cast<unsigned int>(bss.dims(1))) - bss, 2));
 }
 
 af::array dtwInternal(af::array a, af::array bss) {

@@ -86,5 +86,6 @@ af::array quantile(af::array tss, af::array q, float precision = 100000000);
  * the end in the second category.
  */
 af::array quantilesCut(af::array tss, float quantiles, float precision = 0.00000001);
-};  // namespace statistics
-};  // namespace tsa
+
+}  // namespace statistics
+}  // namespace tsa

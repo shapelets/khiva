@@ -325,12 +325,12 @@ std::vector<int> getIndexMaxColums(std::vector<T> r) {
 
     for (unsigned long i = 0; i < r.size(); i++) {
         if (r[i] == 1) {
-            result.push_back(i);
+            result.push_back(static_cast<int>(i));
         }
     }
 
     return result;
 }
 
-};  // namespace array
-};  // namespace tsa
+}  // namespace array
+}  // namespace tsa
