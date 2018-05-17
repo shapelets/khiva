@@ -89,21 +89,38 @@ void tsa::matrix::meanStdev(af::array t, long m, af::array &mean, af::array &std
 af::array tsa::matrix::generateMask(long m, long batchSize, long batchStart, long tsLength, long nTimeSeries) {
     long bandSize = static_cast<long>(std::ceil(m / 2.0)) + 1;
 
-    int tmp = batchStart > 0;
-    // Identity matrix of batch or band size (the max of both) rows and
-    // tsLength + band size columns
-    af::array identity = af::identity(std::max(batchSize, bandSize) + bandSize, tsLength + bandSize - 1);
-    // Shifting the identity matrix to the batch start position
-    identity = af::shift(identity, 0, batchStart - tmp, 0);
+    if (m * tsLength <= 2097152) {
+        // Limit the faster method using convolve for up to the previous number of points which uses approximately
+        // 1.42GB of memory
+        int tmp = batchStart > 0;
+        // Identity matrix of batch or band size (the max of both) rows and
+        // tsLength + band size columns
+        af::array identity = af::identity(std::max(batchSize, bandSize) + bandSize, tsLength + bandSize - 1);
+        // Shifting the identity matrix to the batch start position
+        identity = af::shift(identity, 0, batchStart - tmp, 0);
 
-    // Calculating the band matrix using the convolve function
-    af::array mask = af::convolve2(identity, af::constant(1, bandSize, bandSize)) > 0;
-    mask = mask(af::seq(tmp, batchSize - 1 + tmp), af::seq(tsLength));
+        // Calculating the band matrix using the convolve function
+        af::array mask = af::convolve2(identity, af::constant(1, bandSize, bandSize)) > 0;
+        mask = mask(af::seq(tmp, batchSize - 1 + tmp), af::seq(tsLength));
 
-    // Tiling the same mask to all the time series
-    mask = af::tile(mask, 1, 1, nTimeSeries);
+        // Tiling the same mask to all the time series
+        mask = af::tile(mask, 1, 1, nTimeSeries);
 
-    return mask;
+        return mask;
+    } else {
+        af::array mask = af::array(batchSize, tsLength);
+        af::array tmp =
+            af::transpose(af::join(0, af::constant(1, 2 * (bandSize - 1) + 1), af::constant(0, tsLength - 1)));
+        for (int i = 0; i < batchSize; i++) {
+            af::array tmp2 = af::shift(tmp, 0, i + batchStart);
+            mask(i, af::span) = tmp2(af::seq(bandSize - 1, tsLength + bandSize - 2));
+        }
+
+        // Tiling the same mask to all the time series
+        mask = af::tile(mask, 1, 1, nTimeSeries);
+
+        return mask;
+    }
 }
 
 void tsa::matrix::calculateDistanceProfile(af::array qt, af::array a, af::array sum_q, af::array sum_q2,

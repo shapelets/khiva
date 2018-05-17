@@ -338,7 +338,7 @@ void cudaBenchmarks() {
 
     BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{2 << 10, 8 << 10}, {128, 512}, {16 << 9, 32 << 9}})
+        ->Ranges({{2 << 10, 128 << 10}, {128, 1024}, {16 << 9, 32 << 9}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
@@ -395,7 +395,7 @@ void openclBenchmarks() {
 
     BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{2 << 10, 8 << 10}, {128, 512}, {16 << 9, 32 << 9}})
+        ->Ranges({{2 << 10, 128 << 10}, {128, 1024}, {16 << 9, 32 << 9}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
@@ -452,7 +452,7 @@ void cpuBenchmarks() {
 
     BENCHMARK_TEMPLATE(GenerateMask, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{2 << 10, 8 << 10}, {128, 512}, {16 << 9, 32 << 9}})
+        ->Ranges({{2 << 10, 128 << 10}, {128, 1024}, {16 << 9, 32 << 9}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
