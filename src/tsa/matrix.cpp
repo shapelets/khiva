@@ -330,14 +330,15 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
         af::array distance = af::array(0, ta.type());
         af::array pidx = af::array(0, af::dtype::u32);
 
+        long iterationSizeA = std::min(chunkSizeA, na);
+        long end = 0;
+
         // Splitting the reference time series
-        for (long k = 0; k < (na - m + 1); k += chunkSizeA) {
-            // Start of the given time series chunk
-            long start = k / chunkSizeA * (chunkSizeA - m + 1);
+        for (long start = 0; end < na - 1; start += (iterationSizeA - m + 1)) {
             // The iteration space cannot be greater than what is left (na - start)
-            long iterationSizeA = std::min(chunkSizeA, na - start);
+            iterationSizeA = std::min(chunkSizeA, na - start);
             // End of the given time series chunk
-            long end = start + iterationSizeA - 1;
+            end = start + iterationSizeA - 1;
 
             // Reference time series chunk to compare to
             af::array taChunk = ta(af::seq(start, end), af::span);
@@ -497,14 +498,15 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
         // Calculating the mask required to filter the trivial matches
         af::array mask = tsa::matrix::generateMask(m, iterationSizeB, i, n - m + 1, nTimeSeries);
 
+        long iterationSizeA = std::min(chunkSizeA, n);
+        long end = 0;
+
         // Splitting the reference time series
-        for (long k = 0; k < (n - m + 1); k += chunkSizeA) {
-            // Start of the given time series chunk
-            long start = k / chunkSizeA * (chunkSizeA - m + 1);
+        for (long start = 0; end < n - 1; start += (iterationSizeA - m + 1)) {
             // The iteration space cannot be greater than what is left (na - start)
-            long iterationSizeA = std::min(chunkSizeA, n - start);
+            iterationSizeA = std::min(chunkSizeA, n - start);
             // End of the given time series chunk
-            long end = start + iterationSizeA - 1;
+            end = start + iterationSizeA - 1;
 
             // Reference time series chunk to compare to
             af::array tChunk = t(af::seq(start, end), af::span);
