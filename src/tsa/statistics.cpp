@@ -15,19 +15,6 @@ af::array tsa::statistics::covariance(af::array tss, bool unbiased) {
     return af::reorder(result(0, af::span, af::span), 1, 2, 0, 3);
 }
 
-af::array tsa::statistics::moment(af::array tss, int k) {
-    double n = static_cast<double>(tss.dims(0));
-
-    return af::sum(af::pow(tss, k), 0) / n;
-}
-
-af::array tsa::statistics::sampleStdev(af::array tss) {
-    double n = static_cast<double>(tss.dims(0));
-    af::array mean = af::mean(tss, 0);
-
-    return af::sqrt(af::sum(af::pow(tss - af::tile(mean, static_cast<unsigned int>(tss.dims(0))), 2), 0) / (n - 1));
-}
-
 af::array tsa::statistics::kurtosis(af::array tss) {
     double n = static_cast<double>(tss.dims(0));
 
@@ -40,12 +27,20 @@ af::array tsa::statistics::kurtosis(af::array tss) {
     return a * b - c;
 }
 
-af::array tsa::statistics::skewness(af::array tss) {
-    float n = static_cast<float>(tss.dims(0));
-    af::array tssMinusMean = (tss - af::tile(af::mean(tss, 0), static_cast<unsigned int>(tss.dims(0))));
-    af::array m3 = tsa::statistics::moment(tssMinusMean, 3);
-    af::array s3 = af::pow(tsa::statistics::sampleStdev(tss), 3);
-    return (std::pow(n, 2.0) / ((n - 1) * (n - 2))) * m3 / s3;
+af::array tsa::statistics::moment(af::array tss, int k) {
+    double n = static_cast<double>(tss.dims(0));
+
+    return af::sum(af::pow(tss, k), 0) / n;
+}
+
+af::array tsa::statistics::ljungBox(af::array tss, long lags) {
+    long n = tss.dims(0);
+    const double e = 2;
+    af::array ac = tsa::features::autoCorrelation(tss, lags + 1);
+    af::array acp = af::pow(ac(af::seq(1, af::end), af::span), e);
+    af::array r = af::range(acp.dims(0), acp.dims(1), acp.dims(2), acp.dims(3)) + 1;
+    af::array d = acp / (n - r);
+    return af::sum(d) * n * (n + 2);
 }
 
 af::array tsa::statistics::quantile(af::array tss, af::array q, float precision) {
@@ -98,4 +93,19 @@ af::array tsa::statistics::quantilesCut(af::array tss, float quantiles, float pr
     }
 
     return result;
+}
+
+af::array tsa::statistics::sampleStdev(af::array tss) {
+    double n = static_cast<double>(tss.dims(0));
+    af::array mean = af::mean(tss, 0);
+
+    return af::sqrt(af::sum(af::pow(tss - af::tile(mean, static_cast<unsigned int>(tss.dims(0))), 2), 0) / (n - 1));
+}
+
+af::array tsa::statistics::skewness(af::array tss) {
+    float n = static_cast<float>(tss.dims(0));
+    af::array tssMinusMean = (tss - af::tile(af::mean(tss, 0), static_cast<unsigned int>(tss.dims(0))));
+    af::array m3 = tsa::statistics::moment(tssMinusMean, 3);
+    af::array s3 = af::pow(tsa::statistics::sampleStdev(tss), 3);
+    return (std::pow(n, 2.0) / ((n - 1) * (n - 2))) * m3 / s3;
 }

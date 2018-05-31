@@ -28,45 +28,6 @@ void Covariance(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
-void Moment(benchmark::State &state) {
-    af::setBackend(BE);
-    af::setDevice(D);
-
-    auto n = state.range(0);
-    auto m = state.range(1);
-    auto k = state.range(2);
-
-    auto t = af::randu(n, m, f64);
-
-    af::sync();
-    while (state.KeepRunning()) {
-        auto moment = tsa::statistics::moment(t, k);
-        moment.eval();
-        af::sync();
-    }
-    addMemoryCounters(state);
-}
-
-template <af::Backend BE, int D>
-void SampleStdev(benchmark::State &state) {
-    af::setBackend(BE);
-    af::setDevice(D);
-
-    auto n = state.range(0);
-    auto m = state.range(1);
-
-    auto t = af::randu(n, m, f64);
-
-    af::sync();
-    while (state.KeepRunning()) {
-        auto sampleStdev = tsa::statistics::sampleStdev(t);
-        sampleStdev.eval();
-        af::sync();
-    }
-    addMemoryCounters(state);
-}
-
-template <af::Backend BE, int D>
 void Kurtosis(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -86,19 +47,39 @@ void Kurtosis(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
-void Skewness(benchmark::State &state) {
+void LjungBox(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
 
     auto n = state.range(0);
     auto m = state.range(1);
+    auto lag = state.range(2);
+
+    auto t = af::randu(n, m, f64);
+    af::sync();
+    while (state.KeepRunning()) {
+        auto ljungBox = tsa::statistics::ljungBox(t, lag);
+        ljungBox.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
+void Moment(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+    auto k = state.range(2);
 
     auto t = af::randu(n, m, f64);
 
     af::sync();
     while (state.KeepRunning()) {
-        auto kurtosis = tsa::statistics::skewness(t);
-        kurtosis.eval();
+        auto moment = tsa::statistics::moment(t, k);
+        moment.eval();
         af::sync();
     }
     addMemoryCounters(state);
@@ -146,20 +127,48 @@ void QuantilesCut(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
+template <af::Backend BE, int D>
+void SampleStdev(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto sampleStdev = tsa::statistics::sampleStdev(t);
+        sampleStdev.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
+void Skewness(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto kurtosis = tsa::statistics::skewness(t);
+        kurtosis.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
 void cudaBenchmarks() {
     BENCHMARK_TEMPLATE(Covariance, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 32 << 10}, {1, 16}})
-        ->Unit(benchmark::TimeUnit::kMicrosecond);
-
-    BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
-        ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
-        ->Unit(benchmark::TimeUnit::kMicrosecond);
-
-    BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
-        ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
@@ -167,9 +176,14 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(Skewness, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(LjungBox, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(Quantile, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
@@ -181,6 +195,16 @@ void cudaBenchmarks() {
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {2, 8}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Skewness, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
 void openclBenchmarks() {
@@ -189,24 +213,19 @@ void openclBenchmarks() {
         ->Ranges({{1 << 10, 32 << 10}, {1, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
-        ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
-        ->Unit(benchmark::TimeUnit::kMicrosecond);
-
-    BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
-        ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
-        ->Unit(benchmark::TimeUnit::kMicrosecond);
-
     BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(Skewness, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(LjungBox, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(Quantile, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
@@ -218,6 +237,16 @@ void openclBenchmarks() {
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {2, 8}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Skewness, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
 void cpuBenchmarks() {
@@ -226,24 +255,19 @@ void cpuBenchmarks() {
         ->Ranges({{1 << 10, 32 << 10}, {1, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
-        ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
-        ->Unit(benchmark::TimeUnit::kMicrosecond);
-
-    BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
-        ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
-        ->Unit(benchmark::TimeUnit::kMicrosecond);
-
     BENCHMARK_TEMPLATE(Kurtosis, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(Skewness, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(LjungBox, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Ranges({{1 << 10, 512 << 10}, {32, 256}, {32, 256}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Moment, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {1, 4}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(Quantile, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
@@ -254,6 +278,16 @@ void cpuBenchmarks() {
     BENCHMARK_TEMPLATE(QuantilesCut, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 512 << 10}, {16, 32}, {2, 8}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(SampleStdev, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(Skewness, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 512 << 10}, {16, 32}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 

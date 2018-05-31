@@ -8,6 +8,20 @@
 #include <tsa/statistics.h>
 #include "tsaTest.h"
 
+void covarianceBiased() {
+    float dataX[] = {-2.1f, -1, 4.3f, 3, 1.1f, 0.12f, 3, 1.1f, 0.12f};
+    af::array tss(3, 3, dataX);
+
+    float dataExpected[] = {7.80666667f, -2.85733333f, -2.85733333f, -2.85733333f, 1.42942222f,
+                            1.42942222f, -2.85733333f, 1.42942222f,  1.42942222f};
+
+    float *result = tsa::statistics::covariance(tss, false).host<float>();
+
+    for (int i = 0; i < 9; i++) {
+        ASSERT_NEAR(dataExpected[i], result[i], EPSILON);
+    }
+}
+
 void covarianceUnbiased() {
     float dataX[] = {-2.1f, -1, 4.3f, 3, 1.1f, 0.12f, 3, 1.1f, 0.12f};
     af::array tss(3, 3, dataX);
@@ -22,18 +36,29 @@ void covarianceUnbiased() {
     }
 }
 
-void covarianceBiased() {
-    float dataX[] = {-2.1f, -1, 4.3f, 3, 1.1f, 0.12f, 3, 1.1f, 0.12f};
-    af::array tss(3, 3, dataX);
+void kurtosis() {
+    float data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
+    af::array tss(6, 2, data);
 
-    float dataExpected[] = {7.80666667f, -2.85733333f, -2.85733333f, -2.85733333f, 1.42942222f,
-                            1.42942222f, -2.85733333f, 1.42942222f,  1.42942222f};
+    float dataExpected[] = {-1.2f, -2.66226722f};
 
-    float *result = tsa::statistics::covariance(tss, false).host<float>();
+    float *result = tsa::statistics::kurtosis(tss).host<float>();
 
-    for (int i = 0; i < 9; i++) {
-        ASSERT_NEAR(dataExpected[i], result[i], EPSILON);
+    for (int i = 0; i < 2; i++) {
+        ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e2);
     }
+}
+
+void ljungBox() {
+    float data[] = {0, 1, 2, 3, 4, 5, 6, 7};
+    af::array tss(4, 2, data);
+
+    af::array result = tsa::statistics::ljungBox(tss, 3);
+    float *calculated = result.host<float>();
+
+    float expected[] = {6.4400f, 6.4400f};
+    ASSERT_NEAR(expected[0], calculated[0], EPSILON);
+    ASSERT_NEAR(expected[1], calculated[1], EPSILON);
 }
 
 void moment() {
@@ -54,44 +79,6 @@ void moment() {
 
     ASSERT_NEAR(result[0], dataExpected, EPSILON * 1e2);
     ASSERT_NEAR(result[1], dataExpected, EPSILON * 1e2);
-}
-
-void sampleStdev() {
-    float data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
-    af::array tss(6, 2, data);
-
-    float dataExpected[] = {1.870828693f, 12.988456413f};
-
-    float *result = tsa::statistics::sampleStdev(tss).host<float>();
-
-    ASSERT_NEAR(result[0], dataExpected[0], EPSILON);
-    ASSERT_NEAR(result[1], dataExpected[1], EPSILON);
-}
-
-void kurtosis() {
-    float data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
-    af::array tss(6, 2, data);
-
-    float dataExpected[] = {-1.2f, -2.66226722f};
-
-    float *result = tsa::statistics::kurtosis(tss).host<float>();
-
-    for (int i = 0; i < 2; i++) {
-        ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e2);
-    }
-}
-
-void skewness() {
-    float data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
-    af::array tss(6, 2, data);
-
-    float dataExpected[] = {0.0f, 0.236177069879499f};
-
-    float *result = tsa::statistics::skewness(tss).host<float>();
-
-    for (int i = 0; i < 2; i++) {
-        ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e2);
-    }
 }
 
 void quantile() {
@@ -169,13 +156,39 @@ void quantilesCut7() {
     }
 }
 
-TSA_TEST(StatisticsTests, CovarianceUnbiased, covarianceUnbiased)
+void sampleStdev() {
+    float data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
+    af::array tss(6, 2, data);
+
+    float dataExpected[] = {1.870828693f, 12.988456413f};
+
+    float *result = tsa::statistics::sampleStdev(tss).host<float>();
+
+    ASSERT_NEAR(result[0], dataExpected[0], EPSILON);
+    ASSERT_NEAR(result[1], dataExpected[1], EPSILON);
+}
+
+void skewness() {
+    float data[] = {0, 1, 2, 3, 4, 5, 2, 2, 2, 20, 30, 25};
+    af::array tss(6, 2, data);
+
+    float dataExpected[] = {0.0f, 0.236177069879499f};
+
+    float *result = tsa::statistics::skewness(tss).host<float>();
+
+    for (int i = 0; i < 2; i++) {
+        ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e2);
+    }
+}
+
 TSA_TEST(StatisticsTests, CovarianceBiased, covarianceBiased)
-TSA_TEST(StatisticsTests, Moment, moment)
-TSA_TEST(StatisticsTests, SampleStdev, sampleStdev)
+TSA_TEST(StatisticsTests, CovarianceUnbiased, covarianceUnbiased)
 TSA_TEST(StatisticsTests, Kurtosis, kurtosis)
-TSA_TEST(StatisticsTests, Skewness, skewness)
+TSA_TEST(StatisticsTests, LjungBox, ljungBox)
+TSA_TEST(StatisticsTests, Moment, moment)
 TSA_TEST(StatisticsTests, Quantile, quantile)
 TSA_TEST(StatisticsTests, QuantilesCut2, quantilesCut2)
 TSA_TEST(StatisticsTests, QuantilesCut3, quantilesCut3)
 TSA_TEST(StatisticsTests, QuantilesCut7, quantilesCut7)
+TSA_TEST(StatisticsTests, SampleStdev, sampleStdev)
+TSA_TEST(StatisticsTests, Skewness, skewness)

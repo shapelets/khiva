@@ -118,8 +118,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_skewness(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantile(JNIEnv *env, jobject, jlong ref,
-                                                                       jlong ref_q, jfloat precision) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
+                                                                       jfloat precision) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -162,6 +162,28 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantilesCut(JNIEn
     tmp[1] = (jlong)af_p;
 
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_ljungBox(JNIEnv *env, jobject, jlong ref, jlong lags) {
+    const jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, tsa::statistics::ljungBox(var, lags).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+
     return pointers;
 }
 
