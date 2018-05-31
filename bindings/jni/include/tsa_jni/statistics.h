@@ -42,9 +42,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_kurtosis(JNIEnv *e
  * The test statistic is:
  *
  * \f[
- *
- * Q = n\left(n+2\right)\sum_{k=1}^h\frac{\hat{\rho}^2_k}{n-k} </math>
- *
+ * Q = n\left(n+2\right)\sum_{k=1}^h\frac{\hat{\rho}^2_k}{n-k}
  * \f]
  *
  * where ''n'' is the sample size, \f$\hat{\rho}k \f$ is the sample autocorrelation at lag ''k'', and ''h'' is the
@@ -52,9 +50,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_kurtosis(JNIEnv *e
  * \f$\alpha\f$, the \f$critical region\f$ for rejection of the hypothesis of randomness is:
  *
  * \f[
- *
  * Q > \chi_{1-\alpha,h}^2
- *
  * \f]
  *
  * where \f$ \chi_{1-\alpha,h}^2 \f$ is the \f$\alpha\f$-quantile of the chi-squared distribution with ''h'' degrees of
