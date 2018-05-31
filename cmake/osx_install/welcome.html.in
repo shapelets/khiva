@@ -1,0 +1,27 @@
+<html>
+<body>
+    <h1>Welcome to TSA ${VERSION_SHORT}</h1>
+
+    <p>
+    TSA is an open source C++ library which focus on providing efficient
+    algorithms to perform analytics over time series of data. It can be
+    used to extract insights from one or a group of time series.
+    </p>
+
+    <p> 
+    The large number of available methods allow us to understand the nature
+    of each time series.
+    </p>
+
+    <p>
+    Based on that analytics, the user can reduce dimensionality, find out
+    recurrent motifs or discords, understand the seasonality or trend from
+    a given time series, forecasting and detect anomalies.
+    </p>
+
+    <p>
+    Follow these steps to install the TSA library.
+    </p>
+</body>
+
+</html>

@@ -1,4 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
+PROJECT(TSA
+    LANGUAGES C CXX)
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Using C++ 11
@@ -26,30 +28,30 @@ SET(TSALIB_BASE_DIR ${PROJECT_SOURCE_DIR})
 # Define source directory
 SET(TSALIB_SRC "${TSALIB_BASE_DIR}/src")
 # Define include directory
-SET(TSALIB_INC "${TSALIB_BASE_DIR}/include")
+SET(TSALIB_INC "${TSALIB_BASE_DIR}/include/")
 # Library Name
 SET(TSALIB "tsa")
 
-# git support
-INCLUDE(GetGitRevisionDescription)
+# bring TSA version and installation directories
+INCLUDE(Version)
+INCLUDE(TSAInstallDirs)
 
-# get current version from git tags
-git_describe(VERSION --tags --dirty=-dirty)
+SET(PROJECT_VERSION ${VERSION_SHORT})
 
-# parse the version information into pieces.
-STRING(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" VERSION_MAJOR "${VERSION}")
-STRING(REGEX REPLACE "^v[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${VERSION}")
-STRING(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${VERSION}")
-STRING(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" VERSION_SHA1 "${VERSION}")
-SET(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+# These config files will be installed so we need to set the install_destination
+# path relative to the install path
+INCLUDE(CMakePackageConfigHelpers)
+WRITE_BASIC_PACKAGE_VERSION_FILE(
+    cmake/install/TSAConfigVersion.cmake
+    COMPATIBILITY SameMajorVersion)
 
-# dump version information down to a header file
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/tsa/version.h.in
-               ${CMAKE_CURRENT_SOURCE_DIR}/include/tsa/version.h)
-
-# dump version to the version test file
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/test/versionTest.cpp.in
-               ${CMAKE_CURRENT_SOURCE_DIR}/test/versionTest.cpp)
+SET(INCLUDE_DIRS include)
+SET(CMAKE_DIR ${TSA_INSTALL_CMAKE_DIR})
+CONFIGURE_PACKAGE_CONFIG_FILE(
+    ${CMAKE_MODULE_PATH}/TSAConfig.cmake.in
+    cmake/install/TSAConfig.cmake
+    INSTALL_DESTINATION "${TSA_INSTALL_CMAKE_DIR}"
+    PATH_VARS INCLUDE_DIRS CMAKE_DIR)
 
 IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # Turn compiler warnings up to 11
@@ -59,15 +61,14 @@ IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -pedantic -Wno-gnu-zero-variadic-macro-arguments -Wint-conversion -Wshorten-64-to-32")
 ELSEIF(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -pedantic -Wint-conversion")
-ENDIF()
-
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    SET(CMAKE_INSTALL_PREFIX "C:/Program Files/TSA/")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -pedantic")
 ENDIF()
 
 # build items in subdirectories
 ADD_SUBDIRECTORY(src)
+
+# build examples
+ADD_SUBDIRECTORY(examples)
 
 # build experiments
 ADD_SUBDIRECTORY(experiments)
@@ -83,5 +84,15 @@ ADD_SUBDIRECTORY(bindings)
 # build items in subdirectories
 ADD_SUBDIRECTORY(doc)
 
+INSTALL(DIRECTORY examples/
+    DESTINATION ${TSA_INSTALL_EXAMPLE_DIR}
+    COMPONENT examples
+    FILES_MATCHING
+    PATTERN "*.cpp"
+    PATTERN "*.h")
 
+INSTALL(DIRECTORY licenses/
+    DESTINATION ${TSA_INSTALL_LICENSES_DIR}
+    COMPONENT licenses)
 
+INCLUDE(CPackConfig)

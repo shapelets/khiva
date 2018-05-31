@@ -18,13 +18,11 @@ SET(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/doxygen/Doxyfile)
  
 CONFIGURE_FILE(${doxyfile_in} ${doxyfile} @ONLY)
  
-ADD_CUSTOM_TARGET(TSA_doc_doxygen ALL
+ADD_CUSTOM_TARGET(TSA_doc_doxygen
     ${DOXYGEN_EXECUTABLE}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen 
     COMMENT "Generating API documentation with Doxygen"
     )
-
-# INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
 
 # Generating Sphinx Documentation
 IF(NOT DEFINED SPHINX_THEME)
@@ -54,7 +52,7 @@ ADD_CUSTOM_TARGET(MoveSPHINXFILES
                 ${CMAKE_CURRENT_SOURCE_DIR}/sphinx/source
                 ${CMAKE_CURRENT_BINARY_DIR}/sphinx/source)
  
-ADD_CUSTOM_TARGET(TSA_doc_sphinx
+ADD_CUSTOM_TARGET(TSA_doc_sphinx ALL
     ${SPHINX_EXECUTABLE}
         -q -b html
         -c "${BINARY_BUILD_DIR}"
@@ -65,4 +63,6 @@ ADD_CUSTOM_TARGET(TSA_doc_sphinx
 
     COMMENT "Building HTML documentation with Sphinx")
 
-# INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
+INSTALL(DIRECTORY ${SPHINX_HTML_DIR}
+    DESTINATION ${TSA_INSTALL_DOC_DIR}
+    COMPONENT documentation)

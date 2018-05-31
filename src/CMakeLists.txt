@@ -29,21 +29,19 @@ ADD_DEFINITIONS(-DNOMINMAX)
 # Compile using unified backend
 ADD_DEFINITIONS(-DAF_UNIFIED)
 
-# Install Variables
-SET(TSA_INSTALL_LIB_DIR "lib")
-
 # Files to add to compilation
 FILE(GLOB_RECURSE TSALIB_CODE 
     "${TSALIB_SRC}/*.cpp"
-    "${TSALIB_INC}/*.h" )
+    "${TSALIB_INC}*.h" )
 
 # The output is a static library
 ADD_LIBRARY(${TSALIB} STATIC ${TSALIB_CODE})
 
 # Declare include directories
-TARGET_INCLUDE_DIRECTORIES(${TSALIB} PUBLIC 
+TARGET_INCLUDE_DIRECTORIES(${TSALIB} PUBLIC
+                           $<BUILD_INTERFACE:${TSALIB_INC}>
+                           $<INSTALL_INTERFACE:${TSA_INSTALL_INC_DIR}>
                            ${ArrayFire_INCLUDE_DIRS}
-                           ${TSALIB_INC} 
                            ${Boost_INCLUDE_DIRS})
 
 # Declare compilation libraries
@@ -57,13 +55,34 @@ SET_TARGET_PROPERTIES(${TSALIB} PROPERTIES
     SOVERSION ${VERSION_MAJOR}
     PUBLIC_HEADER "${TSALIB_INC}/tsa.h")
 
-INSTALL(TARGETS ${TSALIB} DESTINATION ${TSA_INSTALL_LIB_DIR}
-        PUBLIC_HEADER DESTINATION "include")
+# Installation
+INSTALL(TARGETS ${TSALIB}
+        EXPORT TSA
+        COMPONENT core
+        PUBLIC_HEADER DESTINATION ${TSA_INSTALL_INC_DIR}
+        RUNTIME DESTINATION ${TSA_INSTALL_BIN_DIR}
+        LIBRARY DESTINATION ${TSA_INSTALL_LIB_DIR}
+        ARCHIVE DESTINATION ${TSA_INSTALL_LIB_DIR}
+        INCLUDES DESTINATION ${TSA_INSTALL_INC_DIR})
+
+INSTALL(EXPORT TSA
+         NAMESPACE TSA::
+         DESTINATION ${TSA_INSTALL_CMAKE_DIR}
+         COMPONENT core)
+
+EXPORT(EXPORT TSA
+        NAMESPACE TSA::
+        FILE cmake/TSATargets.cmake)
 
 INSTALL(DIRECTORY ${TSALIB_INC} 
-        DESTINATION ${CMAKE_INSTALL_PREFIX}
+        DESTINATION ${TSA_INSTALL_INC_DIR}
         COMPONENT headers
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN ".gitignore" EXCLUDE
 )
+
+INSTALL(FILES ${CMAKE_BINARY_DIR}/cmake/install/TSAConfig.cmake
+              ${CMAKE_BINARY_DIR}/cmake/install/TSAConfigVersion.cmake
+              DESTINATION ${TSA_INSTALL_CMAKE_DIR}
+              COMPONENT cmake)

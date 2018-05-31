@@ -23,10 +23,7 @@ SET(TSALIB_C_BASE_DIR "${PROJECT_SOURCE_DIR}")
 # Define source directory
 SET(TSALIB_C_SRC "${TSALIB_C_BASE_DIR}/src")
 # Define include directories
-SET(TSALIB_C_INC "${TSALIB_C_BASE_DIR}/include")
-
-# Installation directories
-SET(TSA_C_INSTALL_LIB_DIR "lib")
+SET(TSALIB_C_INC "${TSALIB_C_BASE_DIR}/include/")
 
 # Library Name
 SET(TSALIB_C "tsa_c")
@@ -34,7 +31,7 @@ SET(TSALIB_C "tsa_c")
 # Files to add to compilation
 FILE(GLOB_RECURSE TSALIB_C_CODE 
     "${TSALIB_C_SRC}/*.cpp"
-    "${TSALIB_C_INC}/*.h" )
+    "${TSALIB_C_INC}*.h" )
 
 # The output is a static library
 ADD_LIBRARY(${TSALIB_C} SHARED ${TSALIB_C_CODE})
@@ -45,23 +42,24 @@ TARGET_INCLUDE_DIRECTORIES(${TSALIB_C} PUBLIC
                            ${TSALIB_C_INC})
 
 # Declare compilation libraries
-TARGET_LINK_LIBRARIES(${TSALIB_C}
-                      ${TSALIB}
+TARGET_LINK_LIBRARIES(${TSALIB_C} PUBLIC
+                      ${TSALIB} PRIVATE
                       ${CMAKE_DL_LIBS})
 
 # Add metadata
 SET_TARGET_PROPERTIES(${TSALIB_C} PROPERTIES
     VERSION ${VERSION_SHORT}
     SOVERSION ${VERSION_MAJOR}
-    PUBLIC_HEADER "${TSALIB_C_INC}/tsa_c.h")
+    PUBLIC_HEADER "${TSALIB_C_INC}tsa_c.h")
 
 # Install bindings
 # C binding
-INSTALL(TARGETS ${TSALIB_C} DESTINATION ${TSA_C_INSTALL_LIB_DIR}
-        PUBLIC_HEADER DESTINATION "include")
+INSTALL(TARGETS ${TSALIB_C} DESTINATION ${TSA_INSTALL_LIB_DIR}
+        COMPONENT c_binding
+        PUBLIC_HEADER DESTINATION ${TSA_INSTALL_INC_DIR})
 
 INSTALL(DIRECTORY ${TSALIB_C_INC} 
-        DESTINATION ${CMAKE_INSTALL_PREFIX}
+        DESTINATION ${TSA_INSTALL_INC_DIR}
         COMPONENT headers
         FILES_MATCHING
         PATTERN "*.h"

@@ -10,6 +10,14 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 4. Create `build` folder and, after moving into the new folder, run `cmake ..` 
 5. Run the actual make for your environment.
 
+### Generating the TSA installers
+This project can be packaged to be installed in a Windows, Linux or Mac OS system. CPack is used in order to perform this task.
+1. For **Windows** the installer can be generated running the command `cpack -G NSIS` inside the `build` folder. You need [NSIS] (http://nsis.sourceforge.net/Download) installed in your system.
+2. For **linux** either a **deb** or a **rpm** package the installer can be generated. This could be done running the command `cpack -G DEB` or `cpack -G RPM` respectively inside the `build` folder.
+3. For **Mac OS** the installer can be generated running the command `cpack -G productbuild` inside the `build` folder.
+
+**Notes:** Before generating the installer the project should be built. The generated package will be stored in the `build` folder.
+
 ## Generating documentation
 
 We use `sphinx + doxygen` to generate our documentation. You will need to install the following packages:

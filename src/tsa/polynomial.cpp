@@ -6,6 +6,9 @@
 
 #include <tsa/linalg.h>
 #include <tsa/polynomial.h>
+#include <Eigen/Eigenvalues>
+
+using namespace Eigen;
 
 #define EPSILON 1e-8
 

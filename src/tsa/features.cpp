@@ -13,6 +13,7 @@
 #include <tsa/statistics.h>
 #include <algorithm>
 #include <cmath>
+#include <tuple>
 
 typedef std::tuple<std::vector<int>, std::vector<int>, int> CWTTuple;
 typedef std::tuple<std::vector<int>, std::vector<int>> LineTuple;
