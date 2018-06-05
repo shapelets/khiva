@@ -57,12 +57,10 @@ JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_createArrayFromDoubleComplex
 /**
  * @brief Retrieves data from the device to host (Float, Double, Int, Boolean, Long, Short or Byte).
  *
- * @param ref The Array that contains the data to be retrieved.
- *
  * @return Array with the data.
  */
 #define GET_T_FROM_ARRAY(Ty, ty) \
-    JNIEXPORT j##ty##Array JNICALL Java_com_gcatsoft_tsa_Array_get##Ty##FromArray(JNIEnv *env, jobject, jlong ref);
+    JNIEXPORT j##ty##Array JNICALL Java_com_gcatsoft_tsa_Array_get##Ty##FromArray(JNIEnv *env, jobject thisObj);
 GET_T_FROM_ARRAY(Float, float)
 GET_T_FROM_ARRAY(Double, double)
 GET_T_FROM_ARRAY(Int, int)
@@ -74,56 +72,275 @@ GET_T_FROM_ARRAY(Long, long)
 /**
  * @brief Retrieves data from the device to host (Double Complex).
  *
- * @param ref The Array that contains the data to be retrieved.
- *
  * @return Array with the data.
  */
-JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj,
-                                                                                     jlong ref);
+JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj);
 
 /**
  * @brief Retrieves data from the device to host (Float Complex).
  *
- * @param ref The Array that contains the data to be retrieved.
- *
  * @return Array with the data.
  */
-JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj,
-                                                                                    jlong ref);
+JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj);
 
 /**
  * @brief Gets the Array type.
  *
- * @param ref The Array reference.
- *
  * @return Integer representing the Array type.
  */
-JNIEXPORT jint JNICALL Java_com_gcatsoft_tsa_Array_getType(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jint JNICALL Java_com_gcatsoft_tsa_Array_nativeGetType(JNIEnv *env, jobject thisObj);
 
 /**
  * @brief Gets the Array dimensions.
  *
- * @param ref The Array reference.
- *
  * @return The dimensions.
  */
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_getDims(JNIEnv *env, jobject thisObj, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_nativeGetDims(JNIEnv *env, jobject thisObj);
 
 /**
  * @brief Prints the Array.
- *
- * @param ref The Array reference.
- *
- * @return The updated reference.
  */
-JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_print(JNIEnv *, jobject, jlong ref);
+JNIEXPORT void JNICALL Java_com_gcatsoft_tsa_Array_nativePrint(JNIEnv *env, jobject thisObj);
 
 /**
  * @brief Releases the array.
- *
- * @param ref The Array reference.
  */
-JNIEXPORT void JNICALL Java_com_gcatsoft_tsa_Array_deleteArray(JNIEnv *, jobject, jlong ref);
+JNIEXPORT void JNICALL Java_com_gcatsoft_tsa_Array_deleteArray(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief Adds this array with the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_add(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Multiplies this array with the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_mul(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Subtracts this array with the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_sub(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Divides this array with the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_div(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Performs the modulo operation of this array between the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_mod(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Powers this array with the one specified as parameter. This array is the base and the exponent is the
+ * specified parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_pow(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Compares (element-wise) if this array is lower than the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_lt(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Compares (element-wise) if this array is greater than the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_gt(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Compares (element-wise) if this array is lower or equal than the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_le(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Compares (element-wise) if this array is greater or equal than the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_ge(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Compares (element-wise) if this array is equal to the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_eq(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Compares (element-wise) if this array is not equal to the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_ne(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Performs an AND operation with this array (element-wise) and the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_bitAnd(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Performs an OR operation with this array (element-wise) and the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_bitOr(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Performs an eXclusive-OR operation with this array (element-wise) and the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_bitXor(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Performs a left bit shift operation to this array (element-wise) as many times as specified in the parameter
+ * n.
+ *
+ * @param n Number of bits to be shifted.
+ *
+ * @return The reference of the resulting array.
+ */
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeBitShiftL(JNIEnv *env, jobject thisObj, jint n);
+
+/**
+ * @brief Performs a right bit shift operation to this array (element-wise) as many times as specified in the parameter
+ * n.
+ *
+ * @param n Number of bits to be shifted.
+ *
+ * @return The reference of the resulting array.
+ */
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeBitShiftR(JNIEnv *env, jobject thisObj, jint n);
+
+/**
+ * @brief Logical NOT operation to this array.
+ *
+ * @return The reference of the resulting array.
+ */
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeNot(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief Transposes this array.
+ *
+ * @param conjugate If true a conjugate transposition is performed.
+ *
+ * @return The reference of the resulting array.
+ */
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeTranspose(JNIEnv *env, jobject thisObj, jboolean conjugate);
+
+/**
+ * @brief Retrieves a given column of this array.
+ *
+ * @param index The column to be retrieved.
+ *
+ * @return The reference of the resulting array.
+ */
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeCol(JNIEnv *env, jobject thisObj, jint index);
+
+/**
+ * @brief Retrieves a subset of columns of this array, starting at first and finishing at last, both inclusive.
+ *
+ * @param first Start of the subset of columns to be retrieved.
+ * @param last End of the subset of columns to be retrieved.
+ *
+ * @return The reference of the resulting array.
+ */
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeCols(JNIEnv *env, jobject thisObj, jint first, jint last);
+
+/**
+ * @brief Retrieves a given row of this array.
+ *
+ * @param index The row to be retrieved.
+ *
+ * @return The reference of the resulting array.
+ */
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeRow(JNIEnv *env, jobject thisObj, jint index);
+
+/**
+ * @brief Retrieves a subset of rows of this array, starting at first and finishing at last, both inclusive.
+ *
+ * @param first Start of the subset of rows to be retrieved.
+ * @param last End of the subset of rows to be retrieved.
+ *
+ * @return The reference of the resulting array.
+ */
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeRows(JNIEnv *env, jobject thisObj, jint first, jint last);
+
+/**
+ * @brief Performs a matrix multiplication of this array with the one specified as parameter.
+ *
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ */
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_matmul(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+
+/**
+ * @brief Performs a deep copy of this array. Both the data stored in the device and all the object properties in Java.
+ *
+ * @return The reference of the resulting array.
+ */
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeCopy(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief Changes the type of this array.
+ *
+ * @param type Target type of the output array.
+ *
+ * @return The reference of the resulting array.
+ */
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_as(JNIEnv *env, jobject thisObj, jint type);
 
 #ifdef __cplusplus
 }

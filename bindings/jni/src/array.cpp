@@ -106,23 +106,23 @@ JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_createArrayFromDoubleComplex
     return jlong(ret);
 }
 
-#define GET_T_FROM_ARRAY(Ty, ty)                                                                                \
-    JNIEXPORT j##ty##Array JNICALL Java_com_gcatsoft_tsa_Array_get##Ty##FromArray(JNIEnv *env, jobject thisObj, \
-                                                                                  jlong ref) {                  \
-        j##ty##Array result;                                                                                    \
-        dim_t elements = 0;                                                                                     \
-        af_get_elements(&elements, (void *)ref);                                                                \
-        result = env->New##Ty##Array(static_cast<jsize>(elements));                                             \
-        j##ty *resf = env->Get##Ty##ArrayElements(result, 0);                                                   \
-        af_array a = (af_array)ref;                                                                             \
-        af::array var = af::array(a);                                                                           \
-        tsa::array::getData(var, resf);                                                                         \
-        af_retain_array(&a, var.get());                                                                         \
-        jclass clazz = env->GetObjectClass(thisObj);                                                            \
-        jfieldID fidf = env->GetFieldID(clazz, "reference", "J");                                               \
-        env->SetLongField(thisObj, fidf, jlong(a));                                                             \
-        env->Release##Ty##ArrayElements(result, resf, 0);                                                       \
-        return result;                                                                                          \
+#define GET_T_FROM_ARRAY(Ty, ty)                                                                                  \
+    JNIEXPORT j##ty##Array JNICALL Java_com_gcatsoft_tsa_Array_get##Ty##FromArray(JNIEnv *env, jobject thisObj) { \
+        jclass clazz = env->GetObjectClass(thisObj);                                                              \
+        jfieldID fidf = env->GetFieldID(clazz, "reference", "J");                                                 \
+        jlong ref = env->GetLongField(thisObj, fidf);                                                             \
+        j##ty##Array result;                                                                                      \
+        dim_t elements = 0;                                                                                       \
+        af_get_elements(&elements, (void *)ref);                                                                  \
+        result = env->New##Ty##Array(static_cast<jsize>(elements));                                               \
+        j##ty *resf = env->Get##Ty##ArrayElements(result, 0);                                                     \
+        af_array a = (af_array)ref;                                                                               \
+        af::array var = af::array(a);                                                                             \
+        tsa::array::getData(var, resf);                                                                           \
+        af_retain_array(&a, var.get());                                                                           \
+        env->SetLongField(thisObj, fidf, jlong(a));                                                               \
+        env->Release##Ty##ArrayElements(result, resf, 0);                                                         \
+        return result;                                                                                            \
     }
 GET_T_FROM_ARRAY(Float, float)
 GET_T_FROM_ARRAY(Double, double)
@@ -133,8 +133,11 @@ GET_T_FROM_ARRAY(Short, short)
 GET_T_FROM_ARRAY(Byte, byte)
 #undef GET_T_FROM_ARRAY
 
-JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj,
-                                                                                     jlong ref) {
+JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
     jobjectArray result;
     dim_t elements = 0;
     (af_get_elements(&elements, (void *)(ref)));
@@ -150,8 +153,6 @@ JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getDoubleComplexFromA
     af::array var = af::array(a);
     tsa::array::getData(var, tmp);
     af_retain_array(&a, var.get());
-    jclass clazz = env->GetObjectClass(thisObj);
-    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     env->SetLongField(thisObj, fidf, jlong(a));
 
     for (int i = 0; i < elements; i++) {
@@ -165,8 +166,11 @@ JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getDoubleComplexFromA
     return result;
 }
 
-JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj,
-                                                                                    jlong ref) {
+JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
     jobjectArray result;
     dim_t elements = 0;
     (af_get_elements(&elements, (void *)(ref)));
@@ -182,8 +186,6 @@ JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getFloatComplexFromAr
     af::array var = af::array(a);
     tsa::array::getData(var, tmp);
     af_retain_array(&a, var.get());
-    jclass clazz = env->GetObjectClass(thisObj);
-    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     env->SetLongField(thisObj, fidf, jlong(a));
 
     for (int i = 0; i < elements; i++) {
@@ -197,18 +199,24 @@ JNIEXPORT jobjectArray JNICALL Java_com_gcatsoft_tsa_Array_getFloatComplexFromAr
     return result;
 }
 
-JNIEXPORT jint JNICALL Java_com_gcatsoft_tsa_Array_getType(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jint JNICALL Java_com_gcatsoft_tsa_Array_nativeGetType(JNIEnv *env, jobject thisObj) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
     af_array a = (af_array)ref;
     af::array var = af::array(a);
     jint t = tsa::array::getType(var);
     af_retain_array(&a, var.get());
-    jclass clazz = env->GetObjectClass(thisObj);
-    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     env->SetLongField(thisObj, fidf, jlong(a));
     return t;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_getDims(JNIEnv *env, jobject thisObj, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_nativeGetDims(JNIEnv *env, jobject thisObj) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
     af_array a = (af_array)ref;
     af::array var = af::array(a);
     af::dim4 d = tsa::array::getDims(var);
@@ -218,24 +226,662 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_getDims(JNIEnv *env, jo
     memcpy(result, d.dims, sizeof(d.dims));
 
     af_retain_array(&a, var.get());
-    jclass clazz = env->GetObjectClass(thisObj);
-    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     env->SetLongField(thisObj, fidf, jlong(a));
     env->SetLongArrayRegion(p, 0, 4, &result[0]);
 
     return p;
 }
 
-JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_print(JNIEnv *, jobject, jlong ref) {
+JNIEXPORT void JNICALL Java_com_gcatsoft_tsa_Array_nativePrint(JNIEnv *env, jobject thisObj) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
     af_array a = (af_array)ref;
     af::array var = af::array(a);
     tsa::array::print(var);
     af_retain_array(&a, var.get());
-    return jlong(a);
+    env->SetLongField(thisObj, fidf, jlong(a));
 }
 
-JNIEXPORT void JNICALL Java_com_gcatsoft_tsa_Array_deleteArray(JNIEnv *, jobject, jlong ref) {
+JNIEXPORT void JNICALL Java_com_gcatsoft_tsa_Array_deleteArray(JNIEnv *env, jobject thisObj) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
     tsa::array::deleteArray((void *)&ref);
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_add(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a + b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_mul(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a * b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_sub(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a - b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_div(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a / b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_mod(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a % b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_pow(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = af::pow(a, b);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_lt(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a < b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_gt(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a > b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_le(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a <= b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_ge(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a >= b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_eq(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a == b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_ne(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a != b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_bitAnd(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a & b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_bitOr(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = a | b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_bitXor(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = !a != !b;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeBitShiftL(JNIEnv *env, jobject thisObj, jint n) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+
+    af::array c = a << n;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    return (jlong)af_p;
+}
+
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeBitShiftR(JNIEnv *env, jobject thisObj, jint n) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+
+    af::array c = a >> n;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    return (jlong)af_p;
+}
+
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeNot(JNIEnv *env, jobject thisObj) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+
+    af::array c = !a;
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    return (jlong)af_p;
+}
+
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeTranspose(JNIEnv *env, jobject thisObj, jboolean conjugate) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+
+    af::array c = af::transpose(a, conjugate);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    return (jlong)af_p;
+}
+
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeCol(JNIEnv *env, jobject thisObj, jint index) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+
+    af::array c = a.col(index);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    return (jlong)af_p;
+}
+
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeCols(JNIEnv *env, jobject thisObj, jint first, jint last) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+
+    af::array c = a.cols(first, last);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    return (jlong)af_p;
+}
+
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeRow(JNIEnv *env, jobject thisObj, jint index) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+
+    af::array c = a.row(index);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    return (jlong)af_p;
+}
+
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeRows(JNIEnv *env, jobject thisObj, jint first, jint last) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+
+    af::array c = a.rows(first, last);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    return (jlong)af_p;
+}
+
+JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Array_matmul(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+    af_array rhs = (af_array)ref_rhs;
+    af::array b = af::array(rhs);
+
+    af::array c = af::matmul(a, b);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&rhs, b.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    jlong result[] = {(jlong)rhs, (jlong)af_p};
+    jlongArray p = env->NewLongArray(2);
+    env->SetLongArrayRegion(p, 0, 2, &result[0]);
+
+    return p;
+}
+
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_nativeCopy(JNIEnv *env, jobject thisObj) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+
+    af::array c = a.copy();
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    return (jlong)af_p;
+}
+
+JNIEXPORT jlong JNICALL Java_com_gcatsoft_tsa_Array_as(JNIEnv *env, jobject thisObj, jint type) {
+    jclass clazz = env->GetObjectClass(thisObj);
+    jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
+    jlong ref = env->GetLongField(thisObj, fidf);
+
+    af_array lhs = (af_array)ref;
+    af::array a = af::array(lhs);
+
+    tsa::dtype dt = static_cast<tsa::dtype>(type);
+    af::array c = a.as(dt);
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&lhs, a.get());
+    af_retain_array(&af_p, c.get());
+
+    env->SetLongField(thisObj, fidf, jlong(lhs));
+
+    return (jlong)af_p;
 }
 
 #ifdef __cplusplus
