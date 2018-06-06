@@ -1,62 +1,62 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
-#include <tsa/normalization.h>
-#include <tsa_c/normalization.h>
+#include <khiva/normalization.h>
+#include <khiva_c/normalization.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-TSAAPI void decimal_scaling_norm(tsa_array *tss, tsa_array *result) {
+KHIVAAPI void decimal_scaling_norm(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::normalization::decimalScalingNorm(var).get());
+    af_retain_array(result, khiva::normalization::decimalScalingNorm(var).get());
 }
 
-TSAAPI void decimal_scaling_norm_in_place(tsa_array *tss) {
+KHIVAAPI void decimal_scaling_norm_in_place(khiva_array *tss) {
     af::array var = af::array(*tss);
-    tsa::normalization::decimalScalingNormInPlace(var);
-    af_retain_array(tss, var.get());
-}
-
-TSAAPI void max_min_norm(tsa_array *tss, double *high, double *low, double *epsilon, tsa_array *result) {
-    af::array var = af::array(*tss);
-    af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::normalization::maxMinNorm(var, *high, *low, *epsilon).get());
-}
-
-TSAAPI void max_min_norm_in_place(tsa_array *tss, double *high, double *low, double *epsilon) {
-    af::array var = af::array(*tss);
-    tsa::normalization::maxMinNormInPlace(var, *high, *low, *epsilon);
+    khiva::normalization::decimalScalingNormInPlace(var);
     af_retain_array(tss, var.get());
 }
 
-TSAAPI void mean_norm(tsa_array *tss, tsa_array *result) {
+KHIVAAPI void max_min_norm(khiva_array *tss, double *high, double *low, double *epsilon, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::normalization::meanNorm(var).get());
+    af_retain_array(result, khiva::normalization::maxMinNorm(var, *high, *low, *epsilon).get());
 }
 
-TSAAPI void mean_norm_in_place(tsa_array *tss) {
+KHIVAAPI void max_min_norm_in_place(khiva_array *tss, double *high, double *low, double *epsilon) {
     af::array var = af::array(*tss);
-    tsa::normalization::meanNormInPlace(var);
+    khiva::normalization::maxMinNormInPlace(var, *high, *low, *epsilon);
     af_retain_array(tss, var.get());
 }
 
-TSAAPI void znorm(tsa_array *tss, double *epsilon, tsa_array *result) {
+KHIVAAPI void mean_norm(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::normalization::znorm(var, *epsilon).get());
+    af_retain_array(result, khiva::normalization::meanNorm(var).get());
 }
 
-TSAAPI void znorm_in_place(tsa_array *tss, double *epsilon) {
+KHIVAAPI void mean_norm_in_place(khiva_array *tss) {
     af::array var = af::array(*tss);
-    tsa::normalization::znormInPlace(var, *epsilon);
+    khiva::normalization::meanNormInPlace(var);
+    af_retain_array(tss, var.get());
+}
+
+KHIVAAPI void znorm(khiva_array *tss, double *epsilon, khiva_array *result) {
+    af::array var = af::array(*tss);
+    af_retain_array(tss, var.get());
+    af_retain_array(result, khiva::normalization::znorm(var, *epsilon).get());
+}
+
+KHIVAAPI void znorm_in_place(khiva_array *tss, double *epsilon) {
+    af::array var = af::array(*tss);
+    khiva::normalization::znormInPlace(var, *epsilon);
     af_retain_array(tss, var.get());
 }
 

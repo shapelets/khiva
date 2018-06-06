@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa/regression.h>
-#include "tsaTest.h"
+#include <khiva/regression.h>
+#include "khivaTest.h"
 
 void linear() {
     float dataX[] = {0.24580423f, 0.59642861f, 0.35879163f, 0.37891011f, 0.02445137f,
@@ -20,7 +20,7 @@ void linear() {
     af::array slope, intercept, rvalue, pvalue, stderrest;
     float slope_host, intercept_host, rvalue_host, pvalue_host, stderrest_host;
 
-    tsa::regression::linear(x, y, slope, intercept, rvalue, pvalue, stderrest);
+    khiva::regression::linear(x, y, slope, intercept, rvalue, pvalue, stderrest);
 
     slope.host(&slope_host);
     intercept.host(&intercept_host);
@@ -48,7 +48,7 @@ void linearMultipleTimeSeries() {
 
     af::array slope, intercept, rvalue, pvalue, stderrest;
 
-    tsa::regression::linear(xss, yss, slope, intercept, rvalue, pvalue, stderrest);
+    khiva::regression::linear(xss, yss, slope, intercept, rvalue, pvalue, stderrest);
 
     float *slope_host = slope.host<float>();
     float *intercept_host = intercept.host<float>();
@@ -68,5 +68,5 @@ void linearMultipleTimeSeries() {
     ASSERT_NEAR(stderrest_host[1], 0.412351891, EPSILON);
 }
 
-TSA_TEST(RegressionTests, Linear, linear)
-TSA_TEST(RegressionTests, LinearMultipleTimeSeries, linearMultipleTimeSeries)
+KHIVA_TEST(RegressionTests, Linear, linear)
+KHIVA_TEST(RegressionTests, LinearMultipleTimeSeries, linearMultipleTimeSeries)

@@ -3,8 +3,8 @@
 Namespace Library
 =================
 
-.. doxygennamespace:: tsa::library
-    :project: TSA
+.. doxygennamespace:: khiva::library
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

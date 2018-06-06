@@ -1,7 +1,7 @@
 {
     "licenser.license": "MPLv2",
-    "licenser.projectName": "TSA",
-    "licenser.author": "Grumpy Cat Software S.L.",
+    "licenser.projectName": "KHIVA",
+    "licenser.author": "Shaplets.io",
     "files.associations": {
         "algorithm": "cpp",
         "chrono": "cpp",
@@ -85,7 +85,8 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "__string": "cpp"
     },
     "files.eol": "\n",
     "clang-format.style": "{BasedOnStyle: Google, ColumnLimit: 120, IndentWidth: 4, DerivePointerAlignment: false, PointerAlignment: Right}",

@@ -1,45 +1,45 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
-#include <tsa/distances.h>
-#include <tsa_c/distances.h>
+#include <khiva/distances.h>
+#include <khiva_c/distances.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-TSAAPI void euclidean(tsa_array *tss, tsa_array *result) {
+KHIVAAPI void euclidean(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::distances::euclidean(var).get());
+    af_retain_array(result, khiva::distances::euclidean(var).get());
 }
 
-TSAAPI void dtw(tsa_array *tss, tsa_array *result) {
+KHIVAAPI void dtw(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::distances::dtw(var).get());
+    af_retain_array(result, khiva::distances::dtw(var).get());
 }
 
-TSAAPI void hamming(tsa_array *tss, tsa_array *result) {
+KHIVAAPI void hamming(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::distances::hamming(var).get());
+    af_retain_array(result, khiva::distances::hamming(var).get());
 }
 
-TSAAPI void manhattan(tsa_array *tss, tsa_array *result) {
+KHIVAAPI void manhattan(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::distances::manhattan(var).get());
+    af_retain_array(result, khiva::distances::manhattan(var).get());
 }
 
-TSAAPI void squared_euclidean(tsa_array *tss, tsa_array *result) {
+KHIVAAPI void squared_euclidean(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
-    af_retain_array(result, tsa::distances::squaredEuclidean(var).get());
+    af_retain_array(result, khiva::distances::squaredEuclidean(var).get());
 }
 
 #ifdef __cplusplus

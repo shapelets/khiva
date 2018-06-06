@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa/linalg.h>
-#include "tsaTest.h"
+#include <khiva/linalg.h>
+#include "khivaTest.h"
 
 void lls() {
     float a[] = {4, 3, -1, -2};
@@ -15,7 +15,7 @@ void lls() {
     float bb[] = {3, 1};
     af::array b = af::array(2, bb);
 
-    af::array x = tsa::linalg::lls(A, b);
+    af::array x = khiva::linalg::lls(A, b);
 
     float *calculated = x.host<float>();
 
@@ -32,7 +32,7 @@ void llsMoreEquations() {
     float bb[] = {3, 1, 9};
     af::array b = af::array(3, bb);
 
-    af::array x = tsa::linalg::lls(A, b);
+    af::array x = khiva::linalg::lls(A, b);
 
     float *calculated = x.host<float>();
 
@@ -49,7 +49,7 @@ void llsMoreVariables() {
     float bb[] = {3, 1};
     af::array b = af::array(2, bb);
 
-    af::array x = tsa::linalg::lls(A, b);
+    af::array x = khiva::linalg::lls(A, b);
 
     float *calculated = x.host<float>();
 
@@ -61,6 +61,6 @@ void llsMoreVariables() {
 }
 
 // Not testing in CPU because the static linking of OpenMP that Arrayfire does makes the test crash
-TSA_TEST_BACKENDS(LinAlgTests, Lls, lls, true, true, false, true, true, false)
-TSA_TEST_BACKENDS(LinAlgTests, LlsMoreEquations, llsMoreEquations, true, true, false, true, true, false)
-TSA_TEST_BACKENDS(LinAlgTests, LlsMoreVariables, llsMoreVariables, true, true, false, true, true, false)
+KHIVA_TEST_BACKENDS(LinAlgTests, Lls, lls, true, true, false, true, true, false)
+KHIVA_TEST_BACKENDS(LinAlgTests, LlsMoreEquations, llsMoreEquations, true, true, false, true, true, false)
+KHIVA_TEST_BACKENDS(LinAlgTests, LlsMoreVariables, llsMoreVariables, true, true, false, true, true, false)

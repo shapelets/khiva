@@ -3,8 +3,8 @@
 Namespace Statistics
 ====================
 
-.. doxygennamespace:: tsa::statistics
-    :project: TSA
+.. doxygennamespace:: khiva::statistics
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

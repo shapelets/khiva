@@ -1,10 +1,10 @@
-===========================
-TSA (Time Series Analytics)
-===========================
+=============================
+KHIVA (Time Series Analytics)
+=============================
 
-This is the documentation of **TSA** library.
+This is the documentation of **KHIVA** library.
 
-TSA [#f1]_ is an open source C++ library which focus on providing efficient algorithms to perform analytics over 
+KHIVA [#f1]_ is an open source C++ library which focus on providing efficient algorithms to perform analytics over 
 time series of data. It can be used to extract insights from one or a group of time series. The large number of 
 available methods allow us to understand the nature of each time series. Based on that analytics, the user can 
 reduce dimensionality, find out recurrent motifs or discords, understand the seasonality or trend from a given time
@@ -16,9 +16,9 @@ IOT, application performance monitoring (APM), music industry, etc.
 
 It is just the beginning, so keep tuned, more features are coming ...  
 
-`shapelets-tsa@googlegroups.com
-<https://groups.google.com/forum/?fromgroups#!forum/shapelets-tsa>`_ is the place for discussions and questions about 
-TSA library. We use the `GitHub Issue Tracker <https://github.com/shapelets/tsa/issues>`_ to manage bug reports 
+`shapelets-khiva@googlegroups.com
+<https://groups.google.com/forum/?fromgroups#!forum/shapelets-khiva>`_ is the place for discussions and questions about 
+KHIVA library. We use the `GitHub Issue Tracker <https://github.com/shapelets/khiva/issues>`_ to manage bug reports 
 and feature requests.
 
 You can jump right into the package by looking into our :ref:`chapter-gettingstarted`.
@@ -36,14 +36,14 @@ You can jump right into the package by looking into our :ref:`chapter-gettingsta
 Cite Us
 =======
 
-If you use TSA Library for a publication, please cite it as:
+If you use KHIVA Library for a publication, please cite it as:
 
 .. code-block:: bash
 
-     @misc{tsa-library, 
+     @misc{khiva-library, 
         author = "David Cuesta and Justo Ruiz and Oscar Torreno and Antonio Vilches", 
-        title = "TSA Library", 
-        howpublished = "\url{http://shapelets.io/tsa}"
+        title = "KHIVA Library", 
+        howpublished = "\url{https://shapelets.io/khiva}"
      }
 
 .. rubric:: Footnotes

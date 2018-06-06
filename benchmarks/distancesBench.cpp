@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
-#include <tsa/distances.h>
-#include "tsaBenchmark.h"
+#include <khiva/distances.h>
+#include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
 void DTW(benchmark::State &state) {
@@ -20,7 +20,7 @@ void DTW(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto dwt = tsa::distances::dtw(t);
+        auto dwt = khiva::distances::dtw(t);
         dwt.eval();
         af::sync();
     }
@@ -39,7 +39,7 @@ void Euclidean(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto dwt = tsa::distances::euclidean(t);
+        auto dwt = khiva::distances::euclidean(t);
         dwt.eval();
         af::sync();
     }
@@ -58,7 +58,7 @@ void Hamming(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto dwt = tsa::distances::hamming(t);
+        auto dwt = khiva::distances::hamming(t);
         dwt.eval();
         af::sync();
     }
@@ -77,7 +77,7 @@ void Manhattan(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto dwt = tsa::distances::manhattan(t);
+        auto dwt = khiva::distances::manhattan(t);
         dwt.eval();
         af::sync();
     }
@@ -96,7 +96,7 @@ void SquaredEuclidean(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto dwt = tsa::distances::squaredEuclidean(t);
+        auto dwt = khiva::distances::squaredEuclidean(t);
         dwt.eval();
         af::sync();
     }
@@ -184,4 +184,4 @@ void cpuBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)
+KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

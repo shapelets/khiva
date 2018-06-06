@@ -1,19 +1,19 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <tsa/regularization.h>
-#include <tsa_jni/regularization.h>
+#include <khiva/regularization.h>
+#include <khiva_jni/regularization.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
-                                                                          jint aggregationFunction, jint nColumnsKey,
-                                                                          jint nColumnsValue) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
+                                                                             jint aggregationFunction, jint nColumnsKey,
+                                                                             jint nColumnsValue) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -27,25 +27,25 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regularization_groupBy(JNIEnv
     af_retain_array(&arr, var.get());
     switch (aggregationFunction) {
         case 0:
-            af_retain_array(&af_p, tsa::regularization::groupBy(var, af::mean, nColumnsKey, nColumnsValue).get());
+            af_retain_array(&af_p, khiva::regularization::groupBy(var, af::mean, nColumnsKey, nColumnsValue).get());
             break;
         case 1:
-            af_retain_array(&af_p, tsa::regularization::groupBy(var, af::median, nColumnsKey, nColumnsValue).get());
+            af_retain_array(&af_p, khiva::regularization::groupBy(var, af::median, nColumnsKey, nColumnsValue).get());
             break;
         case 2:
-            af_retain_array(&af_p, tsa::regularization::groupBy(var, af::min, nColumnsKey, nColumnsValue).get());
+            af_retain_array(&af_p, khiva::regularization::groupBy(var, af::min, nColumnsKey, nColumnsValue).get());
             break;
         case 3:
-            af_retain_array(&af_p, tsa::regularization::groupBy(var, af::max, nColumnsKey, nColumnsValue).get());
+            af_retain_array(&af_p, khiva::regularization::groupBy(var, af::max, nColumnsKey, nColumnsValue).get());
             break;
         case 4:
-            af_retain_array(&af_p, tsa::regularization::groupBy(var, af::stdev, nColumnsKey, nColumnsValue).get());
+            af_retain_array(&af_p, khiva::regularization::groupBy(var, af::stdev, nColumnsKey, nColumnsValue).get());
             break;
         case 5:
-            af_retain_array(&af_p, tsa::regularization::groupBy(var, af::var, nColumnsKey, nColumnsValue).get());
+            af_retain_array(&af_p, khiva::regularization::groupBy(var, af::var, nColumnsKey, nColumnsValue).get());
             break;
         default:
-            af_retain_array(&af_p, tsa::regularization::groupBy(var, af::mean, nColumnsKey, nColumnsValue).get());
+            af_retain_array(&af_p, khiva::regularization::groupBy(var, af::mean, nColumnsKey, nColumnsValue).get());
             break;
     }
     tmp[0] = (jlong)arr;

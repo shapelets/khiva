@@ -1,4 +1,4 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,8 +7,8 @@
 #include <arrayfire.h>
 #include <benchmark/benchmark.h>
 #include <float.h>
-#include <tsa/normalization.h>
-#include "tsaBenchmark.h"
+#include <khiva/normalization.h>
+#include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
 void DecimalScalingNorm(benchmark::State &state) {
@@ -20,7 +20,7 @@ void DecimalScalingNorm(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto normalised = tsa::normalization::decimalScalingNorm(tss);
+        auto normalised = khiva::normalization::decimalScalingNorm(tss);
         normalised.eval();
         af::sync();
     }
@@ -37,7 +37,7 @@ void DecimalScalingNormInPlace(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::normalization::decimalScalingNormInPlace(tss);
+        khiva::normalization::decimalScalingNormInPlace(tss);
         tss.eval();
         af::sync();
     }
@@ -54,7 +54,7 @@ void MaxMinNorm(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto normalised = tsa::normalization::maxMinNorm(ts, DBL_MIN);
+        auto normalised = khiva::normalization::maxMinNorm(ts, DBL_MIN);
         normalised.eval();
         af::sync();
     }
@@ -71,7 +71,7 @@ void MaxMinNormInPlace(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::normalization::maxMinNormInPlace(ts, DBL_MIN);
+        khiva::normalization::maxMinNormInPlace(ts, DBL_MIN);
         ts.eval();
         af::sync();
     }
@@ -88,7 +88,7 @@ void MeanNorm(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto normalised = tsa::normalization::meanNorm(tss);
+        auto normalised = khiva::normalization::meanNorm(tss);
         normalised.eval();
         af::sync();
     }
@@ -105,7 +105,7 @@ void MeanNormInPlace(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::normalization::meanNormInPlace(tss);
+        khiva::normalization::meanNormInPlace(tss);
         tss.eval();
         af::sync();
     }
@@ -122,7 +122,7 @@ void ZNorm(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto normalised = tsa::normalization::znorm(ts, DBL_MIN);
+        auto normalised = khiva::normalization::znorm(ts, DBL_MIN);
         normalised.eval();
         af::sync();
     }
@@ -139,7 +139,7 @@ void ZNormInPlace(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::normalization::znormInPlace(ts, DBL_MIN);
+        khiva::normalization::znormInPlace(ts, DBL_MIN);
         ts.eval();
         af::sync();
     }
@@ -272,4 +272,4 @@ void cpuBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)
+KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

@@ -1,12 +1,18 @@
+# Copyright (c) 2018 Shapelets.io
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
-PROJECT(TSA
+PROJECT(Khiva
     LANGUAGES C CXX)
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Using C++ 11
 SET(CMAKE_CXX_STANDARD 11)
 
-# bring conan generated dependencies
+# Bring conan generated dependencies
 INCLUDE(conanbuildinfo.cmake)
 CONAN_BASIC_SETUP()
 
@@ -22,19 +28,18 @@ IF(NOT CMAKE_BUILD_TYPE)
       FORCE)
 ENDIF()
 
-# Set the base directory to parent so src and include become
-# equaly visible
-SET(TSALIB_BASE_DIR ${PROJECT_SOURCE_DIR})
+# Set the base directory to parent so src and include become equaly visible
+SET(KHIVALIB_BASE_DIR ${PROJECT_SOURCE_DIR})
 # Define source directory
-SET(TSALIB_SRC "${TSALIB_BASE_DIR}/src")
+SET(KHIVALIB_SRC "${KHIVALIB_BASE_DIR}/src")
 # Define include directory
-SET(TSALIB_INC "${TSALIB_BASE_DIR}/include/")
+SET(KHIVALIB_INC "${KHIVALIB_BASE_DIR}/include/")
 # Library Name
-SET(TSALIB "tsa")
+SET(KHIVALIB "khiva")
 
-# bring TSA version and installation directories
+# Bring KHIVA version and installation directories
 INCLUDE(Version)
-INCLUDE(TSAInstallDirs)
+INCLUDE(KhivaInstallDirs)
 
 SET(PROJECT_VERSION ${VERSION_SHORT})
 
@@ -42,15 +47,15 @@ SET(PROJECT_VERSION ${VERSION_SHORT})
 # path relative to the install path
 INCLUDE(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(
-    cmake/install/TSAConfigVersion.cmake
+    cmake/install/KhivaConfigVersion.cmake
     COMPATIBILITY SameMajorVersion)
 
 SET(INCLUDE_DIRS include)
-SET(CMAKE_DIR ${TSA_INSTALL_CMAKE_DIR})
+SET(CMAKE_DIR ${KHIVA_INSTALL_CMAKE_DIR})
 CONFIGURE_PACKAGE_CONFIG_FILE(
-    ${TSALIB_BASE_DIR}/cmake/TSAConfig.cmake.in
-    cmake/install/TSAConfig.cmake
-    INSTALL_DESTINATION "${TSA_INSTALL_CMAKE_DIR}"
+    ${KHIVALIB_BASE_DIR}/cmake/KhivaConfig.cmake.in
+    cmake/install/KhivaConfig.cmake
+    INSTALL_DESTINATION "${KHIVA_INSTALL_CMAKE_DIR}"
     PATH_VARS INCLUDE_DIRS CMAKE_DIR)
 
 IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
@@ -70,9 +75,6 @@ ADD_SUBDIRECTORY(src)
 # build examples
 ADD_SUBDIRECTORY(examples)
 
-# build experiments
-ADD_SUBDIRECTORY(experiments)
-
 # test and benchmarks
 ENABLE_TESTING()
 ADD_SUBDIRECTORY(test)
@@ -85,14 +87,14 @@ ADD_SUBDIRECTORY(bindings)
 ADD_SUBDIRECTORY(doc)
 
 INSTALL(DIRECTORY examples/
-    DESTINATION ${TSA_INSTALL_EXAMPLE_DIR}
+    DESTINATION ${KHIVA_INSTALL_EXAMPLE_DIR}
     COMPONENT examples
     FILES_MATCHING
     PATTERN "*.cpp"
     PATTERN "*.h")
 
 INSTALL(DIRECTORY licenses/
-    DESTINATION ${TSA_INSTALL_LICENSES_DIR}
+    DESTINATION ${KHIVA_INSTALL_LICENSES_DIR}
     COMPONENT licenses)
 
 INCLUDE(CPackConfig)

@@ -1,5 +1,11 @@
+# Copyright (c) 2018 Shapelets.io
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
-PROJECT(TSALIB_TEST)
+PROJECT(KHIVALIB_TEST)
 
 FILE(GLOB_RECURSE ALL_EXAMPLE_CPP *.cpp)
 
@@ -8,5 +14,5 @@ FOREACH(ONE_EXAMPLE_CPP ${ALL_EXAMPLE_CPP})
     SET(TARGET_NAME ${ONE_EXAMPLE_EXEC})
     ADD_EXECUTABLE(${TARGET_NAME} ${ONE_EXAMPLE_CPP})
 
-    TARGET_LINK_LIBRARIES(${TARGET_NAME} ${TSALIB})
+    TARGET_LINK_LIBRARIES(${TARGET_NAME} ${KHIVALIB})
 ENDFOREACH()

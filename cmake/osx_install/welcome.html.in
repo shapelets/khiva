@@ -1,9 +1,9 @@
 <html>
 <body>
-    <h1>Welcome to TSA ${VERSION_SHORT}</h1>
+    <h1>Welcome to KHIVA ${VERSION_SHORT}</h1>
 
     <p>
-    TSA is an open source C++ library which focus on providing efficient
+    KHIVA is an open source C++ library which focus on providing efficient
     algorithms to perform analytics over time series of data. It can be
     used to extract insights from one or a group of time series.
     </p>
@@ -20,7 +20,7 @@
     </p>
 
     <p>
-    Follow these steps to install the TSA library.
+    Follow these steps to install the KHIVA library.
     </p>
 </body>
 

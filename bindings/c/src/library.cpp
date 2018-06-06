@@ -1,33 +1,33 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <tsa/library.h>
-#include <tsa/version.h>
-#include <tsa_c/library.h>
+#include <khiva/library.h>
+#include <khiva/version.h>
+#include <khiva_c/library.h>
 #include <cstring>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-TSAAPI void info() { tsa::library::backendInfo(); }
+KHIVAAPI void info() { khiva::library::backendInfo(); }
 
-TSAAPI void set_backend(int *backend) { tsa::library::setBackend(static_cast<tsa::library::Backend>(*backend)); }
+KHIVAAPI void set_backend(int *backend) { khiva::library::setBackend(static_cast<khiva::library::Backend>(*backend)); }
 
-TSAAPI void get_backend(int *backend) { *backend = static_cast<int>(tsa::library::getBackend()); }
+KHIVAAPI void get_backend(int *backend) { *backend = static_cast<int>(khiva::library::getBackend()); }
 
-TSAAPI void get_backends(int *backends) { *backends = tsa::library::getBackends(); }
+KHIVAAPI void get_backends(int *backends) { *backends = khiva::library::getBackends(); }
 
-TSAAPI void set_device(int *device) { tsa::library::setDevice(*device); }
+KHIVAAPI void set_device(int *device) { khiva::library::setDevice(*device); }
 
-TSAAPI void get_device_id(int *device_id) { *device_id = tsa::library::getDevice(); }
+KHIVAAPI void get_device_id(int *device_id) { *device_id = khiva::library::getDevice(); }
 
-TSAAPI void get_device_count(int *device_count) { *device_count = tsa::library::getDeviceCount(); }
+KHIVAAPI void get_device_count(int *device_count) { *device_count = khiva::library::getDeviceCount(); }
 
-TSAAPI void version(char **v) { strcpy(*v, tsa::version()); }
+KHIVAAPI void version(char **v) { strcpy(*v, khiva::version()); }
 
 #ifdef __cplusplus
 }

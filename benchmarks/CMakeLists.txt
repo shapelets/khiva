@@ -1,3 +1,9 @@
+# Copyright (c) 2018 Shapelets.io
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 FIND_PACKAGE(Threads REQUIRED)
 FIND_PACKAGE(Benchmark REQUIRED)
 
@@ -9,7 +15,7 @@ FOREACH(ONE_BENCH_CPP ${ALL_BENCH_CPP})
    ADD_EXECUTABLE(${TARGET_NAME} ${ONE_BENCH_CPP})
    
    SET_TARGET_PROPERTIES(${TARGET_NAME} PROPERTIES OUTPUT_NAME ${ONE_BENCH_EXEC}) 
-   TARGET_LINK_LIBRARIES(${TARGET_NAME} benchmark ${TSALIB} ${CMAKE_THREAD_LIBS_INIT})
+   TARGET_LINK_LIBRARIES(${TARGET_NAME} benchmark ${KHIVALIB} ${CMAKE_THREAD_LIBS_INIT})
 
    IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
       TARGET_LINK_LIBRARIES(${TARGET_NAME} Shlwapi)

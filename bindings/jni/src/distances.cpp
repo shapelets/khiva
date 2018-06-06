@@ -1,18 +1,18 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <jni.h>
-#include <tsa/distances.h>
-#include <tsa_jni/distances.h>
+#include <khiva/distances.h>
+#include <khiva_jni/distances.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_euclidean(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -24,7 +24,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_euclidean(JNIEnv *e
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::distances::euclidean(var).get());
+    af_retain_array(&af_p, khiva::distances::euclidean(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -33,7 +33,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_euclidean(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_dtw(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_dtw(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -45,7 +45,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_dtw(JNIEnv *env, jo
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::distances::dtw(var).get());
+    af_retain_array(&af_p, khiva::distances::dtw(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -54,7 +54,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_dtw(JNIEnv *env, jo
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_hamming(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_hamming(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -66,7 +66,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_hamming(JNIEnv *env
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::distances::hamming(var).get());
+    af_retain_array(&af_p, khiva::distances::hamming(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -75,7 +75,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_hamming(JNIEnv *env
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_manhattan(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -87,7 +87,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_manhattan(JNIEnv *e
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::distances::manhattan(var).get());
+    af_retain_array(&af_p, khiva::distances::manhattan(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -96,7 +96,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_manhattan(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -108,7 +108,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Distances_squaredEuclidean(JN
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::distances::squaredEuclidean(var).get());
+    af_retain_array(&af_p, khiva::distances::squaredEuclidean(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;

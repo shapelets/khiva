@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa/library.h>
-#include "tsaTest.h"
+#include <khiva/library.h>
+#include "khivaTest.h"
 
 // Simple test, does not use gmock
 void setBackendTest() {
@@ -16,45 +16,45 @@ void setBackendTest() {
     bool cpu = backends & af::Backend::AF_BACKEND_CPU;
 
     if (cuda) {
-        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_CUDA);
+        khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_CUDA);
         ASSERT_EQ(af::getActiveBackend(), af::Backend::AF_BACKEND_CUDA);
     }
 
     if (opencl) {
-        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_OPENCL);
+        khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_OPENCL);
         ASSERT_EQ(af::getActiveBackend(), af::Backend::AF_BACKEND_OPENCL);
     }
 
     if (cpu) {
-        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_CPU);
+        khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_CPU);
         ASSERT_EQ(af::getActiveBackend(), af::Backend::AF_BACKEND_CPU);
     }
 }
 
 void getBackendTest() {
-    int backends = tsa::library::getBackends();
-    bool cuda = backends & tsa::library::Backend::TSA_BACKEND_CUDA;
-    bool opencl = backends & tsa::library::Backend::TSA_BACKEND_OPENCL;
-    bool cpu = backends & tsa::library::Backend::TSA_BACKEND_CPU;
+    int backends = khiva::library::getBackends();
+    bool cuda = backends & khiva::library::Backend::KHIVA_BACKEND_CUDA;
+    bool opencl = backends & khiva::library::Backend::KHIVA_BACKEND_OPENCL;
+    bool cpu = backends & khiva::library::Backend::KHIVA_BACKEND_CPU;
 
     if (cuda) {
-        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_CUDA);
-        ASSERT_EQ(tsa::library::getBackend(), tsa::library::Backend::TSA_BACKEND_CUDA);
+        khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_CUDA);
+        ASSERT_EQ(khiva::library::getBackend(), khiva::library::Backend::KHIVA_BACKEND_CUDA);
     }
 
     if (opencl) {
-        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_OPENCL);
-        ASSERT_EQ(tsa::library::getBackend(), tsa::library::Backend::TSA_BACKEND_OPENCL);
+        khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_OPENCL);
+        ASSERT_EQ(khiva::library::getBackend(), khiva::library::Backend::KHIVA_BACKEND_OPENCL);
     }
 
     if (cpu) {
-        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_CPU);
-        ASSERT_EQ(tsa::library::getBackend(), tsa::library::Backend::TSA_BACKEND_CPU);
+        khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_CPU);
+        ASSERT_EQ(khiva::library::getBackend(), khiva::library::Backend::KHIVA_BACKEND_CPU);
     }
 }
 
 void getBackendsTest() {
-    int backends = tsa::library::getBackends();
+    int backends = khiva::library::getBackends();
     int backendsAF = af::getAvailableBackends();
 
     ASSERT_EQ(backends, backendsAF);
@@ -63,7 +63,7 @@ void getBackendsTest() {
 void setDeviceTest() {
     int devices = af::getDeviceCount();
     for (int i = 0; i < devices; i++) {
-        tsa::library::setDevice(i);
+        khiva::library::setDevice(i);
         ASSERT_EQ(af::getDevice(), i);
     }
 }
@@ -71,36 +71,36 @@ void setDeviceTest() {
 void getDeviceTest() {
     int devices = af::getDeviceCount();
     for (int i = 0; i < devices; i++) {
-        tsa::library::setDevice(i);
-        ASSERT_EQ(tsa::library::getDevice(), i);
+        khiva::library::setDevice(i);
+        ASSERT_EQ(khiva::library::getDevice(), i);
     }
 }
 
 void getDeviceCountTest() {
-    int backends = tsa::library::getBackends();
-    bool cuda = backends & tsa::library::Backend::TSA_BACKEND_CUDA;
-    bool opencl = backends & tsa::library::Backend::TSA_BACKEND_OPENCL;
-    bool cpu = backends & tsa::library::Backend::TSA_BACKEND_CPU;
+    int backends = khiva::library::getBackends();
+    bool cuda = backends & khiva::library::Backend::KHIVA_BACKEND_CUDA;
+    bool opencl = backends & khiva::library::Backend::KHIVA_BACKEND_OPENCL;
+    bool cpu = backends & khiva::library::Backend::KHIVA_BACKEND_CPU;
 
     if (cuda) {
-        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_CUDA);
-        ASSERT_EQ(af::getDeviceCount(), tsa::library::getDeviceCount());
+        khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_CUDA);
+        ASSERT_EQ(af::getDeviceCount(), khiva::library::getDeviceCount());
     }
 
     if (opencl) {
-        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_OPENCL);
-        ASSERT_EQ(af::getDeviceCount(), tsa::library::getDeviceCount());
+        khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_OPENCL);
+        ASSERT_EQ(af::getDeviceCount(), khiva::library::getDeviceCount());
     }
 
     if (cpu) {
-        tsa::library::setBackend(tsa::library::Backend::TSA_BACKEND_CPU);
-        ASSERT_EQ(af::getDeviceCount(), tsa::library::getDeviceCount());
+        khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_CPU);
+        ASSERT_EQ(af::getDeviceCount(), khiva::library::getDeviceCount());
     }
 }
 
-TSA_TEST(LibraryTests, SetBackendTest, setBackendTest)
-TSA_TEST(LibraryTests, GetBackendTest, getBackendTest)
-TSA_TEST(LibraryTests, GetBackendsTest, getBackendsTest)
-TSA_TEST(LibraryTests, SetDeviceTest, setDeviceTest)
-TSA_TEST(LibraryTests, GetDeviceTest, getDeviceTest)
-TSA_TEST(LibraryTests, GetDeviceCountTest, getDeviceCountTest)
+KHIVA_TEST(LibraryTests, SetBackendTest, setBackendTest)
+KHIVA_TEST(LibraryTests, GetBackendTest, getBackendTest)
+KHIVA_TEST(LibraryTests, GetBackendsTest, getBackendsTest)
+KHIVA_TEST(LibraryTests, SetDeviceTest, setDeviceTest)
+KHIVA_TEST(LibraryTests, GetDeviceTest, getDeviceTest)
+KHIVA_TEST(LibraryTests, GetDeviceCountTest, getDeviceCountTest)

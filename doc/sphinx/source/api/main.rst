@@ -1,8 +1,8 @@
 .. _chapter-API:
 
-TSA API
-=======
-This is the list of namespaces that comprise the TSA library. 
+KHIVA API
+=========
+This is the list of namespaces that comprise the KHIVA library. 
 
 .. toctree::
    :caption: Table of Contents
@@ -34,7 +34,4 @@ This is the list of namespaces that comprise the TSA library.
 * :ref:`namespace-regression-label` 
 * :ref:`namespace-regularization-label` 
 * :ref:`namespace-statistics-label` 
-
-.. doxygenfunction: tsa::dimensionality::PIP
-
 

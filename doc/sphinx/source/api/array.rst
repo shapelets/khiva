@@ -3,8 +3,8 @@
 Namespace Array
 ===============
 
-.. doxygennamespace:: tsa::array
-    :project: TSA
+.. doxygennamespace:: khiva::array
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

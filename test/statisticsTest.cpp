@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa/statistics.h>
-#include "tsaTest.h"
+#include <khiva/statistics.h>
+#include "khivaTest.h"
 
 void covarianceBiased() {
     float dataX[] = {-2.1f, -1, 4.3f, 3, 1.1f, 0.12f, 3, 1.1f, 0.12f};
@@ -15,7 +15,7 @@ void covarianceBiased() {
     float dataExpected[] = {7.80666667f, -2.85733333f, -2.85733333f, -2.85733333f, 1.42942222f,
                             1.42942222f, -2.85733333f, 1.42942222f,  1.42942222f};
 
-    float *result = tsa::statistics::covariance(tss, false).host<float>();
+    float *result = khiva::statistics::covariance(tss, false).host<float>();
 
     for (int i = 0; i < 9; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], EPSILON);
@@ -29,7 +29,7 @@ void covarianceUnbiased() {
     float dataExpected[] = {11.70999999f, -4.286f, -4.286f,     -4.286f,    2.14413333f,
                             2.14413333f,  -4.286f, 2.14413333f, 2.14413333f};
 
-    float *result = tsa::statistics::covariance(tss, true).host<float>();
+    float *result = khiva::statistics::covariance(tss, true).host<float>();
 
     for (int i = 0; i < 9; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], EPSILON);
@@ -42,7 +42,7 @@ void kurtosis() {
 
     float dataExpected[] = {-1.2f, -2.66226722f};
 
-    float *result = tsa::statistics::kurtosis(tss).host<float>();
+    float *result = khiva::statistics::kurtosis(tss).host<float>();
 
     for (int i = 0; i < 2; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e2);
@@ -53,7 +53,7 @@ void ljungBox() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7};
     af::array tss(4, 2, data);
 
-    af::array result = tsa::statistics::ljungBox(tss, 3);
+    af::array result = khiva::statistics::ljungBox(tss, 3);
     float *calculated = result.host<float>();
 
     float expected[] = {6.4400f, 6.4400f};
@@ -68,14 +68,14 @@ void moment() {
 
     float dataExpected = 9.166666666f;
 
-    float *result = tsa::statistics::moment(xss, 2).host<float>();
+    float *result = khiva::statistics::moment(xss, 2).host<float>();
 
     ASSERT_NEAR(result[0], dataExpected, EPSILON);
     ASSERT_NEAR(result[1], dataExpected, EPSILON);
 
     dataExpected = 163.1666666666f;
 
-    result = tsa::statistics::moment(xss, 4).host<float>();
+    result = khiva::statistics::moment(xss, 4).host<float>();
 
     ASSERT_NEAR(result[0], dataExpected, EPSILON * 1e2);
     ASSERT_NEAR(result[1], dataExpected, EPSILON * 1e2);
@@ -89,7 +89,7 @@ void quantile() {
 
     af::array q = af::array(2, quantiles);
 
-    float *calculated = tsa::statistics::quantile(tss, q).host<float>();
+    float *calculated = khiva::statistics::quantile(tss, q).host<float>();
 
     float expected[] = {0.5, 1.0, 6.5, 7.0};
 
@@ -103,7 +103,7 @@ void quantilesCut2() {
 
     float quantiles = 2;
 
-    af::array result = af::transpose(tsa::statistics::quantilesCut(tss, quantiles));
+    af::array result = af::transpose(khiva::statistics::quantilesCut(tss, quantiles));
 
     float *calculated = result.host<float>();
 
@@ -122,7 +122,7 @@ void quantilesCut3() {
 
     float quantiles = 3;
 
-    af::array result = af::transpose(tsa::statistics::quantilesCut(tss, quantiles));
+    af::array result = af::transpose(khiva::statistics::quantilesCut(tss, quantiles));
 
     float *calculated = result.host<float>();
 
@@ -142,7 +142,7 @@ void quantilesCut7() {
 
     float quantiles = 7;
 
-    af::array result = af::transpose(tsa::statistics::quantilesCut(tss, quantiles));
+    af::array result = af::transpose(khiva::statistics::quantilesCut(tss, quantiles));
 
     float *calculated = result.host<float>();
 
@@ -162,7 +162,7 @@ void sampleStdev() {
 
     float dataExpected[] = {1.870828693f, 12.988456413f};
 
-    float *result = tsa::statistics::sampleStdev(tss).host<float>();
+    float *result = khiva::statistics::sampleStdev(tss).host<float>();
 
     ASSERT_NEAR(result[0], dataExpected[0], EPSILON);
     ASSERT_NEAR(result[1], dataExpected[1], EPSILON);
@@ -174,21 +174,21 @@ void skewness() {
 
     float dataExpected[] = {0.0f, 0.236177069879499f};
 
-    float *result = tsa::statistics::skewness(tss).host<float>();
+    float *result = khiva::statistics::skewness(tss).host<float>();
 
     for (int i = 0; i < 2; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e2);
     }
 }
 
-TSA_TEST(StatisticsTests, CovarianceBiased, covarianceBiased)
-TSA_TEST(StatisticsTests, CovarianceUnbiased, covarianceUnbiased)
-TSA_TEST(StatisticsTests, Kurtosis, kurtosis)
-TSA_TEST(StatisticsTests, LjungBox, ljungBox)
-TSA_TEST(StatisticsTests, Moment, moment)
-TSA_TEST(StatisticsTests, Quantile, quantile)
-TSA_TEST(StatisticsTests, QuantilesCut2, quantilesCut2)
-TSA_TEST(StatisticsTests, QuantilesCut3, quantilesCut3)
-TSA_TEST(StatisticsTests, QuantilesCut7, quantilesCut7)
-TSA_TEST(StatisticsTests, SampleStdev, sampleStdev)
-TSA_TEST(StatisticsTests, Skewness, skewness)
+KHIVA_TEST(StatisticsTests, CovarianceBiased, covarianceBiased)
+KHIVA_TEST(StatisticsTests, CovarianceUnbiased, covarianceUnbiased)
+KHIVA_TEST(StatisticsTests, Kurtosis, kurtosis)
+KHIVA_TEST(StatisticsTests, LjungBox, ljungBox)
+KHIVA_TEST(StatisticsTests, Moment, moment)
+KHIVA_TEST(StatisticsTests, Quantile, quantile)
+KHIVA_TEST(StatisticsTests, QuantilesCut2, quantilesCut2)
+KHIVA_TEST(StatisticsTests, QuantilesCut3, quantilesCut3)
+KHIVA_TEST(StatisticsTests, QuantilesCut7, quantilesCut7)
+KHIVA_TEST(StatisticsTests, SampleStdev, sampleStdev)
+KHIVA_TEST(StatisticsTests, Skewness, skewness)

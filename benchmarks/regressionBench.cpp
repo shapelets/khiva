@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
-#include <tsa/regression.h>
-#include "tsaBenchmark.h"
+#include <khiva/regression.h>
+#include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
 void Linear(benchmark::State &state) {
@@ -22,7 +22,7 @@ void Linear(benchmark::State &state) {
     af::sync();
     while (state.KeepRunning()) {
         af::array slope, intercept, rvalue, pvalue, stderrest;
-        tsa::regression::linear(x, y, slope, intercept, rvalue, pvalue, stderrest);
+        khiva::regression::linear(x, y, slope, intercept, rvalue, pvalue, stderrest);
         slope.eval();
         intercept.eval();
         rvalue.eval();
@@ -54,4 +54,4 @@ void cpuBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)
+KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

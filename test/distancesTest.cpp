@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa/distances.h>
-#include "tsaTest.h"
+#include <khiva/distances.h>
+#include "khivaTest.h"
 
 void dtw() {
     std::vector<double> a;
@@ -27,7 +27,7 @@ void dtw() {
     b.push_back(6);
     b.push_back(7);
 
-    double result = tsa::distances::dtw(a, b);
+    double result = khiva::distances::dtw(a, b);
 
     ASSERT_EQ(result, 19);
 }
@@ -36,7 +36,7 @@ void dtw2() {
     float data[] = {1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5};
     af::array tss(5, 5, data);
 
-    af::array result = tsa::distances::dtw(tss);
+    af::array result = khiva::distances::dtw(tss);
 
     // check dimensions
     auto dims = result.dims();
@@ -84,7 +84,7 @@ void euclidean() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(4, 3, data);
 
-    auto result = tsa::distances::euclidean(tss);
+    auto result = khiva::distances::euclidean(tss);
 
     // check dimensions
     auto dims = result.dims();
@@ -110,7 +110,7 @@ void hamming() {
     float data[] = {1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5};
     af::array tss(5, 5, data);
 
-    af::array result = tsa::distances::hamming(tss);
+    af::array result = khiva::distances::hamming(tss);
 
     // check dimensions
     auto dims = result.dims();
@@ -157,7 +157,7 @@ void manhattan() {
     float data[] = {1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5};
     af::array tss(5, 5, data);
 
-    af::array result = tsa::distances::manhattan(tss);
+    af::array result = khiva::distances::manhattan(tss);
 
     // check dimensions
     auto dims = result.dims();
@@ -205,7 +205,7 @@ void squaredEuclidean() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(4, 3, data);
 
-    auto result = tsa::distances::squaredEuclidean(tss);
+    auto result = khiva::distances::squaredEuclidean(tss);
 
     // check dimensions
     auto dims = result.dims();
@@ -227,9 +227,9 @@ void squaredEuclidean() {
     ASSERT_EQ(0.0f, hostResult[8]);
 }
 
-TSA_TEST(DistanceTests, DTW, dtw)
-TSA_TEST(DistanceTests, DTW2, dtw2)
-TSA_TEST(DistanceTests, Euclidean, euclidean)
-TSA_TEST(DistanceTests, Hamming, hamming)
-TSA_TEST(DistanceTests, Manhattam, manhattan)
-TSA_TEST(DistanceTests, SquaredEuclidean, squaredEuclidean)
+KHIVA_TEST(DistanceTests, DTW, dtw)
+KHIVA_TEST(DistanceTests, DTW2, dtw2)
+KHIVA_TEST(DistanceTests, Euclidean, euclidean)
+KHIVA_TEST(DistanceTests, Hamming, hamming)
+KHIVA_TEST(DistanceTests, Manhattam, manhattan)
+KHIVA_TEST(DistanceTests, SquaredEuclidean, squaredEuclidean)

@@ -1,27 +1,27 @@
 !define MUI_WELCOMEPAGE_TITLE '${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION} Installer'
 !define MUI_WELCOMEPAGE_TITLE_3LINES
 !define MUI_WELCOMEPAGE_TEXT    \
-"TSA is an open source C++ library which focus on providing efficient algorithms to perform\
+"Khiva is an open source C++ library which focus on providing efficient algorithms to perform\
 analytics over time series of data. It can be used to extract insights from one or a group of\
 time series.\r\n\r\n\
 The large number of available methods allow us to understand the nature of each\
 time series.\r\n\r\n\
 Based on that analytics, the user can reduce dimensionality, find out recurrent motifs\
 or discords, understand the seasonality or trend from a given time series, forecasting and detect anomalies.\r\n\r\n\
-Follow these steps to install the TSA library."
+Follow these steps to install the Khiva library."
 
-!define MUI_ICON "@CPACK_TSA_ASSETS_DIR@@CPACK_PACKAGE_NAME@.ico"
-!define MUI_UNICON "@CPACK_TSA_ASSETS_DIR@@CPACK_PACKAGE_NAME@.ico"
+!define MUI_ICON "@CPACK_KHIVA_ASSETS_DIR@@CPACK_PACKAGE_NAME@.ico"
+!define MUI_UNICON "@CPACK_KHIVA_ASSETS_DIR@@CPACK_PACKAGE_NAME@.ico"
 
-!define MUI_WELCOMEFINISHPAGE_BITMAP "@CPACK_TSA_ASSETS_DIR@@CPACK_PACKAGE_NAME@_sym.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "@CPACK_TSA_ASSETS_DIR@@CPACK_PACKAGE_NAME@_sym.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "@CPACK_KHIVA_ASSETS_DIR@@CPACK_PACKAGE_NAME@_sym.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "@CPACK_KHIVA_ASSETS_DIR@@CPACK_PACKAGE_NAME@_sym.bmp"
 !define MUI_WELCOMEFINISHPAGE_UNBITMAP_NOSTRETCH
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP_NOSTRETCH
 
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_RIGHT
-!define MUI_HEADERIMAGE_BITMAP "@CPACK_TSA_ASSETS_DIR@@CPACK_PACKAGE_NAME@_logo.bmp"
-!define MUI_HEADERIMAGE_UNBITMAP "@CPACK_TSA_ASSETS_DIR@@CPACK_PACKAGE_NAME@_logo.bmp"
+!define MUI_HEADERIMAGE_BITMAP "@CPACK_KHIVA_ASSETS_DIR@@CPACK_PACKAGE_NAME@_logo.bmp"
+!define MUI_HEADERIMAGE_UNBITMAP "@CPACK_KHIVA_ASSETS_DIR@@CPACK_PACKAGE_NAME@_logo.bmp"
 !define MUI_HEADERIMAGE_BITMAP_NOSTRETCH
 !define MUI_HEADERIMAGE_UNBITMAP_NOSTRETCH
 !define MUI_ABORTWARNING
@@ -30,8 +30,8 @@ Follow these steps to install the TSA library."
 ; Defines for Finish Page
 !define MUI_FINISHPAGE_RUN "explorer.exe"
 !define MUI_FINISHPAGE_RUN_PARAMETERS "$INSTDIR"
-!define MUI_FINISHPAGE_RUN_TEXT "Open TSA Install Directory to see Examples"
+!define MUI_FINISHPAGE_RUN_TEXT "Open Khiva Install Directory to see Examples"
 !define MUI_FINISHPAGE_SHOWREADME "http://www.shapelets.io/docs/"
-!define MUI_FINISHPAGE_SHOWREADME_TEXT "Open TSA Documentation on the Web"
-!define MUI_FINISHPAGE_LINK "TSA Support and Discussions"
-!define MUI_FINISHPAGE_LINK_LOCATION "https://groups.google.com/forum/?fromgroups#!forum/shapelets-tsa"
+!define MUI_FINISHPAGE_SHOWREADME_TEXT "Open Khiva Documentation on the Web"
+!define MUI_FINISHPAGE_LINK "Khiva Support and Discussions"
+!define MUI_FINISHPAGE_LINK_LOCATION "https://groups.google.com/forum/?fromgroups#!forum/shapelets-khiva"

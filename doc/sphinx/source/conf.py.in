@@ -25,9 +25,9 @@ doxygenDir = docDir + "/doxygen"
 
 # -- Project information -----------------------------------------------------
 
-project = u'TSA'
-copyright = u'2018, Grumpy Cat Software S.L.'
-author = u'Grumpy Cat Software S.L.'
+project = u'KHIVA'
+copyright = u'2018, Shapelets'
+author = u'Shapelets'
 
 # The short X.Y version
 version = u''
@@ -87,16 +87,16 @@ pygments_style = 'sphinx'
 
 # Setup the breathe extension
 breathe_projects = {
-    "TSA": doxygenDir + "/xml"
+    "KHIVA": doxygenDir + "/xml"
 }
-breathe_default_project = "TSA"
+breathe_default_project = "KHIVA"
 
 # Setup the exhale extension
 exhale_args = {
     # These arguments are required
-    "containmentFolder":     sphinxSourceDir + "/apiTSA",
+    "containmentFolder":     sphinxSourceDir + "/apiKHIVA",
     "rootFileName":          "main.rst",
-    "rootFileTitle":         "TSA API",
+    "rootFileTitle":         "KHIVA API",
     "doxygenStripFromPath":  "../",
     # Suggested optional arguments
     "createTreeView":        True,
@@ -145,7 +145,7 @@ html_theme_path = ["_themes"]
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'TSAdoc'
+htmlhelp_basename = 'KHIVAdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -172,8 +172,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'TSA.tex', u'TSA Documentation',
-     u'Grumpy Cat Software S.L.', 'manual'),
+    (master_doc, 'KHIVA.tex', u'KHIVA Documentation',
+     u'Shapelets.io', 'manual'),
 ]
 
 
@@ -182,7 +182,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'tsa', u'TSA Documentation',
+    (master_doc, 'khiva', u'KHIVA Documentation',
      [author], 1)
 ]
 
@@ -193,8 +193,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'TSA', u'TSA Documentation',
-     author, 'TSA', 'One line description of project.',
+    (master_doc, 'KHIVA', u'KHIVA Documentation',
+     author, 'KHIVA', 'One line description of project.',
      'Miscellaneous'),
 ]
 

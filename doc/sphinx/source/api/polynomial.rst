@@ -3,8 +3,8 @@
 Namespace Polynomial
 ====================
 
-.. doxygennamespace:: tsa::polynomial
-    :project: TSA
+.. doxygennamespace:: khiva::polynomial
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

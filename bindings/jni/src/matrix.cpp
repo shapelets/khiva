@@ -1,19 +1,19 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
-#include <tsa/matrix.h>
-#include <tsa_jni/matrix.h>
+#include <khiva/matrix.h>
+#include <khiva_jni/matrix.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
-                                                                            jlong ref_index, jlong n) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
+                                                                               jlong ref_index, jlong n) {
     const jint l = 5;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -40,8 +40,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNDiscords(JNIE
     af::array discords_indices;
     af::array subsequence_indices;
 
-    tsa::matrix::findBestNDiscords(var_profile, var_index, static_cast<long>(n), discords, discords_indices,
-                                   subsequence_indices);
+    khiva::matrix::findBestNDiscords(var_profile, var_index, static_cast<long>(n), discords, discords_indices,
+                                     subsequence_indices);
 
     af_retain_array(&af_p_discord_distances, discords.get());
     af_retain_array(&af_p_discord_indices, discords_indices.get());
@@ -57,8 +57,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNDiscords(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
-                                                                          jlong ref_index, jlong n) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
+                                                                             jlong ref_index, jlong n) {
     const jint l = 5;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -85,8 +85,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNMotifs(JNIEnv
     af::array motif_indices;
     af::array subsequence_indices;
 
-    tsa::matrix::findBestNMotifs(var_profile, var_index, static_cast<long>(n), motifs, motif_indices,
-                                 subsequence_indices);
+    khiva::matrix::findBestNMotifs(var_profile, var_index, static_cast<long>(n), motifs, motif_indices,
+                                   subsequence_indices);
 
     af_retain_array(&af_p_motif_distances, motifs.get());
     af_retain_array(&af_p_motif_indices, motif_indices.get());
@@ -102,8 +102,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_findBestNMotifs(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stomp(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
-                                                                jlong m) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
+                                                                   jlong m) {
     const jint l = 4;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -127,7 +127,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stomp(JNIEnv *env, job
     af::array index;
     long subsequence = static_cast<long>(m);
 
-    tsa::matrix::stomp(var_a, var_b, subsequence, distance, index);
+    khiva::matrix::stomp(var_a, var_b, subsequence, distance, index);
 
     af_retain_array(&af_p_distance, distance.get());
     af_retain_array(&af_p_index, index.get());
@@ -141,7 +141,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stomp(JNIEnv *env, job
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -161,7 +161,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Matrix_stompSelfJoin(JNIEnv *
     af::array index;
     long subsequence = static_cast<long>(m);
 
-    tsa::matrix::stomp(var_a, subsequence, distance, index);
+    khiva::matrix::stomp(var_a, subsequence, distance, index);
 
     af_retain_array(&af_p_distance, distance.get());
     af_retain_array(&af_p_index, index.get());

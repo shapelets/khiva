@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
-#include <tsa/features.h>
-#include "tsaBenchmark.h"
+#include <khiva/features.h>
+#include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
 void AbsoluteSumOfChanges(benchmark::State &state) {
@@ -20,7 +20,7 @@ void AbsoluteSumOfChanges(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto asoc = tsa::features::absoluteSumOfChanges(t);
+        auto asoc = khiva::features::absoluteSumOfChanges(t);
         asoc.eval();
         af::sync();
     }
@@ -39,7 +39,7 @@ void AbsEnergy(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto ae = tsa::features::absEnergy(t);
+        auto ae = khiva::features::absEnergy(t);
         ae.eval();
         af::sync();
     }
@@ -60,7 +60,7 @@ void AggregatedLinearTrend(benchmark::State &state) {
     af::sync();
     while (state.KeepRunning()) {
         af::array slope, intercept, rvalue, pvalue, stderrest;
-        tsa::features::aggregatedLinearTrend(t, chunkSize, af::mean, slope, intercept, rvalue, pvalue, stderrest);
+        khiva::features::aggregatedLinearTrend(t, chunkSize, af::mean, slope, intercept, rvalue, pvalue, stderrest);
         slope.eval();
         intercept.eval();
         rvalue.eval();
@@ -84,7 +84,7 @@ void AggregatedAutocorrelation(benchmark::State &state) {
     af::sync();
 
     while (state.KeepRunning()) {
-        af::array output = tsa::features::aggregatedAutocorrelation(t, af::mean);
+        af::array output = khiva::features::aggregatedAutocorrelation(t, af::mean);
         output.eval();
         af::sync();
     }
@@ -103,7 +103,7 @@ void ApproximateEntropy(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto entropy = tsa::features::approximateEntropy(t, 128, 0.5);
+        auto entropy = khiva::features::approximateEntropy(t, 128, 0.5);
         entropy.eval();
         af::sync();
     }
@@ -122,7 +122,7 @@ void CrossCovariance(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto cc = tsa::features::crossCovariance(t, t);
+        auto cc = khiva::features::crossCovariance(t, t);
         cc.eval();
         af::sync();
     }
@@ -141,7 +141,7 @@ void AutoCovariance(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto ac = tsa::features::autoCovariance(t);
+        auto ac = khiva::features::autoCovariance(t);
         ac.eval();
         af::sync();
     }
@@ -160,7 +160,7 @@ void CrossCorrelation(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto cc = tsa::features::crossCorrelation(t, t);
+        auto cc = khiva::features::crossCorrelation(t, t);
         cc.eval();
         af::sync();
     }
@@ -180,7 +180,7 @@ void AutoCorrelation(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto ac = tsa::features::autoCorrelation(t, lag);
+        auto ac = khiva::features::autoCorrelation(t, lag);
         ac.eval();
         af::sync();
     }
@@ -200,7 +200,7 @@ void BinnedEntropy(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto ac = tsa::features::binnedEntropy(t, bins);
+        auto ac = khiva::features::binnedEntropy(t, bins);
         ac.eval();
         af::sync();
     }
@@ -220,7 +220,7 @@ void C3(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto c3 = tsa::features::c3(t, lag);
+        auto c3 = khiva::features::c3(t, lag);
         c3.eval();
         af::sync();
     }
@@ -240,7 +240,7 @@ void CidCe(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto cidCe = tsa::features::cidCe(t, zNormalize);
+        auto cidCe = khiva::features::cidCe(t, zNormalize);
         cidCe.eval();
         af::sync();
     }
@@ -259,7 +259,7 @@ void CountBelowMean(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto cbm = tsa::features::countBelowMean(t);
+        auto cbm = khiva::features::countBelowMean(t);
         cbm.eval();
         af::sync();
     }
@@ -280,7 +280,7 @@ void CwtCoefficients(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto cwt = tsa::features::cwtCoefficients(t, ws, 8, 3);
+        auto cwt = khiva::features::cwtCoefficients(t, ws, 8, 3);
         cwt.eval();
         af::sync();
     }
@@ -302,7 +302,7 @@ void EnergyRatioByChunks(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto cbm = tsa::features::energyRatioByChunks(t, numSegments, segmentFocus);
+        auto cbm = khiva::features::energyRatioByChunks(t, numSegments, segmentFocus);
         cbm.eval();
         af::sync();
     }
@@ -322,7 +322,7 @@ void FftAggregated(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto fftA = tsa::features::fftAggregated(t);
+        auto fftA = khiva::features::fftAggregated(t);
         fftA.eval();
         af::sync();
     }
@@ -343,7 +343,7 @@ void FftCoefficient(benchmark::State &state) {
     af::sync();
     while (state.KeepRunning()) {
         af::array real, imag, _abs, angle;
-        tsa::features::fftCoefficient(t, coefficient, real, imag, _abs, angle);
+        khiva::features::fftCoefficient(t, coefficient, real, imag, _abs, angle);
         real.eval();
         imag.eval();
         _abs.eval();
@@ -365,7 +365,7 @@ void FirstLocationOfMaximum(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto first = tsa::features::firstLocationOfMaximum(t);
+        auto first = khiva::features::firstLocationOfMaximum(t);
         first.eval();
         af::sync();
     }
@@ -384,7 +384,7 @@ void FirstLocationOfMinimum(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto first = tsa::features::firstLocationOfMinimum(t);
+        auto first = khiva::features::firstLocationOfMinimum(t);
         first.eval();
         af::sync();
     }
@@ -406,7 +406,7 @@ void FriedrichCoefficients(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto fc = tsa::features::friedrichCoefficients(t, m2, r);
+        auto fc = khiva::features::friedrichCoefficients(t, m2, r);
         fc.eval();
         af::sync();
     }
@@ -425,7 +425,7 @@ void HasDuplicates(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto duplicates = tsa::features::hasDuplicates(t);
+        auto duplicates = khiva::features::hasDuplicates(t);
         duplicates.eval();
         af::sync();
     }
@@ -444,7 +444,7 @@ void HasDuplicateMax(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto duplicateMax = tsa::features::hasDuplicateMax(t);
+        auto duplicateMax = khiva::features::hasDuplicateMax(t);
         duplicateMax.eval();
         af::sync();
     }
@@ -463,7 +463,7 @@ void HasDuplicateMin(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto duplicateMin = tsa::features::hasDuplicateMin(t);
+        auto duplicateMin = khiva::features::hasDuplicateMin(t);
         duplicateMin.eval();
         af::sync();
     }
@@ -483,7 +483,7 @@ void IndexMassQuantile(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto index = tsa::features::indexMassQuantile(t, q);
+        auto index = khiva::features::indexMassQuantile(t, q);
         index.eval();
         af::sync();
     }
@@ -502,7 +502,7 @@ void Kurtosis(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto kurtosis = tsa::features::kurtosis(t);
+        auto kurtosis = khiva::features::kurtosis(t);
         kurtosis.eval();
         af::sync();
     }
@@ -522,7 +522,7 @@ void LargeStandardDeviation(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto large = tsa::features::largeStandardDeviation(t, r);
+        auto large = khiva::features::largeStandardDeviation(t, r);
         large.eval();
         af::sync();
     }
@@ -541,7 +541,7 @@ void LastLocationOfMaximum(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto llom = tsa::features::lastLocationOfMaximum(t);
+        auto llom = khiva::features::lastLocationOfMaximum(t);
         llom.eval();
         af::sync();
     }
@@ -560,7 +560,7 @@ void LastLocationOfMinimum(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto llom = tsa::features::lastLocationOfMaximum(t);
+        auto llom = khiva::features::lastLocationOfMaximum(t);
         llom.eval();
         af::sync();
     }
@@ -579,7 +579,7 @@ void Length(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto length = tsa::features::length(t);
+        auto length = khiva::features::length(t);
         length.eval();
         af::sync();
     }
@@ -599,7 +599,7 @@ void LinearTrend(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stder);
+        khiva::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stder);
         pvalue.eval();
         rvalue.eval();
         intercept.eval();
@@ -622,7 +622,7 @@ void LongestStrikeAboveMean(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto longest = tsa::features::longestStrikeAboveMean(t);
+        auto longest = khiva::features::longestStrikeAboveMean(t);
         longest.eval();
         af::sync();
     }
@@ -641,7 +641,7 @@ void LongestStrikeBelowMean(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto longest = tsa::features::longestStrikeBelowMean(t);
+        auto longest = khiva::features::longestStrikeBelowMean(t);
         longest.eval();
         af::sync();
     }
@@ -662,7 +662,7 @@ void MaxLangevinFixedPoint(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto langevin = tsa::features::maxLangevinFixedPoint(t, mm, r);
+        auto langevin = khiva::features::maxLangevinFixedPoint(t, mm, r);
         langevin.eval();
         af::sync();
     }
@@ -681,7 +681,7 @@ void Maximum(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto maximum = tsa::features::maximum(t);
+        auto maximum = khiva::features::maximum(t);
         maximum.eval();
         af::sync();
     }
@@ -700,7 +700,7 @@ void Mean(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto mean = tsa::features::mean(t);
+        auto mean = khiva::features::mean(t);
         mean.eval();
         af::sync();
     }
@@ -719,7 +719,7 @@ void MeanAbsoluteChange(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto mac = tsa::features::meanAbsoluteChange(t);
+        auto mac = khiva::features::meanAbsoluteChange(t);
         mac.eval();
         af::sync();
     }
@@ -738,7 +738,7 @@ void MeanChange(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto mc = tsa::features::meanChange(t);
+        auto mc = khiva::features::meanChange(t);
         mc.eval();
         af::sync();
     }
@@ -757,7 +757,7 @@ void MeanSecondDerivativeCentral(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto meanSDC = tsa::features::meanSecondDerivativeCentral(t);
+        auto meanSDC = khiva::features::meanSecondDerivativeCentral(t);
         meanSDC.eval();
         af::sync();
     }
@@ -776,7 +776,7 @@ void Median(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto median = tsa::features::median(t);
+        auto median = khiva::features::median(t);
         median.eval();
         af::sync();
     }
@@ -795,7 +795,7 @@ void Minimum(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto minimum = tsa::features::minimum(t);
+        auto minimum = khiva::features::minimum(t);
         minimum.eval();
         af::sync();
     }
@@ -814,7 +814,7 @@ void NumberCrossingM(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto ncm = tsa::features::numberCrossingM(t, 0);
+        auto ncm = khiva::features::numberCrossingM(t, 0);
         ncm.eval();
         af::sync();
     }
@@ -834,7 +834,7 @@ void NumberPeaks(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto np = tsa::features::numberPeaks(t, nn);
+        auto np = khiva::features::numberPeaks(t, nn);
         np.eval();
         af::sync();
     }
@@ -856,7 +856,7 @@ void PartialAutocorrelation(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto ncm = tsa::features::partialAutocorrelation(t, lags_d);
+        auto ncm = khiva::features::partialAutocorrelation(t, lags_d);
         ncm.eval();
         af::sync();
     }
@@ -880,7 +880,7 @@ void PercentageOfReoccurringDatapointsToAllDatapoints(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto p = tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(t, s);
+        auto p = khiva::features::percentageOfReoccurringDatapointsToAllDatapoints(t, s);
         p.eval();
         af::sync();
     }
@@ -899,7 +899,7 @@ void PercentageOfReoccurringValuesToAllValues(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto p = tsa::features::percentageOfReoccurringValuesToAllValues(t, false);
+        auto p = khiva::features::percentageOfReoccurringValuesToAllValues(t, false);
         p.eval();
         af::sync();
     }
@@ -922,7 +922,7 @@ void Quantile(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto quantile = tsa::features::quantile(t, q);
+        auto quantile = khiva::features::quantile(t, q);
         quantile.eval();
         af::sync();
     }
@@ -942,7 +942,7 @@ void RangeCount(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto range = tsa::features::rangeCount(t, minimum, maximum);
+        auto range = khiva::features::rangeCount(t, minimum, maximum);
         range.eval();
         af::sync();
     }
@@ -961,7 +961,7 @@ void RatioBeyondRSigma(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto rbrs = tsa::features::ratioBeyondRSigma(t, 0.5);
+        auto rbrs = khiva::features::ratioBeyondRSigma(t, 0.5);
         rbrs.eval();
         af::sync();
     }
@@ -980,7 +980,7 @@ void RatioValueNumberToTimeSeriesLength(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto ratio = tsa::features::ratioValueNumberToTimeSeriesLength(t);
+        auto ratio = khiva::features::ratioValueNumberToTimeSeriesLength(t);
         ratio.eval();
         af::sync();
     }
@@ -999,7 +999,7 @@ void SampleEntropy(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto se = tsa::features::sampleEntropy(t);
+        auto se = khiva::features::sampleEntropy(t);
         se.eval();
         af::sync();
     }
@@ -1018,7 +1018,7 @@ void Skewness(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto kurtosis = tsa::features::kurtosis(t);
+        auto kurtosis = khiva::features::kurtosis(t);
         kurtosis.eval();
         af::sync();
     }
@@ -1037,7 +1037,7 @@ void SpktWelchDensity(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto stdev = tsa::features::spktWelchDensity(t, 0);
+        auto stdev = khiva::features::spktWelchDensity(t, 0);
         stdev.eval();
         af::sync();
     }
@@ -1056,7 +1056,7 @@ void StandardDeviation(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto stdev = tsa::features::standardDeviation(t);
+        auto stdev = khiva::features::standardDeviation(t);
         stdev.eval();
         af::sync();
     }
@@ -1080,7 +1080,7 @@ void SumOfReoccurringDatapoints(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto sord = tsa::features::sumOfReoccurringDatapoints(t, s);
+        auto sord = khiva::features::sumOfReoccurringDatapoints(t, s);
         sord.eval();
         af::sync();
     }
@@ -1099,7 +1099,7 @@ void SumOfReoccurringValues(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto sorv = tsa::features::sumOfReoccurringValues(t);
+        auto sorv = khiva::features::sumOfReoccurringValues(t);
         sorv.eval();
         af::sync();
     }
@@ -1118,7 +1118,7 @@ void SumValues(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto sv = tsa::features::sumOfReoccurringValues(t);
+        auto sv = khiva::features::sumOfReoccurringValues(t);
         sv.eval();
         af::sync();
     }
@@ -1137,7 +1137,7 @@ void SymmetryLooking(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto sl = tsa::features::symmetryLooking(t, 0.1f);
+        auto sl = khiva::features::symmetryLooking(t, 0.1f);
         sl.eval();
         af::sync();
     }
@@ -1156,7 +1156,7 @@ void TimeReversalAsymmetryStatistic(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto tr = tsa::features::timeReversalAsymmetryStatistic(t, 2);
+        auto tr = khiva::features::timeReversalAsymmetryStatistic(t, 2);
         tr.eval();
         af::sync();
     }
@@ -1175,7 +1175,7 @@ void ValueCount(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto vc = tsa::features::valueCount(t, 0.5);
+        auto vc = khiva::features::valueCount(t, 0.5);
         vc.eval();
         af::sync();
     }
@@ -1194,7 +1194,7 @@ void Variance(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto vc = tsa::features::variance(t);
+        auto vc = khiva::features::variance(t);
         vc.eval();
         af::sync();
     }
@@ -1213,7 +1213,7 @@ void NumberCwtPeaks(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto nCWTp = tsa::features::numberCwtPeaks(t, 2);
+        auto nCWTp = khiva::features::numberCwtPeaks(t, 2);
         nCWTp.eval();
         af::sync();
     }
@@ -1232,7 +1232,7 @@ void VarianceLargerThanStandardDeviation(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto vlts = tsa::features::varianceLargerThanStandardDeviation(t);
+        auto vlts = khiva::features::varianceLargerThanStandardDeviation(t);
         vlts.eval();
         af::sync();
     }
@@ -2183,4 +2183,4 @@ void cpuBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)
+KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

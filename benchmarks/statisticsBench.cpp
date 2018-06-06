@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
-#include <tsa/statistics.h>
-#include "tsaBenchmark.h"
+#include <khiva/statistics.h>
+#include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
 void Covariance(benchmark::State &state) {
@@ -20,7 +20,7 @@ void Covariance(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto cov = tsa::statistics::covariance(t);
+        auto cov = khiva::statistics::covariance(t);
         cov.eval();
         af::sync();
     }
@@ -39,7 +39,7 @@ void Kurtosis(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto kurtosis = tsa::statistics::kurtosis(t);
+        auto kurtosis = khiva::statistics::kurtosis(t);
         kurtosis.eval();
         af::sync();
     }
@@ -58,7 +58,7 @@ void LjungBox(benchmark::State &state) {
     auto t = af::randu(n, m, f64);
     af::sync();
     while (state.KeepRunning()) {
-        auto ljungBox = tsa::statistics::ljungBox(t, lag);
+        auto ljungBox = khiva::statistics::ljungBox(t, lag);
         ljungBox.eval();
         af::sync();
     }
@@ -78,7 +78,7 @@ void Moment(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto moment = tsa::statistics::moment(t, k);
+        auto moment = khiva::statistics::moment(t, k);
         moment.eval();
         af::sync();
     }
@@ -100,7 +100,7 @@ void Quantile(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto quantile = tsa::statistics::quantile(t, q);
+        auto quantile = khiva::statistics::quantile(t, q);
         quantile.eval();
         af::sync();
     }
@@ -120,7 +120,7 @@ void QuantilesCut(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto quantilesCut = tsa::statistics::quantilesCut(t, qs);
+        auto quantilesCut = khiva::statistics::quantilesCut(t, qs);
         quantilesCut.eval();
         af::sync();
     }
@@ -139,7 +139,7 @@ void SampleStdev(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto sampleStdev = tsa::statistics::sampleStdev(t);
+        auto sampleStdev = khiva::statistics::sampleStdev(t);
         sampleStdev.eval();
         af::sync();
     }
@@ -158,7 +158,7 @@ void Skewness(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto kurtosis = tsa::statistics::skewness(t);
+        auto kurtosis = khiva::statistics::skewness(t);
         kurtosis.eval();
         af::sync();
     }
@@ -291,4 +291,4 @@ void cpuBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)
+KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

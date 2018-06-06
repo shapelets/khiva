@@ -8,6 +8,5 @@ conaninfo.txt
 *CMakeFiles*
 *Makefile
 CMakeCache.txt
-doc/sphinx/source/apiTSA/*
-include/tsa/version.h
+include/khiva/version.h
 test/versionTest.cpp

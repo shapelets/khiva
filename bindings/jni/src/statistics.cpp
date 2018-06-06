@@ -1,19 +1,19 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <jni.h>
-#include <tsa/statistics.h>
-#include <tsa_jni/statistics.h>
+#include <khiva/statistics.h>
+#include <khiva_jni/statistics.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_covariance(JNIEnv *env, jobject, jlong ref,
-                                                                         jboolean unbiased) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_covariance(JNIEnv *env, jobject, jlong ref,
+                                                                            jboolean unbiased) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -25,7 +25,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_covariance(JNIEnv 
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::statistics::covariance(var, unbiased).get());
+    af_retain_array(&af_p, khiva::statistics::covariance(var, unbiased).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -34,7 +34,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_covariance(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_moment(JNIEnv *env, jobject, jlong ref, jint k) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_moment(JNIEnv *env, jobject, jlong ref, jint k) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -46,7 +46,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_moment(JNIEnv *env
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::statistics::moment(var, k).get());
+    af_retain_array(&af_p, khiva::statistics::moment(var, k).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -55,7 +55,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_moment(JNIEnv *env
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_sampleStdev(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_sampleStdev(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -67,7 +67,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_sampleStdev(JNIEnv
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::statistics::sampleStdev(var).get());
+    af_retain_array(&af_p, khiva::statistics::sampleStdev(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -76,7 +76,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_sampleStdev(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_kurtosis(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_kurtosis(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -88,7 +88,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_kurtosis(JNIEnv *e
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::statistics::kurtosis(var).get());
+    af_retain_array(&af_p, khiva::statistics::kurtosis(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -97,7 +97,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_kurtosis(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_skewness(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_skewness(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -109,7 +109,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_skewness(JNIEnv *e
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::statistics::skewness(var).get());
+    af_retain_array(&af_p, khiva::statistics::skewness(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -118,8 +118,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_skewness(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
-                                                                       jfloat precision) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
+                                                                          jfloat precision) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -133,7 +133,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantile(JNIEnv *e
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr_q, var.get());
-    af_retain_array(&af_p, tsa::statistics::quantile(var, var_q, precision).get());
+    af_retain_array(&af_p, khiva::statistics::quantile(var, var_q, precision).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)arr_q;
@@ -143,8 +143,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantile(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantilesCut(JNIEnv *env, jobject, jlong ref,
-                                                                           jfloat quantiles, jfloat precision) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_quantilesCut(JNIEnv *env, jobject, jlong ref,
+                                                                              jfloat quantiles, jfloat precision) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -156,7 +156,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantilesCut(JNIEn
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::statistics::quantilesCut(var, quantiles, precision).get());
+    af_retain_array(&af_p, khiva::statistics::quantilesCut(var, quantiles, precision).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -165,7 +165,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_quantilesCut(JNIEn
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_ljungBox(JNIEnv *env, jobject, jlong ref, jlong lags) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_ljungBox(JNIEnv *env, jobject, jlong ref, jlong lags) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -177,7 +177,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Statistics_ljungBox(JNIEnv *e
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::statistics::ljungBox(var, lags).get());
+    af_retain_array(&af_p, khiva::statistics::ljungBox(var, lags).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;

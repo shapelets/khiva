@@ -3,8 +3,8 @@
 Namespace Distances
 ===================
 
-.. doxygennamespace:: tsa::distances
-    :project: TSA
+.. doxygennamespace:: khiva::distances
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

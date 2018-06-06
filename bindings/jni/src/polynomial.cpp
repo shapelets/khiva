@@ -1,18 +1,18 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <tsa/polynomial.h>
-#include <tsa_jni/polynomial.h>
+#include <khiva/polynomial.h>
+#include <khiva_jni/polynomial.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX,
-                                                                      jlong refY, jint deg) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY,
+                                                                         jint deg) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -27,7 +27,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_polyfit(JNIEnv *en
     af_retain_array(&xx, x.get());
     af_retain_array(&yy, y.get());
 
-    af_retain_array(&af_p, tsa::polynomial::polyfit(x, y, deg).get());
+    af_retain_array(&af_p, khiva::polynomial::polyfit(x, y, deg).get());
 
     tmp[0] = (jlong)xx;
     tmp[1] = (jlong)yy;
@@ -38,7 +38,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_polyfit(JNIEnv *en
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_roots(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -50,7 +50,7 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Polynomial_roots(JNIEnv *env,
     af_array af_p = (af_array)raw_pointer;
 
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, tsa::polynomial::roots(var).get());
+    af_retain_array(&af_p, khiva::polynomial::roots(var).get());
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;

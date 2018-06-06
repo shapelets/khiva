@@ -1,11 +1,11 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
-#include <tsa.h>
+#include <khiva.h>
 
 void stompIgnoreTrivialOneSeries() {
     float data[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 11, 10, 11, 10, 10};
@@ -16,7 +16,7 @@ void stompIgnoreTrivialOneSeries() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(tss, m, distance, index);
+    khiva::matrix::stomp(tss, m, distance, index);
 
     float *resultingDistance = distance.host<float>();
 
@@ -34,7 +34,7 @@ void stompIgnoreTrivialMultipleSeries() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(tss, m, distance, index);
+    khiva::matrix::stomp(tss, m, distance, index);
 
     float *resultingDistance = distance.host<float>();
 
@@ -51,7 +51,7 @@ void stompConsiderTrivialOneSeries() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(t, t, m, distance, index);
+    khiva::matrix::stomp(t, t, m, distance, index);
 
     float *resultingDistance = distance.host<float>();
 
@@ -71,7 +71,7 @@ void stompConsiderTrivialMultipleSeries() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(ta, tb, m, distance, index);
+    khiva::matrix::stomp(ta, tb, m, distance, index);
 
     float *resultingDistance = distance.host<float>();
 

@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
-#include <tsa/regularization.h>
-#include "tsaBenchmark.h"
+#include <khiva/regularization.h>
+#include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
 void GroupByUnsorted(benchmark::State &state) {
@@ -24,7 +24,7 @@ void GroupByUnsorted(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto groupped = tsa::regularization::groupBy(keysAndValues, af::mean, false);
+        auto groupped = khiva::regularization::groupBy(keysAndValues, af::mean, false);
         groupped.eval();
         af::sync();
     }
@@ -47,7 +47,7 @@ void GroupBySorted(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto groupped = tsa::regularization::groupBy(keysAndValues, af::mean);
+        auto groupped = khiva::regularization::groupBy(keysAndValues, af::mean);
         groupped.eval();
         af::sync();
     }
@@ -90,4 +90,4 @@ void cpuBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)
+KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

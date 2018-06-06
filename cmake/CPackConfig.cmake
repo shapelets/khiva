@@ -1,4 +1,4 @@
-# Copyright (c) 2018 Grumpy Cat Software S.L.
+# Copyright (c) 2018 Shapelets.io
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,7 +22,7 @@ set(SITE_URL "www.shapelets.io")
 
 # Long description of the package
 set(CPACK_PACKAGE_DESCRIPTION
-"TSA is an open source C++ library which focus on providing efficient
+"Khiva is an open source C++ library which focus on providing efficient
 algorithms to perform analytics over time series of data. It can be
 used to extract insights from one or a group of time series.
 
@@ -47,7 +47,7 @@ set(MY_CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/assets/${APP_LOW_NAME}.ico")
 
 file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}/assets/" NATIVE_ASSETS_PATH)
 string(REPLACE "\\" "\\\\" NATIVE_ASSETS_PATH  ${NATIVE_ASSETS_PATH})
-set(CPACK_TSA_ASSETS_DIR "${NATIVE_ASSETS_PATH}")
+set(CPACK_KHIVA_ASSETS_DIR "${NATIVE_ASSETS_PATH}")
 
 set(CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
@@ -80,10 +80,10 @@ if(APPLE)
   set(README_FILE       "${OSX_INSTALL_SOURCE}/readme.html.in")
   set(README_FILE_OUT   "${CMAKE_CURRENT_BINARY_DIR}/readme.html")
 
-  set(LICENSE_FILE       "${TSALIB_BASE_DIR}/LICENSE")
+  set(LICENSE_FILE       "${KHIVALIB_BASE_DIR}/LICENSE")
   set(LICENSE_FILE_OUT   "${CMAKE_CURRENT_BINARY_DIR}/license.txt")
 
-  set(TSA_TITLE    "TSA ${VERSION_SHORT}")
+  set(KHIVA_TITLE    "Khiva ${VERSION_SHORT}")
   configure_file(${WELCOME_FILE} ${WELCOME_FILE_OUT})
   configure_file(${README_FILE} ${README_FILE_OUT})
   configure_file(${LICENSE_FILE} ${LICENSE_FILE_OUT})
@@ -93,7 +93,7 @@ if(APPLE)
 elseif(WIN32)
   set(WIN_INSTALL_SOURCE ${PROJECT_SOURCE_DIR}/cmake/nsis)
 
-  set(LICENSE_FILE       "${TSALIB_BASE_DIR}/LICENSE")
+  set(LICENSE_FILE       "${KHIVALIB_BASE_DIR}/LICENSE")
   set(LICENSE_FILE_OUT   "${CMAKE_CURRENT_BINARY_DIR}/license.txt")
   configure_file(${LICENSE_FILE} ${LICENSE_FILE_OUT})
   set(CPACK_RESOURCE_FILE_LICENSE ${LICENSE_FILE_OUT})
@@ -113,8 +113,8 @@ elseif(WIN32)
   endif (CMAKE_CL_64)
 else()
   set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local")
-  set(CPACK_RESOURCE_FILE_LICENSE "${TSALIB_BASE_DIR}/LICENSE")
-  set(CPACK_RESOURCE_FILE_README "${TSALIB_BASE_DIR}/README.md")
+  set(CPACK_RESOURCE_FILE_LICENSE "${KHIVALIB_BASE_DIR}/LICENSE")
+  set(CPACK_RESOURCE_FILE_README "${KHIVALIB_BASE_DIR}/README.md")
 endif()
 
 # Set the default components installed in the package
@@ -126,53 +126,53 @@ cpack_add_install_type(Runtime DISPLAY_NAME "Runtime")
 cpack_add_install_type(Development DISPLAY_NAME "Development")
 cpack_add_install_type(Extra DISPLAY_NAME "Extra")
 
-# TSA group
+# Khiva group
 ##############################################################
-cpack_add_component_group(tsa
-  DISPLAY_NAME "TSA"
-  DESCRIPTION "TSA Core, Bindings, Headers, Library"
+cpack_add_component_group(khiva
+  DISPLAY_NAME "Khiva"
+  DESCRIPTION "Khiva Core, Bindings, Headers, Library"
   EXPANDED)
 ##############################################################
 
 cpack_add_component(core
   DISPLAY_NAME "Core"
-  DESCRIPTION "TSA Core"
-  GROUP tsa
+  DESCRIPTION "Khiva Core"
+  GROUP khiva
   REQUIRED)
 cpack_add_component(c_binding
   DISPLAY_NAME "C Binding"
   DESCRIPTION "C binding to connect with the Python, R and MATLAB programming languages"
-  GROUP tsa
+  GROUP khiva
   REQUIRED)
 cpack_add_component(jni_binding
   DISPLAY_NAME "JNI Binding"
   DESCRIPTION "JNI Binding to connect with the Java programming language"
-  GROUP tsa
+  GROUP khiva
   REQUIRED)
 cpack_add_component(headers
   DISPLAY_NAME "C/C++ Headers"
-  DESCRIPTION "Headers for the TSA Library."
-  GROUP tsa
+  DESCRIPTION "Headers for the Khiva Library."
+  GROUP khiva
   INSTALL_TYPES Development Extra)
 cpack_add_component(cmake
   DISPLAY_NAME "CMake Support"
-  DESCRIPTION "Configuration files to use TSA using CMake."
-  GROUP tsa
+  DESCRIPTION "Configuration files to use Khiva using CMake."
+  GROUP khiva
   INSTALL_TYPES Development Extra)
 cpack_add_component(documentation
-  DISPLAY_NAME "TSA Documentation"
+  DISPLAY_NAME "Khiva Documentation"
   DESCRIPTION "Sphinx documentation"
-  GROUP tsa
+  GROUP khiva
   INSTALL_TYPES Extra)
 cpack_add_component(examples
-  DISPLAY_NAME "TSA Examples"
-  DESCRIPTION "Various examples using TSA."
-  GROUP tsa
+  DISPLAY_NAME "Khiva Examples"
+  DESCRIPTION "Various examples using Khiva."
+  GROUP khiva
   INSTALL_TYPES Extra)
 cpack_add_component(licenses
   DISPLAY_NAME "Licenses"
-  DESCRIPTION "License files for upstream libraries and TSA."
-  GROUP tsa
+  DESCRIPTION "License files for upstream libraries and Khiva."
+  GROUP khiva
   REQUIRED)
 
 ##
@@ -197,7 +197,7 @@ set(arrayfire_lic_path "${CMAKE_SOURCE_DIR}/LICENSES/ArrayFire License.txt")
 set(boost_lic_path "${CMAKE_SOURCE_DIR}/licenses/Boost Software License.txt")
 set(mpl2_lic_path "${CMAKE_SOURCE_DIR}/LICENSES/MPL2 License.txt")
 
-cpack_ifw_configure_component_group(tsa)
+cpack_ifw_configure_component_group(khiva)
 cpack_ifw_configure_component(core FORCED_INSTALLATION)
 cpack_ifw_configure_component(c_binding FORCED_INSTALLATION)
 cpack_ifw_configure_component(jni_binding FORCED_INSTALLATION)
@@ -206,7 +206,7 @@ cpack_ifw_configure_component(cmake)
 cpack_ifw_configure_component(documentation)
 cpack_ifw_configure_component(examples)
 cpack_ifw_configure_component(licenses FORCED_INSTALLATION
-  LICENSES "ArrayFire" ${arrayfire_lic_path} "Boost" ${boost_lic_path} "Eigen" ${mpl2_lic_path} "TSA" ${mpl2_lic_path}
+  LICENSES "ArrayFire" ${arrayfire_lic_path} "Boost" ${boost_lic_path} "Eigen" ${mpl2_lic_path} "Khiva" ${mpl2_lic_path}
 )
 
 ##

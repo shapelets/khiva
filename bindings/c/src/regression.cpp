@@ -1,19 +1,19 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
-#include <tsa/regression.h>
-#include <tsa_c/regression.h>
+#include <khiva/regression.h>
+#include <khiva_c/regression.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-TSAAPI void linear(tsa_array *xss, tsa_array *yss, tsa_array *slope, tsa_array *intercept, tsa_array *rvalue,
-                   tsa_array *pvalue, tsa_array *stderrest) {
+KHIVAAPI void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array *intercept,
+                     khiva_array *rvalue, khiva_array *pvalue, khiva_array *stderrest) {
     af::array var_xss = af::array(*xss);
     af::array var_yss = af::array(*yss);
     af_retain_array(xss, var_xss.get());
@@ -25,8 +25,8 @@ TSAAPI void linear(tsa_array *xss, tsa_array *yss, tsa_array *slope, tsa_array *
     af::array pvalue_primitive;
     af::array stderrest_primitive;
 
-    tsa::regression::linear(var_xss, var_yss, slope_primitive, intercept_primtive, rvalue_primitive, pvalue_primitive,
-                            stderrest_primitive);
+    khiva::regression::linear(var_xss, var_yss, slope_primitive, intercept_primtive, rvalue_primitive, pvalue_primitive,
+                              stderrest_primitive);
 
     af_retain_array(slope, slope_primitive.get());
     af_retain_array(intercept, intercept_primtive.get());

@@ -29,9 +29,9 @@
   ;Default installation folder
   InstallDir "@CPACK_NSIS_INSTALL_ROOT@\@CPACK_PACKAGE_INSTALL_DIRECTORY@\v@CPACK_PACKAGE_VERSION_MAJOR@"
 
-  !define env_tsa_hklm 'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
+  !define env_khiva_hklm 'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
 
-  !define cmake_pkg_reg_key 'HKCU "Software\Kitware\CMake\Packages\TSA"'
+  !define cmake_pkg_reg_key 'HKCU "Software\Kitware\CMake\Packages\KHIVA"'
 
 ;--------------------------------
 ;General
@@ -707,16 +707,16 @@ Section "-Core installation"
   !insertmacro MUI_INSTALLOPTIONS_READ $ADD_TO_PATH_CURRENT_USER "NSIS.InstallOptions.ini" "Field 4" "State"
 
 
-  ;Create TSA_PATH variable
-  WriteRegExpandStr ${env_tsa_hklm} TSA_PATH '$INSTDIR'
-  WriteRegExpandStr ${env_tsa_hklm} TSA_PATH_v@CPACK_PACKAGE_VERSION_MAJOR@ '$INSTDIR'
+  ;Create KHIVA_PATH variable
+  WriteRegExpandStr ${env_khiva_hklm} KHIVA_PATH '$INSTDIR'
+  WriteRegExpandStr ${env_khiva_hklm} KHIVA_PATH_v@CPACK_PACKAGE_VERSION_MAJOR@ '$INSTDIR'
 
   ;Add key for CMake package
-  WriteRegStr ${cmake_pkg_reg_key} TSA_CMake_DIR '$INSTDIR'
+  WriteRegStr ${cmake_pkg_reg_key} KHIVA_CMake_DIR '$INSTDIR'
 
   ; make sure windows knows about the change
   SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
-  MessageBox MB_OK "Added TSA_PATH environment variable for all users.$\n$\nIf you chose not to modify PATH in the installer, please manually add $\"%TSA_PATH%\lib$\" to the user or system PATH variable for running applications using TSA."
+  MessageBox MB_OK "Added KHIVA_PATH environment variable for all users.$\n$\nIf you chose not to modify PATH in the installer, please manually add $\"%KHIVA_PATH%\lib$\" to the user or system PATH variable for running applications using KHIVA."
 
 
   ; Write special uninstall registry entries
@@ -851,12 +851,12 @@ Section "Uninstall"
 !endif
 
 
-  ;DELETE TSA_PATH variable
-  DeleteRegValue ${env_tsa_hklm} TSA_PATH
-  DeleteRegValue ${env_tsa_hklm} TSA_PATH_v@CPACK_PACKAGE_VERSION_MAJOR@
+  ;DELETE KHIVA_PATH variable
+  DeleteRegValue ${env_khiva_hklm} KHIVA_PATH
+  DeleteRegValue ${env_khiva_hklm} KHIVA_PATH_v@CPACK_PACKAGE_VERSION_MAJOR@
 
   ;Delete cmake package key
-  DeleteRegValue ${cmake_pkg_reg_key} TSA_CMake_DIR
+  DeleteRegValue ${cmake_pkg_reg_key} KHIVA_CMake_DIR
 
   ; make sure windows knows about the change
   SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000

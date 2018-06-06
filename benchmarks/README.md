@@ -1,8 +1,8 @@
-# TSA Benchmarks
+# KHIVA Benchmarks
 
-In order to execute the benchmarks in all the available backends we have defined the `TSA_BENCHMARK_MAIN` macro, which redefines the `BENCHMARK_MAIN` macro of Google benchmarks.
+In order to execute the benchmarks in all the available backends we have defined the `KHIVA_BENCHMARK_MAIN` macro, which redefines the `BENCHMARK_MAIN` macro of Google benchmarks.
 
-The `TSA_BENCHMARK_MAIN` needs 3 functions in the following order:
+The `KHIVA_BENCHMARK_MAIN` needs 3 functions in the following order:
 1. A function containing the benchmarks to be executed in the **CUDA** backend.
 2. A function containing the benchmarks to be executed in the **OPENCL** backend.
 3. A function containing the benchmarks to be executed in the **CPU** backend.
@@ -14,7 +14,7 @@ The device on which the benchmarks are executed are defined in the following con
 
 Example benchmarking file:
 ```C++
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -22,7 +22,7 @@ Example benchmarking file:
 
 #include <arrayfire.h>
 #include <benchmark/benchmark.h>
-#include "tsabenchmark.h"
+#include "khivabenchmark.h"
 
 template <af::Backend BE, int D>
 void test(benchmark::State &state) {
@@ -59,5 +59,5 @@ void cpuBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks);
+KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks);
 ```

@@ -3,8 +3,8 @@
 Namespace LinAlg
 ================
 
-.. doxygennamespace:: tsa::linalg
-    :project: TSA
+.. doxygennamespace:: khiva::linalg
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

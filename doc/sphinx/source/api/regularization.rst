@@ -3,8 +3,8 @@
 Namespace Regularization
 ========================
 
-.. doxygennamespace:: tsa::regularization
-    :project: TSA
+.. doxygennamespace:: khiva::regularization
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

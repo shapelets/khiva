@@ -3,8 +3,8 @@
 Namespace Features
 ==================
 
-.. doxygennamespace:: tsa::features
-    :project: TSA
+.. doxygennamespace:: khiva::features
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

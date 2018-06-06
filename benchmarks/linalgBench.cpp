@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
-#include <tsa/linalg.h>
-#include "tsaBenchmark.h"
+#include <khiva/linalg.h>
+#include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
 void Lls(benchmark::State &state) {
@@ -20,7 +20,7 @@ void Lls(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto x = tsa::linalg::lls(A, b);
+        auto x = khiva::linalg::lls(A, b);
         x.eval();
         af::sync();
     }
@@ -45,4 +45,4 @@ void cpuBenchmarks() {
     // Empty cpu benchmarks because of the OpenMP static linking problem caused by Arrayfire
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)
+KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

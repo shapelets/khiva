@@ -3,8 +3,8 @@
 Namespace Matrix
 ================
 
-.. doxygennamespace:: tsa::matrix
-    :project: TSA
+.. doxygennamespace:: khiva::matrix
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

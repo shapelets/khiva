@@ -3,8 +3,8 @@
 Namespace Regression
 ====================
 
-.. doxygennamespace:: tsa::regression
-    :project: TSA
+.. doxygennamespace:: khiva::regression
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

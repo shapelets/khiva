@@ -1,16 +1,16 @@
-# TSA
+# KHIVA
 
 ## License
 This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 
 ## Installation
-1. Install conan, c++ package manager, preferably through `pip install conan`.  For more informacion and alternative instalation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html)
+1. Install conan, c++ package manager, preferably through `pip install conan`.  For more information and alternative instalation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html)
 2. Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`
 3. Run `conan install . --build missing -s compiler.libcxx=libstdc++11`, which will bring down dependencies and generate the necessary include files for the `cmake` build.
 4. Create `build` folder and, after moving into the new folder, run `cmake ..` 
 5. Run the actual make for your environment.
 
-### Generating the TSA installers
+### Generating the KHIVA installers
 This project can be packaged to be installed in a Windows, Linux or Mac OS system. CPack is used in order to perform this task.
 1. For **Windows** the installer can be generated running the command `cpack -G NSIS` inside the `build` folder. You need [NSIS] (http://nsis.sourceforge.net/Download) installed in your system.
 2. For **linux** either a **deb** or a **rpm** package the installer can be generated. This could be done running the command `cpack -G DEB` or `cpack -G RPM` respectively inside the `build` folder.
@@ -36,7 +36,7 @@ We use the `clang-format` plugin for the VS Code editor to format our codes. Thi
 
 ### Branching model
 
-Our branching model has two permanent branches, **develop** and **master**. We aim at using `develop` as the main branch, where all features are merged. In this sense, we use the master branch to push the release versions of the TSA library.
+Our branching model has two permanent branches, **develop** and **master**. We aim at using `develop` as the main branch, where all features are merged. In this sense, we use the master branch to push the release versions of the KHIVA library.
 
 ### Contribution process
 

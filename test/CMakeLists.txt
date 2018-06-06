@@ -1,5 +1,11 @@
+# Copyright (c) 2018 Shapelets.io
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
-PROJECT(TSALIB_TEST)
+PROJECT(KHIVALIB_TEST)
 
 FIND_PACKAGE(Threads REQUIRED)
 
@@ -15,6 +21,6 @@ FOREACH(ONE_TEST_CPP ${ALL_TEST_CPP})
     SET(TARGET_NAME ${ONE_TEST_EXEC})
     ADD_EXECUTABLE(${TARGET_NAME} ${ONE_TEST_CPP})
 
-    TARGET_LINK_LIBRARIES(${TARGET_NAME} ${TSALIB} gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
+    TARGET_LINK_LIBRARIES(${TARGET_NAME} ${KHIVALIB} gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
     gtest_discover_tests(${TARGET_NAME} AUTO)
 ENDFOREACH()

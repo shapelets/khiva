@@ -1,19 +1,19 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <jni.h>
-#include <tsa/regression.h>
-#include <tsa_jni/regression.h>
+#include <khiva/regression.h>
+#include <khiva_jni/regression.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regression_linear(JNIEnv *env, jobject, jlong ref_xss,
-                                                                     jlong ref_yss) {
+JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Regression_linear(JNIEnv *env, jobject, jlong ref_xss,
+                                                                        jlong ref_yss) {
     const jint l = 7;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -48,8 +48,8 @@ JNIEXPORT jlongArray JNICALL Java_com_gcatsoft_tsa_Regression_linear(JNIEnv *env
     af::array primitive_slope;
     af::array primitive_stderr;
 
-    tsa::regression::linear(var_xss, var_yss, primitive_slope, primitive_intercept, primitive_rvalue, primitive_pvalue,
-                            primitive_stderr);
+    khiva::regression::linear(var_xss, var_yss, primitive_slope, primitive_intercept, primitive_rvalue,
+                              primitive_pvalue, primitive_stderr);
 
     af_retain_array(&af_p_pvalue, primitive_pvalue.get());
     af_retain_array(&af_p_rvalue, primitive_rvalue.get());

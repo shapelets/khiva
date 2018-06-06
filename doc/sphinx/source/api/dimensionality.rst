@@ -3,8 +3,8 @@
 Namespace Dimensionality
 ========================
 
-.. doxygennamespace:: tsa::dimensionality
-    :project: TSA
+.. doxygennamespace:: khiva::dimensionality
+    :project: KHIVA
     :members:
     :protected-members:
     :private-members:

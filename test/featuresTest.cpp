@@ -1,18 +1,18 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa/features.h>
-#include "tsaTest.h"
+#include <khiva/features.h>
+#include "khivaTest.h"
 
 void absEnergy() {
     float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     af::array tss(10, 1, data);
 
-    auto result = tsa::features::absEnergy(tss);
+    auto result = khiva::features::absEnergy(tss);
 
     float expected[] = {385};
     float *host_res = result.host<float>();
@@ -26,7 +26,7 @@ void absEnergy2() {
     float data[] = {1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4};
     af::array tss(4, 3, data);
 
-    auto result = tsa::features::absEnergy(tss);
+    auto result = khiva::features::absEnergy(tss);
 
     float expected[] = {30, 30, 30};
     float *host_res = result.row(0).host<float>();
@@ -40,7 +40,7 @@ void absoluteSumOfChanges() {
     float data[] = {0, 1, 2, 3, 4, 6, 8, 10, 11, 14, 17, 20};
     af::array tss(4, 3, data);
 
-    af::array asoc = tsa::features::absoluteSumOfChanges(tss);
+    af::array asoc = khiva::features::absoluteSumOfChanges(tss);
 
     // check dimensions
     af::dim4 dims = asoc.dims();
@@ -60,7 +60,7 @@ void aggregatedCorrelationMean() {
     float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     af::array tss(6, 2, data);
 
-    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::mean);
+    af::array res = khiva::features::aggregatedAutocorrelation(tss, af::mean);
     float *r = res.host<float>();
     float a[] = {-0.6571428571428571f, -0.6571428571428571f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
@@ -71,7 +71,7 @@ void aggregatedCorrelationMedian() {
     float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     af::array tss(6, 2, data);
 
-    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::median);
+    af::array res = khiva::features::aggregatedAutocorrelation(tss, af::median);
     float *r = res.host<float>();
     float a[] = {-0.54285717010498047, -0.54285717010498047};
     ASSERT_NEAR(r[0], a[0], EPSILON);
@@ -82,7 +82,7 @@ void aggregatedCorrelationMin() {
     float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     af::array tss(6, 2, data);
 
-    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::min);
+    af::array res = khiva::features::aggregatedAutocorrelation(tss, af::min);
     float *r = res.host<float>();
     float a[] = {-2.142857142857143f, -2.142857142857143f};
     ASSERT_NEAR(r[0], a[0], EPSILON * 2);
@@ -93,7 +93,7 @@ void aggregatedCorrelationMax() {
     float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     af::array tss(6, 2, data);
 
-    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::max);
+    af::array res = khiva::features::aggregatedAutocorrelation(tss, af::max);
     float *r = res.host<float>();
     float a[] = {0.6f, 0.6f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
@@ -104,7 +104,7 @@ void aggregatedCorrelationStdev() {
     float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     af::array tss(6, 2, data);
 
-    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::stdev);
+    af::array res = khiva::features::aggregatedAutocorrelation(tss, af::stdev);
     float *r = res.host<float>();
     float a[] = {0.9744490855905009f, 0.9744490855905009f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
@@ -115,7 +115,7 @@ void aggregatedCorrelationVar() {
     float data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     af::array tss(6, 2, data);
 
-    af::array res = tsa::features::aggregatedAutocorrelation(tss, af::var);
+    af::array res = khiva::features::aggregatedAutocorrelation(tss, af::var);
     float *r = res.host<float>();
     float a[] = {0.9495510204081633f, 0.9495510204081633f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
@@ -128,7 +128,7 @@ void aggregatedLinearTrendMean() {
 
     af::array slope, intercept, rvalue, pvalue, stderrest;
 
-    tsa::features::aggregatedLinearTrend(tss, 3, af::mean, slope, intercept, rvalue, pvalue, stderrest);
+    khiva::features::aggregatedLinearTrend(tss, 3, af::mean, slope, intercept, rvalue, pvalue, stderrest);
 
     float slopeCalculated, interceptCalculated, rvalueCalculated, pvalueCalculated, stderrestCalculated;
 
@@ -151,7 +151,7 @@ void aggregatedLinearTrendMin() {
 
     af::array slope, intercept, rvalue, pvalue, stderrest;
 
-    tsa::features::aggregatedLinearTrend(tss, 3, af::min, slope, intercept, rvalue, pvalue, stderrest);
+    khiva::features::aggregatedLinearTrend(tss, 3, af::min, slope, intercept, rvalue, pvalue, stderrest);
 
     float slopeCalculated, interceptCalculated, rvalueCalculated, pvalueCalculated, stderrestCalculated;
 
@@ -175,7 +175,7 @@ void aggregatedLinearTrendMultipleSeriesMean() {
 
     af::array slope, intercept, rvalue, pvalue, stderrest;
 
-    tsa::features::aggregatedLinearTrend(tss, 3, af::mean, slope, intercept, rvalue, pvalue, stderrest);
+    khiva::features::aggregatedLinearTrend(tss, 3, af::mean, slope, intercept, rvalue, pvalue, stderrest);
 
     float *slopeCalculated = slope.host<float>();
     float *interceptCalculated = intercept.host<float>();
@@ -202,7 +202,7 @@ void aggregatedLinearTrendMultipleSeriesMin() {
 
     af::array slope, intercept, rvalue, pvalue, stderrest;
 
-    tsa::features::aggregatedLinearTrend(tss, 3, af::mean, slope, intercept, rvalue, pvalue, stderrest);
+    khiva::features::aggregatedLinearTrend(tss, 3, af::mean, slope, intercept, rvalue, pvalue, stderrest);
 
     float *slopeCalculated = slope.host<float>();
     float *interceptCalculated = intercept.host<float>();
@@ -230,7 +230,7 @@ void approximateEntropy() {
     a = af::tile(a, 1, 2);
     a(af::span, 1) += 10;
 
-    af::array res = tsa::features::approximateEntropy(a, m, r);
+    af::array res = khiva::features::approximateEntropy(a, m, r);
 
     float *resCalculated = res.host<float>();
 
@@ -247,7 +247,7 @@ void crossCovariance() {
     float data2[] = {4, 6, 8, 10, 12, 14, 16, 18, 20, 22};
     af::array yss(5, 2, data2);
 
-    af::array calculated = tsa::features::crossCovariance(xss, yss, false);
+    af::array calculated = khiva::features::crossCovariance(xss, yss, false);
 
     float *calculatedHost = calculated.host<float>();
 
@@ -268,7 +268,7 @@ void crossCovarianceBiased() {
     float data2[] = {4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24};
     af::array yss(6, 2, data2);
 
-    af::array calculated = tsa::features::crossCovariance(xss, yss, false);
+    af::array calculated = khiva::features::crossCovariance(xss, yss, false);
 
     float *calculatedHost = calculated.host<float>();
 
@@ -296,7 +296,7 @@ void crossCovarianceUnbiased() {
     float data2[] = {4, 6, 8, 10, 14, 16, 18, 20};
     af::array yss(4, 2, data2);
 
-    af::array calculated = tsa::features::crossCovariance(xss, yss, true);
+    af::array calculated = khiva::features::crossCovariance(xss, yss, true);
 
     float *calculatedHost = calculated.host<float>();
 
@@ -313,7 +313,7 @@ void autoCovariance() {
     float data[] = {0, 1, 2, 3, 10, 11, 12, 13};
     af::array tss(4, 2, data);
 
-    af::array calculated = tsa::features::autoCovariance(tss);
+    af::array calculated = khiva::features::autoCovariance(tss);
 
     float *calculatedHost = calculated.host<float>();
 
@@ -335,7 +335,7 @@ void crossCorrelation() {
     float data2[] = {4, 6, 8, 10, 12};
     af::array ys(5, data2);
 
-    af::array calculated = tsa::features::crossCorrelation(xs, ys, false);
+    af::array calculated = khiva::features::crossCorrelation(xs, ys, false);
 
     float *calculatedHost = calculated.host<float>();
 
@@ -351,7 +351,7 @@ void autoCorrelation() {
     float data[] = {0, 1, 2, 3, 10, 11, 12, 13};
     af::array tss(4, 2, data);
 
-    af::array calculated2 = tsa::features::autoCorrelation(tss, 4);
+    af::array calculated2 = khiva::features::autoCorrelation(tss, 4);
 
     float *calculated2Host = calculated2.host<float>();
 
@@ -373,7 +373,7 @@ void binnedEntropy() {
     af::array h_data2(20, 1, ts2);
     af::array tss = af::join(1, h_data, h_data2);
 
-    af::array output = tsa::features::binnedEntropy(tss, 5);
+    af::array output = khiva::features::binnedEntropy(tss, 5);
 
     float *h_out = output.host<float>();
     float a[] = {1.6094379124341005f, 1.5614694247763998f};
@@ -385,7 +385,7 @@ void c3() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(6, 2, data);
 
-    af::array c3Result = tsa::features::c3(tss, 2);
+    af::array c3Result = khiva::features::c3(tss, 2);
 
     float *c3Calculated = c3Result.host<float>();
 
@@ -397,14 +397,14 @@ void cidCe() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(6, 2, data);
 
-    af::array cidCeResult = tsa::features::cidCe(tss);
+    af::array cidCeResult = khiva::features::cidCe(tss);
 
     float *cidCeCalculated = cidCeResult.host<float>();
 
     ASSERT_NEAR(cidCeCalculated[0], 2.23606797749979, EPSILON);
     ASSERT_NEAR(cidCeCalculated[1], 2.23606797749979, EPSILON);
 
-    af::array cidCeResult2 = tsa::features::cidCe(tss, true);
+    af::array cidCeResult2 = khiva::features::cidCe(tss, true);
 
     float *cidCeCalculated2 = cidCeResult2.host<float>();
 
@@ -416,7 +416,7 @@ void countAboveMean() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(6, 2, data);
 
-    af::array countAboveMeanResult = tsa::features::countBelowMean(tss);
+    af::array countAboveMeanResult = khiva::features::countBelowMean(tss);
 
     unsigned int *countAboveMeanCalculated = countAboveMeanResult.host<unsigned int>();
 
@@ -428,7 +428,7 @@ void countBelowMean() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(6, 2, data);
 
-    af::array countBelowMeanResult = tsa::features::countBelowMean(tss);
+    af::array countBelowMeanResult = khiva::features::countBelowMean(tss);
 
     unsigned int *countBelowMeanCalculated = countBelowMeanResult.host<unsigned int>();
 
@@ -441,7 +441,7 @@ void cwtCoefficients() {
     int widths[] = {1, 2, 3};
     af::array data_d(3, 2, data);
     af::array widths_d(3, 1, widths);
-    af::array result = tsa::features::cwtCoefficients(data_d, widths_d, 2, 2);
+    af::array result = khiva::features::cwtCoefficients(data_d, widths_d, 2, 2);
 
     float *cwt = result.host<float>();
 
@@ -456,14 +456,14 @@ void energyRatioByChunk() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(6, 2, data);
 
-    af::array energyRatioByChunkResult = tsa::features::energyRatioByChunks(tss, 2, 0);
+    af::array energyRatioByChunkResult = khiva::features::energyRatioByChunks(tss, 2, 0);
 
     float *energyRatioByChunkCalculated = energyRatioByChunkResult.host<float>();
 
     ASSERT_NEAR(energyRatioByChunkCalculated[0], 0.090909091, EPSILON);
     ASSERT_NEAR(energyRatioByChunkCalculated[1], 0.330376940, EPSILON);
 
-    af::array energyRatioByChunkResult2 = tsa::features::energyRatioByChunks(tss, 2, 1);
+    af::array energyRatioByChunkResult2 = khiva::features::energyRatioByChunks(tss, 2, 1);
 
     float *energyRatioByChunkCalculated2 = energyRatioByChunkResult2.host<float>();
 
@@ -475,7 +475,7 @@ void fftAggregated() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     af::array tss(10, 2, data);
 
-    af::array fftAgg = tsa::features::fftAggregated(tss);
+    af::array fftAgg = khiva::features::fftAggregated(tss);
 
     float *fft = fftAgg.host<float>();
     float f1 = 1.135143f;
@@ -500,7 +500,7 @@ void fftCoefficient() {
 
     af::array real, imag, _abs, angle;
 
-    tsa::features::fftCoefficient(tss, 0, real, imag, _abs, angle);
+    khiva::features::fftCoefficient(tss, 0, real, imag, _abs, angle);
 
     float *realCalculated = real.host<float>();
     float *imagCalculated = imag.host<float>();
@@ -521,7 +521,7 @@ void firstLocationOfMaximum() {
     float data[] = {5, 4, 3, 5, 0, 1, 5, 3, 2, 1, 2, 4, 3, 5, 2, 5, 4, 3, 5, 2};
     af::array tss(10, 2, data);
 
-    af::array result = tsa::features::firstLocationOfMaximum(tss);
+    af::array result = khiva::features::firstLocationOfMaximum(tss);
 
     float *hr = result.host<float>();
 
@@ -533,7 +533,7 @@ void firstLocationOfMinimum() {
     float data[] = {5, 4, 3, 0, 0, 1, 5, 4, 3, 0, 2, 1};
     af::array tss(6, 2, data);
 
-    af::array result = tsa::features::firstLocationOfMinimum(tss);
+    af::array result = khiva::features::firstLocationOfMinimum(tss);
 
     float *firstMinimumCalculated = result.host<float>();
 
@@ -547,7 +547,7 @@ void friedrichCoefficients() {
 
     int m = 4;
     float r = 2;
-    af::array result = tsa::features::friedrichCoefficients(tss, m, r);
+    af::array result = khiva::features::friedrichCoefficients(tss, m, r);
 
     float *calculated = result.host<float>();
 
@@ -562,7 +562,7 @@ void hasDuplicates() {
     float data[] = {5, 4, 3, 0, 0, 1, 5, 4, 3, 0, 2, 1};
     af::array tss(6, 2, data);
 
-    af::array duplicates = tsa::features::hasDuplicates(tss);
+    af::array duplicates = khiva::features::hasDuplicates(tss);
 
     bool *duplicatesCalculated = (bool *)duplicates.host<char>();
 
@@ -574,7 +574,7 @@ void hasDuplicateMax() {
     float data[] = {5, 4, 3, 0, 5, 1, 5, 4, 3, 0, 2, 1};
     af::array tss(6, 2, data);
 
-    af::array out = tsa::features::hasDuplicateMax(tss);
+    af::array out = khiva::features::hasDuplicateMax(tss);
 
     bool *hout = (bool *)out.host<char>();
 
@@ -586,7 +586,7 @@ void hasDuplicateMin() {
     float data[] = {5, 4, 3, 0, 0, 1, 5, 4, 3, 0, 2, 1};
     af::array tss(6, 2, data);
 
-    af::array duplicateMin = tsa::features::hasDuplicateMin(tss);
+    af::array duplicateMin = khiva::features::hasDuplicateMin(tss);
 
     bool *duplicateMinCalculated = (bool *)duplicateMin.host<char>();
 
@@ -599,7 +599,7 @@ void indexMassQuantile() {
     af::array tss(6, 2, data);
     float q = 0.5;
 
-    af::array result = tsa::features::indexMassQuantile(tss, q);
+    af::array result = khiva::features::indexMassQuantile(tss, q);
 
     float *hresult = result.host<float>();
     float expected[] = {0.333333333f, 0.3333333333f};
@@ -614,7 +614,7 @@ void kurtosis() {
 
     float dataExpected[] = {-1.2f, -2.66226722f};
 
-    float *result = tsa::features::kurtosis(tss).host<float>();
+    float *result = khiva::features::kurtosis(tss).host<float>();
 
     for (int i = 0; i < 2; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e1);
@@ -626,7 +626,7 @@ void largeStandardDeviation() {
     af::array tss(6, 2, data);
     float r = 0.4f;
 
-    bool *result = (bool *)tsa::features::largeStandardDeviation(tss, r).host<char>();
+    bool *result = (bool *)khiva::features::largeStandardDeviation(tss, r).host<char>();
 
     ASSERT_EQ(result[0], true);
     ASSERT_EQ(result[1], false);
@@ -636,7 +636,7 @@ void lastLocationOfMaximum() {
     float data[] = {0, 4, 3, 5, 5, 1, 0, 4, 3, 2, 5, 1};
     af::array tss(6, 2, data);
 
-    af::array result = tsa::features::lastLocationOfMaximum(tss);
+    af::array result = khiva::features::lastLocationOfMaximum(tss);
 
     float *lastMaximumCalculated = result.host<float>();
 
@@ -650,7 +650,7 @@ void lastLocationOfMinimum() {
     float data[] = {0, 4, 3, 5, 5, 1, 0, 4, 3, 2, 5, 1, 4, 5, 1, 2};
     af::array tss(8, 2, data);
 
-    af::array result = tsa::features::lastLocationOfMinimum(tss);
+    af::array result = khiva::features::lastLocationOfMinimum(tss);
 
     float *out = result.host<float>();
 
@@ -662,7 +662,7 @@ void length() {
     float data[] = {0, 4, 3, 5, 5, 1, 0, 4, 3, 2, 5, 1};
     af::array tss(6, 2, data);
 
-    af::array result = tsa::features::length(tss);
+    af::array result = khiva::features::length(tss);
 
     int *lengthCalculated = result.host<int>();
 
@@ -675,7 +675,7 @@ void linearTrend() {
     af::array tss(6, 2, data);
 
     af::array pvalue, rvalue, intercept, slope, stder;
-    tsa::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stder);
+    khiva::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stder);
 
     float *hpvalue = pvalue.host<float>();
     ASSERT_NEAR(hpvalue[0], 0.6260380997892747, EPSILON);
@@ -703,7 +703,7 @@ void longestStrikeAboveMean() {
                     20, 20, 20, 1, 1, 1, 20, 20, 20, 1,  1, 1, 1, 1, 1, 1, 1, 1, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::longestStrikeAboveMean(tss);
+    af::array result = khiva::features::longestStrikeAboveMean(tss);
 
     float *longestCalculated = result.host<float>();
 
@@ -716,7 +716,7 @@ void longestStrikeBelowMean() {
                     20, 20, 20, 1, 1, 1, 20, 20, 20, 1,  1, 1, 1, 1, 1, 1, 1, 1, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::longestStrikeBelowMean(tss);
+    af::array result = khiva::features::longestStrikeBelowMean(tss);
 
     float *longestCalculated = result.host<float>();
 
@@ -728,7 +728,7 @@ void maxLangevinFixedPoint() {
     float data[] = {0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5};
     af::array tss(6, 2, data);
 
-    af::array result = tsa::features::maxLangevinFixedPoint(tss, 7, 2);
+    af::array result = khiva::features::maxLangevinFixedPoint(tss, 7, 2);
 
     float *calculated = result.host<float>();
 
@@ -743,7 +743,7 @@ void maximum() {
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::maximum(tss);
+    af::array result = khiva::features::maximum(tss);
 
     float *maximum = result.host<float>();
 
@@ -756,7 +756,7 @@ void mean() {
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::mean(tss);
+    af::array result = khiva::features::mean(tss);
 
     float *mean = result.host<float>();
 
@@ -768,7 +768,7 @@ void meanAbsoluteChange() {
     float data[] = {0, 1, 2, 3, 4, 5, 8, 10, 12, 14, 16, 18};
     af::array tss(6, 2, data);
 
-    af::array result = tsa::features::meanAbsoluteChange(tss);
+    af::array result = khiva::features::meanAbsoluteChange(tss);
 
     // check distances
     float r = 5.0f / 6.0f;
@@ -781,7 +781,7 @@ void meanChange() {
     float data[] = {0, 1, 2, 3, 4, 5, 8, 10, 12, 14, 16, 18};
     af::array tss(6, 2, data);
 
-    af::array result = tsa::features::meanChange(tss);
+    af::array result = khiva::features::meanChange(tss);
 
     // check distances
     float r = 5.0f / 6.0f;
@@ -794,7 +794,7 @@ void meanSecondDerivativeCentral() {
     float data[] = {1, 3, 7, 4, 8, 2, 5, 1, 7, 4};
     af::array tss(5, 2, data);
 
-    af::array result = tsa::features::meanSecondDerivativeCentral(tss);
+    af::array result = khiva::features::meanSecondDerivativeCentral(tss);
 
     // check distances
     float r0 = 1.0f / 5.0f;
@@ -809,7 +809,7 @@ void median() {
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::median(tss);
+    af::array result = khiva::features::median(tss);
 
     float *median = result.host<float>();
 
@@ -822,7 +822,7 @@ void minimum() {
                     20, 20, 20, 2,  19, 4,  20, 20, 20, 4,  15, 6,  30, 7,  9,  18, 4, 10, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::minimum(tss);
+    af::array result = khiva::features::minimum(tss);
 
     float *minimum = result.host<float>();
 
@@ -835,7 +835,7 @@ void numberCrossingM() {
                     1, 2, 1, 1, -3, -4, 7, 8, 9, 10, -2, 1, -3, 5, 6, 7, -10};
     af::array tss(17, 2, data);
 
-    af::array result = tsa::features::numberCrossingM(tss, 0);
+    af::array result = khiva::features::numberCrossingM(tss, 0);
 
     float *ncm = result.host<float>();
 
@@ -848,7 +848,7 @@ void numberCwtPeaks() {
                     1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1};
     af::array tss(21, 2, data);
 
-    af::array result = tsa::features::numberCwtPeaks(tss, 2);
+    af::array result = khiva::features::numberCwtPeaks(tss, 2);
 
     float *ncp = result.host<float>();
 
@@ -860,7 +860,7 @@ void numberPeaks() {
     float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
     af::array tss(7, 2, data);
 
-    af::array result = tsa::features::numberPeaks(tss, 2);
+    af::array result = khiva::features::numberPeaks(tss, 2);
 
     float *np = result.host<float>();
 
@@ -882,7 +882,7 @@ void partialAutocorrelation() {
     int lags[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     af::array lags_d(10, 1, lags);
 
-    af::array result = tsa::features::partialAutocorrelation(tss, lags_d);
+    af::array result = khiva::features::partialAutocorrelation(tss, lags_d);
     float *pa = result.col(0).host<float>();
 
     ASSERT_NEAR(pa[0], 1.0, 1e-3);
@@ -901,7 +901,7 @@ void percentageOfReoccurringDatapointsToAllDatapoints() {
     float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
     af::array tss(7, 2, data);
 
-    af::array result = tsa::features::percentageOfReoccurringDatapointsToAllDatapoints(tss, false);
+    af::array result = khiva::features::percentageOfReoccurringDatapointsToAllDatapoints(tss, false);
 
     float *calculated = result.host<float>();
 
@@ -915,7 +915,7 @@ void percentageOfReoccurringValuesToAllValues() {
     float data[] = {1, 1, 2, 3, 4, 4, 5, 6, 1, 2, 2, 3, 4, 5, 6, 7};
     af::array tss(8, 2, data);
 
-    af::array result = tsa::features::percentageOfReoccurringValuesToAllValues(tss, false);
+    af::array result = khiva::features::percentageOfReoccurringValuesToAllValues(tss, false);
 
     float *calculated = result.host<float>();
 
@@ -934,7 +934,7 @@ void quantile() {
     float q[] = {0.6f};
     af::array qq = af::array(1, q);
 
-    af::array result = tsa::features::quantile(tss, qq);
+    af::array result = khiva::features::quantile(tss, qq);
 
     float *calculated = result.host<float>();
 
@@ -948,7 +948,7 @@ void rangeCount() {
     float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 5, 4, 0, 0, 13};
     af::array tss(7, 2, data);
 
-    af::array result = tsa::features::rangeCount(tss, 2, 12);
+    af::array result = khiva::features::rangeCount(tss, 2, 12);
 
     float *calculated = result.host<float>();
 
@@ -962,7 +962,7 @@ void ratioBeyondRSigma() {
     float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
     af::array tss(7, 2, data);
 
-    af::array result = tsa::features::ratioBeyondRSigma(tss, 0.5);
+    af::array result = khiva::features::ratioBeyondRSigma(tss, 0.5);
 
     float *calculated = result.host<float>();
 
@@ -976,7 +976,7 @@ void ratioValueNumberToTimeSeriesLength() {
     float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 5, 0, 4, 6, 0, 13};
     af::array tss(7, 2, data);
 
-    af::array result = tsa::features::ratioValueNumberToTimeSeriesLength(tss);
+    af::array result = khiva::features::ratioValueNumberToTimeSeriesLength(tss);
 
     float *calculated = result.host<float>();
 
@@ -990,7 +990,7 @@ void sampleEntropy() {
     float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
     af::array tss(7, 2, data);
 
-    af::array result = tsa::features::sampleEntropy(tss);
+    af::array result = khiva::features::sampleEntropy(tss);
 
     float *calculated = result.host<float>();
 
@@ -1004,7 +1004,7 @@ void skewness() {
     float data[] = {3, 0, 0, 4, 0, 0, 13, 3, 0, 0, 4, 0, 0, 13};
     af::array tss(7, 2, data);
 
-    af::array result = tsa::features::skewness(tss);
+    af::array result = khiva::features::skewness(tss);
 
     float *calculated = result.host<float>();
 
@@ -1019,7 +1019,7 @@ void spktWelchDensity() {
     af::array tss(10, 2, data);
     int coeff = 0;
 
-    af::array result = tsa::features::spktWelchDensity(tss, coeff);
+    af::array result = khiva::features::spktWelchDensity(tss, coeff);
     float *calculated = result.host<float>();
 
     float expected[] = {1.6666667461395264, 1.6666667461395264};
@@ -1033,7 +1033,7 @@ void standardDeviation() {
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::standardDeviation(tss);
+    af::array result = khiva::features::standardDeviation(tss);
 
     float *stdev = result.host<float>();
 
@@ -1045,7 +1045,7 @@ void sumOfReoccurringDatapoints() {
     float data[] = {3, 3, 0, 4, 0, 13, 13, 3, 3, 0, 4, 0, 13, 13};
     af::array tss(7, 2, data);
 
-    af::array result = tsa::features::sumOfReoccurringDatapoints(tss, false);
+    af::array result = khiva::features::sumOfReoccurringDatapoints(tss, false);
 
     float *calculated = result.host<float>();
 
@@ -1059,7 +1059,7 @@ void sumOfReoccurringValues() {
     float data[] = {4, 4, 6, 6, 7, 4, 7, 7, 8, 8};
     af::array tss(5, 2, data);
 
-    af::array result = tsa::features::sumOfReoccurringValues(tss, false);
+    af::array result = khiva::features::sumOfReoccurringValues(tss, false);
 
     float *calculated = result.host<float>();
 
@@ -1073,7 +1073,7 @@ void sumValues() {
     float data[] = {1, 2, 3, 4.1f, -1.2f, -2, -3, -4};
     af::array tss(4, 2, data);
 
-    af::array result = tsa::features::sumValues(tss);
+    af::array result = khiva::features::sumValues(tss);
 
     float *sv = (float *)result.host<float>();
     float expected[] = {10.1f, -10.2f};
@@ -1087,7 +1087,7 @@ void symmetryLooking() {
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::symmetryLooking(tss, 0.1f);
+    af::array result = khiva::features::symmetryLooking(tss, 0.1f);
 
     bool *sl = (bool *)result.host<char>();
 
@@ -1100,7 +1100,7 @@ void timeReversalAsymmetryStatistic() {
                     20, 20, 20, 2, 19, 1, 20, 20, 20, 1,  15, 1,  30, 1,  1,  18, 4,  1,  20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::timeReversalAsymmetryStatistic(tss, 2);
+    af::array result = khiva::features::timeReversalAsymmetryStatistic(tss, 2);
 
     float *r = result.host<float>();
 
@@ -1113,7 +1113,7 @@ void valueCount() {
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::valueCount(tss, 20);
+    af::array result = khiva::features::valueCount(tss, 20);
 
     unsigned int *vc = result.host<unsigned int>();
 
@@ -1125,7 +1125,7 @@ void variance() {
     float data[] = {1, 1, -1, -1, 1, 2, -2, -1};
     af::array tss(4, 2, data);
 
-    af::array result = tsa::features::variance(tss);
+    af::array result = khiva::features::variance(tss);
 
     float *v = result.host<float>();
 
@@ -1138,7 +1138,7 @@ void varianceLargerThanStandardDeviation() {
                     20, 20, 20, 2,  19, 1,  20, 20, 20, 1,  15, 1,  30, 1,  1, 18, 4, 1, 20, 20};
     af::array tss(20, 2, data);
 
-    af::array result = tsa::features::varianceLargerThanStandardDeviation(tss);
+    af::array result = khiva::features::varianceLargerThanStandardDeviation(tss);
 
     bool *vlts = (bool *)result.host<char>();
 
@@ -1146,78 +1146,78 @@ void varianceLargerThanStandardDeviation() {
     ASSERT_EQ(vlts[1], 1);
 }
 
-TSA_TEST(FeaturesTests, AbsEnergy, absEnergy)
-TSA_TEST(FeaturesTests, AbsEnergy2, absEnergy2)
-TSA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges)
-TSA_TEST(FeaturesTests, AggregatedCorrelationMean, aggregatedCorrelationMean)
-TSA_TEST(FeaturesTests, AggregatedCorrelationMedian, aggregatedCorrelationMedian)
-TSA_TEST(FeaturesTests, AggregatedCorrelationMin, aggregatedCorrelationMin)
-TSA_TEST(FeaturesTests, AggregatedCorrelationMax, aggregatedCorrelationMax)
-TSA_TEST(FeaturesTests, AggregatedCorrelationStdev, aggregatedCorrelationStdev)
-TSA_TEST(FeaturesTests, AggregatedCorrelationVar, aggregatedCorrelationVar)
-TSA_TEST(FeaturesTests, AggregatedLinearTrendMean, aggregatedLinearTrendMean)
-TSA_TEST(FeaturesTests, AggregatedLinearTrendMin, aggregatedLinearTrendMin)
-TSA_TEST(FeaturesTests, AggregatedLinearTrendMultipleSeriesMean, aggregatedLinearTrendMultipleSeriesMean)
-TSA_TEST(FeaturesTests, AggregatedLinearTrendMultipleSeriesMin, aggregatedLinearTrendMultipleSeriesMin)
-TSA_TEST(FeaturesTests, ApproximateEntropy, approximateEntropy)
-TSA_TEST(FeaturesTests, CrossCovariance, crossCovariance)
-TSA_TEST(FeaturesTests, CrossCovarianceBiased, crossCovarianceBiased)
-TSA_TEST(FeaturesTests, CrossCovarianceUnbiased, crossCovarianceUnbiased)
-TSA_TEST(FeaturesTests, AutoCovariance, autoCovariance)
-TSA_TEST(FeaturesTests, CrossCorrelation, crossCorrelation)
-TSA_TEST(FeaturesTests, AutoCorrelation, autoCorrelation)
-TSA_TEST(FeaturesTests, BinnedEntropy, binnedEntropy)
-TSA_TEST(FeaturesTests, C3, c3)
-TSA_TEST(FeaturesTests, CidCe, cidCe)
-TSA_TEST(FeaturesTests, CountAboveMean, countAboveMean)
-TSA_TEST(FeaturesTests, CountBelowMean, countBelowMean)
-TSA_TEST(FeaturesTests, CwtCoefficients, cwtCoefficients)
-TSA_TEST(FeaturesTests, EnergyRatioByChunk, energyRatioByChunk)
-TSA_TEST(FeaturesTests, FftAggregated, fftAggregated)
-TSA_TEST(FeaturesTests, FftCoefficient, fftCoefficient)
-TSA_TEST(FeaturesTests, FirstLocationOfMaximum, firstLocationOfMaximum)
-TSA_TEST(FeaturesTests, FirstLocationOfMinimum, firstLocationOfMinimum)
-TSA_TEST_BACKENDS(FeaturesTests, FriedrichCoefficients, friedrichCoefficients, true, true, false, false, false, false)
-TSA_TEST(FeaturesTests, HasDuplicates, hasDuplicates)
-TSA_TEST(FeaturesTests, HasDuplicateMax, hasDuplicateMax)
-TSA_TEST(FeaturesTests, HasDuplicateMin, hasDuplicateMin)
-TSA_TEST(FeaturesTests, IndexMassQuantile, indexMassQuantile)
-TSA_TEST(FeaturesTests, Kurtosis, kurtosis)
-TSA_TEST(FeaturesTests, LargeStandardDeviation, largeStandardDeviation)
-TSA_TEST(FeaturesTests, LastLocationOfMaximum, lastLocationOfMaximum)
-TSA_TEST(FeaturesTests, LastLocationOfMinimum, lastLocationOfMinimum)
-TSA_TEST(FeaturesTests, Length, length)
-TSA_TEST(FeaturesTests, LinearTrend, linearTrend)
-TSA_TEST(FeaturesTests, LongestStrikeAboveMean, longestStrikeAboveMean)
-TSA_TEST(FeaturesTests, LongestStrikeBelowMean, longestStrikeBelowMean)
-TSA_TEST_BACKENDS(FeaturesTests, MaxLangevinFixedPoint, maxLangevinFixedPoint, true, true, false, false, false, false)
-TSA_TEST(FeaturesTests, Maximum, maximum)
-TSA_TEST(FeaturesTests, Mean, mean)
-TSA_TEST(FeaturesTests, MeanAbsoluteChange, meanAbsoluteChange)
-TSA_TEST(FeaturesTests, MeanChange, meanChange)
-TSA_TEST(FeaturesTests, MeanSecondDerivativeCentral, meanSecondDerivativeCentral)
-TSA_TEST(FeaturesTests, Median, median)
-TSA_TEST(FeaturesTests, Minimum, minimum)
-TSA_TEST(FeaturesTests, NumberCrossingM, numberCrossingM)
-TSA_TEST(FeaturesTests, NumberCwtPeaks, numberCwtPeaks)
-TSA_TEST(FeaturesTests, NumberPeaks, numberPeaks)
-TSA_TEST(FeaturesTests, PartialAutocorrelation, partialAutocorrelation)
-TSA_TEST(FeaturesTests, PercentageOfReoccurringDatapointsToAllDatapoints,
-         percentageOfReoccurringDatapointsToAllDatapoints)
-TSA_TEST(FeaturesTests, PercentageOfReoccurringValuesToAllValues, percentageOfReoccurringValuesToAllValues)
-TSA_TEST(FeaturesTests, Quantile, quantile)
-TSA_TEST(FeaturesTests, RangeCount, rangeCount)
-TSA_TEST(FeaturesTests, RatioBeyondRSigma, ratioBeyondRSigma)
-TSA_TEST(FeaturesTests, RatioValueNumberToTimeSeriesLength, ratioValueNumberToTimeSeriesLength)
-TSA_TEST(FeaturesTests, SampleEntropy, sampleEntropy)
-TSA_TEST(FeaturesTests, Skewness, skewness)
-TSA_TEST(FeaturesTests, SpktWelchDensity, spktWelchDensity)
-TSA_TEST(FeaturesTests, StandardDeviation, standardDeviation)
-TSA_TEST(FeaturesTests, SumOfReoccurringDatapoints, sumOfReoccurringDatapoints)
-TSA_TEST(FeaturesTests, SumOfReoccurringValues, sumOfReoccurringValues)
-TSA_TEST(FeaturesTests, SumValues, sumValues)
-TSA_TEST(FeaturesTests, SymmetryLooking, symmetryLooking)
-TSA_TEST(FeaturesTests, TimeReversalAsymmetryStatistic, timeReversalAsymmetryStatistic)
-TSA_TEST(FeaturesTests, ValueCount, valueCount)
-TSA_TEST(FeaturesTests, Variance, variance)
-TSA_TEST(FeaturesTests, VarianceLargerThanStandardDeviation, varianceLargerThanStandardDeviation)
+KHIVA_TEST(FeaturesTests, AbsEnergy, absEnergy)
+KHIVA_TEST(FeaturesTests, AbsEnergy2, absEnergy2)
+KHIVA_TEST(FeaturesTests, AbsoluteSumOfChanges, absoluteSumOfChanges)
+KHIVA_TEST(FeaturesTests, AggregatedCorrelationMean, aggregatedCorrelationMean)
+KHIVA_TEST(FeaturesTests, AggregatedCorrelationMedian, aggregatedCorrelationMedian)
+KHIVA_TEST(FeaturesTests, AggregatedCorrelationMin, aggregatedCorrelationMin)
+KHIVA_TEST(FeaturesTests, AggregatedCorrelationMax, aggregatedCorrelationMax)
+KHIVA_TEST(FeaturesTests, AggregatedCorrelationStdev, aggregatedCorrelationStdev)
+KHIVA_TEST(FeaturesTests, AggregatedCorrelationVar, aggregatedCorrelationVar)
+KHIVA_TEST(FeaturesTests, AggregatedLinearTrendMean, aggregatedLinearTrendMean)
+KHIVA_TEST(FeaturesTests, AggregatedLinearTrendMin, aggregatedLinearTrendMin)
+KHIVA_TEST(FeaturesTests, AggregatedLinearTrendMultipleSeriesMean, aggregatedLinearTrendMultipleSeriesMean)
+KHIVA_TEST(FeaturesTests, AggregatedLinearTrendMultipleSeriesMin, aggregatedLinearTrendMultipleSeriesMin)
+KHIVA_TEST(FeaturesTests, ApproximateEntropy, approximateEntropy)
+KHIVA_TEST(FeaturesTests, CrossCovariance, crossCovariance)
+KHIVA_TEST(FeaturesTests, CrossCovarianceBiased, crossCovarianceBiased)
+KHIVA_TEST(FeaturesTests, CrossCovarianceUnbiased, crossCovarianceUnbiased)
+KHIVA_TEST(FeaturesTests, AutoCovariance, autoCovariance)
+KHIVA_TEST(FeaturesTests, CrossCorrelation, crossCorrelation)
+KHIVA_TEST(FeaturesTests, AutoCorrelation, autoCorrelation)
+KHIVA_TEST(FeaturesTests, BinnedEntropy, binnedEntropy)
+KHIVA_TEST(FeaturesTests, C3, c3)
+KHIVA_TEST(FeaturesTests, CidCe, cidCe)
+KHIVA_TEST(FeaturesTests, CountAboveMean, countAboveMean)
+KHIVA_TEST(FeaturesTests, CountBelowMean, countBelowMean)
+KHIVA_TEST(FeaturesTests, CwtCoefficients, cwtCoefficients)
+KHIVA_TEST(FeaturesTests, EnergyRatioByChunk, energyRatioByChunk)
+KHIVA_TEST(FeaturesTests, FftAggregated, fftAggregated)
+KHIVA_TEST(FeaturesTests, FftCoefficient, fftCoefficient)
+KHIVA_TEST(FeaturesTests, FirstLocationOfMaximum, firstLocationOfMaximum)
+KHIVA_TEST(FeaturesTests, FirstLocationOfMinimum, firstLocationOfMinimum)
+KHIVA_TEST_BACKENDS(FeaturesTests, FriedrichCoefficients, friedrichCoefficients, true, true, false, false, false, false)
+KHIVA_TEST(FeaturesTests, HasDuplicates, hasDuplicates)
+KHIVA_TEST(FeaturesTests, HasDuplicateMax, hasDuplicateMax)
+KHIVA_TEST(FeaturesTests, HasDuplicateMin, hasDuplicateMin)
+KHIVA_TEST(FeaturesTests, IndexMassQuantile, indexMassQuantile)
+KHIVA_TEST(FeaturesTests, Kurtosis, kurtosis)
+KHIVA_TEST(FeaturesTests, LargeStandardDeviation, largeStandardDeviation)
+KHIVA_TEST(FeaturesTests, LastLocationOfMaximum, lastLocationOfMaximum)
+KHIVA_TEST(FeaturesTests, LastLocationOfMinimum, lastLocationOfMinimum)
+KHIVA_TEST(FeaturesTests, Length, length)
+KHIVA_TEST(FeaturesTests, LinearTrend, linearTrend)
+KHIVA_TEST(FeaturesTests, LongestStrikeAboveMean, longestStrikeAboveMean)
+KHIVA_TEST(FeaturesTests, LongestStrikeBelowMean, longestStrikeBelowMean)
+KHIVA_TEST_BACKENDS(FeaturesTests, MaxLangevinFixedPoint, maxLangevinFixedPoint, true, true, false, false, false, false)
+KHIVA_TEST(FeaturesTests, Maximum, maximum)
+KHIVA_TEST(FeaturesTests, Mean, mean)
+KHIVA_TEST(FeaturesTests, MeanAbsoluteChange, meanAbsoluteChange)
+KHIVA_TEST(FeaturesTests, MeanChange, meanChange)
+KHIVA_TEST(FeaturesTests, MeanSecondDerivativeCentral, meanSecondDerivativeCentral)
+KHIVA_TEST(FeaturesTests, Median, median)
+KHIVA_TEST(FeaturesTests, Minimum, minimum)
+KHIVA_TEST(FeaturesTests, NumberCrossingM, numberCrossingM)
+KHIVA_TEST(FeaturesTests, NumberCwtPeaks, numberCwtPeaks)
+KHIVA_TEST(FeaturesTests, NumberPeaks, numberPeaks)
+KHIVA_TEST(FeaturesTests, PartialAutocorrelation, partialAutocorrelation)
+KHIVA_TEST(FeaturesTests, PercentageOfReoccurringDatapointsToAllDatapoints,
+           percentageOfReoccurringDatapointsToAllDatapoints)
+KHIVA_TEST(FeaturesTests, PercentageOfReoccurringValuesToAllValues, percentageOfReoccurringValuesToAllValues)
+KHIVA_TEST(FeaturesTests, Quantile, quantile)
+KHIVA_TEST(FeaturesTests, RangeCount, rangeCount)
+KHIVA_TEST(FeaturesTests, RatioBeyondRSigma, ratioBeyondRSigma)
+KHIVA_TEST(FeaturesTests, RatioValueNumberToTimeSeriesLength, ratioValueNumberToTimeSeriesLength)
+KHIVA_TEST(FeaturesTests, SampleEntropy, sampleEntropy)
+KHIVA_TEST(FeaturesTests, Skewness, skewness)
+KHIVA_TEST(FeaturesTests, SpktWelchDensity, spktWelchDensity)
+KHIVA_TEST(FeaturesTests, StandardDeviation, standardDeviation)
+KHIVA_TEST(FeaturesTests, SumOfReoccurringDatapoints, sumOfReoccurringDatapoints)
+KHIVA_TEST(FeaturesTests, SumOfReoccurringValues, sumOfReoccurringValues)
+KHIVA_TEST(FeaturesTests, SumValues, sumValues)
+KHIVA_TEST(FeaturesTests, SymmetryLooking, symmetryLooking)
+KHIVA_TEST(FeaturesTests, TimeReversalAsymmetryStatistic, timeReversalAsymmetryStatistic)
+KHIVA_TEST(FeaturesTests, ValueCount, valueCount)
+KHIVA_TEST(FeaturesTests, Variance, variance)
+KHIVA_TEST(FeaturesTests, VarianceLargerThanStandardDeviation, varianceLargerThanStandardDeviation)

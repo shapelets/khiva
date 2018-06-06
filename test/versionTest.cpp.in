@@ -1,4 +1,4 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -6,10 +6,10 @@
 
 #include <arrayfire.h>
 #include <gtest/gtest.h>
-#include <tsa.h>
-#include "tsaTest.h"
+#include <khiva.h>
+#include "khivaTest.h"
 
 // Simple test, does not use gmock
-void versionTest() { ASSERT_STREQ(tsa::version(), "@VERSION_SHORT@"); }
+void versionTest() { ASSERT_STREQ(khiva::version(), "@VERSION_SHORT@"); }
 
-TSA_TEST(VersionTest, VersionTest, versionTest)
+KHIVA_TEST(VersionTest, VersionTest, versionTest)

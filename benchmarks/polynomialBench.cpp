@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
-#include <tsa/polynomial.h>
-#include "tsaBenchmark.h"
+#include <khiva/polynomial.h>
+#include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
 void Polyfit(benchmark::State &state) {
@@ -21,7 +21,7 @@ void Polyfit(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto coeffs = tsa::polynomial::polyfit(x, y, m);
+        auto coeffs = khiva::polynomial::polyfit(x, y, m);
         coeffs.eval();
         af::sync();
     }
@@ -40,7 +40,7 @@ void Roots(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto roots = tsa::polynomial::roots(p);
+        auto roots = khiva::polynomial::roots(p);
         roots.eval();
         af::sync();
     }
@@ -75,4 +75,4 @@ void cpuBenchmarks() {
     // Empty cpu benchmarks because of the OpenMP static linking problem caused by Arrayfire
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)
+KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

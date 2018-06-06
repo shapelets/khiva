@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
-#include <tsa/matrix.h>
-#include "tsaBenchmark.h"
+#include <khiva/matrix.h>
+#include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
 void SlidingDotProduct(benchmark::State &state) {
@@ -21,7 +21,7 @@ void SlidingDotProduct(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto sdp = tsa::matrix::slidingDotProduct(q, t);
+        auto sdp = khiva::matrix::slidingDotProduct(q, t);
         sdp.eval();
         af::sync();
     }
@@ -48,7 +48,7 @@ void SlidingDotProductParallel(benchmark::State &state) {
     af::sync();
     while (state.KeepRunning()) {
         gfor(af::seq idx, n - m) {
-            auto sdp = tsa::matrix::slidingDotProduct(input(af::span, idx, af::span, af::span), t);
+            auto sdp = khiva::matrix::slidingDotProduct(input(af::span, idx, af::span, af::span), t);
             sdp.eval();
         }
         af::sync();
@@ -72,7 +72,7 @@ void MeanStdevAuxiliary(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::matrix::meanStdev(t, a, m, mean, stdev);
+        khiva::matrix::meanStdev(t, a, m, mean, stdev);
         mean.eval();
         stdev.eval();
         af::sync();
@@ -96,7 +96,7 @@ void MeanStdev(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::matrix::meanStdev(t, a, m, mean, stdev);
+        khiva::matrix::meanStdev(t, a, m, mean, stdev);
         mean.eval();
         stdev.eval();
         af::sync();
@@ -120,7 +120,7 @@ void GenerateMask(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        af::array mask = tsa::matrix::generateMask(m, 2048, batchStart, n - m + 1);
+        af::array mask = khiva::matrix::generateMask(m, 2048, batchStart, n - m + 1);
         mask.eval();
         af::sync();
     }
@@ -142,10 +142,10 @@ void CalculateDistanceProfile(benchmark::State &state) {
     af::array mean;
     af::array stdev;
 
-    tsa::matrix::meanStdev(t, a, m, mean, stdev);
+    khiva::matrix::meanStdev(t, a, m, mean, stdev);
 
-    auto qt = tsa::matrix::slidingDotProduct(q, t);
-    af::array mask = tsa::matrix::generateMask(m, 1, 0, n - m + 1);
+    auto qt = khiva::matrix::slidingDotProduct(q, t);
+    af::array mask = khiva::matrix::generateMask(m, 1, 0, n - m + 1);
 
     auto sumQ = sum(q);
     auto sumQ2 = sum(pow(q, 2));
@@ -155,7 +155,7 @@ void CalculateDistanceProfile(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::matrix::calculateDistanceProfile(qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
+        khiva::matrix::calculateDistanceProfile(qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
         distance.eval();
         index.eval();
         af::sync();
@@ -176,7 +176,7 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
     af::array mean;
     af::array stdev;
 
-    tsa::matrix::meanStdev(t, a, m, mean, stdev);
+    khiva::matrix::meanStdev(t, a, m, mean, stdev);
 
     auto input = af::array(m, n - m + 1, t.type());
 
@@ -187,7 +187,7 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
     af::array distance;
     af::array index;
 
-    af::array mask = tsa::matrix::generateMask(m, n - m + 1, 0, n - m + 1);
+    af::array mask = khiva::matrix::generateMask(m, n - m + 1, 0, n - m + 1);
 
     af::sync();
     while (state.KeepRunning()) {
@@ -195,8 +195,8 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
             auto q = input(af::span, idx, af::span, af::span);
             auto sumQ = sum(q);
             auto sumQ2 = sum(pow(q, 2));
-            auto qt = tsa::matrix::slidingDotProduct(q, t);
-            tsa::matrix::calculateDistanceProfile(qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
+            auto qt = khiva::matrix::slidingDotProduct(q, t);
+            khiva::matrix::calculateDistanceProfile(qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
             distance.eval();
             index.eval();
         }
@@ -222,12 +222,12 @@ void Mass(benchmark::State &state) {
     af::array mean;
     af::array stdev;
 
-    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
-    af::array mask = tsa::matrix::generateMask(m, 1, 0, n - m + 1);
+    khiva::matrix::meanStdev(t, aux, m, mean, stdev);
+    af::array mask = khiva::matrix::generateMask(m, 1, 0, n - m + 1);
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::matrix::mass(q, t, aux, mean, stdev, mask, distance, index);
+        khiva::matrix::mass(q, t, aux, mean, stdev, mask, distance, index);
         distance.eval();
         index.eval();
         af::sync();
@@ -252,7 +252,7 @@ void Stomp(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::matrix::stomp(ta, tb, m, profile, index);
+        khiva::matrix::stomp(ta, tb, m, profile, index);
         profile.eval();
         index.eval();
         af::sync();
@@ -280,7 +280,7 @@ void StompDataCPU(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::matrix::stomp(af::array(n, t_host), af::array(n, t_host), m, profile, index);
+        khiva::matrix::stomp(af::array(n, t_host), af::array(n, t_host), m, profile, index);
         profile.eval();
         index.eval();
         af::sync();
@@ -306,7 +306,7 @@ void StompWithItself(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        tsa::matrix::stomp(t, m, profile, index);
+        khiva::matrix::stomp(t, m, profile, index);
         profile.eval();
         index.eval();
         af::sync();
@@ -486,4 +486,4 @@ void cpuBenchmarks() {
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
-TSA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)
+KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)

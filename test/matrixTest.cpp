@@ -1,12 +1,12 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa/matrix.h>
-#include "tsaTest.h"
+#include <khiva/matrix.h>
+#include "khivaTest.h"
 
 void slidingDotProduct() {
     float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
@@ -16,7 +16,7 @@ void slidingDotProduct() {
     float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
 
-    af::array sdp = tsa::matrix::slidingDotProduct(q, tss);
+    af::array sdp = khiva::matrix::slidingDotProduct(q, tss);
     ASSERT_EQ(sdp.dims(0), 12);
     ASSERT_EQ(sdp.dims(1), 2);
 
@@ -36,7 +36,7 @@ void meanStdev() {
     af::array mean;
     af::array stdev;
 
-    tsa::matrix::meanStdev(tss, m, mean, stdev);
+    khiva::matrix::meanStdev(tss, m, mean, stdev);
 
     ASSERT_EQ(mean.dims(0), 12);
     ASSERT_EQ(mean.dims(1), 2);
@@ -74,7 +74,7 @@ void meanStdevMEqualsLength() {
     af::array mean;
     af::array stdev;
 
-    tsa::matrix::meanStdev(tss, m, mean, stdev);
+    khiva::matrix::meanStdev(tss, m, mean, stdev);
 
     ASSERT_EQ(mean.dims(0), 1);
     ASSERT_EQ(mean.dims(1), 2);
@@ -92,7 +92,7 @@ void meanStdevMEqualsLength() {
 }
 
 void generateMask() {
-    af::array mask = tsa::matrix::generateMask(3, 4, 2, 8, 2);
+    af::array mask = khiva::matrix::generateMask(3, 4, 2, 8, 2);
 
     ASSERT_EQ(mask.dims(0), 4);
     ASSERT_EQ(mask.dims(1), 8);
@@ -121,14 +121,14 @@ void calculateDistanceProfile() {
     af::array stdev;
     af::array aux;
 
-    af::array qtss = tsa::matrix::slidingDotProduct(q, tss);
-    tsa::matrix::meanStdev(tss, aux, m, mean, stdev);
+    af::array qtss = khiva::matrix::slidingDotProduct(q, tss);
+    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, distance,
-                                          index);
+    khiva::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, distance,
+                                            index);
 
     float expectedDistance = 19.0552097998f;
     int expectedIndex = 7;
@@ -160,16 +160,16 @@ void calculateDistanceProfileMiddle() {
     af::array stdev;
     af::array aux;
 
-    af::array qtss = tsa::matrix::slidingDotProduct(q, tss);
-    tsa::matrix::meanStdev(tss, aux, m, mean, stdev);
+    af::array qtss = khiva::matrix::slidingDotProduct(q, tss);
+    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    af::array mask = tsa::matrix::generateMask(m, 1, 0, 12, 2);
+    af::array mask = khiva::matrix::generateMask(m, 1, 0, 12, 2);
 
-    tsa::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, mask,
-                                          distance, index);
+    khiva::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, mask,
+                                            distance, index);
 
     float expectedDistance = 19.0552097998f;
     int expectedIndex = 7;
@@ -202,14 +202,14 @@ void massIgnoreTrivial() {
     af::array stdev;
     af::array aux;
 
-    tsa::matrix::meanStdev(tss, aux, m, mean, stdev);
+    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    af::array mask = tsa::matrix::generateMask(m, 1, 0, 12, 2);
+    af::array mask = khiva::matrix::generateMask(m, 1, 0, 12, 2);
 
-    tsa::matrix::mass(q, tss, aux, mean, stdev, mask, distance, index);
+    khiva::matrix::mass(q, tss, aux, mean, stdev, mask, distance, index);
 
     float expectedDistance = 0.0;
     int expectedIndex = 7;
@@ -242,12 +242,12 @@ void massConsiderTrivial() {
     af::array stdev;
     af::array aux;
 
-    tsa::matrix::meanStdev(tss, aux, m, mean, stdev);
+    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::mass(q, tss, aux, mean, stdev, distance, index);
+    khiva::matrix::mass(q, tss, aux, mean, stdev, distance, index);
 
     float expectedDistance = 0.0;
     int expectedIndex = 7;
@@ -275,7 +275,7 @@ void stompIgnoreTrivialOneSeries() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(tss, m, distance, index);
+    khiva::matrix::stomp(tss, m, distance, index);
 
     unsigned int expectedIndex[] = {6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
 
@@ -303,7 +303,7 @@ void stompIgnoreTrivialMultipleSeries() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(tss, m, distance, index);
+    khiva::matrix::stomp(tss, m, distance, index);
 
     unsigned int expectedIndex[] = {6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 9, 10, 11, 6, 7, 8, 3, 4, 5, 0, 1, 2};
 
@@ -330,7 +330,7 @@ void stompConsiderTrivialOneSeries() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(t, t, m, distance, index);
+    khiva::matrix::stomp(t, t, m, distance, index);
 
     unsigned int expectedIndex[] = {0, 1, 2, 3, 4, 5};
     float *resultingDistance = distance.host<float>();
@@ -356,7 +356,7 @@ void stompConsiderTrivialOneSeries2() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(ta, tb, m, distance, index);
+    khiva::matrix::stomp(ta, tb, m, distance, index);
 
     unsigned int expectedIndex[] = {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1};
     float *resultingDistance = distance.host<float>();
@@ -382,7 +382,7 @@ void stompConsiderTrivialMultipleSeries() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(ta, tb, m, distance, index);
+    khiva::matrix::stomp(ta, tb, m, distance, index);
 
     unsigned int expectedIndex[] = {0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 1, 4, 5, 3, 2, 0,
                                     5, 0, 4, 3, 1, 2, 5, 0, 4, 3, 1, 2, 0, 1, 2, 3, 4, 5};
@@ -407,7 +407,7 @@ void stompConsiderTrivialMultipleSeriesBigM() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(ta, tb, m, distance, index);
+    khiva::matrix::stomp(ta, tb, m, distance, index);
 
     float *resultingDistance = distance.host<float>();
 
@@ -434,13 +434,13 @@ void findBestMotifs() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(ta, tb, m, distance, index);
+    khiva::matrix::stomp(ta, tb, m, distance, index);
 
     af::array motifs;
     af::array motifsIndices;
     af::array subsequenceIndices;
 
-    tsa::matrix::findBestNMotifs(distance, index, 2, motifs, motifsIndices, subsequenceIndices);
+    khiva::matrix::findBestNMotifs(distance, index, 2, motifs, motifsIndices, subsequenceIndices);
 
     unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
@@ -465,13 +465,13 @@ void findBestDiscords() {
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(ta, tb, m, distance, index);
+    khiva::matrix::stomp(ta, tb, m, distance, index);
 
     af::array discords;
     af::array discordsIndices;
     af::array subsequenceIndices;
 
-    tsa::matrix::findBestNDiscords(distance, index, 2, discords, discordsIndices, subsequenceIndices);
+    khiva::matrix::findBestNDiscords(distance, index, 2, discords, discordsIndices, subsequenceIndices);
 
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
@@ -479,19 +479,19 @@ void findBestDiscords() {
     ASSERT_EQ(subsequenceIndicesHost[1], 9);
 }
 
-TSA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct)
-TSA_TEST(MatrixTests, MeanStdev, meanStdev)
-TSA_TEST(MatrixTests, MeanStdevMEqualsLength, meanStdevMEqualsLength)
-TSA_TEST(MatrixTests, GenerateMask, generateMask)
-TSA_TEST(MatrixTests, CalculateDistanceProfile, calculateDistanceProfile)
-TSA_TEST(MatrixTests, CalculateDistanceProfileMiddle, calculateDistanceProfileMiddle)
-TSA_TEST(MatrixTests, MassIgnoreTrivial, massIgnoreTrivial)
-TSA_TEST(MatrixTests, MassConsiderTrivial, massConsiderTrivial)
-TSA_TEST(MatrixTests, StompIgnoreTrivialOneSeries, stompIgnoreTrivialOneSeries)
-TSA_TEST(MatrixTests, StompIgnoreTrivialMultipleSeries, stompIgnoreTrivialMultipleSeries)
-TSA_TEST(MatrixTests, StompConsiderTrivialOneSeries, stompConsiderTrivialOneSeries)
-TSA_TEST(MatrixTests, StompConsiderTrivialOneSeries2, stompConsiderTrivialOneSeries2)
-TSA_TEST(MatrixTests, StompConsiderTrivialMultipleSeries, stompConsiderTrivialMultipleSeries)
-TSA_TEST(MatrixTests, StompConsiderTrivialMultipleSeriesBigM, stompConsiderTrivialMultipleSeriesBigM)
-TSA_TEST(MatrixTests, FindBestMotifs, findBestMotifs)
-TSA_TEST(MatrixTests, FindBestDiscords, findBestDiscords)
+KHIVA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct)
+KHIVA_TEST(MatrixTests, MeanStdev, meanStdev)
+KHIVA_TEST(MatrixTests, MeanStdevMEqualsLength, meanStdevMEqualsLength)
+KHIVA_TEST(MatrixTests, GenerateMask, generateMask)
+KHIVA_TEST(MatrixTests, CalculateDistanceProfile, calculateDistanceProfile)
+KHIVA_TEST(MatrixTests, CalculateDistanceProfileMiddle, calculateDistanceProfileMiddle)
+KHIVA_TEST(MatrixTests, MassIgnoreTrivial, massIgnoreTrivial)
+KHIVA_TEST(MatrixTests, MassConsiderTrivial, massConsiderTrivial)
+KHIVA_TEST(MatrixTests, StompIgnoreTrivialOneSeries, stompIgnoreTrivialOneSeries)
+KHIVA_TEST(MatrixTests, StompIgnoreTrivialMultipleSeries, stompIgnoreTrivialMultipleSeries)
+KHIVA_TEST(MatrixTests, StompConsiderTrivialOneSeries, stompConsiderTrivialOneSeries)
+KHIVA_TEST(MatrixTests, StompConsiderTrivialOneSeries2, stompConsiderTrivialOneSeries2)
+KHIVA_TEST(MatrixTests, StompConsiderTrivialMultipleSeries, stompConsiderTrivialMultipleSeries)
+KHIVA_TEST(MatrixTests, StompConsiderTrivialMultipleSeriesBigM, stompConsiderTrivialMultipleSeriesBigM)
+KHIVA_TEST(MatrixTests, FindBestMotifs, findBestMotifs)
+KHIVA_TEST(MatrixTests, FindBestDiscords, findBestDiscords)

@@ -1,18 +1,18 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
-#include <tsa/polynomial.h>
-#include "tsaTest.h"
+#include <khiva/polynomial.h>
+#include "khivaTest.h"
 
 void polyfit1() {
     float data[] = {0, 1, 2, 3, 4, 5};
     af::array x = af::array(6, data);
 
-    float *calculated = tsa::polynomial::polyfit(x, x, 1).host<float>();
+    float *calculated = khiva::polynomial::polyfit(x, x, 1).host<float>();
 
     float expected[] = {1.0f, 0.0f};
 
@@ -27,7 +27,7 @@ void polyfit3() {
     float dataY[] = {0.0f, 0.8f, 0.9f, 0.1f, -0.8f, -1.0f};
     af::array y = af::array(6, dataY);
 
-    float *calculated = tsa::polynomial::polyfit(x, y, 3).host<float>();
+    float *calculated = khiva::polynomial::polyfit(x, y, 3).host<float>();
 
     float expected[] = {0.08703704f, -0.81349206f, 1.69312169f, -0.03968254f};
 
@@ -40,7 +40,7 @@ void roots() {
     float coeffs[] = {5, -20, 5, 50, -20, -40};
     af::array p = af::array(6, coeffs);
 
-    af::array roots = tsa::polynomial::roots(p);
+    af::array roots = khiva::polynomial::roots(p);
 
     af::cfloat *calculated = roots.host<af::cfloat>();
 
@@ -58,6 +58,6 @@ void roots() {
 }
 
 // Not testing in CPU because the static linking of OpenMP that Arrayfire does makes the test crash
-TSA_TEST_BACKENDS(PolynomialTests, Polyfit1, polyfit1, true, true, false, true, true, false)
-TSA_TEST_BACKENDS(PolynomialTests, Polyfit3, polyfit3, true, true, false, true, true, false)
-TSA_TEST_BACKENDS(PolynomialTests, Roots, roots, true, true, false, true, true, false)
+KHIVA_TEST_BACKENDS(PolynomialTests, Polyfit1, polyfit1, true, true, false, true, true, false)
+KHIVA_TEST_BACKENDS(PolynomialTests, Polyfit3, polyfit3, true, true, false, true, true, false)
+KHIVA_TEST_BACKENDS(PolynomialTests, Roots, roots, true, true, false, true, true, false)
