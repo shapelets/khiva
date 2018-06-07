@@ -1,0 +1,24 @@
+language: cpp
+sudo: false
+dist: trusty
+compiler:
+- clang
+os:
+- linux
+before_install:
+- echo $LANG
+- echo $LC_ALL
+
+# command to install dependencies
+install:
+  - ./.ci/travis/install.sh
+before_script:
+  - export PYTHONPATH=$PYTHONPATH:$(pwd)
+
+# command to run tests
+script: 
+  - ulimit -n 2048 # Error with py3 and OSX, max file descriptors
+  - ./.ci/travis/run.sh
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
