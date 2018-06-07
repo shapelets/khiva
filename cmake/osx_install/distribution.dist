@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<installer-gui-script minSpecVersion="1">
+    <title>${KHIVA_TITLE}</title>
+    <welcome    file="${WELCOME_FILE_OUT}" />
+    <readme     file="${README_FILE_OUT}" mime-type="text/html" />
+    <license    file="${PROJECT_SOURCE_DIR}/LICENSE" mime-type="text/plain" />
+
+    <pkg-ref id="com.shapelets.khiva.lib"         version="${VERSION_SHORT}" onConclusion="none">KHIVALibrary.pkg</pkg-ref>
+    <pkg-ref id="com.shapelets.khiva.inc"         version="${VERSION_SHORT}" onConclusion="none">KHIVAHeaders.pkg</pkg-ref>
+    <pkg-ref id="com.shapelets.khiva.examples"    version="${VERSION_SHORT}" onConclusion="none">KHIVAExamples.pkg</pkg-ref>
+    <pkg-ref id="com.shapelets.khiva.doc"         version="${VERSION_SHORT}" onConclusion="none">KHIVADoc.pkg</pkg-ref>
+    <pkg-ref id="com.shapelets.khiva.cmake"       version="${VERSION_SHORT}" onConclusion="none">KHIVACMake.pkg</pkg-ref>
+    <options customize="always" require-scripts="false"/>
+    <choices-outline>
+        <line choice="com.shapelets.khiva.lib"/>
+        <line choice="com.shapelets.khiva.inc"/>
+        <line choice="com.shapelets.khiva.examples"/>
+        <line choice="com.shapelets.khiva.doc"/>
+        <line choice="com.shapelets.khiva.cmake"/>
+    </choices-outline>
+    <choice title="Library" description="Library files of KHIVA" id="com.shapelets.khiva.lib" visible="true" enabled="true">
+        <pkg-ref id="com.shapelets.khiva.lib"/>
+    </choice>
+    <choice title="Headers" description="KHIVA Headers." id="com.shapelets.khiva.inc" visible="true" enabled="true">
+        <pkg-ref id="com.shapelets.khiva.inc"/>
+    </choice>
+    <choice title="Examples" description="KHIVA Examples" id="com.shapelets.khiva.examples" visible="true" enabled="true">
+        <pkg-ref id="com.shapelets.khiva.examples"/>
+    </choice>
+    <choice title="Documentation" description="KHIVA Documentation" id="com.shapelets.khiva.doc" visible="true" enabled="true">
+        <pkg-ref id="com.shapelets.khiva.doc"/>
+    </choice>
+</installer-gui-script>

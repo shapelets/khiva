@@ -1,0 +1,42 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## [0.1.0] - 2018-06-06
+### Added
+- Binding for Matlab.
+- Statistics namespace.
+- Features namespace.
+- Dimensionality namespace.
+- Polynomial namespace.
+- LinAlg namespace.
+- Normalization namespace.
+- Regression namespace.
+- Regularization namespace.
+- Support for Windows and Linux (Ubuntu 16.04 LTS).
+- Documentation using breathe.
+- Async. memory management.
+- Operators for Khiva Arrays class for all bindings (Java, Python, C++, R)
+
+### Removed
+- Simplification namespace.
+
+## [0.0.1] - 2018-03-03
+### Added
+- We have set Arrayfire as an abstraction layer to run on top of accelerators that are able to run OpenCL.
+- Implementation of STOMP method.
+- (Mueen's Algorithm for Similarity Search) MASS algorithm implementation.
+- Implementation of Simplification algorithms (Visvalingam and PIP).
+- Benchmarks Suite (based on Google Benchmark).
+- Test Suite (Google Test).
+- New Features Algorithms.
+- Binding for Python, R, Java.
+- Matrix namespace.
+- Distances namespace.
+- Simplification namespace.
+
+[Unreleased]: https://github.com/Shapelets/Khiva/branch/develop
+[0.0.1]: https://github.com/Shapelets/Khiva/branches/compare/develop%0Dv0.0.1.0
+

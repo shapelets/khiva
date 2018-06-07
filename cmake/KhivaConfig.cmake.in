@@ -1,0 +1,90 @@
+# Copyright (c) 2018 Shapelets.io
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Khiva
+# ---------
+#
+# IMPORTED Targets
+# ^^^^^^^^^^^^^^^^
+#
+# This is the configuration file for the Khiva Library. It provides the
+# following :prop_tgt:`IMPORTED` target:
+#
+# ``Khiva::khiva``
+#   Target for the Khiva library.
+#
+# This target can be used to link with your application using the
+# ``target_link_library`` command. Here is an example of how to use this
+# target in your application:
+#
+#   add_executable(mybinary source.cpp)
+#   target_link_library(mybinary PRIVATE Khiva::khiva)
+#
+# This example creates a mybinary executable from the source.cpp file and links
+# against the Khiva library. Note you do *not* need to set
+# the include directories as they are automatically included with the target.
+#
+# This is the recommended way of linking against Khiva
+#
+# Legacy Variables
+# ^^^^^^^^^^^^^^^^
+#
+# Additionally, this config file creates the following variables for backward
+# compatibility with legacy cmake files:
+#
+# ``KHIVA_INCLUDE_DIRS``
+#  Path to KHIVA's include directory.
+# ``KHIVA_LIBRARIES``
+#  Khiva's libraries. This will default to a GPU backend if one
+#  is found.
+# ``KHIVA_FOUND``
+#  True if Khiva has been located
+#
+# It is recommended you use imported targets instead of these variables.
+#
+# You may provide a hint to where Khiva's root directory may be located
+# by setting KHIVA_DIR. You should not need to set this if you installed
+# Khiva using the official installers or the package manager (please submit
+# a bug report). If CMake is unable to locate Khiva then set the
+# KHIVA_DIR to the directory of this file.
+#
+# If you are trying to link against a source build then this should be set to
+# the build directory.
+
+@PACKAGE_INIT@
+
+set_and_check(KHIVA_INCLUDE_DIRS @PACKAGE_INCLUDE_DIRS@)
+
+if(NOT TARGET Khiva::Khiva AND NOT TARGET khiva)
+  # Either we are not in the Khiva project or the target was not built
+  if(EXISTS @PACKAGE_CMAKE_DIR@/Khiva.cmake)
+    include(@PACKAGE_CMAKE_DIR@/Khiva.cmake)
+  endif()
+endif()
+
+if(TARGET Khiva::Khiva)
+  get_property(config TARGET Khiva::khiva PROPERTY IMPORTED_CONFIGURATIONS)
+  if(NOT config)
+    set(config "NOCONFIG")
+  endif()
+  get_property(loc TARGET Khiva::Khiva PROPERTY IMPORTED_LOCATION_${config})
+endif()
+
+if((TARGET Khiva::Khiva AND EXISTS ${loc}) OR TARGET khiva)
+  set(KHIVA_FOUND ON)
+  set(KHIVA_LIBRARIES Khiva::Khiva)
+else()
+  set(KHIVA_FOUND OFF)
+endif()
+
+foreach(_comp ${KHIVA_FIND_COMPONENTS})
+  if (NOT KHIVA_${_comp}_FOUND)
+    set(KHIVA_FOUND False)
+    set(KHIVA_NOT_FOUND_MESSAGE "Required Khiva component ${_comp} not found")
+  endif()
+endforeach()
+
+check_required_components(ArrayFire)

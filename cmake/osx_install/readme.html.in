@@ -1,0 +1,14 @@
+<html>
+<body>
+
+    <h2>Install Directories</h2>
+    <ul>
+        <li> Libraries will be installed in <code>/usr/local/lib</code> </li>
+        <li> Headers will be installed in <code>/usr/local/include</code> </li>
+        <li> Examples, documentation and CMake config files will be installed in <code>/usr/local/share</code> </li>
+    </ul>
+    <p> For complete list of updates, visit <a href="http://www.shapelets.io/docs/releasenotes.htm">KHIVA Release Notes</a></p>
+
+    <p> For questions about KHIVA or this installer, visit <a href="https://groups.google.com/forum/?fromgroups#!forum/shapelets-khiva"> KHIVA User Group</a> </p>
+</body>
+</html>

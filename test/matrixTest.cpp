@@ -1,71 +1,119 @@
-// Copyright (c) 2018 Grumpy Cat Software S.L.
+// Copyright (c) 2018 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include "tsa.h"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
+#include <khiva/matrix.h>
+#include "khivaTest.h"
 
-#define EPSILON 1e-6
-
-TEST(MatrixTests, SlidingDotProduct)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void slidingDotProduct() {
+    float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(14, data);
+    af::array tss = af::tile(t, 1, 2);
 
-    double query[] = {10, 11, 12};
+    float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
-    
-    af::array sdp = tsa::matrix::slidingDotProduct(q, t);
-    ASSERT_EQ(sdp.dims(0), 12);
 
-    double expected[] = {330, 342, 365, 374, 361, 340, 342, 365, 374, 361, 340, 330};
-    double *result = sdp.host<double>();
-    for(int i = 0; i < 12; i++) {
-        ASSERT_EQ(result[i], expected[i]);
+    af::array sdp = khiva::matrix::slidingDotProduct(q, tss);
+    ASSERT_EQ(sdp.dims(0), 12);
+    ASSERT_EQ(sdp.dims(1), 2);
+
+    float expected[] = {330, 342, 365, 374, 361, 340, 342, 365, 374, 361, 340, 330};
+    float *result = sdp.host<float>();
+    for (int i = 0; i < 24; i++) {
+        ASSERT_EQ(result[i], expected[i % 12]);
     }
 }
 
-TEST(MatrixTests, MeanStdev)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void meanStdev() {
+    float data[] = {10, 10, 11, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 11};
     af::array t = af::array(14, data);
+    af::array tss = af::tile(t, 1, 2);
 
     long m = 3;
     af::array mean;
     af::array stdev;
 
-    tsa::matrix::meanStdev(t, m, mean, stdev);
+    khiva::matrix::meanStdev(tss, m, mean, stdev);
 
     ASSERT_EQ(mean.dims(0), 12);
+    ASSERT_EQ(mean.dims(1), 2);
     ASSERT_EQ(stdev.dims(0), 12);
+    ASSERT_EQ(stdev.dims(1), 2);
 
-    double expectedMean[] = {10, 10.333333333, 11, 11.333333333, 11, 10.333333333, 10.333333333, 11, 11.333333333, 11, 10.333333333, 10};
-    double expectedStdev[] = {0, 0.471404521, 0.816496581, 0.471404521, 0.816496581, 0.471404521, 0.471404521, 0.816496581, 0.471404521, 0.816496581, 0.471404521, 0};    
-    double *resultingMean = mean.host<double>();
-    double *resultingStdev = stdev.host<double>();    
-    for(int i = 0; i < 12; i++) {
-        ASSERT_NEAR(resultingMean[i], expectedMean[i], EPSILON);
-        ASSERT_NEAR(resultingStdev[i], expectedStdev[i], EPSILON);        
+    float expectedMean[] = {10.333333333f,
+                            10.666666666f,
+                            11.333333333f,
+                            11.333333333f,
+                            11,
+                            10.333333333f,
+                            10.333333333f,
+                            11,
+                            11.333333333f,
+                            11,
+                            10.333333333f,
+                            10.333333333f};
+    float expectedStdev[] = {0.471404521f, 0.471404521f, 0.471404521f, 0.471404521f, 0.816496581f, 0.471404521f,
+                             0.471404521f, 0.816496581f, 0.471404521f, 0.816496581f, 0.471404521f, 0.471404521f};
+    float *resultingMean = mean.host<float>();
+    float *resultingStdev = stdev.host<float>();
+    for (int i = 0; i < 24; i++) {
+        ASSERT_NEAR(resultingMean[i], expectedMean[i % 12], EPSILON * 3e3);
+        ASSERT_NEAR(resultingStdev[i], expectedStdev[i % 12], EPSILON * 3e3);
     }
 }
 
-TEST(MatrixTests, GenerateMask)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    tsa::matrix::generateMask(3, 4, 2, 8);
+void meanStdevMEqualsLength() {
+    float data[] = {10, 10, 11, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 11};
+    af::array t = af::array(14, data);
+    af::array tss = af::tile(t, 1, 2);
+
+    long m = 14;
+    af::array mean;
+    af::array stdev;
+
+    khiva::matrix::meanStdev(tss, m, mean, stdev);
+
+    ASSERT_EQ(mean.dims(0), 1);
+    ASSERT_EQ(mean.dims(1), 2);
+    ASSERT_EQ(stdev.dims(0), 1);
+    ASSERT_EQ(stdev.dims(1), 2);
+
+    float expectedMean[] = {10.714285f};
+    float expectedStdev[] = {0.699862f};
+    float *resultingMean = mean.host<float>();
+    float *resultingStdev = stdev.host<float>();
+    ASSERT_NEAR(resultingMean[0], expectedMean[0], EPSILON * 3e3);
+    ASSERT_NEAR(resultingMean[1], expectedMean[0], EPSILON * 3e3);
+    ASSERT_NEAR(resultingStdev[0], expectedStdev[0], EPSILON * 3e3);
+    ASSERT_NEAR(resultingStdev[1], expectedStdev[0], EPSILON * 3e3);
 }
 
-TEST(MatrixTests, CalculateDistanceProfile)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
-    af::array t = af::array(14, data);
+void generateMask() {
+    af::array mask = khiva::matrix::generateMask(3, 4, 2, 8, 2);
 
-    double query[] = {10, 11, 12};
+    ASSERT_EQ(mask.dims(0), 4);
+    ASSERT_EQ(mask.dims(1), 8);
+    ASSERT_EQ(mask.dims(2), 2);
+
+    float *maskCalculated = af::transpose(mask).as(af::dtype::f32).host<float>();
+
+    float maskExpected[] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0,
+                            0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+
+    for (int i = 0; i < 64; i++) {
+        ASSERT_EQ(maskCalculated[i], maskExpected[i % 32]);
+    }
+}
+
+void calculateDistanceProfile() {
+    float data[] = {10, 10, 11, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 11};
+    af::array t = af::array(14, data);
+    af::array tss = af::tile(t, 1, 2);
+
+    float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
 
     long m = 3;
@@ -73,32 +121,38 @@ TEST(MatrixTests, CalculateDistanceProfile)
     af::array stdev;
     af::array aux;
 
-    af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
+    af::array qtss = khiva::matrix::slidingDotProduct(q, tss);
+    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, distance, index);
+    khiva::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, distance,
+                                            index);
 
-    double expectedDistance = 19.0552097998;
-    int expectedIndex = 7;    
-    double *resultingDistance = distance.host<double>();
+    float expectedDistance = 19.0552097998f;
+    int expectedIndex = 7;
 
-    unsigned int resultingIndex;
-    index.host(&resultingIndex);    
+    ASSERT_EQ(distance.dims(), af::dim4(1, 2, 1, 1));
+    ASSERT_EQ(index.dims(), af::dim4(1, 2, 1, 1));
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
-    ASSERT_EQ(resultingIndex, expectedIndex);
+    float *resultingDistance = distance.host<float>();
+
+    unsigned int resultingIndex[2];
+    index.host(&resultingIndex);
+
+    ASSERT_NEAR(resultingDistance[0], expectedDistance, EPSILON * 1e1);
+    ASSERT_NEAR(resultingDistance[1], expectedDistance, EPSILON * 1e1);
+    ASSERT_EQ(resultingIndex[0], expectedIndex);
+    ASSERT_EQ(resultingIndex[1], expectedIndex);
 }
 
-TEST(MatrixTests, CalculateDistanceProfileMiddle)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void calculateDistanceProfileMiddle() {
+    float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(14, data);
+    af::array tss = af::tile(t, 1, 2);
 
-    double query[] = {10, 11, 12};
+    float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
 
     long m = 3;
@@ -106,70 +160,40 @@ TEST(MatrixTests, CalculateDistanceProfileMiddle)
     af::array stdev;
     af::array aux;
 
-    af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
+    af::array qtss = khiva::matrix::slidingDotProduct(q, tss);
+    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    af::array mask = tsa::matrix::generateMask(m, 1, 0, 12);
+    af::array mask = khiva::matrix::generateMask(m, 1, 0, 12, 2);
 
-    tsa::matrix::calculateDistanceProfile(m, qt, aux, af::sum(q), af::sum(af::pow(q, 2)), mean, stdev, mask, distance, index);
+    khiva::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, mask,
+                                            distance, index);
 
-    double expectedDistance = 19.0552097998;
-    int expectedIndex = 7;    
-    double *resultingDistance = distance.host<double>();
+    float expectedDistance = 19.0552097998f;
+    int expectedIndex = 7;
 
-    unsigned int resultingIndex;
-    index.host(&resultingIndex);    
+    ASSERT_EQ(distance.dims(), af::dim4(1, 2, 1, 1));
+    ASSERT_EQ(index.dims(), af::dim4(1, 2, 1, 1));
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
-    ASSERT_EQ(resultingIndex, expectedIndex);
+    float *resultingDistance = distance.host<float>();
+
+    unsigned int resultingIndex[2];
+    index.host(&resultingIndex);
+
+    ASSERT_NEAR(resultingDistance[0], expectedDistance, EPSILON * 1e1);
+    ASSERT_NEAR(resultingDistance[1], expectedDistance, EPSILON * 1e1);
+    ASSERT_EQ(resultingIndex[0], expectedIndex);
+    ASSERT_EQ(resultingIndex[1], expectedIndex);
 }
 
-TEST(MatrixTests, MassIgnoreTrivial)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void massIgnoreTrivial() {
+    float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(14, data);
+    af::array tss = af::tile(t, 1, 2);
 
-    double query[] = {10, 11, 12};
-    af::array q = af::array(3, query);
-
-    long m = 3;
-
-    af::array mean;
-    af::array stdev;
-    af::array aux;
-
-    af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
-
-    af::array distance;
-    af::array index;
-
-    af::array mask = tsa::matrix::generateMask(m, 1, 0, 12);
-
-    tsa::matrix::mass(q, t, m, aux, mean, stdev, mask, distance, index);
-
-    double expectedDistance = 0.00000004712;
-    int expectedIndex = 7;    
-    double *resultingDistance = distance.host<double>();
-
-    unsigned int resultingIndex;
-    index.host(&resultingIndex);    
-
-    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
-    ASSERT_EQ(resultingIndex, expectedIndex);
-}
-
-TEST(MatrixTests, MassConsiderTrivial)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
-    af::array t = af::array(14, data);
-
-    double query[] = {10, 11, 12};
+    float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
 
     long m = 3;
@@ -178,132 +202,296 @@ TEST(MatrixTests, MassConsiderTrivial)
     af::array stdev;
     af::array aux;
 
-    af::array qt = tsa::matrix::slidingDotProduct(q, t);
-    tsa::matrix::meanStdev(t, aux, m, mean, stdev);
+    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::mass(q, t, m, aux, mean, stdev, distance, index);
+    af::array mask = khiva::matrix::generateMask(m, 1, 0, 12, 2);
 
-    double expectedDistance = 0.00000004712;
-    int expectedIndex = 7;    
-    double *resultingDistance = distance.host<double>();
+    khiva::matrix::mass(q, tss, aux, mean, stdev, mask, distance, index);
 
-    unsigned int resultingIndex;
-    index.host(&resultingIndex);    
+    float expectedDistance = 0.0;
+    int expectedIndex = 7;
 
-    ASSERT_NEAR(*resultingDistance, expectedDistance, EPSILON);
-    ASSERT_EQ(resultingIndex, expectedIndex);
+    ASSERT_EQ(distance.dims(), af::dim4(1, 2, 1, 1));
+    ASSERT_EQ(index.dims(), af::dim4(1, 2, 1, 1));
+
+    float *resultingDistance = distance.host<float>();
+
+    unsigned int resultingIndex[2];
+    index.host(&resultingIndex);
+
+    ASSERT_NEAR(resultingDistance[0], expectedDistance, 1e-2);
+    ASSERT_NEAR(resultingDistance[1], expectedDistance, 1e-2);
+    ASSERT_EQ(resultingIndex[0], expectedIndex);
+    ASSERT_EQ(resultingIndex[1], expectedIndex);
 }
 
-TEST(MatrixTests, StompOneTimeSeries)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+void massConsiderTrivial() {
+    float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(14, data);
+    af::array tss = af::tile(t, 1, 2);
+
+    float query[] = {10, 11, 12};
+    af::array q = af::array(3, query);
+
+    long m = 3;
+
+    af::array mean;
+    af::array stdev;
+    af::array aux;
+
+    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::mass(q, tss, aux, mean, stdev, distance, index);
+
+    float expectedDistance = 0.0;
+    int expectedIndex = 7;
+
+    ASSERT_EQ(distance.dims(), af::dim4(1, 2, 1, 1));
+    ASSERT_EQ(index.dims(), af::dim4(1, 2, 1, 1));
+
+    float *resultingDistance = distance.host<float>();
+
+    unsigned int resultingIndex[2];
+    index.host(&resultingIndex);
+
+    ASSERT_NEAR(resultingDistance[0], expectedDistance, 1e-2);
+    ASSERT_NEAR(resultingDistance[1], expectedDistance, 1e-2);
+    ASSERT_EQ(resultingIndex[0], expectedIndex);
+    ASSERT_EQ(resultingIndex[1], expectedIndex);
+}
+
+void stompIgnoreTrivialOneSeries() {
+    float data[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 11, 10, 11, 10, 10};
+    af::array tss = af::array(14, data);
 
     long m = 3;
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(t, m, distance, index);
+    khiva::matrix::stomp(tss, m, distance, index);
 
-    unsigned int expectedIndex[] = {11, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 0};    
-    double *resultingDistance = distance.host<double>();
+    unsigned int expectedIndex[] = {6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5};
+
+    ASSERT_EQ(distance.dims(), af::dim4(12, 1, 1, 1));
+    ASSERT_EQ(index.dims(), af::dim4(12, 1, 1, 1));
+
+    float *resultingDistance = distance.host<float>();
 
     unsigned int resultingIndex[12];
-    index.host(&resultingIndex);    
+    index.host(&resultingIndex);
 
-    for(int i = 0; i < 12; i++){
-        ASSERT_NEAR(resultingDistance[i], 0.0, EPSILON);
+    for (int i = 0; i < 12; i++) {
+        ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
 }
 
-TEST(MatrixTests, StompTwoTimeSeries)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
-    af::array t = af::array(14, data);
+void stompIgnoreTrivialMultipleSeries() {
+    float data[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 11, 10, 11, 10, 10,
+                    11, 10, 10, 11, 10, 11, 11, 10, 11, 11, 10, 10, 11, 10};
+    af::array tss = af::array(14, 2, data);
 
     long m = 3;
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(t, t, m, distance, index);
+    khiva::matrix::stomp(tss, m, distance, index);
 
-    unsigned int expectedIndex[] = {11, 1, 2, 8, 9, 5, 1, 2, 8, 9, 5, 11};    
-    double *resultingDistance = distance.host<double>();
+    unsigned int expectedIndex[] = {6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 9, 10, 11, 6, 7, 8, 3, 4, 5, 0, 1, 2};
 
-    unsigned int resultingIndex[12];
-    index.host(&resultingIndex);    
+    ASSERT_EQ(distance.dims(), af::dim4(12, 2, 1, 1));
+    ASSERT_EQ(index.dims(), af::dim4(12, 2, 1, 1));
 
-    for(int i = 0; i < 12; i++){
-        ASSERT_NEAR(resultingDistance[i], 0.0, EPSILON);
+    float *resultingDistance = distance.host<float>();
+
+    unsigned int resultingIndex[24];
+    index.host(&resultingIndex);
+
+    for (int i = 0; i < 24; i++) {
+        ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
 }
 
-TEST(MatrixTests, FindBestMotifs)
-{
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data_a[] = {10, 11, 10, 10, 10, 10, 9, 10, 10, 10, 10, 10, 11, 10};
-    af::array ta = af::array(14, data_a);
-
-    double data_b[] = {10, 11, 10, 300, 20, 30, 40, 50, 60, 70, 80, 90, 80, 90};
-    af::array tb = af::array(14, data_b);
+void stompConsiderTrivialOneSeries() {
+    float data[] = {10, 10, 11, 11, 10, 11, 10, 10};
+    af::array t = af::array(8, data);
 
     long m = 3;
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(ta, tb, m, distance, index);
+    khiva::matrix::stomp(t, t, m, distance, index);
+
+    unsigned int expectedIndex[] = {0, 1, 2, 3, 4, 5};
+    float *resultingDistance = distance.host<float>();
+
+    unsigned int resultingIndex[6];
+    index.host(&resultingIndex);
+
+    for (int i = 0; i < 6; i++) {
+        ASSERT_NEAR(resultingDistance[i], 0.0, 1e-2);
+        ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
+    }
+}
+
+void stompConsiderTrivialOneSeries2() {
+    float dataA[] = {10, 11, 10, 11, 10, 11, 10, 11};
+    af::array ta = af::array(4, 2, dataA);
+
+    float dataB[] = {10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11};
+    af::array tb = af::array(8, 2, dataB);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, tb, m, distance, index);
+
+    unsigned int expectedIndex[] = {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1};
+    float *resultingDistance = distance.host<float>();
+
+    unsigned int resultingIndex[24];
+    index.host(&resultingIndex);
+
+    for (int i = 0; i < 24; i++) {
+        ASSERT_NEAR(resultingDistance[i], 0.0, 1e-2);
+        ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
+    }
+}
+
+void stompConsiderTrivialMultipleSeries() {
+    float dataA[] = {10, 10, 11, 11, 10, 11, 10, 10, 10, 10, 11, 11, 10, 11, 10, 10, 11, 10, 10, 11, 10, 11, 11, 10};
+    af::array ta = af::array(8, 3, dataA);
+
+    float dataB[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 10, 10, 11, 10, 11, 11, 10};
+    af::array tb = af::array(8, 2, dataB);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, tb, m, distance, index);
+
+    unsigned int expectedIndex[] = {0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 1, 4, 5, 3, 2, 0,
+                                    5, 0, 4, 3, 1, 2, 5, 0, 4, 3, 1, 2, 0, 1, 2, 3, 4, 5};
+    float *resultingDistance = distance.host<float>();
+
+    unsigned int resultingIndex[36];
+    index.host(&resultingIndex);
+
+    for (int i = 0; i < 36; i++) {
+        ASSERT_NEAR(resultingDistance[i], 0.0, 1e-2);
+        ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
+    }
+}
+
+void stompConsiderTrivialMultipleSeriesBigM() {
+    af::array ta = af::randn(4096, 3);
+
+    af::array tb = ta;
+
+    long m = 4096;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, tb, m, distance, index);
+
+    float *resultingDistance = distance.host<float>();
+
+    unsigned int resultingIndex[9];
+    index.host(&resultingIndex);
+
+    for (int i = 0; i < 9; i++) {
+        if (i % 4 == 0) {
+            ASSERT_NEAR(resultingDistance[i], 0.0, 1e-1);
+            ASSERT_EQ(resultingIndex[i], 0);
+        }
+    }
+}
+
+void findBestMotifs() {
+    float data_a[] = {10, 10, 10, 10, 10, 10, 9, 10, 10, 10, 10, 10, 11, 10, 9};
+    af::array ta = af::array(15, data_a);
+
+    float data_b[] = {10, 11, 10, 9};
+    af::array tb = af::array(4, data_b);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, tb, m, distance, index);
 
     af::array motifs;
     af::array motifsIndices;
     af::array subsequenceIndices;
 
-    tsa::matrix::findBestNMotifs(distance, index, 2, motifs, motifsIndices, subsequenceIndices);
+    khiva::matrix::findBestNMotifs(distance, index, 2, motifs, motifsIndices, subsequenceIndices);
 
     unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
-    ASSERT_EQ(motifsIndicesHost[0], 5);
-    ASSERT_EQ(motifsIndicesHost[1], 0);
+    ASSERT_EQ(motifsIndicesHost[0], 12);
+    ASSERT_EQ(motifsIndicesHost[1], 11);
 
-    ASSERT_EQ(subsequenceIndicesHost[0], 11);
-    ASSERT_EQ(subsequenceIndicesHost[1], 0);    
+    ASSERT_EQ(subsequenceIndicesHost[0], 1);
+    ASSERT_EQ(subsequenceIndicesHost[1], 0);
 }
 
-TEST(MatrixTests, FindBestDiscords)
-{
+void findBestDiscords() {
     af::setBackend(af::Backend::AF_BACKEND_CPU);
-    double data_a[] = {10, 11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 10};
-    af::array ta = af::array(14, data_a);
+    double data_a[] = {11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11};
+    af::array ta = af::array(12, data_a);
 
-    double data_b[] = {10, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 9, 10};
-    af::array tb = af::array(14, data_b);
+    double data_b[] = {9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 9};
+    af::array tb = af::array(12, data_b);
 
     long m = 3;
 
     af::array distance;
     af::array index;
 
-    tsa::matrix::stomp(ta, tb, m, distance, index);
+    khiva::matrix::stomp(ta, tb, m, distance, index);
 
     af::array discords;
     af::array discordsIndices;
     af::array subsequenceIndices;
 
-    tsa::matrix::findBestNDiscords(distance, index, 2, discords, discordsIndices, subsequenceIndices);
+    khiva::matrix::findBestNDiscords(distance, index, 2, discords, discordsIndices, subsequenceIndices);
 
-    unsigned int *discordsIndicesHost = discordsIndices.host<unsigned int>();
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
     ASSERT_EQ(subsequenceIndicesHost[0], 0);
-    ASSERT_EQ(subsequenceIndicesHost[1], 11);    
+    ASSERT_EQ(subsequenceIndicesHost[1], 9);
 }
+
+KHIVA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct)
+KHIVA_TEST(MatrixTests, MeanStdev, meanStdev)
+KHIVA_TEST(MatrixTests, MeanStdevMEqualsLength, meanStdevMEqualsLength)
+KHIVA_TEST(MatrixTests, GenerateMask, generateMask)
+KHIVA_TEST(MatrixTests, CalculateDistanceProfile, calculateDistanceProfile)
+KHIVA_TEST(MatrixTests, CalculateDistanceProfileMiddle, calculateDistanceProfileMiddle)
+KHIVA_TEST(MatrixTests, MassIgnoreTrivial, massIgnoreTrivial)
+KHIVA_TEST(MatrixTests, MassConsiderTrivial, massConsiderTrivial)
+KHIVA_TEST(MatrixTests, StompIgnoreTrivialOneSeries, stompIgnoreTrivialOneSeries)
+KHIVA_TEST(MatrixTests, StompIgnoreTrivialMultipleSeries, stompIgnoreTrivialMultipleSeries)
+KHIVA_TEST(MatrixTests, StompConsiderTrivialOneSeries, stompConsiderTrivialOneSeries)
+KHIVA_TEST(MatrixTests, StompConsiderTrivialOneSeries2, stompConsiderTrivialOneSeries2)
+KHIVA_TEST(MatrixTests, StompConsiderTrivialMultipleSeries, stompConsiderTrivialMultipleSeries)
+KHIVA_TEST(MatrixTests, StompConsiderTrivialMultipleSeriesBigM, stompConsiderTrivialMultipleSeriesBigM)
+KHIVA_TEST(MatrixTests, FindBestMotifs, findBestMotifs)
+KHIVA_TEST(MatrixTests, FindBestDiscords, findBestDiscords)

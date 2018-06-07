@@ -1,26 +1,33 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
+# Copyright (c) 2018 Shapelets.io
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
+PROJECT(KHIVALIB)
 # Find the ArrayFire package.
 FIND_PACKAGE(ArrayFire REQUIRED)
-# Find the JNI package.
-FIND_PACKAGE(JNI REQUIRED)
 # Find the Boost package
 FIND_PACKAGE(Boost REQUIRED)
-
-PROJECT(TSALIB)
 
 # Compile with C++11 support.
 INCLUDE(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
 
-if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-elseif(COMPILER_SUPPORTS_CXX0X)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-else()
-    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-endif()
+SET(CMAKE_CXX_FLAGS "-fPIC ${CMAKE_CXX_FLAGS}")
+
+# This if statement is required to avoid compilation problems with gcc
+IF(NOT CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    IF(COMPILER_SUPPORTS_CXX11)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    ELSEIF(COMPILER_SUPPORTS_CXX0X)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+    ELSE()
+        MESSAGE(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+    ENDIF()
+ENDIF()
 
 # Avoid conflicts with min and max functions
 ADD_DEFINITIONS(-DNOMINMAX)
@@ -28,37 +35,60 @@ ADD_DEFINITIONS(-DNOMINMAX)
 # Compile using unified backend
 ADD_DEFINITIONS(-DAF_UNIFIED)
 
-# Set the base directory to parent so src and include become
-# equaly visible
-SET(TSALIB_BASE_DIR "..")
-# Define source directory
-SET(TSALIB_SRC "${TSALIB_BASE_DIR}/src")
-# Define include directory
-SET(TSALIB_INC "${TSALIB_BASE_DIR}/include")
-
 # Files to add to compilation
-FILE(GLOB_RECURSE TSALIB_CODE 
-    "${TSALIB_SRC}/*.cpp"
-    "${TSALIB_INC}/*.h" )
+FILE(GLOB_RECURSE KHIVALIB_CODE 
+    "${KHIVALIB_SRC}/*.cpp"
+    "${KHIVALIB_INC}*.h" )
 
 # The output is a static library
-ADD_LIBRARY(TSALIB STATIC ${TSALIB_CODE})
+ADD_LIBRARY(${KHIVALIB} STATIC ${KHIVALIB_CODE})
 
 # Declare include directories
-TARGET_INCLUDE_DIRECTORIES(TSALIB PUBLIC 
+TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
+                           $<BUILD_INTERFACE:${KHIVALIB_INC}>
+                           $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
                            ${ArrayFire_INCLUDE_DIRS}
-                           ${TSALIB_INC} 
-                           ${JNI_INCLUDE_DIRS}
                            ${Boost_INCLUDE_DIRS})
 
 # Declare compilation libraries
-TARGET_LINK_LIBRARIES(TSALIB
+TARGET_LINK_LIBRARIES(${KHIVALIB}
                       ${ArrayFire_Unified_LIBRARIES}
                       ${CMAKE_DL_LIBS})
 
 # Add metadata
-SET_TARGET_PROPERTIES(TSALIB PROPERTIES 
+SET_TARGET_PROPERTIES(${KHIVALIB} PROPERTIES 
     VERSION ${VERSION_SHORT}
     SOVERSION ${VERSION_MAJOR}
-    PUBLIC_HEADER "${TSALIB_INC}/tsa.h")
+    PUBLIC_HEADER "${KHIVALIB_INC}/khiva.h")
 
+# Installation
+INSTALL(TARGETS ${KHIVALIB}
+        EXPORT Khiva
+        COMPONENT core
+        PUBLIC_HEADER DESTINATION ${KHIVA_INSTALL_INC_DIR}
+        RUNTIME DESTINATION ${KHIVA_INSTALL_BIN_DIR}
+        LIBRARY DESTINATION ${KHIVA_INSTALL_LIB_DIR}
+        ARCHIVE DESTINATION ${KHIVA_INSTALL_LIB_DIR}
+        INCLUDES DESTINATION ${KHIVA_INSTALL_INC_DIR})
+
+INSTALL(EXPORT Khiva
+         NAMESPACE Khiva::
+         DESTINATION ${KHIVA_INSTALL_CMAKE_DIR}
+         COMPONENT core)
+
+EXPORT(EXPORT Khiva
+        NAMESPACE Khiva::
+        FILE cmake/KhivaTargets.cmake)
+
+INSTALL(DIRECTORY ${KHIVALIB_INC} 
+        DESTINATION ${KHIVA_INSTALL_INC_DIR}
+        COMPONENT headers
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN ".gitignore" EXCLUDE
+)
+
+INSTALL(FILES ${CMAKE_BINARY_DIR}/cmake/install/KhivaConfig.cmake
+              ${CMAKE_BINARY_DIR}/cmake/install/KhivaConfigVersion.cmake
+              DESTINATION ${KHIVA_INSTALL_CMAKE_DIR}
+              COMPONENT cmake)

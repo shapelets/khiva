@@ -1,10 +1,18 @@
+# Copyright (c) 2018 Shapelets.io
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
+PROJECT(Khiva
+    LANGUAGES C CXX)
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Using C++ 11
 SET(CMAKE_CXX_STANDARD 11)
 
-# bring conan generated dependencies
+# Bring conan generated dependencies
 INCLUDE(conanbuildinfo.cmake)
 CONAN_BASIC_SETUP()
 
@@ -20,35 +28,73 @@ IF(NOT CMAKE_BUILD_TYPE)
       FORCE)
 ENDIF()
 
-# git support
-INCLUDE(GetGitRevisionDescription)
+# Set the base directory to parent so src and include become equaly visible
+SET(KHIVALIB_BASE_DIR ${PROJECT_SOURCE_DIR})
+# Define source directory
+SET(KHIVALIB_SRC "${KHIVALIB_BASE_DIR}/src")
+# Define include directory
+SET(KHIVALIB_INC "${KHIVALIB_BASE_DIR}/include/")
+# Library Name
+SET(KHIVALIB "khiva")
 
-# get current version from git tags
-git_describe(VERSION --tags --dirty=-dirty)
+# Bring KHIVA version and installation directories
+INCLUDE(Version)
+INCLUDE(KhivaInstallDirs)
 
-# parse the version information into pieces.
-STRING(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" VERSION_MAJOR "${VERSION}")
-STRING(REGEX REPLACE "^v[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${VERSION}")
-STRING(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${VERSION}")
-STRING(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" VERSION_SHA1 "${VERSION}")
-SET(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+SET(PROJECT_VERSION ${VERSION_SHORT})
 
-# dump version information down to a header file
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/version.h.in
-               ${CMAKE_CURRENT_SOURCE_DIR}/include/version.h)
+# These config files will be installed so we need to set the install_destination
+# path relative to the install path
+INCLUDE(CMakePackageConfigHelpers)
+WRITE_BASIC_PACKAGE_VERSION_FILE(
+    cmake/install/KhivaConfigVersion.cmake
+    COMPATIBILITY SameMajorVersion)
+
+SET(INCLUDE_DIRS include)
+SET(CMAKE_DIR ${KHIVA_INSTALL_CMAKE_DIR})
+CONFIGURE_PACKAGE_CONFIG_FILE(
+    ${KHIVALIB_BASE_DIR}/cmake/KhivaConfig.cmake.in
+    cmake/install/KhivaConfig.cmake
+    INSTALL_DESTINATION "${KHIVA_INSTALL_CMAKE_DIR}"
+    PATH_VARS INCLUDE_DIRS CMAKE_DIR)
+
+IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # Turn compiler warnings up to 11
+    STRING(REGEX REPLACE "[-/]W[1-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -pedantic -Wno-gnu-zero-variadic-macro-arguments -Wint-conversion -Wshorten-64-to-32")
+ELSEIF(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wextra -pedantic")
+ENDIF()
 
 # build items in subdirectories
 ADD_SUBDIRECTORY(src)
 
-# build experiments
-ADD_SUBDIRECTORY(experiments)
+# build examples
+ADD_SUBDIRECTORY(examples)
 
 # test and benchmarks
 ENABLE_TESTING()
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(benchmarks)
+
+# build bindings for c and jni
+ADD_SUBDIRECTORY(bindings)
+
 # build items in subdirectories
 ADD_SUBDIRECTORY(doc)
 
+INSTALL(DIRECTORY examples/
+    DESTINATION ${KHIVA_INSTALL_EXAMPLE_DIR}
+    COMPONENT examples
+    FILES_MATCHING
+    PATTERN "*.cpp"
+    PATTERN "*.h")
 
+INSTALL(DIRECTORY licenses/
+    DESTINATION ${KHIVA_INSTALL_LICENSES_DIR}
+    COMPONENT licenses)
 
+INCLUDE(CPackConfig)
