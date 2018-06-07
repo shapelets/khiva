@@ -9,7 +9,6 @@ INCLUDE(GetGitRevisionDescription)
 
 # get current version from git tags
 git_describe(VERSION --tags)
-
 get_git_head_revision(HEAD_REF LONG_COMMIT_ID)
 
 # parse the version information into pieces.
