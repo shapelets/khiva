@@ -1,11 +1,11 @@
 Core Development Team
 ---------------------
 
-- Justo Ruiz-Ferrer - Paella Chef Developer (`justo.ruiz@gcatsoft.com <justo.ruiz@gcatsoft.com>`_)
-- Antonio Vilches - Boqueron Developer (`antonio.vilches@gcatsoft.com <antonio.vilches@gcatsoft.com>`_)
-- Oscar Torreno - Early Morning Developer - (`oscar.torreno@gcatsoft.com <oscar.torreno@gcatsoft.com>`_)
-- David Cuesta - Leaks Developer - (`david.cuesta@gcatsoft.com <david.cuesta@gcatsoft.com>`_)
+- Justo Ruiz-Ferrer (`justo.ruiz@shapelets.io <justo.ruiz@shapelets.io>`_)
+- Antonio Vilches (`antonio.vilches@shapelets.io <antonio.vilches@shapelets.io>`_)
+- Oscar Torreno (`oscar.torreno@shapelets.io <oscar.torreno@shapelets.io>`_)
+- David Cuesta (`david.cuesta@shapelets.io <david.cuesta@shapelets.io>`_)
 
 Contributions
 -------------
-- Luis Sanchez - Not a Developer - (`luis.sanchez@gcatsoft.com <luis.sanchez@gcatsoft.com>`_)
+- Luis Sanchez (`luis.sanchez@shapelets.io <luis.sanchez@shapelets.io>`_)
