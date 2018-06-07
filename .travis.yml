@@ -1,0 +1,4 @@
+dist: trusty
+sudo: false
+
+compiler: clang
