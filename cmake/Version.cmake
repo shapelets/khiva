@@ -10,11 +10,13 @@ INCLUDE(GetGitRevisionDescription)
 # get current version from git tags
 git_describe(VERSION --tags)
 
+get_git_head_revision(HEAD_REF LONG_COMMIT_ID)
+
 # parse the version information into pieces.
 STRING(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" VERSION_MAJOR "${VERSION}")
 STRING(REGEX REPLACE "^v[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${VERSION}")
 STRING(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${VERSION}")
-STRING(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)-(.*)" "\\2" VERSION_SHA1 "${VERSION}")
+STRING(SUBSTRING ${LONG_COMMIT_ID} 0 7 VERSION_SHA1)
 SET(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 # dump version information down to a header file
