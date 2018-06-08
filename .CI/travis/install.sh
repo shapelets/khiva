@@ -2,7 +2,7 @@
 
 # Installing dependencies
 sudo apt-get update
-sudo apt-get install -y python3 python3-pip cmake
+sudo apt-get install -y python3 python3-pip cmake libboost-all-dev
 
 # Installing conan
 sudo pip3 install conan
