@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Sudo
-sudo apt-get install libboost
+sudo apt-get install libboost-all-dev
