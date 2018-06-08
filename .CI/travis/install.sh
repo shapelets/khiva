@@ -8,6 +8,7 @@ sudo apt-get install -y python3 python3-pip cmake
 sudo pip3 install conan
 
 # Installing library dependencies with conan
+conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
 conan install . --build missing -s compiler.libcxx=libstdc++11
 
 # Preparing the build
