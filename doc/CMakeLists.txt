@@ -47,6 +47,18 @@ ADD_CUSTOM_TARGET(KHIVA_doc_sphinx ALL
         "${SPHINX_HTML_DIR}"
     COMMENT "Building HTML documentation with Sphinx")
 
+# HTML output directory
+SET(SPHINX_LATEX_DIR "${CMAKE_CURRENT_BINARY_DIR}/latex")
+
+ADD_CUSTOM_TARGET(KHIVA_doc_sphinx_pdf
+    ${SPHINX_EXECUTABLE}
+        -q -b latex
+        -c "${CMAKE_CURRENT_SOURCE_DIR}/sphinx/source/"
+        -d "${SPHINX_CACHE_DIR}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/sphinx/source"
+        "${SPHINX_LATEX_DIR}"
+    COMMENT "Building HTML documentation with Sphinx")
+
 INSTALL(DIRECTORY ${SPHINX_HTML_DIR}
     DESTINATION ${KHIVA_INSTALL_DOC_DIR}
     COMPONENT documentation)
