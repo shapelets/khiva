@@ -1,8 +1,10 @@
 
 sudo: required
-
-services:
-  - docker
+dist: trusty
+compiler:
+- clang
+os:
+- linux
 
 # It is not really needed, other than for showing correct language tag in Travis CI build log.
 language: cpp
