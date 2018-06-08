@@ -4,7 +4,7 @@ Namespace Library
 =================
 
 .. doxygennamespace:: khiva::library
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:

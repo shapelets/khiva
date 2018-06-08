@@ -1,4 +1,4 @@
-# KHIVA
+# Khiva
 
 ## License
 This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
@@ -10,7 +10,7 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 4. Create `build` folder and, after moving into the new folder, run `cmake ..` 
 5. Run the actual make for your environment.
 
-### Generating the KHIVA installers
+### Generating the Khiva installers
 This project can be packaged to be installed in a Windows, Linux or Mac OS system. CPack is used in order to perform this task.
 1. For **Windows** the installer can be generated running the command `cpack -G NSIS` inside the `build` folder. You need [NSIS] (http://nsis.sourceforge.net/Download) installed in your system.
 2. For **linux** either a **deb** or a **rpm** package the installer can be generated. This could be done running the command `cpack -G DEB` or `cpack -G RPM` respectively inside the `build` folder.
@@ -36,7 +36,7 @@ We use the `clang-format` plugin for the VS Code editor to format our codes. Thi
 
 ### Branching model
 
-Our branching model has two permanent branches, **develop** and **master**. We aim at using `develop` as the main branch, where all features are merged. In this sense, we use the master branch to push the release versions of the KHIVA library.
+Our branching model has two permanent branches, **develop** and **master**. We aim at using `develop` as the main branch, where all features are merged. In this sense, we use the master branch to push the release versions of the Khiva library.
 
 ### Contribution process
 

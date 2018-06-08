@@ -4,7 +4,7 @@ Namespace Polynomial
 ====================
 
 .. doxygennamespace:: khiva::polynomial
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:

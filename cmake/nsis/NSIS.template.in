@@ -31,7 +31,7 @@
 
   !define env_khiva_hklm 'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
 
-  !define cmake_pkg_reg_key 'HKCU "Software\Kitware\CMake\Packages\KHIVA"'
+  !define cmake_pkg_reg_key 'HKCU "Software\Kitware\CMake\Packages\Khiva"'
 
 ;--------------------------------
 ;General
