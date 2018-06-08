@@ -1,17 +1,26 @@
-language: cpp
 sudo: required
-dist: trusty
-compiler:
-- clang
-os:
-- linux
+
+services:
+  - docker
+
+# It is not really needed, other than for showing correct language tag in Travis CI build log.
+language: cpp
+
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y python3 libboost-all-dev libeigen3-dev
+  - docker run -d --name ubuntu-test -v $(pwd):/travis ubuntu:latest tail -f /dev/null
+  - docker ps
+
 install:
-  - mkdir build
-  - cd build
-  - cmake ..
-  - make install
+  - docker exec -t ubuntu-test bash -c "apt-get update;
+    apt-get install -y software-properties-common python-software-properties;
+    apt-get install -y build-essential cmake libboost-thread-dev libboost-date-time-dev;
+    add-apt-repository -y ppa:ubuntu-toolchain-r/test;
+    apt-get update;
+    apt-get install -y gcc-$CC_VER g++-$CC_VER"
 
-
+script:
+  - docker exec -t ubuntu-test bash -c "cd /travis;
+    cmake -DCMAKE_C_COMPILER=gcc-$CC_VER -DCMAKE_CXX_COMPILER=g++-$CC_VER . &&
+    make &&
+    chmod +x travis &&
+    ./travis"
