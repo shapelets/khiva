@@ -5,7 +5,7 @@ sudo apt-get update
 sudo apt-get install -y python3 cmake
 
 # Installing conan
-pip3.6 install conan
+pip install conan
 
 # Installing library dependencies with conan
 conan install . --build missing -s compiler.libcxx=libstdc++11
