@@ -4,7 +4,7 @@ Namespace LinAlg
 ================
 
 .. doxygennamespace:: khiva::linalg
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:

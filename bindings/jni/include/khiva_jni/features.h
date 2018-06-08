@@ -682,7 +682,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Features_ratioBeyondRSigma
  * not the case. In principle, it just returns:
  *
  * \f[
- *      \frac{\textit{number_unique_values}}{\textit{number_values}}
+ *      \frac{\textit{number\_unique\_values}}{\textit{number\_values}}
  * \f]
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and

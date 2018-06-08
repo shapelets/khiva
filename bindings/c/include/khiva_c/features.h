@@ -692,7 +692,7 @@ KHIVAAPI void ratio_beyond_r_sigma(khiva_array *array, float *r, khiva_array *re
  * not the case. In principle, it just returns:
  *
  * \f[
- *      \frac{\textit{number_unique_values}}{\textit{number_values}}
+ *      \frac{\textit{number\_unique\_values}}{\textit{number\_values}}
  * \f]
  *
  * @param array Expects an input array whose dimension zero is the length of the time series (all the same) and
