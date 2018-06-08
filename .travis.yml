@@ -11,7 +11,7 @@ before_install:
 
 # command to install dependencies
 install:
-  - ./.ci/travis/install.sh
+  - source ./.ci/travis/install.sh
 before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
