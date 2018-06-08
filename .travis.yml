@@ -7,20 +7,8 @@ services:
 language: cpp
 
 before_install:
-  - docker run -d --name ubuntu-test -v $(pwd):/travis ubuntu:latest tail -f /dev/null
-  - docker ps
+  - source .CI/travis/install.sh 2>&1 > /dev/null
 
 install:
-  - docker exec -t ubuntu-test bash -c "apt-get update;
-    apt-get install -y software-properties-common python-software-properties;
-    apt-get install -y build-essential cmake libboost-thread-dev libboost-date-time-dev;
-    add-apt-repository -y ppa:ubuntu-toolchain-r/test;
-    apt-get update;
-    apt-get install -y gcc-$CC_VER g++-$CC_VER"
+  - source .CI/travis/run.sh
 
-script:
-  - docker exec -t ubuntu-test bash -c "cd /travis;
-    cmake -DCMAKE_C_COMPILER=gcc-$CC_VER -DCMAKE_CXX_COMPILER=g++-$CC_VER . &&
-    make &&
-    chmod +x travis &&
-    ./travis"
