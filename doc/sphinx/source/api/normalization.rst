@@ -4,7 +4,7 @@ Namespace Normalization
 =======================
 
 .. doxygennamespace:: khiva::normalization
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:

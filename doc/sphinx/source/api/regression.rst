@@ -4,7 +4,7 @@ Namespace Regression
 ====================
 
 .. doxygennamespace:: khiva::regression
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:

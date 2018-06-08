@@ -6,11 +6,9 @@
 
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace features
-{
+namespace features {
 /**
  * @brief Calculates the absolute energy of the time series which is the sum over the squared values.
  * \f[
@@ -417,8 +415,9 @@ af::array hasDuplicateMax(af::array tss);
 af::array hasDuplicateMin(af::array tss);
 
 /**
- * @brief Calculates the relative index \f$i\f$ where \f$q%\f$ of the mass of the time series within tss lie at the left
- * of \f$i\f$. For example for \f$q = 50%\f$ this feature calculator will return the mass center of the time series.
+ * @brief Calculates the relative index \f$i\f$ where \f$q\%\f$ of the mass of the time series within tss lie at the
+ * left of \f$i\f$. For example for \f$q = 50\%\f$ this feature calculator will return the mass center of the time
+ * series.
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
@@ -770,7 +769,7 @@ af::array ratioBeyondRSigma(af::array tss, float r);
  * @brief Calculates a factor which is 1 if all values in the time series occur only once, and below one if this is
  * not the case. In principle, it just returns:
  * \f[
- *      \frac{\textit{number_unique_values}}{\textit{number_values}}
+ *      \frac{\textit{number\_unique\_values}}{\textit{number\_values}}
  * \f]
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -944,5 +943,5 @@ af::array variance(af::array tss);
  */
 af::array varianceLargerThanStandardDeviation(af::array tss);
 
-} // namespace features
-} // namespace khiva
+}  // namespace features
+}  // namespace khiva

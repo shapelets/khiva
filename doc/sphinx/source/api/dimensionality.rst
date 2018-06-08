@@ -4,7 +4,7 @@ Namespace Dimensionality
 ========================
 
 .. doxygennamespace:: khiva::dimensionality
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:
