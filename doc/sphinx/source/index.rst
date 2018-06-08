@@ -1,5 +1,5 @@
 =============================
-Khiva (Time Series Analytics)
+Khiva
 =============================
 
 This is the documentation of **Khiva** library.
