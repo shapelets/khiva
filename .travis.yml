@@ -7,7 +7,7 @@ os:
 - linux
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y python3 libboost-all-dev eigen
+  - sudo apt-get install -y python3 libboost-all-dev libeigen3-dev
 install:
   - mkdir build
   - cd build
