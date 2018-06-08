@@ -33,7 +33,7 @@ if not os.path.exists(doxygen_dir):
 
 # -- Project information -----------------------------------------------------
 
-project = u'KHIVA'
+project = u'Khiva'
 copyright = u'2018, Shapelets'
 author = u'Shapelets'
 
@@ -109,9 +109,9 @@ pygments_style = 'sphinx'
 
 # Setup the breathe extension
 breathe_projects = {
-    "KHIVA": doxygen_dir + "/xml"
+    "Khiva": doxygen_dir + "/xml"
 }
-breathe_default_project = "KHIVA"
+breathe_default_project = "Khiva"
 
 # Tell sphinx what the primary language being documented is.
 primary_domain = 'cpp'
@@ -153,7 +153,7 @@ html_theme_path = ["_themes"]
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'KHIVAdoc'
+htmlhelp_basename = 'Khivadoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -180,7 +180,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'KHIVA.tex', u'KHIVA Documentation',
+    (master_doc, 'Khiva.tex', u'Khiva Documentation',
      u'Shapelets.io', 'manual'),
 ]
 
@@ -190,7 +190,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'khiva', u'KHIVA Documentation',
+    (master_doc, 'khiva', u'Khiva Documentation',
      [author], 1)
 ]
 
@@ -201,8 +201,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'KHIVA', u'KHIVA Documentation',
-     author, 'KHIVA', 'One line description of project.',
+    (master_doc, 'Khiva', u'Khiva Documentation',
+     author, 'Khiva', 'One line description of project.',
      'Miscellaneous'),
 ]
 

@@ -4,7 +4,7 @@ Namespace Regularization
 ========================
 
 .. doxygennamespace:: khiva::regularization
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:

@@ -4,7 +4,7 @@ Namespace Statistics
 ====================
 
 .. doxygennamespace:: khiva::statistics
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:

@@ -1,4 +1,4 @@
-# KHIVA Tests
+# Khiva Tests
 
 In order to execute the benchmarks in all the available backends and for all the devices we have defined the `KHIVA_TEST` macro, which defines a Google test for each available backend and device using the `TEST` macro.
 

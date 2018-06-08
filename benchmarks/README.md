@@ -1,4 +1,4 @@
-# KHIVA Benchmarks
+# Khiva Benchmarks
 
 In order to execute the benchmarks in all the available backends we have defined the `KHIVA_BENCHMARK_MAIN` macro, which redefines the `BENCHMARK_MAIN` macro of Google benchmarks.
 

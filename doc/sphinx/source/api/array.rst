@@ -4,7 +4,7 @@ Namespace Array
 ===============
 
 .. doxygennamespace:: khiva::array
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:

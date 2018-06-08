@@ -4,7 +4,7 @@ Namespace Features
 ==================
 
 .. doxygennamespace:: khiva::features
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:
