@@ -13,15 +13,23 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import pip
+import subprocess
+
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-baseDir = str(os.path.abspath('../../../../../'))
-buildDir = baseDir + "/build" 
-docDir = buildDir + "/doc"
-sphinxDir = docDir + "/sphinx"
-sphinxSourceDir = sphinxDir + "/source"
-doxygenDir = docDir + "/doxygen"
+base_dir = str(os.path.abspath('../../../'))
+doc_source_dir = base_dir + "/doc"
+doxygen_source_dir = doc_source_dir + "/doxygen"
+build_dir = base_dir + "/build"
+doc_dir = build_dir + "/doc"
+sphinx_dir = doc_source_dir + "/sphinx"
+sphinx_source_dir = sphinx_dir + "/source"
+doxygen_dir = doc_dir + "/doxygen"
+
+if not os.path.exists(doxygen_dir):
+    os.makedirs(doxygen_dir)
 
 # -- Project information -----------------------------------------------------
 
@@ -30,10 +38,26 @@ copyright = u'2018, Shapelets'
 author = u'Shapelets'
 
 # The short X.Y version
-version = u''
+version = ''
 # The full version, including alpha/beta/rc tags
-release = u'@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@'
+release = subprocess.check_output(
+    ["git", "describe"]).strip().decode("utf-8").split('-')[0]
 
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+if on_rtd:
+    pip.main(['install', 'breathe'])
+
+with open(doxygen_source_dir + "/Doxyfile.in") as f:
+    newText = f.read().replace('@VERSION_SHORT@', release).replace(
+        '@DOXYGEN_OUTPUT_DIR@', doxygen_dir)
+
+with open(doxygen_dir + "/Doxyfile", "w") as f:
+    f.write(newText)
+
+print("doxygen " + doxygen_dir + "/Doxyfile")
+
+subprocess.call("doxygen " + doxygen_dir + "/Doxyfile", shell=True)
 
 # -- General configuration ---------------------------------------------------
 
@@ -50,10 +74,8 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
-    #'sphinx.ext.imgmath',
     'sphinx.ext.viewcode',
     'breathe'
-    #'exhale'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -87,23 +109,9 @@ pygments_style = 'sphinx'
 
 # Setup the breathe extension
 breathe_projects = {
-    "KHIVA": doxygenDir + "/xml"
+    "KHIVA": doxygen_dir + "/xml"
 }
 breathe_default_project = "KHIVA"
-
-# Setup the exhale extension
-exhale_args = {
-    # These arguments are required
-    "containmentFolder":     sphinxSourceDir + "/apiKHIVA",
-    "rootFileName":          "main.rst",
-    "rootFileTitle":         "KHIVA API",
-    "doxygenStripFromPath":  "../",
-    # Suggested optional arguments
-    "createTreeView":        True,
-    # TIP: if using the sphinx-bootstrap-theme, you need
-    # "treeViewIsBootstrap": True,
-    "exhaleExecutesDoxygen": False
-}
 
 # Tell sphinx what the primary language being documented is.
 primary_domain = 'cpp'
@@ -117,7 +125,7 @@ highlight_language = 'cpp'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme' #'alabaster'
+html_theme = 'sphinx_rtd_theme'
 html_theme_path = ["_themes"]
 
 # Theme options are theme-specific and customize the look and feel of a theme
