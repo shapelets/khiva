@@ -12,11 +12,6 @@ PROJECT(KHIVALIB_DOC)
 # Generating Doxygen Documentation
 # check if Doxygen is installed, add a target to generate API documentation with Doxygen
 FIND_PACKAGE(Doxygen QUIET)
-OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ON)
-
-IF(NOT DOXYGEN_FOUND)
-MESSAGE(STATUS "I should not get printed")
-ENDIF()
 
 IF(NOT DOXYGEN_FOUND OR SPHINX_EXECUTABLE STREQUAL "" OR DOT_EXECUTABLE STREQUAL "")
     SET(KHIVA_BUILD_DOCUMENTATION OFF)
