@@ -17,9 +17,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Avoid conflicts with min and max functions
-ADD_DEFINITIONS(-DNOMINMAX)
-
 # Compile using unified backend
 ADD_DEFINITIONS(-DAF_UNIFIED)
 
