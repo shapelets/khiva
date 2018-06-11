@@ -1,9 +1,6 @@
 bin
 build
 .DS_Store
-conanbuildinfo.cmake
-conanbuildinfo.txt
-conaninfo.txt
 *.cmake
 *CMakeFiles*
 *Makefile
