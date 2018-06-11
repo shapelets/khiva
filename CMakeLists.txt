@@ -13,9 +13,9 @@ SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 SET(CMAKE_CXX_STANDARD 11)
 
 # Load from environment variables
-SET(CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH})
-SET(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+LIST(APPEND CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH})
+LIST(APPEND CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
+LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Set the build type
 IF(NOT CMAKE_BUILD_TYPE)
@@ -27,17 +27,26 @@ ENDIF()
 # Compile-time options
 OPTION(KHIVA_BUILD_TESTS "Build tests of the Khiva library" ON)
 OPTION(KHIVA_BUILD_BENCHMARKS "Build benchmarks of the Khiva library" ON)
+OPTION(KHIVA_BUILD_EXAMPLES "Build examples of the Khiva library" ON)
+OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependencies of the Khiva library" ON)
 
-INCLUDE(conan)
+IF(KHIVA_USE_CONAN)
+    INCLUDE(conan)
 
-conan_cmake_run(CONANFILE conanfile.txt
-                BASIC_SETUP CMAKE_TARGETS
-                BUILD missing
-                SETTINGS cppstd=11)
+    IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        SET(CONAN_CPPSTD 14)
+    ELSE()
+        SET(CONAN_CPPSTD 11)
+    ENDIF()
+    conan_cmake_run(CONANFILE conanfile.txt
+                    BASIC_SETUP CMAKE_TARGETS
+                    BUILD missing
+                    SETTINGS cppstd=${CONAN_CPPSTD})
 
-# Bring conan generated dependencies
-INCLUDE(build/conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
+    # Bring conan generated dependencies
+    INCLUDE(build/conanbuildinfo.cmake)
+    CONAN_BASIC_SETUP()
+ENDIF()
 
 # Set the base directory to parent so src and include become equaly visible
 SET(KHIVALIB_BASE_DIR ${PROJECT_SOURCE_DIR})

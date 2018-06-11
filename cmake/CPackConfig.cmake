@@ -166,11 +166,13 @@ if(KHIVA_BUILD_DOCUMENTATION)
     GROUP khiva
     INSTALL_TYPES Extra)
 endif()
-cpack_add_component(examples
-  DISPLAY_NAME "Khiva Examples"
-  DESCRIPTION "Various examples using Khiva."
-  GROUP khiva
-  INSTALL_TYPES Extra)
+if(KHIVA_BUILD_EXAMPLES)
+  cpack_add_component(examples
+    DISPLAY_NAME "Khiva Examples"
+    DESCRIPTION "Various examples using Khiva."
+    GROUP khiva
+    INSTALL_TYPES Extra)
+endif()
 cpack_add_component(licenses
   DISPLAY_NAME "Licenses"
   DESCRIPTION "License files for upstream libraries and Khiva."
@@ -208,7 +210,9 @@ cpack_ifw_configure_component(cmake)
 if(KHIVA_BUILD_DOCUMENTATION)
   cpack_ifw_configure_component(documentation)
 endif()
-cpack_ifw_configure_component(examples)
+if(KHIVA_BUILD_EXAMPLES)
+  cpack_ifw_configure_component(examples)
+endif()
 cpack_ifw_configure_component(licenses FORCED_INSTALLATION
   LICENSES "ArrayFire" ${arrayfire_lic_path} "Boost" ${boost_lic_path} "Eigen" ${mpl2_lic_path} "Khiva" ${mpl2_lic_path}
 )
