@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 FIND_PACKAGE(Threads REQUIRED)
-FIND_PACKAGE(Benchmark REQUIRED)
+FIND_PACKAGE(benchmark CONFIG REQUIRED)
 
 FILE(GLOB_RECURSE ALL_BENCH_CPP *.cpp)
 
