@@ -12,8 +12,8 @@ compiler:
 before_install:
   - sudo apt-get update
   - sudo apt-get install -y python3 libboost-all-dev libeigen3-dev
-  - source .ci/travis/install-intel.sh
-  - source .ci/travis/install-arrayfire.sh
+  - source ./.ci/travis/install-intel.sh
+  - source ./.ci/travis/install-arrayfire.sh
 
 install:
   - source ./.ci/travis/install.sh
