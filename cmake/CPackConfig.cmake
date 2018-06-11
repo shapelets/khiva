@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.5)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/nsis")
 
-include(Version)
+include(KhivaVersion)
 include(CPackIFW)
 
 set(CPACK_GENERATOR "STGZ;TGZ" CACHE STRINGS "STGZ;TGZ;DEB;RPM;productbuild")
@@ -159,16 +159,20 @@ cpack_add_component(cmake
   DESCRIPTION "Configuration files to use Khiva using CMake."
   GROUP khiva
   INSTALL_TYPES Development Extra)
-cpack_add_component(documentation
-  DISPLAY_NAME "Khiva Documentation"
-  DESCRIPTION "Sphinx documentation"
-  GROUP khiva
-  INSTALL_TYPES Extra)
-cpack_add_component(examples
-  DISPLAY_NAME "Khiva Examples"
-  DESCRIPTION "Various examples using Khiva."
-  GROUP khiva
-  INSTALL_TYPES Extra)
+if(KHIVA_BUILD_DOCUMENTATION)
+  cpack_add_component(documentation
+    DISPLAY_NAME "Khiva Documentation"
+    DESCRIPTION "Sphinx documentation"
+    GROUP khiva
+    INSTALL_TYPES Extra)
+endif()
+if(KHIVA_BUILD_EXAMPLES)
+  cpack_add_component(examples
+    DISPLAY_NAME "Khiva Examples"
+    DESCRIPTION "Various examples using Khiva."
+    GROUP khiva
+    INSTALL_TYPES Extra)
+endif()
 cpack_add_component(licenses
   DISPLAY_NAME "Licenses"
   DESCRIPTION "License files for upstream libraries and Khiva."
@@ -203,8 +207,12 @@ cpack_ifw_configure_component(c_binding FORCED_INSTALLATION)
 cpack_ifw_configure_component(jni_binding FORCED_INSTALLATION)
 cpack_ifw_configure_component(headers)
 cpack_ifw_configure_component(cmake)
-cpack_ifw_configure_component(documentation)
-cpack_ifw_configure_component(examples)
+if(KHIVA_BUILD_DOCUMENTATION)
+  cpack_ifw_configure_component(documentation)
+endif()
+if(KHIVA_BUILD_EXAMPLES)
+  cpack_ifw_configure_component(examples)
+endif()
 cpack_ifw_configure_component(licenses FORCED_INSTALLATION
   LICENSES "ArrayFire" ${arrayfire_lic_path} "Boost" ${boost_lic_path} "Eigen" ${mpl2_lic_path} "Khiva" ${mpl2_lic_path}
 )

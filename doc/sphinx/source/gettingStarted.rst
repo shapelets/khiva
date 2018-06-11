@@ -14,7 +14,7 @@ latest source code version by cloning our git repository:
 
 .. code-block:: bash
 
-    git clone https://github.com/Shapelets/Khiva
+    git clone https://github.com/shapelets/khiva
 
 
 Dependencies

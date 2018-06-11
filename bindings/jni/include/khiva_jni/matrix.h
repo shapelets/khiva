@@ -23,7 +23,7 @@ extern "C" {
  *           - The indices of the query sequences that produced
  *             the minimum reported in the motifs.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
                                                                              jlong ref_index, jlong n);
 
 /**
@@ -39,7 +39,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_findBestNMotifs(JNI
  *          - The indices of the query sequences that produced
  *            the "N" bigger discords.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
                                                                                jlong ref_index, jlong n);
 
 /**
@@ -53,7 +53,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_findBestNDiscords(J
  *          - The distance profile.
  *          - The index profile.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
                                                                    jlong m);
 
 /**
@@ -67,7 +67,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_stomp(JNIEnv *env, 
  *            from 't' in a different location of itself.
  *          - The matrix profile index, which points to where the aforementioned minimum is located.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m);
 
 #ifdef __cplusplus
 }

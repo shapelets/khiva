@@ -4,20 +4,13 @@ Khiva
 
 This is the documentation of **Khiva** library.
 
-Khiva [#f1]_ is an open source C++ library which focus on providing efficient algorithms to perform analytics over 
-time series of data. It can be used to extract insights from one or a group of time series. The large number of 
-available methods allow us to understand the nature of each time series. Based on that analytics, the user can 
-reduce dimensionality, find out recurrent motifs or discords, understand the seasonality or trend from a given time
-series, forecasting and detect anomalies. 
+Khiva [#f1]_ is an open-source library of efficient algorithms to analyse time series in GPU and CPU. It can be used to extract insights from one or a group of time series. The large number of available methods allow us to understand the nature of each time series. Based on the results of this analysis, users can reduce dimensionality, find out recurrent motifs or discords, understand the seasonality or trend from a given time series, forecasting and detect anomalies.
 
-It is a novel project that wants to provide a mean for time series analytics at scale. Our vision is that this kind
-of analytics can be exploit in a wide range of use cases across several industries, like finance, energy, e-health,
-IOT, application performance monitoring (APM), music industry, etc.  
+Khiva provides a mean for time series analytics at scale. These analytics can be exploited in a wide range of use cases across several industries, like energy, finance, e-health, IoT, music industry, etc. 
 
-It is just the beginning, so keep tuned, more features are coming ...  
+This is just the beginning, so stay tuned as more features are coming ...  
 
-`shapelets-khiva@googlegroups.com
-<https://groups.google.com/forum/?fromgroups#!forum/shapelets-khiva>`_ is the place for discussions and questions about 
+`Gitter <https://gitter.im/shapelets-io/khiva>`_ is the place for discussions and questions about 
 Khiva library. We use the `GitHub Issue Tracker <https://github.com/shapelets/khiva/issues>`_ to manage bug reports 
 and feature requests.
 
@@ -31,6 +24,7 @@ You can jump right into the package by looking into our :ref:`chapter-gettingsta
    Getting Started <gettingStarted>
    API <api/main>
    Bindings to other languages <bindings/main>
+   Using Khiva in your CMake project <cmake>
    Authors <authors>
 
 Cite Us
