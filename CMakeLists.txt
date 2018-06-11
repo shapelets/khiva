@@ -14,6 +14,10 @@ SET(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON) # Required
 SET(CMAKE_CXX_EXTENSIONS ON) # with compiler extensions like gnu++11
 
+# Avoid conflicts with min and max functions
+IF(WIN32)
+    ADD_DEFINITIONS(-DNOMINMAX)
+ENDIF()
 # Load from environment variables
 LIST(APPEND CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH})
 LIST(APPEND CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
