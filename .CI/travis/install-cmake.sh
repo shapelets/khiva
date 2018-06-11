@@ -7,7 +7,7 @@
 wget https://cmake.org/files/v3.11/cmake-3.11.3.tar.gz
 tar -xzvf cmake-3.11.3.tar.gz
 cd cmake-3.11.3
-./bootstrap 2> /dev/null
+./bootstrap > /dev/null 2>&1
 sudo make install
 cd ..
 
