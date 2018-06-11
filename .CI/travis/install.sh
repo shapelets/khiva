@@ -13,5 +13,5 @@ conan install . --build missing -s compiler.libcxx=libstdc++11
 # Preparing the build
 mkdir build
 cd build
-cmake ..
+../bin/cmake ..
 make all
