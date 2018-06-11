@@ -24,7 +24,7 @@ Make sure you have checked _all_ steps below.
 
 
 ## License
-- [ ] Add an [Mozilla Public License 2.0 header](http://mozilla.org/MPL/2.0/) to all the new files.
+- [ ] Add a [Mozilla Public License 2.0 license header](http://mozilla.org/MPL/2.0/) to all the new files.
 
 
 ### Documentation
