@@ -6,9 +6,8 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 ## Installation
 1. Install conan, c++ package manager, preferably through `pip install conan`.  For more information and alternative instalation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html)
 2. Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`
-3. Run `conan install . --build missing -s compiler.libcxx=libstdc++11`, which will bring down dependencies and generate the necessary include files for the `cmake` build.
-4. Create `build` folder and, after moving into the new folder, run `cmake ..` 
-5. Run the actual make for your environment.
+3. Create `build` folder and, after moving into the new folder, run `cmake ..` 
+4. Run `make -j8 && make install`.
 
 ### Generating the Khiva installers
 This project can be packaged to be installed in a Windows, Linux or Mac OS system. CPack is used in order to perform this task.
@@ -46,7 +45,7 @@ In order t contribute to the code base, we follow the next process :
 2. Create a new branch with the following pattern "feature/[nameOfTheFeature]"
 `git checkout -b feature/exampleFeature`
 3. Develop the new feature on the the new branch. It includes testing and documentation.
-`git commit -a -m "Bla, Bla, Bla";  git push`
+`git commit -a -m "Bla, Bla, Bla"; git push`
 4. Open a Pull Request to merge the feature branch in to develop. Currently, a pull request has to be reviewed at least by one person.
 5. Finally, delete the feature branch.
 6. Move back to develop branch.

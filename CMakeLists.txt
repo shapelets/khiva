@@ -12,10 +12,6 @@ SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 # Using C++ 11
 SET(CMAKE_CXX_STANDARD 11)
 
-# Bring conan generated dependencies
-INCLUDE(conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-
 # Load from environment variables
 SET(CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH})
 SET(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
@@ -27,6 +23,28 @@ IF(NOT CMAKE_BUILD_TYPE)
       CACHE STRING "Build configuration 'Release' or 'Debug'."
       FORCE)
 ENDIF()
+
+# Compile-time options
+OPTION(KHIVA_BUILD_TESTS "Build tests of the Khiva library" ON)
+OPTION(KHIVA_BUILD_BENCHMARKS "Build benchmarks of the Khiva library" ON)
+
+# Download the conan.cmake file to allow downloading dependencies from CMake
+IF(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+   MESSAGE(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+   FILE(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/v0.11/conan.cmake"
+                 "${CMAKE_BINARY_DIR}/conan.cmake")
+ENDIF()
+
+INCLUDE(${CMAKE_BINARY_DIR}/conan.cmake)
+
+conan_cmake_run(CONANFILE conanfile.txt
+                BASIC_SETUP CMAKE_TARGETS
+                BUILD missing
+                SETTINGS cppstd=11)
+
+# Bring conan generated dependencies
+INCLUDE(build/conanbuildinfo.cmake)
+CONAN_BASIC_SETUP()
 
 # Set the base directory to parent so src and include become equaly visible
 SET(KHIVALIB_BASE_DIR ${PROJECT_SOURCE_DIR})
@@ -75,10 +93,16 @@ ADD_SUBDIRECTORY(src)
 # build examples
 ADD_SUBDIRECTORY(examples)
 
-# test and benchmarks
-ENABLE_TESTING()
-ADD_SUBDIRECTORY(test)
-ADD_SUBDIRECTORY(benchmarks)
+# build tests
+IF(KHIVA_BUILD_TESTS)
+    ENABLE_TESTING()
+    ADD_SUBDIRECTORY(test)
+ENDIF()
+
+# build benchmarks
+IF(KHIVA_BUILD_BENCHMARKS)
+    ADD_SUBDIRECTORY(benchmarks)
+ENDIF()
 
 # build bindings for c and jni
 ADD_SUBDIRECTORY(bindings)
