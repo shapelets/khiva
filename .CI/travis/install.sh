@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Installing conan
+sudo apt-get update
+sudo apt-get install -y python3 python3-pip libboost-all-dev
 sudo pip3 install conan
 
 # Installing library dependencies with conan
