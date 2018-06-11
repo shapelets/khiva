@@ -18,7 +18,7 @@ little bit helps, and credit will always be given.
 
 ## Contribution process
 
-In order t contribute to the code base, we follow the next process :
+In order to contribute to the code base, we follow the next process :
 1. The main branch is develop, every developer should pull the current status of the branch before stating to develop any new feature.
 `git pull`
 1. Create a new branch with the following pattern "feature/[name_of_the_feature]"
