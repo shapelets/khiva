@@ -8,11 +8,7 @@ about: Create a report to help us improve
 A clear and concise description of what the bug is.
 
 **To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Steps to reproduce the behavior, at minimum a code snippet containing the steps which produced the error, and preferably a project with :
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
@@ -20,16 +16,10 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+**Environment information:**
+ - OS: [e.g. Mac OS]
+ - Version [e.g. 10.13]
+ - Khiva dependencies versions [e.g. ArrayFire 3.5.1, Boost 1.66.0]
 
 **Additional context**
 Add any other context about the problem here.
