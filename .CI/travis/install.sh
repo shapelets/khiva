@@ -2,8 +2,8 @@
 
 # Installing conan
 sudo apt-get update
-sudo apt-get install -y python3 python3-pip libboost-all-dev doxygen
-sudo pip3 install conan graphviz sphinx sphinx_rtd_theme breathe
+sudo apt-get install -y python3 python3-pip libboost-all-dev doxygen graphviz
+sudo pip3 install conan sphinx sphinx_rtd_theme breathe
 
 # Installing library dependencies with conan
 conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
