@@ -9,12 +9,10 @@ language: cpp
 compiler: g++
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install -y python3 libboost-all-dev libeigen3-dev
   - source .CI/travis/install-intel.sh
   - source .CI/travis/install-arrayfire.sh
   - source .CI/travis/install-cmake.sh
   - cmake --version
 
 install:
-  - source .CI/travis/install.sh
+  - cmake --version
