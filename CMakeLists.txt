@@ -28,7 +28,7 @@ ENDIF()
 OPTION(KHIVA_BUILD_TESTS "Build tests of the Khiva library" ON)
 OPTION(KHIVA_BUILD_BENCHMARKS "Build benchmarks of the Khiva library" ON)
 OPTION(KHIVA_BUILD_EXAMPLES "Build examples of the Khiva library" ON)
-OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ON)
+OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen, GraphViz and Sphinx)" ON)
 OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependencies of the Khiva library" ON)
 
 IF(KHIVA_USE_CONAN)
