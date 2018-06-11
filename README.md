@@ -31,17 +31,6 @@ We use `sphinx + doxygen` to generate our documentation. You will need to instal
 
 ## Contributing
 
-### Formatting Style
-
-In order to have a standarised code base, we only accept code that is formatted according to the Google rules for C++ with a column width of 120 characters and an identation of 4 whitespaces. For this purpose, we use `clang-format`, which can be installed in MacOs by executing the next command: `brew install clang-format`.
-We use the `clang-format` plugin for the VS Code editor to format our codes. This plugin uses the `clang-format` program and the aforementioned rules under the hood.
-
-### Branching model
-
-Our branching model has two permanent branches, **develop** and **master**. We aim at using `develop` as the main branch, where all features are merged. In this sense, we use the master branch to push the release versions of the Khiva library.
-
-### Contributing
-
 The rules to contribute to this project are described [here](CONTRIBUTING.md)
 
 ### Builds

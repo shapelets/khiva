@@ -24,6 +24,7 @@ You can jump right into the package by looking into our :ref:`chapter-gettingsta
    Getting Started <gettingStarted>
    API <api/main>
    Bindings to other languages <bindings/main>
+   Using Khiva in your CMake project <cmake>
    Authors <authors>
 
 Cite Us
