@@ -12,7 +12,7 @@ extern "C"
 {
 #endif
 
-    JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Linalg_lls(JNIEnv *env, jobject, jlong ref_a, jlong ref_b)
+    JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Linalg_lls(JNIEnv *env, jobject, jlong ref_a, jlong ref_b)
     {
         const jint l = 3;
         jlong tmp[l];

@@ -29,7 +29,7 @@ extern "C" {
  *          stderrest Standard error of the estimated gradient.
  *      }
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Regression_linear(JNIEnv *env, jobject, jlong ref_xss,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobject, jlong ref_xss,
                                                                         jlong ref_yss);
 
 #ifdef __cplusplus

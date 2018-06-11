@@ -13,56 +13,56 @@ extern "C" {
 /**
  * @brief JNI interface to get the devices info.
  */
-JNIEXPORT void JNICALL Java_com_shapelets_khiva_Library_info(JNIEnv *, jobject);
+JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_info(JNIEnv *, jobject);
 
 /**
  * @brief JNI interface to set the backend.
  *
  * @param backend The desired backend.
  */
-JNIEXPORT void JNICALL Java_com_shapelets_khiva_Library_setBackend(JNIEnv *, jobject, jint backend);
+JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_setBackend(JNIEnv *, jobject, jint backend);
 
 /**
  * @brief JNI interface to get the active backend.
  *
  * @return The active backend.
  */
-JNIEXPORT int JNICALL Java_com_shapelets_khiva_Library_getBackend(JNIEnv *, jobject);
+JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *, jobject);
 
 /**
  * @brief JNI interface to get the available backends.
  *
  * @return The available backends.
  */
-JNIEXPORT int JNICALL Java_com_shapelets_khiva_Library_getBackends(JNIEnv *, jobject);
+JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *, jobject);
 
 /**
  * @brief JNI interface to set the device.
  *
  * @param device The desired device.
  */
-JNIEXPORT void JNICALL Java_com_shapelets_khiva_Library_setDevice(JNIEnv *, jobject, jint device);
+JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_setDevice(JNIEnv *, jobject, jint device);
 
 /**
  * @brief JNI interface to get the active device.
  *
  * @return The active device.
  */
-JNIEXPORT int JNICALL Java_com_shapelets_khiva_Library_getDeviceID(JNIEnv *, jobject);
+JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *, jobject);
 
 /**
  * @brief JNI interface to get the device count.
  *
  * @return The device count.
  */
-JNIEXPORT int JNICALL Java_com_shapelets_khiva_Library_getDeviceCount(JNIEnv *, jobject);
+JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, jobject);
 
 /**
  * @brief Returns a string with the current version of the library.
  *
  * @return A byte array with the current version of the library.
  */
-JNIEXPORT jbyteArray JNICALL Java_com_shapelets_khiva_Library_version(JNIEnv *env, jobject);
+JNIEXPORT jbyteArray JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject);
 
 #ifdef __cplusplus
 }
