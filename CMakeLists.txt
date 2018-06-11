@@ -44,7 +44,7 @@ IF(KHIVA_USE_CONAN)
                     SETTINGS cppstd=${CONAN_CPPSTD})
 
     # Bring conan generated dependencies
-    INCLUDE(build/conanbuildinfo.cmake)
+    INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
     CONAN_BASIC_SETUP()
 ENDIF()
 
@@ -58,7 +58,7 @@ SET(KHIVALIB_INC "${KHIVALIB_BASE_DIR}/include/")
 SET(KHIVALIB "khiva")
 
 # Bring KHIVA version and installation directories
-INCLUDE(Version)
+INCLUDE(KhivaVersion)
 INCLUDE(KhivaInstallDirs)
 
 SET(PROJECT_VERSION ${VERSION_SHORT})
