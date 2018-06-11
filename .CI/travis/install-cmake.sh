@@ -5,6 +5,8 @@
 ###############
 
 # Installing dependencies
+sudo aptitude remove cmake
+sudo apt-get remove cmake
 sudo apt-get update
 sudo apt-get install -y python3 python3-pip libboost-all-dev
 sudo pip install --upgrade cmake
