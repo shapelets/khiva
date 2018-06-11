@@ -20,7 +20,7 @@ little bit helps, and credit will always be given.
 
 ## Formatting Style
 
-In order to have a standarised code base, we only accept code that is formatted according to the Google rules for C++ with a column width of 120 characters and an identation of 4 whitespaces. For this purpose, we use `clang-format`, which can be installed in MacOs by executing the next command: `brew install clang-format`.
+In order to have a standarised code base, we only accept code that is formatted according to the Google rules for C++ with a column width of 120 characters and an indentation of 4 whitespaces. For this purpose, we use `clang-format`, which can be installed in MacOs by executing the next command: `brew install clang-format`.
 We use the `clang-format` plugin for the VS Code editor to format our codes. This plugin uses the `clang-format` program and the aforementioned rules under the hood.
 
 ## Branching model
