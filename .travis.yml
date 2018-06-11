@@ -9,6 +9,8 @@ language: cpp
 compiler: g++
 
 before_install:
+  - source .CI/travis/install-intel.sh
+  - source .CI/travis/install-arrayfire.sh
   - source .CI/travis/install-cmake.sh
   - cmake --version
 
