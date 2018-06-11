@@ -20,7 +20,7 @@ SET(KHIVALIB_C_BASE_DIR "${PROJECT_SOURCE_DIR}")
 # Define source directory
 SET(KHIVALIB_C_SRC "${KHIVALIB_C_BASE_DIR}/src")
 # Define include directories
-SET(KHIVALIB_C_INC "${KHIVALIB_C_BASE_DIR}/include/")
+SET(KHIVALIB_C_INC "${KHIVALIB_C_BASE_DIR}/include")
 
 # Library Name
 SET(KHIVALIB_C "khiva_c")
@@ -45,9 +45,10 @@ TARGET_LINK_LIBRARIES(${KHIVALIB_C} PUBLIC
 
 # Add metadata
 SET_TARGET_PROPERTIES(${KHIVALIB_C} PROPERTIES
+	FOLDER bindings
     VERSION ${VERSION_SHORT}
     SOVERSION ${VERSION_MAJOR}
-    PUBLIC_HEADER "${KHIVALIB_C_INC}khiva_c.h")
+    PUBLIC_HEADER "${KHIVALIB_C_INC}/khiva_c.h")
 
 # Install bindings
 # C binding
