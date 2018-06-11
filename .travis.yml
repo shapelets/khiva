@@ -6,8 +6,7 @@ dist: trusty
 sudo: required
 
 language: cpp
-compiler:
-- clang
+compiler: g++
 
 before_install:
   - sudo apt-get update
