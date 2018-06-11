@@ -28,14 +28,7 @@ ENDIF()
 OPTION(KHIVA_BUILD_TESTS "Build tests of the Khiva library" ON)
 OPTION(KHIVA_BUILD_BENCHMARKS "Build benchmarks of the Khiva library" ON)
 
-# Download the conan.cmake file to allow downloading dependencies from CMake
-IF(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
-   MESSAGE(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
-   FILE(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/v0.11/conan.cmake"
-                 "${CMAKE_BINARY_DIR}/conan.cmake")
-ENDIF()
-
-INCLUDE(${CMAKE_BINARY_DIR}/conan.cmake)
+INCLUDE(conan)
 
 conan_cmake_run(CONANFILE conanfile.txt
                 BASIC_SETUP CMAKE_TARGETS
