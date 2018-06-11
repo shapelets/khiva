@@ -1,17 +1,23 @@
 
-sudo: required
+
+
+os: linux
 dist: trusty
+sudo: required
+
+language: cpp
 compiler:
 - clang
-os:
-- linux
-
-# It is not really needed, other than for showing correct language tag in Travis CI build log.
-language: cpp
 
 before_install:
-  - source .CI/travis/install.sh
+  - sudo apt-get update
+  - sudo apt-get install -y python3 libboost-all-dev libeigen3-dev
+  - source .ci/travis/install-intel.sh
+  - source .ci/travis/install-arrayfire.sh
 
 install:
-  - source .CI/travis/run.sh
-
+  - source ./.ci/travis/install.sh
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make install
