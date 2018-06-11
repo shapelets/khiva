@@ -15,4 +15,4 @@ before_install:
   - cmake --version
 
 install:
-  - cmake --version
+  - source .CI/travis/install.sh
