@@ -4,13 +4,9 @@
 # Install CMAKE
 ###############
 
-wget https://cmake.org/files/v3.11/cmake-3.11.3.tar.gz
-tar -xzf cmake-3.11.3.tar.gz
-cd cmake-3.11.3
-./configure > /dev/null
-make
-sudo make install
-# To update to the new version
-sudo update-alternatives --install /usr/bin/cmake cmake /usr/local/bin/cmake 1 --force
-cmake --version
+sudo apt-get remove cmake
+wget https://cmake.org/files/v3.11/cmake-3.11.3-Linux-x86_64.sh
+chmod +x cmake-3.11.3-Linux-x86_64.sh
+./cmake-3.11.3-Linux-x86_64.sh --skip-license --prefix=/usr/local
+sudo ln -s /usr/local/bin/cmake /usr/bin/cmake
 cd ..
