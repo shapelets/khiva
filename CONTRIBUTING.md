@@ -20,7 +20,7 @@ little bit helps, and credit will always be given.
 
 ## Formatting Style
 
-In order to have a standarised code base, we only accept code that is formatted according to the Google rules for C++ with a column width of 120 characters and an identation of 4 whitespaces. For this purpose, we use `clang-format`, which can be installed in MacOs by executing the next command: `brew install clang-format`.
+In order to have a standarised code base, we only accept code that is formatted according to the Google rules for C++ with a column width of 120 characters and an indentation of 4 whitespaces. For this purpose, we use `clang-format`, which can be installed in MacOs by executing the next command: `brew install clang-format`.
 We use the `clang-format` plugin for the VS Code editor to format our codes. This plugin uses the `clang-format` program and the aforementioned rules under the hood.
 
 ## Branching model
@@ -30,7 +30,7 @@ Our branching model has two permanent branches, **develop** and **master**. We a
 ## Contribution process
 
 In order to contribute to the code base, we follow the next process :
-1. The main branch is develop, every developer should pull the current status of the branch before stating to develop any new feature.
+1. The main branch is `develop`, every developer should pull the current status of the branch before starting to develop any new feature.
 `git pull`
 1. Create a new branch with the following pattern "feature/[name_of_the_feature]"
 `git checkout -b feature/example_feature`
