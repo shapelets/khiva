@@ -10,7 +10,7 @@ PROJECT(KHIVALIB)
 FIND_PACKAGE(ArrayFire REQUIRED)
 # Find the Boost package
 FIND_PACKAGE(Boost REQUIRED)
-
+FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
 # Compile with C++11 support.
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -41,6 +41,7 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
 # Declare compilation libraries
 TARGET_LINK_LIBRARIES(${KHIVALIB}
                       ${ArrayFire_Unified_LIBRARIES}
+					  Eigen3::Eigen
                       ${CMAKE_DL_LIBS})
 
 # Add metadata
