@@ -10,7 +10,7 @@ This project is licensed under [MPL-v2] (https://www.mozilla.org/en-US/MPL/2.0/)
 
 2. Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`
 
-3. Run `conan install. --build missing -s compiler.libcxx=libstdc++11`, which will bring down dependencies and generate the necessary include files for the `cmake` build.
+3. Run `conan install . --build missing -s compiler.libcxx=libstdc++11`, which will bring down dependencies and generate the necessary include files for the `cmake` build.
 
 4. Create `build` folder and, after moving into the new folder, run `cmake ..`
 
