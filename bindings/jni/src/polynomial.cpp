@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY,
                                                                          jint deg) {
     const jint l = 3;
     jlong tmp[l];
@@ -38,7 +38,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Polynomial_polyfit(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);

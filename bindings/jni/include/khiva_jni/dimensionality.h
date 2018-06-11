@@ -26,7 +26,7 @@ extern "C" {
  *
  * @return The updated ref and an array of points with the reduced dimensionality.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_paa(JNIEnv *env, jobject, jlong ref, jint bins);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *env, jobject, jlong ref, jint bins);
 
 /**
  * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.
@@ -39,7 +39,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_paa(JNIEnv 
  *
  * @return The updated ref and an array with the most Perceptually Important numberIPs.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_pip(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *env, jobject, jlong ref,
                                                                          jint numberIPs);
 
 /**
@@ -54,7 +54,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_pip(JNIEnv 
  *
  * @return The updated reference and a reference to an Array with the reduced number of points.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref,
                                                                                  jfloat maxError);
 
 /**
@@ -69,7 +69,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_PLABottomUp
  *
  * @return The updated reference and a reference to an Array with the reduced number of points.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_PLASlidingWindow(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWindow(JNIEnv *env, jobject, jlong ref,
                                                                                       jfloat maxError);
 
 /**
@@ -89,7 +89,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_PLASlidingW
  * @return The updated ref and an array with the x-coordinates and y-coordinates of the selected points (x in column 0
  * and y in column 1).
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject,
                                                                                          jlong ref, jdouble epsilon);
 
 /**
@@ -109,7 +109,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_ramerDougla
  *
  * @return The updated ref and an array of symbols.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_sax(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *env, jobject, jlong ref,
                                                                          jint alphabetSize);
 
 /**
@@ -125,7 +125,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_sax(JNIEnv 
  * @return The updated ref and an array with the x-coordinates and y-coordinates of the selected points (x in column 0
  * and y in column 1).
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref,
                                                                                  jint numPoints);
 
 #ifdef __cplusplus

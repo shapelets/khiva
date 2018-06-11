@@ -20,7 +20,7 @@ extern "C" {
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between
  * time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the Dynamic Time Warping Distance.
@@ -32,7 +32,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_euclidean(JNIEnv
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_dtw(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_dtw(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates Hamming distances between time series.
@@ -44,7 +44,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_dtw(JNIEnv *env,
  * distance between two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_hamming(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_hamming(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates Manhattan distances between time series.
@@ -56,7 +56,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_hamming(JNIEnv *
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between time
  * series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the non squared version of the euclidean distance.
@@ -68,7 +68,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_manhattan(JNIEnv
  * between two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref);
 
 #ifdef __cplusplus
 }

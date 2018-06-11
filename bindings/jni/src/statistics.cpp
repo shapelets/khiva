@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_covariance(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEnv *env, jobject, jlong ref,
                                                                             jboolean unbiased) {
     const jint l = 2;
     jlong tmp[l];
@@ -34,7 +34,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_covariance(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_moment(JNIEnv *env, jobject, jlong ref, jint k) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_moment(JNIEnv *env, jobject, jlong ref, jint k) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -55,7 +55,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_moment(JNIEnv *
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_sampleStdev(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_sampleStdev(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -76,7 +76,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_sampleStdev(JNI
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_kurtosis(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_kurtosis(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -97,7 +97,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_kurtosis(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_skewness(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_skewness(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -118,7 +118,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_skewness(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
                                                                           jfloat precision) {
     const jint l = 3;
     jlong tmp[l];
@@ -143,7 +143,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_quantile(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_quantilesCut(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantilesCut(JNIEnv *env, jobject, jlong ref,
                                                                               jfloat quantiles, jfloat precision) {
     const jint l = 2;
     jlong tmp[l];
@@ -165,7 +165,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_quantilesCut(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Statistics_ljungBox(JNIEnv *env, jobject, jlong ref, jlong lags) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_ljungBox(JNIEnv *env, jobject, jlong ref, jlong lags) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
