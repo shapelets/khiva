@@ -14,6 +14,6 @@ a couple of lines in your ``CmakeLists.txt``:
     add_executable(example example.cpp)
     target_link_libraries(example Khiva::khiva)
 
-``find_package(Khiva)`` may be used when Khiva was installed system wide. Please follow the installation instructions for your operating system contained at the `getting started <gettingStarted>`_.
+``find_package(Khiva REQUIRED)`` may be used when Khiva was installed system wide. Please follow the installation instructions for your operating system contained at the :ref:`getting started<gettingStarted>`.
 
 .. _`CMake`: https://cmake.org/
