@@ -93,7 +93,9 @@ ENDIF()
 ADD_SUBDIRECTORY(src)
 
 # build examples
-ADD_SUBDIRECTORY(examples)
+IF(KHIVA_BUILD_EXAMPLES)
+    ADD_SUBDIRECTORY(examples)
+ENDIF()
 
 # build tests
 IF(KHIVA_BUILD_TESTS)
@@ -111,15 +113,6 @@ ADD_SUBDIRECTORY(bindings)
 
 # build items in subdirectories
 ADD_SUBDIRECTORY(doc)
-
-IF(KHIVA_BUILD_EXAMPLES)
-    INSTALL(DIRECTORY examples/
-        DESTINATION ${KHIVA_INSTALL_EXAMPLE_DIR}
-        COMPONENT examples
-        FILES_MATCHING
-        PATTERN "*.cpp"
-        PATTERN "*.h")
-ENDIF()
 
 INSTALL(DIRECTORY licenses/
     DESTINATION ${KHIVA_INSTALL_LICENSES_DIR}
