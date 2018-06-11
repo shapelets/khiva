@@ -26,7 +26,7 @@ ADD_DEFINITIONS(-DAF_UNIFIED)
 # Files to add to compilation
 FILE(GLOB_RECURSE KHIVALIB_CODE 
     "${KHIVALIB_SRC}/*.cpp"
-    "${KHIVALIB_INC}*.h" )
+    "${KHIVALIB_INC}/*.h" )
 
 # The output is a static library
 ADD_LIBRARY(${KHIVALIB} STATIC ${KHIVALIB_CODE})

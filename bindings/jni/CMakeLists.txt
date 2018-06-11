@@ -29,7 +29,7 @@ SET(KHIVALIB_JNI "khiva_jni")
 # Files to add to compilation
 FILE(GLOB_RECURSE KHIVALIB_JNI_CODE 
     "${KHIVALIB_JNI_SRC}/*.cpp"
-    "${KHIVALIB_JNI_INC}*.h" )
+    "${KHIVALIB_JNI_INC}/*.h" )
 
 # The output is a static library
 ADD_LIBRARY(${KHIVALIB_JNI} SHARED ${KHIVALIB_JNI_CODE})

@@ -28,7 +28,7 @@ SET(KHIVALIB_C "khiva_c")
 # Files to add to compilation
 FILE(GLOB_RECURSE KHIVALIB_C_CODE 
     "${KHIVALIB_C_SRC}/*.cpp"
-    "${KHIVALIB_C_INC}*.h" )
+    "${KHIVALIB_C_INC}/*.h" )
 
 # The output is a static library
 ADD_LIBRARY(${KHIVALIB_C} SHARED ${KHIVALIB_C_CODE})
