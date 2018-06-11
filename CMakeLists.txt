@@ -12,20 +12,41 @@ SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 # Using C++ 11
 SET(CMAKE_CXX_STANDARD 11)
 
-# Bring conan generated dependencies
-INCLUDE(conanbuildinfo.cmake)
-CONAN_BASIC_SETUP()
-
 # Load from environment variables
-SET(CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH})
-SET(CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+LIST(APPEND CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH})
+LIST(APPEND CMAKE_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
+LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Set the build type
 IF(NOT CMAKE_BUILD_TYPE)
   SET(CMAKE_BUILD_TYPE "Release" 
       CACHE STRING "Build configuration 'Release' or 'Debug'."
       FORCE)
+ENDIF()
+
+# Compile-time options
+OPTION(KHIVA_BUILD_TESTS "Build tests of the Khiva library" ON)
+OPTION(KHIVA_BUILD_BENCHMARKS "Build benchmarks of the Khiva library" ON)
+OPTION(KHIVA_BUILD_EXAMPLES "Build examples of the Khiva library" ON)
+OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen, GraphViz and Sphinx)" ON)
+OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependencies of the Khiva library" ON)
+
+IF(KHIVA_USE_CONAN)
+    INCLUDE(conan)
+
+    IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        SET(CONAN_CPPSTD 14)
+    ELSE()
+        SET(CONAN_CPPSTD 11)
+    ENDIF()
+    conan_cmake_run(CONANFILE conanfile.txt
+                    BASIC_SETUP CMAKE_TARGETS
+                    BUILD missing
+                    SETTINGS cppstd=${CONAN_CPPSTD})
+
+    # Bring conan generated dependencies
+    INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
+    CONAN_BASIC_SETUP()
 ENDIF()
 
 # Set the base directory to parent so src and include become equaly visible
@@ -38,7 +59,7 @@ SET(KHIVALIB_INC "${KHIVALIB_BASE_DIR}/include/")
 SET(KHIVALIB "khiva")
 
 # Bring KHIVA version and installation directories
-INCLUDE(Version)
+INCLUDE(KhivaVersion)
 INCLUDE(KhivaInstallDirs)
 
 SET(PROJECT_VERSION ${VERSION_SHORT})
@@ -73,25 +94,28 @@ ENDIF()
 ADD_SUBDIRECTORY(src)
 
 # build examples
-ADD_SUBDIRECTORY(examples)
+IF(KHIVA_BUILD_EXAMPLES)
+    ADD_SUBDIRECTORY(examples)
+ENDIF()
 
-# test and benchmarks
-ENABLE_TESTING()
-ADD_SUBDIRECTORY(test)
-ADD_SUBDIRECTORY(benchmarks)
+# build tests
+IF(KHIVA_BUILD_TESTS)
+    ENABLE_TESTING()
+    ADD_SUBDIRECTORY(test)
+ENDIF()
+
+# build benchmarks
+IF(KHIVA_BUILD_BENCHMARKS)
+    ADD_SUBDIRECTORY(benchmarks)
+ENDIF()
 
 # build bindings for c and jni
 ADD_SUBDIRECTORY(bindings)
 
 # build items in subdirectories
-ADD_SUBDIRECTORY(doc)
-
-INSTALL(DIRECTORY examples/
-    DESTINATION ${KHIVA_INSTALL_EXAMPLE_DIR}
-    COMPONENT examples
-    FILES_MATCHING
-    PATTERN "*.cpp"
-    PATTERN "*.h")
+IF(KHIVA_BUILD_DOCUMENTATION)
+    ADD_SUBDIRECTORY(doc)
+ENDIF()
 
 INSTALL(DIRECTORY licenses/
     DESTINATION ${KHIVA_INSTALL_LICENSES_DIR}

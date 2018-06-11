@@ -8,7 +8,7 @@
 # Sets KHIVA installation paths.
 #
 
-include(Version)
+include(KhivaVersion)
 
 if(WIN32)
     set(CMAKE_INSTALL_PREFIX "C:/Program Files/Khiva/v${VERSION_MAJOR}/")
