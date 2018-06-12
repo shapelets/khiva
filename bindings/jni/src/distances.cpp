@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -33,7 +33,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_euclidean(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_dtw(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_dtw(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -54,7 +54,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_dtw(JNIEnv *env,
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_hamming(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_hamming(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -75,7 +75,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_hamming(JNIEnv *
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -96,7 +96,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_manhattan(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);

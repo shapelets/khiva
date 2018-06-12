@@ -21,10 +21,10 @@ extern "C" {
  * been normalized by dividing each number by 10^j, where j is the number of integer digits of the max number in the
  * time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Normalization_decimalScalingNorm(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNorm(JNIEnv *env, jobject, jlong ref);
 
 /**
- * @brief Same as Java_com_shapelets_khiva_Normalization_decimalScalingNorm, but it performs the operation in place,
+ * @brief Same as Java_io_shapelets_khiva_Normalization_decimalScalingNorm, but it performs the operation in place,
  * without allocating further memory.
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -32,7 +32,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Normalization_decimalScali
  *
  * @return The updated ref.
  */
-JNIEXPORT jlong JNICALL Java_com_shapelets_khiva_Normalization_decimalScalingNormInPlace(JNIEnv *, jobject, jlong ref);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNormInPlace(JNIEnv *, jobject, jlong ref);
 
 /**
  * @brief Normalizes the given time series according to its minimum and maximum value and adjusts each value within the
@@ -48,12 +48,12 @@ JNIEXPORT jlong JNICALL Java_com_shapelets_khiva_Normalization_decimalScalingNor
  * @return The updated ref and an array with the same dimensions as ref, whose values (time series in dimension 0) have
  * been normalized by maximum and minimum values, and scaled as per high and low parameters.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env, jobject, jlong ref,
                                                                                jdouble high, jdouble low,
                                                                                jdouble epsilon);
 
 /**
- * @brief Same as Java_com_shapelets_khiva_Normalization_maxMinNorm, but it performs the operation in place, without
+ * @brief Same as Java_io_shapelets_khiva_Normalization_maxMinNorm, but it performs the operation in place, without
  * allocating further memory.
  *
  * @param ref Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
@@ -65,7 +65,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Normalization_maxMinNorm(J
  *
  * @return The updated ref.
  */
-JNIEXPORT jlong JNICALL Java_com_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *, jobject, jlong ref,
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *, jobject, jlong ref,
                                                                                  jdouble high, jdouble low,
                                                                                  jdouble epsilon);
 
@@ -83,7 +83,7 @@ JNIEXPORT jlong JNICALL Java_com_shapelets_khiva_Normalization_maxMinNormInPlace
  * been normalized by substracting the mean from each number and dividing each number by \f$ max(x) - min(x)\f$, in the
  * time series.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Normalization_meanNorm(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_meanNorm(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Normalizes the given time series according to its maximum-minimum value and its mean. It follows the following
@@ -97,7 +97,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Normalization_meanNorm(JNI
  *
  * @return The updated ref.
  */
-JNIEXPORT jlong JNICALL Java_com_shapelets_khiva_Normalization_meanNormInPlace(JNIEnv *, jobject, jlong ref);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JNIEnv *, jobject, jlong ref);
 
 /**
  * @brief Calculates a new set of time series with zero mean and standard deviation one.
@@ -110,7 +110,7 @@ JNIEXPORT jlong JNICALL Java_com_shapelets_khiva_Normalization_meanNormInPlace(J
  * @return The updated ref and an array with the same dimensions as ref where the time series have been
  * adjusted for zero mean and one as standard deviation.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobject, jlong ref,
                                                                           jdouble epsilon);
 
 /**
@@ -124,7 +124,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Normalization_znorm(JNIEnv
  *
  * @return The updated ref.
  */
-JNIEXPORT jlong JNICALL Java_com_shapelets_khiva_Normalization_znormInPlace(JNIEnv *, jobject, jlong ref,
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_znormInPlace(JNIEnv *, jobject, jlong ref,
                                                                             jdouble epsilon);
 
 #ifdef __cplusplus

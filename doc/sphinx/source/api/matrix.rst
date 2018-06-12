@@ -4,7 +4,7 @@ Namespace Matrix
 ================
 
 .. doxygennamespace:: khiva::matrix
-    :project: KHIVA
+    :project: Khiva
     :members:
     :protected-members:
     :private-members:

@@ -13,33 +13,33 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_com_shapelets_khiva_Library_info(JNIEnv *, jobject) { khiva::library::backendInfo(); }
+JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_info(JNIEnv *, jobject) { khiva::library::backendInfo(); }
 
-JNIEXPORT void JNICALL Java_com_shapelets_khiva_Library_setBackend(JNIEnv *, jobject, jint backend) {
+JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_setBackend(JNIEnv *, jobject, jint backend) {
     khiva::library::setBackend(static_cast<khiva::library::Backend>(backend));
 }
 
-JNIEXPORT int JNICALL Java_com_shapelets_khiva_Library_getBackend(JNIEnv *, jobject) {
+JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *, jobject) {
     return static_cast<int>(khiva::library::getBackend());
 }
 
-JNIEXPORT int JNICALL Java_com_shapelets_khiva_Library_getBackends(JNIEnv *, jobject) {
+JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *, jobject) {
     return khiva::library::getBackends();
 }
 
-JNIEXPORT void JNICALL Java_com_shapelets_khiva_Library_setDevice(JNIEnv *, jobject, jint device) {
+JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_setDevice(JNIEnv *, jobject, jint device) {
     khiva::library::setDevice(device);
 }
 
-JNIEXPORT int JNICALL Java_com_shapelets_khiva_Library_getDeviceID(JNIEnv *, jobject) {
+JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *, jobject) {
     return khiva::library::getDevice();
 }
 
-JNIEXPORT int JNICALL Java_com_shapelets_khiva_Library_getDeviceCount(JNIEnv *, jobject) {
+JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, jobject) {
     return khiva::library::getDeviceCount();
 }
 
-JNIEXPORT jbyteArray JNICALL Java_com_shapelets_khiva_Library_version(JNIEnv *env, jobject) {
+JNIEXPORT jbyteArray JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject) {
     const char *v = khiva::version();
     jsize l = static_cast<jsize>(strlen(v));
     jbyteArray result = env->NewByteArray(l);

@@ -1,7 +1,7 @@
 {
     "licenser.license": "MPLv2",
-    "licenser.projectName": "KHIVA",
-    "licenser.author": "Shaplets.io",
+    "licenser.projectName": "Khiva",
+    "licenser.author": "Shapelets.io",
     "files.associations": {
         "algorithm": "cpp",
         "chrono": "cpp",

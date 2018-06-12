@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
                                                                              jint aggregationFunction, jint nColumnsKey,
                                                                              jint nColumnsValue) {
     const jint l = 2;
