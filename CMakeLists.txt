@@ -32,13 +32,6 @@ OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API document
 OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependencies of the Khiva library" ON)
 OPTION(KHIVA_COVERAGE "This flag allows Code Coverage of the code" OFF)
 
-IF(KHIVA_COVERAGE)
-    INCLUDE(CodeCoverage)
-    setup_target_for_coverage(Khiva_coverage tests coverage)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
-ENDIF()
-
-
 IF(KHIVA_USE_CONAN)
     INCLUDE(conan)
 
