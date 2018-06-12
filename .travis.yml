@@ -14,6 +14,7 @@ addons:
   apt:
     packages:
     - lcov
+    - kcov
 
 cache:
     directories:

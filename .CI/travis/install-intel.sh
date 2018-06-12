@@ -15,3 +15,4 @@ tar -xzf /tmp/opencl_runtime.tgz -C /tmp
 sed 's/decline/accept/g' -i /tmp/${PACKAGE_NAME}/silent.cfg
 sudo apt-get install -yq cpio
 sudo /tmp/${PACKAGE_NAME}/install.sh -s /tmp/${PACKAGE_NAME}/silent.cfg
+sudo rm /tmp/opencl_runtime.tgz
