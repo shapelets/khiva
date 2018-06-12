@@ -1,5 +1,10 @@
 # KHIVA
 
+[![Documentation Status](https://readthedocs.org/projects/khiva/badge/?version=latest)](https://khiva.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.com/shapelets/khiva.svg?branch=develop)](https://travis-ci.com/shapelets/khiva)
+[![Coverage Status](https://coveralls.io/repos/github/shapelets/khiva/badge.svg?branch=develop)](https://coveralls.io/github/shapelets/khiva?branch=develop)
+
+
 ## License
 
 This project is licensed under [MPL-v2] (https://www.mozilla.org/en-US/MPL/2.0/).
@@ -39,8 +44,6 @@ We use `sphinx + doxygen` to generate our documentation. You will need to instal
 * Read the Docs Theme: `pip install sphinx_rtd_theme`
 
 * Breathe: `pip install breathe`
-
-* Exhale: `pip install exhale`
 
 ## Contributing
 
