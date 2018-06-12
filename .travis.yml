@@ -3,8 +3,22 @@ os: linux
 dist: trusty
 sudo: required
 
+env:
+  global:
+    - ARRAYFIRE=/opt/arrayfire
+
 language: cpp
 compiler: g++
+
+addons:
+  apt:
+    packages:
+    - lcov
+
+cache:
+    directories:
+        - ${HOME}/.conan
+        - ${ARRAYFIRE}
 
 before_install:
   - source .CI/travis/install-intel.sh
@@ -15,7 +29,10 @@ install:
   - source .CI/travis/install.sh
 
 script:
-    - mkdir -p build && cd build
-    - ../bin/cmake ..
-    - make -j4
-    - ctest --output-on-failure
+  - source .CI/travis/build_and_test.sh
+
+after_success:
+  - lcov --directory tests --base-directory . --capture --output-file coverage.info
+  - lcov --remove coverage.info '/usr*' '/opt*' '*/cl.hpp' -o coverage.info
+  - bash <(curl -s https://codecov.io/bash)
+
