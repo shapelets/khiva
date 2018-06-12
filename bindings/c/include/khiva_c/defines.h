@@ -10,7 +10,6 @@
 #define DLL_EXPORT __declspec(dllexport) // Note: actually gcc seems to also supports this syntax.
 #define DLL_IMPORT __declspec(dllimport)
 #else
-#define KHIVAAPI
 #define DLL_EXPORT
 #define DLL_IMPORT
 #endif
