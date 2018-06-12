@@ -54,7 +54,7 @@ SET(KHIVALIB_BASE_DIR ${PROJECT_SOURCE_DIR})
 # Define source directory
 SET(KHIVALIB_SRC "${KHIVALIB_BASE_DIR}/src")
 # Define include directory
-SET(KHIVALIB_INC "${KHIVALIB_BASE_DIR}/include/")
+SET(KHIVALIB_INC "${KHIVALIB_BASE_DIR}/include")
 # Library Name
 SET(KHIVALIB "khiva")
 

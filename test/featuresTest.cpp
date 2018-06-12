@@ -274,7 +274,7 @@ void crossCovarianceBiased() {
 
     // Expected results obtained using statsmodels
     for (int i = 0; i < 2; i++) {
-        ASSERT_EQ(calculatedHost[(i * 12)], 2.5);
+        ASSERT_NEAR(calculatedHost[(i * 12)], 2.5, EPSILON);
         ASSERT_NEAR(calculatedHost[(i * 12) + 1], 2.499999999, EPSILON);
         ASSERT_EQ(calculatedHost[(i * 12) + 2], 2.5);
         ASSERT_NEAR(calculatedHost[(i * 12) + 3], -0.124999999, EPSILON * 1e3);

@@ -26,7 +26,7 @@ ADD_DEFINITIONS(-DAF_UNIFIED)
 # Files to add to compilation
 FILE(GLOB_RECURSE KHIVALIB_CODE 
     "${KHIVALIB_SRC}/*.cpp"
-    "${KHIVALIB_INC}*.h" )
+    "${KHIVALIB_INC}/*.h" )
 
 # The output is a static library
 ADD_LIBRARY(${KHIVALIB} STATIC ${KHIVALIB_CODE})
@@ -68,7 +68,7 @@ EXPORT(EXPORT Khiva
         NAMESPACE Khiva::
         FILE cmake/KhivaTargets.cmake)
 
-INSTALL(DIRECTORY ${KHIVALIB_INC} 
+INSTALL(DIRECTORY ${KHIVALIB_INC}/ 
         DESTINATION ${KHIVA_INSTALL_INC_DIR}
         COMPONENT headers
         FILES_MATCHING
