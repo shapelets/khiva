@@ -33,7 +33,7 @@ extern "C" {
  *
  * @return The updated ref and an array with the values of the group keys aggregated using the aggregationFunction.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
                                                                              jint aggregationFunction, jint nColumnsKey,
                                                                              jint nColumnsValue);
 

@@ -1,8 +1,8 @@
 .. _chapter-API:
 
-KHIVA API
+Khiva API
 =========
-This is the list of namespaces that comprise the KHIVA library. 
+This is the list of namespaces that comprise the Khiva library. 
 
 .. toctree::
    :caption: Table of Contents

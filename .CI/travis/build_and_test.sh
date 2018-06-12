@@ -3,7 +3,7 @@
 
 # Build the project
 mkdir -p build && cd build
-../bin/cmake ..
+../bin/cmake .. -DKHIVA_COVERAGE=ON
 make -j4
 
 # Run Testa

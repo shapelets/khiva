@@ -20,7 +20,7 @@ extern "C" {
  *
  * @return The updated refs and an array with the polynomial coefficients, highest power first.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY,
                                                                          jint deg);
 
 /**
@@ -35,7 +35,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Polynomial_polyfit(JNIEnv 
  *
  * @return The updated ref and an array containing the roots of the polynomial.
  */
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref);
 
 #ifdef __cplusplus
 }

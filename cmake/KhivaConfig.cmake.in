@@ -36,7 +36,7 @@
 # compatibility with legacy cmake files:
 #
 # ``KHIVA_INCLUDE_DIRS``
-#  Path to KHIVA's include directory.
+#  Path to Khiva's include directory.
 # ``KHIVA_LIBRARIES``
 #  Khiva's libraries. This will default to a GPU backend if one
 #  is found.

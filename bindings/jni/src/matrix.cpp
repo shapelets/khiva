@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
                                                                                jlong ref_index, jlong n) {
     const jint l = 5;
     jlong tmp[l];
@@ -57,7 +57,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_findBestNDiscords(J
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
                                                                              jlong ref_index, jlong n) {
     const jint l = 5;
     jlong tmp[l];
@@ -102,7 +102,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_findBestNMotifs(JNI
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
                                                                    jlong m) {
     const jint l = 4;
     jlong tmp[l];
@@ -141,7 +141,7 @@ JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_stomp(JNIEnv *env, 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
