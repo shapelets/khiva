@@ -18,7 +18,7 @@ addons:
 
 cache:
     directories:
-        - ${HOME}/.conan
+      - ${HOME}/.conan
 
 before_install:
   - source .CI/travis/install-intel.sh
@@ -32,4 +32,5 @@ script:
   - source .CI/travis/build_and_test.sh
 
 after_success:
-  - coveralls --root .. -E ".*external.*" -E ".*CMakeFiles.*" -E ".*test/.*.cpp.*"
+  - cd ${HOME}/build
+  - coveralls --root .. -E ".*external.*" -E ".*CMakeFiles.*" -E ".*test/.*" -E ".*bindings/.*" -E ".*benchmarks/.* -E ".*cmake/.*
