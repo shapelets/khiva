@@ -29,7 +29,7 @@ FILE(GLOB_RECURSE KHIVALIB_CODE
     "${KHIVALIB_INC}/*.h" )
 
 IF(KHIVA_COVERAGE)
-        ADD_COMPILE_OPTIONS(-g -O0 -coverage -fprofile-arcs -ftest-coverage)
+        ADD_COMPILE_OPTIONS(-fprofile-arcs -ftest-coverage)
 ENDIF()
 
 # The output is a static library

@@ -16,7 +16,7 @@ INCLUDE(GoogleTest)
 FILE(GLOB_RECURSE ALL_TEST_CPP *.cpp)
 
 IF(KHIVA_COVERAGE)
-    ADD_COMPILE_OPTIONS(-g -O0 -coverage -fprofile-arcs -ftest-coverage)
+    ADD_COMPILE_OPTIONS(-fprofile-arcs -ftest-coverage)
     FOREACH(ONE_TEST_CPP ${ALL_TEST_CPP})
         GET_FILENAME_COMPONENT(ONE_TEST_EXEC_TMP ${ONE_TEST_CPP} NAME_WE)
         STRING(REPLACE "Test" "" ONE_TEST_EXEC ${ONE_TEST_EXEC_TMP})
