@@ -32,8 +32,5 @@ script:
   - source .CI/travis/build_and_test.sh
 
 after_success:
-  - cd ${HOME}/build
-  - coveralls --root .. -E ".*external.*" -E ".*CMakeFiles.*" -E ".*test/.*" -E ".*bindings/.*" -E ".*benchmarks/.*" -E ".*cmake/.*" -E "/usr/*.*" -E "/opt/*.*" -E "/home/travis/.conan/*.*" 
-  - lcov --directory test --base-directory . --capture --output-file coverage.info
-  - lcov --remove coverage.info '/usr*' '/opt*' '*/cl.hpp' -o coverage.info
-  - bash <(curl -s https://codecov.io/bash)
+  - source .CI/travis/coveralls.sh
+  - source .CI/travis/codecov.sh
