@@ -33,7 +33,8 @@ OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependenci
 OPTION(KHIVA_COVERAGE "This flag allows Code Coverage of the code" OFF)
 
 IF(KHIVA_COVERAGE)
-    include(CodeCoverage)
+    INCLUDE(CodeCoverage)
+    setup_target_for_coverage(${PROJECT_NAME}_coverage tests coverage)
 ENDIF()
 
 
