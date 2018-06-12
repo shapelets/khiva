@@ -10,7 +10,11 @@ before_install:
   - source .CI/travis/install-intel.sh
   - source .CI/travis/install-arrayfire.sh
   - source .CI/travis/install-cmake.sh
-  - cmake --version
 
 install:
   - source .CI/travis/install.sh
+
+script:
+    - mkdir -p build && cd build
+    - ../bin/cmake ..
+    - make -j4
