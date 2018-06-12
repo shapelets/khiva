@@ -383,7 +383,7 @@ af::array khiva::features::cwtCoefficients(af::array tss, af::array widths, int 
     af::array aux = af::abs(widths - w) * (-1);
     af::max(maximum, index, aux, 0);
     // WORKAROUND: Forcing movement of index to CPU mem, just to avoid problems with Intel GPU
-    unsigned int i = index.scalar<int>();
+    int i = index.scalar<int>();
     // Select the corresponding values of coeff and w
     return af::reorder(output(i, coeff, af::span), 0, 2, 1);
 }
