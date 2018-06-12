@@ -32,5 +32,4 @@ script:
   - source .CI/travis/build_and_test.sh
 
 after_success:
-  - source .CI/travis/coveralls.sh
   - source .CI/travis/codecov.sh
