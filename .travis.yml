@@ -18,8 +18,7 @@ addons:
 cache:
     directories:
         - ${HOME}/.conan
-        - ${ARRAYFIRE}
-
+        
 before_install:
   - source .CI/travis/install-intel.sh
   - source .CI/travis/install-arrayfire.sh
