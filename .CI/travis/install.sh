@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # Installing conan
-sudo apt-get update
-sudo apt-get install -y python3 python3-pip libboost-all-dev doxygen graphviz
 sudo pip3 install conan sphinx sphinx_rtd_theme breathe
 
 # Installing Coveralls
