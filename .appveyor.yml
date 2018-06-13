@@ -9,7 +9,8 @@ before_build:
   - appveyor DownloadFile "http://registrationcenter-download.intel.com/akdlm/irc_nas/12512/opencl_runtime_16.1.2_x64_setup.msi"
   - start /wait msiexec /i opencl_runtime_16.1.2_x64_setup.msi /qn /l*v msiexec1.log
   - appveyor DownloadFile "http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-v3.5.1.exe"
-  - start /wait ArrayFire-v3.5.1.exe /S
+  - start ArrayFire-v3.5.1.exe /S
+  - start /wait .CI/appveyor/lookAF.bat
   - choco install doxygen.install
   - choco install graphviz
   - start /wait pip3.exe install conan sphinx sphinx_rtd_theme breathe cpp-coveralls
