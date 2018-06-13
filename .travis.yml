@@ -8,13 +8,12 @@ env:
     - ARRAYFIRE=/opt/arrayfire
 
 language: cpp
-compiler: g++
+compiler: clang
 
 addons:
   apt:
     packages:
     - lcov
-    - kcov
 
 cache:
     directories:
