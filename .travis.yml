@@ -21,15 +21,15 @@ cache:
       - ${HOME}/.conan
 
 before_install:
-  - source .CI/travis/install-intel.sh
-  - source .CI/travis/install-arrayfire.sh
-  - source .CI/travis/install-cmake.sh
+  - source .CI/travis/install-intel.sh 2>&1 > /dev/null
+  - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
+  - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
 
 install:
-  - source .CI/travis/install.sh
+  - source .CI/travis/install.sh 2>&1 > /dev/null
 
 script:
-  - source .CI/travis/build_and_test.sh
+  - source .CI/travis/build.sh 2>&1 > /dev/null
 
 after_success:
   - source .CI/travis/codecov.sh
