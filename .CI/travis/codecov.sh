@@ -8,7 +8,4 @@ lcov --remove coverage.info 'test/*' 'include/*' -o coverage.info
 lcov --list coverage.info
 
 # Uploading report to CodeCov
-# curl -s https://codecov.io/bash > .codecov
-# chmod +x .codecov
-# ./.codecov
 bash <(curl -s https://codecov.io/bash) -X gcov
