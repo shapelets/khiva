@@ -12,13 +12,15 @@ compiler: gcc
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
-    - lcov
-    - python3 
-    - python3-pip
-    - libboost-all-dev
-    - doxygen 
-    - graphviz
+      - lcov
+      - python3 
+      - python3-pip
+      - libboost-all-dev
+      - doxygen 
+      - graphviz
 
 cache:
     directories:
