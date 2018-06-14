@@ -8,7 +8,7 @@ env:
     - ARRAYFIRE=/opt/arrayfire
 
 language: cpp
-compiler: gcc
+compiler: g++
 
 addons:
   apt:
