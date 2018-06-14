@@ -34,7 +34,7 @@ OPTION(KHIVA_ENABLE_COVERAGE "This flag allows Code Coverage of the code" OFF)
 
 IF(KHIVA_ENABLE_COVERAGE)
     INCLUDE(CodeCoverage)
-    APPEND_COVERAGE_COMPILER_FLAGS()
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
 ENDIF()
 
 IF(KHIVA_USE_CONAN)
