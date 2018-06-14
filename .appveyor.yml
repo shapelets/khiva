@@ -20,7 +20,7 @@ before_build:
   - start /wait conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
   - start /wait conan remote add -f boost_math https://api.bintray.com/conan/bincrafters/public-conan
   - mkdir build && cd build
-  - start /wait conan install . --build
+  - start /wait conan install .. --build
 build_script:
     - cmake .. -G"Visual Studio 14 Win64"
     - cmake --build . --config Release
