@@ -48,13 +48,13 @@ matrix:
     - os: osx
       osx_image: xcode9.3
       env:
-        - MATRIX_EVAL="brew install gcc5 lcov python3 doxygen graphviz && CC=gcc-5 && CXX=g++-5"
+        - MATRIX_EVAL="sudo brew install gcc5 lcov python doxygen graphviz && CC=gcc-5 && CXX=g++-5"
 
     # works on Mac Os
     - os: osx
       osx_image: xcode9.3
       env:
-        - MATRIX_EVAL="brew install lcov python3 doxygen graphviz"
+        - MATRIX_EVAL="sudo brew install lcov python doxygen graphviz"
   
 cache:
     directories:
