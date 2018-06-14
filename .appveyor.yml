@@ -5,7 +5,7 @@ environment:
 cache:
     - C:\ProgramData\chocolatey\bin -> .appveyor.yml
     - C:\ProgramData\chocolatey\lib -> .appveyor.yml
-    - '%USERPROFILE%\.conan -> conanfile.txt'  # conan cache
+    - c:\tools\vcpkg\installed\
 clone_folder: C:\khiva
 platform:
     - x64
@@ -14,14 +14,13 @@ before_build:
   - start /wait msiexec /i opencl_runtime_16.1.2_x64_setup.msi /qn /l*v msiexec1.log
   - appveyor DownloadFile "https://drive.google.com/uc?authuser=0&id=1uM_QI1nrQS0MCvOt3DR96NiZQMP7n6DE&export=download" -FileName ArrayFire-no-gl-d920eae2.exe
   - start /wait ArrayFire-no-gl-d920eae2.exe /S
-  - choco install doxygen.install
-  - choco install graphviz
-  - start /wait pip3.exe install conan sphinx sphinx_rtd_theme breathe cpp-coveralls
-  - start /wait conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
+  - start /wait choco install doxygen.install
+  - start /wait choco install graphviz
+  - start /wait pip3.exe install sphinx sphinx_rtd_theme breathe cpp-coveralls
+  - vcpkg install --triplet x64-windows boost-math gtest benchmark eigen3
   - mkdir build && cd build
-  - start /wait conan install .. --build
 build_script:
-    - cmake .. -G"Visual Studio 14 Win64"
+    - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"Visual Studio 14 Win64"
     - cmake --build . --config Release
 test_script:
     - ctest -C Release --output-on-failure
