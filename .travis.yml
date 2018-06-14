@@ -15,6 +15,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
+      - g++-5
       - lcov
       - python3 
       - python3-pip
