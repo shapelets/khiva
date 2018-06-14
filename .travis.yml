@@ -81,10 +81,7 @@ matrix:
       install:
         - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
         - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
-        - sudo pip install conan sphinx sphinx_rtd_theme breathe
-        - conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
-        - conan remote add -f boost_math https://api.bintray.com/conan/bincrafters/public-conan
-        - conan install . --build missing 
+        - source .CI/travis/install.sh 2>&1 > /dev/null
 
     # works on Mac Os
     - os: osx
@@ -96,16 +93,14 @@ matrix:
       install:
         - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
         - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
-        - source .CI/travis/install.sh 2>&1 > /dev/null
+        - sudo pip install conan sphinx sphinx_rtd_theme breathe
+        - conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
+        - conan remote add -f boost_math https://api.bintray.com/conan/bincrafters/public-conan
+        - conan install . --build missing 
   
 cache:
     directories:
       - ${HOME}/.conan
-
-install:
-  - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
-  - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
-  - source .CI/travis/install.sh 2>&1 > /dev/null
 
 script:
   - source .CI/travis/build.sh
