@@ -43,47 +43,6 @@ We use `sphinx + doxygen` to generate our documentation. You will need to instal
 
 ## Contributing
 
-### Formatting Style
-
-To have a standarised code base, we only accept code that is formatted according to the Google rules for C++ with a column width of 120 characters and an indentation of 4 white spaces. For this purpose, we use `clang-format`, which can be installed in MacOS by executing the next command: `brew install clang-format`.
-
-We use the `clang-format` plugin for the VS Code editor to format our codes. This plugin uses the `clang-format` program and the aforementioned rules under the hood.
-
-### Branching model
-
-Our branching model has two permanent branches, **develop** and **master**. We aim at using `develop` as the main branch, where all features are merged. In this sense, we use the master branch to push the release versions of the KHIVA library.
-
-### Contribution process
-
-To contribute to the code base, we follow the next process:
-
-1. The main branch is developed; every developer should pull the current status of the branch before stating to develop any new feature.
-
-`git pull`
-
-2. Create a new branch with the following pattern "feature/[nameOfTheFeature]"
-
-`git checkout -b feature/exampleFeature`
-
-3. Develop the new feature on the new branch. It includes testing and documentation.
-
-`git commit -a -m "Bla, Bla, Bla”; git push`
-
-4. Open a Pull Request to merge the feature branch in to develop. Currently, a pull request must be reviewed at least by one person.
-
-5. Finally, delete the feature branch.
-
-6. Move back to develop branch.
-
-`git checkout develop`
-
-7. Pull the latest changes.
-
-`git pull`
-
-### Builds
-
-We have a first approach to generate a build and execute the set of tests on every pull request to the **develop** branch. This process is based on bitbucket pipelines and is **currently stopped**.
 The rules to contribute to this project are described [here](CONTRIBUTING.md)
 
 ### Builds
