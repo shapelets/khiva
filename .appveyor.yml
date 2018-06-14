@@ -18,7 +18,6 @@ before_build:
   - choco install graphviz
   - start /wait pip3.exe install conan sphinx sphinx_rtd_theme breathe cpp-coveralls
   - start /wait conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
-  - start /wait conan remote add -f boost_math https://api.bintray.com/conan/bincrafters/public-conan
   - mkdir build && cd build
   - start /wait conan install .. --build
 build_script:
