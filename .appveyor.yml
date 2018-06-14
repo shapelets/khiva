@@ -2,6 +2,10 @@ image:
     - Visual Studio 2015
 environment:
     PATH: C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
+cache:
+    - C:\ProgramData\chocolatey\bin -> .appveyor.yml
+    - C:\ProgramData\chocolatey\lib -> .appveyor.yml
+    - '%USERPROFILE%\.conan -> conanfile.txt'  # conan cache
 clone_folder: C:\khiva
 platform:
     - x64
@@ -15,8 +19,9 @@ before_build:
   - start /wait pip3.exe install conan sphinx sphinx_rtd_theme breathe cpp-coveralls
   - start /wait conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
   - start /wait conan remote add -f boost_math https://api.bintray.com/conan/bincrafters/public-conan
+  - mkdir build && cd build
+  - start /wait conan install . --build
 build_script:
-    - mkdir build && cd build
     - cmake .. -G"Visual Studio 14 Win64"
     - cmake --build . --config Release
 test_script:
