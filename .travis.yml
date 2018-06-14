@@ -1,8 +1,5 @@
 
 language: cpp
-compiler: 
-  - clang
-  - g++
 sudo: required
 
 env:
@@ -11,24 +8,6 @@ env:
 
 matrix:
   include:
-    # works on Precise and Trusty
-    - os: linux
-      dist: trusty
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.9
-            - lcov
-            - python3 
-            - python3-pip
-            - libboost-all-dev
-            - doxygen 
-            - graphviz
-      env:
-         - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
-
     # works on Trusty
     - os: linux
       dist: trusty
@@ -46,60 +25,6 @@ matrix:
             - graphviz
       env:
          - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
-
-    # works on Precise and Trusty
-    - os: linux
-      dist: trusty
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
-            - lcov
-            - python3 
-            - python3-pip
-            - libboost-all-dev
-            - doxygen 
-            - graphviz
-      env:
-         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
-    
-    # works on Trusty
-    - os: linux
-      dist: trusty
-      addons:
-        apt:
-          sources:
-            - llvm-toolchain-trusty-3.9
-          packages:
-            - clang-3.9
-            - lcov
-            - python3 
-            - python3-pip
-            - libboost-all-dev
-            - doxygen 
-            - graphviz
-      env:
-        - MATRIX_EVAL="CC=clang-3.9 && CXX=clang++-3.9"
-
-    # works on Trusty
-    - os: linux
-      dist: trusty
-      addons:
-        apt:
-          sources:
-            - llvm-toolchain-trusty-4.0
-          packages:
-            - clang-4.0
-            - lcov
-            - python3 
-            - python3-pip
-            - libboost-all-dev
-            - doxygen 
-            - graphviz
-      env:
-        - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 
     # works on Trusty
     - os: linux
@@ -123,18 +48,9 @@ matrix:
     - os: osx
       osx_image: xcode9.3
       env:
-        - MATRIX_EVAL="brew install gcc4.9 lcov python3 python3-pip doxygen graphviz && CC=gcc-4.9 && CXX=g++-4.9"
-
-    - os: osx
-      osx_image: xcode9.3
-      env:
         - MATRIX_EVAL="brew install gcc5 lcov python3 python3-pip doxygen graphviz && CC=gcc-5 && CXX=g++-5"
 
-    - os: osx
-      osx_image: xcode9.3
-      env:
-        - MATRIX_EVAL="brew install gcc6 lcov python3 python3-pip doxygen graphviz && CC=gcc-6 && CXX=g++-6"
-
+    # works on Mac Os
     - os: osx
       osx_image: xcode9.3
       env:
