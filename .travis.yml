@@ -29,7 +29,7 @@ matrix:
       env:
          - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
 
-    # works on Precise and Trusty
+    # works on Trusty
     - os: linux
       dist: trusty
       addons:
@@ -46,43 +46,49 @@ matrix:
             - graphviz
       env:
          - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+    
+    # works on Trusty
     - os: linux
       dist: trusty
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
+            - llvm-toolchain-trusty-3.9
           packages:
             - clang-3.6
+            - lcov
+            - python3 
+            - python3-pip
+            - libboost-all-dev
+            - doxygen 
+            - graphviz
       env:
-        - MATRIX_EVAL="CC=clang-3.6 && CXX=clang++-3.6"
+        - MATRIX_EVAL="CC=clang-3.9 && CXX=clang++-3.9"
 
-    # works on Precise and Trusty
+    # works on Trusty
     - os: linux
       dist: trusty
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
+            - llvm-toolchain-trusty-4.0
           packages:
             - clang-3.7
       env:
-        - MATRIX_EVAL="CC=clang-3.7 && CXX=clang++-3.7"
+        - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 
-    # works on Precise and Trusty
+    # works on Trusty
     - os: linux
       dist: trusty
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.8
+            - llvm-toolchain-trusty-5.0
           packages:
             - clang-3.8
       env:
-        - MATRIX_EVAL="CC=clang-3.8 && CXX=clang++-3.8"  
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+  
 
 cache:
     directories:
