@@ -1,5 +1,6 @@
 image:
     - Visual Studio 2015
+    - Visual Studio 2017
 environment:
     PATH: C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
 cache:
@@ -19,8 +20,19 @@ before_build:
   - start /wait pip3.exe install sphinx sphinx_rtd_theme breathe cpp-coveralls
   - vcpkg install --triplet x64-windows boost-math gtest benchmark eigen3
   - mkdir build && cd build
-build_script:
-    - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"Visual Studio 14 Win64"
-    - cmake --build . --config Release
+for:
+-
+  matrix:
+    only:
+      - image: Visual Studio 2015
+  build_script:
+  - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"Visual Studio 14 Win64"
+  - cmake --build . --config Release
+  matrix:
+    only:
+      - image: Visual Studio 2017
+  build_script:
+  - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"Visual Studio 15 Win64"
+  - cmake --build . --config Release
 test_script:
     - ctest -C Release --output-on-failure
