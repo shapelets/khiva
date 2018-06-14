@@ -9,13 +9,7 @@ PROJECT(KHIVALIB)
 # Find the ArrayFire package.
 FIND_PACKAGE(ArrayFire REQUIRED)
 # Find the Boost package
-IF (WIN32)
-    SET(Boost_USE_STATIC_LIBS ON)
-ENDIF ()
-
-FIND_PACKAGE(Boost REQUIRED COMPONENTS
-    math
-)
+FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
 
 # Compile with C++11 support.
@@ -53,14 +47,12 @@ IF(KHIVA_COVERAGE)
         # Declare compilation libraries
         TARGET_LINK_LIBRARIES(${KHIVALIB}
                         ${ArrayFire_Unified_LIBRARIES}
-                        Boost::math
                         Eigen3::Eigen
                         ${CMAKE_DL_LIBS} "--coverage")
 ELSE()
         # Declare compilation libraries
         TARGET_LINK_LIBRARIES(${KHIVALIB}
                         ${ArrayFire_Unified_LIBRARIES}
-                        Boost::math
                         Eigen3::Eigen
                         ${CMAKE_DL_LIBS})
 ENDIF()
