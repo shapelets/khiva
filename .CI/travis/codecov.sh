@@ -1,8 +1,7 @@
 #!/bin/bash
 
-lcov --directory test --base-directory ../src --no-external --capture --output-file coverage.info
-lcov --remove coverage.info '/usr*' '/opt*' '*/cl.hpp' '*/.conan/*' -o coverage.info
+lcov --directory src --base-directory ../src/khiva --capture --output-file coverage.info
+lcov --remove coverage.info 'Core*' '*/.conan/*' '*/usr*' '*/cl.hpp' '*/include*' -o coverage.info
 lcov --list coverage.info
 # Uploading report to CodeCov
-bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
-cd ..
+bash <(curl -s https://codecov.io/bash)
