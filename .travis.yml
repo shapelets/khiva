@@ -36,4 +36,5 @@ script:
   - source .CI/travis/build.sh 2>&1 > /dev/null
 
 after_success:
+  - cd ${TRAVIS_BUILD_DIR}
   - source .CI/travis/codecov.sh
