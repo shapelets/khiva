@@ -1,6 +1,8 @@
 
 language: cpp
-compiler: g++
+compiler: 
+  - clang
+  - g++
 sudo: required
 
 env:
@@ -43,18 +45,56 @@ matrix:
             - doxygen 
             - graphviz
       env:
-         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"     
+         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+    - os: linux
+      dist: trusty
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.6
+          packages:
+            - clang-3.6
+      env:
+        - MATRIX_EVAL="CC=clang-3.6 && CXX=clang++-3.6"
+
+    # works on Precise and Trusty
+    - os: linux
+      dist: trusty
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.7
+          packages:
+            - clang-3.7
+      env:
+        - MATRIX_EVAL="CC=clang-3.7 && CXX=clang++-3.7"
+
+    # works on Precise and Trusty
+    - os: linux
+      dist: trusty
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.8
+          packages:
+            - clang-3.8
+      env:
+        - MATRIX_EVAL="CC=clang-3.8 && CXX=clang++-3.8"  
 
 cache:
     directories:
       - ${HOME}/.conan
 
 before_install:
+  - eval "${MATRIX_EVAL}"
+
+install:
   - source .CI/travis/install-intel.sh 2>&1 > /dev/null
   - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
   - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
-
-install:
   - source .CI/travis/install.sh 2>&1 > /dev/null
 
 script:
