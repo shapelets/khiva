@@ -33,18 +33,6 @@ OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependenci
 OPTION(KHIVA_COVERAGE "This flag allows Code Coverage of the code" OFF)
 
 IF(KHIVA_USE_CONAN)
-    INCLUDE(conan)
-
-    IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-        SET(CONAN_CPPSTD 14)
-    ELSE()
-        SET(CONAN_CPPSTD 11)
-    ENDIF()
-    conan_cmake_run(CONANFILE conanfile.txt
-                    BASIC_SETUP CMAKE_TARGETS
-                    BUILD missing
-                    SETTINGS cppstd=${CONAN_CPPSTD})
-
     # Bring conan generated dependencies
     INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
     CONAN_BASIC_SETUP()
