@@ -1,79 +1,38 @@
-
-sudo: required
+os: linux
 dist: trusty
-language: cpp
+sudo: required
 
 env:
   global:
     - ARRAYFIRE=/opt/arrayfire
 
+language: cpp
+compiler: g++
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-5
+      - lcov
+      - python3 
+      - python3-pip
+      - libboost-all-dev
+      - doxygen 
+      - graphviz
+
 cache:
-  directories:
-    - ${HOME}/.conan
+    directories:
+      - ${HOME}/.conan
 
-matrix:
-  include:
-    - compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.9
-            - lcov
-            - python3 
-            - python3-pip
-            - libboost-all-dev
-            - doxygen 
-            - graphviz
-      env: COMPILER=g++-4.9
-
-    - compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-            - lcov
-            - python3 
-            - python3-pip
-            - libboost-all-dev
-            - doxygen 
-            - graphviz
-      env: COMPILER=g++-5
-
-    - compiler: clang
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-3.6
-          packages:
-            - clang-3.6
-      env: COMPILER=clang++-3.6
-
-    - compiler: clang
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-3.7
-          packages:
-            - clang-3.7
-            - lcov
-            - python3 
-            - python3-pip
-            - libboost-all-dev
-            - doxygen 
-            - graphviz
-      env: COMPILER=clang++-3.7
-
-install:
+before_install:
   - source .CI/travis/install-intel.sh 
   - source .CI/travis/install-arrayfire.sh 
-  - source .CI/travis/install-cmake.sh 
-  - source .CI/travis/install.sh
-  
+  - source .CI/travis/install-cmake.sh
+
+install:
+  - source .CI/travis/install.sh 
+
 script:
   - source .CI/travis/build.sh
