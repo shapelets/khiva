@@ -1,38 +1,8 @@
-os: linux
 dist: trusty
 sudo: required
-
-env:
-  global:
-    - ARRAYFIRE=/opt/arrayfire
-
 language: cpp
-compiler: g++
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-5
-      - lcov
-      - python3 
-      - python3-pip
-      - libboost-all-dev
-      - doxygen 
-      - graphviz
-
-cache:
-    directories:
-      - ${HOME}/.conan
-
-before_install:
+script:
   - source .CI/travis/install-intel.sh 
   - source .CI/travis/install-arrayfire.sh 
   - source .CI/travis/install-cmake.sh
-
-install:
-  - source .CI/travis/install.sh 
-
-script:
-  - source .CI/travis/build.sh
