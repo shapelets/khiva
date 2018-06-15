@@ -4,10 +4,10 @@ dist: trusty
 
 
 install:
-  - source .CI/travis/install-intel.sh 2>&1 > /dev/null
-  - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
-  - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
-  - source .CI/travis/install_linux.sh 2>&1 > /dev/null
+  - source .CI/travis/install-intel.sh
+  - source .CI/travis/install-arrayfire.sh
+  - source .CI/travis/install-cmake.sh
+  - source .CI/travis/install_linux.sh
 
 script:
   - source .CI/travis/build.sh
