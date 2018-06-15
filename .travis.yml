@@ -15,7 +15,11 @@ matrix:
       compiler:
         - gcc
       before_install:
-        -  source .CI/travis/install_linux.sh
+        - source .CI/travis/install_linux.sh
+        - source .CI/travis/install-arrayfire.sh
+        - source .CI/travis/install-cmake.sh
+      script:
+        - source .CI/travis/build_linux.sh
 
     - os: linux
       dist: trusty
@@ -23,25 +27,30 @@ matrix:
       compiler:
         - clang
       before_install:
-        -  source .CI/travis/install_linux.sh
+        - source .CI/travis/install_linux.sh
+        - source .CI/travis/install-arrayfire.sh
+        - source .CI/travis/install-cmake.sh
+      script:
+        - source .CI/travis/build_linux.sh
 
     - os: osx
       osx_image: xcode9.3
       compiler:
         - gcc
       before_install:
-        -  source .CI/travis/install_osx.sh
+        - source .CI/travis/install_osx.sh
+        - source .CI/travis/install-arrayfire_osx.sh
+      script:
+        - source .CI/travis/build_osx.sh
 
     - os: osx
       osx_image: xcode9.3
       compiler:
         - clang
       before_install:
-        -  source .CI/travis/install_osx.sh
+        - source .CI/travis/install_osx.sh
+        - source .CI/travis/install-arrayfire_osx.sh
+      script:
+        - source .CI/travis/build_osx.sh
 
-install:
-  - source .CI/travis/install-arrayfire.sh
-  - source .CI/travis/install-cmake.sh
 
-script:
-  - source .CI/travis/build.sh
