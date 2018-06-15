@@ -2,6 +2,10 @@ language: cpp
 sudo: required
 dist: trusty
 
+compiler:
+  - g++
+  - clang
+
 cache:
     directories:
       - ${HOME}/.conan
