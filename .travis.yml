@@ -33,7 +33,3 @@ install:
   
 script:
   - source .CI/travis/build.sh
-
-after_success:
-  - source .CI/travis/codecov.sh
-
