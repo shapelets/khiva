@@ -5,7 +5,8 @@ brew upgrade python
 brew install --force doxygen graphviz
 
 # Installing conan
-sudo pip install conan sphinx sphinx_rtd_theme breathe
+sudo pip3 install --upgrade pip
+sudo pip3 install conan sphinx sphinx_rtd_theme breathe
 
 # Installing library dependencies with conan
 conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
