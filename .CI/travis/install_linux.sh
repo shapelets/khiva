@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sudo apt-get update -y
 sudo apt-get install -y lcov python3 python3-pip libboost-all-dev doxygen graphviz
 
 # Installing conan
