@@ -40,7 +40,6 @@ matrix:
         -  source .CI/travis/install_osx.sh
 
 install:
-  - source .CI/travis/install-intel.sh
   - source .CI/travis/install-arrayfire.sh
   - source .CI/travis/install-cmake.sh
 
