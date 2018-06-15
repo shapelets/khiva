@@ -2,19 +2,47 @@ language: cpp
 sudo: required
 dist: trusty
 
-compiler:
-  - g++
-  - clang
 
 cache:
     directories:
       - ${HOME}/.conan
 
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      compiler:
+        - gcc
+      before_install:
+        -  source .CI/travis/install_linux.sh
+
+    - os: linux
+      dist: trusty
+      sudo: required
+      compiler:
+        - clang
+      before_install:
+        -  source .CI/travis/install_linux.sh
+
+    - os: osx
+      osx_image: xcode9.3
+      compiler:
+        - gcc
+      before_install:
+        -  source .CI/travis/install_osx.sh
+
+    - os: osx
+      osx_image: xcode9.3
+      compiler:
+        - clang
+      before_install:
+        -  source .CI/travis/install_osx.sh
+
 install:
   - source .CI/travis/install-intel.sh
   - source .CI/travis/install-arrayfire.sh
   - source .CI/travis/install-cmake.sh
-  - source .CI/travis/install_linux.sh
 
 script:
   - source .CI/travis/build.sh
