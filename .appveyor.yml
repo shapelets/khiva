@@ -16,8 +16,8 @@ platform:
 before_build:
     - appveyor DownloadFile "http://registrationcenter-download.intel.com/akdlm/irc_nas/12512/opencl_runtime_16.1.2_x64_setup.msi"
     - start /wait msiexec /i opencl_runtime_16.1.2_x64_setup.msi /qn /l*v msiexec1.log
-    - appveyor DownloadFile "https://drive.google.com/uc?authuser=0&id=1uM_QI1nrQS0MCvOt3DR96NiZQMP7n6DE&export=download" -FileName ArrayFire-no-gl-d920eae2.exe
-    - start /wait ArrayFire-no-gl-d920eae2.exe /S
+    - appveyor DownloadFile "https://drive.google.com/uc?authuser=0&id=1WGV7kAs5kSgUei2qeCfwFjTmzm1l63FX&export=download" -FileName ArrayFire-d920eae2.exe
+    - start /wait ArrayFire-d920eae2.exe /S
     - start /wait choco install doxygen.install
     - start /wait choco install graphviz
     - start /wait pip3.exe install sphinx sphinx_rtd_theme breathe cpp-coveralls
