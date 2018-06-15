@@ -7,23 +7,23 @@ env:
     - ARRAYFIRE=/opt/arrayfire
 
 cache:
-    directories:
-      - ${HOME}/.conan
+  directories:
+    - ${HOME}/.conan
 
 os: linux
-dist: trusty
-  addons:
-    apt:
-      sources:
-        - ubuntu-toolchain-r-test
-      update: true
-      packages:
-        - lcov
-        - python3 
-        - python3-pip
-        - libboost-all-dev
-        - doxygen 
-        - graphviz
+  dist: trusty
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        update: true
+        packages:
+          - lcov
+          - python3 
+          - python3-pip
+          - libboost-all-dev
+          - doxygen 
+          - graphviz
 
 install:
   - source .CI/travis/install-intel.sh 
