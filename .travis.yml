@@ -27,11 +27,11 @@ matrix:
          - MATRIX_EVAL="CC=gcc && CXX=g++"
       before_install:
         - eval "${MATRIX_EVAL}"
-        - source .CI/travis/install-intel.sh 2>&1 > /dev/null
       install:
-        - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
-        - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
-        - source .CI/travis/install.sh 2>&1 > /dev/null
+         - source .CI/travis/install-intel.sh 
+        - source .CI/travis/install-arrayfire.sh 
+        - source .CI/travis/install-cmake.sh 
+        - source .CI/travis/install.sh
 
     # works on Trusty
     - os: linux
@@ -52,8 +52,8 @@ matrix:
          - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
       before_install:
         - eval "${MATRIX_EVAL}"
-        - source .CI/travis/install-intel.sh 2>&1 > /dev/null
       install:
+        - source .CI/travis/install-intel.sh 2>&1 > /dev/null
         - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
         - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
         - source .CI/travis/install.sh 2>&1 > /dev/null
@@ -77,24 +77,26 @@ matrix:
          - MATRIX_EVAL="CC=gcc-5 && CXX=g++-6"
       before_install:
         - eval "${MATRIX_EVAL}"
-        - source .CI/travis/install-intel.sh 2>&1 > /dev/null
       install:
-        - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
-        - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
-        - source .CI/travis/install.sh 2>&1 > /dev/null
+        - source .CI/travis/install-intel.sh 
+        - source .CI/travis/install-arrayfire.sh 
+        - source .CI/travis/install-cmake.sh 
+        - source .CI/travis/install.sh
 
     # works on Mac Os
     - os: osx
       osx_image: xcode9.3
       env:
-        - MATRIX_EVAL=" brew install --force lcov doxygen graphviz"
+        - MATRIX_EVAL=""
       before_install:
+        - brew install --force lcov doxygen graphviz
         - brew upgrade python
+        - pip install --upgrade pip
         - eval "${MATRIX_EVAL}"
       install:
         - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
         - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
-        - sudo pip install conan sphinx sphinx_rtd_theme breathe
+        - pip install conan sphinx sphinx_rtd_theme breathe
         - conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
         - conan remote add -f boost_math https://api.bintray.com/conan/bincrafters/public-conan
         - conan install . --build missing 
