@@ -53,10 +53,10 @@ matrix:
       before_install:
         - eval "${MATRIX_EVAL}"
       install:
-        - source .CI/travis/install-intel.sh 2>&1 > /dev/null
-        - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
-        - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
-        - source .CI/travis/install.sh 2>&1 > /dev/null
+        - source .CI/travis/install-intel.sh 
+        - source .CI/travis/install-arrayfire.sh 
+        - source .CI/travis/install-cmake.sh 
+        - source .CI/travis/install.sh 
 
     # works on Trusty
     - os: linux
@@ -94,8 +94,8 @@ matrix:
         - pip install --upgrade pip
         - eval "${MATRIX_EVAL}"
       install:
-        - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
-        - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
+        - source .CI/travis/install-arrayfire.sh 
+        - source .CI/travis/install-cmake.sh 
         - pip install conan sphinx sphinx_rtd_theme breathe
         - conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
         - conan remote add -f boost_math https://api.bintray.com/conan/bincrafters/public-conan
