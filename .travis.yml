@@ -6,105 +6,33 @@ env:
   global:
     - ARRAYFIRE=/opt/arrayfire
 
-matrix:
-  include:
-    # works on Trusty
-    - os: linux
-      dist: trusty
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++
-            - lcov
-            - python3 
-            - python3-pip
-            - libboost-all-dev
-            - doxygen 
-            - graphviz
-      env:
-         - MATRIX_EVAL="CC=gcc && CXX=g++"
-      before_install:
-        - eval "${MATRIX_EVAL}"
-      install:
-         - source .CI/travis/install-intel.sh 
-        - source .CI/travis/install-arrayfire.sh 
-        - source .CI/travis/install-cmake.sh 
-        - source .CI/travis/install.sh
-
-    # works on Trusty
-    - os: linux
-      dist: trusty
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-            - lcov
-            - python3 
-            - python3-pip
-            - libboost-all-dev
-            - doxygen 
-            - graphviz
-      env:
-         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
-      before_install:
-        - eval "${MATRIX_EVAL}"
-      install:
-        - source .CI/travis/install-intel.sh 
-        - source .CI/travis/install-arrayfire.sh 
-        - source .CI/travis/install-cmake.sh 
-        - source .CI/travis/install.sh 
-
-    # works on Trusty
-    - os: linux
-      dist: trusty
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
-            - lcov
-            - python3 
-            - python3-pip
-            - libboost-all-dev
-            - doxygen 
-            - graphviz
-      env:
-         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-6"
-      before_install:
-        - eval "${MATRIX_EVAL}"
-      install:
-        - source .CI/travis/install-intel.sh 
-        - source .CI/travis/install-arrayfire.sh 
-        - source .CI/travis/install-cmake.sh 
-        - source .CI/travis/install.sh
-
-    # works on Mac Os
-    - os: osx
-      osx_image: xcode9.3
-      env:
-        - MATRIX_EVAL=""
-      before_install:
-        - brew install --force lcov doxygen graphviz
-        - brew upgrade python
-        - pip install --upgrade pip
-        - eval "${MATRIX_EVAL}"
-      install:
-        - source .CI/travis/install-arrayfire.sh 
-        - source .CI/travis/install-cmake.sh 
-        - pip install conan sphinx sphinx_rtd_theme breathe
-        - conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
-        - conan remote add -f boost_math https://api.bintray.com/conan/bincrafters/public-conan
-        - conan install . --build missing 
-  
 cache:
     directories:
       - ${HOME}/.conan
 
+
+os: linux
+dist: trusty
+  addons:
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
+      update: true
+      packages:
+        - g++
+        - lcov
+        - python3 
+        - python3-pip
+        - libboost-all-dev
+        - doxygen 
+        - graphviz
+
+install:
+  - source .CI/travis/install-intel.sh 
+  - source .CI/travis/install-arrayfire.sh 
+  - source .CI/travis/install-cmake.sh 
+  - source .CI/travis/install.sh
+  
 script:
   - source .CI/travis/build.sh
 
