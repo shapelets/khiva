@@ -11,19 +11,65 @@ cache:
     - ${HOME}/.conan
 
 os: linux
-  dist: trusty
-    addons:
-      apt:
-        sources:
-          - ubuntu-toolchain-r-test
-        update: true
-        packages:
-          - lcov
-          - python3 
-          - python3-pip
-          - libboost-all-dev
-          - doxygen 
-          - graphviz
+dist: trusty
+
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+            - lcov
+            - python3 
+            - python3-pip
+            - libboost-all-dev
+            - doxygen 
+            - graphviz
+      env: COMPILER=g++-4.9
+
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+            - lcov
+            - python3 
+            - python3-pip
+            - libboost-all-dev
+            - doxygen 
+            - graphviz
+      env: COMPILER=g++-5
+
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-3.6
+          packages:
+            - clang-3.6
+      env: COMPILER=clang++-3.6
+
+    - compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-3.7
+          packages:
+            - clang-3.7
+            - lcov
+            - python3 
+            - python3-pip
+            - libboost-all-dev
+            - doxygen 
+            - graphviz
+      env: COMPILER=clang++-3.7
 
 install:
   - source .CI/travis/install-intel.sh 
