@@ -10,7 +10,6 @@ cache:
     directories:
       - ${HOME}/.conan
 
-
 os: linux
 dist: trusty
   addons:
