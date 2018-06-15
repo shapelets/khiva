@@ -1,0 +1,16 @@
+language: cpp
+sudo: required
+dist: trusty
+
+
+install:
+  - source .CI/travis/install-intel.sh 2>&1 > /dev/null
+  - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
+  - source .CI/travis/install-cmake.sh 2>&1 > /dev/null
+  - source .CI/travis/install_linux.sh 2>&1 > /dev/null
+
+script:
+  - source .CI/travis/build.sh
+
+after_success:
+  - source .CI/travis/codecov.sh

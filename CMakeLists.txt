@@ -30,6 +30,19 @@ OPTION(KHIVA_BUILD_BENCHMARKS "Build benchmarks of the Khiva library" ON)
 OPTION(KHIVA_BUILD_EXAMPLES "Build examples of the Khiva library" ON)
 OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen, GraphViz and Sphinx)" ON)
 OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependencies of the Khiva library" ON)
+OPTION(KHIVA_ENABLE_COVERAGE "This flag allows Code Coverage of the code" OFF)
+
+IF(KHIVA_ENABLE_COVERAGE)
+    # Seeting clompiler flags for code coverage
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 --coverage -fprofile-arcs -ftest-coverage")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage -fprofile-arcs -ftest-coverage")
+
+    if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+        link_libraries(gcov)
+    else()
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+    endif()
+ENDIF()
 
 IF(KHIVA_USE_CONAN)
     INCLUDE(conan)
