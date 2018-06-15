@@ -2,6 +2,9 @@ language: cpp
 sudo: required
 dist: trusty
 
+cache:
+    directories:
+      - ${HOME}/.conan
 
 install:
   - source .CI/travis/install-intel.sh
