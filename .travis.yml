@@ -87,8 +87,9 @@ matrix:
     - os: osx
       osx_image: xcode9.3
       env:
-        - MATRIX_EVAL=" brew upgrade python && brew install --force lcov python doxygen graphviz"
+        - MATRIX_EVAL=" brew install --force lcov doxygen graphviz"
       before_install:
+        - brew upgrade python
         - eval "${MATRIX_EVAL}"
       install:
         - source .CI/travis/install-arrayfire.sh 2>&1 > /dev/null
