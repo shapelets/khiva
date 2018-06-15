@@ -30,6 +30,12 @@ OPTION(KHIVA_BUILD_BENCHMARKS "Build benchmarks of the Khiva library" ON)
 OPTION(KHIVA_BUILD_EXAMPLES "Build examples of the Khiva library" ON)
 OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen, GraphViz and Sphinx)" ON)
 OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependencies of the Khiva library" ON)
+OPTION(KHIVA_ENABLE_COVERAGE "This flag allows Code Coverage of the code" OFF)
+
+IF(KHIVA_ENABLE_COVERAGE)
+    INCLUDE(CodeCoverage)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
+ENDIF()
 
 IF(KHIVA_USE_CONAN)
     INCLUDE(conan)

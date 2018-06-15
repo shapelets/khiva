@@ -29,7 +29,7 @@ FILE(GLOB_RECURSE KHIVALIB_CODE
     "${KHIVALIB_INC}/*.h" )
 
 # The output is a static library
-ADD_LIBRARY(${KHIVALIB} STATIC ${KHIVALIB_CODE})
+ADD_LIBRARY(${KHIVALIB} STATIC ${KHIVALIB_CODE} )
 
 # Declare include directories
 TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
@@ -38,11 +38,17 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
                            ${ArrayFire_INCLUDE_DIRS}
                            ${Boost_INCLUDE_DIRS})
 
-# Declare compilation libraries
-TARGET_LINK_LIBRARIES(${KHIVALIB}
-                      ${ArrayFire_Unified_LIBRARIES}
-                      ${CMAKE_DL_LIBS})
-
+IF(KHIVA_ENABLE_COVERAGE)
+        # Declare compilation libraries
+        TARGET_LINK_LIBRARIES(${KHIVALIB}
+                        ${ArrayFire_Unified_LIBRARIES}
+                        ${CMAKE_DL_LIBS} "--coverage")
+ELSE()
+        # Declare compilation libraries
+        TARGET_LINK_LIBRARIES(${KHIVALIB}
+                        ${ArrayFire_Unified_LIBRARIES}
+                        ${CMAKE_DL_LIBS})
+ENDIF()
 # Add metadata
 SET_TARGET_PROPERTIES(${KHIVALIB} PROPERTIES 
     VERSION ${VERSION_SHORT}
