@@ -11,5 +11,3 @@ sudo mkdir /opt/arrayfire
 chmod +x ArrayFire-no-gl-v3.6.0_Linux_x86_84.sh
 sudo ./ArrayFire-no-gl-v3.6.0_Linux_x86_84.sh --prefix=/opt/arrayfire --skip-license
 rm ArrayFire-no-gl-v3.6.0_Linux_x86_84.sh
-
-
