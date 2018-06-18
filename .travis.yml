@@ -20,6 +20,8 @@ matrix:
         - source .CI/travis/install-cmake.sh
       script:
         - source .CI/travis/build_linux.sh
+      after_success:
+        - source .CI/travis/codecov.sh
 
     - os: linux
       dist: trusty
