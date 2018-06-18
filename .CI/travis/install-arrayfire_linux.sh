@@ -6,8 +6,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 wget http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_Linux_x86_64.sh
-sudo mkdir /opt
+sudo mkdir /opt -p
 
 chmod +x ArrayFire-no-gl-v3.5.1_Linux_x86_64.sh
 sudo ./ArrayFire-no-gl-v3.5.1_Linux_x86_64.sh --prefix=/opt --skip-license
+
+sudo echo /opt/arrayfire/lib > /etc/ld.so.conf.d/arrayfire.conf
+sudo ldconfig
+
 rm ArrayFire-no-gl-v3.5.1_Linux_x86_64.sh
