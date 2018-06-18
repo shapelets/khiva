@@ -1,4 +1,10 @@
 # Khiva
+
+| Branch        | Build Documentation                                                                                                                           | Build Linux and Mac Os                                                                                            |  Build Windows                                                                                                                                          | Code Coverage                                                                                                                    |
+| ------------- |:---------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------:|
+| master        | [![Documentation Status](https://readthedocs.org/projects/khiva/badge/?version=latest)](https://khiva.readthedocs.io/en/latest/?badge=latest) | [![Build Status](https://travis-ci.com/shapelets/khiva.svg?branch=master)](https://travis-ci.com/shapelets/khiva) | [![Build status](https://ci.appveyor.com/api/projects/status/2oiggqcufnl3iddd/branch/master?svg=true)](https://ci.appveyor.com/project/shapelets/khiva) |[![Coverage Status](https://codecov.io/gh/shapelets/khiva/branch/master/graph/badge.svg)](https://codecov.io/gh/shapelets/khiva)  |
+| develop       | [![Documentation Status](https://readthedocs.org/projects/khiva/badge/?version=latest)](https://khiva.readthedocs.io/en/latest/?badge=latest) | [![Build Status](https://travis-ci.com/shapelets/khiva.svg?branch=develop)](https://travis-ci.com/shapelets/khiva)| [![Build status](https://ci.appveyor.com/api/projects/status/2oiggqcufnl3iddd/branch/develop?svg=true)](https://ci.appveyor.com/project/shapelets/khiva)|[![Coverage Status](https://codecov.io/gh/shapelets/khiva/branch/develop/graph/badge.svg)](https://codecov.io/gh/shapelets/khiva) |
+
 Khiva is an open-source library of efficient algorithms to analyse time series in GPU and CPU. It can be used to extract insights from one or a group of time series. The large number of available methods allow us to understand the nature of each time series. Based on the results of this analysis, users can reduce dimensionality, find out recurrent motifs or discords, understand the seasonality or trend from a given time series, forecasting and detect anomalies.
 
 Khiva provides a mean for time series analytics at scale. These analytics can be exploited in a wide range of [use cases](https://github.com/shapelets/khiva-use-cases)  across several industries, like energy, finance, e-health, IoT, music industry, etc.
@@ -7,7 +13,7 @@ Khiva provides a mean for time series analytics at scale. These analytics can be
 This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 
 ## Installation
-1. Install conan, c++ package manager, preferably through `pip install conan`.  For more information and alternative instalation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html)
+1. Install conan, c++ package manager, preferably through `pip install conan`.  For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html)
 2. Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`
 3. Create `build` folder and, after moving into the new folder, run `cmake ..` 
 4. Run `make -j8 && make install`.

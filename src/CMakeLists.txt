@@ -37,11 +37,17 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
                            $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
                            ${ArrayFire_INCLUDE_DIRS}
                            ${Boost_INCLUDE_DIRS})
-
-# Declare compilation libraries
-TARGET_LINK_LIBRARIES(${KHIVALIB}
-                      ${ArrayFire_Unified_LIBRARIES}
+IF(KHIVA_ONLY_CPU_BACKEND)
+    # Declare compilation libraries
+    TARGET_LINK_LIBRARIES(${KHIVALIB}
+                      ${ArrayFire_CPU_LIBRARIES}
                       ${CMAKE_DL_LIBS})
+ELSE()
+    # Declare compilation libraries
+    TARGET_LINK_LIBRARIES(${KHIVALIB}
+            ${ArrayFire_Unified_LIBRARIES}
+            ${CMAKE_DL_LIBS})
+ENDIF()
 
 # Add metadata
 SET_TARGET_PROPERTIES(${KHIVALIB} PROPERTIES 
