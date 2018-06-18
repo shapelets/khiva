@@ -40,8 +40,7 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
 
 # Declare compilation libraries
 TARGET_LINK_LIBRARIES(${KHIVALIB}
-                        ArrayFire::afcpu
-                      #${ArrayFire_Unified_LIBRARIES}
+                      ${ArrayFire_CPU_LIBRARIES}
                       ${CMAKE_DL_LIBS})
 
 # Add metadata
