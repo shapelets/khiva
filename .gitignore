@@ -8,3 +8,4 @@ CMakeCache.txt
 include/khiva/version.h
 test/versionTest.cpp
 .idea/
+*.gcov
