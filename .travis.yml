@@ -15,13 +15,11 @@ matrix:
       compiler:
         - gcc
       before_install:
-        - source .CI/travis/install_linux.sh
+        - source .ravis/install_linux.sh
         - source .CI/travis/install-arrayfire.sh
         - source .CI/travis/install-cmake.sh
       script:
         - source .CI/travis/build_linux.sh
-      after_success:
-        - source .CI/travis/codecov.sh
 
     - os: linux
       dist: trusty

@@ -1,10 +1,11 @@
 #!/bin/bash
+# Copyright (c) 2018 Shapelets.io
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 set -ev
-
-###########################
-# Get Intel OpenCL Runtime
-###########################
 
 # https://software.intel.com/en-us/articles/opencl-drivers#latest_CPU_runtime
 PACKAGE_URL=http://registrationcenter-download.intel.com/akdlm/irc_nas/12556/opencl_runtime_16.1.2_x64_rh_6.4.0.37.tgz
