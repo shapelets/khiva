@@ -30,4 +30,11 @@ build_script:
 test_script:
     - ctest -C Release --no-compress-output --output-on-failure -T test
 on_finish:
-  - ps: If (Test-Path .\Testing\**\Test.xml) {(New-Object System.Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\Testing\**\Test.xml))}
+    - ps: |
+        $xsl = ".CI\appveyor\ctest-to-junit.xsl" 
+        $ctest_xml = (Resolve-Path .\Testing\**\Test.xml)
+        $junit_xml = ".\build\Testing\results-junit.xml"
+        $xslt = New-Object System.Xml.Xsl.XslCompiledTransform 
+        $xslt.Load($xsl) 
+        $xslt.Transform($ctest_xml, $junit_xml) 
+        (New-Object System.Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", $junit_xml)
