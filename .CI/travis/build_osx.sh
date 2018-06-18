@@ -5,8 +5,7 @@
 mkdir -p build && cd build
 cmake .. -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
 make all
-./bin/version
-./bin/dimensionality
+AF_PRINT_ERRORS=1 ./bin/dimensionality
 make test
 
 cd ..
