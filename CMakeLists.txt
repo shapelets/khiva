@@ -30,8 +30,8 @@ OPTION(KHIVA_BUILD_BENCHMARKS "Build benchmarks of the Khiva library" ON)
 OPTION(KHIVA_BUILD_EXAMPLES "Build examples of the Khiva library" ON)
 OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen, GraphViz and Sphinx)" ON)
 OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependencies of the Khiva library" ON)
-OPTION(KHIVA_ENABLE_COVERAGE "This flag allows Code Coverage of the code" OFF)
-OPTION(KHIVA_ONLY_CPU_BACKEND "This flag only allows the execution on the CPU Backend of the code" OFF)
+OPTION(KHIVA_ENABLE_COVERAGE "This flag anables Code Coverage of the code" OFF)
+OPTION(KHIVA_ONLY_CPU_BACKEND "This flag limits the execution to the CPU Backend" OFF)
 
 
 IF(KHIVA_ENABLE_COVERAGE)
