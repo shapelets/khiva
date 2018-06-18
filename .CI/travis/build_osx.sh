@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export AF_PATH=/opt/arrayfire
 
 # Build the project
 mkdir -p build && cd build
