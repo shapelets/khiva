@@ -30,4 +30,4 @@ build_script:
     - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"%GENERATOR%"
     - cmake --build . --config Release
 test_script:
-    - ctest -C Release -V --output-on-failure
+    - ctest -C Release --output-on-failure
