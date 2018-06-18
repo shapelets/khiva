@@ -27,7 +27,7 @@ before_build:
 
 build_script:
     - mkdir build && cd build
-    - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"%GENERATOR%"
+    - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"%GENERATOR%"
     - cmake --build . --config Release
 test_script:
     - ctest -C Release --output-on-failure
