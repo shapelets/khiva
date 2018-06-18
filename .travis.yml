@@ -6,7 +6,6 @@ dist: trusty
 cache:
     directories:
       - ${HOME}/.conan
-      - /usr/local/Cellar
 
 matrix:
   include:
