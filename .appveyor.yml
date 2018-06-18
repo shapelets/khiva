@@ -7,17 +7,15 @@ environment:
     matrix:
         - GENERATOR: "Visual Studio 15 Win64"
         - GENERATOR: "Visual Studio 14 Win64"
-        - GENERATOR: "Visual Studio 13 Win64"
+        - GENERATOR: "Visual Studio 12 Win64"
 cache:
-    - C:\ProgramData\chocolatey\bin -> .appveyor.yml
-    - C:\ProgramData\chocolatey\lib -> .appveyor.yml
+    - C:\ProgramData\chocolatey\bin
+    - C:\ProgramData\chocolatey\lib
     - c:\tools\vcpkg\installed\
 clone_folder: C:\khiva
 platform:
     - x64
 before_build:
-    - appveyor DownloadFile "http://registrationcenter-download.intel.com/akdlm/irc_nas/12512/opencl_runtime_16.1.2_x64_setup.msi"
-    - start /wait msiexec /i opencl_runtime_16.1.2_x64_setup.msi /qn /l*v msiexec1.log
     - appveyor DownloadFile "https://www.dropbox.com/s/ndt1eaouriiu4qi/ArrayFire-v3.5.1.zip?dl=1" -FileName ArrayFire-v3.5.1.zip
     - 7z x ArrayFire-v3.5.1.zip -o"C:\Program Files"
     - reg add HKCU\Software\Kitware\CMake\Packages\ArrayFire /v ArrayFire_CMake_DIR /d "C:\Program Files\ArrayFire\v3\cmake" /f
