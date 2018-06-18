@@ -30,8 +30,4 @@ build_script:
 test_script:
     - ctest -C Release --no-compress-output --output-on-failure -T test
 on_finish:
-  - ps: |
-      # Publish/Upload the results to AppVeyor (Tests tab in UI)
-      If (Test-Path .\Testing\**\Test.xml) {
-        (New-Object System.Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\Testing\**\Test.xml))
-      }
+  - ps: If (Test-Path .\Testing\**\Test.xml) {(New-Object System.Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\Testing\**\Test.xml))}
