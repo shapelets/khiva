@@ -9,9 +9,6 @@ PROJECT(KHIVALIB)
 # Find the ArrayFire package.
 FIND_PACKAGE(ArrayFire REQUIRED)
 # Find the Boost package
-IF(WIN32)
-    SET(Boost_USE_STATIC_LIBS ON)
-ENDIF()
 FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
 
