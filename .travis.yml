@@ -53,4 +53,7 @@ matrix:
       script:
         - source .CI/travis/build_osx.sh
 
+      after_success:
+        - source .CI/travis/codecov.sh
+
 
