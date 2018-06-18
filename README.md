@@ -13,7 +13,7 @@ Khiva provides a mean for time series analytics at scale. These analytics can be
 This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 
 ## Installation
-1. Install conan, c++ package manager, preferably through `pip install conan`.  For more information and alternative instalation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html)
+1. Install conan, c++ package manager, preferably through `pip install conan`.  For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html)
 2. Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`
 3. Create `build` folder and, after moving into the new folder, run `cmake ..` 
 4. Run `make -j8 && make install`.
