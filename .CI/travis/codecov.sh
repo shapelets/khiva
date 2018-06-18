@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd build
-lcov --directory . --base-directory ../src --no-external --capture --output-file coverage.info
+lcov --directory test --base-directory ../src --no-external --capture --output-file coverage.info
 lcov --remove coverage.info '*/.conan/*' '*/usr*' '*/cl.hpp' '*/include/*' '*/bindings/*' '*/test/*' -o coverage.info
 lcov --list coverage.info
 
