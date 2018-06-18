@@ -1,10 +1,12 @@
+image:
+    - Visual Studio 2017
 environment:
-    PATH: C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
+    BOOST_ROOT: C:\Libraries\boost_1_67_0
+    AF_PATH: C:\Program Files\ArrayFire\v3
+    PATH: $(AF_PATH)\lib;C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
     matrix:
-      - GENERATOR: "Visual Studio 14 Win64"
-        os: Visual Studio 2017
-      - GENERATOR: "Visual Studio 15 Win64"
-        os: Visual Studio 2017
+#        - GENERATOR: "Visual Studio 14 Win64"
+        - GENERATOR: "Visual Studio 15 Win64"
 cache:
     - C:\ProgramData\chocolatey\bin -> .appveyor.yml
     - C:\ProgramData\chocolatey\lib -> .appveyor.yml
@@ -13,18 +15,19 @@ clone_folder: C:\khiva
 platform:
     - x64
 before_build:
-  - appveyor DownloadFile "http://registrationcenter-download.intel.com/akdlm/irc_nas/12512/opencl_runtime_16.1.2_x64_setup.msi"
-  - start /wait msiexec /i opencl_runtime_16.1.2_x64_setup.msi /qn /l*v msiexec1.log
-  - appveyor DownloadFile "https://drive.google.com/uc?authuser=0&id=1uM_QI1nrQS0MCvOt3DR96NiZQMP7n6DE&export=download" -FileName ArrayFire-no-gl-d920eae2.exe
-  - start /wait ArrayFire-no-gl-d920eae2.exe /S
-  - start /wait choco install doxygen.install
-  - start /wait choco install graphviz
-  - start /wait pip3.exe install sphinx sphinx_rtd_theme breathe cpp-coveralls
-  - vcpkg install --triplet x64-windows boost-math gtest benchmark eigen3
-  - mkdir build && cd build
+    - appveyor DownloadFile "http://registrationcenter-download.intel.com/akdlm/irc_nas/12512/opencl_runtime_16.1.2_x64_setup.msi"
+    - start /wait msiexec /i opencl_runtime_16.1.2_x64_setup.msi /qn /l*v msiexec1.log
+    - appveyor DownloadFile "https://www.dropbox.com/s/ndt1eaouriiu4qi/ArrayFire-v3.5.1.zip?dl=1" -FileName ArrayFire-v3.5.1.zip
+    - 7z x ArrayFire-v3.5.1.zip -o"C:\Program Files"
+    - reg add HKCU\Software\Kitware\CMake\Packages\ArrayFire /v ArrayFire_CMake_DIR /d "C:\Program Files\ArrayFire\v3\cmake" /f
+    - start /wait choco install doxygen.install
+    - start /wait choco install graphviz
+    - start /wait pip3.exe install sphinx sphinx_rtd_theme breathe cpp-coveralls
+    - vcpkg install --triplet x64-windows gtest benchmark eigen3
 
 build_script:
-  - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"%GENERATOR%"
-  - cmake --build . --config Release
+    - mkdir build && cd build
+    - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"%GENERATOR%"
+    - cmake --build . --config Release
 test_script:
-    - ctest -C Release --output-on-failure
+    - ctest -C Release -V --output-on-failure
