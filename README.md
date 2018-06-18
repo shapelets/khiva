@@ -2,7 +2,7 @@
 
 [![Documentation Status](https://readthedocs.org/projects/khiva/badge/?version=latest)](https://khiva.readthedocs.io/en/latest/?badge=latest)
 [![Build Status](https://travis-ci.com/shapelets/khiva.svg?branch=develop)](https://travis-ci.com/shapelets/khiva)
-[![Coverage Status](https://coveralls.io/repos/github/shapelets/khiva/badge.svg?branch=develop)](https://coveralls.io/github/shapelets/khiva?branch=develop)
+[![Coverage Status](https://codecov.io/gh/shapelets/khiva/branch/develop/graph/badge.svg)](https://codecov.io/gh/shapelets/khiva)
 
 Khiva is an open-source library of efficient algorithms to analyse time series in GPU and CPU. It can be used to extract insights from one or a group of time series. The large number of available methods allow us to understand the nature of each time series. Based on the results of this analysis, users can reduce dimensionality, find out recurrent motifs or discords, understand the seasonality or trend from a given time series, forecasting and detect anomalies.
 
