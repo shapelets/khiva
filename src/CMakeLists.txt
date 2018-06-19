@@ -38,7 +38,7 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
 # Declare compilation libraries
 TARGET_LINK_LIBRARIES(${KHIVALIB}
                       ${ArrayFire_Unified_LIBRARIES}
-					  Eigen3::Eigen
+                      Eigen3::Eigen
                       ${CMAKE_DL_LIBS})
 
 # Add compile definitions
