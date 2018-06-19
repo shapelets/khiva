@@ -11,13 +11,6 @@ dist: trusty
 cache:
     directories:
       - ${HOME}/.conan
-      - /opt/arrayfire
-      - ${TRAVIS_BUILD_DIR}/cmake
-      - /bin/
-      - /usr/bin/
-      - /sbin/
-      - /usr/sbin/
-      - /usr/local/lib/python3.4/dist-packages
 
 matrix:
   include:
