@@ -6,8 +6,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #brew update
-#brew upgrade python
-brew install --force python doxygen graphviz lcov
+brew upgrade python
+brew install --force  doxygen graphviz lcov
 
 # Installing conan
 sudo pip3 install --upgrade pip
