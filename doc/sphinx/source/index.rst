@@ -2,7 +2,7 @@
 Khiva
 =============================
 
-This is the documentation of **Khiva** library.
+This is the documentation of the **Khiva** library.
 
 Khiva [#f1]_ is an open-source library of efficient algorithms to analyse time series in GPU and CPU. It can be used to extract insights from one or a group of time series. The large number of available methods allow us to understand the nature of each time series. Based on the results of this analysis, users can reduce dimensionality, find out recurrent motifs or discords, understand the seasonality or trend from a given time series, forecasting and detect anomalies.
 
