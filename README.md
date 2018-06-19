@@ -10,7 +10,6 @@ Khiva is an open-source library of efficient algorithms to analyse time series i
 Khiva provides a mean for time series analytics at scale. These analytics can be exploited in a wide range of [use cases](https://github.com/shapelets/khiva-use-cases)  across several industries, like energy, finance, e-health, IoT, music industry, etc.
 
 ## License
-
 This project is licensed under [MPL-v2] (https://www.mozilla.org/en-US/MPL/2.0/).
 
 ## Installation
@@ -31,7 +30,6 @@ This project can be packaged to be installed in a Windows, Linux or Mac OS syste
 ## Generating documentation
 
 We use `sphinx + doxygen` to generate our documentation. You will need to install the following packages:
-
 * Sphinx: `brew install sphinx`
 * Doxygen: `brew install doxygen`
 * Read the Docs Theme: `pip install sphinx_rtd_theme`
