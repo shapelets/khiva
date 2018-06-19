@@ -8,7 +8,6 @@
 brew update
 brew upgrade python
 brew install --force doxygen graphviz lcov
-#brew link doxygen graphviz lcov python
 
 # Installing conan
 sudo pip3 install --upgrade pip
