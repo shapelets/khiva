@@ -33,11 +33,8 @@ This project can be packaged to be installed in a Windows, Linux or Mac OS syste
 We use `sphinx + doxygen` to generate our documentation. You will need to install the following packages:
 
 * Sphinx: `brew install sphinx`
-
 * Doxygen: `brew install doxygen`
-
 * Read the Docs Theme: `pip install sphinx_rtd_theme`
-
 * Breathe: `pip install breathe`
 
 ## Contributing

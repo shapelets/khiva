@@ -29,12 +29,8 @@ FILE(GLOB_RECURSE KHIVALIB_CODE
     "${KHIVALIB_SRC}/*.cpp"
     "${KHIVALIB_INC}/*.h" )
 
-IF(KHIVA_COVERAGE)
-        ADD_COMPILE_OPTIONS(-fprofile-arcs -ftest-coverage)
-ENDIF()
-
 # The output is a static library
-ADD_LIBRARY(${KHIVALIB} STATIC ${KHIVALIB_CODE} )
+ADD_LIBRARY(${KHIVALIB} STATIC ${KHIVALIB_CODE})
 
 # Declare include directories
 TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC

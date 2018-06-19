@@ -8,7 +8,7 @@ eigen/3.3.4@conan/stable
 gtest:shared=False
 gtest:build_gmock=True
 gtest:fPIC=True
-boost_atomic:shared=False
+boost:shared=True # False
 
 [generators]
 cmake
