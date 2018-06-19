@@ -28,7 +28,6 @@ This project can be packaged to be installed in a Windows, Linux or Mac OS syste
 **Notes:** Before generating the installer the project should be built. The generated package will be stored in the `build` folder.
 
 ## Generating documentation
-
 We use `sphinx + doxygen` to generate our documentation. You will need to install the following packages:
 * Sphinx: `brew install sphinx`
 * Doxygen: `brew install doxygen`
@@ -36,7 +35,6 @@ We use `sphinx + doxygen` to generate our documentation. You will need to instal
 * Breathe: `pip install breathe`
 
 ## Contributing
-
 The rules to contribute to this project are described [here](CONTRIBUTING.md)
 
 ### Builds
