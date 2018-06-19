@@ -24,7 +24,6 @@ matrix:
         - source .CI/travis/install-arrayfire_linux.sh
         - source .CI/travis/install-cmake_linux.sh
       script:
-        - cd ${TRAVIS_BUILd_DIR}
         - source .CI/travis/build_linux.sh
 
     - os: linux
@@ -37,7 +36,6 @@ matrix:
         - source .CI/travis/install-arrayfire_linux.sh
         - source .CI/travis/install-cmake_linux.sh
       script:
-        - cd ${TRAVIS_BUILd_DIR}
         - source .CI/travis/build_linux.sh
 
     - os: osx
@@ -48,7 +46,6 @@ matrix:
         - source .CI/travis/install_osx.sh
         - source .CI/travis/install-arrayfire_osx.sh
       script:
-        - cd ${TRAVIS_BUILd_DIR}
         - source .CI/travis/build_osx.sh
 
     - os: osx
@@ -59,11 +56,9 @@ matrix:
         - source .CI/travis/install_osx.sh
         - source .CI/travis/install-arrayfire_osx.sh
       script:
-        - cd ${TRAVIS_BUILd_DIR}
         - source .CI/travis/build_osx.sh
 
       after_success:
-        - cd ${TRAVIS_BUILd_DIR}
         - source .CI/travis/codecov.sh
 
 
