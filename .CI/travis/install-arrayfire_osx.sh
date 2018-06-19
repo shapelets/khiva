@@ -11,6 +11,5 @@ if [ ! -d "${TRAVIS_BUILD_DIR}/arrayfire" ]; then
     sudo mkdir /opt/arrayfire
 
     sudo installer -pkg ArrayFire-no-gl-v3.5.1_OSX.pkg -target /
-    rm ArrayFire-no-gl-v3.5.1_OSX.pkg
     cd ..
 fi

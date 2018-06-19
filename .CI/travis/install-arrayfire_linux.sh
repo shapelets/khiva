@@ -12,7 +12,5 @@ if [ ! -d "${TRAVIS_BUILD_DIR}/arrayfire" ]; then
 
     chmod +x ArrayFire-v3.5.1_Linux_x86_64.sh
     sudo ./ArrayFire-v3.5.1_Linux_x86_64.sh --prefix=/opt/arrayfire --skip-license
-
-    rm ArrayFire-v3.5.1_Linux_x86_64.sh
     cd ..
 fi
