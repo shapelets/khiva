@@ -11,11 +11,12 @@ FIND_PACKAGE(ArrayFire REQUIRED)
 # Find the Boost package
 FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
-# Compile with C++11 support.
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+# Compile with C++11 support.
+SET(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Compile using unified backend
 ADD_DEFINITIONS(-DAF_UNIFIED)
@@ -34,12 +35,22 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
                            $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
                            ${ArrayFire_INCLUDE_DIRS}
                            ${Boost_INCLUDE_DIRS})
-
-# Declare compilation libraries
-TARGET_LINK_LIBRARIES(${KHIVALIB}
-                      ${ArrayFire_Unified_LIBRARIES}
+                           
+IF(KHIVA_ONLY_CPU_BACKEND)
+    # Declare compilation libraries
+    TARGET_LINK_LIBRARIES(${KHIVALIB}
+                      ${ArrayFire_CPU_LIBRARIES}
                       Eigen3::Eigen
+                      ${Boost_LIBRARIES}
                       ${CMAKE_DL_LIBS})
+ELSE()
+    # Declare compilation libraries
+    TARGET_LINK_LIBRARIES(${KHIVALIB}
+            ${ArrayFire_Unified_LIBRARIES}
+            Eigen3::Eigen
+            ${Boost_LIBRARIES}
+            ${CMAKE_DL_LIBS})
+ENDIF()
 
 # Add compile definitions
 TARGET_COMPILE_DEFINITIONS(${KHIVALIB} PRIVATE KHIVA_STATICLIB PUBLIC AF_UNIFIED)

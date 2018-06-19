@@ -36,20 +36,22 @@ OPTION(KHIVA_BUILD_BENCHMARKS "Build benchmarks of the Khiva library" ON)
 OPTION(KHIVA_BUILD_EXAMPLES "Build examples of the Khiva library" ON)
 OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen, GraphViz and Sphinx)" ON)
 OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependencies of the Khiva library" ON)
+OPTION(KHIVA_ENABLE_COVERAGE "This flag anables Code Coverage of the code" OFF)
+OPTION(KHIVA_ONLY_CPU_BACKEND "This flag limits the execution to the CPU Backend" OFF)
+
+IF(KHIVA_ENABLE_COVERAGE AND NOT WIN32)
+    # Setting compiler flags for code coverage
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 --coverage -fprofile-arcs -ftest-coverage")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage -fprofile-arcs -ftest-coverage")
+
+    IF(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+        link_libraries(gcov)
+    ELSE()
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+    ENDIF()
+ENDIF()
 
 IF(KHIVA_USE_CONAN)
-    INCLUDE(conan)
-
-    IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-        SET(CONAN_CPPSTD 14)
-    ELSE()
-        SET(CONAN_CPPSTD 11)
-    ENDIF()
-    conan_cmake_run(CONANFILE conanfile.txt
-                    BASIC_SETUP CMAKE_TARGETS
-                    BUILD missing
-                    SETTINGS cppstd=${CONAN_CPPSTD})
-
     # Bring conan generated dependencies
     INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
     CONAN_BASIC_SETUP()
