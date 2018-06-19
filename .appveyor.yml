@@ -16,8 +16,8 @@ clone_folder: C:\khiva
 platform:
     - x64
 before_build:
-    - ps: if(!(Test-Path -Path C:\Program Files\ArrayFire )){ appveyor DownloadFile "https://www.dropbox.com/s/ndt1eaouriiu4qi/ArrayFire-v3.5.1.zip?dl=1" -FileName ArrayFire-v3.5.1.zip }
-    - ps: if(!(Test-Path -Path C:\Program Files\ArrayFire )){ 7z x ArrayFire-v3.5.1.zip -o"C:\Program Files" }
+    - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ appveyor DownloadFile "https://www.dropbox.com/s/ndt1eaouriiu4qi/ArrayFire-v3.5.1.zip?dl=1" -FileName ArrayFire-v3.5.1.zip }
+    - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ 7z x ArrayFire-v3.5.1.zip -o"C:\Program Files" }
     - reg add HKCU\Software\Kitware\CMake\Packages\ArrayFire /v ArrayFire_CMake_DIR /d "C:\Program Files\ArrayFire\v3\cmake" /f
     - start /wait choco install doxygen.install
     - start /wait choco install graphviz
