@@ -33,7 +33,6 @@ OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependenci
 OPTION(KHIVA_ENABLE_COVERAGE "This flag anables Code Coverage of the code" OFF)
 OPTION(KHIVA_ONLY_CPU_BACKEND "This flag limits the execution to the CPU Backend" OFF)
 
-
 IF(KHIVA_ENABLE_COVERAGE)
     # Seeting clompiler flags for code coverage
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 --coverage -fprofile-arcs -ftest-coverage")
