@@ -10,10 +10,10 @@ Khiva is an open-source library of efficient algorithms to analyse time series i
 Khiva provides a mean for time series analytics at scale. These analytics can be exploited in a wide range of [use cases](https://github.com/shapelets/khiva-use-cases)  across several industries, like energy, finance, e-health, IoT, music industry, etc.
 
 ## License
-This project is licensed under [MPL-v2] (https://www.mozilla.org/en-US/MPL/2.0/).
+This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 
 ## Installation
-1. Install conan, c++ package manager, preferably through `pip install conan`.  For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
+1. Install conan, c++ package manager, preferably through `pip install conan`. For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
 2. Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`.
 3. Create `build` folder and, after moving into the new folder, run `conan install .. --build missing`.
 4. Run `cmake ..`. 
