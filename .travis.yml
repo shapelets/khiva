@@ -12,7 +12,7 @@ cache:
     directories:
       - ${HOME}/.conan
       - /opt/arrayfire
-      - ${TRAVIS_BUILD_DIR}/bin
+      - ${TRAVIS_BUILD_DIR}/cmake
 
 matrix:
   include:
@@ -61,6 +61,7 @@ matrix:
         - source .CI/travis/build_osx.sh
 
       after_success:
+        - cd ${TRAVIS_BUILd_DIR}
         - source .CI/travis/codecov.sh
 
 
