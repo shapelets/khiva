@@ -10,12 +10,13 @@ PROJECT(KHIVALIB)
 FIND_PACKAGE(ArrayFire REQUIRED)
 # Find the Boost package
 FIND_PACKAGE(Boost REQUIRED)
+FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
 
 # Compile with C++11 support.
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Avoid conflicts with min and max functions
 ADD_DEFINITIONS(-DNOMINMAX)
@@ -41,11 +42,15 @@ IF(KHIVA_ONLY_CPU_BACKEND)
     # Declare compilation libraries
     TARGET_LINK_LIBRARIES(${KHIVALIB}
                       ${ArrayFire_CPU_LIBRARIES}
+                      Eigen3::Eigen
+                      ${Boost_LIBRARIES}
                       ${CMAKE_DL_LIBS})
 ELSE()
     # Declare compilation libraries
     TARGET_LINK_LIBRARIES(${KHIVALIB}
             ${ArrayFire_Unified_LIBRARIES}
+            Eigen3::Eigen
+            ${Boost_LIBRARIES}
             ${CMAKE_DL_LIBS})
 ENDIF()
 

@@ -13,10 +13,11 @@ Khiva provides a mean for time series analytics at scale. These analytics can be
 This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 
 ## Installation
-1. Install conan, c++ package manager, preferably through `pip install conan`.  For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html)
-2. Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`
-3. Create `build` folder and, after moving into the new folder, run `cmake ..` 
-4. Run `make -j8 && make install`.
+1. Install conan, c++ package manager, preferably through `pip install conan`. For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
+2. Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`.
+3. Create `build` folder and, after moving into the new folder, run `conan install .. --build missing`.
+4. Run `cmake ..`. 
+5. Run `make -j8 && make install`.
 
 ### Generating the Khiva installers
 This project can be packaged to be installed in a Windows, Linux or Mac OS system. CPack is used in order to perform this task.
@@ -33,11 +34,10 @@ We use `sphinx + doxygen` to generate our documentation. You will need to instal
 * Doxygen: `brew install doxygen`
 * Read the Docs Theme: `pip install sphinx_rtd_theme`
 * Breathe: `pip install breathe`
-* Exhale: `pip install exhale`
 
 ## Contributing
 
 The rules to contribute to this project are described [here](CONTRIBUTING.md)
 
 ### Builds
-We have a first approach to generate a build and execute the set of tests on every pull request to the **develop** branch. This process uses **travis** and **appveyor** and is currently under setup.
+We have a first approach to generate a build and execute the set of tests on every pull request to the **develop** branch. This process uses **travis** and **appveyor**. The status badges of the builds are contained at the beginning of this file.
