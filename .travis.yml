@@ -13,6 +13,11 @@ cache:
       - ${HOME}/.conan
       - /opt/arrayfire
       - ${TRAVIS_BUILD_DIR}/cmake
+      - /bin/
+      - /usr/bin/
+      - /sbin/
+      - /usr/sbin/
+      - /usr/local/lib
 
 matrix:
   include:
