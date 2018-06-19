@@ -21,7 +21,6 @@ matrix:
         - gcc
       before_install:
         - source .CI/travis/install_linux.sh
-        - source .CI/travis/install-intel_linux.sh
         - source .CI/travis/install-arrayfire_linux.sh
         - source .CI/travis/install-cmake_linux.sh
       script:
@@ -34,7 +33,6 @@ matrix:
         - clang
       before_install:
         - source .CI/travis/install_linux.sh
-        - source .CI/travis/install-intel_linux.sh
         - source .CI/travis/install-arrayfire_linux.sh
         - source .CI/travis/install-cmake_linux.sh
       script:

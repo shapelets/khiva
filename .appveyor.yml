@@ -7,7 +7,6 @@ environment:
     matrix:
         - GENERATOR: "Visual Studio 15 Win64"
         - GENERATOR: "Visual Studio 14 Win64"
-        - GENERATOR: "Visual Studio 12 Win64"
 cache:
     - C:\ProgramData\chocolatey\bin
     - C:\ProgramData\chocolatey\lib
@@ -27,6 +26,15 @@ before_build:
 build_script:
     - mkdir build && cd build
     - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"%GENERATOR%"
-    - cmake --build . --config Release
+    - cmake --build . --config Release -- /m
 test_script:
-    - ctest -C Release --output-on-failure
+    - ctest -C Release --no-compress-output --output-on-failure -T test
+on_finish:
+    - ps: |
+        $xsl = "C:\khiva\.CI\appveyor\ctest-to-junit.xsl"
+        $ctest_xml = (Resolve-Path C:\khiva\build\Testing\**\Test.xml)
+        $junit_xml = "C:\khiva\build\Testing\results-junit.xml"
+        $xslt = New-Object System.Xml.Xsl.XslCompiledTransform 
+        $xslt.Load($xsl) 
+        $xslt.Transform($ctest_xml, $junit_xml) 
+        (New-Object System.Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)","C:\khiva\build\Testing\results-junit.xml")
