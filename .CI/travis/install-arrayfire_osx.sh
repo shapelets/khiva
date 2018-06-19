@@ -8,8 +8,9 @@
 if [ ! -e "${TRAVIS_BUILD_DIR}/arrayfire/ArrayFire-no-gl-v3.5.1_OSX.pkg" ]; then
     mkdir -p arrayfire && cd arrayfire
     wget http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_OSX.pkg
-    sudo mkdir /opt/arrayfire
-
-    sudo installer -pkg ArrayFire-no-gl-v3.5.1_OSX.pkg -target /
-    cd ..
 fi
+
+sudo mkdir /opt/arrayfire
+
+sudo installer -pkg ArrayFire-no-gl-v3.5.1_OSX.pkg -target /
+cd ..
