@@ -61,6 +61,7 @@ matrix:
         - source .CI/travis/build_osx.sh
 
       after_success:
+        - cd ${TRAVIS_BUILD_DIR}
         - source .CI/travis/codecov.sh
 
 
