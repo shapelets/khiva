@@ -7,7 +7,7 @@
 
 # Build the project
 mkdir -p build && cd build
-conan install .. --build missing
+conan install .. -s compiler=apple-clang -s compiler.version=9.1 --build missing
 cmake .. -DKHIVA_ENABLE_COVERAGE=ON -DKHIVA_ONLY_CPU_BACKEND=ON -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
 make all
 make test
