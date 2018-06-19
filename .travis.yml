@@ -40,6 +40,8 @@ matrix:
 
     - os: osx
       osx_image: xcode9.3
+      env:
+        - CXX=g++
       compiler:
         - gcc
       before_install:
@@ -50,6 +52,8 @@ matrix:
 
     - os: osx
       osx_image: xcode9.3
+      env:
+        - CXX=clang++
       compiler:
         - clang
       before_install:
