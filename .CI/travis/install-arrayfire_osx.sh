@@ -5,7 +5,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-if [ ! -d "${TRAVIS_BUILD_DIR/arrayfire}" ]; then
+if [ ! -d "${TRAVIS_BUILD_DIR}/arrayfire" ]; then
     mkdir -p arrayfire && cd arrayfire
     wget http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_OSX.pkg
     sudo mkdir /opt/arrayfire
