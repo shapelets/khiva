@@ -6,12 +6,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #if [ ! -d "${TRAVIS_BUILD_DIR/cmake}" ]; then
-  mkdir -p cmake
+mkdir -p cmake
 
-  cd cmake
-  wget https://cmake.org/files/v3.11/cmake-3.11.3-Linux-x86_64.sh
-  chmod +x cmake-3.11.3-Linux-x86_64.sh
-  sudo ./cmake-3.11.3-Linux-x86_64.sh --skip-license
-  rm cmake-3.11.3-Linux-x86_64.sh
-  cd ..
+cd cmake
+wget https://cmake.org/files/v3.11/cmake-3.11.3-Linux-x86_64.sh
+chmod +x cmake-3.11.3-Linux-x86_64.sh
+sudo ./cmake-3.11.3-Linux-x86_64.sh --skip-license
+rm cmake-3.11.3-Linux-x86_64.sh
+cd ..
 #fi
