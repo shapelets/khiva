@@ -6,7 +6,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-if [ ! -d "/opt/arrayfire" ]; then
+#if [ ! -d "/opt/arrayfire" ]; then
   # Control will enter here if $DIRECTORY doesn't exist.
   wget http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-v3.5.1_Linux_x86_64.sh
   sudo mkdir /opt -p
@@ -15,5 +15,5 @@ if [ ! -d "/opt/arrayfire" ]; then
   sudo ./ArrayFire-v3.5.1_Linux_x86_64.sh --prefix=/opt --skip-license
 
   rm ArrayFire-v3.5.1_Linux_x86_64.sh
-fi
+#fi
 

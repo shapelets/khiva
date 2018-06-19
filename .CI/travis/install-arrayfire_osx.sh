@@ -5,10 +5,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-if [ ! -d "/opt/arrayfire" ]; then
+#if [ ! -d "/opt/arrayfire" ]; then
   wget http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_OSX.pkg
   sudo mkdir /opt/arrayfire
 
   sudo installer -pkg ArrayFire-no-gl-v3.5.1_OSX.pkg -target /
   rm ArrayFire-no-gl-v3.5.1_OSX.pkg
-if
+#if
