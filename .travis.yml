@@ -11,6 +11,8 @@ dist: trusty
 cache:
     directories:
       - ${HOME}/.conan
+      - ${TRAVIS_BUILD_DIR}/cmake
+      - ${TRAVIS_BUILD_DIR}/arrayfire
 
 matrix:
   include:
