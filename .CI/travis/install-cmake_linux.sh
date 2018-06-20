@@ -11,7 +11,9 @@ if [ ! -e "${TRAVIS_BUILD_DIR}/cmake/cmake-3.11.3-Linux-x86_64.sh" ]; then
     cd ..
 fi
 
-cd cmake
+mkdir cmakebin
+cp cmake/cmake-3.11.3-Linux-x86_64.sh cmakebin/cmake-3.11.3-Linux-x86_64.sh
+cd cmakebin
 chmod +x cmake-3.11.3-Linux-x86_64.sh
 sudo ./cmake-3.11.3-Linux-x86_64.sh --skip-license
 cd ..
