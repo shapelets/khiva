@@ -1,3 +1,6 @@
+# Visual Studio folders
+.vs
+
 bin
 build
 .DS_Store
