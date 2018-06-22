@@ -20,26 +20,26 @@ little bit helps, and credit will always be given.
 
 ## Formatting Style
 
-In order to have a standarised code base, we only accept code that is formatted according to the Google rules for C++ with a column width of 120 characters and an indentation of 4 whitespaces. For this purpose, we use `clang-format`, which can be installed in MacOs by executing the next command: `brew install clang-format`.
+In order to have a standardised code base, we only accept code that is formatted according to the Google rules for C++ with a column width of 120 characters and an indentation of 4 whitespaces. For this purpose, we use `clang-format`, which can be installed in MacOs by executing the next command: `brew install clang-format`.
 We use the `clang-format` plugin for the VS Code editor to format our codes. This plugin uses the `clang-format` program and the aforementioned rules under the hood.
 
 ## Branching model
 
-Our branching model has two permanent branches, **develop** and **master**. We aim at using `develop` as the main branch, where all features are merged. In this sense, we use the master branch to push the release versions of the Khiva library.
+Our branching model has one permanent branch, **master**. We aim at using `master` as the main branch, where all features are merged. In this sense, we also use the master branch to contain the release versions of the Khiva library by means of git tags.
 
 ## Contribution process
 
 In order to contribute to the code base, we follow the next process :
-1. The main branch is `develop`, every developer should pull the current status of the branch before starting to develop any new feature.
+1. The main branch is `master`, every developer should pull the current status of the branch before starting to develop any new feature.
 `git pull`
 1. Create a new branch with the following pattern "feature/[name_of_the_feature]"
 `git checkout -b feature/example_feature`
 3. Develop the new feature on the the new branch. It includes testing and documentation.
 `git commit -a -m "Bla, Bla, Bla";  git push`
-4. Open a Pull Request to merge the feature branch in to develop. Currently, a pull request has to be reviewed at least by one person.
+4. Open a Pull Request to merge the feature branch into `master`. Currently, a pull request has to be reviewed at least by one person.
 5. Finally, delete the feature branch.
-6. Move back to develop branch.
-`git checkout develop`
+6. Move back to `master` branch.
+`git checkout master`
 7. Pull the latest changes.
 `git pull`
 
