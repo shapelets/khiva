@@ -8,8 +8,6 @@ environment:
         - GENERATOR: "Visual Studio 15 Win64"
         - GENERATOR: "Visual Studio 14 Win64"
 cache:
-    - C:\ProgramData\chocolatey\bin
-    - C:\ProgramData\chocolatey\lib
     - c:\tools\vcpkg\installed\
     - C:\Program Files\ArrayFire
 clone_folder: C:\khiva
@@ -26,7 +24,7 @@ before_build:
 
 build_script:
     - mkdir build && cd build
-    - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"%GENERATOR%"
+    - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"%GENERATOR%"
     - cmake --build . --config Release -- /m
 test_script:
     - ctest -C Release --no-compress-output --output-on-failure -T test
