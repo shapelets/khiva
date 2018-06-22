@@ -7,9 +7,21 @@
 #if defined(_WIN32) || defined(_MSC_VER)
 // http://msdn.microsoft.com/en-us/library/b0084kay(v=VS.80).aspx
 // http://msdn.microsoft.com/en-us/library/3y1sfaz2%28v=VS.80%29.aspx
-#define KHIVAAPI __declspec(dllexport)
+#define DLL_EXPORT __declspec(dllexport) // Note: actually gcc seems to also supports this syntax.
+#define DLL_IMPORT __declspec(dllimport)
 #else
+#define DLL_EXPORT
+#define DLL_IMPORT
+#endif
+
+#ifdef KHIVA_STATICLIB
 #define KHIVAAPI
+#else
+#if defined(BUILDING_KHIVA_DLL)
+#  define KHIVAAPI DLL_EXPORT
+#else
+#  define KHIVAAPI DLL_IMPORT
+#endif
 #endif
 
 typedef void *khiva_array;

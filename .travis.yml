@@ -1,0 +1,67 @@
+# Copyright (c) 2018 Shapelets.io
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+language: cpp
+sudo: required
+dist: trusty
+
+cache:
+    directories:
+      - ${HOME}/.conan
+      - ${TRAVIS_BUILD_DIR}/cmake
+      - ${TRAVIS_BUILD_DIR}/arrayfire
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      compiler:
+        - gcc
+      before_install:
+        - source .CI/travis/install_linux.sh
+        - source .CI/travis/install-arrayfire_linux.sh
+        - source .CI/travis/install-cmake_linux.sh
+      script:
+        - source .CI/travis/build_linux.sh
+
+    - os: linux
+      dist: trusty
+      sudo: required
+      compiler:
+        - clang
+      before_install:
+        - source .CI/travis/install_linux.sh
+        - source .CI/travis/install-arrayfire_linux.sh
+        - source .CI/travis/install-cmake_linux.sh
+      script:
+        - source .CI/travis/build_linux.sh
+
+    - os: osx
+      osx_image: xcode9.3
+      compiler:
+        - gcc
+      before_install:
+        - source .CI/travis/install_osx.sh
+        - source .CI/travis/install-arrayfire_osx.sh
+      script:
+        - source .CI/travis/build_osx.sh
+
+    - os: osx
+      osx_image: xcode9.3
+      compiler:
+        - clang
+      before_install:
+        - source .CI/travis/install_osx.sh
+        - source .CI/travis/install-arrayfire_osx.sh
+      script:
+        - source .CI/travis/build_osx.sh
+
+      after_success:
+        - cd ${TRAVIS_BUILD_DIR}
+        - source .CI/travis/codecov.sh
+
+
