@@ -1,3 +1,6 @@
+# Visual Studio folders
+.vs
+
 bin
 build
 .DS_Store
@@ -7,3 +10,6 @@ build
 CMakeCache.txt
 include/khiva/version.h
 test/versionTest.cpp
+.idea/
+*.gcov
+*.info

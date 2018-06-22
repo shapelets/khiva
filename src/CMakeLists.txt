@@ -10,23 +10,18 @@ PROJECT(KHIVALIB)
 FIND_PACKAGE(ArrayFire REQUIRED)
 # Find the Boost package
 FIND_PACKAGE(Boost REQUIRED)
+FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
 
 # Compile with C++11 support.
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_STANDARD 11)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-# Avoid conflicts with min and max functions
-ADD_DEFINITIONS(-DNOMINMAX)
-
-# Compile using unified backend
-ADD_DEFINITIONS(-DAF_UNIFIED)
+SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Files to add to compilation
 FILE(GLOB_RECURSE KHIVALIB_CODE 
     "${KHIVALIB_SRC}/*.cpp"
-    "${KHIVALIB_INC}*.h" )
+    "${KHIVALIB_INC}/*.h" )
 
 # The output is a static library
 ADD_LIBRARY(${KHIVALIB} STATIC ${KHIVALIB_CODE})
@@ -37,11 +32,25 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
                            $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
                            ${ArrayFire_INCLUDE_DIRS}
                            ${Boost_INCLUDE_DIRS})
-
-# Declare compilation libraries
-TARGET_LINK_LIBRARIES(${KHIVALIB}
-                      ${ArrayFire_Unified_LIBRARIES}
+                           
+IF(KHIVA_ONLY_CPU_BACKEND)
+    # Declare compilation libraries
+    TARGET_LINK_LIBRARIES(${KHIVALIB}
+                      ${ArrayFire_CPU_LIBRARIES}
+                      Eigen3::Eigen
+                      ${Boost_LIBRARIES}
                       ${CMAKE_DL_LIBS})
+ELSE()
+    # Declare compilation libraries
+    TARGET_LINK_LIBRARIES(${KHIVALIB}
+            ${ArrayFire_Unified_LIBRARIES}
+            Eigen3::Eigen
+            ${Boost_LIBRARIES}
+            ${CMAKE_DL_LIBS})
+ENDIF()
+
+# Add compile definitions
+TARGET_COMPILE_DEFINITIONS(${KHIVALIB} PRIVATE KHIVA_STATICLIB PUBLIC AF_UNIFIED)
 
 # Add metadata
 SET_TARGET_PROPERTIES(${KHIVALIB} PROPERTIES 
@@ -68,7 +77,7 @@ EXPORT(EXPORT Khiva
         NAMESPACE Khiva::
         FILE cmake/KhivaTargets.cmake)
 
-INSTALL(DIRECTORY ${KHIVALIB_INC} 
+INSTALL(DIRECTORY ${KHIVALIB_INC}/ 
         DESTINATION ${KHIVA_INSTALL_INC_DIR}
         COMPONENT headers
         FILES_MATCHING

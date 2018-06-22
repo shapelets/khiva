@@ -453,7 +453,6 @@ void findBestMotifs() {
 }
 
 void findBestDiscords() {
-    af::setBackend(af::Backend::AF_BACKEND_CPU);
     double data_a[] = {11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11};
     af::array ta = af::array(12, data_a);
 
