@@ -39,7 +39,7 @@ Tools:
 Libraries: 
 
 * OpenCL library for you GPU card (`Intel <https://software.intel.com/en-us/intel-opencl/download>`_, `AMD <https://support.amd.com/en-us/download>`_, or `Nvidia <https://developer.nvidia.com/opencl>`_).
-* To run on accelerators like GPUs, `Arrayfire <https://arrayfire.com/download/>`_.
+* To run on accelerators like GPUs, `Arrayfire <https://arrayfire.com/download/>`_. Note that in order to use Arrayfire on Windows you need to `install <https://www.microsoft.com/en-in/download/details.aspx?id=48145>`_ Visual Studio 2015 (x64) runtime libraries.
 * To test the functionality provided by Khiva, `Google Test <https://github.com/google/googletest>`_.
 * To benchmark Khiva, `Google Benchmark <https://github.com/google/benchmark>`_.
 * `Boost <https://www.boost.org/users/download/>`_.
