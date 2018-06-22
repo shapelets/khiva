@@ -1,0 +1,41 @@
+image:
+    - Visual Studio 2017
+environment:
+    BOOST_ROOT: C:\Libraries\boost_1_67_0
+    AF_PATH: C:\Program Files\ArrayFire\v3
+    PATH: $(AF_PATH)\lib;C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
+    matrix:
+        - GENERATOR: "Visual Studio 15 Win64"
+        - GENERATOR: "Visual Studio 14 Win64"
+cache:
+    - C:\ProgramData\chocolatey\bin
+    - C:\ProgramData\chocolatey\lib
+    - c:\tools\vcpkg\installed\
+    - C:\Program Files\ArrayFire
+clone_folder: C:\khiva
+platform:
+    - x64
+before_build:
+    - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ appveyor DownloadFile "https://www.dropbox.com/s/ndt1eaouriiu4qi/ArrayFire-v3.5.1.zip?dl=1" -FileName ArrayFire-v3.5.1.zip }
+    - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ 7z x ArrayFire-v3.5.1.zip -o"C:\Program Files" }
+    - reg add HKCU\Software\Kitware\CMake\Packages\ArrayFire /v ArrayFire_CMake_DIR /d "C:\Program Files\ArrayFire\v3\cmake" /f
+    - start /wait choco install doxygen.install
+    - start /wait choco install graphviz
+    - start /wait pip3.exe install sphinx sphinx_rtd_theme breathe cpp-coveralls
+    - vcpkg install --triplet x64-windows gtest benchmark eigen3
+
+build_script:
+    - mkdir build && cd build
+    - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"%GENERATOR%"
+    - cmake --build . --config Release -- /m
+test_script:
+    - ctest -C Release --no-compress-output --output-on-failure -T test
+on_finish:
+    - ps: |
+        $xsl = "C:\khiva\.CI\appveyor\ctest-to-junit.xsl"
+        $ctest_xml = (Resolve-Path C:\khiva\build\Testing\**\Test.xml)
+        $junit_xml = "C:\khiva\build\Testing\results-junit.xml"
+        $xslt = New-Object System.Xml.Xsl.XslCompiledTransform 
+        $xslt.Load($xsl) 
+        $xslt.Transform($ctest_xml, $junit_xml) 
+        (New-Object System.Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)","C:\khiva\build\Testing\results-junit.xml")
