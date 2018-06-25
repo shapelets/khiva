@@ -6,12 +6,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 brew upgrade python
-brew install --force doxygen graphviz lcov
+brew install --force lcov
 
 # Installing conan
 sudo pip3 install --upgrade pip
-sudo pip3 install conan sphinx sphinx_rtd_theme breathe
+sudo pip3 install conan
 
 # Installing library dependencies with conan
 conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
-conan remote add -f boost_math https://api.bintray.com/conan/bincrafters/public-conan
