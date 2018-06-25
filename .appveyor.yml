@@ -17,14 +17,12 @@ before_build:
     - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ appveyor DownloadFile "https://www.dropbox.com/s/ndt1eaouriiu4qi/ArrayFire-v3.5.1.zip?dl=1" -FileName ArrayFire-v3.5.1.zip }
     - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ 7z x ArrayFire-v3.5.1.zip -o"C:\Program Files" }
     - reg add HKCU\Software\Kitware\CMake\Packages\ArrayFire /v ArrayFire_CMake_DIR /d "C:\Program Files\ArrayFire\v3\cmake" /f
-    - start /wait choco install doxygen.install
-    - start /wait choco install graphviz
-    - start /wait pip3.exe install sphinx sphinx_rtd_theme breathe cpp-coveralls
-    - vcpkg install --triplet x64-windows gtest benchmark eigen3
+    - start /wait pip3.exe install cpp-coveralls
+    - vcpkg install --triplet x64-windows gtest eigen3
 
 build_script:
     - mkdir build && cd build
-    - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"%GENERATOR%"
+    - cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_BENCHMARKS=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"%GENERATOR%"
     - cmake --build . --config Release -- /m
 test_script:
     - ctest -C Release --no-compress-output --output-on-failure -T test
