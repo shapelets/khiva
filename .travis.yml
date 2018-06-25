@@ -44,6 +44,12 @@ matrix:
       osx_image: xcode9.3
       compiler:
         - gcc
+      cache:
+        directories:
+          - ${HOME}/.conan
+          - ${TRAVIS_BUILD_DIR}/cmake
+          - ${TRAVIS_BUILD_DIR}/arrayfire
+          - $HOME/Library/Caches/Homebrew
       before_install:
         - source .CI/travis/install_osx.sh
         - source .CI/travis/install-arrayfire_osx.sh
@@ -54,6 +60,12 @@ matrix:
       osx_image: xcode9.3
       compiler:
         - clang
+      cache:
+        directories:
+          - ${HOME}/.conan
+          - ${TRAVIS_BUILD_DIR}/cmake
+          - ${TRAVIS_BUILD_DIR}/arrayfire
+          - $HOME/Library/Caches/Homebrew
       before_install:
         - source .CI/travis/install_osx.sh
         - source .CI/travis/install-arrayfire_osx.sh
