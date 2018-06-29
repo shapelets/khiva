@@ -1,2 +1,4 @@
+codecov:
+  branch: master
 fixes:
   - "khiva/::"
