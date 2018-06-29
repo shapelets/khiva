@@ -5,9 +5,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 cd ..
-lcov --directory src --capture --no-external --output-file coverage.info
+lcov --directory . --capture --no-external --output-file coverage.info
 lcov --remove coverage.info '*/.conan/*' '*/usr*' '*/cl.hpp' '*/include/*' '*/bindings/*' '*/test/*' -o coverage.info
 lcov --list coverage.info
 
 # Uploading report to CodeCov
-bash <(curl -s https://codecov.io/bash) -f coverage.info -X gcov || echo "Codecov did not collect coverage reports"
+bash <(curl -s https://codecov.io/bash) -f coverage.info -X gcov -p . -Z || echo "Codecov did not collect coverage reports"

@@ -41,14 +41,8 @@ OPTION(KHIVA_ONLY_CPU_BACKEND "This flag limits the execution to the CPU Backend
 
 IF(KHIVA_ENABLE_COVERAGE AND NOT WIN32)
     # Setting compiler flags for code coverage
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 --coverage -fprofile-arcs -ftest-coverage")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage -fprofile-arcs -ftest-coverage")
-
-    IF(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-        link_libraries(gcov)
-    ELSE()
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
-    ENDIF()
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
 ENDIF()
 
 IF(KHIVA_USE_CONAN)
