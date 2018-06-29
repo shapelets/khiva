@@ -57,14 +57,6 @@ af::array khiva::features::aggregatedAutocorrelation(af::array tss,
     return aggregationFunction(autocorrelations, 0);
 }
 
-af::array aggregating(af::array input, af::array (*aggregationFunction)(const af::array &, const int)) {
-    return aggregationFunction(input, -1);
-}
-
-af::array aggregating(af::array input, af::array (*aggregationFunction)(const af::array &, const dim_t)) {
-    return aggregationFunction(input, -1);
-}
-
 af::array aggregatingOnChunks(af::array input, long chunkSize,
                               af::array (*aggregationFunction)(const af::array &, const int)) {
     // Calculating the chunk size to split the input data into. The rest of dividing the input data
@@ -1160,20 +1152,6 @@ af::array hannWindow(int m, bool sym) {
         window += 0.5 * af::cos(k * fac);
     }
     return window(af::seq(0, m - 1));
-}
-
-/**
- *  @brief returns the main frequencies used in FFT.
- *
- *  @param n The n frequencies to be calculated.
- *  @param d The divisor to be applied.
- *  @return af::array The n main frequencies of FFT.
- */
-af::array rfftFreq(int n, float d) {
-    float val = 1.0f / (n * d);
-    int N = static_cast<int>(std::floor(n / 2)) + 1;
-    af::array results = af::seq(0, N - 1);
-    return results * val;
 }
 
 /**

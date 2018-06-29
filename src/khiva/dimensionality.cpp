@@ -26,17 +26,6 @@ float computeTriangleArea(khiva::dimensionality::Point a, khiva::dimensionality:
     return res;
 }
 
-std::vector<float> computeBreakpoints(int alphabet_size) {
-    std::vector<float> res(alphabet_size - 1);
-    boost::math::normal dist(0.0f, 1.0f);
-
-    for (int i = 1; i < alphabet_size; i++) {
-        float value = static_cast<float>(quantile(dist, (float)i * (1 / (float)alphabet_size)));
-        res.push_back(value);
-    }
-    return res;
-}
-
 std::vector<float> computeBreakpoints(int alphabet_size, float mean_value, float std_value) {
     std::vector<float> res;
     boost::math::normal dist(mean_value, std_value);

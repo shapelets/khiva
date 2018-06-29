@@ -67,6 +67,32 @@ void groupByDoubleKeyDoubleValueColumn() {
     }
 }
 
+void groupByMin() {
+    float data[] = {0, 1, 1, 2, 2, 3, 0, 3, 3, 1, 1, 2};
+    af::array tss = af::array(6, 2, data);
+
+    float expected[] = {0, 3, 1, 2};
+
+    float *result = khiva::regularization::groupBy(tss, af::min).host<float>();
+
+    for (int i = 0; i < 4; i++) {
+        ASSERT_EQ(result[i], expected[i]);
+    }
+}
+
+void groupByVar() {
+    float data[] = {0, 1, 1, 2, 2, 3, 0, 3, 3, 1, 1, 2};
+    af::array tss = af::array(6, 2, data);
+
+    float expected[] = {0, 0, 0, 0};
+
+    float *result = khiva::regularization::groupBy(tss, af::var).host<float>();
+
+    for (int i = 0; i < 4; i++) {
+        ASSERT_EQ(result[i], expected[i]);
+    }
+}
+
 // Testing only in the first available device
 KHIVA_TEST_BACKENDS(RegularizationTests, GroupBySingleKeyColumn, groupBySingleKeyColumn, true, true, true, false, false,
                     false)
@@ -76,3 +102,5 @@ KHIVA_TEST_BACKENDS(RegularizationTests, GroupByDoubleKeyColumn2, groupByDoubleK
                     false, false)
 KHIVA_TEST_BACKENDS(RegularizationTests, GroupByDoubleKeyDoubleValueColumn, groupByDoubleKeyDoubleValueColumn, true,
                     true, true, false, false, false)
+KHIVA_TEST_BACKENDS(RegularizationTests, GroupByMin, groupByMin, true, true, true, false, false, false)
+KHIVA_TEST_BACKENDS(RegularizationTests, GroupByVar, groupByVar, true, true, true, false, false, false)
