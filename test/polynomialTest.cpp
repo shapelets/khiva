@@ -58,6 +58,6 @@ void roots() {
 }
 
 // Not testing in CPU because the static linking of OpenMP that Arrayfire does makes the test crash
-KHIVA_TEST_BACKENDS(PolynomialTests, Polyfit1, polyfit1, true, true, false, true, true, false)
-KHIVA_TEST_BACKENDS(PolynomialTests, Polyfit3, polyfit3, true, true, false, true, true, false)
-KHIVA_TEST_BACKENDS(PolynomialTests, Roots, roots, true, true, false, true, true, false)
+KHIVA_TEST(PolynomialTests, Polyfit1, polyfit1)
+KHIVA_TEST(PolynomialTests, Polyfit3, polyfit3)
+KHIVA_TEST(PolynomialTests, Roots, roots)
