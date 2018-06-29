@@ -32,7 +32,7 @@ void polyfit3() {
     float expected[] = {0.08703704f, -0.81349206f, 1.69312169f, -0.03968254f};
 
     for (int i = 0; i < 4; i++) {
-        ASSERT_NEAR(calculated[i], expected[i], EPSILON * 3);
+        ASSERT_NEAR(calculated[i], expected[i], EPSILON * 1e2f);
     }
 }
 
