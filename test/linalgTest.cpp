@@ -61,6 +61,6 @@ void llsMoreVariables() {
 }
 
 // Not testing in CPU because the static linking of OpenMP that Arrayfire does makes the test crash
-KHIVA_TEST_BACKENDS(LinAlgTests, Lls, lls, true, true, false, true, true, false)
-KHIVA_TEST_BACKENDS(LinAlgTests, LlsMoreEquations, llsMoreEquations, true, true, false, true, true, false)
-KHIVA_TEST_BACKENDS(LinAlgTests, LlsMoreVariables, llsMoreVariables, true, true, false, true, true, false)
+KHIVA_TEST(LinAlgTests, Lls, lls)
+KHIVA_TEST(LinAlgTests, LlsMoreEquations, llsMoreEquations)
+KHIVA_TEST(LinAlgTests, LlsMoreVariables, llsMoreVariables)
