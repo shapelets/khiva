@@ -293,6 +293,27 @@ void stompIgnoreTrivialOneSeries() {
     }
 }
 
+void stompIgnoreTrivialOneBigSeries() {
+    af::array tss = af::randn(5000);
+
+    long m = 500;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(tss, m, distance, index);
+
+    ASSERT_EQ(distance.dims(), af::dim4(4501, 1, 1, 1));
+    ASSERT_EQ(index.dims(), af::dim4(4501, 1, 1, 1));
+
+    unsigned int resultingIndex[4501];
+    index.host(&resultingIndex);
+
+    for (int i = 0; i < 4501; i++) {
+        ASSERT_NE(resultingIndex[i], i);
+    }
+}
+
 void stompIgnoreTrivialMultipleSeries() {
     float data[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 11, 10, 11, 10, 10,
                     11, 10, 10, 11, 10, 11, 11, 10, 11, 11, 10, 10, 11, 10};
@@ -341,6 +362,27 @@ void stompConsiderTrivialOneSeries() {
     for (int i = 0; i < 6; i++) {
         ASSERT_NEAR(resultingDistance[i], 0.0, 1e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
+    }
+}
+
+void stompConsiderTrivialOneBigSeries() {
+    af::array tss = af::randn(5000);
+
+    long m = 500;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(tss(af::seq(1000)), tss, m, distance, index);
+
+    ASSERT_EQ(distance.dims(), af::dim4(4501, 1, 1, 1));
+    ASSERT_EQ(index.dims(), af::dim4(4501, 1, 1, 1));
+
+    unsigned int resultingIndex[4501];
+    index.host(&resultingIndex);
+
+    for (int i = 0; i < 501; i++) {
+        ASSERT_EQ(resultingIndex[i], i);
     }
 }
 
@@ -487,8 +529,10 @@ KHIVA_TEST(MatrixTests, CalculateDistanceProfileMiddle, calculateDistanceProfile
 KHIVA_TEST(MatrixTests, MassIgnoreTrivial, massIgnoreTrivial)
 KHIVA_TEST(MatrixTests, MassConsiderTrivial, massConsiderTrivial)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialOneSeries, stompIgnoreTrivialOneSeries)
+KHIVA_TEST(MatrixTests, StompIgnoreTrivialOneBigSeries, stompIgnoreTrivialOneBigSeries)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialMultipleSeries, stompIgnoreTrivialMultipleSeries)
 KHIVA_TEST(MatrixTests, StompConsiderTrivialOneSeries, stompConsiderTrivialOneSeries)
+KHIVA_TEST(MatrixTests, StompConsiderTrivialOneBigSeries, stompConsiderTrivialOneBigSeries)
 KHIVA_TEST(MatrixTests, StompConsiderTrivialOneSeries2, stompConsiderTrivialOneSeries2)
 KHIVA_TEST(MatrixTests, StompConsiderTrivialMultipleSeries, stompConsiderTrivialMultipleSeries)
 KHIVA_TEST(MatrixTests, StompConsiderTrivialMultipleSeriesBigM, stompConsiderTrivialMultipleSeriesBigM)

@@ -60,7 +60,6 @@ void llsMoreVariables() {
     ASSERT_NEAR(calculated[2], expected[2], EPSILON);
 }
 
-// Not testing in CPU because the static linking of OpenMP that Arrayfire does makes the test crash
 KHIVA_TEST(LinAlgTests, Lls, lls)
 KHIVA_TEST(LinAlgTests, LlsMoreEquations, llsMoreEquations)
 KHIVA_TEST(LinAlgTests, LlsMoreVariables, llsMoreVariables)

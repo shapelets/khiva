@@ -8,7 +8,8 @@
 #include <khiva/library.h>
 #include "khivaTest.h"
 
-// Simple test, does not use gmock
+void backendInfoTest() { khiva::library::backendInfo(); }
+
 void setBackendTest() {
     int backends = af::getAvailableBackends();
     bool cuda = backends & af::Backend::AF_BACKEND_CUDA;
@@ -98,6 +99,7 @@ void getDeviceCountTest() {
     }
 }
 
+KHIVA_TEST(LibraryTests, BackendInfoTest, backendInfoTest)
 KHIVA_TEST(LibraryTests, SetBackendTest, setBackendTest)
 KHIVA_TEST(LibraryTests, GetBackendTest, getBackendTest)
 KHIVA_TEST(LibraryTests, GetBackendsTest, getBackendsTest)

@@ -416,7 +416,7 @@ void countAboveMean() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
     af::array tss(6, 2, data);
 
-    af::array countAboveMeanResult = khiva::features::countBelowMean(tss);
+    af::array countAboveMeanResult = khiva::features::countAboveMean(tss);
 
     unsigned int *countAboveMeanCalculated = countAboveMeanResult.host<unsigned int>();
 
@@ -1177,7 +1177,7 @@ KHIVA_TEST(FeaturesTests, FftAggregated, fftAggregated)
 KHIVA_TEST(FeaturesTests, FftCoefficient, fftCoefficient)
 KHIVA_TEST(FeaturesTests, FirstLocationOfMaximum, firstLocationOfMaximum)
 KHIVA_TEST(FeaturesTests, FirstLocationOfMinimum, firstLocationOfMinimum)
-KHIVA_TEST_BACKENDS(FeaturesTests, FriedrichCoefficients, friedrichCoefficients, true, true, false, false, false, false)
+KHIVA_TEST(FeaturesTests, FriedrichCoefficients, friedrichCoefficients)
 KHIVA_TEST(FeaturesTests, HasDuplicates, hasDuplicates)
 KHIVA_TEST(FeaturesTests, HasDuplicateMax, hasDuplicateMax)
 KHIVA_TEST(FeaturesTests, HasDuplicateMin, hasDuplicateMin)
@@ -1190,7 +1190,7 @@ KHIVA_TEST(FeaturesTests, Length, length)
 KHIVA_TEST(FeaturesTests, LinearTrend, linearTrend)
 KHIVA_TEST(FeaturesTests, LongestStrikeAboveMean, longestStrikeAboveMean)
 KHIVA_TEST(FeaturesTests, LongestStrikeBelowMean, longestStrikeBelowMean)
-KHIVA_TEST_BACKENDS(FeaturesTests, MaxLangevinFixedPoint, maxLangevinFixedPoint, true, true, false, false, false, false)
+KHIVA_TEST(FeaturesTests, MaxLangevinFixedPoint, maxLangevinFixedPoint)
 KHIVA_TEST(FeaturesTests, Maximum, maximum)
 KHIVA_TEST(FeaturesTests, Mean, mean)
 KHIVA_TEST(FeaturesTests, MeanAbsoluteChange, meanAbsoluteChange)
