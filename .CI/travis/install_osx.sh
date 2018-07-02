@@ -5,16 +5,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-brew update
-
-# Forcing Python 3.6.5_1. Pip packages using cython do not compile with 3.7.0.
-cd /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core
-ls -lah .
-git checkout f2a764e -- ./Formula/python.rb
-brew upgrade python
-git reset HEAD ./Formula/python.rb
-git checkout -- ./Formula/python.rb
-cd $OLDPWD
+brew upgrade pyenv
+export PATH=$HOME/.pyenv/shims:$HOME/.pyenv/versions/${TRAVIS_PYTHON_VERSION}/bin:$PATH
+pyenv install 3.6.5 -s
+pyenv init -
+pyenv local 3.6.5
 
 brew install --force lcov
 
