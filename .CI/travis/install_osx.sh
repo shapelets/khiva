@@ -6,7 +6,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 # Forcing Python 3.6.5_1. Pip packages using cython do not compile with 3.7.0.
-cd "$(brew --repo homebrew/core)"
+cd /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core
+ls -lah .
 git checkout f2a764e -- ./Formula/python.rb
 brew upgrade python
 git reset HEAD ./Formula/python.rb
