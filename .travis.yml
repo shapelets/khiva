@@ -49,6 +49,7 @@ matrix:
           - ${HOME}/.conan
           - ${TRAVIS_BUILD_DIR}/cmake
           - ${TRAVIS_BUILD_DIR}/arrayfire
+          - $HOME/.pyenv
           - $HOME/Library/Caches/Homebrew
       before_install:
         - source .CI/travis/install_osx.sh
@@ -65,6 +66,7 @@ matrix:
           - ${HOME}/.conan
           - ${TRAVIS_BUILD_DIR}/cmake
           - ${TRAVIS_BUILD_DIR}/arrayfire
+          - $HOME/.pyenv
           - $HOME/Library/Caches/Homebrew
       before_install:
         - source .CI/travis/install_osx.sh
