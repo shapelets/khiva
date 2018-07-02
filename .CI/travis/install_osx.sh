@@ -7,9 +7,10 @@
 
 # Forcing Python 3.6.5_1. Pip packages using cython do not compile with 3.7.0.
 cd "$(brew --repo homebrew/core)"
-git checkout f2a764e Formula/python.rb
+git checkout f2a764e -- ./Formula/python.rb
 brew upgrade python
-git checkout -- Formula/python.rb
+git reset HEAD ./Formula/python.rb
+git checkout -- ./Formula/python.rb
 cd $OLDPWD
 
 brew install --force lcov
