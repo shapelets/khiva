@@ -249,7 +249,7 @@ JNIEXPORT void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jo
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
 
-    khiva::array::deleteArray((void *)&ref);
+    khiva::array::deleteArray((void *)ref);
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_add(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
