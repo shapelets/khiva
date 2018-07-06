@@ -20,9 +20,11 @@ typedef enum {
 typedef khiva_backend Backend;
 
 /**
- * @brief Get the backend info.
+ * @brief Get information from the active backend.
+ *
+ * @return std::string The information of the backend.
  */
-void backendInfo();
+std::string backendInfo();
 
 /**
  * @brief Set the backend.

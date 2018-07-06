@@ -10,6 +10,6 @@
 #include "khivaTest.h"
 
 // Simple test, does not use gmock
-void versionTest() { ASSERT_STREQ(khiva::version(), "@VERSION_SHORT@"); }
+void versionTest() { ASSERT_STREQ(khiva::version().c_str(), "@VERSION_SHORT@"); }
 
 KHIVA_TEST(VersionTest, VersionTest, versionTest)

@@ -11,9 +11,9 @@ extern "C" {
 #endif
 
 /**
- * @brief JNI interface to get the devices info.
+ * @brief JNI interface to get information from the active backend.
  */
-JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_info(JNIEnv *, jobject);
+JNIEXPORT jstring JNICALL Java_io_shapelets_khiva_Library_backendInfo(JNIEnv * env, jobject);
 
 /**
  * @brief JNI interface to set the backend.
@@ -62,7 +62,7 @@ JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, j
  *
  * @return A byte array with the current version of the library.
  */
-JNIEXPORT jbyteArray JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject);
+JNIEXPORT jstring JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject);
 
 #ifdef __cplusplus
 }

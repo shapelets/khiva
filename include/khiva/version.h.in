@@ -6,16 +6,23 @@
 
 #pragma once
 
-#define VERSION_MAJOR "@VERSION_MAJOR@";
-#define VERSION_MINOR "@VERSION_MINOR@";
-#define VERSION_PATCH "@VERSION_PATCH@";
-#define VERSION_SHA1 "@VERSION_SHA1@";
-#define VERSION "@VERSION_SHORT@";
+#include <string>
+
+constexpr char versionMajor[] = "@VERSION_MAJOR@";
+constexpr char versionMinor[] = "@VERSION_MINOR@";
+constexpr char versionPatch[] = "@VERSION_PATCH@";
+constexpr char versionSha1[]  = "@VERSION_SHA1@";
+constexpr char versionShort[] = "@VERSION_SHORT@";
 
 #define BUILD_TYPE "@CMAKE_BUILD_TYPE@";
 
 namespace khiva {
 
-const char *version();
+/**
+ * @brief Returns the version of Khiva Library.
+ *
+ * @return std::string A string containing the version number of Khiva library.
+ */
+std::string version();
 
 } // namespace khiva

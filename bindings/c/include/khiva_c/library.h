@@ -11,47 +11,47 @@ extern "C" {
 #endif
 
 /**
- * @brief Get the devices info.
+ * @brief Gets information from the active backend.
  */
-KHIVAAPI void info();
+KHIVAAPI void backend_info(char **info);
 
 /**
- * @brief Set the backend.
+ * @brief Sets the backend.
  *
  * @param backend The desired backend.
  */
 KHIVAAPI void set_backend(int *backend);
 
 /**
- * @brief Get the active backend.
+ * @brief Gets the active backend.
  *
  * @param backend The active backend.
  */
 KHIVAAPI void get_backend(int *backend);
 
 /**
- * @brief Get the available backends.
+ * @brief Gets the available backends.
  *
  * @param backends The available backends.
  */
 KHIVAAPI void get_backends(int *backends);
 
 /**
- * @brief Set the device.
+ * @brief Sets the device.
  *
  * @param device The desired device.
  */
 KHIVAAPI void set_device(int *device);
 
 /**
- * @brief Get the active device.
+ * @brief Gets the active device.
  *
  * @param device The active device.
  */
 KHIVAAPI void get_device_id(int *device_id);
 
 /**
- * @brief Get the devices count.
+ * @brief Gets the devices count.
  *
  * @param device_count The devices count.
  */

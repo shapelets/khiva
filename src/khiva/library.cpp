@@ -6,9 +6,8 @@
 
 #include <arrayfire.h>
 #include <khiva/library.h>
-#include <iostream>
 
-void khiva::library::backendInfo() { std::cout << std::string(af::infoString()) << std::endl; }
+std::string khiva::library::backendInfo() { return std::string(af::infoString()); }
 
 void khiva::library::setBackend(khiva::library::Backend be) { af::setBackend(static_cast<af::Backend>(be)); }
 
