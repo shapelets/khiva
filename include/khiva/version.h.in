@@ -13,8 +13,7 @@ constexpr char versionMinor[] = "@VERSION_MINOR@";
 constexpr char versionPatch[] = "@VERSION_PATCH@";
 constexpr char versionSha1[]  = "@VERSION_SHA1@";
 constexpr char versionShort[] = "@VERSION_SHORT@";
-
-#define BUILD_TYPE "@CMAKE_BUILD_TYPE@";
+constexpr char buildType[]    = "@CMAKE_BUILD_TYPE@";
 
 namespace khiva {
 
