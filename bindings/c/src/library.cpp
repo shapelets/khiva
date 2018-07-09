@@ -7,13 +7,12 @@
 #include <khiva/library.h>
 #include <khiva/version.h>
 #include <khiva_c/library.h>
-#include <cstring>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-KHIVAAPI void info() { khiva::library::backendInfo(); }
+KHIVAAPI void backend_info(char **info) { strcpy(*info, khiva::library::backendInfo().c_str()); }
 
 KHIVAAPI void set_backend(int *backend) { khiva::library::setBackend(static_cast<khiva::library::Backend>(*backend)); }
 
@@ -27,7 +26,7 @@ KHIVAAPI void get_device_id(int *device_id) { *device_id = khiva::library::getDe
 
 KHIVAAPI void get_device_count(int *device_count) { *device_count = khiva::library::getDeviceCount(); }
 
-KHIVAAPI void version(char **v) { strcpy(*v, khiva::version()); }
+KHIVAAPI void version(char **v) { strcpy(*v, khiva::version().c_str()); }
 
 #ifdef __cplusplus
 }

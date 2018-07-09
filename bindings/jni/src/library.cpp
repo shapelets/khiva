@@ -7,13 +7,14 @@
 #include <khiva/library.h>
 #include <khiva/version.h>
 #include <khiva_jni/library.h>
-#include <cstring>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_info(JNIEnv *, jobject) { khiva::library::backendInfo(); }
+JNIEXPORT jstring JNICALL Java_io_shapelets_khiva_Library_backendInfo(JNIEnv * env, jobject) {
+    return env->NewStringUTF(khiva::library::backendInfo().c_str());
+}
 
 JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_setBackend(JNIEnv *, jobject, jint backend) {
     khiva::library::setBackend(static_cast<khiva::library::Backend>(backend));
@@ -39,13 +40,8 @@ JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, j
     return khiva::library::getDeviceCount();
 }
 
-JNIEXPORT jbyteArray JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject) {
-    const char *v = khiva::version();
-    jsize l = static_cast<jsize>(strlen(v));
-    jbyteArray result = env->NewByteArray(l);
-    env->SetByteArrayRegion(result, 0, l, (jbyte *)v);
-
-    return result;
+JNIEXPORT jstring JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject) {
+    return env->NewStringUTF(khiva::version().c_str());
 }
 
 #ifdef __cplusplus

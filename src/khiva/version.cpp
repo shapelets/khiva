@@ -6,4 +6,4 @@
 
 #include <khiva/version.h>
 
-const char *khiva::version() { return VERSION; }
+std::string khiva::version() { return versionShort; }
