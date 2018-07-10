@@ -7,6 +7,7 @@
 #include <khiva/library.h>
 #include <khiva/version.h>
 #include <khiva_c/library.h>
+#include <cstring>
 
 #ifdef __cplusplus
 extern "C" {
