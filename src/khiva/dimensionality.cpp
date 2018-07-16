@@ -167,7 +167,6 @@ af::array khiva::dimensionality::PAA(af::array a, int bins) {
         throw std::invalid_argument("Invalid dims");
     }
     dim_t n = a.dims(0);
-    int end = static_cast<int>(n - 1);
     dim_t elem_row = n / bins;
     af::array b = af::moddims(a, elem_row, bins, a.dims(1));
     af::array addition = af::sum(b, 0);
