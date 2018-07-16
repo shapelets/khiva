@@ -166,6 +166,9 @@ af::array khiva::dimensionality::PAA(af::array a, int bins) {
     if (a.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims");
     }
+    if (a.dims(0) % bins != 0) {
+        throw std::invalid_argument("The number of important points should be a factor of the total number of points.");
+    }
     dim_t n = a.dims(0);
     dim_t elem_row = n / bins;
     af::array b = af::moddims(a, elem_row, bins, a.dims(1));
@@ -178,9 +181,6 @@ af::array khiva::dimensionality::PAA(af::array a, int bins) {
 af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
     if (ts.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims");
-    }
-    if (ts.dims(0) % numberIPs != 0) {
-        throw std::invalid_argument("The number of important points should be a factor of the total number of points.");
     }
     dim_t n = ts.dims(0);
     int end = static_cast<int>(n - 1);

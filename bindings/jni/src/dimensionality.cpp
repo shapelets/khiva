@@ -30,7 +30,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *
         af_retain_array(&af_p, khiva::dimensionality::PAA(var, bins).get());
     } catch (std::invalid_argument &ia) {
         char const *message =
-            "PAA invalid argument. Khiva array with two columns expected (x axis and y axis). PAA algorithm not "
+            "PAA invalid argument. Khiva array with two columns expected (x axis and y axis). The number of important "
+            "points should be a factor of the total number of points. PAA algorithm not "
             "applied.";
         env->ThrowNew(exClass, message);
     }
@@ -61,8 +62,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *
         af_retain_array(&af_p, khiva::dimensionality::PIP(var, numberIPs).get());
     } catch (std::invalid_argument &ia) {
         char const *message =
-            "PIP invalid argument. Khiva array with two columns expected (x axis and y axis). The number of important "
-            "points should be a factor of the total number of points. PIP algorithm not applied.";
+            "PIP invalid argument. Khiva array with two columns expected (x axis and y axis). PIP algorithm not "
+            "applied.";
         env->ThrowNew(exClass, message);
     }
 
