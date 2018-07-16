@@ -15,43 +15,85 @@ extern "C" {
 KHIVAAPI void paa(khiva_array *a, int *bins, khiva_array *result) {
     af::array var = af::array(*a);
     af_retain_array(a, var.get());
-    af_retain_array(result, khiva::dimensionality::PAA(var, *bins).get());
+    try {
+        af_retain_array(result, khiva::dimensionality::PAA(var, *bins).get());
+    } catch (std::invalid_argument &ia) {
+        std::cerr << "PAA invalid argument: " << ia.what() << std::endl;
+        std::cerr << "PAA algorithm not applied." << std::endl;
+        exit(-1);
+    }
 }
 
 KHIVAAPI void pip(khiva_array *a, int *number_ips, khiva_array *result) {
     af::array var = af::array(*a);
     af_retain_array(a, var.get());
-    af_retain_array(result, khiva::dimensionality::PIP(var, *number_ips).get());
+    try {
+        af_retain_array(result, khiva::dimensionality::PIP(var, *number_ips).get());
+    } catch (std::invalid_argument &ia) {
+        std::cerr << "PIP invalid argument: " << ia.what() << std::endl;
+        std::cerr << "No PIP algorithm applied" << std::endl;
+        exit(-1);
+    }
 }
 
 KHIVAAPI void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *result) {
     af::array var = af::array(*ts);
     af_retain_array(ts, var.get());
-    af_retain_array(result, khiva::dimensionality::PLABottomUp(var, *max_error).get());
+    try {
+        af_retain_array(result, khiva::dimensionality::PLABottomUp(var, *max_error).get());
+    } catch (std::invalid_argument &ia) {
+        std::cerr << "PLABottomUp Invalid argument: " << ia.what() << std::endl;
+        std::cerr << "No PLABottomUp Algorithm applied" << std::endl;
+        exit(-1);
+    }
 }
 
 KHIVAAPI void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array *result) {
     af::array var = af::array(*ts);
     af_retain_array(ts, var.get());
-    af_retain_array(result, khiva::dimensionality::PLASlidingWindow(var, *max_error).get());
+    try {
+        af_retain_array(result, khiva::dimensionality::PLASlidingWindow(var, *max_error).get());
+    } catch (std::invalid_argument &ia) {
+        std::cerr << "PLASlidingWindow Invalid argument: " << ia.what() << std::endl;
+        std::cerr << "No PLASlidingWindow algorithm applied" << std::endl;
+        exit(-1);
+    }
 }
 
 KHIVAAPI void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_array *res_points) {
     af::array var = af::array(*points);
     af_retain_array(points, var.get());
-    af_retain_array(res_points, khiva::dimensionality::ramerDouglasPeucker(var, *epsilon).get());
+    try {
+        af_retain_array(res_points, khiva::dimensionality::ramerDouglasPeucker(var, *epsilon).get());
+    } catch (std::invalid_argument &ia) {
+        std::cerr << "ramerDouglasPacker invalid argument: " << ia.what() << std::endl;
+        std::cerr << "No ramerDouglasPacker algorithm applied" << std::endl;
+        exit(-1);
+    }
 }
 
 KHIVAAPI void sax(khiva_array *a, int *alphabet_size, khiva_array *result) {
     af::array var = af::array(*a);
     af_retain_array(a, var.get());
-    af_retain_array(result, khiva::dimensionality::SAX(var, *alphabet_size).get());
+    try {
+        af_retain_array(result, khiva::dimensionality::SAX(var, *alphabet_size).get());
+    } catch (std::invalid_argument &ia) {
+        std::cerr << "SAX invalid argument: " << ia.what() << std::endl;
+        std::cerr << "No SAX algorithm applied" << std::endl;
+        exit(-1);
+    }
 }
 
 KHIVAAPI void visvalingam(khiva_array *points, int *num_points, khiva_array *res_points) {
     af::array var = af::array(*points);
     af_retain_array(points, var.get());
-    af_retain_array(res_points, khiva::dimensionality::visvalingam(var, *num_points).get());
+    try {
+        af_retain_array(res_points, khiva::dimensionality::visvalingam(var, *num_points).get());
+    } catch (std::invalid_argument &ia) {
+        std::cerr << "Visvalingam invalid argument: " << ia.what() << std::endl;
+        std::cerr << "No Visvalingam algorithm applied" << std::endl;
+        exit(-1);
+    }
 }
 
 #ifdef __cplusplus
