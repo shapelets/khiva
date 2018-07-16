@@ -18,14 +18,16 @@ extern "C" {
  * @param The matrix profile index containing the index of the most similar
  * subsequence
  * @param length_profile Length of the matrix profile
+ * @param m Subsequence length value used to calculate the input matrix profile.
  * @param n Number of discords to extract
  * @param discord_distances The distance of the best N discords
  * @param discord_indices The indices of the best N discords
  * @param subsequence_indices The indices of the query sequences that produced
  * the "N" bigger discords.
  */
-KHIVAAPI void find_best_n_discords(khiva_array *profile, khiva_array *index, long *n, khiva_array *discord_distances,
-                                   khiva_array *discord_indices, khiva_array *subsequence_indices);
+KHIVAAPI void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n,
+                                   khiva_array *discord_distances, khiva_array *discord_indices,
+                                   khiva_array *subsequence_indices);
 
 /**
  * @brief Primitive of the findBestNMotifs function.
@@ -34,14 +36,16 @@ KHIVAAPI void find_best_n_discords(khiva_array *profile, khiva_array *index, lon
  * subsequence.
  * @param index The matrix profile index containing where each minimum occurs.
  * @param length_profile Length of the matrix profile.
+ * @param m Subsequence length value used to calculate the input matrix profile.
  * @param n Number of motifs to extract.
  * @param motif_distances The distance of the best N motifs.
  * @param motif_indices The indices of the best N motifs.
  * @param subsequence_indices The indices of the query sequences that produced
  * the minimum reported in the motifs.
  */
-KHIVAAPI void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *n, khiva_array *motif_distances,
-                                 khiva_array *motif_indices, khiva_array *subsequence_indices);
+KHIVAAPI void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n,
+                                 khiva_array *motif_distances, khiva_array *motif_indices,
+                                 khiva_array *subsequence_indices);
 
 /**
  * @brief  Primitive of the STOMP algorithm.

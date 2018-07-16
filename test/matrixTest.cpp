@@ -482,7 +482,7 @@ void findBestMotifs() {
     af::array motifsIndices;
     af::array subsequenceIndices;
 
-    khiva::matrix::findBestNMotifs(distance, index, 2, motifs, motifsIndices, subsequenceIndices);
+    khiva::matrix::findBestNMotifs(distance, index, 3, 2, motifs, motifsIndices, subsequenceIndices);
 
     unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
@@ -492,6 +492,49 @@ void findBestMotifs() {
 
     ASSERT_EQ(subsequenceIndicesHost[0], 1);
     ASSERT_EQ(subsequenceIndicesHost[1], 0);
+}
+
+void findBestMotifsMultipleProfiles() {
+    float data_a[] = {10, 10, 10, 10, 10, 10, 9, 10, 10, 10, 10, 10, 11, 10, 9,
+                      10, 10, 10, 10, 10, 10, 9, 10, 10, 10, 10, 10, 11, 10, 9};
+    af::array ta = af::array(15, 2, data_a);
+
+    float data_b[] = {10, 11, 10, 9, 10, 11, 10, 9};
+    af::array tb = af::array(4, 2, data_b);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, tb, m, distance, index);
+
+    af::array motifs;
+    af::array motifsIndices;
+    af::array subsequenceIndices;
+
+    khiva::matrix::findBestNMotifs(distance, index, 3, 2, motifs, motifsIndices, subsequenceIndices);
+
+    unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
+    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+
+    ASSERT_EQ(motifsIndicesHost[0], 12);
+    ASSERT_EQ(motifsIndicesHost[1], 11);
+    ASSERT_EQ(motifsIndicesHost[2], 12);
+    ASSERT_EQ(motifsIndicesHost[3], 11);
+    ASSERT_EQ(motifsIndicesHost[4], 12);
+    ASSERT_EQ(motifsIndicesHost[5], 11);
+    ASSERT_EQ(motifsIndicesHost[6], 12);
+    ASSERT_EQ(motifsIndicesHost[7], 11);
+
+    ASSERT_EQ(subsequenceIndicesHost[0], 1);
+    ASSERT_EQ(subsequenceIndicesHost[1], 0);
+    ASSERT_EQ(subsequenceIndicesHost[2], 1);
+    ASSERT_EQ(subsequenceIndicesHost[3], 0);
+    ASSERT_EQ(subsequenceIndicesHost[4], 1);
+    ASSERT_EQ(subsequenceIndicesHost[5], 0);
+    ASSERT_EQ(subsequenceIndicesHost[6], 1);
+    ASSERT_EQ(subsequenceIndicesHost[7], 0);
 }
 
 void findBestDiscords() {
@@ -512,12 +555,44 @@ void findBestDiscords() {
     af::array discordsIndices;
     af::array subsequenceIndices;
 
-    khiva::matrix::findBestNDiscords(distance, index, 2, discords, discordsIndices, subsequenceIndices);
+    khiva::matrix::findBestNDiscords(distance, index, 3, 2, discords, discordsIndices, subsequenceIndices);
 
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
     ASSERT_EQ(subsequenceIndicesHost[0], 0);
     ASSERT_EQ(subsequenceIndicesHost[1], 9);
+}
+
+void findBestDiscordsMultipleProfiles() {
+    double data_a[] = {11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11};
+    af::array ta = af::array(12, 2, data_a);
+
+    double data_b[] = {9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 9};
+    af::array tb = af::array(12, 2, data_b);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, tb, m, distance, index);
+
+    af::array discords;
+    af::array discordsIndices;
+    af::array subsequenceIndices;
+
+    khiva::matrix::findBestNDiscords(distance, index, 3, 2, discords, discordsIndices, subsequenceIndices);
+
+    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+
+    ASSERT_EQ(subsequenceIndicesHost[0], 0);
+    ASSERT_EQ(subsequenceIndicesHost[1], 9);
+    ASSERT_EQ(subsequenceIndicesHost[2], 0);
+    ASSERT_EQ(subsequenceIndicesHost[3], 9);
+    ASSERT_EQ(subsequenceIndicesHost[4], 0);
+    ASSERT_EQ(subsequenceIndicesHost[5], 9);
+    ASSERT_EQ(subsequenceIndicesHost[6], 0);
+    ASSERT_EQ(subsequenceIndicesHost[7], 9);
 }
 
 KHIVA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct)
@@ -537,4 +612,6 @@ KHIVA_TEST(MatrixTests, StompConsiderTrivialOneSeries2, stompConsiderTrivialOneS
 KHIVA_TEST(MatrixTests, StompConsiderTrivialMultipleSeries, stompConsiderTrivialMultipleSeries)
 KHIVA_TEST(MatrixTests, StompConsiderTrivialMultipleSeriesBigM, stompConsiderTrivialMultipleSeriesBigM)
 KHIVA_TEST(MatrixTests, FindBestMotifs, findBestMotifs)
+KHIVA_TEST(MatrixTests, FindBestMotifsMultipleProfiles, findBestMotifsMultipleProfiles)
 KHIVA_TEST(MatrixTests, FindBestDiscords, findBestDiscords)
+KHIVA_TEST(MatrixTests, FindBestDiscordsMultipleProfiles, findBestDiscordsMultipleProfiles)

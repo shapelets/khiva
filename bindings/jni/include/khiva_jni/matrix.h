@@ -16,6 +16,7 @@ extern "C" {
  * @param ref_profile The matrix profile containing the minimum distance of each
  * subsequence.
  * @param ref_index The matrix profile index containing where each minimum occurs.
+ * @param m Subsequence length value used to calculate the input matrix profile.
  * @param n Number of motifs to extract.
  * @return The updated ref_profile and ref_index and references to:
  *           - The distance of the best N motifs.
@@ -24,7 +25,7 @@ extern "C" {
  *             the minimum reported in the motifs.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
-                                                                             jlong ref_index, jlong n);
+                                                                            jlong ref_index, jlong m, jlong n);
 
 /**
  * @brief This function extracts the best N motifs from a previously calculated matrix profile.
@@ -32,6 +33,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIE
  * @param ref_profile The matrix profile containing the minimum distance of each
  * subsequence.
  * @param ref_index The matrix profile index containing where each maximum occurs.
+ * @param m Subsequence length value used to calculate the input matrix profile.
  * @param n Number of discords to extract.
  * @return The updated ref_profile and ref_index and references to:
  *          - The distance of the best N discords.
@@ -40,7 +42,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIE
  *            the "N" bigger discords.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
-                                                                               jlong ref_index, jlong n);
+                                                                              jlong ref_index, jlong m, jlong n);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
@@ -54,7 +56,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JN
  *          - The index profile.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
-                                                                   jlong m);
+                                                                  jlong m);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length

@@ -13,7 +13,7 @@ extern "C" {
 #endif
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
-                                                                               jlong ref_index, jlong n) {
+                                                                              jlong ref_index, jlong m, jlong n) {
     const jint l = 5;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -40,8 +40,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JN
     af::array discords_indices;
     af::array subsequence_indices;
 
-    khiva::matrix::findBestNDiscords(var_profile, var_index, static_cast<long>(n), discords, discords_indices,
-                                     subsequence_indices);
+    khiva::matrix::findBestNDiscords(var_profile, var_index, static_cast<long>(m), static_cast<long>(n), discords,
+                                     discords_indices, subsequence_indices);
 
     af_retain_array(&af_p_discord_distances, discords.get());
     af_retain_array(&af_p_discord_indices, discords_indices.get());
@@ -58,7 +58,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JN
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
-                                                                             jlong ref_index, jlong n) {
+                                                                            jlong ref_index, jlong m, jlong n) {
     const jint l = 5;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -85,8 +85,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIE
     af::array motif_indices;
     af::array subsequence_indices;
 
-    khiva::matrix::findBestNMotifs(var_profile, var_index, static_cast<long>(n), motifs, motif_indices,
-                                   subsequence_indices);
+    khiva::matrix::findBestNMotifs(var_profile, var_index, static_cast<long>(m), static_cast<long>(n), motifs,
+                                   motif_indices, subsequence_indices);
 
     af_retain_array(&af_p_motif_distances, motifs.get());
     af_retain_array(&af_p_motif_indices, motif_indices.get());
@@ -103,7 +103,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIE
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
-                                                                   jlong m) {
+                                                                  jlong m) {
     const jint l = 4;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);

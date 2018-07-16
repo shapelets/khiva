@@ -628,12 +628,12 @@ void khiva::matrix::stomp(af::array t, long m, af::array &profile, af::array &in
     }
 }
 
-void khiva::matrix::findBestNMotifs(af::array profile, af::array index, long n, af::array &motifs,
-                                    af::array &motifsIndices, af::array &subsequenceIndices) {
+void khiva::matrix::findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs,
+                                    af::array &motifsIndices, af::array &subsequenceIndices, bool selfJoin) {
     // Repeat the profile in the second dimension
-    af::array profileTiled = af::tile(profile, 1, 2);
+    af::array profileTiled = af::tile(profile, 1, 1, 1, 2);
     // Joining it with an array from 1 to n in order to obtain the query subsequence index later on
-    af::array joined = af::join(1, index, af::range(index.dims(0), 1, 1, 1, -1, index.type()));
+    af::array joined = af::join(3, index, af::range(index.dims(), -1, index.type()));
     af::array sortedDistances;
     af::array sortedIndices;
 
@@ -641,21 +641,21 @@ void khiva::matrix::findBestNMotifs(af::array profile, af::array index, long n, 
     af::sort(sortedDistances, sortedIndices, profileTiled, joined, 0, true);
 
     // Taking the best n indices
-    af::array bestNIndices = sortedIndices(af::seq(n), af::span);
+    af::array bestNIndices = sortedIndices(af::seq(n), af::span, af::span, af::span);
     // Distance of the best n motifs
-    motifs = sortedDistances(af::seq(n));
+    motifs = sortedDistances(af::seq(n), af::span, af::span, 0);
     // Index of the reference subsequence producing the minimum
-    motifsIndices = bestNIndices.col(0);
+    motifsIndices = bestNIndices(af::span, af::span, af::span, 0);
     // Index of the query subsequences producing the minimum
-    subsequenceIndices = bestNIndices.col(1);
+    subsequenceIndices = bestNIndices(af::span, af::span, af::span, 1);
 }
 
-void khiva::matrix::findBestNDiscords(af::array profile, af::array index, long n, af::array &discords,
-                                      af::array &discordsIndices, af::array &subsequenceIndices) {
+void khiva::matrix::findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
+                                      af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin) {
     // Repeat the profile in the second dimension
-    af::array profileTiled = af::tile(profile, 1, 2);
+    af::array profileTiled = af::tile(profile, 1, 1, 1, 2);
     // Joining it with an array from 1 to n in order to obtain the query subsequence index later on
-    af::array joined = af::join(1, index, af::range(index.dims(0), 1, 1, 1, -1, index.type()));
+    af::array joined = af::join(3, index, af::range(index.dims(), -1, index.type()));
     af::array sortedDistances;
     af::array sortedIndices;
 
@@ -663,11 +663,11 @@ void khiva::matrix::findBestNDiscords(af::array profile, af::array index, long n
     af::sort(sortedDistances, sortedIndices, profileTiled, joined, 0, false);
 
     // Taking the best n indices
-    af::array bestNIndices = sortedIndices(af::seq(n), af::span);
+    af::array bestNIndices = sortedIndices(af::seq(n), af::span, af::span, af::span);
     // Distance of the best n discords
-    discords = sortedDistances(af::seq(n));
+    discords = sortedDistances(af::seq(n), af::span, af::span, 0);
     // Index of the reference subsequence producing the maximum
-    discordsIndices = bestNIndices.col(0);
+    discordsIndices = bestNIndices(af::span, af::span, af::span, 0);
     // Index of the query subsequences producing the maximum
-    subsequenceIndices = bestNIndices.col(1);
+    subsequenceIndices = bestNIndices(af::span, af::span, af::span, 1);
 }

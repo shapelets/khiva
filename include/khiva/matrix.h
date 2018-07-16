@@ -152,28 +152,34 @@ void stomp(af::array t, long m, af::array &profile, af::array &index);
  *
  * @param profile The matrix profile containing the minimum distance of each subsequence.
  * @param index The matrix profile index containing where each minimum occurs.
+ * @param m Subsequence length value used to calculate the input matrix profile.
  * @param n Number of motifs to extract.
  * @param motifs The distance of the best N motifs.
  * @param motifsIndices The indices of the best N motifs.
  * @param subsequenceIndices The indices of the query sequences that produced the minimum reported in the motifs
  * output array.
+ * @param selfJoin Indicates whether the input profile comes from a self join operation or not. It determines
+ * whether the mirror similar region is included in the output or not.
  */
-void findBestNMotifs(af::array profile, af::array index, long n, af::array &motifs, af::array &motifsIndices,
-                     af::array &subsequenceIndices);
+void findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs, af::array &motifsIndices,
+                     af::array &subsequenceIndices, bool selfJoin = false);
 
 /**
  * @brief This function extracts the best N discords from a previously calculated matrix profile.
  *
  * @param profile The matrix profile containing the minimum distance of each subsequence.
  * @param index The matrix profile index containing where each minimum occurs.
+ * @param m Subsequence length value used to calculate the input matrix profile.
  * @param n Number of discords to extract.
  * @param discords The distance of the best N discords.
  * @param discordsIndices The indices of the best N discords.
  * @param subsequenceIndices The indices of the query sequences that produced the discords reported in the discords
  * output array.
+ * @param selfJoin Indicates whether the input profile comes from a self join operation or not. It determines
+ * whether the mirror similar region is included in the output or not.
  */
-void findBestNDiscords(af::array profile, af::array index, long n, af::array &discords, af::array &discordsIndices,
-                       af::array &subsequenceIndices);
+void findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
+                       af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin = false);
 
 }  // namespace matrix
 }  // namespace khiva
