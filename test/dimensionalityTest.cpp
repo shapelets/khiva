@@ -58,8 +58,8 @@ void paaException() {
     try {
         af::array out = khiva::dimensionality::PAA(a, 6);
     } catch (std::invalid_argument &ia) {
-        EXPECT_EQ(ia.what(),
-                  std::string("The number of important points should be a factor of the total number of points."));
+        EXPECT_EQ(ia.what(), std::string("Invalid number of points. The number of important points should be a factor "
+                                         "of the total number of points."));
     }
 }
 
