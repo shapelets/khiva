@@ -30,7 +30,7 @@ void pipException() {
     try {
         af::array out = khiva::dimensionality::PIP(a, 6);
     } catch (std::invalid_argument &ia) {
-        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
     }
 }
 
@@ -41,7 +41,7 @@ void plaBottomUpException() {
     try {
         af::array out = khiva::dimensionality::PLABottomUp(a, 6);
     } catch (std::invalid_argument &ia) {
-        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
     }
 }
 
@@ -52,7 +52,7 @@ void plaSlidingWindowException() {
     try {
         af::array out = khiva::dimensionality::PLASlidingWindow(a, 6);
     } catch (std::invalid_argument &ia) {
-        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
     }
 }
 
@@ -63,7 +63,7 @@ void ramerDouglasPeuckerException() {
     try {
         af::array out = khiva::dimensionality::ramerDouglasPeucker(a, 6);
     } catch (std::invalid_argument &ia) {
-        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
     }
 }
 
@@ -74,7 +74,7 @@ void visvalingamException() {
     try {
         af::array out = khiva::dimensionality::visvalingam(a, 6);
     } catch (std::invalid_argument &ia) {
-        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
     }
 }
 
@@ -85,7 +85,7 @@ void saxException() {
     try {
         af::array out = khiva::dimensionality::SAX(a, 6);
     } catch (std::invalid_argument &ia) {
-        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
     }
 }
 
