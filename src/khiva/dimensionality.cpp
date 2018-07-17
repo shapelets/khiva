@@ -177,7 +177,7 @@ af::array khiva::dimensionality::PAA(af::array a, int bins) {
 
 af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
     if (ts.dims(1) != 2) {
-        throw std::invalid_argument("Invalid dims");
+        throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis)");
     }
     dim_t n = ts.dims(0);
     int end = static_cast<int>(n - 1);
@@ -318,7 +318,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLABottomUp(std
 
 af::array khiva::dimensionality::PLABottomUp(af::array ts, float maxError) {
     if (ts.dims(1) != 2) {
-        throw std::invalid_argument("Invalid dims");
+        throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis)");
     }
     // Extracting info from af::array
     float *h_x = ts.col(0).host<float>();
@@ -387,7 +387,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLASlidingWindo
 
 af::array khiva::dimensionality::PLASlidingWindow(af::array ts, float maxError) {
     if (ts.dims(1) != 2) {
-        throw std::invalid_argument("Invalid dims");
+        throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis)");
     }
     // Extracting info from af::array
     float *h_x = ts.col(0).host<float>();
@@ -464,7 +464,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::ramerDouglasPeu
 
 af::array khiva::dimensionality::ramerDouglasPeucker(af::array pointList, double epsilon) {
     if (pointList.dims(1) != 2) {
-        throw std::invalid_argument("Invalid dims");
+        throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis)");
     }
     std::vector<khiva::dimensionality::Point> points;
     float *x = pointList.col(0).host<float>();
@@ -496,7 +496,7 @@ af::array khiva::dimensionality::ramerDouglasPeucker(af::array pointList, double
 
 af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     if (a.dims(1) != 2) {
-        throw std::invalid_argument("Invalid dims");
+        throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis)");
     }
     af::array result = af::constant(0, a.dims(), af::dtype::s32);
     for (int k = 0; k < a.dims(1); k++) {
@@ -559,7 +559,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
 
 af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints) {
     if (pointList.dims(1) != 2) {
-        throw std::invalid_argument("Invalid dims");
+        throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis)");
     }
     std::vector<khiva::dimensionality::Point> points;
     float *x = pointList.col(0).host<float>();

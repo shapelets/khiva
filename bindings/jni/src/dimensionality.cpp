@@ -157,8 +157,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglas
         af_retain_array(&af_p, khiva::dimensionality::ramerDouglasPeucker(var, epsilon).get());
     } catch (std::invalid_argument &ia) {
         char const *message =
-            "ramerDouglasPeucker invalid argument. Khiva array with two columns expected (x axis and y axis). "
-            "ramerDouglasPeucker algorithm not applied.";
+            "RamerDouglasPeucker invalid argument. Khiva array with two columns expected (x axis and y axis). "
+            "RamerDouglasPeucker algorithm not applied.";
         env->ThrowNew(exClass, message);
     }
 
@@ -189,7 +189,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *
         af_retain_array(&af_p, khiva::dimensionality::SAX(var, alphabetSize).get());
     } catch (std::invalid_argument &ia) {
         char const *message =
-            "sax invalid argument. Khiva array with two columns expected (x axis and y axis). sax algorithm not "
+            "Sax invalid argument. Khiva array with two columns expected (x axis and y axis). Sax algorithm not "
             "applied.";
         env->ThrowNew(exClass, message);
     }
@@ -221,7 +221,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(
         af_retain_array(&af_p, khiva::dimensionality::visvalingam(var, numPoints).get());
     } catch (std::invalid_argument &ia) {
         char const *message =
-            "visvalingam invalid argument. Khiva array with two columns expected (x axis and y axis). visvalingam "
+            "Visvalingam invalid argument. Khiva array with two columns expected (x axis and y axis). Visvalingam "
             "algorithm not applied.";
         env->ThrowNew(exClass, message);
     }

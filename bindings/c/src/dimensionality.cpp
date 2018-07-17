@@ -42,8 +42,8 @@ KHIVAAPI void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *resu
     try {
         af_retain_array(result, khiva::dimensionality::PLABottomUp(var, *max_error).get());
     } catch (std::invalid_argument &ia) {
-        std::cerr << "PLABottomUp Invalid argument: " << ia.what() << std::endl;
-        std::cerr << "No PLABottomUp Algorithm applied" << std::endl;
+        std::cerr << "PLABottomUp invalid argument: " << ia.what() << std::endl;
+        std::cerr << "No PLABottomUp algorithm applied" << std::endl;
         exit(-1);
     }
 }
@@ -54,7 +54,7 @@ KHIVAAPI void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array 
     try {
         af_retain_array(result, khiva::dimensionality::PLASlidingWindow(var, *max_error).get());
     } catch (std::invalid_argument &ia) {
-        std::cerr << "PLASlidingWindow Invalid argument: " << ia.what() << std::endl;
+        std::cerr << "PLASlidingWindow invalid argument: " << ia.what() << std::endl;
         std::cerr << "No PLASlidingWindow algorithm applied" << std::endl;
         exit(-1);
     }
@@ -66,8 +66,8 @@ KHIVAAPI void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_
     try {
         af_retain_array(res_points, khiva::dimensionality::ramerDouglasPeucker(var, *epsilon).get());
     } catch (std::invalid_argument &ia) {
-        std::cerr << "ramerDouglasPacker invalid argument: " << ia.what() << std::endl;
-        std::cerr << "No ramerDouglasPacker algorithm applied" << std::endl;
+        std::cerr << "ramerDouglasPeucker invalid argument: " << ia.what() << std::endl;
+        std::cerr << "No ramerDouglasPeucker algorithm applied" << std::endl;
         exit(-1);
     }
 }
