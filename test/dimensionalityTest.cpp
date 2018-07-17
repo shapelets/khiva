@@ -11,6 +11,84 @@
 #include <sstream>
 #include "khivaTest.h"
 
+void paaException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::PAA(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(),
+                  std::string("The number of important points should be a factor of the total number of points."));
+    }
+}
+
+void pipException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::PIP(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+    }
+}
+
+void plaBottomUpException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::PLABottomUp(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+    }
+}
+
+void plaSlidingWindowException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::PLASlidingWindow(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+    }
+}
+
+void ramerDouglasPeuckerException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::ramerDouglasPeucker(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+    }
+}
+
+void visvalingamException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::visvalingam(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+    }
+}
+
+void saxException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::SAX(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims"));
+    }
+}
+
 void paa() {
     float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array a(10, 1, pointList);
@@ -346,6 +424,12 @@ void visvalingam2() {
     }
 }
 
+KHIVA_TEST(DimensionalityTests, SAXException, saxException)
+KHIVA_TEST(DimensionalityTests, PIPException, pipException)
+KHIVA_TEST(DimensionalityTests, PLABottomUpException, plaBottomUpException)
+KHIVA_TEST(DimensionalityTests, PLASlidingWindowException, plaSlidingWindowException)
+KHIVA_TEST(DimensionalityTests, RamerDouglasPeuckerException, ramerDouglasPeuckerException)
+KHIVA_TEST(DimensionalityTests, PAAException, paaException)
 KHIVA_TEST(DimensionalityTests, PAA, paa)
 KHIVA_TEST(DimensionalityTests, PAA_NORM, paaNorm)
 KHIVA_TEST(DimensionalityTests, PIP, pip)
