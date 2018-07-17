@@ -29,9 +29,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *
     try {
         af_retain_array(&af_p, khiva::dimensionality::PAA(var, bins).get());
     } catch (std::invalid_argument &ia) {
-        char const *message =
-            "PAA invalid argument. The number of important points should be a factor of the total number of points. "
-            "PAA algorithm not applied.";
+        char const *message = ia.what();
         env->ThrowNew(exClass, message);
     }
     tmp[0] = (jlong)arr;
@@ -60,9 +58,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *
     try {
         af_retain_array(&af_p, khiva::dimensionality::PIP(var, numberIPs).get());
     } catch (std::invalid_argument &ia) {
-        char const *message =
-            "PIP invalid argument. Khiva array with two columns expected (x axis and y axis). PIP algorithm not "
-            "applied.";
+        char const *message = ia.what();
         env->ThrowNew(exClass, message);
     }
 
@@ -92,9 +88,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(
     try {
         af_retain_array(&af_p, khiva::dimensionality::PLABottomUp(var, maxError).get());
     } catch (std::invalid_argument &ia) {
-        char const *message =
-            "PLABottomUp invalid argument. Khiva array with two columns expected (x axis and y axis). PLABottomUp "
-            "algorithm not applied.";
+        char const *message = ia.what();
         env->ThrowNew(exClass, message);
     }
 
@@ -124,9 +118,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWi
     try {
         af_retain_array(&af_p, khiva::dimensionality::PLASlidingWindow(var, maxError).get());
     } catch (std::invalid_argument &ia) {
-        char const *message =
-            "PLASlidingWindow invalid argument. Khiva array with two columns expected (x axis and y axis). "
-            "PLASlidingWindow algorithm not applied.";
+        char const *message = ia.what();
         env->ThrowNew(exClass, message);
     }
 
@@ -156,9 +148,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglas
     try {
         af_retain_array(&af_p, khiva::dimensionality::ramerDouglasPeucker(var, epsilon).get());
     } catch (std::invalid_argument &ia) {
-        char const *message =
-            "RamerDouglasPeucker invalid argument. Khiva array with two columns expected (x axis and y axis). "
-            "RamerDouglasPeucker algorithm not applied.";
+        char const *message = ia.what();
         env->ThrowNew(exClass, message);
     }
 
@@ -188,9 +178,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *
     try {
         af_retain_array(&af_p, khiva::dimensionality::SAX(var, alphabetSize).get());
     } catch (std::invalid_argument &ia) {
-        char const *message =
-            "Sax invalid argument. Khiva array with two columns expected (x axis and y axis). Sax algorithm not "
-            "applied.";
+        char const *message = ia.what();
         env->ThrowNew(exClass, message);
     }
 
@@ -220,9 +208,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(
     try {
         af_retain_array(&af_p, khiva::dimensionality::visvalingam(var, numPoints).get());
     } catch (std::invalid_argument &ia) {
-        char const *message =
-            "Visvalingam invalid argument. Khiva array with two columns expected (x axis and y axis). Visvalingam "
-            "algorithm not applied.";
+        char const *message = ia.what();
         env->ThrowNew(exClass, message);
     }
 
