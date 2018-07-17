@@ -163,9 +163,6 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
 }
 
 af::array khiva::dimensionality::PAA(af::array a, int bins) {
-    if (a.dims(1) != 2) {
-        throw std::invalid_argument("Invalid dims");
-    }
     if (a.dims(0) % bins != 0) {
         throw std::invalid_argument("The number of important points should be a factor of the total number of points.");
     }
