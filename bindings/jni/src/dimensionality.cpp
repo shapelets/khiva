@@ -22,9 +22,16 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
-    af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, khiva::dimensionality::PAA(var, bins).get());
+    char const *className = "java/lang/RuntimeException";
+    jclass exClass = env->FindClass(className);
 
+    af_retain_array(&arr, var.get());
+    try {
+        af_retain_array(&af_p, khiva::dimensionality::PAA(var, bins).get());
+    } catch (std::invalid_argument &ia) {
+        char const *message = ia.what();
+        env->ThrowNew(exClass, message);
+    }
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
 
@@ -33,7 +40,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *env, jobject, jlong ref,
-                                                                         jint numberIPs) {
+                                                                        jint numberIPs) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -44,8 +51,16 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
+    char const *className = "java/lang/RuntimeException";
+    jclass exClass = env->FindClass(className);
+
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, khiva::dimensionality::PIP(var, numberIPs).get());
+    try {
+        af_retain_array(&af_p, khiva::dimensionality::PIP(var, numberIPs).get());
+    } catch (std::invalid_argument &ia) {
+        char const *message = ia.what();
+        env->ThrowNew(exClass, message);
+    }
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -55,7 +70,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref,
-                                                                                 jfloat maxError) {
+                                                                                jfloat maxError) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -66,8 +81,16 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
+    char const *className = "java/lang/RuntimeException";
+    jclass exClass = env->FindClass(className);
+
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, khiva::dimensionality::PLABottomUp(var, maxError).get());
+    try {
+        af_retain_array(&af_p, khiva::dimensionality::PLABottomUp(var, maxError).get());
+    } catch (std::invalid_argument &ia) {
+        char const *message = ia.what();
+        env->ThrowNew(exClass, message);
+    }
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -77,7 +100,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWindow(JNIEnv *env, jobject, jlong ref,
-                                                                                      jfloat maxError) {
+                                                                                     jfloat maxError) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -88,8 +111,16 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWi
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
+    char const *className = "java/lang/RuntimeException";
+    jclass exClass = env->FindClass(className);
+
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, khiva::dimensionality::PLASlidingWindow(var, maxError).get());
+    try {
+        af_retain_array(&af_p, khiva::dimensionality::PLASlidingWindow(var, maxError).get());
+    } catch (std::invalid_argument &ia) {
+        char const *message = ia.what();
+        env->ThrowNew(exClass, message);
+    }
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -98,8 +129,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWi
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject,
-                                                                                         jlong ref, jdouble epsilon) {
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject, jlong ref,
+                                                                                        jdouble epsilon) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -110,8 +141,16 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglas
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
+    char const *className = "java/lang/RuntimeException";
+    jclass exClass = env->FindClass(className);
+
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, khiva::dimensionality::ramerDouglasPeucker(var, epsilon).get());
+    try {
+        af_retain_array(&af_p, khiva::dimensionality::ramerDouglasPeucker(var, epsilon).get());
+    } catch (std::invalid_argument &ia) {
+        char const *message = ia.what();
+        env->ThrowNew(exClass, message);
+    }
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -121,7 +160,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglas
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *env, jobject, jlong ref,
-                                                                         jint alphabetSize) {
+                                                                        jint alphabetSize) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -132,8 +171,16 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
+    char const *className = "java/lang/RuntimeException";
+    jclass exClass = env->FindClass(className);
+
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, khiva::dimensionality::SAX(var, alphabetSize).get());
+    try {
+        af_retain_array(&af_p, khiva::dimensionality::SAX(var, alphabetSize).get());
+    } catch (std::invalid_argument &ia) {
+        char const *message = ia.what();
+        env->ThrowNew(exClass, message);
+    }
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
@@ -143,7 +190,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref,
-                                                                                 jint numPoints) {
+                                                                                jint numPoints) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -154,8 +201,16 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
+    char const *className = "java/lang/RuntimeException";
+    jclass exClass = env->FindClass(className);
+
     af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, khiva::dimensionality::visvalingam(var, numPoints).get());
+    try {
+        af_retain_array(&af_p, khiva::dimensionality::visvalingam(var, numPoints).get());
+    } catch (std::invalid_argument &ia) {
+        char const *message = ia.what();
+        env->ThrowNew(exClass, message);
+    }
 
     tmp[0] = (jlong)arr;
     tmp[1] = (jlong)af_p;
