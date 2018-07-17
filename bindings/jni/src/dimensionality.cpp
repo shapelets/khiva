@@ -6,6 +6,7 @@
 
 #include <khiva/dimensionality.h>
 #include <khiva_jni/dimensionality.h>
+#include <stdexcept>
 
 #ifdef __cplusplus
 extern "C" {

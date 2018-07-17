@@ -7,6 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/dimensionality.h>
 #include <khiva_c/dimensionality.h>
+#include <stdexcept>
 
 #ifdef __cplusplus
 extern "C" {
