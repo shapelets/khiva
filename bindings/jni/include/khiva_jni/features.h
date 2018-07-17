@@ -49,9 +49,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_absoluteSumOfChang
  *          }
  * @return Updated reference and an array whose values contains the aggregated correaltion for each time series.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorrelation(JNIEnv *env, jobject,
-                                                                                         jlong ref,
-                                                                                         jint aggregationFunction);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorrelation(JNIEnv *env, jobject, jlong ref,
+                                                                                        jint aggregationFunction);
 
 /**
  * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
@@ -82,8 +81,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorr
  *         }
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTrend(JNIEnv *env, jobject, jlong ref,
-                                                                                     jlong chunkSize,
-                                                                                     jint aggregationFunction);
+                                                                                    jlong chunkSize,
+                                                                                    jint aggregationFunction);
 
 /**
  * @brief Calculates a vectorized Approximate entropy algorithm.
@@ -100,7 +99,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTr
  * @return The updated ref and the vectorized approximate entropy for all the input time series in ref Array.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_approximateEntropy(JNIEnv *env, jobject, jlong ref,
-                                                                                  jint m, jdouble r);
+                                                                                 jint m, jfloat r);
 
 /**
  * @brief Calculates the cross-covariance of the given time series.
@@ -114,7 +113,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_approximateEntropy
  * @return The updated refs and the cross-covariance value for the given time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JNIEnv *env, jobject, jlong ref_xss,
-                                                                               jlong ref_yss, jboolean unbiased);
+                                                                              jlong ref_yss, jboolean unbiased);
 
 /**
  * @brief Calculates the auto-covariance the given time series.
@@ -126,7 +125,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JN
  * @return The updated ref and the auto-covariance value for the given time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCovariance(JNIEnv *env, jobject, jlong ref,
-                                                                              jboolean unbiased);
+                                                                             jboolean unbiased);
 
 /**
  * @brief Calculates the cross-correlation of the given time series.
@@ -139,7 +138,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCovariance(JNI
  * @return The updated refs and the cross-correlation value for the given time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCorrelation(JNIEnv *env, jobject, jlong ref_xss,
-                                                                                jlong ref_yss, jboolean unbiased);
+                                                                               jlong ref_yss, jboolean unbiased);
 
 /**
  * @brief Calculates the autocorrelation of the specified lag for the given time series.
@@ -151,7 +150,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCorrelation(J
  * @return The updated ref and the autocorrelation value for the given time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCorrelation(JNIEnv *env, jobject, jlong ref,
-                                                                               jlong maxLag, jboolean unbiased);
+                                                                              jlong maxLag, jboolean unbiased);
 /**
  * @brief Calculates the binned entropy for the given time series and number of bins.
  *
@@ -161,7 +160,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCorrelation(JN
  * @return The updated ref and the binned entropy value for the given time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_binnedEntropy(JNIEnv *env, jobject, jlong ref,
-                                                                             jint max_bins);
+                                                                            jint max_bins);
 
 /**
  * @brief Calculates the Schreiber, T. and Schmitz, A. (1997) measure of non-linearity
@@ -184,7 +183,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_c3(JNIEnv *env, jo
  * @return The updated ref and the complexity value for the given time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_cidCe(JNIEnv *env, jobject, jlong ref,
-                                                                     jboolean zNormalize);
+                                                                    jboolean zNormalize);
 
 /**
  * @brief Calculates the number of values in the time series that are higher than the mean.
@@ -229,7 +228,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_countBelowMean(JNI
  * @return Updated refs and the result of calculated coefficients.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_cwtCoefficients(JNIEnv *env, jobject, jlong ref,
-                                                                               jlong ref_w, jint coeff, jint w);
+                                                                              jlong ref_w, jint coeff, jint w);
 
 /**
  * @brief Calculates the sum of squares of chunk i out of N chunks expressed as a ratio
@@ -243,8 +242,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_cwtCoefficients(JN
  * @return The updated ref and the energy ratio by chunk of the time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_energyRatioByChunks(JNIEnv *env, jobject, jlong ref,
-                                                                                   jlong numSegments,
-                                                                                   jlong segmentFocus);
+                                                                                  jlong numSegments,
+                                                                                  jlong segmentFocus);
 
 /**
  * @brief Calculates the spectral centroid(mean), variance, skew, and kurtosis of the absolute fourier transform
@@ -278,7 +277,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_fftAggregated(JNIE
  *          }
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_fftCoefficient(JNIEnv *env, jobject, jlong ref,
-                                                                              jlong coefficient);
+                                                                             jlong coefficient);
 
 /**
  * @brief Calculates the first relative location of the maximal value for each time series.
@@ -318,7 +317,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMin
  * @return The updated ref and the coefficients for each time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_friedrichCoefficients(JNIEnv *env, jobject, jlong ref,
-                                                                                     jint m, jfloat r);
+                                                                                    jint m, jfloat r);
 
 /**
  * @brief Calculates if the input time series contain duplicated elements.
@@ -358,7 +357,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMin(JN
  * @return The updated ref and the index of the max quantile q.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_indexMassQuantile(JNIEnv *env, jobject, jlong ref,
-                                                                                 jfloat q);
+                                                                                jfloat q);
 
 /**
  * @brief Returns the kurtosis of ref (calculated with the adjusted Fisher-Pearson
@@ -380,7 +379,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_kurtosis(JNIEnv *e
  * deviation.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_largeStandardDeviation(JNIEnv *env, jobject, jlong ref,
-                                                                                      jfloat r);
+                                                                                     jfloat r);
 
 /**
  * @brief Calculates the last location of the maximum value of each time series. The position
@@ -474,7 +473,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeBelow
  * @return The updated ref and the largest fixed point of deterministic dynamics.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_maxLangevinFixedPoint(JNIEnv *env, jobject, jlong ref,
-                                                                                     jint m, jfloat r);
+                                                                                    jint m, jfloat r);
 
 /**
  * @brief Calculates the maximum value for each time series within ref.
@@ -520,7 +519,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_meanChange(JNIEnv 
  * @return The updated ref and the mean value of a central approximation of the second derivative for each time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject,
-                                                                                           jlong ref);
+                                                                                          jlong ref);
 
 /**
  * @brief Calculates the median value for each time series within ref.
@@ -562,7 +561,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCrossingM(JN
  * @return The updated ref and the number of peaks for each time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCwtPeaks(JNIEnv *env, jobject, jlong ref,
-                                                                              jint maxW);
+                                                                             jint maxW);
 
 /**
  * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$ref\f$. A peak of support
@@ -603,7 +602,7 @@ and zero for \f$ k>p \f$."
 * @return The updated refs and the partial autocorrelation for each time series for the given lag.
 */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_partialAutocorrelation(JNIEnv *env, jobject, jlong ref,
-                                                                                      jlong lags);
+                                                                                     jlong lags);
 
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
@@ -649,7 +648,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccu
  * @return The updated ref and the values at the given quantile.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
-                                                                        jfloat precision);
+                                                                       jfloat precision);
 
 /**
  * @brief Counts observed values within the interval [min, max).
@@ -662,7 +661,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *e
  * @return The updated ref and the values at the given range.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_rangeCount(JNIEnv *env, jobject, jlong ref, jfloat min,
-                                                                          jfloat max);
+                                                                         jfloat max);
 
 /**
  * @brief Calculates the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
@@ -675,7 +674,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_rangeCount(JNIEnv 
  * the mean of \f$x\f$.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioBeyondRSigma(JNIEnv *env, jobject, jlong ref,
-                                                                                 jfloat r);
+                                                                                jfloat r);
 
 /**
  * @brief Calculates a factor which is 1 if all values in the time series occur only once, and below one if this is
@@ -690,7 +689,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioBeyondRSigma(
  * @return The updated ref and the ratio of unique values with respect to the total number of values.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioValueNumberToTimeSeriesLength(JNIEnv *env, jobject,
-                                                                                                  jlong ref);
+                                                                                                 jlong ref);
 
 /**
  * @brief Calculates a vectorized sample entropy algorithm.
@@ -737,7 +736,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_skewness(JNIEnv *e
  * frequencies for each time series in ref.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_spktWelchDensity(JNIEnv *env, jobject, jlong ref,
-                                                                                jint coeff);
+                                                                               jint coeff);
 
 /**
  * @brief Calculates the standard deviation of each time series within ref.
@@ -757,7 +756,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_standardDeviation(
  * @return The updated ref and the sum of all data points, that are present in the time series more than once.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject,
-                                                                                          jlong ref, jboolean isSorted);
+                                                                                         jlong ref, jboolean isSorted);
 
 /**
  * @brief Calculates the sum of all values, that are present in the time series more than once.
@@ -768,7 +767,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringDa
  * @return The updated ref and the sum of all values, that are present in the time series more than once.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringValues(JNIEnv *env, jobject, jlong ref,
-                                                                                      jboolean isSorted);
+                                                                                     jboolean isSorted);
 
 /**
  * @brief Calculates the sum over the time series ref.
@@ -791,7 +790,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sumValues(JNIEnv *
  * @return The updated ref and an array denoting if the input time series look symmetric.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_symmetryLooking(JNIEnv *env, jobject, jlong ref,
-                                                                               jfloat r);
+                                                                              jfloat r);
 
 /**
  * @brief This function calculates the value of:
@@ -814,7 +813,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_symmetryLooking(JN
  * @return The updated ref and an array containing the time reversal asymetry statistic value in each time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_timeReversalAsymmetryStatistic(JNIEnv *env, jobject,
-                                                                                              jlong ref, jint lag);
+                                                                                             jlong ref, jint lag);
 
 /**
  * @brief Counts occurrences of value in the time series ref.
@@ -844,7 +843,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_variance(JNIEnv *e
  * @return The updated ref and an array denoting if the variance of ref is greater than the standard deviation.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_varianceLargerThanStandardDeviation(JNIEnv *env, jobject,
-                                                                                                   jlong ref);
+                                                                                                  jlong ref);
 #ifdef __cplusplus
 }
 #endif

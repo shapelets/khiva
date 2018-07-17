@@ -8,11 +8,7 @@
 #include <khiva/dimensionality.h>
 #include <khiva_c/dimensionality.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-KHIVAAPI void paa(khiva_array *a, int *bins, khiva_array *result) {
+void paa(khiva_array *a, int *bins, khiva_array *result) {
     af::array var = af::array(*a);
     af_retain_array(a, var.get());
     try {
@@ -24,7 +20,7 @@ KHIVAAPI void paa(khiva_array *a, int *bins, khiva_array *result) {
     }
 }
 
-KHIVAAPI void pip(khiva_array *a, int *number_ips, khiva_array *result) {
+void pip(khiva_array *a, int *number_ips, khiva_array *result) {
     af::array var = af::array(*a);
     af_retain_array(a, var.get());
     try {
@@ -36,7 +32,7 @@ KHIVAAPI void pip(khiva_array *a, int *number_ips, khiva_array *result) {
     }
 }
 
-KHIVAAPI void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *result) {
+void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *result) {
     af::array var = af::array(*ts);
     af_retain_array(ts, var.get());
     try {
@@ -48,7 +44,7 @@ KHIVAAPI void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *resu
     }
 }
 
-KHIVAAPI void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array *result) {
+void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array *result) {
     af::array var = af::array(*ts);
     af_retain_array(ts, var.get());
     try {
@@ -60,7 +56,7 @@ KHIVAAPI void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array 
     }
 }
 
-KHIVAAPI void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_array *res_points) {
+void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_array *res_points) {
     af::array var = af::array(*points);
     af_retain_array(points, var.get());
     try {
@@ -72,7 +68,7 @@ KHIVAAPI void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_
     }
 }
 
-KHIVAAPI void sax(khiva_array *a, int *alphabet_size, khiva_array *result) {
+void sax(khiva_array *a, int *alphabet_size, khiva_array *result) {
     af::array var = af::array(*a);
     af_retain_array(a, var.get());
     try {
@@ -84,7 +80,7 @@ KHIVAAPI void sax(khiva_array *a, int *alphabet_size, khiva_array *result) {
     }
 }
 
-KHIVAAPI void visvalingam(khiva_array *points, int *num_points, khiva_array *res_points) {
+void visvalingam(khiva_array *points, int *num_points, khiva_array *res_points) {
     af::array var = af::array(*points);
     af_retain_array(points, var.get());
     try {
@@ -95,7 +91,3 @@ KHIVAAPI void visvalingam(khiva_array *points, int *num_points, khiva_array *res
         exit(-1);
     }
 }
-
-#ifdef __cplusplus
-}
-#endif

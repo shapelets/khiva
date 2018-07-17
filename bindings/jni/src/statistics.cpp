@@ -8,12 +8,7 @@
 #include <khiva/statistics.h>
 #include <khiva_jni/statistics.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEnv *env, jobject, jlong ref,
-                                                                            jboolean unbiased) {
+jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEnv *env, jobject, jlong ref, jboolean unbiased) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -34,7 +29,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEn
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_moment(JNIEnv *env, jobject, jlong ref, jint k) {
+jlongArray JNICALL Java_io_shapelets_khiva_Statistics_moment(JNIEnv *env, jobject, jlong ref, jint k) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -55,7 +50,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_moment(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_sampleStdev(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Statistics_sampleStdev(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -76,7 +71,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_sampleStdev(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_kurtosis(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Statistics_kurtosis(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -97,7 +92,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_kurtosis(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_skewness(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Statistics_skewness(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -118,8 +113,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_skewness(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
-                                                                          jfloat precision) {
+jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
+                                                               jfloat precision) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -143,8 +138,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantilesCut(JNIEnv *env, jobject, jlong ref,
-                                                                              jfloat quantiles, jfloat precision) {
+jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantilesCut(JNIEnv *env, jobject, jlong ref, jfloat quantiles,
+                                                                   jfloat precision) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -165,7 +160,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantilesCut(JNI
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_ljungBox(JNIEnv *env, jobject, jlong ref, jlong lags) {
+jlongArray JNICALL Java_io_shapelets_khiva_Statistics_ljungBox(JNIEnv *env, jobject, jlong ref, jlong lags) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -186,7 +181,3 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_ljungBox(JNIEnv 
 
     return pointers;
 }
-
-#ifdef __cplusplus
-}
-#endif

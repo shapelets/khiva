@@ -7,12 +7,7 @@
 #include <khiva/polynomial.h>
 #include <khiva_jni/polynomial.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY,
-                                                                         jint deg) {
+jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY, jint deg) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -38,7 +33,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -59,7 +54,3 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *en
 
     return pointers;
 }
-
-#ifdef __cplusplus
-}
-#endif
