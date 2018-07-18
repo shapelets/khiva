@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <khiva/matrix.h>
+#include <stdexcept>
 #include "khivaTest.h"
 
 void slidingDotProduct() {
@@ -482,24 +483,161 @@ void findBestMotifs() {
     af::array motifsIndices;
     af::array subsequenceIndices;
 
-    khiva::matrix::findBestNMotifs(distance, index, 2, motifs, motifsIndices, subsequenceIndices);
+    khiva::matrix::findBestNMotifs(distance, index, 3, 1, motifs, motifsIndices, subsequenceIndices);
 
     unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
     ASSERT_EQ(motifsIndicesHost[0], 12);
-    ASSERT_EQ(motifsIndicesHost[1], 11);
 
     ASSERT_EQ(subsequenceIndicesHost[0], 1);
-    ASSERT_EQ(subsequenceIndicesHost[1], 0);
+}
+
+void findBestMotifsMultipleProfiles() {
+    float data_a[] = {10, 10, 10, 10, 10, 10, 9, 10, 10, 10, 10, 10, 11, 10, 9,
+                      10, 10, 10, 10, 10, 10, 9, 10, 10, 10, 10, 10, 11, 10, 9};
+    af::array ta = af::array(15, 2, data_a);
+
+    float data_b[] = {10, 11, 10, 9, 10, 11, 10, 9};
+    af::array tb = af::array(4, 2, data_b);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, tb, m, distance, index);
+
+    af::array motifs;
+    af::array motifsIndices;
+    af::array subsequenceIndices;
+
+    khiva::matrix::findBestNMotifs(distance, index, 3, 1, motifs, motifsIndices, subsequenceIndices);
+
+    unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
+    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+
+    ASSERT_EQ(motifsIndicesHost[0], 12);
+    ASSERT_EQ(motifsIndicesHost[1], 12);
+    ASSERT_EQ(motifsIndicesHost[2], 12);
+    ASSERT_EQ(motifsIndicesHost[3], 12);
+
+    ASSERT_EQ(subsequenceIndicesHost[0], 1);
+    ASSERT_EQ(subsequenceIndicesHost[1], 1);
+    ASSERT_EQ(subsequenceIndicesHost[2], 1);
+    ASSERT_EQ(subsequenceIndicesHost[3], 1);
+}
+
+void findBestMotifsMirror() {
+    float data_a[] = {10.1, 11, 10.2, 10.15, 10.775, 10.1, 11, 10.2};
+    af::array ta = af::array(8, data_a);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, m, distance, index);
+
+    af::array motifs;
+    af::array motifsIndices;
+    af::array subsequenceIndices;
+
+    khiva::matrix::findBestNMotifs(distance, index, 3, 2, motifs, motifsIndices, subsequenceIndices, true);
+
+    unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
+    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+
+    ASSERT_EQ(motifsIndicesHost[0], 0);
+    ASSERT_EQ(motifsIndicesHost[1], 0);
+
+    ASSERT_EQ(subsequenceIndicesHost[0], 5);
+    ASSERT_EQ(subsequenceIndicesHost[1], 3);
+}
+
+void findBestMotifsConsecutive() {
+    float data_a[] = {10.1f, 11, 10.1f, 10.15f, 10.075f, 10.1f, 11, 10.1f, 10.15f};
+    af::array ta = af::array(9, data_a);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, m, distance, index);
+
+    af::array motifs;
+    af::array motifsIndices;
+    af::array subsequenceIndices;
+
+    khiva::matrix::findBestNMotifs(distance, index, 3, 2, motifs, motifsIndices, subsequenceIndices, true);
+
+    unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
+    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+
+    ASSERT_EQ(motifsIndicesHost[1], 6);
+
+    ASSERT_EQ(subsequenceIndicesHost[1], 3);
+}
+
+void findBestMotifsMirrorException() {
+    float data_a[] = {10, 11, 10, 11, 10, 11, 10};
+    af::array ta = af::array(7, data_a);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, m, distance, index);
+
+    af::array motifs;
+    af::array motifsIndices;
+    af::array subsequenceIndices;
+
+    try {
+        khiva::matrix::findBestNMotifs(distance, index, 3, 3, motifs, motifsIndices, subsequenceIndices, true);
+    } catch (std::runtime_error &re) {
+        EXPECT_EQ(
+            re.what(),
+            std::string(
+                "Only 2 out of the best 3 motifs can be calculated. The resulting 1 motifs were not included because "
+                "they are mirror motifs."));
+    }
+}
+
+void findBestMotifsException() {
+    float data_a[] = {10, 11, 10, 11, 10, 11, 10};
+    af::array ta = af::array(7, data_a);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, m, distance, index);
+
+    af::array motifs;
+    af::array motifsIndices;
+    af::array subsequenceIndices;
+
+    try {
+        khiva::matrix::findBestNMotifs(distance, index, 3, 4, motifs, motifsIndices, subsequenceIndices, true);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(
+            ia.what(),
+            std::string(
+                "You cannot retrieve more than (L-m+1)/(m/2) motifs, since there cannot be consecutive motifs in m/2 "
+                "before and after a given one. L refers to the time series length."));
+    }
 }
 
 void findBestDiscords() {
-    double data_a[] = {11, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11};
-    af::array ta = af::array(12, data_a);
+    float data_a[] = {11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11};
+    af::array ta = af::array(13, data_a);
 
-    double data_b[] = {9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 9};
-    af::array tb = af::array(12, data_b);
+    float data_b[] = {9, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 9};
+    af::array tb = af::array(13, data_b);
 
     long m = 3;
 
@@ -512,12 +650,143 @@ void findBestDiscords() {
     af::array discordsIndices;
     af::array subsequenceIndices;
 
-    khiva::matrix::findBestNDiscords(distance, index, 2, discords, discordsIndices, subsequenceIndices);
+    khiva::matrix::findBestNDiscords(distance, index, 3, 2, discords, discordsIndices, subsequenceIndices);
 
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
     ASSERT_EQ(subsequenceIndicesHost[0], 0);
-    ASSERT_EQ(subsequenceIndicesHost[1], 9);
+    ASSERT_EQ(subsequenceIndicesHost[1], 10);
+}
+
+void findBestDiscordsMultipleProfiles() {
+    float data_a[] = {11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11,
+                      11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11};
+    af::array ta = af::array(13, 2, data_a);
+
+    float data_b[] = {9, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 9,
+                      9, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 10.2f, 10.1f, 9};
+    af::array tb = af::array(13, 2, data_b);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, tb, m, distance, index);
+
+    af::array discords;
+    af::array discordsIndices;
+    af::array subsequenceIndices;
+
+    khiva::matrix::findBestNDiscords(distance, index, 3, 2, discords, discordsIndices, subsequenceIndices);
+
+    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+
+    ASSERT_EQ(subsequenceIndicesHost[0], 0);
+    ASSERT_EQ(subsequenceIndicesHost[1], 10);
+    ASSERT_EQ(subsequenceIndicesHost[2], 0);
+    ASSERT_EQ(subsequenceIndicesHost[3], 10);
+    ASSERT_EQ(subsequenceIndicesHost[4], 0);
+    ASSERT_EQ(subsequenceIndicesHost[5], 10);
+    ASSERT_EQ(subsequenceIndicesHost[6], 0);
+    ASSERT_EQ(subsequenceIndicesHost[7], 10);
+}
+
+void findBestDiscordsMirror() {
+    float data_a[] = {10, 11, 10, 10, 11, 10};
+    af::array ta = af::array(6, data_a);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, m, distance, index);
+
+    af::array discords;
+    af::array discordsIndices;
+    af::array subsequenceIndices;
+
+    khiva::matrix::findBestNDiscords(distance, index, 3, 1, discords, discordsIndices, subsequenceIndices, true);
+
+    unsigned int *discordsIndicesHost = discordsIndices.host<unsigned int>();
+    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+
+    ASSERT_EQ(discordsIndicesHost[0], 3);
+
+    ASSERT_EQ(subsequenceIndicesHost[0], 1);
+}
+
+void findBestDiscordsConsecutive() {
+    float data_a[] = {10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 9.999f, 9.998f};
+    af::array ta = af::array(15, data_a);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, m, distance, index);
+
+    af::array discords;
+    af::array discordsIndices;
+    af::array subsequenceIndices;
+
+    khiva::matrix::findBestNDiscords(distance, index, 3, 2, discords, discordsIndices, subsequenceIndices, true);
+
+    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+
+    ASSERT_EQ(subsequenceIndicesHost[0], 12);
+    ASSERT_NE(subsequenceIndicesHost[1], 11);
+}
+
+void findBestDiscordsMirrorException() {
+    float data_a[] = {10, 11, 10, 10, 11, 10};
+    af::array ta = af::array(6, data_a);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, m, distance, index);
+
+    af::array discords;
+    af::array discordsIndices;
+    af::array subsequenceIndices;
+
+    try {
+        khiva::matrix::findBestNDiscords(distance, index, 3, 2, discords, discordsIndices, subsequenceIndices, true);
+    } catch (std::runtime_error &re) {
+        EXPECT_EQ(re.what(), std::string(std::string("Only 1 out of the best 2 discords can be calculated. The "
+                                                     "resulting 1 discords were not included because "
+                                                     "they are mirror discords.")));
+    }
+}
+
+void findBestDiscordsException() {
+    float data_a[] = {10, 11, 10, 11, 10, 11, 10};
+    af::array ta = af::array(7, data_a);
+
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::stomp(ta, m, distance, index);
+
+    af::array discords;
+    af::array discordsIndices;
+    af::array subsequenceIndices;
+
+    try {
+        khiva::matrix::findBestNDiscords(distance, index, 3, 4, discords, discordsIndices, subsequenceIndices, true);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(),
+                  std::string(
+                      "You cannot retrieve more than (L-m+1)/(m/2) discords, since there cannot be "
+                      "consecutive discords in m/2 before and after a given one. L refers to the time series length."));
+    }
 }
 
 KHIVA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct)
@@ -537,4 +806,14 @@ KHIVA_TEST(MatrixTests, StompConsiderTrivialOneSeries2, stompConsiderTrivialOneS
 KHIVA_TEST(MatrixTests, StompConsiderTrivialMultipleSeries, stompConsiderTrivialMultipleSeries)
 KHIVA_TEST(MatrixTests, StompConsiderTrivialMultipleSeriesBigM, stompConsiderTrivialMultipleSeriesBigM)
 KHIVA_TEST(MatrixTests, FindBestMotifs, findBestMotifs)
+KHIVA_TEST(MatrixTests, FindBestMotifsMultipleProfiles, findBestMotifsMultipleProfiles)
+KHIVA_TEST(MatrixTests, FindBestMotifsMirror, findBestMotifsMirror)
+KHIVA_TEST(MatrixTests, FindBestMotifsConsecutive, findBestMotifsConsecutive)
+KHIVA_TEST(MatrixTests, FindBestMotifsMirrorException, findBestMotifsMirrorException)
+KHIVA_TEST(MatrixTests, FindBestMotifsException, findBestMotifsException)
 KHIVA_TEST(MatrixTests, FindBestDiscords, findBestDiscords)
+KHIVA_TEST(MatrixTests, FindBestDiscordsMultipleProfiles, findBestDiscordsMultipleProfiles)
+KHIVA_TEST(MatrixTests, FindBestDiscordsMirror, findBestDiscordsMirror)
+KHIVA_TEST(MatrixTests, FindBestDiscordsConsecutive, findBestDiscordsConsecutive)
+KHIVA_TEST(MatrixTests, FindBestDiscordsMirrorException, findBestDiscordsMirrorException)
+KHIVA_TEST(MatrixTests, FindBestDiscordsException, findBestDiscordsException)
