@@ -9,7 +9,8 @@
 #include <khiva_jni/matrix.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
-                                                                    jlong ref_index, jlong n) {
+                                                                    jlong ref_index, jlong m, jlong n,
+                                                                    jboolean self_join) {
     const jint l = 5;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -37,7 +38,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env,
     af::array subsequence_indices;
 
     khiva::matrix::findBestNDiscords(var_profile, var_index, static_cast<long>(m), static_cast<long>(n), discords,
-                                     discords_indices, subsequence_indices);
+                                     discords_indices, subsequence_indices, static_cast<bool>(self_join));
 
     af_retain_array(&af_p_discord_distances, discords.get());
     af_retain_array(&af_p_discord_indices, discords_indices.get());
@@ -54,7 +55,8 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env,
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
-                                                                  jlong ref_index, jlong n) {
+                                                                  jlong ref_index, jlong m, jlong n,
+                                                                  jboolean self_join) {
     const jint l = 5;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -82,7 +84,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, j
     af::array subsequence_indices;
 
     khiva::matrix::findBestNMotifs(var_profile, var_index, static_cast<long>(m), static_cast<long>(n), motifs,
-                                   motif_indices, subsequence_indices);
+                                   motif_indices, subsequence_indices, static_cast<bool>(self_join));
 
     af_retain_array(&af_p_motif_distances, motifs.get());
     af_retain_array(&af_p_motif_indices, motif_indices.get());

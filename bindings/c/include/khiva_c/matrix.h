@@ -24,10 +24,12 @@ extern "C" {
  * @param discord_indices The indices of the best N discords
  * @param subsequence_indices The indices of the query sequences that produced
  * the "N" bigger discords.
+ * @param self_join Indicates whether the input profile comes from a self join operation or not. It determines
+ * whether the mirror similar region is included in the output or not.
  */
 KHIVAAPI void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n,
                                    khiva_array *discord_distances, khiva_array *discord_indices,
-                                   khiva_array *subsequence_indices);
+                                   khiva_array *subsequence_indices, bool *self_join);
 
 /**
  * @brief Primitive of the findBestNMotifs function.
@@ -42,10 +44,12 @@ KHIVAAPI void find_best_n_discords(khiva_array *profile, khiva_array *index, lon
  * @param motif_indices The indices of the best N motifs.
  * @param subsequence_indices The indices of the query sequences that produced
  * the minimum reported in the motifs.
+ * @param self_join Indicates whether the input profile comes from a self join operation or not. It determines
+ * whether the mirror similar region is included in the output or not.
  */
 KHIVAAPI void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n,
                                  khiva_array *motif_distances, khiva_array *motif_indices,
-                                 khiva_array *subsequence_indices);
+                                 khiva_array *subsequence_indices, bool *self_join);
 
 /**
  * @brief  Primitive of the STOMP algorithm.
