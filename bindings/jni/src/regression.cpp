@@ -6,7 +6,9 @@
 
 #include <jni.h>
 #include <khiva/regression.h>
+#include <khiva_jni/defines.h>
 #include <khiva_jni/regression.h>
+#include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobject, jlong ref_xss, jlong ref_yss) {
     const jint l = 7;
@@ -14,10 +16,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobjec
     jlongArray pointers = env->NewLongArray(l);
 
     af_array arr_xss = (af_array)ref_xss;
-    af::array var_xss = af::array(arr_xss);
+    af::array var_xss;
 
     af_array arr_yss = (af_array)ref_yss;
-    af::array var_yss = af::array(arr_yss);
+    af::array var_yss;
 
     jlong raw_pointer_pvalue = 0;
     af_array af_p_pvalue = (af_array)raw_pointer_pvalue;
@@ -34,8 +36,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobjec
     jlong raw_pointer_stderr = 0;
     af_array af_p_stderr = (af_array)raw_pointer_stderr;
 
-    af_retain_array(&arr_xss, var_xss.get());
-    af_retain_array(&arr_yss, var_yss.get());
+    check_and_retain_arrays(arr_xss, arr_yss, var_xss, var_yss);
 
     af::array primitive_pvalue;
     af::array primitive_rvalue;

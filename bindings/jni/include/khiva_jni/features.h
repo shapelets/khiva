@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <jni.h>
+#include <khiva_jni/defines.h>
 
 #ifdef __cplusplus
 extern "C" {

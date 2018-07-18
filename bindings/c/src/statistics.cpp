@@ -7,6 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/statistics.h>
 #include <khiva_c/statistics.h>
+#include <khiva_c/util.h>
 
 void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_array *result) {
     af::array var = af::array(*tss);
@@ -33,10 +34,9 @@ void moment_statistics(khiva_array *tss, int *k, khiva_array *result) {
 }
 
 void quantile_statistics(khiva_array *tss, khiva_array *q, float *precision, khiva_array *result) {
-    af::array var = af::array(*tss);
-    af_retain_array(tss, var.get());
-    af::array var_q = af::array(*q);
-    af_retain_array(q, var_q.get());
+    af::array var;
+    af::array var_q;
+    check_and_retain_arrays(tss, q, var, var_q);
     af_retain_array(result, khiva::statistics::quantile(var, var_q, *precision).get());
 }
 

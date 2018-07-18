@@ -7,6 +7,7 @@
 #include <jni.h>
 #include <khiva/features.h>
 #include <khiva_jni/features.h>
+#include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_absEnergy(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
@@ -206,21 +207,19 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JNIEnv *env,
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
 
-    af_array arr_xss = (af_array)ref_xss;
-    af::array var_xss = af::array(arr_xss);
+    af_array xss = (af_array)ref_xss;
+    af::array var_xss;
+    af_array yss = (af_array)ref_yss;
+    af::array var_yss;
 
-    af_retain_array(&arr_xss, var_xss.get());
-
-    af_array arr_yss = (af_array)ref_yss;
-    af::array var_yss = af::array(arr_yss);
-
+    check_and_retain_arrays(xss, yss, var_xss, var_yss);
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
-
     af_retain_array(&af_p, khiva::features::crossCovariance(var_xss, var_yss, unbiased).get());
+    std::cout << (jlong)var_xss.get();
 
-    tmp[0] = (jlong)arr_xss;
-    tmp[1] = (jlong)arr_yss;
+    tmp[0] = (jlong)xss;
+    tmp[1] = (jlong)yss;
     tmp[2] = (jlong)af_p;
 
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
@@ -256,12 +255,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCorrelation(JNIEnv *env
     jlongArray pointers = env->NewLongArray(l);
 
     af_array arr_xss = (af_array)ref_xss;
-    af::array var_xss = af::array(arr_xss);
-
-    af_retain_array(&arr_xss, var_xss.get());
-
+    af::array var_xss;
     af_array arr_yss = (af_array)ref_yss;
-    af::array var_yss = af::array(arr_yss);
+    af::array var_yss;
+
+    check_and_retain_arrays(arr_xss, arr_yss, var_xss, var_yss);
 
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
@@ -416,16 +414,15 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_cwtCoefficients(JNIEnv *env,
     jlongArray pointers = env->NewLongArray(l);
 
     af_array arr = (af_array)ref;
-    af::array var = af::array(arr);
+    af::array var;
 
     af_array af_w = (af_array)widths;
-    af::array var_w = af::array(af_w);
+    af::array var_w;
+
+    check_and_retain_arrays(arr, af_w, var, var_w);
 
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
-
-    af_retain_array(&arr, var.get());
-    af_retain_array(&af_w, var_w.get());
 
     af_retain_array(&af_p, khiva::features::cwtCoefficients(var, var_w, coeff, w).get());
 
@@ -1162,14 +1159,14 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_partialAutocorrelation(JNIEn
     jlongArray pointers = env->NewLongArray(l);
 
     af_array arr = (af_array)ref;
-    af::array var = af::array(arr);
+    af::array var;
     af_array arr_lags = (af_array)lags;
-    af::array var_lags = af::array(arr_lags);
+    af::array var_lags;
+
+    check_and_retain_arrays(arr, arr_lags, var, var_lags);
+
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
-
-    af_retain_array(&arr, var.get());
-    af_retain_array(&arr_lags, var_lags.get());
 
     af_retain_array(&af_p, khiva::features::partialAutocorrelation(var, var_lags).get());
 
@@ -1236,19 +1233,19 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *env, jobjec
     jlongArray pointers = env->NewLongArray(l);
 
     af_array arr = (af_array)ref;
-    af::array var = af::array(arr);
+    af::array var;
     af_array arr_q = (af_array)q;
-    af::array var_q = af::array(arr_q);
+    af::array var_q;
+
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
-    af_retain_array(&arr, var.get());
-    af_retain_array(&arr_q, var_q.get());
+    check_and_retain_arrays(arr, arr_q, var, var_q);
 
     af_retain_array(&af_p, khiva::features::quantile(var, var_q, precision).get());
 
-    tmp[0] = (jlong)arr;
-    tmp[1] = (jlong)arr_q;
+    tmp[0] = (jlong)var.get();
+    tmp[1] = (jlong)var_q.get();
     tmp[2] = (jlong)af_p;
 
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);

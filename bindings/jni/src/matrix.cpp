@@ -6,7 +6,9 @@
 
 #include <arrayfire.h>
 #include <khiva/matrix.h>
+#include <khiva_jni/defines.h>
 #include <khiva_jni/matrix.h>
+#include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
                                                                     jlong ref_index, jlong n) {
@@ -15,10 +17,12 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env,
     jlongArray pointers = env->NewLongArray(l);
 
     af_array arr_profile = (af_array)ref_profile;
-    af::array var_profile = af::array(arr_profile);
+    af::array var_profile;
 
     af_array arr_index = (af_array)ref_index;
-    af::array var_index = af::array(arr_index);
+    af::array var_index;
+
+    check_and_retain_arrays(arr_profile, arr_index, var_profile, var_index);
 
     jlong raw_pointer_discord_distances = 0;
     af_array af_p_discord_distances = (af_array)raw_pointer_discord_distances;
@@ -28,9 +32,6 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env,
 
     jlong raw_pointer_subsequence_indices = 0;
     af_array af_p_subsequence_indices = (af_array)raw_pointer_subsequence_indices;
-
-    af_retain_array(&arr_profile, var_profile.get());
-    af_retain_array(&arr_index, var_index.get());
 
     af::array discords;
     af::array discords_indices;
@@ -60,10 +61,12 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, j
     jlongArray pointers = env->NewLongArray(l);
 
     af_array arr_profile = (af_array)ref_profile;
-    af::array var_profile = af::array(arr_profile);
+    af::array var_profile;
 
     af_array arr_index = (af_array)ref_index;
-    af::array var_index = af::array(arr_index);
+    af::array var_index;
+
+    check_and_retain_arrays(arr_profile, arr_index, var_profile, var_index);
 
     jlong raw_pointer_motif_distances = 0;
     af_array af_p_motif_distances = (af_array)raw_pointer_motif_distances;
@@ -73,9 +76,6 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, j
 
     jlong raw_pointer_subsequence_indices = 0;
     af_array af_p_subsequence_indices = (af_array)raw_pointer_subsequence_indices;
-
-    af_retain_array(&arr_profile, var_profile.get());
-    af_retain_array(&arr_index, var_index.get());
 
     af::array motifs;
     af::array motif_indices;
@@ -104,19 +104,18 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jl
     jlongArray pointers = env->NewLongArray(l);
 
     af_array arr_a = (af_array)ref_a;
-    af::array var_a = af::array(arr_a);
+    af::array var_a;
 
     af_array arr_b = (af_array)ref_b;
-    af::array var_b = af::array(arr_b);
+    af::array var_b;
+
+    check_and_retain_arrays(arr_a, arr_b, var_a, var_b);
 
     jlong raw_pointer_distance = 0;
     af_array af_p_distance = (af_array)raw_pointer_distance;
 
     jlong raw_pointer_index = 0;
     af_array af_p_index = (af_array)raw_pointer_index;
-
-    af_retain_array(&arr_a, var_a.get());
-    af_retain_array(&arr_b, var_b.get());
 
     af::array distance;
     af::array index;

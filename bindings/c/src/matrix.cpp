@@ -7,13 +7,13 @@
 #include <arrayfire.h>
 #include <khiva/matrix.h>
 #include <khiva_c/matrix.h>
+#include <khiva_c/util.h>
 
 void find_best_n_discords(khiva_array *profile, khiva_array *index, long *n, khiva_array *discord_distances,
                           khiva_array *discord_indices, khiva_array *subsequence_indices) {
-    af::array var_profile = af::array(*profile);
-    af::array var_index = af::array(*index);
-    af_retain_array(profile, var_profile.get());
-    af_retain_array(index, var_index.get());
+    af::array var_profile;
+    af::array var_index;
+    check_and_retain_arrays(profile, index, var_profile, var_index);
 
     af::array discords;
     af::array discordIndices;
@@ -26,10 +26,9 @@ void find_best_n_discords(khiva_array *profile, khiva_array *index, long *n, khi
 
 void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *n, khiva_array *motif_distances,
                         khiva_array *motif_indices, khiva_array *subsequence_indices) {
-    af::array var_profile = af::array(*profile);
-    af::array var_index = af::array(*index);
-    af_retain_array(profile, var_profile.get());
-    af_retain_array(index, var_index.get());
+    af::array var_profile;
+    af::array var_index;
+    check_and_retain_arrays(profile, index, var_profile, var_index);
 
     af::array motifs;
     af::array motifIndices;
@@ -41,10 +40,9 @@ void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *n, khiva
 }
 
 void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i) {
-    af::array var_tssa = af::array(*tssa);
-    af::array var_tssb = af::array(*tssb);
-    af_retain_array(tssa, var_tssa.get());
-    af_retain_array(tssb, var_tssb.get());
+    af::array var_tssa;
+    af::array var_tssb;
+    check_and_retain_arrays(tssa, tssb, var_tssa, var_tssb);
 
     af::array distance;
     af::array index;
