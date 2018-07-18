@@ -7,12 +7,7 @@
 #include <khiva/normalization.h>
 #include <khiva_jni/normalization.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNorm(JNIEnv *env, jobject,
-                                                                                       jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNorm(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -34,7 +29,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_decimalScalin
     return pointers;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNormInPlace(JNIEnv *, jobject, jlong ref) {
+jlong JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNormInPlace(JNIEnv *, jobject, jlong ref) {
     af_array arr = (af_array)ref;
     af::array var = af::array(arr);
 
@@ -43,9 +38,8 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNorm
     return (jlong)arr;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env, jobject, jlong ref,
-                                                                               jdouble high, jdouble low,
-                                                                               jdouble epsilon) {
+jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env, jobject, jlong ref, jdouble high,
+                                                                    jdouble low, jdouble epsilon) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -67,9 +61,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JN
     return pointers;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *, jobject, jlong ref,
-                                                                                 jdouble high, jdouble low,
-                                                                                 jdouble epsilon) {
+jlong JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *, jobject, jlong ref, jdouble high,
+                                                                      jdouble low, jdouble epsilon) {
     af_array arr = (af_array)ref;
     af::array var = af::array(arr);
 
@@ -78,7 +71,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(
     return (jlong)arr;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_meanNorm(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Normalization_meanNorm(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -100,7 +93,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_meanNorm(JNIE
     return pointers;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JNIEnv *, jobject, jlong ref) {
+jlong JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JNIEnv *, jobject, jlong ref) {
     af_array arr = (af_array)ref;
     af::array var = af::array(arr);
 
@@ -109,8 +102,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JN
     return (jlong)arr;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobject, jlong ref,
-                                                                          jdouble epsilon) {
+jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobject, jlong ref, jdouble epsilon) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -132,8 +124,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_znormInPlace(JNIEnv *, jobject, jlong ref,
-                                                                            jdouble epsilon) {
+jlong JNICALL Java_io_shapelets_khiva_Normalization_znormInPlace(JNIEnv *, jobject, jlong ref, jdouble epsilon) {
     af_array arr = (af_array)ref;
     af::array var = af::array(arr);
 
@@ -141,7 +132,3 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_znormInPlace(JNIEn
     af_retain_array(&arr, var.get());
     return (jlong)arr;
 }
-
-#ifdef __cplusplus
-}
-#endif

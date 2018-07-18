@@ -8,11 +8,7 @@
 #include <khiva/distances.h>
 #include <khiva_jni/distances.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -33,7 +29,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_euclidean(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_dtw(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Distances_dtw(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -54,7 +50,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_dtw(JNIEnv *env, 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_hamming(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Distances_hamming(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -75,7 +71,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_hamming(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -96,7 +92,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_manhattan(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -116,7 +112,3 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_squaredEuclidean(
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
     return pointers;
 }
-
-#ifdef __cplusplus
-}
-#endif

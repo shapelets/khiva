@@ -8,18 +8,10 @@
 #include <khiva/linalg.h>
 #include <khiva_c/linalg.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-KHIVAAPI void lls(khiva_array *a, khiva_array *b, khiva_array *result) {
+void lls(khiva_array *a, khiva_array *b, khiva_array *result) {
     af::array var_a = af::array(*a);
     af_retain_array(a, var_a.get());
     af::array var_b = af::array(*b);
     af_retain_array(b, var_b.get());
     af_retain_array(result, khiva::linalg::lls(var_a, var_b).get());
 }
-
-#ifdef __cplusplus
-}
-#endif

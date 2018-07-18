@@ -6,12 +6,9 @@
 
 #include <jni.h>
 #include <khiva/features.h>
+#include <khiva_jni/features.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_absEnergy(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_absEnergy(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -32,7 +29,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_absEnergy(JNIEnv *
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_absoluteSumOfChanges(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_absoluteSumOfChanges(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -53,8 +50,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_absoluteSumOfChang
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorrelation(JNIEnv *env, jobject, jlong ref,
-                                                                                        jint aggregationFunction) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorrelation(JNIEnv *env, jobject, jlong ref,
+                                                                              jint aggregationFunction) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -101,9 +98,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorr
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTrend(JNIEnv *env, jobject, jlong ref,
-                                                                                    jlong chunkSize,
-                                                                                    jint aggregationFunction) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTrend(JNIEnv *env, jobject, jlong ref,
+                                                                          jlong chunkSize, jint aggregationFunction) {
     const jint l = 6;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -182,8 +178,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTr
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_approximateEntropy(JNIEnv *env, jobject, jlong ref,
-                                                                                 jint m, jfloat r) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_approximateEntropy(JNIEnv *env, jobject, jlong ref, jint m,
+                                                                       jfloat r) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -204,8 +200,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_approximateEntropy
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JNIEnv *env, jobject, jlong ref_xss,
-                                                                              jlong ref_yss, jboolean unbiased) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JNIEnv *env, jobject, jlong ref_xss, jlong ref_yss,
+                                                                    jboolean unbiased) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -231,8 +227,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCovariance(JNIEnv *env, jobject, jlong ref,
-                                                                             jboolean unbiased) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCovariance(JNIEnv *env, jobject, jlong ref, jboolean unbiased) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -254,8 +249,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCovariance(JNI
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCorrelation(JNIEnv *env, jobject, jlong ref_xss,
-                                                                               jlong ref_yss, jboolean unbiased) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCorrelation(JNIEnv *env, jobject, jlong ref_xss, jlong ref_yss,
+                                                                     jboolean unbiased) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -281,8 +276,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCorrelation(J
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCorrelation(JNIEnv *env, jobject, jlong ref,
-                                                                              jlong maxLag, jboolean unbiased) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCorrelation(JNIEnv *env, jobject, jlong ref, jlong maxLag,
+                                                                    jboolean unbiased) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -304,8 +299,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCorrelation(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_binnedEntropy(JNIEnv *env, jobject, jlong ref,
-                                                                            jint max_bins) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_binnedEntropy(JNIEnv *env, jobject, jlong ref, jint max_bins) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -327,7 +321,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_binnedEntropy(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_c3(JNIEnv *env, jobject, jlong ref, jlong lag) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_c3(JNIEnv *env, jobject, jlong ref, jlong lag) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -349,8 +343,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_c3(JNIEnv *env, jo
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_cidCe(JNIEnv *env, jobject, jlong ref,
-                                                                    jboolean zNormalize) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_cidCe(JNIEnv *env, jobject, jlong ref, jboolean zNormalize) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -372,7 +365,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_cidCe(JNIEnv *env,
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_countAboveMean(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_countAboveMean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -394,7 +387,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_countAboveMean(JNI
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_countBelowMean(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_countBelowMean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -416,8 +409,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_countBelowMean(JNI
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_cwtCoefficients(JNIEnv *env, jobject, jlong ref,
-                                                                              jlong widths, jint coeff, jint w) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_cwtCoefficients(JNIEnv *env, jobject, jlong ref, jlong widths,
+                                                                    jint coeff, jint w) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -445,9 +438,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_cwtCoefficients(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_energyRatioByChunks(JNIEnv *env, jobject, jlong ref,
-                                                                                  jlong numSegments,
-                                                                                  jlong segmentFocus) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_energyRatioByChunks(JNIEnv *env, jobject, jlong ref,
+                                                                        jlong numSegments, jlong segmentFocus) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -471,7 +463,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_energyRatioByChunk
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_fftAggregated(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_fftAggregated(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -493,8 +485,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_fftAggregated(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_fftCoefficient(JNIEnv *env, jobject, jlong ref,
-                                                                             jlong coefficient) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_fftCoefficient(JNIEnv *env, jobject, jlong ref, jlong coefficient) {
     const jint l = 5;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -539,7 +530,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_fftCoefficient(JNI
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMaximum(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMaximum(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -561,7 +552,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMax
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMinimum(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMinimum(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -583,8 +574,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMin
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_friedrichCoefficients(JNIEnv *env, jobject, jlong ref,
-                                                                                    jint m, jfloat r) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_friedrichCoefficients(JNIEnv *env, jobject, jlong ref, jint m,
+                                                                          jfloat r) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -606,7 +597,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_friedrichCoefficie
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicates(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicates(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -628,7 +619,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicates(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMax(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMax(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -650,7 +641,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMax(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMin(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMin(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -672,8 +663,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMin(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_indexMassQuantile(JNIEnv *env, jobject, jlong ref,
-                                                                                jfloat q) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_indexMassQuantile(JNIEnv *env, jobject, jlong ref, jfloat q) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -695,7 +685,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_indexMassQuantile(
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_kurtosis(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_kurtosis(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -717,8 +707,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_kurtosis(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_largeStandardDeviation(JNIEnv *env, jobject, jlong ref,
-                                                                                     jfloat r) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_largeStandardDeviation(JNIEnv *env, jobject, jlong ref, jfloat r) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -740,7 +729,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_largeStandardDevia
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMaximum(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMaximum(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -762,7 +751,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMaxi
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMinimum(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMinimum(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -784,7 +773,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMini
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_length(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_length(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -806,7 +795,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_length(JNIEnv *env
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_linearTrend(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_linearTrend(JNIEnv *env, jobject, jlong ref) {
     const jint l = 6;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -857,7 +846,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_linearTrend(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_localMaximals(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_localMaximals(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -879,7 +868,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_localMaximals(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeAboveMean(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeAboveMean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -901,7 +890,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeAbove
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeBelowMean(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeBelowMean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -923,8 +912,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeBelow
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_maxLangevinFixedPoint(JNIEnv *env, jobject, jlong ref,
-                                                                                    jint m, jfloat r) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_maxLangevinFixedPoint(JNIEnv *env, jobject, jlong ref, jint m,
+                                                                          jfloat r) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -946,7 +935,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_maxLangevinFixedPo
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_maximum(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_maximum(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -968,7 +957,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_maximum(JNIEnv *en
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_mean(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_mean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -990,7 +979,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_mean(JNIEnv *env, 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_meanAbsoluteChange(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_meanAbsoluteChange(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1012,7 +1001,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_meanAbsoluteChange
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_meanChange(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_meanChange(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1034,8 +1023,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_meanChange(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject,
-                                                                                          jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1057,7 +1045,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_meanSecondDerivati
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_median(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_median(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1079,7 +1067,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_median(JNIEnv *env
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_minimum(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_minimum(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1101,7 +1089,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_minimum(JNIEnv *en
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCrossingM(JNIEnv *env, jobject, jlong ref, jint m) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCrossingM(JNIEnv *env, jobject, jlong ref, jint m) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1123,8 +1111,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCrossingM(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCwtPeaks(JNIEnv *env, jobject, jlong ref,
-                                                                             jint maxW) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCwtPeaks(JNIEnv *env, jobject, jlong ref, jint maxW) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1146,7 +1133,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCwtPeaks(JNI
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_numberPeaks(JNIEnv *env, jobject, jlong ref, jint n) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_numberPeaks(JNIEnv *env, jobject, jlong ref, jint n) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1168,8 +1155,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_numberPeaks(JNIEnv
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_partialAutocorrelation(JNIEnv *env, jobject, jlong ref,
-                                                                                     jlong lags) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_partialAutocorrelation(JNIEnv *env, jobject, jlong ref,
+                                                                           jlong lags) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1195,7 +1182,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_partialAutocorrela
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringDatapointsToAllDatapoints(
+jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringDatapointsToAllDatapoints(
     JNIEnv *env, jobject, jlong ref, jboolean isSorted) {
     const jint l = 2;
     jlong tmp[l];
@@ -1218,8 +1205,9 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccu
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringValuesToAllValues(
-    JNIEnv *env, jobject, jlong ref, jboolean isSorted) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringValuesToAllValues(JNIEnv *env, jobject,
+                                                                                             jlong ref,
+                                                                                             jboolean isSorted) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1241,8 +1229,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccu
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *env, jobject, jlong ref, jlong q,
-                                                                       jfloat precision) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *env, jobject, jlong ref, jlong q,
+                                                             jfloat precision) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1268,8 +1256,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_rangeCount(JNIEnv *env, jobject, jlong ref, jfloat min,
-                                                                         jfloat max) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_rangeCount(JNIEnv *env, jobject, jlong ref, jfloat min,
+                                                               jfloat max) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1291,8 +1279,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_rangeCount(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioBeyondRSigma(JNIEnv *env, jobject, jlong ref,
-                                                                                jfloat r) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioBeyondRSigma(JNIEnv *env, jobject, jlong ref, jfloat r) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1314,8 +1301,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioBeyondRSigma(
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioValueNumberToTimeSeriesLength(JNIEnv *env, jobject,
-                                                                                                 jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioValueNumberToTimeSeriesLength(JNIEnv *env, jobject,
+                                                                                       jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1337,7 +1324,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioValueNumberTo
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sampleEntropy(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_sampleEntropy(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1359,7 +1346,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sampleEntropy(JNIE
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_skewness(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_skewness(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1381,8 +1368,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_skewness(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_spktWelchDensity(JNIEnv *env, jobject, jlong ref,
-                                                                               jint coeff) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_spktWelchDensity(JNIEnv *env, jobject, jlong ref, jint coeff) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1404,7 +1390,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_spktWelchDensity(J
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_standardDeviation(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_standardDeviation(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1426,8 +1412,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_standardDeviation(
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject,
-                                                                                         jlong ref, jboolean isSorted) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject, jlong ref,
+                                                                               jboolean isSorted) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1449,8 +1435,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringDa
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringValues(JNIEnv *env, jobject, jlong ref,
-                                                                                     jboolean isSorted) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringValues(JNIEnv *env, jobject, jlong ref,
+                                                                           jboolean isSorted) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1472,7 +1458,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringVa
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sumValues(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_sumValues(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1494,8 +1480,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_sumValues(JNIEnv *
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_symmetryLooking(JNIEnv *env, jobject, jlong ref,
-                                                                              jfloat r) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_symmetryLooking(JNIEnv *env, jobject, jlong ref, jfloat r) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1517,8 +1502,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_symmetryLooking(JN
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_timeReversalAsymmetryStatistic(JNIEnv *env, jobject,
-                                                                                             jlong ref, jint lag) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_timeReversalAsymmetryStatistic(JNIEnv *env, jobject, jlong ref,
+                                                                                   jint lag) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1540,7 +1525,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_timeReversalAsymme
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_valueCount(JNIEnv *env, jobject, jlong ref, jfloat v) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_valueCount(JNIEnv *env, jobject, jlong ref, jfloat v) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1562,7 +1547,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_valueCount(JNIEnv 
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_variance(JNIEnv *env, jobject, jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_variance(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1584,8 +1569,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_variance(JNIEnv *e
     return pointers;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_varianceLargerThanStandardDeviation(JNIEnv *env, jobject,
-                                                                                                  jlong ref) {
+jlongArray JNICALL Java_io_shapelets_khiva_Features_varianceLargerThanStandardDeviation(JNIEnv *env, jobject,
+                                                                                        jlong ref) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -1606,7 +1591,3 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Features_varianceLargerThan
 
     return pointers;
 }
-
-#ifdef __cplusplus
-}
-#endif

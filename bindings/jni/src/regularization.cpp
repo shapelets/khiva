@@ -7,13 +7,9 @@
 #include <khiva/regularization.h>
 #include <khiva_jni/regularization.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
-                                                                             jint aggregationFunction, jint nColumnsKey,
-                                                                             jint nColumnsValue) {
+jlongArray JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
+                                                                  jint aggregationFunction, jint nColumnsKey,
+                                                                  jint nColumnsValue) {
     const jint l = 2;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -54,7 +50,3 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIE
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
     return pointers;
 }
-
-#ifdef __cplusplus
-}
-#endif

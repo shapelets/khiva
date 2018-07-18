@@ -8,35 +8,31 @@
 #include <khiva/statistics.h>
 #include <khiva_c/statistics.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-KHIVAAPI void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_array *result) {
+void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, khiva::statistics::covariance(var, *unbiased).get());
 }
 
-KHIVAAPI void kurtosis_statistics(khiva_array *tss, khiva_array *result) {
+void kurtosis_statistics(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, khiva::statistics::kurtosis(var).get());
 }
 
-KHIVAAPI void ljung_box(khiva_array *tss, long *lags, khiva_array *result) {
+void ljung_box(khiva_array *tss, long *lags, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, khiva::statistics::ljungBox(var, *lags).get());
 }
 
-KHIVAAPI void moment_statistics(khiva_array *tss, int *k, khiva_array *result) {
+void moment_statistics(khiva_array *tss, int *k, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, khiva::statistics::moment(var, *k).get());
 }
 
-KHIVAAPI void quantile_statistics(khiva_array *tss, khiva_array *q, float *precision, khiva_array *result) {
+void quantile_statistics(khiva_array *tss, khiva_array *q, float *precision, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af::array var_q = af::array(*q);
@@ -44,24 +40,20 @@ KHIVAAPI void quantile_statistics(khiva_array *tss, khiva_array *q, float *preci
     af_retain_array(result, khiva::statistics::quantile(var, var_q, *precision).get());
 }
 
-KHIVAAPI void quantiles_cut_statistics(khiva_array *tss, float *quantiles, float *precision, khiva_array *result) {
+void quantiles_cut_statistics(khiva_array *tss, float *quantiles, float *precision, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, khiva::statistics::quantilesCut(var, *quantiles, *precision).get());
 }
 
-KHIVAAPI void sample_stdev_statistics(khiva_array *tss, khiva_array *result) {
+void sample_stdev_statistics(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, khiva::statistics::sampleStdev(var).get());
 }
 
-KHIVAAPI void skewness_statistics(khiva_array *tss, khiva_array *result) {
+void skewness_statistics(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af_retain_array(result, khiva::statistics::skewness(var).get());
 }
-
-#ifdef __cplusplus
-}
-#endif

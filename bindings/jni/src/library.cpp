@@ -8,42 +8,30 @@
 #include <khiva/version.h>
 #include <khiva_jni/library.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-JNIEXPORT jstring JNICALL Java_io_shapelets_khiva_Library_backendInfo(JNIEnv * env, jobject) {
+jstring JNICALL Java_io_shapelets_khiva_Library_backendInfo(JNIEnv *env, jobject) {
     return env->NewStringUTF(khiva::library::backendInfo().c_str());
 }
 
-JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_setBackend(JNIEnv *, jobject, jint backend) {
+void JNICALL Java_io_shapelets_khiva_Library_setBackend(JNIEnv *, jobject, jint backend) {
     khiva::library::setBackend(static_cast<khiva::library::Backend>(backend));
 }
 
-JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *, jobject) {
+int JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *, jobject) {
     return static_cast<int>(khiva::library::getBackend());
 }
 
-JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *, jobject) {
-    return khiva::library::getBackends();
-}
+int JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *, jobject) { return khiva::library::getBackends(); }
 
-JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_setDevice(JNIEnv *, jobject, jint device) {
+void JNICALL Java_io_shapelets_khiva_Library_setDevice(JNIEnv *, jobject, jint device) {
     khiva::library::setDevice(device);
 }
 
-JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *, jobject) {
-    return khiva::library::getDevice();
-}
+int JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *, jobject) { return khiva::library::getDevice(); }
 
-JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, jobject) {
+int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, jobject) {
     return khiva::library::getDeviceCount();
 }
 
-JNIEXPORT jstring JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject) {
+jstring JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject) {
     return env->NewStringUTF(khiva::version().c_str());
 }
-
-#ifdef __cplusplus
-}
-#endif

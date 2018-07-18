@@ -8,12 +8,7 @@
 #include <khiva/regression.h>
 #include <khiva_jni/regression.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobject, jlong ref_xss,
-                                                                        jlong ref_yss) {
+jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobject, jlong ref_xss, jlong ref_yss) {
     const jint l = 7;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -68,7 +63,3 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *e
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
     return pointers;
 }
-
-#ifdef __cplusplus
-}
-#endif
