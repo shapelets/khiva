@@ -7,7 +7,9 @@
 #include <khiva/matrix.h>
 #include <khiva/normalization.h>
 #include <algorithm>
+#include <iterator>
 #include <limits>
+#include <set>
 
 #define BATCH_SIZE 2048
 #define EPSILON 1e-8
@@ -87,7 +89,7 @@ void khiva::matrix::meanStdev(af::array t, long m, af::array &mean, af::array &s
 }
 
 af::array khiva::matrix::generateMask(long m, long batchSize, long batchStart, long tsLength, long nTimeSeries) {
-    long bandSize = static_cast<long>(std::ceil(m / 2.0)) + 1;
+    long bandSize = static_cast<long>(std::ceil(m / 2.0f)) + 1;
 
     if (m * tsLength <= 2097152) {
         // Limit the faster method using convolve for up to the previous number of points which uses approximately
@@ -628,46 +630,128 @@ void khiva::matrix::stomp(af::array t, long m, af::array &profile, af::array &in
     }
 }
 
-void khiva::matrix::findBestNMotifs(af::array profile, af::array index, long n, af::array &motifs,
-                                    af::array &motifsIndices, af::array &subsequenceIndices) {
-    // Repeat the profile in the second dimension
-    af::array profileTiled = af::tile(profile, 1, 2);
-    // Joining it with an array from 1 to n in order to obtain the query subsequence index later on
-    af::array joined = af::join(1, index, af::range(index.dims(0), 1, 1, 1, -1, index.type()));
-    af::array sortedDistances;
-    af::array sortedIndices;
-
-    // Sort the profile and the indices using the profile as keys
-    af::sort(sortedDistances, sortedIndices, profileTiled, joined, 0, true);
-
-    // Taking the best n indices
-    af::array bestNIndices = sortedIndices(af::seq(n), af::span);
-    // Distance of the best n motifs
-    motifs = sortedDistances(af::seq(n));
-    // Index of the reference subsequence producing the minimum
-    motifsIndices = bestNIndices.col(0);
-    // Index of the query subsequences producing the minimum
-    subsequenceIndices = bestNIndices.col(1);
+/**
+ * @brief Private function to determine if the given motif/discord is consecutive or not, or if it is a mirror of
+ * any of the best motifs/discords.
+ *
+ * @param pairs Set of best motifs/discords.
+ * @param pair Given motif/discord.
+ * @param m Subsequence length used to calculate the matrix profile.
+ * @return True if the motif/discord should be filtered and false otherwise.
+ */
+bool isFiltered(std::set<std::pair<unsigned int, unsigned int>> pairs, std::pair<unsigned int, unsigned int> pair,
+                long m) {
+    unsigned int startQ = static_cast<unsigned int>(std::max(static_cast<long>(pair.first) - m / 2, 0L));
+    unsigned int startR = static_cast<unsigned int>(std::max(static_cast<long>(pair.second) - m / 2, 0L));
+    unsigned int endQ = pair.first + static_cast<unsigned int>(m / 2);
+    unsigned int endR = pair.second + static_cast<unsigned int>(m / 2);
+    for (unsigned int i = startQ; i <= endQ; i++) {
+        for (unsigned int j = startR; j <= endR; j++) {
+            if (std::find(pairs.begin(), pairs.end(), std::make_pair(i, j)) != pairs.end()) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
-void khiva::matrix::findBestNDiscords(af::array profile, af::array index, long n, af::array &discords,
-                                      af::array &discordsIndices, af::array &subsequenceIndices) {
+void findBestN(af::array profile, af::array index, long m, long n, af::array &distance, af::array &indices,
+               af::array &subsequenceIndices, bool selfJoin, bool lookForMotifs) {
+    std::string aux = (lookForMotifs) ? "motifs" : "discords";
+    if (n > std::max(static_cast<int>(std::ceil(profile.dims(0) / std::ceil(m / 2.0f))), 1)) {
+        throw std::invalid_argument("You cannot retrieve more than (L-m+1)/(m/2) " + aux +
+                                    ", since there cannot be consecutive " + aux +
+                                    " in m/2 before and after a given one. L refers to the time series length.");
+    }
+
     // Repeat the profile in the second dimension
-    af::array profileTiled = af::tile(profile, 1, 2);
+    af::array profileTiled = af::tile(profile, 1, 1, 1, 2);
     // Joining it with an array from 1 to n in order to obtain the query subsequence index later on
-    af::array joined = af::join(1, index, af::range(index.dims(0), 1, 1, 1, -1, index.type()));
+    af::array joined = af::join(3, index, af::range(index.dims(), -1, index.type()));
     af::array sortedDistances;
     af::array sortedIndices;
 
     // Sort the profile and the indices using the profile as keys
-    af::sort(sortedDistances, sortedIndices, profileTiled, joined, 0, false);
+    af::sort(sortedDistances, sortedIndices, profileTiled, joined, 0, lookForMotifs);
 
-    // Taking the best n indices
-    af::array bestNIndices = sortedIndices(af::seq(n), af::span);
-    // Distance of the best n discords
-    discords = sortedDistances(af::seq(n));
-    // Index of the reference subsequence producing the maximum
-    discordsIndices = bestNIndices.col(0);
-    // Index of the query subsequences producing the maximum
-    subsequenceIndices = bestNIndices.col(1);
+    // Defining output variables
+    // Distance of the best n
+    distance = sortedDistances(af::seq(n), af::span, af::span, 0);
+    // Index of the reference subsequence producing the minimum
+    indices = sortedIndices(af::seq(n), af::span, af::span, 0);
+    // Index of the query subsequences producing the minimum
+    subsequenceIndices = sortedIndices(af::seq(n), af::span, af::span, 1);
+
+    // For each reference time series
+    for (int i = 0; i < profile.dims(1); i++) {
+        // For each query time series
+        for (int j = 0; j < profile.dims(2); j++) {
+            // Initializing variables
+            std::vector<unsigned int> mIndices(sortedIndices.dims(0));
+            sortedIndices(af::span, i, j, 0).host(&mIndices[0]);
+            std::vector<unsigned int> sIndices(sortedIndices.dims(0));
+            sortedIndices(af::span, i, j, 1).host(&sIndices[0]);
+
+            std::vector<std::pair<unsigned int, unsigned int>> target;
+            target.reserve(mIndices.size());
+            std::transform(mIndices.begin(), mIndices.end(), sIndices.begin(), std::back_inserter(target),
+                           [](unsigned int a, unsigned int b) { return std::make_pair(a, b); });
+
+            std::vector<unsigned int> resIndices(n);
+            std::vector<unsigned int> resSubsequenceIndices(n);
+
+            std::vector<int> positions;
+
+            resIndices[0] = target[0].first;
+            resSubsequenceIndices[0] = target[0].second;
+            positions.push_back(0);
+            std::set<std::pair<unsigned int, unsigned int>> resIndicesPairs;
+            resIndicesPairs.insert(target[0]);
+
+            // Calculate the best N motifs
+            int k = 1, l = 1;
+            while (l < target.size() && k < n) {
+                if (!isFiltered(resIndicesPairs, target[l], m) &&
+                    (!selfJoin || !isFiltered(resIndicesPairs, std::make_pair(target[l].second, target[l].first), m))) {
+                    // If the distance is lower than the threshold of m/2 (and is not a mirror)
+                    // Add it to the resulting set
+                    resIndices[k] = target[l].first;
+                    resSubsequenceIndices[k] = target[l].second;
+                    resIndicesPairs.insert(target[l]);
+                    positions.push_back(l);
+
+                    // Increment the number of resulting best n so far
+                    k++;
+                }
+                l++;
+            }
+
+            if (l >= target.size() && k < n) {
+                // If we enter here, it is because there have been too many mirrors, which cannot be known a priori
+                // The consecutive best n check is done at the beginning of the function
+                throw std::runtime_error("Only " + std::to_string(k) + " out of the best " + std::to_string(n) + " " +
+                                         aux + " can be calculated. The resulting " + std::to_string(n - k) + " " +
+                                         aux + " were not included because they are mirror " + aux + ".");
+            }
+
+            // From host to device (distances, motifsIndices, subsequenceIndices)
+            // Distances
+            af::array distancePositions = af::array(positions.size(), &positions[0]);
+            distance(af::span, i, j) = sortedDistances(distancePositions, i, j, 0);
+            // Indices
+            indices(af::span, i, j) = af::array(resIndices.size(), &resIndices[0]);
+            // Subsequence Indices
+            subsequenceIndices(af::span, i, j) = af::array(resSubsequenceIndices.size(), &resSubsequenceIndices[0]);
+        }
+    }
+}
+
+void khiva::matrix::findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs,
+                                    af::array &motifsIndices, af::array &subsequenceIndices, bool selfJoin) {
+    findBestN(profile, index, m, n, motifs, motifsIndices, subsequenceIndices, selfJoin, true);
+}
+
+void khiva::matrix::findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
+                                      af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin) {
+    findBestN(profile, index, m, n, discords, discordsIndices, subsequenceIndices, selfJoin, false);
 }

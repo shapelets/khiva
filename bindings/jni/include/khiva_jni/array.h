@@ -68,7 +68,6 @@ GET_T_FROM_ARRAY(Boolean, boolean)
 GET_T_FROM_ARRAY(Long, long)
 GET_T_FROM_ARRAY(Short, short)
 GET_T_FROM_ARRAY(Byte, byte)
-
 #undef GET_T_FROM_ARRAY
 
 /**
