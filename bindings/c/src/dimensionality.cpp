@@ -7,6 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/dimensionality.h>
 #include <khiva_c/dimensionality.h>
+#include <stdexcept>
 
 void paa(khiva_array *a, int *bins, khiva_array *result) {
     af::array var = af::array(*a);
