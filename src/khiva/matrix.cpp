@@ -7,6 +7,7 @@
 #include <khiva/matrix.h>
 #include <khiva/normalization.h>
 #include <algorithm>
+#include <iterator>
 #include <limits>
 #include <set>
 
