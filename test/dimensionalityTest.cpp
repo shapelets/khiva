@@ -51,6 +51,18 @@ void paaNorm() {
     }
 }
 
+void paaException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::PAA(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid number of points. The number of important points should be a factor "
+                                         "of the total number of points."));
+    }
+}
+
 void pip() {
     float exp_x[] = {0.0f, 2.0f, 3.0f, 6.0f, 7.0f, 9.0f};
     float exp_y[] = {0.0f, -0.1f, 5.0f, 8.1f, 9.0f, 9.0f};
@@ -69,6 +81,17 @@ void pip() {
     for (size_t i = 0; i < 6; i++) {
         ASSERT_EQ(pox_h[i], exp_x[i]);
         ASSERT_EQ(poy_h[i], exp_y[i]);
+    }
+}
+
+void pipException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::PIP(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
     }
 }
 
@@ -163,6 +186,17 @@ void plaBottomUp2() {
     ASSERT_EQ(poy[7], expected[7].second);
 }
 
+void plaBottomUpException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::PLABottomUp(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
+    }
+}
+
 void plaSlidingWindow() {
     float maxError = 1.0;
     std::vector<khiva::dimensionality::Point> pointList;
@@ -241,6 +275,17 @@ void plaSlidingWindow2() {
     ASSERT_EQ(poy_h[5], expected[5].second);
 }
 
+void plaSlidingWindowException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::PLASlidingWindow(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
+    }
+}
+
 void ramerDouglasPeucker() {
     std::vector<khiva::dimensionality::Point> pointList;
     std::vector<khiva::dimensionality::Point> pointListOut;
@@ -287,6 +332,17 @@ void ramerDouglasPeucker2() {
     }
 }
 
+void ramerDouglasPeuckerException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::ramerDouglasPeucker(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
+    }
+}
+
 void sax() {
     float pointList[] = {0.05f, 2.45f, 6.5f, 8.55f, 9.0f, 0.05f, 2.45f, 6.5f, 8.55f, 9.0f};
     af::array a(5, 2, pointList);
@@ -297,6 +353,17 @@ void sax() {
 
     for (size_t i = 0; i < 10; i++) {
         EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
+    }
+}
+
+void saxException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::SAX(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
     }
 }
 
@@ -346,15 +413,33 @@ void visvalingam2() {
     }
 }
 
+void visvalingamException() {
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+
+    try {
+        af::array out = khiva::dimensionality::visvalingam(a, 6);
+    } catch (std::invalid_argument &ia) {
+        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
+    }
+}
+
 KHIVA_TEST(DimensionalityTests, PAA, paa)
 KHIVA_TEST(DimensionalityTests, PAA_NORM, paaNorm)
+KHIVA_TEST(DimensionalityTests, PAAException, paaException)
 KHIVA_TEST(DimensionalityTests, PIP, pip)
+KHIVA_TEST(DimensionalityTests, PIPException, pipException)
 KHIVA_TEST(DimensionalityTests, PLABottomUp, plaBottomUp)
 KHIVA_TEST(DimensionalityTests, PLABottomUp2, plaBottomUp2)
+KHIVA_TEST(DimensionalityTests, PLABottomUpException, plaBottomUpException)
 KHIVA_TEST(DimensionalityTests, PLASlidingWindow, plaSlidingWindow)
 KHIVA_TEST(DimensionalityTests, PLASlidingWindow2, plaSlidingWindow2)
+KHIVA_TEST(DimensionalityTests, PLASlidingWindowException, plaSlidingWindowException)
 KHIVA_TEST(DimensionalityTests, RamerDouglasPeucker, ramerDouglasPeucker)
 KHIVA_TEST(DimensionalityTests, RamerDouglasPeucker2, ramerDouglasPeucker2)
+KHIVA_TEST(DimensionalityTests, RamerDouglasPeuckerException, ramerDouglasPeuckerException)
 KHIVA_TEST(DimensionalityTests, SAX, sax)
+KHIVA_TEST(DimensionalityTests, SAXException, saxException)
 KHIVA_TEST(DimensionalityTests, Visvalingam, visvalingam)
 KHIVA_TEST(DimensionalityTests, Visvalingam2, visvalingam2)
+KHIVA_TEST(DimensionalityTests, VisvalingamException, visvalingamException)
