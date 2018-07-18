@@ -8,12 +8,8 @@
 #include <khiva/regularization.h>
 #include <khiva_c/regularization.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-KHIVAAPI void group_by(khiva_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
-                       khiva_array *result) {
+void group_by(khiva_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
+              khiva_array *result) {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
 
@@ -48,7 +44,3 @@ KHIVAAPI void group_by(khiva_array *array, int *aggregation_function, int *n_col
             break;
     }
 }
-
-#ifdef __cplusplus
-}
-#endif

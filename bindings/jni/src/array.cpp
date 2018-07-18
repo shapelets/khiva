@@ -8,21 +8,17 @@
 #include <khiva_jni/array.h>
 #include <cstring>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#define CREATE_T_ARRAY(Ty, ty, dty)                                                                                  \
-    JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFrom##Ty(JNIEnv *env, jobject,                  \
-                                                                              j##ty##Array elems, jlongArray dims) { \
-        af_array ret = 0;                                                                                            \
-        jlong *dimptr = env->GetLongArrayElements(dims, 0);                                                          \
-        dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};                                               \
-        void *inptr = (void *)env->Get##Ty##ArrayElements(elems, 0);                                                 \
-        af_retain_array(&ret, khiva::array::createArray(inptr, 4, tdims, dty).get());                                \
-        env->ReleaseLongArrayElements(dims, dimptr, 0);                                                              \
-        env->Release##Ty##ArrayElements(elems, (j##ty *)inptr, 0);                                                   \
-        return jlong(ret);                                                                                           \
+#define CREATE_T_ARRAY(Ty, ty, dty)                                                                           \
+    jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFrom##Ty(JNIEnv *env, jobject, j##ty##Array elems, \
+                                                                    jlongArray dims) {                        \
+        af_array ret = 0;                                                                                     \
+        jlong *dimptr = env->GetLongArrayElements(dims, 0);                                                   \
+        dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};                                        \
+        void *inptr = (void *)env->Get##Ty##ArrayElements(elems, 0);                                          \
+        af_retain_array(&ret, khiva::array::createArray(inptr, 4, tdims, dty).get());                         \
+        env->ReleaseLongArrayElements(dims, dimptr, 0);                                                       \
+        env->Release##Ty##ArrayElements(elems, (j##ty *)inptr, 0);                                            \
+        return jlong(ret);                                                                                    \
     }
 CREATE_T_ARRAY(Float, float, khiva::dtype::f32)
 CREATE_T_ARRAY(Double, double, khiva::dtype::f64)
@@ -34,8 +30,8 @@ CREATE_T_ARRAY(Byte, byte, khiva::dtype::u8)
 
 #undef CREATE_T_ARRAY
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComplex(JNIEnv *env, jclass,
-                                                                                  jobjectArray objs, jlongArray dims) {
+jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComplex(JNIEnv *env, jclass, jobjectArray objs,
+                                                                        jlongArray dims) {
     af_array ret = 0;
     jlong *dimptr = env->GetLongArrayElements(dims, 0);
     jint len = env->GetArrayLength(objs);
@@ -70,8 +66,8 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComple
     return jlong(ret);
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass,
-                                                                                   jobjectArray objs, jlongArray dims) {
+jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass, jobjectArray objs,
+                                                                         jlongArray dims) {
     af_array ret = 0;
     jlong *dimptr = env->GetLongArrayElements(dims, 0);
     jint len = env->GetArrayLength(objs);
@@ -106,23 +102,23 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleCompl
     return jlong(ret);
 }
 
-#define GET_T_FROM_ARRAY(Ty, ty)                                                                                    \
-    JNIEXPORT j##ty##Array JNICALL Java_io_shapelets_khiva_Array_get##Ty##FromArray(JNIEnv *env, jobject thisObj) { \
-        jclass clazz = env->GetObjectClass(thisObj);                                                                \
-        jfieldID fidf = env->GetFieldID(clazz, "reference", "J");                                                   \
-        jlong ref = env->GetLongField(thisObj, fidf);                                                               \
-        j##ty##Array result;                                                                                        \
-        dim_t elements = 0;                                                                                         \
-        af_get_elements(&elements, (void *)ref);                                                                    \
-        result = env->New##Ty##Array(static_cast<jsize>(elements));                                                 \
-        j##ty *resf = env->Get##Ty##ArrayElements(result, 0);                                                       \
-        af_array a = (af_array)ref;                                                                                 \
-        af::array var = af::array(a);                                                                               \
-        khiva::array::getData(var, resf);                                                                           \
-        af_retain_array(&a, var.get());                                                                             \
-        env->SetLongField(thisObj, fidf, jlong(a));                                                                 \
-        env->Release##Ty##ArrayElements(result, resf, 0);                                                           \
-        return result;                                                                                              \
+#define GET_T_FROM_ARRAY(Ty, ty)                                                                          \
+    j##ty##Array JNICALL Java_io_shapelets_khiva_Array_get##Ty##FromArray(JNIEnv *env, jobject thisObj) { \
+        jclass clazz = env->GetObjectClass(thisObj);                                                      \
+        jfieldID fidf = env->GetFieldID(clazz, "reference", "J");                                         \
+        jlong ref = env->GetLongField(thisObj, fidf);                                                     \
+        j##ty##Array result;                                                                              \
+        dim_t elements = 0;                                                                               \
+        af_get_elements(&elements, (void *)ref);                                                          \
+        result = env->New##Ty##Array(static_cast<jsize>(elements));                                       \
+        j##ty *resf = env->Get##Ty##ArrayElements(result, 0);                                             \
+        af_array a = (af_array)ref;                                                                       \
+        af::array var = af::array(a);                                                                     \
+        khiva::array::getData(var, resf);                                                                 \
+        af_retain_array(&a, var.get());                                                                   \
+        env->SetLongField(thisObj, fidf, jlong(a));                                                       \
+        env->Release##Ty##ArrayElements(result, resf, 0);                                                 \
+        return result;                                                                                    \
     }
 GET_T_FROM_ARRAY(Float, float)
 GET_T_FROM_ARRAY(Double, double)
@@ -133,7 +129,7 @@ GET_T_FROM_ARRAY(Short, short)
 GET_T_FROM_ARRAY(Byte, byte)
 #undef GET_T_FROM_ARRAY
 
-JNIEXPORT jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj) {
+jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -166,7 +162,7 @@ JNIEXPORT jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFro
     return result;
 }
 
-JNIEXPORT jobjectArray JNICALL Java_io_shapelets_khiva_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj) {
+jobjectArray JNICALL Java_io_shapelets_khiva_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -199,7 +195,7 @@ JNIEXPORT jobjectArray JNICALL Java_io_shapelets_khiva_Array_getFloatComplexFrom
     return result;
 }
 
-JNIEXPORT jint JNICALL Java_io_shapelets_khiva_Array_nativeGetType(JNIEnv *env, jobject thisObj) {
+jint JNICALL Java_io_shapelets_khiva_Array_nativeGetType(JNIEnv *env, jobject thisObj) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -212,7 +208,7 @@ JNIEXPORT jint JNICALL Java_io_shapelets_khiva_Array_nativeGetType(JNIEnv *env, 
     return t;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_nativeGetDims(JNIEnv *env, jobject thisObj) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_nativeGetDims(JNIEnv *env, jobject thisObj) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -232,7 +228,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_nativeGetDims(JNIEnv 
     return p;
 }
 
-JNIEXPORT void JNICALL Java_io_shapelets_khiva_Array_nativePrint(JNIEnv *env, jobject thisObj) {
+void JNICALL Java_io_shapelets_khiva_Array_nativePrint(JNIEnv *env, jobject thisObj) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -244,7 +240,7 @@ JNIEXPORT void JNICALL Java_io_shapelets_khiva_Array_nativePrint(JNIEnv *env, jo
     env->SetLongField(thisObj, fidf, jlong(a));
 }
 
-JNIEXPORT void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jobject thisObj) {
+void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jobject thisObj) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -252,7 +248,7 @@ JNIEXPORT void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jo
     khiva::array::deleteArray((void *)ref);
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_add(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_add(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -279,7 +275,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_add(JNIEnv *env, jobj
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_mul(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_mul(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -306,7 +302,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_mul(JNIEnv *env, jobj
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_sub(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_sub(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -333,7 +329,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_sub(JNIEnv *env, jobj
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_div(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_div(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -360,7 +356,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_div(JNIEnv *env, jobj
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_mod(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_mod(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -387,7 +383,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_mod(JNIEnv *env, jobj
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_pow(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_pow(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -414,7 +410,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_pow(JNIEnv *env, jobj
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_lt(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_lt(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -441,7 +437,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_lt(JNIEnv *env, jobje
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_gt(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_gt(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -468,7 +464,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_gt(JNIEnv *env, jobje
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_le(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_le(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -495,7 +491,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_le(JNIEnv *env, jobje
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_ge(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_ge(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -522,7 +518,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_ge(JNIEnv *env, jobje
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_eq(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_eq(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -549,7 +545,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_eq(JNIEnv *env, jobje
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_ne(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_ne(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -576,7 +572,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_ne(JNIEnv *env, jobje
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_bitAnd(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_bitAnd(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -603,7 +599,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_bitAnd(JNIEnv *env, j
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_bitOr(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_bitOr(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -630,7 +626,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_bitOr(JNIEnv *env, jo
     return p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_bitXor(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_bitXor(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -657,7 +653,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_bitXor(JNIEnv *env, j
     return p;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftL(JNIEnv *env, jobject thisObj, jint n) {
+jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftL(JNIEnv *env, jobject thisObj, jint n) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -677,7 +673,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftL(JNIEnv *en
     return (jlong)af_p;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftR(JNIEnv *env, jobject thisObj, jint n) {
+jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftR(JNIEnv *env, jobject thisObj, jint n) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -697,7 +693,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftR(JNIEnv *en
     return (jlong)af_p;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeNot(JNIEnv *env, jobject thisObj) {
+jlong JNICALL Java_io_shapelets_khiva_Array_nativeNot(JNIEnv *env, jobject thisObj) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -717,8 +713,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeNot(JNIEnv *env, job
     return (jlong)af_p;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *env, jobject thisObj,
-                                                                      jboolean conjugate) {
+jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *env, jobject thisObj, jboolean conjugate) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -738,7 +733,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *en
     return (jlong)af_p;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeCol(JNIEnv *env, jobject thisObj, jint index) {
+jlong JNICALL Java_io_shapelets_khiva_Array_nativeCol(JNIEnv *env, jobject thisObj, jint index) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -757,7 +752,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeCol(JNIEnv *env, job
     return (jlong)af_p;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeCols(JNIEnv *env, jobject thisObj, jint first, jint last) {
+jlong JNICALL Java_io_shapelets_khiva_Array_nativeCols(JNIEnv *env, jobject thisObj, jint first, jint last) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -777,7 +772,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeCols(JNIEnv *env, jo
     return (jlong)af_p;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeRow(JNIEnv *env, jobject thisObj, jint index) {
+jlong JNICALL Java_io_shapelets_khiva_Array_nativeRow(JNIEnv *env, jobject thisObj, jint index) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -797,7 +792,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeRow(JNIEnv *env, job
     return (jlong)af_p;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeRows(JNIEnv *env, jobject thisObj, jint first, jint last) {
+jlong JNICALL Java_io_shapelets_khiva_Array_nativeRows(JNIEnv *env, jobject thisObj, jint first, jint last) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -817,7 +812,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeRows(JNIEnv *env, jo
     return (jlong)af_p;
 }
 
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
+jlongArray JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -844,7 +839,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, j
     return p;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeCopy(JNIEnv *env, jobject thisObj) {
+jlong JNICALL Java_io_shapelets_khiva_Array_nativeCopy(JNIEnv *env, jobject thisObj) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -864,7 +859,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeCopy(JNIEnv *env, jo
     return (jlong)af_p;
 }
 
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_as(JNIEnv *env, jobject thisObj, jint type) {
+jlong JNICALL Java_io_shapelets_khiva_Array_as(JNIEnv *env, jobject thisObj, jint type) {
     jclass clazz = env->GetObjectClass(thisObj);
     jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
     jlong ref = env->GetLongField(thisObj, fidf);
@@ -884,7 +879,3 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_as(JNIEnv *env, jobject th
 
     return (jlong)af_p;
 }
-
-#ifdef __cplusplus
-}
-#endif

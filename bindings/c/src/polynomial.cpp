@@ -10,11 +10,7 @@
 #include <khiva/polynomial.h>
 #include <khiva_c/polynomial.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-KHIVAAPI void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result) {
+void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result) {
     af::array xx = af::array(*x);
     af_retain_array(x, xx.get());
     af::array yy = af::array(*y);
@@ -22,12 +18,8 @@ KHIVAAPI void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *res
     af_retain_array(result, khiva::polynomial::polyfit(xx, yy, *deg).get());
 }
 
-KHIVAAPI void roots(khiva_array *p, khiva_array *result) {
+void roots(khiva_array *p, khiva_array *result) {
     af::array var = af::array(*p);
     af_retain_array(p, var.get());
     af_retain_array(result, khiva::polynomial::roots(var).get());
 }
-
-#ifdef __cplusplus
-}
-#endif
