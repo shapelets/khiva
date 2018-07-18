@@ -61,7 +61,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComplex(JNIEnv *
     dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
     af_retain_array(&ret, khiva::array::createArray(af_array(tmp), 4, tdims, khiva::dtype::c32).get());
 
-    delete[] tmp;
+    free(tmp);
     env->ReleaseLongArrayElements(dims, dimptr, 0);
     return jlong(ret);
 }
@@ -97,7 +97,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleComplex(JNIEnv 
     dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
     af_retain_array(&ret, khiva::array::createArray(af_array(tmp), 4, tdims, khiva::dtype::c64).get());
 
-    delete[] tmp;
+    free(tmp);
     env->ReleaseLongArrayElements(dims, dimptr, 0);
     return jlong(ret);
 }
@@ -158,7 +158,7 @@ jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFromArray(JNI
         env->SetObjectArrayElement(result, i, obj);
     }
 
-    delete[] tmp;
+    free(tmp);
     return result;
 }
 
@@ -191,7 +191,7 @@ jobjectArray JNICALL Java_io_shapelets_khiva_Array_getFloatComplexFromArray(JNIE
         env->SetObjectArrayElement(result, i, obj);
     }
 
-    delete[] tmp;
+    free(tmp);
     return result;
 }
 

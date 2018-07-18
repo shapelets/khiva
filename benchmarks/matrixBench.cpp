@@ -289,7 +289,7 @@ void StompDataCPU(benchmark::State &state) {
 
     addMemoryCounters(state);
 
-    delete[] t_host;
+    free(t_host);
 }
 
 template <af::Backend BE, int D>
