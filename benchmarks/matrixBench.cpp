@@ -6,6 +6,7 @@
 
 #include <benchmark/benchmark.h>
 #include <khiva/matrix.h>
+#include <math.h>
 #include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
@@ -315,6 +316,81 @@ void StompWithItself(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
+template <af::Backend BE, int D>
+void FindBestNMotifs(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = 8192L;
+    auto m = state.range(0);
+
+    auto t = af::randu(n, f64);
+
+    af::array profile;
+    af::array index;
+    af::array motifs;
+    af::array motifsIndices;
+    af::array subsequenceIndices;
+
+    khiva::matrix::stomp(t, m, profile, index);
+    profile.eval();
+    index.eval();
+
+    float percent = (log2(state.range(1)) + 1) * 0.125f;
+    long maxMotifs = std::max(static_cast<int>(std::ceil(profile.dims(0) / std::ceil(m / 2.0f))), 1);
+    long nMotifs = static_cast<long>(std::ceil(percent * maxMotifs));
+
+    af::sync();
+    while (state.KeepRunning()) {
+        khiva::matrix::findBestNMotifs(profile, index, m, nMotifs, motifs, motifsIndices, subsequenceIndices, true);
+
+        motifs.eval();
+        motifsIndices.eval();
+        subsequenceIndices.eval();
+        af::sync();
+    }
+
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
+void FindBestNDiscords(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = 8192L;
+    auto m = state.range(0);
+
+    auto t = af::randu(n, f64);
+
+    af::array profile;
+    af::array index;
+    af::array discords;
+    af::array discordsIndices;
+    af::array subsequenceIndices;
+
+    khiva::matrix::stomp(t, m, profile, index);
+    profile.eval();
+    index.eval();
+
+    float percent = (log2(state.range(1)) + 1) * 0.125f;
+    long maxDiscords = std::max(static_cast<int>(std::ceil(profile.dims(0) / std::ceil(m / 2.0f))), 1);
+    long nDiscords = static_cast<long>(std::ceil(percent * maxDiscords));
+
+    af::sync();
+    while (state.KeepRunning()) {
+        khiva::matrix::findBestNDiscords(profile, index, m, nDiscords, discords, discordsIndices, subsequenceIndices,
+                                         true);
+
+        discords.eval();
+        discordsIndices.eval();
+        subsequenceIndices.eval();
+        af::sync();
+    }
+
+    addMemoryCounters(state);
+}
+
 void cudaBenchmarks() {
     BENCHMARK_TEMPLATE(SlidingDotProduct, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(8)
@@ -369,6 +445,16 @@ void cudaBenchmarks() {
     BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{16 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(FindBestNMotifs, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16, 1024}, {1, 128}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(FindBestNDiscords, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16, 1024}, {1, 128}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
@@ -427,6 +513,16 @@ void openclBenchmarks() {
         ->RangeMultiplier(2)
         ->Ranges({{16 << 10, 32 << 10}, {16, 512}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(FindBestNMotifs, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16, 1024}, {1, 128}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(FindBestNDiscords, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16, 1024}, {1, 128}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
 void cpuBenchmarks() {
@@ -483,6 +579,16 @@ void cpuBenchmarks() {
     BENCHMARK_TEMPLATE(StompWithItself, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{16 << 10, 32 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(FindBestNMotifs, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16, 1024}, {1, 128}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(FindBestNDiscords, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{16, 1024}, {1, 128}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
