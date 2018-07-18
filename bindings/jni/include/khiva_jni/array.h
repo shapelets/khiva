@@ -19,9 +19,9 @@ extern "C" {
  *
  * @return The array reference.
  */
-#define CREATE_T_ARRAY(Ty, ty, dty)                                                                  \
+#define CREATE_T_ARRAY(Ty, ty, dty)                                                                 \
     JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFrom##Ty(JNIEnv *env, jobject, \
-                                                                               j##ty##Array elems, jlongArray dims);
+                                                                              j##ty##Array elems, jlongArray dims);
 CREATE_T_ARRAY(Float, float, khiva::dtype::f32)
 CREATE_T_ARRAY(Double, double, khiva::dtype::f64)
 CREATE_T_ARRAY(Int, int, khiva::dtype::s32)
@@ -41,7 +41,7 @@ CREATE_T_ARRAY(Byte, byte, khiva::dtype::u8)
  * @return The array reference.
  */
 JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComplex(JNIEnv *env, jclass,
-                                                                                   jobjectArray objs, jlongArray dims);
+                                                                                  jobjectArray objs, jlongArray dims);
 
 /**
  * @brief Creates an Array object of Double Complex.
@@ -52,7 +52,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComple
  * @return The array reference.
  */
 JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass,
-                                                                                    jobjectArray objs, jlongArray dims);
+                                                                                   jobjectArray objs, jlongArray dims);
 
 /**
  * @brief Retrieves data from the device to host (Float, Double, Int, Boolean, Long, Short or Byte).
@@ -66,7 +66,8 @@ GET_T_FROM_ARRAY(Double, double)
 GET_T_FROM_ARRAY(Int, int)
 GET_T_FROM_ARRAY(Boolean, boolean)
 GET_T_FROM_ARRAY(Long, long)
-
+GET_T_FROM_ARRAY(Short, short)
+GET_T_FROM_ARRAY(Byte, byte)
 #undef GET_T_FROM_ARRAY
 
 /**
@@ -277,8 +278,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeNot(JNIEnv *env, job
  *
  * @return The reference of the resulting array.
  */
-JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *env, jobject thisObj,
-                                                                       jboolean conjugate);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *env, jobject thisObj, jboolean conjugate);
 
 /**
  * @brief Retrieves a given column of this array.
