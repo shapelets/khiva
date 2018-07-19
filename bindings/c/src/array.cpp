@@ -7,6 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/array.h>
 #include <khiva_c/array.h>
+#include <khiva_c/util.h>
 #include <cstring>
 
 void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *result, int *type) {
@@ -41,136 +42,121 @@ void get_type(khiva_array *array, int *t) {
 }
 
 void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 + var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 * var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_sub(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 - var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_div(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 / var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_mod(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 % var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_pow(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = af::pow(var1, var2);
     af_retain_array(result, r.get());
 }
 
 void khiva_lt(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 < var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_gt(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 > var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_le(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 <= var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_ge(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 >= var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_eq(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 == var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_ne(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 != var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_bitand(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 & var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_bitor(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = var1 | var2;
     af_retain_array(result, r.get());
 }
 
 void khiva_bitxor(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af::array var2 = af::array(*rhs);
-    af_retain_array(lhs, var1.get());
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af::array r = !var1 != !var2;
     af_retain_array(result, r.get());
 }
@@ -231,10 +217,9 @@ void khiva_rows(khiva_array *array, int *first, int *last, khiva_array *result) 
 }
 
 void khiva_matmul(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1 = af::array(*lhs);
-    af_retain_array(lhs, var1.get());
-    af::array var2 = af::array(*rhs);
-    af_retain_array(rhs, var2.get());
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(lhs, rhs, var1, var2);
     af_retain_array(result, af::matmul(var1, var2).get());
 }
 

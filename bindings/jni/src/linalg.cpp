@@ -6,6 +6,7 @@
 
 #include <khiva/linalg.h>
 #include <khiva_jni/linalg.h>
+#include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Linalg_lls(JNIEnv *env, jobject, jlong ref_a, jlong ref_b) {
     const jint l = 3;
@@ -13,14 +14,13 @@ jlongArray JNICALL Java_io_shapelets_khiva_Linalg_lls(JNIEnv *env, jobject, jlon
     jlongArray pointers = env->NewLongArray(l);
 
     af_array arr_a = (af_array)ref_a;
-    af::array var_a = af::array(arr_a);
+    af::array var_a;
     af_array arr_b = (af_array)ref_b;
-    af::array var_b = af::array(arr_b);
+    af::array var_b;
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
-    af_retain_array(&arr_a, var_a.get());
-    af_retain_array(&arr_b, var_b.get());
+    check_and_retain_arrays(arr_a, arr_b, var_a, var_b);
 
     af_retain_array(&af_p, khiva::linalg::lls(var_a, var_b).get());
 

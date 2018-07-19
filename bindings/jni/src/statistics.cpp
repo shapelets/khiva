@@ -7,6 +7,7 @@
 #include <jni.h>
 #include <khiva/statistics.h>
 #include <khiva_jni/statistics.h>
+#include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEnv *env, jobject, jlong ref, jboolean unbiased) {
     const jint l = 2;
@@ -120,14 +121,14 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobj
     jlongArray pointers = env->NewLongArray(l);
 
     af_array arr = (af_array)ref;
-    af::array var = af::array(arr);
+    af::array var;
     af_array arr_q = (af_array)ref_q;
-    af::array var_q = af::array(arr_q);
+    af::array var_q;
 
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
-    af_retain_array(&arr_q, var.get());
+    check_and_retain_arrays(arr, arr_q, var, var_q);
     af_retain_array(&af_p, khiva::statistics::quantile(var, var_q, precision).get());
 
     tmp[0] = (jlong)arr;

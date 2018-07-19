@@ -7,11 +7,11 @@
 #include <arrayfire.h>
 #include <khiva/linalg.h>
 #include <khiva_c/linalg.h>
+#include <khiva_c/util.h>
 
 void lls(khiva_array *a, khiva_array *b, khiva_array *result) {
-    af::array var_a = af::array(*a);
-    af_retain_array(a, var_a.get());
-    af::array var_b = af::array(*b);
-    af_retain_array(b, var_b.get());
+    af::array var_a;
+    af::array var_b;
+    check_and_retain_arrays(a, b, var_a, var_b);
     af_retain_array(result, khiva::linalg::lls(var_a, var_b).get());
 }

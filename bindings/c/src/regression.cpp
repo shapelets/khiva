@@ -7,13 +7,13 @@
 #include <arrayfire.h>
 #include <khiva/regression.h>
 #include <khiva_c/regression.h>
+#include <khiva_c/util.h>
 
 void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array *intercept, khiva_array *rvalue,
             khiva_array *pvalue, khiva_array *stderrest) {
-    af::array var_xss = af::array(*xss);
-    af::array var_yss = af::array(*yss);
-    af_retain_array(xss, var_xss.get());
-    af_retain_array(yss, var_yss.get());
+    af::array var_xss;
+    af::array var_yss;
+    check_and_retain_arrays(xss, yss, var_xss, var_yss);
 
     af::array slope_primitive;
     af::array intercept_primtive;

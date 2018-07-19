@@ -6,6 +6,7 @@
 
 #include <khiva/polynomial.h>
 #include <khiva_jni/polynomial.h>
+#include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY, jint deg) {
     const jint l = 3;
@@ -13,17 +14,15 @@ jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobje
     jlongArray pointers = env->NewLongArray(l);
 
     af_array xx = (af_array)refX;
-    af::array x = af::array(xx);
+    af::array x;
     af_array yy = (af_array)refY;
-    af::array y = af::array(yy);
+    af::array y;
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
 
-    af_retain_array(&xx, x.get());
-    af_retain_array(&yy, y.get());
+    check_and_retain_arrays(xx, yy, x, y);
 
     af_retain_array(&af_p, khiva::polynomial::polyfit(x, y, deg).get());
-
     tmp[0] = (jlong)xx;
     tmp[1] = (jlong)yy;
     tmp[2] = (jlong)af_p;

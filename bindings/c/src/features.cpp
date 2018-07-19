@@ -7,6 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/features.h>
 #include <khiva_c/features.h>
+#include <khiva_c/util.h>
 
 void abs_energy(khiva_array *array, khiva_array *result) {
     af::array var = af::array(*array);
@@ -99,10 +100,9 @@ void approximate_entropy(khiva_array *array, int *m, float *r, khiva_array *resu
 }
 
 void cross_covariance(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_array *result) {
-    af::array var_xss = af::array(*xss);
-    af_retain_array(xss, var_xss.get());
-    af::array var_yss = af::array(*yss);
-    af_retain_array(yss, var_yss.get());
+    af::array var_xss;
+    af::array var_yss;
+    check_and_retain_arrays(xss, yss, var_xss, var_yss);
     af_retain_array(result, khiva::features::crossCovariance(var_xss, var_yss, *unbiased).get());
 }
 
@@ -113,10 +113,9 @@ void auto_covariance(khiva_array *array, bool *unbiased, khiva_array *result) {
 }
 
 void cross_correlation(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_array *result) {
-    af::array var_xss = af::array(*xss);
-    af_retain_array(xss, var_xss.get());
-    af::array var_yss = af::array(*yss);
-    af_retain_array(yss, var_yss.get());
+    af::array var_xss;
+    af::array var_yss;
+    check_and_retain_arrays(xss, yss, var_xss, var_yss);
     af_retain_array(result, khiva::features::crossCorrelation(var_xss, var_yss, *unbiased).get());
 }
 
@@ -157,10 +156,9 @@ void count_below_mean(khiva_array *array, khiva_array *result) {
 }
 
 void cwt_coefficients(khiva_array *array, khiva_array *width, int *coeff, int *w, khiva_array *result) {
-    af::array var = af::array(*array);
-    af_retain_array(array, var.get());
-    af::array var_width = af::array(*width);
-    af_retain_array(width, var_width.get());
+    af::array var;
+    af::array var_width;
+    check_and_retain_arrays(array, width, var, var_width);
     af_retain_array(result, khiva::features::cwtCoefficients(var, var_width, *coeff, *w).get());
 }
 
@@ -359,10 +357,9 @@ void number_peaks(khiva_array *array, int *n, khiva_array *result) {
 }
 
 void partial_autocorrelation(khiva_array *array, khiva_array *lags, khiva_array *result) {
-    af::array var = af::array(*array);
-    af_retain_array(array, var.get());
-    af::array var_lags = af::array(*lags);
-    af_retain_array(lags, var_lags.get());
+    af::array var;
+    af::array var_lags;
+    check_and_retain_arrays(array, lags, var, var_lags);
     af_retain_array(result, khiva::features::partialAutocorrelation(var, var_lags).get());
 }
 
@@ -379,10 +376,9 @@ void percentage_of_reoccurring_values_to_all_values(khiva_array *array, bool *is
 }
 
 void quantile(khiva_array *array, khiva_array *q, float *precision, khiva_array *result) {
-    af::array var = af::array(*array);
-    af_retain_array(array, var.get());
-    af::array var_q = af::array(*q);
-    af_retain_array(q, var_q.get());
+    af::array var;
+    af::array var_q;
+    check_and_retain_arrays(array, q, var, var_q);
     af_retain_array(result, khiva::features::quantile(var, var_q, *precision).get());
 }
 

@@ -9,12 +9,12 @@
 #include <arrayfire.h>
 #include <khiva/polynomial.h>
 #include <khiva_c/polynomial.h>
+#include <khiva_c/util.h>
 
 void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result) {
-    af::array xx = af::array(*x);
-    af_retain_array(x, xx.get());
-    af::array yy = af::array(*y);
-    af_retain_array(y, yy.get());
+    af::array xx;
+    af::array yy;
+    check_and_retain_arrays(x, y, xx, yy);
     af_retain_array(result, khiva::polynomial::polyfit(xx, yy, *deg).get());
 }
 
