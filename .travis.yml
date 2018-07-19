@@ -46,6 +46,27 @@ matrix:
     - source .CI/travis/install-arrayfire_osx.sh
     script:
     - source .CI/travis/build_osx.sh
+    before_deploy:
+      - cd build
+      - pwd
+      - ls -lah .
+      - cpack
+      - cpack -G DEB
+      - cpack -G RPM
+      - mv khiva.sh khiva-${TRAVIS_TAG}.sh
+    deploy:
+      provider: releases
+      api_key:
+        secure: v860RsJaga2bZw3CC0gfzR9eQS6OmZdlI8yk19QnvM6YuTX5Kurl4P5uA42YsuZYFoUzmLt2oe0rLUdr+Zvz6tMzD2ss2+qjmCIGMiol7uXl1KytZCTJjctT+4cUatrPTYgHfKfze/tqH3rkHh2oRgu/j4LRCouxHvQMvx8VippLsMk/zp2RtWkPmjPv+sInQ511s93JMGnBi+v+ZzJnDXimuvZ2cZK3ndcBqVMTnCCIl6ndYrrOnj+ie0bsNyRTbTS6/rzIShHBy/79n/gd4oXSc74qc59bbTxcvjzFXgJbifeP/9ruvxKL4D/wpC/MV8a1Adabvawh018NrAXoOn0kcy2A/uuA2i+mvAaFzW+P4PCBZ5B1LuCI8ibj8QYaMlQFHx/3pmhsxpgi4yOe6IR/KXvN8v8Pvz/aDVHpFuMz74OJvXWXeS8MR992lFW+ZyW0OyuTWQ6Bt9t+lrto7V4un3WRotaZGSnuZtp47bMqHc3DNH7I7bcfsFqw7TaPNuKMtZP09hqqy5shcMaOwDQzYLCHsoneZJCrg5FQbY6zOydDfqZ93TggT1zoQP1zlnbMxup4/uzFfAl5M9W8yuffnPqbQP+FdRREuHNMoz1JTMylEdXrjr7NwPEq76zoju/G6TMfmkU9GxuIANUSFgRwhiCsuaeQa+32ThH/xwo=
+      file_glob: true
+      file:
+        - khiva-*.deb
+        - khiva-*.rpm
+        - khiva-${TRAVIS_TAG}.sh
+      draft: true
+      prerelease: false
+      on:
+        tags: true
   - os: osx
     osx_image: xcode9.3
     compiler:

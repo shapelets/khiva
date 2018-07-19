@@ -37,7 +37,6 @@ on_finish:
         (New-Object System.Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)","C:\khiva\build\Testing\results-junit.xml")
 before_deploy:    
     - cpack -G NSIS
-    - ren khiva.exe khiva-%APPVEYOR_REPO_TAG_NAME%.exe
 deploy:
   release: $(APPVEYOR_REPO_TAG_NAME)
   description: 'Khiva $(APPVEYOR_REPO_TAG_NAME)'
