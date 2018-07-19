@@ -43,7 +43,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: 5VLiELH+YvM+rQdWT1k2U1XdA+34bHLh1o+4MjaspzzJTML2sQB7sXEW+FBwrKZR
-  artifact: /khiva.*\.exe/
+  artifact: C:/khiva/build/khiva-$(APPVEYOR_REPO_TAG_NAME).exe
   draft: true
   prerelease: false
   on:
