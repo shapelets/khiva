@@ -35,14 +35,16 @@ on_finish:
         $xslt.Load($xsl) 
         $xslt.Transform($ctest_xml, $junit_xml) 
         (New-Object System.Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)","C:\khiva\build\Testing\results-junit.xml")
+before_deploy:    
     - cpack -G NSIS
+    - ren khiva.exe khiva-%APPVEYOR_REPO_TAG_NAME%.exe
 deploy:
   release: $(APPVEYOR_REPO_TAG_NAME)
   description: 'Khiva $(APPVEYOR_REPO_TAG_NAME)'
   provider: GitHub
   auth_token:
     secure: 5VLiELH+YvM+rQdWT1k2U1XdA+34bHLh1o+4MjaspzzJTML2sQB7sXEW+FBwrKZR
-  artifact: build/khiva.exe
+  artifact: khiva-$(APPVEYOR_REPO_TAG_NAME).exe
   draft: true
   prerelease: false
   on:
