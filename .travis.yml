@@ -1,81 +1,77 @@
-# Copyright (c) 2018 Shapelets.io
-#
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
 language: cpp
 sudo: required
 dist: trusty
-
 cache:
-    directories:
-      - ${HOME}/.conan
-      - ${TRAVIS_BUILD_DIR}/cmake
-      - ${TRAVIS_BUILD_DIR}/arrayfire
-
+  directories:
+  - "${HOME}/.conan"
+  - "${TRAVIS_BUILD_DIR}/cmake"
+  - "${TRAVIS_BUILD_DIR}/arrayfire"
 matrix:
   include:
-    - os: linux
-      dist: trusty
-      sudo: required
-      compiler:
-        - gcc
-      before_install:
-        - source .CI/travis/install_linux.sh
-        - source .CI/travis/install-arrayfire_linux.sh
-        - source .CI/travis/install-cmake_linux.sh
-      script:
-        - source .CI/travis/build_linux.sh
-
-    - os: linux
-      dist: trusty
-      sudo: required
-      compiler:
-        - clang
-      before_install:
-        - source .CI/travis/install_linux.sh
-        - source .CI/travis/install-arrayfire_linux.sh
-        - source .CI/travis/install-cmake_linux.sh
-      script:
-        - source .CI/travis/build_linux.sh
-
-    - os: osx
-      osx_image: xcode9.3
-      compiler:
-        - gcc
-      cache:
-        directories:
-          - ${HOME}/.conan
-          - ${TRAVIS_BUILD_DIR}/cmake
-          - ${TRAVIS_BUILD_DIR}/arrayfire
-          - $HOME/.pyenv
-          - $HOME/Library/Caches/Homebrew
-      before_install:
-        - source .CI/travis/install_osx.sh
-        - source .CI/travis/install-arrayfire_osx.sh
-      script:
-        - source .CI/travis/build_osx.sh
-
-    - os: osx
-      osx_image: xcode9.3
-      compiler:
-        - clang
-      cache:
-        directories:
-          - ${HOME}/.conan
-          - ${TRAVIS_BUILD_DIR}/cmake
-          - ${TRAVIS_BUILD_DIR}/arrayfire
-          - $HOME/.pyenv
-          - $HOME/Library/Caches/Homebrew
-      before_install:
-        - source .CI/travis/install_osx.sh
-        - source .CI/travis/install-arrayfire_osx.sh
-      script:
-        - source .CI/travis/build_osx.sh
-
-      after_success:
-        - cd ${TRAVIS_BUILD_DIR}
-        - source .CI/travis/codecov.sh
-
-
+  - os: linux
+    dist: trusty
+    sudo: required
+    compiler:
+    - gcc
+    before_install:
+    - source .CI/travis/install_linux.sh
+    - source .CI/travis/install-arrayfire_linux.sh
+    - source .CI/travis/install-cmake_linux.sh
+    script:
+    - source .CI/travis/build_linux.sh
+  - os: linux
+    dist: trusty
+    sudo: required
+    compiler:
+    - clang
+    before_install:
+    - source .CI/travis/install_linux.sh
+    - source .CI/travis/install-arrayfire_linux.sh
+    - source .CI/travis/install-cmake_linux.sh
+    script:
+    - source .CI/travis/build_linux.sh
+  - os: osx
+    osx_image: xcode9.3
+    compiler:
+    - gcc
+    cache:
+      directories:
+      - "${HOME}/.conan"
+      - "${TRAVIS_BUILD_DIR}/cmake"
+      - "${TRAVIS_BUILD_DIR}/arrayfire"
+      - "$HOME/.pyenv"
+      - "$HOME/Library/Caches/Homebrew"
+    before_install:
+    - source .CI/travis/install_osx.sh
+    - source .CI/travis/install-arrayfire_osx.sh
+    script:
+    - source .CI/travis/build_osx.sh
+  - os: osx
+    osx_image: xcode9.3
+    compiler:
+    - clang
+    cache:
+      directories:
+      - "${HOME}/.conan"
+      - "${TRAVIS_BUILD_DIR}/cmake"
+      - "${TRAVIS_BUILD_DIR}/arrayfire"
+      - "$HOME/.pyenv"
+      - "$HOME/Library/Caches/Homebrew"
+    before_install:
+    - source .CI/travis/install_osx.sh
+    - source .CI/travis/install-arrayfire_osx.sh
+    script:
+    - source .CI/travis/build_osx.sh
+    after_success:
+    - cd ${TRAVIS_BUILD_DIR}
+    - source .CI/travis/codecov.sh
+    before_deploy:
+      - cpack -G productbuild
+    deploy:
+      provider: releases
+      api_key:
+        secure: v860RsJaga2bZw3CC0gfzR9eQS6OmZdlI8yk19QnvM6YuTX5Kurl4P5uA42YsuZYFoUzmLt2oe0rLUdr+Zvz6tMzD2ss2+qjmCIGMiol7uXl1KytZCTJjctT+4cUatrPTYgHfKfze/tqH3rkHh2oRgu/j4LRCouxHvQMvx8VippLsMk/zp2RtWkPmjPv+sInQ511s93JMGnBi+v+ZzJnDXimuvZ2cZK3ndcBqVMTnCCIl6ndYrrOnj+ie0bsNyRTbTS6/rzIShHBy/79n/gd4oXSc74qc59bbTxcvjzFXgJbifeP/9ruvxKL4D/wpC/MV8a1Adabvawh018NrAXoOn0kcy2A/uuA2i+mvAaFzW+P4PCBZ5B1LuCI8ibj8QYaMlQFHx/3pmhsxpgi4yOe6IR/KXvN8v8Pvz/aDVHpFuMz74OJvXWXeS8MR992lFW+ZyW0OyuTWQ6Bt9t+lrto7V4un3WRotaZGSnuZtp47bMqHc3DNH7I7bcfsFqw7TaPNuKMtZP09hqqy5shcMaOwDQzYLCHsoneZJCrg5FQbY6zOydDfqZ93TggT1zoQP1zlnbMxup4/uzFfAl5M9W8yuffnPqbQP+FdRREuHNMoz1JTMylEdXrjr7NwPEq76zoju/G6TMfmkU9GxuIANUSFgRwhiCsuaeQa+32ThH/xwo=
+      file: khiva.pkg
+      on:
+        repo: otorreno/khiva
+        tags: true
