@@ -16,4 +16,3 @@
 #include <khiva_jni/regression.h>
 #include <khiva_jni/regularization.h>
 #include <khiva_jni/statistics.h>
-#include <khiva_jni/util.h>
