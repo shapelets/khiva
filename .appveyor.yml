@@ -18,6 +18,7 @@ before_build:
     - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ 7z x ArrayFire-v3.5.1.zip -o"C:\Program Files" }
     - reg add HKCU\Software\Kitware\CMake\Packages\ArrayFire /v ArrayFire_CMake_DIR /d "C:\Program Files\ArrayFire\v3\cmake" /f
     - vcpkg install --triplet x64-windows gtest eigen3
+    - start /wait choco install nsis
 
 build_script:
     - mkdir build && cd build
@@ -34,3 +35,16 @@ on_finish:
         $xslt.Load($xsl) 
         $xslt.Transform($ctest_xml, $junit_xml) 
         (New-Object System.Net.WebClient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)","C:\khiva\build\Testing\results-junit.xml")
+    - cpack -G NSIS
+deploy:
+  release: $(APPVEYOR_REPO_TAG_NAME)
+  description: 'Khiva $(APPVEYOR_REPO_TAG_NAME)'
+  provider: GitHub
+  auth_token:
+    secure: 5VLiELH+YvM+rQdWT1k2U1XdA+34bHLh1o+4MjaspzzJTML2sQB7sXEW+FBwrKZR
+  artifact: build/khiva.exe
+  draft: true
+  prerelease: false
+  on:
+    branch: master                 # release from master branch only
+    appveyor_repo_tag: true        # deploy on tag push only
