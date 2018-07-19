@@ -1244,8 +1244,8 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *env, jobjec
 
     af_retain_array(&af_p, khiva::features::quantile(var, var_q, precision).get());
 
-    tmp[0] = (jlong)var.get();
-    tmp[1] = (jlong)var_q.get();
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)arr_q;
     tmp[2] = (jlong)af_p;
 
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
