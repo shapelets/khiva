@@ -6,6 +6,5 @@
 
 #include <arrayfire.h>
 #include <jni.h>
-#include <khiva_c/defines.h>
 
 void check_and_retain_arrays(af_array &a, af_array &b, af::array &var_a, af::array &var_b);
