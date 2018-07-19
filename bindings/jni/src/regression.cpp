@@ -6,7 +6,6 @@
 
 #include <jni.h>
 #include <khiva/regression.h>
-#include <khiva_jni/defines.h>
 #include <khiva_jni/regression.h>
 #include <khiva_jni/util.h>
 

@@ -6,7 +6,6 @@
 
 #include <jni.h>
 #include <khiva/statistics.h>
-#include <khiva_jni/defines.h>
 #include <khiva_jni/statistics.h>
 #include <khiva_jni/util.h>
 

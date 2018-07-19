@@ -6,7 +6,6 @@
 
 #include <arrayfire.h>
 #include <khiva/matrix.h>
-#include <khiva_jni/defines.h>
 #include <khiva_jni/matrix.h>
 #include <khiva_jni/util.h>
 #include <stdexcept>

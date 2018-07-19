@@ -5,7 +5,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <khiva/array.h>
-#include <khiva_c/defines.h>
 #include <khiva_jni/array.h>
 #include <khiva_jni/util.h>
 #include <cstring>
