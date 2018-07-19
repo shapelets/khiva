@@ -27,7 +27,7 @@ void get_dims(khiva_array *array, long long *dimens) {
     af_retain_array(array, var.get());
 }
 
-void print(khiva_array *array) {
+void display(khiva_array *array) {
     af::array var = af::array(*array);
     khiva::array::print(var);
     af_retain_array(array, var.get());

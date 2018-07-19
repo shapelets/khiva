@@ -38,11 +38,11 @@ KHIVAAPI void get_data(khiva_array *array, void *data);
 KHIVAAPI void get_dims(khiva_array *array, long long *dims);
 
 /**
- * @brief Prints an Array.
+ * @brief Displays an Array.
  *
  * @param array The array to display.
  */
-KHIVAAPI void print(khiva_array *array);
+KHIVAAPI void display(khiva_array *array);
 
 /**
  * @brief Decreases the references count of the given array.
