@@ -216,7 +216,6 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JNIEnv *env,
     jlong raw_pointer = 0;
     af_array af_p = (af_array)raw_pointer;
     af_retain_array(&af_p, khiva::features::crossCovariance(var_xss, var_yss, unbiased).get());
-    std::cout << (jlong)var_xss.get();
 
     tmp[0] = (jlong)xss;
     tmp[1] = (jlong)yss;
