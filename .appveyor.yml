@@ -19,10 +19,10 @@ before_build:
     - reg add HKCU\Software\Kitware\CMake\Packages\ArrayFire /v ArrayFire_CMake_DIR /d "C:\Program Files\ArrayFire\v3\cmake" /f
     - vcpkg install --triplet x64-windows gtest eigen3
     - ps: |
-        start /wait choco install nsis
+        Start-Process choco install nsis -NoNewWindow -Wait
         if($($env:APPVEYOR_REPO_TAG) -eq "true"){
-          start /wait choco install doxygen
-          start /wait choco install graphviz
+          Start-Process choco install doxygen -NoNewWindow -Wait
+          Start-Process choco install graphviz -NoNewWindow -Wait
           pip3 install sphinx breathe sphinx_rtd_theme
         }
 
