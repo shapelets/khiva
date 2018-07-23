@@ -88,8 +88,6 @@ matrix:
     - cd ${TRAVIS_BUILD_DIR}
     before_deploy:
       - cd build
-      - pwd
-      - ls -lah .
       - cpack -G productbuild
     deploy:
       name: ${TRAVIS_TAG}
