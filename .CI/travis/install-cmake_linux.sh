@@ -15,4 +15,6 @@ fi
 # Install cmake
 mkdir cmakebin
 cp cmake/cmake-3.11.3-Linux-x86_64.sh cmakebin/cmake-3.11.3-Linux-x86_64.sh
-sudo bash cmakebin/cmake-3.11.3-Linux-x86_64.sh --skip-license
+cd cmakebin
+sudo bash cmake-3.11.3-Linux-x86_64.sh --skip-license
+cd ..
