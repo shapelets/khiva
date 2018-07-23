@@ -37,7 +37,6 @@ matrix:
       - mv khiva.sh khiva-${TRAVIS_TAG}.sh
     deploy:
       name: ${TRAVIS_TAG}
-      body: 'Khiva ${TRAVIS_TAG}\n ${TRAVIS_COMMIT_MESSAGE}'
       skip_cleanup: true
       provider: releases
       api_key:
@@ -94,7 +93,6 @@ matrix:
       - cpack -G productbuild
     deploy:
       name: ${TRAVIS_TAG}
-      body: 'Khiva ${TRAVIS_TAG}\n ${TRAVIS_COMMIT_MESSAGE}'
       skip_cleanup: true
       provider: releases
       api_key:
