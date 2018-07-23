@@ -6,7 +6,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 cd ..
 
-if [[-z ${TRAVIS_TAG}]]; then
+if [[ -z "${TRAVIS_TAG}" ]]; then
   lcov --directory . --capture --no-external --output-file coverage.info
   lcov --remove coverage.info '*/.conan/*' '*/usr*' '*/cl.hpp' '*/include/*' '*/bindings/*' '*/test/*' -o coverage.info
   lcov --list coverage.info
