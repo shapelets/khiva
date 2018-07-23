@@ -38,7 +38,7 @@ build_script:
         }
     - cmake --build . --config Release -- /m
 test_script:
-    - if %APPVEYOR_REPO_TAG% == "false" ctest -C Release --no-compress-output --output-on-failure -T test
+    - if "%APPVEYOR_REPO_TAG%" == "false" ctest -C Release --no-compress-output --output-on-failure -T test
 on_finish:
     - ps: |
         if($($env:APPVEYOR_REPO_TAG) -eq "false"){
