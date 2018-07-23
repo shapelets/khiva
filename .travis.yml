@@ -40,7 +40,7 @@ matrix:
       skip_cleanup: true
       provider: releases
       api_key:
-        secure: v860RsJaga2bZw3CC0gfzR9eQS6OmZdlI8yk19QnvM6YuTX5Kurl4P5uA42YsuZYFoUzmLt2oe0rLUdr+Zvz6tMzD2ss2+qjmCIGMiol7uXl1KytZCTJjctT+4cUatrPTYgHfKfze/tqH3rkHh2oRgu/j4LRCouxHvQMvx8VippLsMk/zp2RtWkPmjPv+sInQ511s93JMGnBi+v+ZzJnDXimuvZ2cZK3ndcBqVMTnCCIl6ndYrrOnj+ie0bsNyRTbTS6/rzIShHBy/79n/gd4oXSc74qc59bbTxcvjzFXgJbifeP/9ruvxKL4D/wpC/MV8a1Adabvawh018NrAXoOn0kcy2A/uuA2i+mvAaFzW+P4PCBZ5B1LuCI8ibj8QYaMlQFHx/3pmhsxpgi4yOe6IR/KXvN8v8Pvz/aDVHpFuMz74OJvXWXeS8MR992lFW+ZyW0OyuTWQ6Bt9t+lrto7V4un3WRotaZGSnuZtp47bMqHc3DNH7I7bcfsFqw7TaPNuKMtZP09hqqy5shcMaOwDQzYLCHsoneZJCrg5FQbY6zOydDfqZ93TggT1zoQP1zlnbMxup4/uzFfAl5M9W8yuffnPqbQP+FdRREuHNMoz1JTMylEdXrjr7NwPEq76zoju/G6TMfmkU9GxuIANUSFgRwhiCsuaeQa+32ThH/xwo=
+        secure: q90u02PfCMuzI+5g7eY1geeY64W8qjvsAU+QM2cvd2xJyra26moKPcwi2LTg3XRZZa4om6RUClBcwwnLW2rYk92KJePxkvfWX8lW5b/WPyn9gdtB9SCfv0D36zjAh+6qP/EG5Tmp1GlCUZmcWUBqVS4WY6Gq/x8kVdTcBj8sJelosblsmo/NSs1ixMyaoStkzo11i/LFFjt3wqL07FoIDx0s2PblrY0+iPZDTxWgMM5hgSfk+8j16FdsGa1wDmMTd17MBNXpXR983wpS+KAGpUqzO0m1UGdbRFxGnn1/M8Zc34jYbADBcN2PWhNZM1Oo1LB4YNBh66cqGa03LViRW0NhRXw+u9E/pGC95aEpEE1ml9vnESExRmWFca+pfJeJg5MBPa3/8HR8wXYL82Uwp67ND03/DJvT4HjmaLuGyXukmJyszzSzsVV1ybRK2VlAsFKmNOtrsHl2YefsbEGDHbTHNDTQk/NTgD9YE5q3PYCYaswp/hdVNbLUN2x2hZ5FojB2WgmYi+/huGC2aWhV2VGDpVJCuhGVGmZXZVr2/lOGIjhTEJTGYf7Vf+7E3CEdIZRNWcdpWSKM/mBP5TZo7NFcJIF32zntLNDVBP34TdEwB62kmPBwFTG1xSr477d3AmhIdTWEHYCEmhrF+kkf19ceuxS7FrQvnSif/BoSbt0=
       file_glob: true
       file:
         - ${TRAVIS_BUILD_DIR}/build/khiva-*.deb
@@ -94,7 +94,7 @@ matrix:
       skip_cleanup: true
       provider: releases
       api_key:
-        secure: v860RsJaga2bZw3CC0gfzR9eQS6OmZdlI8yk19QnvM6YuTX5Kurl4P5uA42YsuZYFoUzmLt2oe0rLUdr+Zvz6tMzD2ss2+qjmCIGMiol7uXl1KytZCTJjctT+4cUatrPTYgHfKfze/tqH3rkHh2oRgu/j4LRCouxHvQMvx8VippLsMk/zp2RtWkPmjPv+sInQ511s93JMGnBi+v+ZzJnDXimuvZ2cZK3ndcBqVMTnCCIl6ndYrrOnj+ie0bsNyRTbTS6/rzIShHBy/79n/gd4oXSc74qc59bbTxcvjzFXgJbifeP/9ruvxKL4D/wpC/MV8a1Adabvawh018NrAXoOn0kcy2A/uuA2i+mvAaFzW+P4PCBZ5B1LuCI8ibj8QYaMlQFHx/3pmhsxpgi4yOe6IR/KXvN8v8Pvz/aDVHpFuMz74OJvXWXeS8MR992lFW+ZyW0OyuTWQ6Bt9t+lrto7V4un3WRotaZGSnuZtp47bMqHc3DNH7I7bcfsFqw7TaPNuKMtZP09hqqy5shcMaOwDQzYLCHsoneZJCrg5FQbY6zOydDfqZ93TggT1zoQP1zlnbMxup4/uzFfAl5M9W8yuffnPqbQP+FdRREuHNMoz1JTMylEdXrjr7NwPEq76zoju/G6TMfmkU9GxuIANUSFgRwhiCsuaeQa+32ThH/xwo=
+        secure: q90u02PfCMuzI+5g7eY1geeY64W8qjvsAU+QM2cvd2xJyra26moKPcwi2LTg3XRZZa4om6RUClBcwwnLW2rYk92KJePxkvfWX8lW5b/WPyn9gdtB9SCfv0D36zjAh+6qP/EG5Tmp1GlCUZmcWUBqVS4WY6Gq/x8kVdTcBj8sJelosblsmo/NSs1ixMyaoStkzo11i/LFFjt3wqL07FoIDx0s2PblrY0+iPZDTxWgMM5hgSfk+8j16FdsGa1wDmMTd17MBNXpXR983wpS+KAGpUqzO0m1UGdbRFxGnn1/M8Zc34jYbADBcN2PWhNZM1Oo1LB4YNBh66cqGa03LViRW0NhRXw+u9E/pGC95aEpEE1ml9vnESExRmWFca+pfJeJg5MBPa3/8HR8wXYL82Uwp67ND03/DJvT4HjmaLuGyXukmJyszzSzsVV1ybRK2VlAsFKmNOtrsHl2YefsbEGDHbTHNDTQk/NTgD9YE5q3PYCYaswp/hdVNbLUN2x2hZ5FojB2WgmYi+/huGC2aWhV2VGDpVJCuhGVGmZXZVr2/lOGIjhTEJTGYf7Vf+7E3CEdIZRNWcdpWSKM/mBP5TZo7NFcJIF32zntLNDVBP34TdEwB62kmPBwFTG1xSr477d3AmhIdTWEHYCEmhrF+kkf19ceuxS7FrQvnSif/BoSbt0=
       file: ${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.pkg
       draft: true
       prerelease: false

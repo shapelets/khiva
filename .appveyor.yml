@@ -44,7 +44,7 @@ deploy:
   release: $(APPVEYOR_REPO_TAG_NAME)
   provider: GitHub
   auth_token:
-    secure: 5VLiELH+YvM+rQdWT1k2U1XdA+34bHLh1o+4MjaspzzJTML2sQB7sXEW+FBwrKZR
+    secure: FnIWCjj+kBbuZdV6gISzXn2jVG6A2jRg5JyfouYa6zqtOLx/lSKgDsjnhbxTkUoI
   artifact: installer
   draft: true
   prerelease: false
