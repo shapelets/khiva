@@ -7,6 +7,10 @@
 
 mkdir -p build && cd build
 conan install .. --build missing
-../cmakebin/bin/cmake .. -DKHIVA_ENABLE_COVERAGE=ON -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
+if [[ -z "${TRAVIS_TAG}" ]]; then
+  ../cmakebin/bin/cmake .. -DKHIVA_ENABLE_COVERAGE=ON -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
+else
+  ../cmakebin/bin/cmake ..
+fi
 make all -j8
 make test
