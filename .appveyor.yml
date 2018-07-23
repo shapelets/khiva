@@ -19,10 +19,10 @@ before_build:
     - reg add HKCU\Software\Kitware\CMake\Packages\ArrayFire /v ArrayFire_CMake_DIR /d "C:\Program Files\ArrayFire\v3\cmake" /f
     - vcpkg install --triplet x64-windows gtest eigen3
     - ps: |
-        Start-Process choco install nsis -NoNewWindow -Wait
+        Start-Process "choco" "install nsis" -NoNewWindow -Wait
         if($($env:APPVEYOR_REPO_TAG) -eq "true"){
-          Start-Process choco install doxygen -NoNewWindow -Wait
-          Start-Process choco install graphviz -NoNewWindow -Wait
+          Start-Process "choco" "install doxygen" -NoNewWindow -Wait
+          Start-Process "choco" "install graphviz" -NoNewWindow -Wait
           python -m pip install --upgrade pip
           pip3 install sphinx breathe sphinx_rtd_theme
         }
@@ -31,9 +31,9 @@ build_script:
     - mkdir build && cd build
     - ps: |
         if($($env:APPVEYOR_REPO_TAG) -eq "true"){
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"%GENERATOR%"
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"$($env:GENERATOR)"
         } else {
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_BENCHMARKS=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"%GENERATOR%"
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_BENCHMARKS=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"$($env:GENERATOR)"
         }
     - cmake --build . --config Release -- /m
 test_script:

@@ -54,6 +54,8 @@ matrix:
     osx_image: xcode9.3
     compiler:
     - gcc
+    env:
+      - TRAVIS_PYTHON_VERSION=3.6.5
     cache:
       directories:
       - "${HOME}/.conan"
@@ -70,6 +72,8 @@ matrix:
     osx_image: xcode9.3
     compiler:
     - clang
+    env:
+      - TRAVIS_PYTHON_VERSION=3.6.5
     cache:
       directories:
       - "${HOME}/.conan"

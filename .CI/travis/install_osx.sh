@@ -6,7 +6,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 brew upgrade pyenv
-export PATH=$HOME/.pyenv/shims:$HOME/.pyenv/versions/${TRAVIS_PYTHON_VERSION}/bin:$PATH
 pyenv install 3.6.5 -s
 pyenv init -
 pyenv local 3.6.5
