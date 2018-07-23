@@ -19,7 +19,7 @@ brew install --force lcov
 pip${PYTHON_VERSION} install --upgrade pip
 pip${PYTHON_VERSION} install conan
 
-if [[ -z "${TRAVIS_TAG}" ]]; then
+if ! [[ -z "${TRAVIS_TAG}" ]]; then
   brew install doxygen graphviz
   pip${PYTHON_VERSION} install sphinx breathe sphinx_rtd_theme
 fi
