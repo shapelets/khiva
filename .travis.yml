@@ -31,9 +31,6 @@ matrix:
     script:
     - source .CI/travis/build_linux.sh
     before_deploy:
-      - cd build
-      - pwd
-      - ls -lah .
       - cpack
       - cpack -G DEB
       - cpack -G RPM
