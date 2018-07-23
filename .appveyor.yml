@@ -21,7 +21,7 @@ before_build:
     - ps: |
         Start-Process "choco" "install nsis" -NoNewWindow -Wait
         if($($env:APPVEYOR_REPO_TAG) -eq "true"){
-          Start-Process "choco" "install doxygen" -NoNewWindow -Wait
+          Start-Process "choco" "install doxygen.install" -NoNewWindow -Wait
           Start-Process "choco" "install graphviz" -NoNewWindow -Wait
           python -m pip install --upgrade pip
           pip3 install sphinx breathe sphinx_rtd_theme
