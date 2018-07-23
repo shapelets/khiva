@@ -9,7 +9,6 @@
 if [ ! -e "${TRAVIS_BUILD_DIR}/arrayfire/ArrayFire-v3.5.1_Linux_x86_64.sh" ]; then
     mkdir -p arrayfire
     wget http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-v3.5.1_Linux_x86_64.sh -O arrayfire/ArrayFire-v3.5.1_Linux_x86_64.sh
-    cd ..
 fi
 
 # Installs arrayfire

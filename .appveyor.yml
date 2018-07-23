@@ -38,7 +38,7 @@ build_script:
         }
     - cmake --build . --config Release -- /m
 test_script:
-    - ps: if($($env:APPVEYOR_REPO_TAG) -eq "false"){ ctest -C Release --no-compress-output --output-on-failure -T test }
+    - if %APPVEYOR_REPO_TAG% == "false" ctest -C Release --no-compress-output --output-on-failure -T test
 on_finish:
     - ps: |
         if($($env:APPVEYOR_REPO_TAG) -eq "false"){
@@ -56,7 +56,8 @@ artifacts:
     - path: build\khiva-$(APPVEYOR_REPO_TAG_NAME).exe
       name: installer
 deploy:
-  release: $(APPVEYOR_REPO_TAG_NAME)
+  release: '$(APPVEYOR_REPO_TAG_NAME) - Windows'
+  description: '$(APPVEYOR_REPO_COMMIT_MESSAGE)'
   provider: GitHub
   auth_token:
     secure: FnIWCjj+kBbuZdV6gISzXn2jVG6A2jRg5JyfouYa6zqtOLx/lSKgDsjnhbxTkUoI

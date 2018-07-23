@@ -36,7 +36,8 @@ matrix:
       - cpack -G RPM
       - mv khiva.sh khiva-${TRAVIS_TAG}.sh
     deploy:
-      name: ${TRAVIS_TAG}
+      name: '${TRAVIS_TAG} - Linux'
+      body: '${TRAVIS_COMMIT_MESSAGE}'
       skip_cleanup: true
       provider: releases
       api_key:
@@ -94,7 +95,8 @@ matrix:
       - cd build
       - cpack -G productbuild
     deploy:
-      name: ${TRAVIS_TAG}
+      name: '${TRAVIS_TAG} - MacOS'
+      body: '${TRAVIS_COMMIT_MESSAGE}'
       skip_cleanup: true
       provider: releases
       api_key:
