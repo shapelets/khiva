@@ -8,6 +8,10 @@
 # Build the project
 mkdir -p build && cd build
 conan install .. -s compiler=apple-clang -s compiler.version=9.1 -s compiler.libcxx=libc++ --build missing
-cmake .. -DKHIVA_ENABLE_COVERAGE=ON -DKHIVA_ONLY_CPU_BACKEND=ON -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
+if [[ -z "${TRAVIS_TAG}" ]]; then
+  cmake .. -DKHIVA_ENABLE_COVERAGE=ON -DKHIVA_ONLY_CPU_BACKEND=ON -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
+else
+  cmake ..
+fi
 make all -j8
 make test
