@@ -39,11 +39,11 @@ before_deploy:
     - cpack -G NSIS
 deploy:
   release: $(APPVEYOR_REPO_TAG_NAME)
-  description: 'Khiva $(APPVEYOR_REPO_TAG_NAME)'
+  description: 'Khiva $(APPVEYOR_REPO_TAG_NAME)\n $(APPVEYOR_REPO_COMMIT_MESSAGE)\n $(APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED)'
   provider: GitHub
   auth_token:
     secure: 5VLiELH+YvM+rQdWT1k2U1XdA+34bHLh1o+4MjaspzzJTML2sQB7sXEW+FBwrKZR
-  artifact: /.*\.exe
+  artifact: /.*\.exe/
   draft: true
   prerelease: false
   on:
