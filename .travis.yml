@@ -1,81 +1,108 @@
-# Copyright (c) 2018 Shapelets.io
-#
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
 language: cpp
 sudo: required
 dist: trusty
-
 cache:
-    directories:
-      - ${HOME}/.conan
-      - ${TRAVIS_BUILD_DIR}/cmake
-      - ${TRAVIS_BUILD_DIR}/arrayfire
-
+  directories:
+  - "${HOME}/.conan"
+  - "${TRAVIS_BUILD_DIR}/cmake"
+  - "${TRAVIS_BUILD_DIR}/arrayfire"
 matrix:
   include:
-    - os: linux
-      dist: trusty
-      sudo: required
-      compiler:
-        - gcc
-      before_install:
-        - source .CI/travis/install_linux.sh
-        - source .CI/travis/install-arrayfire_linux.sh
-        - source .CI/travis/install-cmake_linux.sh
-      script:
-        - source .CI/travis/build_linux.sh
-
-    - os: linux
-      dist: trusty
-      sudo: required
-      compiler:
-        - clang
-      before_install:
-        - source .CI/travis/install_linux.sh
-        - source .CI/travis/install-arrayfire_linux.sh
-        - source .CI/travis/install-cmake_linux.sh
-      script:
-        - source .CI/travis/build_linux.sh
-
-    - os: osx
-      osx_image: xcode9.3
-      compiler:
-        - gcc
-      cache:
-        directories:
-          - ${HOME}/.conan
-          - ${TRAVIS_BUILD_DIR}/cmake
-          - ${TRAVIS_BUILD_DIR}/arrayfire
-          - $HOME/.pyenv
-          - $HOME/Library/Caches/Homebrew
-      before_install:
-        - source .CI/travis/install_osx.sh
-        - source .CI/travis/install-arrayfire_osx.sh
-      script:
-        - source .CI/travis/build_osx.sh
-
-    - os: osx
-      osx_image: xcode9.3
-      compiler:
-        - clang
-      cache:
-        directories:
-          - ${HOME}/.conan
-          - ${TRAVIS_BUILD_DIR}/cmake
-          - ${TRAVIS_BUILD_DIR}/arrayfire
-          - $HOME/.pyenv
-          - $HOME/Library/Caches/Homebrew
-      before_install:
-        - source .CI/travis/install_osx.sh
-        - source .CI/travis/install-arrayfire_osx.sh
-      script:
-        - source .CI/travis/build_osx.sh
-
-      after_success:
-        - cd ${TRAVIS_BUILD_DIR}
-        - source .CI/travis/codecov.sh
-
-
+  - os: linux
+    dist: trusty
+    sudo: required
+    compiler:
+    - gcc
+    before_install:
+    - source .CI/travis/install_linux.sh
+    - source .CI/travis/install-arrayfire_linux.sh
+    - source .CI/travis/install-cmake_linux.sh
+    script:
+    - source .CI/travis/build_linux.sh
+  - os: linux
+    dist: trusty
+    sudo: required
+    compiler:
+    - clang
+    before_install:
+    - source .CI/travis/install_linux.sh
+    - source .CI/travis/install-arrayfire_linux.sh
+    - source .CI/travis/install-cmake_linux.sh
+    script:
+    - source .CI/travis/build_linux.sh
+    before_deploy:
+      - cpack
+      - cpack -G DEB
+      - cpack -G RPM
+      - mv khiva.sh khiva-${TRAVIS_TAG}.sh
+    deploy:
+      name: '${TRAVIS_TAG} - Linux'
+      body: '${TRAVIS_COMMIT_MESSAGE}'
+      skip_cleanup: true
+      provider: releases
+      api_key:
+        secure: q90u02PfCMuzI+5g7eY1geeY64W8qjvsAU+QM2cvd2xJyra26moKPcwi2LTg3XRZZa4om6RUClBcwwnLW2rYk92KJePxkvfWX8lW5b/WPyn9gdtB9SCfv0D36zjAh+6qP/EG5Tmp1GlCUZmcWUBqVS4WY6Gq/x8kVdTcBj8sJelosblsmo/NSs1ixMyaoStkzo11i/LFFjt3wqL07FoIDx0s2PblrY0+iPZDTxWgMM5hgSfk+8j16FdsGa1wDmMTd17MBNXpXR983wpS+KAGpUqzO0m1UGdbRFxGnn1/M8Zc34jYbADBcN2PWhNZM1Oo1LB4YNBh66cqGa03LViRW0NhRXw+u9E/pGC95aEpEE1ml9vnESExRmWFca+pfJeJg5MBPa3/8HR8wXYL82Uwp67ND03/DJvT4HjmaLuGyXukmJyszzSzsVV1ybRK2VlAsFKmNOtrsHl2YefsbEGDHbTHNDTQk/NTgD9YE5q3PYCYaswp/hdVNbLUN2x2hZ5FojB2WgmYi+/huGC2aWhV2VGDpVJCuhGVGmZXZVr2/lOGIjhTEJTGYf7Vf+7E3CEdIZRNWcdpWSKM/mBP5TZo7NFcJIF32zntLNDVBP34TdEwB62kmPBwFTG1xSr477d3AmhIdTWEHYCEmhrF+kkf19ceuxS7FrQvnSif/BoSbt0=
+      file_glob: true
+      file:
+        - ${TRAVIS_BUILD_DIR}/build/khiva-*.deb
+        - ${TRAVIS_BUILD_DIR}/build/khiva-*.rpm
+        - ${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.sh
+      draft: true
+      prerelease: false
+      on:
+        tags: true
+  - os: osx
+    osx_image: xcode9.3
+    compiler:
+    - gcc
+    env:
+      - TRAVIS_PYTHON_VERSION=3.6.5
+    cache:
+      directories:
+      - "${HOME}/.conan"
+      - "${TRAVIS_BUILD_DIR}/cmake"
+      - "${TRAVIS_BUILD_DIR}/arrayfire"
+      - "$HOME/.pyenv"
+      - "$HOME/Library/Caches/Homebrew"
+    before_install:
+    - source .CI/travis/install_osx.sh
+    - source .CI/travis/install-arrayfire_osx.sh
+    script:
+    - source .CI/travis/build_osx.sh
+  - os: osx
+    osx_image: xcode9.3
+    compiler:
+    - clang
+    env:
+      - TRAVIS_PYTHON_VERSION=3.6.5
+    cache:
+      directories:
+      - "${HOME}/.conan"
+      - "${TRAVIS_BUILD_DIR}/cmake"
+      - "${TRAVIS_BUILD_DIR}/arrayfire"
+      - "$HOME/.pyenv"
+      - "$HOME/Library/Caches/Homebrew"
+    before_install:
+    - source .CI/travis/install_osx.sh
+    - source .CI/travis/install-arrayfire_osx.sh
+    script:
+    - source .CI/travis/build_osx.sh
+    after_success:
+    - cd ${TRAVIS_BUILD_DIR}
+    - source .CI/travis/codecov.sh
+    - cd ${TRAVIS_BUILD_DIR}
+    before_deploy:
+      - cd build
+      - cpack -G productbuild
+    deploy:
+      name: '${TRAVIS_TAG} - MacOS'
+      body: '${TRAVIS_COMMIT_MESSAGE}'
+      skip_cleanup: true
+      provider: releases
+      api_key:
+        secure: q90u02PfCMuzI+5g7eY1geeY64W8qjvsAU+QM2cvd2xJyra26moKPcwi2LTg3XRZZa4om6RUClBcwwnLW2rYk92KJePxkvfWX8lW5b/WPyn9gdtB9SCfv0D36zjAh+6qP/EG5Tmp1GlCUZmcWUBqVS4WY6Gq/x8kVdTcBj8sJelosblsmo/NSs1ixMyaoStkzo11i/LFFjt3wqL07FoIDx0s2PblrY0+iPZDTxWgMM5hgSfk+8j16FdsGa1wDmMTd17MBNXpXR983wpS+KAGpUqzO0m1UGdbRFxGnn1/M8Zc34jYbADBcN2PWhNZM1Oo1LB4YNBh66cqGa03LViRW0NhRXw+u9E/pGC95aEpEE1ml9vnESExRmWFca+pfJeJg5MBPa3/8HR8wXYL82Uwp67ND03/DJvT4HjmaLuGyXukmJyszzSzsVV1ybRK2VlAsFKmNOtrsHl2YefsbEGDHbTHNDTQk/NTgD9YE5q3PYCYaswp/hdVNbLUN2x2hZ5FojB2WgmYi+/huGC2aWhV2VGDpVJCuhGVGmZXZVr2/lOGIjhTEJTGYf7Vf+7E3CEdIZRNWcdpWSKM/mBP5TZo7NFcJIF32zntLNDVBP34TdEwB62kmPBwFTG1xSr477d3AmhIdTWEHYCEmhrF+kkf19ceuxS7FrQvnSif/BoSbt0=
+      file: ${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.pkg
+      draft: true
+      prerelease: false
+      on:
+        tags: true

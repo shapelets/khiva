@@ -16,6 +16,5 @@ fi
 mkdir cmakebin
 cp cmake/cmake-3.11.3-Linux-x86_64.sh cmakebin/cmake-3.11.3-Linux-x86_64.sh
 cd cmakebin
-chmod +x cmake-3.11.3-Linux-x86_64.sh
-sudo ./cmake-3.11.3-Linux-x86_64.sh --skip-license
+sudo bash cmake-3.11.3-Linux-x86_64.sh --skip-license
 cd ..
