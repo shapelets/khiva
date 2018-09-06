@@ -165,8 +165,8 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
 af::array khiva::dimensionality::PAA(af::array a, int bins) {
     if (a.dims(0) % bins != 0) {
         throw std::invalid_argument(
-                "Invalid number of points. The number of important points should be a factor of the total number of "
-                        "points.");
+            "Invalid number of points. The number of important points should be a factor of the total number of "
+            "points.");
     }
     dim_t n = a.dims(0);
     dim_t elem_row = n / bins;
@@ -355,7 +355,7 @@ af::array khiva::dimensionality::PLABottomUp(af::array ts, float maxError) {
 }
 
 std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLASlidingWindow(
-        std::vector<khiva::dimensionality::Point> ts, float maxError) {
+    std::vector<khiva::dimensionality::Point> ts, float maxError) {
     std::vector<khiva::dimensionality::Point> result;
     std::vector<khiva::dimensionality::Segment> segments;
 
@@ -424,7 +424,7 @@ af::array khiva::dimensionality::PLASlidingWindow(af::array ts, float maxError) 
 }
 
 std::vector<khiva::dimensionality::Point> khiva::dimensionality::ramerDouglasPeucker(
-        std::vector<khiva::dimensionality::Point> pointList, double epsilon) {
+    std::vector<khiva::dimensionality::Point> pointList, double epsilon) {
     std::vector<khiva::dimensionality::Point> out;
 
     if (pointList.size() < 2) throw std::invalid_argument("Not enough points to simplify ...");
@@ -536,7 +536,7 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
 }
 
 std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
-        std::vector<khiva::dimensionality::Point> pointList, int num_points_allowed) {
+    std::vector<khiva::dimensionality::Point> pointList, int num_points_allowed) {
     // variables
     std::vector<khiva::dimensionality::Point> out(pointList.begin(), pointList.end());
     float min_area = std::numeric_limits<float>::max();

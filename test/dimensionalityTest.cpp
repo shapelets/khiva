@@ -41,9 +41,9 @@ void paaNorm() {
     auto out = khiva::dimensionality::PAA(pointList, 6);
 
     std::vector<khiva::dimensionality::Point> expected = {
-            khiva::dimensionality::Point(0.75, 0.05), khiva::dimensionality::Point(2.25, -0.1f),
-            khiva::dimensionality::Point(3.75, 5.5),  khiva::dimensionality::Point(5.25, 7.0f),
-            khiva::dimensionality::Point(6.75, 8.55), khiva::dimensionality::Point(8.25, 9.0f)};
+        khiva::dimensionality::Point(0.75, 0.05), khiva::dimensionality::Point(2.25, -0.1f),
+        khiva::dimensionality::Point(3.75, 5.5),  khiva::dimensionality::Point(5.25, 7.0f),
+        khiva::dimensionality::Point(6.75, 8.55), khiva::dimensionality::Point(8.25, 9.0f)};
 
     for (size_t i = 0; i < out.size(); i++) {
         ASSERT_EQ(out[i].first, expected[i].first);
@@ -59,7 +59,7 @@ void paaException() {
         af::array out = khiva::dimensionality::PAA(a, 6);
     } catch (std::invalid_argument &ia) {
         EXPECT_EQ(ia.what(), std::string("Invalid number of points. The number of important points should be a factor "
-                                                 "of the total number of points."));
+                                         "of the total number of points."));
     }
 }
 
@@ -112,10 +112,10 @@ void plaBottomUp() {
     auto out = khiva::dimensionality::PLABottomUp(pointList, maxError);
 
     std::vector<khiva::dimensionality::Point> expected = {
-            khiva::dimensionality::Point(0.0, 0.0),  khiva::dimensionality::Point(1.0, 0.1),
-            khiva::dimensionality::Point(2.0, -0.1), khiva::dimensionality::Point(3.0, 5.0),
-            khiva::dimensionality::Point(4.0, 6.0),  khiva::dimensionality::Point(7.0, 9.0),
-            khiva::dimensionality::Point(8.0, 9.0),  khiva::dimensionality::Point(9.0, 9.0)};
+        khiva::dimensionality::Point(0.0, 0.0),  khiva::dimensionality::Point(1.0, 0.1),
+        khiva::dimensionality::Point(2.0, -0.1), khiva::dimensionality::Point(3.0, 5.0),
+        khiva::dimensionality::Point(4.0, 6.0),  khiva::dimensionality::Point(7.0, 9.0),
+        khiva::dimensionality::Point(8.0, 9.0),  khiva::dimensionality::Point(9.0, 9.0)};
 
     ASSERT_EQ(out[0].first, expected[0].first);
     ASSERT_EQ(out[0].second, expected[0].second);
@@ -156,10 +156,10 @@ void plaBottomUp2() {
     float *poy = d_out.col(1).host<float>();
 
     std::vector<khiva::dimensionality::Point> expected = {
-            khiva::dimensionality::Point(0.0, 0.0),  khiva::dimensionality::Point(1.0, 0.1),
-            khiva::dimensionality::Point(2.0, -0.1), khiva::dimensionality::Point(3.0, 5.0),
-            khiva::dimensionality::Point(4.0, 6.0),  khiva::dimensionality::Point(7.0, 9.0),
-            khiva::dimensionality::Point(8.0, 9.0),  khiva::dimensionality::Point(9.0, 9.0)};
+        khiva::dimensionality::Point(0.0, 0.0),  khiva::dimensionality::Point(1.0, 0.1),
+        khiva::dimensionality::Point(2.0, -0.1), khiva::dimensionality::Point(3.0, 5.0),
+        khiva::dimensionality::Point(4.0, 6.0),  khiva::dimensionality::Point(7.0, 9.0),
+        khiva::dimensionality::Point(8.0, 9.0),  khiva::dimensionality::Point(9.0, 9.0)};
 
     ASSERT_EQ(pox[0], expected[0].first);
     ASSERT_EQ(poy[0], expected[0].second);
@@ -214,9 +214,9 @@ void plaSlidingWindow() {
     auto out = khiva::dimensionality::PLASlidingWindow(pointList, maxError);
 
     std::vector<khiva::dimensionality::Point> expected = {
-            khiva::dimensionality::Point(0.0, 0.0), khiva::dimensionality::Point(2.0, -0.1),
-            khiva::dimensionality::Point(3.0, 5.0), khiva::dimensionality::Point(7.0, 9.0),
-            khiva::dimensionality::Point(8.0, 9.0), khiva::dimensionality::Point(9.0, 9.0)};
+        khiva::dimensionality::Point(0.0, 0.0), khiva::dimensionality::Point(2.0, -0.1),
+        khiva::dimensionality::Point(3.0, 5.0), khiva::dimensionality::Point(7.0, 9.0),
+        khiva::dimensionality::Point(8.0, 9.0), khiva::dimensionality::Point(9.0, 9.0)};
 
     ASSERT_EQ(out[0].first, expected[0].first);
     ASSERT_EQ(out[0].second, expected[0].second);
@@ -247,9 +247,9 @@ void plaSlidingWindow2() {
     af::array tss = join(1, tsx, tsy);
 
     std::vector<khiva::dimensionality::Point> expected = {
-            khiva::dimensionality::Point(0.0, 0.0), khiva::dimensionality::Point(2.0, -0.1),
-            khiva::dimensionality::Point(3.0, 5.0), khiva::dimensionality::Point(7.0, 9.0),
-            khiva::dimensionality::Point(8.0, 9.0), khiva::dimensionality::Point(9.0, 9.0)};
+        khiva::dimensionality::Point(0.0, 0.0), khiva::dimensionality::Point(2.0, -0.1),
+        khiva::dimensionality::Point(3.0, 5.0), khiva::dimensionality::Point(7.0, 9.0),
+        khiva::dimensionality::Point(8.0, 9.0), khiva::dimensionality::Point(9.0, 9.0)};
 
     auto out = khiva::dimensionality::PLASlidingWindow(tss, maxError);
 
@@ -290,9 +290,9 @@ void ramerDouglasPeucker() {
     std::vector<khiva::dimensionality::Point> pointList;
     std::vector<khiva::dimensionality::Point> pointListOut;
     std::vector<khiva::dimensionality::Point> expected = {
-            khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
-            khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(6.0f, 8.1f),
-            khiva::dimensionality::Point(9.0f, 9.0f)};
+        khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
+        khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(6.0f, 8.1f),
+        khiva::dimensionality::Point(9.0f, 9.0f)};
 
     pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
     pointList.push_back(khiva::dimensionality::Point(1.0f, 0.1f));
@@ -318,9 +318,9 @@ void ramerDouglasPeucker2() {
                          0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array points(10, 2, pointList);
     std::vector<khiva::dimensionality::Point> expected = {
-            khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
-            khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(6.0f, 8.1f),
-            khiva::dimensionality::Point(9.0f, 9.0f)};
+        khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
+        khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(6.0f, 8.1f),
+        khiva::dimensionality::Point(9.0f, 9.0f)};
 
     af::array res = khiva::dimensionality::ramerDouglasPeucker(points, 1.0);
     float *points_x = res.col(0).host<float>();
@@ -371,9 +371,9 @@ void visvalingam() {
     std::vector<khiva::dimensionality::Point> pointList;
     std::vector<khiva::dimensionality::Point> out;
     std::vector<khiva::dimensionality::Point> expected = {
-            khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
-            khiva::dimensionality::Point(5.0f, 7.0f), khiva::dimensionality::Point(7.0f, 9.0f),
-            khiva::dimensionality::Point(9.0f, 9.0f)};
+        khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
+        khiva::dimensionality::Point(5.0f, 7.0f), khiva::dimensionality::Point(7.0f, 9.0f),
+        khiva::dimensionality::Point(9.0f, 9.0f)};
 
     pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
     pointList.push_back(khiva::dimensionality::Point(1.0f, 0.1f));
@@ -399,9 +399,9 @@ void visvalingam2() {
                          0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array points(10, 2, pointList);
     std::vector<khiva::dimensionality::Point> expected = {
-            khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
-            khiva::dimensionality::Point(5.0f, 7.0f), khiva::dimensionality::Point(7.0f, 9.0f),
-            khiva::dimensionality::Point(9.0f, 9.0f)};
+        khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
+        khiva::dimensionality::Point(5.0f, 7.0f), khiva::dimensionality::Point(7.0f, 9.0f),
+        khiva::dimensionality::Point(9.0f, 9.0f)};
 
     af::array res = khiva::dimensionality::visvalingam(points, 5);
     float *points_x = res.col(0).host<float>();
