@@ -1,7 +1,7 @@
 image:
     - Visual Studio 2017
 environment:
-    BOOST_ROOT: C:\Libraries\boost_1_67_0
+    BOOST_PATH: C:\Libraries\boost_1_67_0
     AF_PATH: C:\Program Files\ArrayFire\v3
     PATH: $(AF_PATH)\lib;C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
     matrix:
@@ -32,9 +32,9 @@ build_script:
     - ps: |
         if($($env:APPVEYOR_REPO_TAG) -eq "true"){
           vcpkg install --triplet x64-windows benchmark
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"$($env:GENERATOR)"
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DBOOST_ROOT="$($env:BOOST_PATH)" -DKHIVA_USE_CONAN=OFF -G"$($env:GENERATOR)"
         } else {
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_BENCHMARKS=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"$($env:GENERATOR)"
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DBOOST_ROOT="$($env:BOOST_PATH)" -DKHIVA_USE_CONAN=OFF -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_BENCHMARKS=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"$($env:GENERATOR)"
         }
     - cmake --build . --config Release -- /m
 test_script:
