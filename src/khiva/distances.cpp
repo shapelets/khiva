@@ -29,7 +29,7 @@ double khiva::distances::dtw(std::vector<double> t0, std::vector<double> t1) {
         cost[0][j] = cost[0][j - 1] + distance(t0[0], t1[j]);
     }
 
-    // Computing the remaining values (we could apply the wavefront parallel pattern, to comput it in parallel)
+    // Computing the remaining values (we could apply the wavefront parallel pattern, to compute it in parallel)
     for (int i = 1; i < m; i++) {
         for (int j = 1; j < n; j++) {
             cost[i][j] =

@@ -11,6 +11,42 @@
 #include <sstream>
 #include "khivaTest.h"
 
+void moddims(){
+    int elem_per_bin = 4;
+    int number_bins = 3;
+
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 1, pointList);
+    af_print(a);
+
+    af::array c = a.slice(8);
+    af_print(c);
+
+    af::array padding = af::constant(0, elem_per_bin * number_bins - a.dims(0), a.dims(1));
+    af_print(padding);
+    af::array res = af::join(0, a, padding);
+    af_print(res);
+    res = af::moddims(res, elem_per_bin, number_bins);
+    af_print(res);
+
+}
+
+void moddims2(){
+    int elem_per_bin = 4;
+    int number_bins = 3;
+
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f, 0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 2, pointList);
+    af_print(a);
+    af::array padding = af::constant(0, elem_per_bin * number_bins - a.dims(0), a.dims(1));
+    af_print(padding);
+    af::array res = af::join(0, a, padding);
+    af_print(res);
+    res = af::moddims(res, elem_per_bin, number_bins);
+    af_print(res);
+
+}
+
 void paa() {
     float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array a(10, 1, pointList);
@@ -25,18 +61,22 @@ void paa() {
     }
 }
 
+void setVectorPoints(std::vector<khiva::dimensionality::Point> &pointList) {
+    pointList.push_back(khiva::dimensionality::Point(0.0, 0.0));
+    pointList.push_back(khiva::dimensionality::Point(1.0, 0.1));
+    pointList.push_back(khiva::dimensionality::Point(2.0, -0.1));
+    pointList.push_back(khiva::dimensionality::Point(3.0, 5.0));
+    pointList.push_back(khiva::dimensionality::Point(4.0, 6.0));
+    pointList.push_back(khiva::dimensionality::Point(5.0, 7.0));
+    pointList.push_back(khiva::dimensionality::Point(6.0, 8.1));
+    pointList.push_back(khiva::dimensionality::Point(7.0, 9.0));
+    pointList.push_back(khiva::dimensionality::Point(8.0, 9.0));
+    pointList.push_back(khiva::dimensionality::Point(9.0, 9.0));
+}
+
 void paaNorm() {
     std::vector<khiva::dimensionality::Point> pointList;
-    pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
-    pointList.push_back(khiva::dimensionality::Point(1.0f, 0.1f));
-    pointList.push_back(khiva::dimensionality::Point(2.0f, -0.1f));
-    pointList.push_back(khiva::dimensionality::Point(3.0f, 5.0f));
-    pointList.push_back(khiva::dimensionality::Point(4.0f, 6.0f));
-    pointList.push_back(khiva::dimensionality::Point(5.0f, 7.0f));
-    pointList.push_back(khiva::dimensionality::Point(6.0f, 8.1f));
-    pointList.push_back(khiva::dimensionality::Point(7.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(8.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(9.0f, 9.0f));
+    setVectorPoints(pointList);
 
     auto out = khiva::dimensionality::PAA(pointList, 6);
 
@@ -98,16 +138,7 @@ void pipException() {
 void plaBottomUp() {
     float maxError = 1.0;
     std::vector<khiva::dimensionality::Point> pointList;
-    pointList.push_back(khiva::dimensionality::Point(0.0, 0.0));
-    pointList.push_back(khiva::dimensionality::Point(1.0, 0.1));
-    pointList.push_back(khiva::dimensionality::Point(2.0, -0.1));
-    pointList.push_back(khiva::dimensionality::Point(3.0, 5.0));
-    pointList.push_back(khiva::dimensionality::Point(4.0, 6.0));
-    pointList.push_back(khiva::dimensionality::Point(5.0, 7.0));
-    pointList.push_back(khiva::dimensionality::Point(6.0, 8.1));
-    pointList.push_back(khiva::dimensionality::Point(7.0, 9.0));
-    pointList.push_back(khiva::dimensionality::Point(8.0, 9.0));
-    pointList.push_back(khiva::dimensionality::Point(9.0, 9.0));
+    setVectorPoints(pointList);
 
     auto out = khiva::dimensionality::PLABottomUp(pointList, maxError);
 
@@ -142,6 +173,8 @@ void plaBottomUp() {
     ASSERT_EQ(out[7].second, expected[7].second);
 }
 
+
+
 void plaBottomUp2() {
     float maxError = 1.0;
     float px[] = {0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f};
@@ -155,35 +188,29 @@ void plaBottomUp2() {
     float *pox = d_out.col(0).host<float>();
     float *poy = d_out.col(1).host<float>();
 
-    std::vector<khiva::dimensionality::Point> expected = {
-        khiva::dimensionality::Point(0.0, 0.0),  khiva::dimensionality::Point(1.0, 0.1),
-        khiva::dimensionality::Point(2.0, -0.1), khiva::dimensionality::Point(3.0, 5.0),
-        khiva::dimensionality::Point(4.0, 6.0),  khiva::dimensionality::Point(7.0, 9.0),
-        khiva::dimensionality::Point(8.0, 9.0),  khiva::dimensionality::Point(9.0, 9.0)};
+    ASSERT_EQ(pox[0], 0.0);
+    ASSERT_EQ(poy[0], 0.0);
 
-    ASSERT_EQ(pox[0], expected[0].first);
-    ASSERT_EQ(poy[0], expected[0].second);
+    ASSERT_EQ(pox[1], 1.0);
+    ASSERT_EQ(poy[1], 0.1);
 
-    ASSERT_EQ(pox[1], expected[1].first);
-    ASSERT_EQ(poy[1], expected[1].second);
+    ASSERT_EQ(pox[2], 2.0);
+    ASSERT_EQ(poy[2], -0.1);
 
-    ASSERT_EQ(pox[2], expected[2].first);
-    ASSERT_EQ(poy[2], expected[2].second);
+    ASSERT_EQ(pox[3], 3.0);
+    ASSERT_EQ(poy[3], 5.0);
 
-    ASSERT_EQ(pox[3], expected[3].first);
-    ASSERT_EQ(poy[3], expected[3].second);
+    ASSERT_EQ(pox[4], 4.0);
+    ASSERT_EQ(poy[4], 6.0);
 
-    ASSERT_EQ(pox[4], expected[4].first);
-    ASSERT_EQ(poy[4], expected[4].second);
+    ASSERT_EQ(pox[5], 7.0);
+    ASSERT_EQ(poy[5], 9.0);
 
-    ASSERT_EQ(pox[5], expected[5].first);
-    ASSERT_EQ(poy[5], expected[5].second);
+    ASSERT_EQ(pox[6], 8.0);
+    ASSERT_EQ(poy[6], 9.0);
 
-    ASSERT_EQ(pox[6], expected[6].first);
-    ASSERT_EQ(poy[6], expected[6].second);
-
-    ASSERT_EQ(pox[7], expected[7].first);
-    ASSERT_EQ(poy[7], expected[7].second);
+    ASSERT_EQ(pox[7], 9.0);
+    ASSERT_EQ(poy[7], 9.0);
 }
 
 void plaBottomUpException() {
@@ -200,41 +227,27 @@ void plaBottomUpException() {
 void plaSlidingWindow() {
     float maxError = 1.0;
     std::vector<khiva::dimensionality::Point> pointList;
-    pointList.push_back(khiva::dimensionality::Point(0.0, 0.0));
-    pointList.push_back(khiva::dimensionality::Point(1.0, 0.1));
-    pointList.push_back(khiva::dimensionality::Point(2.0, -0.1));
-    pointList.push_back(khiva::dimensionality::Point(3.0, 5.0));
-    pointList.push_back(khiva::dimensionality::Point(4.0, 6.0));
-    pointList.push_back(khiva::dimensionality::Point(5.0, 7.0));
-    pointList.push_back(khiva::dimensionality::Point(6.0, 8.1));
-    pointList.push_back(khiva::dimensionality::Point(7.0, 9.0));
-    pointList.push_back(khiva::dimensionality::Point(8.0, 9.0));
-    pointList.push_back(khiva::dimensionality::Point(9.0, 9.0));
+    setVectorPoints(pointList);
 
     auto out = khiva::dimensionality::PLASlidingWindow(pointList, maxError);
 
-    std::vector<khiva::dimensionality::Point> expected = {
-        khiva::dimensionality::Point(0.0, 0.0), khiva::dimensionality::Point(2.0, -0.1),
-        khiva::dimensionality::Point(3.0, 5.0), khiva::dimensionality::Point(7.0, 9.0),
-        khiva::dimensionality::Point(8.0, 9.0), khiva::dimensionality::Point(9.0, 9.0)};
+    ASSERT_EQ(out[0].first, 0.0);
+    ASSERT_EQ(out[0].second, 0.0);
 
-    ASSERT_EQ(out[0].first, expected[0].first);
-    ASSERT_EQ(out[0].second, expected[0].second);
+    ASSERT_EQ(out[1].first, 2.0);
+    ASSERT_EQ(out[1].second, -0.1);
 
-    ASSERT_EQ(out[1].first, expected[1].first);
-    ASSERT_EQ(out[1].second, expected[1].second);
+    ASSERT_EQ(out[2].first, 3.0);
+    ASSERT_EQ(out[2].second, 5.0);
 
-    ASSERT_EQ(out[2].first, expected[2].first);
-    ASSERT_EQ(out[2].second, expected[2].second);
+    ASSERT_EQ(out[3].first, 7.0);
+    ASSERT_EQ(out[3].second, 9.0);
 
-    ASSERT_EQ(out[3].first, expected[3].first);
-    ASSERT_EQ(out[3].second, expected[3].second);
+    ASSERT_EQ(out[4].first, 8.0);
+    ASSERT_EQ(out[4].second, 9.0);
 
-    ASSERT_EQ(out[4].first, expected[4].first);
-    ASSERT_EQ(out[4].second, expected[4].second);
-
-    ASSERT_EQ(out[5].first, expected[5].first);
-    ASSERT_EQ(out[5].second, expected[5].second);
+    ASSERT_EQ(out[5].first, 9.0);
+    ASSERT_EQ(out[5].second, 9.0);
 }
 
 void plaSlidingWindow2() {
@@ -294,16 +307,7 @@ void ramerDouglasPeucker() {
         khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(6.0f, 8.1f),
         khiva::dimensionality::Point(9.0f, 9.0f)};
 
-    pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
-    pointList.push_back(khiva::dimensionality::Point(1.0f, 0.1f));
-    pointList.push_back(khiva::dimensionality::Point(2.0f, -0.1f));
-    pointList.push_back(khiva::dimensionality::Point(3.0f, 5.0f));
-    pointList.push_back(khiva::dimensionality::Point(4.0f, 6.0f));
-    pointList.push_back(khiva::dimensionality::Point(5.0f, 7.0f));
-    pointList.push_back(khiva::dimensionality::Point(6.0f, 8.1f));
-    pointList.push_back(khiva::dimensionality::Point(7.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(8.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(9.0f, 9.0f));
+    setVectorPoints(pointList);
 
     pointListOut = khiva::dimensionality::ramerDouglasPeucker(pointList, 1.0);
 
@@ -375,16 +379,7 @@ void visvalingam() {
         khiva::dimensionality::Point(5.0f, 7.0f), khiva::dimensionality::Point(7.0f, 9.0f),
         khiva::dimensionality::Point(9.0f, 9.0f)};
 
-    pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
-    pointList.push_back(khiva::dimensionality::Point(1.0f, 0.1f));
-    pointList.push_back(khiva::dimensionality::Point(2.0f, -0.1f));
-    pointList.push_back(khiva::dimensionality::Point(3.0f, 5.0f));
-    pointList.push_back(khiva::dimensionality::Point(4.0f, 6.0f));
-    pointList.push_back(khiva::dimensionality::Point(5.0f, 7.0f));
-    pointList.push_back(khiva::dimensionality::Point(6.0f, 8.1f));
-    pointList.push_back(khiva::dimensionality::Point(7.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(8.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(9.0f, 9.0f));
+    setVectorPoints(pointList);
 
     out = khiva::dimensionality::visvalingam(pointList, 5);
 
@@ -424,6 +419,8 @@ void visvalingamException() {
     }
 }
 
+KHIVA_TEST(DimensionalityTests, MODDIMS, moddims)
+KHIVA_TEST(DimensionalityTests, MODDIMS2, moddims2)
 KHIVA_TEST(DimensionalityTests, PAA, paa)
 KHIVA_TEST(DimensionalityTests, PAA_NORM, paaNorm)
 KHIVA_TEST(DimensionalityTests, PAAException, paaException)
