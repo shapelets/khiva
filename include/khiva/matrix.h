@@ -93,6 +93,11 @@ void calculateDistanceProfile(af::array qt, af::array a, af::array sum_q, af::ar
 
 /**
  * @brief Calculates the Mueen distance.
+ *
+ * [1] Chin-Chia Michael Yeh, Yan Zhu, Liudmila Ulanova, Nurjahan Begum, Yifei Ding, Hoang Anh Dau, Diego Furtado Silva,
+ * Abdullah Mueen, Eamonn Keogh (2016). Matrix Profile I: All Pairs Similarity Joins for Time Series: A Unifying View
+ * that Includes Motifs, Discords and Shapelets. IEEE ICDM 2016.
+ *
  * @param q Array whose first dimension is the length of the query time series and the last dimension is the number of
  * time series to calculate.
  * @param t Array with the second time series in the first dimension.
