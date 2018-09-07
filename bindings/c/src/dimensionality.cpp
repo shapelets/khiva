@@ -8,6 +8,7 @@
 #include <khiva/dimensionality.h>
 #include <khiva_c/dimensionality.h>
 #include <stdexcept>
+#include <iostream>
 
 void paa(khiva_array *a, int *bins, khiva_array *result) {
     af::array var = af::array(*a);

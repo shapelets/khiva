@@ -54,6 +54,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JN
  * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
  * of 'm'.
  *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
  * @param ref_a Query time series.
  * @param ref_b Reference time series.
  * @param m The length of the subsequence.
@@ -67,6 +71,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, j
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length
  * of 'm'. This method filters the trivial matches.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
  *
  * @param ref_a Query and reference time series.
  * @param m Subsequence length.Subsequence length.
