@@ -93,6 +93,11 @@ void calculateDistanceProfile(af::array qt, af::array a, af::array sum_q, af::ar
 
 /**
  * @brief Calculates the Mueen distance.
+ *
+ * [1] Chin-Chia Michael Yeh, Yan Zhu, Liudmila Ulanova, Nurjahan Begum, Yifei Ding, Hoang Anh Dau, Diego Furtado Silva,
+ * Abdullah Mueen, Eamonn Keogh (2016). Matrix Profile I: All Pairs Similarity Joins for Time Series: A Unifying View
+ * that Includes Motifs, Discords and Shapelets. IEEE ICDM 2016.
+ *
  * @param q Array whose first dimension is the length of the query time series and the last dimension is the number of
  * time series to calculate.
  * @param t Array with the second time series in the first dimension.
@@ -126,6 +131,10 @@ void mass(af::array q, af::array t, af::array a, af::array mean_t, af::array sig
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
  *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
  * @param ta Query time series.
  * @param tb Reference time series.
  * @param m Subsequence length.
@@ -138,6 +147,10 @@ void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &in
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length of 'm'.
  * This method filters the trivial matches.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
  *
  * @param t Query and reference time series.
  * @param m Subsequence length.

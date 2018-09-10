@@ -54,6 +54,10 @@ KHIVAAPI void find_best_n_motifs(khiva_array *profile, khiva_array *index, long 
 /**
  * @brief  Primitive of the STOMP algorithm.
  *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
  * @param tssa Query time series
  * @param tssb Reference time series
  * @param m Pointer to a long with the length of the subsequence.
@@ -65,6 +69,10 @@ KHIVAAPI void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *
 
 /**
  * @brief Primitive of the STOMP self join algorithm.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
  *
  * @param tss Query and reference time series
  * @param m Pointer to a long with the length of the subsequence.
