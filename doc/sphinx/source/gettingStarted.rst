@@ -97,63 +97,64 @@ Prerequisites
 ^^^^^^^^^^^^^
 
 -  Install `Python-64bits <https://www.python.org/downloads>`__ and add
-   the path to the environment variables path. 32-bits version won't
-   work
+   the path to the environment variable path. 32-bits version won't
+   work.
 -  Install `ArrayFire 3.5.1 <https://arrayfire.com/download/>`__ and add
-   the path to the environment variables path
+   the path to the environment variable path.
 -  Install
    `Vcpkg <https://docs.microsoft.com/es-es/cpp/vcpkg#installation>`__
-   and add the path to the environment variables path
+   and add the path to the environment variable path.
 -  Install `chocolatey <https://chocolatey.org/>`__ to manage windows
-   dependencies and add the path to the environment variables path
+   dependencies and add the path to the environment variable path.
 
 Process
 ^^^^^^^
 
 -  Run ``choco install cmake.install -NoNewWindow -Wait`` Note: Add the
-   path to the environment variables path and **before** than
-   chocolately environment variable path.
--  Run ``choco install doxygen.install -NoNewWindow -Wait``
--  Run ``choco install graphviz -NoNewWindow -Wait``
--  Run ``python -m pip install --upgrade pip``
--  Run ``pip3 install sphinx breathe sphinx_rtd_theme``
+   path to the environment variable path and **before** than chocolately
+   environment variable path.
+-  Run ``choco install doxygen.install -NoNewWindow -Wait``.
+-  Run ``choco install graphviz -NoNewWindow -Wait``.
+-  Run ``python -m pip install --upgrade pip``.
+-  Run ``pip3 install sphinx breathe sphinx_rtd_theme``.
 -  Run
-   ``vcpkg install --triplet x64-windows gtest eigen3 benchmark boost``
--  Create a ``build`` folder in the root path of the project
--  Browse inside the ``build`` folder
+   ``vcpkg install --triplet x64-windows gtest eigen3 benchmark boost``.
+-  Create a ``build`` folder in the root path of the project.
+-  Browse inside the ``build`` folder.
 -  Run
    ``cmake .. -DCMAKE_TOOLCHAIN_FILE="<PATH_TO_VPKG>/scripts/buildsystems/vcpkg.cmake" -DKHIVA_USE_CONAN=OFF -G "Visual Studio 15 2017 Win64"``
    (Do not forget to clean the build directory everytime before running
-   this command)
--  Run ``cmake --build . --config Release -- /m`` to compile
+   this command).
+-  Run ``cmake --build . --config Release -- /m`` to compile.
 
 Install Khiva library without installer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As a final step of the installation process: - Run
-``cmake -DBUILD_TYPE=Release -P cmake_install.cmake``
+As a final step of the installation process:
+
+-  Run ``cmake -DBUILD_TYPE=Release -P cmake_install.cmake``.
 
 Generating the Khiva installer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-CPack is used in order to perform this task.
+We use Cpack and NSIS to generate the installer.
 
-**Notes:** Before generating the installer the project should be built
-following the process explained in the ``Process`` section above. The
+**Notes:** Before generating the installer, the project should be built
+by following the steps in the previous ``Process`` section. The
 generated package will be stored in the ``build`` folder.
 
--  Run ``choco install nsis -NoNewWindow -Wait``
--  The installer can be generated running the command ``cpack -G NSIS``
+-  Run ``choco install nsis -NoNewWindow -Wait``.
+-  The installer can be generated running the command ``cpack -G NSIS``.
 
-**Note:** It is used ``cpack`` from ``cmake`` not the one from
-``chocolatey``. If you cannot run this command, please review that the
-path from ``cmake`` is placed before the pack from ``chocolatey`` in the
-environment variables path
+**Note:** We use the ``cpack`` command from ``cmake``, be aware
+``chocolatey`` has another cpack command. If you cannot run the proper
+command, check out the path from ``cmake`` is placed before the path
+from ``chocolatey`` in the environment variable path.
 
 Generating documentation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  Run ``pip install sphinx`` to install
-   `Sphinx <http://www.sphinx-doc.org/es/stable/install.html#windows-install-python-and-sphinx>`__
--  Browse to the root path of the project
--  Run ``sphinx-build.exe -b html doc/sphinx/source/ build/doc/html/``
+   `Sphinx <http://www.sphinx-doc.org/es/stable/install.html#windows-install-python-and-sphinx>`__.
+-  Browse to the root path of the project.
+-  Run ``sphinx-build.exe -b html doc/sphinx/source/ build/doc/html/``.
