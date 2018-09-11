@@ -97,7 +97,7 @@ Prerequisites
 ^^^^^^^^^^^^^
 
 -  Install `Python-64bits <https://www.python.org/downloads>`__ and add
-   the path to the environment variable path. 32-bits version won't
+   the path to the environment variable path, 32-bits version won't
    work.
 -  Install `ArrayFire 3.5.1 <https://arrayfire.com/download/>`__ and add
    the path to the environment variable path.
@@ -139,9 +139,9 @@ Generating the Khiva installer
 
 We use Cpack and NSIS to generate the installer.
 
-**Notes:** Before generating the installer, the project should be built
-by following the steps in the previous ``Process`` section. The
-generated package will be stored in the ``build`` folder.
+**Notes:** Before generating the installer, the project must be built by
+following the steps in the previous ``Process`` section. The generated
+package will be stored in the ``build`` folder.
 
 -  Run ``choco install nsis -NoNewWindow -Wait``.
 -  The installer can be generated running the command ``cpack -G NSIS``.

@@ -21,7 +21,7 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 
 #### Prerequisites
 
-- Install [Python-64bits](https://www.python.org/downloads) and add the path to the environment variable path. 32-bits version won't work.
+- Install [Python-64bits](https://www.python.org/downloads) and add the path to the environment variable path, 32-bits version won't work.
 - Install [ArrayFire 3.5.1](https://arrayfire.com/download/) and add the path to the environment variable path.
 - Install [Vcpkg](https://docs.microsoft.com/es-es/cpp/vcpkg#installation) and add the path to the environment variable path.
 - Install [chocolatey](https://chocolatey.org/) to manage windows dependencies and add the path to the environment variable path.
@@ -49,7 +49,7 @@ As a final step of the installation process:
 
 We use Cpack and NSIS to generate the installer.
 
-**Notes:** Before generating the installer, the project should be built by following the steps in the previous `Process` section. The generated package will be stored in the `build` folder.
+**Notes:** Before generating the installer, the project must be built by following the steps in the previous `Process` section. The generated package will be stored in the `build` folder.
 
 - Run `choco install nsis -NoNewWindow -Wait`.
 - The installer can be generated running the command `cpack -G NSIS`.
@@ -68,7 +68,7 @@ We use Cpack and NSIS to generate the installer.
 
 #### Prerequisites
 
-- Install [Python-64bits](https://www.python.org/downloads) and add the path to the environment variable path. 32-bits version won't work.
+- Install [Python-64bits](https://www.python.org/downloads) and add the path to the environment variable path, 32-bits version won't work.
 - Install [ArrayFire 3.5.1](https://arrayfire.com/download/) and add the path to the environment variable path.
 
 #### Process
