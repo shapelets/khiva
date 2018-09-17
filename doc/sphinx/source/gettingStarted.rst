@@ -39,7 +39,7 @@ Tools:
 Libraries: 
 
 * OpenCL library for you GPU card (`Intel <https://software.intel.com/en-us/intel-opencl/download>`_, `AMD <https://support.amd.com/en-us/download>`_, or `Nvidia <https://developer.nvidia.com/opencl>`_).
-* To run on accelerators like GPUs, `Arrayfire <https://arrayfire.com/download/>`_. Note that in order to use Arrayfire on Windows you need to `install <https://www.microsoft.com/en-in/download/details.aspx?id=48145>`_ the Visual Studio 2015 (x64) runtime libraries.
+* To run on accelerators like GPUs, `Arrayfire 3.5.1 no-gl <https://arrayfire.com/download/>`_. Note that in order to use Arrayfire on Windows you need to `install <https://www.microsoft.com/en-in/download/details.aspx?id=48145>`_ the Visual Studio 2015 (x64) runtime libraries.
 * To test the functionality provided by Khiva, `Google Test <https://github.com/google/googletest>`_.
 * To benchmark Khiva, `Google Benchmark <https://github.com/google/benchmark>`_.
 * `Boost <https://www.boost.org/users/download/>`_.
@@ -51,14 +51,16 @@ Linux
 
 We will use `Ubuntu 16.04 LTS <http://www.ubuntu.com>`_ as our example linux distribution.
 
-Once we have installed all Khiva dependencies, we are ready to build and install Khiva. First, go to the directory 
-where the source code is stored.
+Once we have installed all Khiva dependencies, we are ready to build and install Khiva. First, go to the source directory.
 
 .. code-block:: bash
 
+    conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
     mkdir build
     cd build
+    conan install .. --build missing
     cmake ..
+    make -j8
     make install
 
 It will install the library in ``/usr/local/lib`` and ``/usr/local/include`` folders.
@@ -80,9 +82,12 @@ where the source code is stored:
 
 .. code-block:: bash
 
+    conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
     mkdir build
     cd build
+    conan install .. --build missing
     cmake ..
+    make -j8
     make install
 
 It will install the library in ``/usr/local/lib`` and ``/usr/local/include`` folders.
@@ -101,8 +106,7 @@ Prerequisites
    work.
 -  Install `ArrayFire 3.5.1 <https://arrayfire.com/download/>`__ and add
    the path to the environment variable path.
--  Install
-   `Vcpkg <https://docs.microsoft.com/es-es/cpp/vcpkg#installation>`__
+-  Install `Vcpkg <https://docs.microsoft.com/es-es/cpp/vcpkg#installation>`__
    and add the path to the environment variable path.
 -  Install `chocolatey <https://chocolatey.org/>`__ to manage windows
    dependencies and add the path to the environment variable path.
