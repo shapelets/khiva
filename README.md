@@ -26,7 +26,7 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 - Install [Vcpkg](https://docs.microsoft.com/es-es/cpp/vcpkg#installation) and add the path to the environment variable path.
 - Install [chocolatey](https://chocolatey.org/) to manage windows dependencies and add the path to the environment variable path.
 
-#### Process
+#### Build process
 
 - Run `choco install cmake.install -NoNewWindow -Wait` Note: Add the path to the environment variable path and **before** than chocolately environment variable path.
 - Run `choco install doxygen.install -NoNewWindow -Wait`.
@@ -39,7 +39,7 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 - Run `cmake .. -DCMAKE_TOOLCHAIN_FILE="<PATH_TO_VPKG>/scripts/buildsystems/vcpkg.cmake" -DKHIVA_USE_CONAN=OFF -G "Visual Studio 15 2017 Win64"` (Do not forget to clean the build directory everytime before running this command).
 - Run `cmake --build . --config Release -- /m` to compile.
 
-#### Install Khiva library without installer
+#### Install Khiva library from source code
 
 As a final step of the installation process:
 
@@ -71,9 +71,9 @@ We use Cpack and NSIS to generate the installer.
 - Install [Python-64bits](https://www.python.org/downloads) or run `apt-get install python3 python3-pip`, 32-bits version won't work.
 - Download [ArrayFire 3.5.1 no-gl](http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_Linux_x86_64.sh).
 - Install ArrayFire `sudo mkdir -p /opt/arrayfire`
-- `sudo bash arrayfire/ArrayFire-v3.5.1_Linux_x86_64.sh --prefix=/opt/arrayfire --skip-license`
+- Run `sudo bash arrayfire/ArrayFire-v3.5.1_Linux_x86_64.sh --prefix=/opt/arrayfire --skip-license`
 
-#### Process
+#### Build process
 
 - Install conan, c++ package manager, preferably running `pip install conan`. For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
 - Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`.
@@ -81,7 +81,7 @@ We use Cpack and NSIS to generate the installer.
 - Run `cmake ..`.
 - Run `make -j8`.
 
-#### Install Khiva library without installer
+#### Install Khiva library from source code
 
 - Run `make install`.
 
@@ -115,7 +115,7 @@ To generate the khiva documentation run the following command.
 - Install [Python-64bits](https://www.python.org/downloads) or run `brew install python3`, 32-bits version won't work.
 - Install [ArrayFire 3.5.1 no-gl](http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_OSX.pkg) and add the path to the environment variable path.
 
-#### Process
+#### Build process
 
 - Install conan, c++ package manager, preferably running `pip install conan`. For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
 - Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`.
@@ -123,13 +123,13 @@ To generate the khiva documentation run the following command.
 - Run `cmake ..`.
 - Run `make -j8`.
 
-#### Install Khiva library without installer
+#### Install Khiva library from source code
 
 - Run `make install`.
 
 ### Generating the Khiva installer
 
-For Mac OS the installer can be generated running the command cpack -G productbuild` inside the build folder.
+For Mac OS the installer can be generated running the command `cpack -G productbuild` inside the build folder.
 
 ### Generating documentation
 

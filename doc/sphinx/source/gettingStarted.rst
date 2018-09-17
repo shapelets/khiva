@@ -49,9 +49,20 @@ Linux
 =====
 .. _section-installation-linux:
 
-We will use `Ubuntu 16.04 LTS <http://www.ubuntu.com>`_ as our example linux distribution.
+We will use `Ubuntu 16.04 LTS <http://www.ubuntu.com>`_ as our linux distribution example.
+
+Prerequisites
+^^^^^^^^^^^^^
+
+- Install [Python-64bits](https://www.python.org/downloads) or run `apt-get install python3 python3-pip`, 32-bits version won't work.
+- Download [ArrayFire 3.5.1 no-gl](http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_Linux_x86_64.sh).
+- Install ArrayFire `sudo mkdir -p /opt/arrayfire`
+- Run `sudo bash arrayfire/ArrayFire-v3.5.1_Linux_x86_64.sh --prefix=/opt/arrayfire --skip-license`
 
 Once we have installed all Khiva dependencies, we are ready to build and install Khiva. First, go to the source directory.
+
+Build Process
+^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -72,13 +83,49 @@ to the environment variable  LD_LIBRARY_PATH.
 
    export LD_LIBRARY_PATH="/pathToArrayfire/arrayfire/lib:$LD_LIBRARY_PATH"
 
+Install Khiva library from source code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+-  Run `make install`.
+
+Generating the khiva installer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+CPack is used in order to perform this task.
+
+**Notes:** Before generating the installer the project should be built following the process explained in the `Process` section above. The generated package will be stored in the `build` folder.
+
+For linux either a deb or a rpm package the installer can be generated. This could be done running the command `cpack -G DEB` or `cpack -G RPM` respectively inside the build folder.
+
+Generating documentation
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+We use `sphinx + doxygen` to generate our documentation. You will need to install the following packages:
+
+- Sphinx: `brew install sphinx`.
+- Doxygen: `brew install doxygen`.
+- Read the Docs Theme: `pip install sphinx_rtd_theme`.
+- Breathe: `pip install breathe`.
+
+To generate the khiva documentation run the following command.
+
+- `make KHIVA_doc_sphinx`.
 
 Mac OS
 ======
 .. _section-installation-mac:
 
+Prerequisites
+^^^^^^^^^^^^^
+
+- Install [Python-64bits](https://www.python.org/downloads) or run `brew install python3`, 32-bits version won't work.
+- Install [ArrayFire 3.5.1 no-gl](http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_OSX.pkg) and add the path to the environment variable path.
+
 Once we have installed all Khiva dependencies, we are ready to build and install Khiva. First, go to the directory 
 where the source code is stored:
+
+Build Process
+^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -91,6 +138,30 @@ where the source code is stored:
     make install
 
 It will install the library in ``/usr/local/lib`` and ``/usr/local/include`` folders.
+
+Install Khiva library from source code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+-  Run `cmake install`.
+
+Generating the khiva installer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For Mac OS the installer can be generated running the command `cpack -G productbuild` inside the build folder.
+
+Generating documentation
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+We use `sphinx + doxygen` to generate our documentation. You will need to install the following packages:
+
+- Sphinx: `brew install sphinx`.
+- Doxygen: `brew install doxygen`.
+- Read the Docs Theme: `pip install sphinx_rtd_theme`.
+- Breathe: `pip install breathe`.
+
+To generate the khiva documentation run the following command.
+
+- `make KHIVA_doc_sphinx`.
 
 Windows
 =======
@@ -111,8 +182,8 @@ Prerequisites
 -  Install `chocolatey <https://chocolatey.org/>`__ to manage windows
    dependencies and add the path to the environment variable path.
 
-Process
-^^^^^^^
+Build Process
+^^^^^^^^^^^^^
 
 -  Run ``choco install cmake.install -NoNewWindow -Wait`` Note: Add the
    path to the environment variable path and **before** than chocolately
@@ -131,8 +202,8 @@ Process
    this command).
 -  Run ``cmake --build . --config Release -- /m`` to compile.
 
-Install Khiva library without installer
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Install Khiva library from source code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 As a final step of the installation process:
 
