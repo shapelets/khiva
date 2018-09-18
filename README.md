@@ -26,7 +26,11 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 - Install [Vcpkg](https://docs.microsoft.com/es-es/cpp/vcpkg#installation) and add the path to the environment variable path.
 - Install [chocolatey](https://chocolatey.org/) to manage windows dependencies and add the path to the environment variable path.
 
-#### Process
+Once we have installed all Khiva dependencies, we are ready to install Khiva from source code or by using the installers.
+
+#### Build from source code
+
+First, go to the source directory.
 
 - Run `choco install cmake.install -NoNewWindow -Wait` Note: Add the path to the environment variable path and **before** than chocolately environment variable path.
 - Run `choco install doxygen.install -NoNewWindow -Wait`.
@@ -39,9 +43,9 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 - Run `cmake .. -DCMAKE_TOOLCHAIN_FILE="<PATH_TO_VPKG>/scripts/buildsystems/vcpkg.cmake" -DKHIVA_USE_CONAN=OFF -G "Visual Studio 15 2017 Win64"` (Do not forget to clean the build directory everytime before running this command).
 - Run `cmake --build . --config Release -- /m` to compile.
 
-#### Install Khiva library without installer
+#### Install Khiva library from source code
 
-As a final step of the installation process:
+Once the build process is finished you can install the library in your system folder:
 
 - Run `cmake -DBUILD_TYPE=Release -P cmake_install.cmake`.
 
@@ -49,7 +53,7 @@ As a final step of the installation process:
 
 We use Cpack and NSIS to generate the installer.
 
-**Notes:** Before generating the installer, the project must be built by following the steps in the previous `Process` section. The generated package will be stored in the `build` folder.
+**Notes:** Before generating the installer, the project has to be built by following the previous `Build from source code` section. The generated package is stored in the `build` folder.
 
 - Run `choco install nsis -NoNewWindow -Wait`.
 - The installer can be generated running the command `cpack -G NSIS`.
@@ -68,28 +72,32 @@ We use Cpack and NSIS to generate the installer.
 
 #### Prerequisites
 
-- Install [Python-64bits](https://www.python.org/downloads) and add the path to the environment variable path, 32-bits version won't work.
-- Install [ArrayFire 3.5.1](https://arrayfire.com/download/) and add the path to the environment variable path.
+- Install [Python-64bits](https://www.python.org/downloads) or run `apt-get install python3 python3-pip`, 32-bits version won't work.
+- Download [ArrayFire 3.5.1 no-gl](http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_Linux_x86_64.sh).
+- Install ArrayFire `sudo mkdir -p /opt/arrayfire`
+- Run `sudo bash arrayfire/ArrayFire-v3.5.1_Linux_x86_64.sh --prefix=/opt/arrayfire --skip-license`
 
-#### Process
+Once we have installed all Khiva dependencies, we are ready to install Khiva from source code or by using the installers.
+
+#### Build from source code
 
 - Install conan, c++ package manager, preferably running `pip install conan`. For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
 - Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`.
 - Create `build` folder and, after moving into the new folder, run `conan install .. --build missing`.
 - Run `cmake ..`.
-- Run `make -j8 && make install`.
+- Run `make -j8`.
 
-#### Install Khiva library without installer
+#### Install Khiva library from source code
 
-TODO
+- Run `make install`.
 
 ### Generating the Khiva installer
 
-CPack is used in order to perform this task.
+The CPack utility from cmake is used to generate the installer.
 
-**Notes:** Before generating the installer the project should be built following the process explained in the `Process` section above. The generated package will be stored in the `build` folder.
+**Notes:** Before generating the installer, the project has to be built by following the `Build from source code` section above. The generated package is stored in the `build` folder.
 
-For linux either a deb or a rpm package the installer can be generated. This could be done running the command `cpack -G DEB` or `cpack -G RPM` respectively inside the build folder.
+For linux, either a deb or a rpm installer package can be generated. This is done by running the command `cpack -G DEB` or `cpack -G RPM` respectively inside the build folder.
 
 ### Generating documentation
 
@@ -100,29 +108,51 @@ We use `sphinx + doxygen` to generate our documentation. You will need to instal
 - Read the Docs Theme: `pip install sphinx_rtd_theme`.
 - Breathe: `pip install breathe`.
 
+To generate the khiva documentation run the following command:
+
+- Run `make documentation`.
+
 ## Mac OS users
 
 ### Installation
 
 #### Prerequisites
 
-TODO
+- Install [Python-64bits](https://www.python.org/downloads) or run `brew install python3`, 32-bits version won't work.
+- Install [ArrayFire 3.5.1 no-gl](http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_OSX.pkg) and add the path to the environment variable path.
 
-#### Process
+Once we have installed all Khiva dependencies, we are ready to install Khiva from source code or by using the installers.
 
-TODO
+#### Build from source code
 
-#### Install Khiva library without installer
+- Install conan, c++ package manager, preferably running `pip install conan`. For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
+- Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`.
+- Create `build` folder and, after moving into the new folder, run `conan install .. --build missing`.
+- Run `cmake ..`.
+- Run `make -j8`.
 
-TODO
+#### Install Khiva library from source code
+
+To install the library in the default system folders, run the following command:
+
+- Run `make install`.
 
 ### Generating the Khiva installer
 
-For Mac OS the installer can be generated running the command cpack -G productbuild` inside the build folder.
+For Mac OS, the installer can be generated by running the command `cpack -G productbuild` inside the build folder.
 
 ### Generating documentation
 
-TODO
+We use `sphinx + doxygen` to generate our documentation. You will need to install the following packages:
+
+- Sphinx: `brew install sphinx`.
+- Doxygen: `brew install doxygen`.
+- Read the Docs Theme: `pip install sphinx_rtd_theme`.
+- Breathe: `pip install breathe`.
+
+To generate the khiva documentation run the following command.
+
+- `make documentation`.
 
 ## Contributing
 
