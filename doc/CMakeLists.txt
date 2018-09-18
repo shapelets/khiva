@@ -47,7 +47,7 @@ IF(KHIVA_BUILD_DOCUMENTATION)
     # HTML output directory
     SET(SPHINX_HTML_DIR "${CMAKE_CURRENT_BINARY_DIR}/html")
     
-    ADD_CUSTOM_TARGET(KHIVA_doc_sphinx ALL
+    ADD_CUSTOM_TARGET(documentation ALL
         ${SPHINX_EXECUTABLE}
             -q -b html
             -c "${CMAKE_CURRENT_SOURCE_DIR}/sphinx/source/"
@@ -59,7 +59,7 @@ IF(KHIVA_BUILD_DOCUMENTATION)
     # LaTeX output directory
     SET(SPHINX_LATEX_DIR "${CMAKE_CURRENT_BINARY_DIR}/latex")
 
-    ADD_CUSTOM_TARGET(KHIVA_doc_sphinx_pdf
+    ADD_CUSTOM_TARGET(documentation_pdf
         ${SPHINX_EXECUTABLE}
             -q -b latex
             -c "${CMAKE_CURRENT_SOURCE_DIR}/sphinx/source/"
