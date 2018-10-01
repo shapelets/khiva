@@ -67,7 +67,7 @@ Prerequisites
 Build from source code
 ^^^^^^^^^^^^^^^^^^^^^^
 
--  Run ``choco install cmake.install -NoNewWindow -Wait`` Note: Add the
+-  Run ``choco install cmake.install -NoNewWindow -Wait`` Note: Add the installation
    path to the environment variable path and **before** than chocolately
    environment variable path.
 -  Run ``choco install doxygen.install -NoNewWindow -Wait``.
@@ -80,7 +80,7 @@ Build from source code
 -  Browse inside the ``build`` folder.
 -  Run
    ``cmake .. -DCMAKE_TOOLCHAIN_FILE="<PATH_TO_VPKG>/scripts/buildsystems/vcpkg.cmake" -DKHIVA_USE_CONAN=OFF -G "Visual Studio 15 2017 Win64"``
-   (Do not forget to clean the build directory every time before running
+   (Note: Replace <PATH_TO_VPKG> with your vcpkg installation path and do not forget to clean the build directory every time before running
    this command).
 -  Run ``cmake --build . --config Release -- /m`` to compile.
 
