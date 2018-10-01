@@ -64,8 +64,20 @@ Prerequisites
 -  Install `chocolatey <https://chocolatey.org/>`__ to manage windows
    dependencies and add the path to the environment variable path.
 
-Build from source code
-^^^^^^^^^^^^^^^^^^^^^^
+Build using a batch installer...
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the tools directory you can find the script install.bat. You must indicate the path to your vcpkg installation directory.
+
+- Usage: install.bat <path_to_vcpkg>
+- Example: install.bat c:\vcpkg
+
+
+...or build from source code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you prefer, you can build Khiva step by step.
+First, go to the source directory.
 
 -  Run ``choco install cmake.install -NoNewWindow -Wait`` Note: Add the installation
    path to the environment variable path and **before** than chocolately
@@ -87,7 +99,7 @@ Build from source code
 Install Khiva library from source code
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To isntall khiva just execute the following command:
+To install Khiva just execute the following command:
 
 -  Run ``cmake -DBUILD_TYPE=Release -P cmake_install.cmake``.
 

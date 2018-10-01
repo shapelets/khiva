@@ -26,10 +26,17 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 - Install [Vcpkg](https://docs.microsoft.com/es-es/cpp/vcpkg#installation) and add the path to the environment variable path.
 - Install [chocolatey](https://chocolatey.org/) to manage windows dependencies and add the path to the environment variable path.
 
-Once we have installed all Khiva dependencies, we are ready to install Khiva from source code or by using the installers.
+Once we have installed all Khiva dependencies, we ar
+
+#### Build using a batch installer...
+
+In the tools directory you can find the script install.bat. You must indicate the path to your vcpkg installation directory.
+- Usage: install.bat <path_to_vcpkg>
+- Example: install.bat c:\vcpkg
 
 #### Build from source code
 
+If you prefer, you can build Khiva step by step.
 First, go to the source directory.
 
 - Run `choco install cmake.install -NoNewWindow -Wait` Note: Add the installation path to the environment variable path and **before** than chocolately environment variable path.
