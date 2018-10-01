@@ -32,7 +32,7 @@ Once we have installed all Khiva dependencies, we are ready to install Khiva fro
 
 First, go to the source directory.
 
-- Run `choco install cmake.install -NoNewWindow -Wait` Note: Add the path to the environment variable path and **before** than chocolately environment variable path.
+- Run `choco install cmake.install -NoNewWindow -Wait` Note: Add the installation path to the environment variable path and **before** than chocolately environment variable path.
 - Run `choco install doxygen.install -NoNewWindow -Wait`.
 - Run `choco install graphviz -NoNewWindow -Wait`.
 - Run `python -m pip install --upgrade pip`.
@@ -40,7 +40,7 @@ First, go to the source directory.
 - Run `vcpkg install --triplet x64-windows gtest eigen3 benchmark boost`.
 - Create a `build` folder in the root path of the project.
 - Browse inside the `build` folder.
-- Run `cmake .. -DCMAKE_TOOLCHAIN_FILE="<PATH_TO_VPKG>/scripts/buildsystems/vcpkg.cmake" -DKHIVA_USE_CONAN=OFF -G "Visual Studio 15 2017 Win64"` (Do not forget to clean the build directory everytime before running this command).
+- Run `cmake .. -DCMAKE_TOOLCHAIN_FILE="<PATH_TO_VPKG>/scripts/buildsystems/vcpkg.cmake" -DKHIVA_USE_CONAN=OFF -G "Visual Studio 15 2017 Win64"` (Note: Replace <PATH_TO_VPKG> with your vcpkg installation path and do not forget to clean the build directory everytime before running this command).
 - Run `cmake --build . --config Release -- /m` to compile.
 
 #### Install Khiva library from source code

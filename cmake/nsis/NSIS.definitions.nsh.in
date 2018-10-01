@@ -1,12 +1,12 @@
 !define MUI_WELCOMEPAGE_TITLE '${CPACK_PACKAGE_NAME} ${CPACK_PACKAGE_VERSION} Installer'
 !define MUI_WELCOMEPAGE_TITLE_3LINES
 !define MUI_WELCOMEPAGE_TEXT    \
-"Khiva is an open source C++ library which focus on providing efficient algorithms to perform\
-analytics over time series of data. It can be used to extract insights from one or a group of\
+"Khiva is an open source C++ library which focus on providing efficient algorithms to perform \
+analytics over time series of data. It can be used to extract insights from one or a group of \
 time series.\r\n\r\n\
-The large number of available methods allow us to understand the nature of each\
+The large number of available methods allow us to understand the nature of each \
 time series.\r\n\r\n\
-Based on that analytics, the user can reduce dimensionality, find out recurrent motifs\
+Based on that analytics, the user can reduce dimensionality, find out recurrent motifs \
 or discords, understand the seasonality or trend from a given time series, forecasting and detect anomalies.\r\n\r\n\
 Follow these steps to install the Khiva library."
 
