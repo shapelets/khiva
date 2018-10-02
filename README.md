@@ -21,20 +21,20 @@ This project is licensed under [MPL-v2](https://www.mozilla.org/en-US/MPL/2.0/).
 
 #### Prerequisites
 
-- Install [Python-64bits](https://www.python.org/downloads) and add the path to the environment variable path, 32-bits version won't work.
-- Install [ArrayFire 3.5.1](https://arrayfire.com/download/) and add the path to the environment variable path.
-- Install [Vcpkg](https://docs.microsoft.com/es-es/cpp/vcpkg#installation) and add the path to the environment variable path.
-- Install [chocolatey](https://chocolatey.org/) to manage windows dependencies and add the path to the environment variable path.
+- Install [Python-64bits](https://www.python.org/downloads) and add the installation path to the environment variable path, 32-bits version won't work.
+- Install [ArrayFire 3.5.1](https://arrayfire.com/download/) and add the installation path to the environment variable path.
+- Install [Vcpkg](https://docs.microsoft.com/es-es/cpp/vcpkg#installation) and add the installation path to the environment variable path.
+- Install [chocolatey](https://chocolatey.org/) to manage windows dependencies and add the installation path to the environment variable path.
 
-Once we have installed all Khiva dependencies, we ar
+Once we have installed all Khiva dependencies,  we are ready to install Khiva by using the installers (Option 1) or from source code (Option 2).
 
-#### Build using a batch installer...
+#### (Option 1) Build using a batch installer
 
 In the tools directory you can find the script install.bat. You must indicate the path to your vcpkg installation directory.
 - Usage: install.bat <path_to_vcpkg>
 - Example: install.bat c:\vcpkg
 
-#### Build from source code
+#### (Option 2) Build from source code
 
 If you prefer, you can build Khiva step by step.
 First, go to the source directory.
@@ -50,7 +50,7 @@ First, go to the source directory.
 - Run `cmake .. -DCMAKE_TOOLCHAIN_FILE="<PATH_TO_VPKG>/scripts/buildsystems/vcpkg.cmake" -DKHIVA_USE_CONAN=OFF -G "Visual Studio 15 2017 Win64"` (Note: Replace <PATH_TO_VPKG> with your vcpkg installation path and do not forget to clean the build directory everytime before running this command).
 - Run `cmake --build . --config Release -- /m` to compile.
 
-#### Install Khiva library from source code
+#### Install Khiva library
 
 Once the build process is finished you can install the library in your system folder:
 

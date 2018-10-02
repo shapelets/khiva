@@ -27,7 +27,7 @@ GOTO:EOF
 :checkCommand
 %~1
 IF %ERRORLEVEL%==0 (
-	echo "Command exists"
+	echo "%~1" "success"
 ) ELSE (
 	echo %~2
 	EXIT

@@ -55,17 +55,20 @@ Prerequisites
 ^^^^^^^^^^^^^
 
 -  Install `Python-64bits <https://www.python.org/downloads>`__ and add
-   the path to the environment variable path, 32-bits version won't
+   the installation path to the environment variable path, 32-bits version won't
    work.
 -  Install `ArrayFire 3.5.1 <https://arrayfire.com/download/>`__ and add
-   the path to the environment variable path.
+   the installation path to the environment variable path.
 -  Install `Vcpkg <https://docs.microsoft.com/es-es/cpp/vcpkg#installation>`__
-   and add the path to the environment variable path.
+   and add the installation path to the environment variable path.
 -  Install `chocolatey <https://chocolatey.org/>`__ to manage windows
-   dependencies and add the path to the environment variable path.
+   dependencies and add the installation path to the environment variable path.
 
-Build using a batch installer...
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Once we have installed all Khiva dependencies,  we are ready to install Khiva by using the installers (Option 1) or from source code (Option 2).
+
+
+(Option 1) Build using a batch installer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the tools directory you can find the script install.bat. You must indicate the path to your vcpkg installation directory.
 
@@ -73,8 +76,8 @@ In the tools directory you can find the script install.bat. You must indicate th
 - Example: install.bat c:\vcpkg
 
 
-...or build from source code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(Option 2) Build from source code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you prefer, you can build Khiva step by step.
 First, go to the source directory.
@@ -96,8 +99,8 @@ First, go to the source directory.
    this command).
 -  Run ``cmake --build . --config Release -- /m`` to compile.
 
-Install Khiva library from source code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Install Khiva library
+^^^^^^^^^^^^^^^^^^^^^
 
 To install Khiva just execute the following command:
 
