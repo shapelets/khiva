@@ -11,6 +11,7 @@ IF NOT exist %1\vcpkg.exe (
 )
 set path_to_vpkg=%1
 CALL :checkCommand "choco install cmake.install" "Please, check your chocolatey installation"
+SET PATH=C:\Program Files\CMake\bin;%PATH%
 CALL :checkCommand "choco install doxygen.install" "Please, check your chocolatey installation"
 CALL :checkCommand "choco install graphviz" "Please, check your chocolatey installation"
 CALL :checkCommand "python -m pip install --upgrade pip" "Please, check your python installation"
