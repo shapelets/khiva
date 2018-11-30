@@ -47,7 +47,11 @@ ENDIF()
 
 IF(KHIVA_USE_CONAN)
     # Bring conan generated dependencies
-    INCLUDE(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
+    if(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
+        include(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
+    else()
+        message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")
+    endif()
     CONAN_BASIC_SETUP()
 ENDIF()
 
