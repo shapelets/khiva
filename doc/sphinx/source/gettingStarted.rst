@@ -55,17 +55,32 @@ Prerequisites
 ^^^^^^^^^^^^^
 
 -  Install `Python-64bits <https://www.python.org/downloads>`__ and add
-   the path to the environment variable path, 32-bits version won't
+   the installation path to the environment variable path, 32-bits version won't
    work.
 -  Install `ArrayFire 3.5.1 <https://arrayfire.com/download/>`__ and add
-   the path to the environment variable path.
+   the installation path to the environment variable path.
 -  Install `Vcpkg <https://docs.microsoft.com/es-es/cpp/vcpkg#installation>`__
-   and add the path to the environment variable path.
+   and add the installation path to the environment variable path.
 -  Install `chocolatey <https://chocolatey.org/>`__ to manage windows
-   dependencies and add the path to the environment variable path.
+   dependencies and add the installation path to the environment variable path.
 
-Build from source code
-^^^^^^^^^^^^^^^^^^^^^^
+Once we have installed all Khiva dependencies,  we are ready to install Khiva by using the installers (Option 1) or from source code (Option 2).
+
+
+(Option 1) Build using a batch installer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the tools directory you can find the script install.bat. You must indicate the path to your vcpkg installation directory.
+
+- Usage: install.bat <path_to_vcpkg>
+- Example: install.bat c:\vcpkg
+
+
+(Option 2) Build from source code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you prefer, you can build Khiva step by step.
+First, go to the source directory.
 
 -  Run ``choco install cmake.install -NoNewWindow -Wait`` Note: Add the installation
    path to the environment variable path and **before** than chocolately
@@ -84,10 +99,10 @@ Build from source code
    this command).
 -  Run ``cmake --build . --config Release -- /m`` to compile.
 
-Install Khiva library from source code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Install Khiva library
+^^^^^^^^^^^^^^^^^^^^^
 
-To isntall khiva just execute the following command:
+To install Khiva just execute the following command:
 
 -  Run ``cmake -DBUILD_TYPE=Release -P cmake_install.cmake``.
 
