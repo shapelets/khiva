@@ -11,7 +11,8 @@
 #include <sstream>
 #include "khivaTest.h"
 
-void paa() {
+
+void paaDivisible() {
     float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array a(10, 1, pointList);
 
@@ -22,6 +23,24 @@ void paa() {
 
     for (size_t i = 0; i < 5; i++) {
         ASSERT_EQ(out_h[i], expected[i]);
+    }
+}
+
+void paaNonDivisible() {
+    float pointList[] = {0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f,
+                         0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 2, pointList);
+
+    af::array out = khiva::dimensionality::PAA(a, 3);
+
+    float *col0 = out.col(0).host<float>();
+    float *col1 = out.col(1).host<float>();
+    std::vector<float> col0_expected = {1.0, 4.0f, 7.5f};
+    std::vector<float> col1_expected = {0.0f, 6.0f, 8.7750f};
+
+    for (size_t i = 0; i < 3; i++) {
+        ASSERT_EQ(col0[i], col0_expected[i]);
+        ASSERT_EQ(col1[i], col1_expected[i]);
     }
 }
 
@@ -424,7 +443,8 @@ void visvalingamException() {
     }
 }
 
-KHIVA_TEST(DimensionalityTests, PAA, paa)
+KHIVA_TEST(DimensionalityTests, PAA_DIVISIBLE, paaDivisible)
+KHIVA_TEST(DimensionalityTests, PAA_NONDIVISIBLE, paaNonDivisible)
 KHIVA_TEST(DimensionalityTests, PAA_NORM, paaNorm)
 KHIVA_TEST(DimensionalityTests, PAAException, paaException)
 KHIVA_TEST(DimensionalityTests, PIP, pip)
