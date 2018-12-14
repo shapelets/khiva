@@ -45,7 +45,7 @@ void paaNonDivisibleFloat() {
 
 void paaNonDivisibleDouble() {
     double pointList[] = {0.0, 1.0, 2.0,  3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0,
-                         0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+                          0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
     af::array a(10, 2, pointList);
 
     af::array out = khiva::dimensionality::PAA(a, 3);
