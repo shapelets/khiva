@@ -127,7 +127,7 @@ void pipException() {
     try {
         af::array out = khiva::dimensionality::PIP(a, 6);
     } catch (std::invalid_argument &ia) {
-        EXPECT_EQ(ia.what(), std::string("Invalid dims. Khiva array with two columns expected (x axis and y axis)."));
+        EXPECT_EQ(ia.what(), std::string("Invalid dimensions: Khiva array with two columns expected (x axis and y axis)."));
     }
 }
 
