@@ -172,7 +172,7 @@ af::array PAA_CPU(af::array a, int bins) {
     T *reducedColumn = (T *)malloc(sizeof(T) * bins);
 
     // Find out the number of elements per bin
-    T elemPerBin = (T)n / (T)bins;
+    T elemPerBin = static_cast<T>(n) / static_cast<T>(bins);
 
     // For each column
     for (int i = 0; i < a.dims(1); i++) {
@@ -202,10 +202,10 @@ af::array PAA_CPU(af::array a, int bins) {
 
         // First Column
         if (i == 0) {
-            af::array aux(bins, 1, (T *)reducedColumn);
+            af::array aux(bins, 1, static_cast<T*>(reducedColumn));
             result = aux;
         } else {
-            af::array aux(bins, 1, (T *)reducedColumn);
+            af::array aux(bins, 1, static_cast<T*>(reducedColumn));
             result = af::join(1, result, aux);
         }
     }
