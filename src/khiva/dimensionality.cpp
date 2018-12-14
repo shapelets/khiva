@@ -163,25 +163,27 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
     return result;
 }
 
+template <typename T>
 af::array PAA_CPU(af::array a, int bins) {
     af::array result;
     int n = a.dims(0);
-    float *column = (float *)malloc(sizeof(float) * n);
-    float *reducedColumn = (float *)malloc(sizeof(float) * bins);
+
+    T *column = (T *)malloc(sizeof(T) * n);
+    T *reducedColumn = (T *)malloc(sizeof(T) * bins);
 
     // Find out the number of elements per bin
-    float elemPerBin = (float)n / (float)bins;
+    T elemPerBin = (T)n / (T)bins;
 
     // For each column
     for (int i = 0; i < a.dims(1); i++) {
         af::array aux = a.col(i);
         aux.host(column);
-        float start = 0.0;
-        float end = elemPerBin - 1;
+        T start = 0.0;
+        T end = elemPerBin - 1;
 
         // For each column
         for (int j = 0; j < bins; j++) {
-            double avg = 0.0;
+            T avg = 0.0;
             int count = 0;
 
             // Compute avg for this segment
@@ -200,10 +202,10 @@ af::array PAA_CPU(af::array a, int bins) {
 
         // First Column
         if (i == 0) {
-            af::array aux(bins, 1, reducedColumn);
+            af::array aux(bins, 1, (T *)reducedColumn);
             result = aux;
         } else {
-            af::array aux(bins, 1, reducedColumn);
+            af::array aux(bins, 1, (T *)reducedColumn);
             result = af::join(1, result, aux);
         }
     }
@@ -227,7 +229,11 @@ af::array khiva::dimensionality::PAA(af::array a, int bins) {
         result = af::reorder(addition / elem_row, 1, 2, 0, 3);
     } else {
         // Call the CPU version
-        result = PAA_CPU(a, bins);
+        if (a.type() == af::dtype::f64) {
+            result = PAA_CPU<double>(a, bins);
+        } else if (a.type() == af::dtype::f32) {
+            result = PAA_CPU<float>(a, bins);
+        }
     }
 
     return result;
