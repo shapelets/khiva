@@ -11,7 +11,7 @@
 #include <sstream>
 #include "khivaTest.h"
 
-void paa() {
+void paaDivisible() {
     float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array a(10, 1, pointList);
 
@@ -22,6 +22,42 @@ void paa() {
 
     for (size_t i = 0; i < 5; i++) {
         ASSERT_EQ(out_h[i], expected[i]);
+    }
+}
+
+void paaNonDivisibleFloat() {
+    float pointList[] = {0.0f, 1.0f, 2.0f,  3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f,
+                         0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array a(10, 2, pointList);
+
+    af::array out = khiva::dimensionality::PAA(a, 3);
+
+    float *col0 = out.col(0).host<float>();
+    float *col1 = out.col(1).host<float>();
+    std::vector<float> col0_expected = {1.0, 4.0f, 7.5f};
+    std::vector<float> col1_expected = {0.0f, 6.0f, 8.7750f};
+
+    for (size_t i = 0; i < 3; i++) {
+        ASSERT_NEAR(col0[i], col0_expected[i], EPSILON);
+        ASSERT_NEAR(col1[i], col1_expected[i], EPSILON);
+    }
+}
+
+void paaNonDivisibleDouble() {
+    double pointList[] = {0.0, 1.0, 2.0,  3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0,
+                          0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
+    af::array a(10, 2, pointList);
+
+    af::array out = khiva::dimensionality::PAA(a, 3);
+
+    double *col0 = out.col(0).host<double>();
+    double *col1 = out.col(1).host<double>();
+    std::vector<double> col0_expected = {1.0, 4.0, 7.5};
+    std::vector<double> col1_expected = {0.0, 6.0, 8.7750};
+
+    for (size_t i = 0; i < 3; i++) {
+        ASSERT_NEAR(col0[i], col0_expected[i], EPSILON);
+        ASSERT_NEAR(col1[i], col1_expected[i], EPSILON);
     }
 }
 
@@ -424,7 +460,9 @@ void visvalingamException() {
     }
 }
 
-KHIVA_TEST(DimensionalityTests, PAA, paa)
+KHIVA_TEST(DimensionalityTests, PAA_Divisible, paaDivisible)
+KHIVA_TEST(DimensionalityTests, PAA_NonDivisibleFloat, paaNonDivisibleFloat)
+KHIVA_TEST(DimensionalityTests, PAA_NonDivisibleDouble, paaNonDivisibleDouble)
 KHIVA_TEST(DimensionalityTests, PAA_NORM, paaNorm)
 KHIVA_TEST(DimensionalityTests, PAAException, paaException)
 KHIVA_TEST(DimensionalityTests, PIP, pip)

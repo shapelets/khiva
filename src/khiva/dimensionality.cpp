@@ -105,7 +105,7 @@ void insertPointBetweenSelected(khiva::dimensionality::Point p, int position,
 bool isPointInDesiredList(khiva::dimensionality::Point point, std::vector<khiva::dimensionality::Point> selected) {
     bool found = false;
     for (size_t i = 0; i < selected.size(); i++) {
-        // We just compare the horinzontal component as it is unique
+        // We just compare the horizontal component as it is unique
         if (selected[i].first == point.first) {
             found = true;
             break;
@@ -113,6 +113,7 @@ bool isPointInDesiredList(khiva::dimensionality::Point point, std::vector<khiva:
     }
     return found;
 }
+
 /**
  * @brief This function calculates the segment indices that we need to compare the point.
  */
@@ -147,7 +148,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
     std::vector<int> counter(bins, 0);
     std::vector<khiva::dimensionality::Point> result(bins, khiva::dimensionality::Point(0.0, 0.0));
 
-    // Iterating over the  timeseries
+    // Iterating over the time series
     for (auto i = begin; i != last; i++) {
         int pos = static_cast<int>(std::min((*i).first * reduction, (float)(bins - 1)));
         sum[pos] += (*i).second;
@@ -162,17 +163,78 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
     return result;
 }
 
-af::array khiva::dimensionality::PAA(af::array a, int bins) {
-    if (a.dims(0) % bins != 0) {
-        throw std::invalid_argument(
-            "Invalid number of points. The number of important points should be a factor of the total number of "
-            "points.");
+template <typename T>
+af::array PAA_CPU(af::array a, int bins) {
+    af::array result;
+    int n = a.dims(0);
+
+    T *column = static_cast<T *>(malloc(sizeof(T) * n));
+    T *reducedColumn = static_cast<T *>(malloc(sizeof(T) * bins));
+
+    // Find out the number of elements per bin
+    T elemPerBin = static_cast<T>(n) / static_cast<T>(bins);
+
+    // For each column
+    for (int i = 0; i < a.dims(1); i++) {
+        af::array aux = a.col(i);
+        aux.host(column);
+        T start = 0.0;
+        T end = elemPerBin - 1;
+
+        // For each column
+        for (int j = 0; j < bins; j++) {
+            T avg = 0.0;
+            int count = 0;
+
+            // Compute avg for this segment
+            for (int k = start; k <= end; k++) {
+                avg = avg + column[k];
+                count++;
+            }
+            avg = avg / count;
+            reducedColumn[j] = avg;
+
+            // Compute next segment
+            start = std::ceil(end);
+            end = end + elemPerBin;
+            end = (end > n) ? n : end;
+        }
+
+        // First Column
+        if (i == 0) {
+            af::array aux(bins, 1, static_cast<T *>(reducedColumn));
+            result = aux;
+        } else {
+            af::array aux(bins, 1, static_cast<T *>(reducedColumn));
+            result = af::join(1, result, aux);
+        }
     }
-    dim_t n = a.dims(0);
-    dim_t elem_row = n / bins;
-    af::array b = af::moddims(a, elem_row, bins, a.dims(1));
-    af::array addition = af::sum(b, 0);
-    af::array result = af::reorder(addition / elem_row, 1, 2, 0, 3);
+    free(reducedColumn);
+    free(column);
+
+    return result;
+}
+
+af::array khiva::dimensionality::PAA(af::array a, int bins) {
+    // Resulting array
+    af::array result;
+
+    // Check dimensions are divisible, if not, call CPU version
+    if (a.dims(0) % bins == 0) {
+        dim_t n = a.dims(0);
+        dim_t elem_row = n / bins;
+
+        af::array b = af::moddims(a, elem_row, bins, a.dims(1));
+        af::array addition = af::sum(b, 0);
+        result = af::reorder(addition / elem_row, 1, 2, 0, 3);
+    } else {
+        // Call the CPU version
+        if (a.type() == af::dtype::f64) {
+            result = PAA_CPU<double>(a, bins);
+        } else if (a.type() == af::dtype::f32) {
+            result = PAA_CPU<float>(a, bins);
+        }
+    }
 
     return result;
 }
