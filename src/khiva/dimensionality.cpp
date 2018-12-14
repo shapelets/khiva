@@ -113,6 +113,7 @@ bool isPointInDesiredList(khiva::dimensionality::Point point, std::vector<khiva:
     }
     return found;
 }
+
 /**
  * @brief This function calculates the segment indices that we need to compare the point.
  */
@@ -163,29 +164,28 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
 }
 
 af::array PAA_CPU(af::array a, int bins) {
-
     af::array result;
     int n = a.dims(0);
-    float * column = (float *) malloc(sizeof(float) * n);
-    float * reducedColumn = (float *) malloc(sizeof(float) * bins);
+    float *column = (float *)malloc(sizeof(float) * n);
+    float *reducedColumn = (float *)malloc(sizeof(float) * bins);
 
     // Find out the number of elements per bin
     float elemPerBin = (float)n / (float)bins;
 
     // For each column
-    for(int i = 0; i < a.dims(1); i++){
+    for (int i = 0; i < a.dims(1); i++) {
         af::array aux = a.col(i);
         aux.host(column);
         float start = 0.0;
         float end = elemPerBin - 1;
 
         // For each column
-        for(int j = 0; j < bins; j++){
+        for (int j = 0; j < bins; j++) {
             double avg = 0.0;
             int count = 0;
 
             // Compute avg for this segment
-            for(int k = start; k <= end; k++){
+            for (int k = start; k <= end; k++) {
                 avg = avg + column[k];
                 count++;
             }
@@ -199,10 +199,10 @@ af::array PAA_CPU(af::array a, int bins) {
         }
 
         // First Column
-        if(i == 0){
+        if (i == 0) {
             af::array aux(bins, 1, reducedColumn);
             result = aux;
-        }else{
+        } else {
             af::array aux(bins, 1, reducedColumn);
             result = af::join(1, result, aux);
         }
@@ -214,7 +214,6 @@ af::array PAA_CPU(af::array a, int bins) {
 }
 
 af::array khiva::dimensionality::PAA(af::array a, int bins) {
-
     // Resulting array
     af::array result;
 
@@ -226,7 +225,7 @@ af::array khiva::dimensionality::PAA(af::array a, int bins) {
         af::array b = af::moddims(a, elem_row, bins, a.dims(1));
         af::array addition = af::sum(b, 0);
         result = af::reorder(addition / elem_row, 1, 2, 0, 3);
-    }else{
+    } else {
         // Call the CPU version
         result = PAA_CPU(a, bins);
     }
