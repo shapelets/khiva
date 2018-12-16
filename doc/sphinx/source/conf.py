@@ -46,7 +46,6 @@ release = subprocess.check_output(
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 if on_rtd:
-    #pip.main(['install', 'breathe'])
     subprocess.call("pip install -m breathe", shell=True)
 
 with open(doxygen_source_dir + "/Doxyfile.in") as f:
