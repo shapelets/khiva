@@ -5,7 +5,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <khiva/distances.h>
-#include <khiva/features.h>
 #include <khiva/normalization.h>
 #include <algorithm>
 #include <limits>
