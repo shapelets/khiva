@@ -32,6 +32,12 @@ void manhattan(khiva_array *tss, khiva_array *result) {
     af_retain_array(result, khiva::distances::manhattan(var).get());
 }
 
+void sbd(khiva_array *tss, khiva_array *result) {
+    af::array var = af::array(*tss);
+    af_retain_array(tss, var.get());
+    af_retain_array(result, khiva::distances::sbd(var).get());
+}
+
 void squared_euclidean(khiva_array *tss, khiva_array *result) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
