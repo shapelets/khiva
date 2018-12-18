@@ -199,32 +199,6 @@ void manhattan() {
     ASSERT_EQ(0.0f, hostResult[i++]);
 }
 
-void squaredEuclidean() {
-    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-    af::array tss(4, 3, data);
-
-    auto result = khiva::distances::squaredEuclidean(tss);
-
-    // check dimensions
-    auto dims = result.dims();
-    ASSERT_EQ(dims[0], 3);
-    ASSERT_EQ(dims[1], 3);
-    ASSERT_EQ(dims[2], 1);
-    ASSERT_EQ(dims[3], 1);
-
-    // check distances
-    float *hostResult = result.host<float>();
-    ASSERT_EQ(0.0f, hostResult[0]);
-    ASSERT_EQ(0.0f, hostResult[1]);
-    ASSERT_EQ(0.0f, hostResult[2]);
-    ASSERT_EQ(64.0f, hostResult[3]);
-    ASSERT_EQ(0.0f, hostResult[4]);
-    ASSERT_EQ(0.0f, hostResult[5]);
-    ASSERT_EQ(256.0f, hostResult[6]);
-    ASSERT_EQ(64.0f, hostResult[7]);
-    ASSERT_EQ(0.0f, hostResult[8]);
-}
-
 void sbd() {
     float data[] = {1, 2, 3, 4, 5, 1, 1, 0, 1, 1, 10, 12, 0, 0, 1};
     af::array tss(5, 3, data);
@@ -251,11 +225,36 @@ void sbd() {
     ASSERT_EQ(0.0f, hostResult[8]);
 }
 
+void squaredEuclidean() {
+    float data[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    af::array tss(4, 3, data);
+
+    auto result = khiva::distances::squaredEuclidean(tss);
+
+    // check dimensions
+    auto dims = result.dims();
+    ASSERT_EQ(dims[0], 3);
+    ASSERT_EQ(dims[1], 3);
+    ASSERT_EQ(dims[2], 1);
+    ASSERT_EQ(dims[3], 1);
+
+    // check distances
+    float *hostResult = result.host<float>();
+    ASSERT_EQ(0.0f, hostResult[0]);
+    ASSERT_EQ(0.0f, hostResult[1]);
+    ASSERT_EQ(0.0f, hostResult[2]);
+    ASSERT_EQ(64.0f, hostResult[3]);
+    ASSERT_EQ(0.0f, hostResult[4]);
+    ASSERT_EQ(0.0f, hostResult[5]);
+    ASSERT_EQ(256.0f, hostResult[6]);
+    ASSERT_EQ(64.0f, hostResult[7]);
+    ASSERT_EQ(0.0f, hostResult[8]);
+}
+
 KHIVA_TEST(DistanceTests, DTW, dtw)
 KHIVA_TEST(DistanceTests, DTW2, dtw2)
 KHIVA_TEST(DistanceTests, Euclidean, euclidean)
 KHIVA_TEST(DistanceTests, Hamming, hamming)
 KHIVA_TEST(DistanceTests, Manhattam, manhattan)
-KHIVA_TEST(DistanceTests, SquaredEuclidean, squaredEuclidean)
 KHIVA_TEST(DistanceTests, SBD, sbd)
-
+KHIVA_TEST(DistanceTests, SquaredEuclidean, squaredEuclidean)

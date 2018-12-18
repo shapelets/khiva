@@ -92,6 +92,27 @@ jlongArray JNICALL Java_io_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobj
     return pointers;
 }
 
+jlongArray JNICALL Java_io_shapelets_khiva_Distances_sbd(JNIEnv *env, jobject, jlong ref) {
+    const jint l = 2;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr = (af_array)ref;
+    af::array var = af::array(arr);
+
+    jlong raw_pointer = 0;
+    af_array af_p = (af_array)raw_pointer;
+
+    af_retain_array(&arr, var.get());
+    af_retain_array(&af_p, khiva::distances::sbd(var).get());
+
+    tmp[0] = (jlong)arr;
+    tmp[1] = (jlong)af_p;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
 jlongArray JNICALL Java_io_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref) {
     const jint l = 2;
     jlong tmp[l];

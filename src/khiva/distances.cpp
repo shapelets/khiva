@@ -130,23 +130,6 @@ af::array khiva::distances::manhattan(af::array tss) {
     return result;
 }
 
-af::array khiva::distances::squaredEuclidean(af::array tss) {
-    // get the number of time series
-    auto numOfTs = tss.dims(1);
-    // the result is a squared matrix of dimensions numOfTs x numOfTs
-    // which is initialised as zero.
-    auto result = af::constant(0, numOfTs, numOfTs, tss.type());
-
-    // for each time series, calculate in parallel all distances
-    for (auto currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
-        gfor(af::seq otherCol, currentCol + 1, static_cast<double>(numOfTs - 1)) {
-            result(currentCol, otherCol) = af::sum(af::pow(tss(af::span, currentCol) - tss(af::span, otherCol), 2));
-        }
-    }
-
-    return result;
-}
-
 af::array khiva::distances::sbd(af::array tss) {
     // get the number of time series
     auto numOfTs = tss.dims(1);
@@ -161,7 +144,25 @@ af::array khiva::distances::sbd(af::array tss) {
             af::array yZNorm = khiva::normalization::znorm(tss(af::span, otherCol));
             af::array xNorm = af::sqrt(af::sum(af::pow(xZNorm, 2), 0));
             af::array yNorm = af::sqrt(af::sum(af::pow(yZNorm, 2), 0));
-            result(currentCol, otherCol) = 1.0 - af::max(af::convolve(xZNorm, af::flip(yZNorm, 0), AF_CONV_EXPAND), 0)/(xNorm*yNorm);
+            result(currentCol, otherCol) =
+                1.0 - af::max(af::convolve(xZNorm, af::flip(yZNorm, 0), AF_CONV_EXPAND), 0) / (xNorm * yNorm);
+        }
+    }
+
+    return result;
+}
+
+af::array khiva::distances::squaredEuclidean(af::array tss) {
+    // get the number of time series
+    auto numOfTs = tss.dims(1);
+    // the result is a squared matrix of dimensions numOfTs x numOfTs
+    // which is initialised as zero.
+    auto result = af::constant(0, numOfTs, numOfTs, tss.type());
+
+    // for each time series, calculate in parallel all distances
+    for (auto currentCol = 0; currentCol < numOfTs - 1; currentCol++) {
+        gfor(af::seq otherCol, currentCol + 1, static_cast<double>(numOfTs - 1)) {
+            result(currentCol, otherCol) = af::sum(af::pow(tss(af::span, currentCol) - tss(af::span, otherCol), 2));
         }
     }
 
