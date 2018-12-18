@@ -85,25 +85,6 @@ void Manhattan(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
-void SquaredEuclidean(benchmark::State &state) {
-    af::setBackend(BE);
-    af::setDevice(D);
-
-    auto n = state.range(0);
-    auto m = state.range(1);
-
-    auto t = af::randu(n, m, f64);
-
-    af::sync();
-    while (state.KeepRunning()) {
-        auto dwt = khiva::distances::squaredEuclidean(t);
-        dwt.eval();
-        af::sync();
-    }
-    addMemoryCounters(state);
-}
-
-template <af::Backend BE, int D>
 void SBD(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -116,6 +97,25 @@ void SBD(benchmark::State &state) {
     af::sync();
     while (state.KeepRunning()) {
         auto dwt = khiva::distances::sbd(t);
+        dwt.eval();
+        af::sync();
+    }
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
+void SquaredEuclidean(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, m, f64);
+
+    af::sync();
+    while (state.KeepRunning()) {
+        auto dwt = khiva::distances::squaredEuclidean(t);
         dwt.eval();
         af::sync();
     }
@@ -143,15 +143,15 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(SquaredEuclidean, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(SBD, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(SBD, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
-            ->RangeMultiplier(2)
-            ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
-            ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(SquaredEuclidean, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
 void openclBenchmarks() {
@@ -175,15 +175,15 @@ void openclBenchmarks() {
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(SquaredEuclidean, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(SBD, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(SBD, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
-            ->RangeMultiplier(2)
-            ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
-            ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(SquaredEuclidean, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
 void cpuBenchmarks() {
@@ -207,15 +207,15 @@ void cpuBenchmarks() {
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(SquaredEuclidean, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(SBD, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(SBD, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
-            ->RangeMultiplier(2)
-            ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
-            ->Unit(benchmark::TimeUnit::kMicrosecond);
+    BENCHMARK_TEMPLATE(SquaredEuclidean, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 10, 64 << 10}, {2, 16}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
 KHIVA_BENCHMARK_MAIN(cudaBenchmarks, openclBenchmarks, cpuBenchmarks)
