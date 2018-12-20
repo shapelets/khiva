@@ -11,7 +11,7 @@ Khiva is an open-source library of efficient algorithms to analyse time series i
 
 Khiva provides a mean for time series analytics at scale. These analytics can be exploited in a wide range of [use cases](https://github.com/shapelets/khiva-use-cases) across several industries, like energy, finance, e-health, IoT, music industry, etc.
 
-Khiva is unfluenced by other time series libraries as [tsfresh](https://github.com/blue-yonder/tsfresh), [tslearn](https://github.com/rtavenar/tslearn), [hctsa](https://github.com/benfulcher/hctsa) among others.
+Khiva is inspired by other time series libraries as [tsfresh](https://github.com/blue-yonder/tsfresh), [tslearn](https://github.com/rtavenar/tslearn) and [hctsa](https://github.com/benfulcher/hctsa) among others.
 
 ## License
 
