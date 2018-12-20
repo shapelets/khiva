@@ -329,22 +329,24 @@ void autoCovariance() {
 }
 
 void crossCorrelation() {
-    float data1[] = {0, 1, 2, 3};
-    af::array xs(4, data1);
+    float data1[] = {0, 1, 2, 3, 0, 1, 2, 3};
+    af::array xs(4, 2, data1);
 
-    float data2[] = {4, 6, 8, 10, 12};
-    af::array ys(5, data2);
+    float data2[] = {4, 6, 8, 10, 12, 4, 6, 8, 10, 12};
+    af::array ys(5, 2, data2);
 
     af::array calculated = khiva::features::crossCorrelation(xs, ys, false);
 
     float *calculatedHost = calculated.host<float>();
 
-    // Expected results obtained using statsmodels
-    ASSERT_NEAR(calculatedHost[0], 0.790569415, EPSILON);
-    ASSERT_NEAR(calculatedHost[1], 0.790569415, EPSILON);
-    ASSERT_NEAR(calculatedHost[2], 0.079056941, EPSILON);
-    ASSERT_NEAR(calculatedHost[3], -0.395284707, EPSILON);
-    ASSERT_NEAR(calculatedHost[4], -0.474341649, EPSILON);
+    // // Expected results obtained using statsmodels
+    for (int i = 0; i < 4; i++) {
+        ASSERT_NEAR(calculatedHost[(i * 5)], 0.790569415, EPSILON);
+        ASSERT_NEAR(calculatedHost[(i * 5) + 1], 0.790569415, EPSILON);
+        ASSERT_NEAR(calculatedHost[(i * 5) + 2], 0.079056941, EPSILON);
+        ASSERT_NEAR(calculatedHost[(i * 5) + 3], -0.395284707, EPSILON);
+        ASSERT_NEAR(calculatedHost[(i * 5) + 4], -0.474341649, EPSILON);
+    }
 }
 
 void autoCorrelation() {

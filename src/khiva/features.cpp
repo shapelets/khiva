@@ -264,7 +264,8 @@ af::array khiva::features::crossCorrelation(af::array xss, af::array yss, bool u
     af::array ccov = khiva::features::crossCovariance(xss, yss, unbiased);
 
     // Dviding by the product of their standard deviations
-    return ccov / af::tile(stdevXss * stdevYss, static_cast<unsigned int>(ccov.dims(0)));
+    return ccov / af::tile(stdevXss * stdevYss, static_cast<unsigned int>(ccov.dims(0)), 1,
+                           static_cast<unsigned int>(ccov.dims(1)));
 }
 
 af::array khiva::features::autoCorrelation(af::array tss, long maxLag, bool unbiased) {
