@@ -15,7 +15,7 @@ export PATH=$HOME/.pyenv/shims:$HOME/.pyenv/versions/${TRAVIS_PYTHON_VERSION}/bi
 export PYTHON_VERSION=$(echo $TRAVIS_PYTHON_VERSION | awk -F'.' '{print $1 "." $2}')
 
 brew install --force lcov
-brew install --force freeimage fontconfig
+brew install --force freeimage fontconfig glfw glbinding
 
 # Installing conan
 pip${PYTHON_VERSION} install --upgrade pip
