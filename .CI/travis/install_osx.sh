@@ -6,6 +6,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 brew upgrade pyenv
+brew upgrade cmake
 pyenv install 3.6.5 -s
 pyenv init -
 pyenv local 3.6.5

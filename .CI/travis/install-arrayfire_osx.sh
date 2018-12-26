@@ -13,3 +13,9 @@ fi
 
 # Installs arrayfire
 sudo installer -pkg arrayfire/ArrayFire-v3.6.2_OSX_x86_64.pkg -target /
+
+# The new ArrayFire installer installs to /opt/arrayfire, moving to /usr/local/lib
+sudo mv /opt/arrayfire/include/* /usr/local/include
+sudo mv /opt/arrayfire/lib/* /usr/local/lib
+sudo mv /opt/arrayfire/share/* /usr/local/share
+sudo rm -rf /opt/arrayfire

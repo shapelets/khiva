@@ -36,14 +36,14 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
 IF(KHIVA_ONLY_CPU_BACKEND)
     # Declare compilation libraries
     TARGET_LINK_LIBRARIES(${KHIVALIB}
-                      ${ArrayFire_CPU_LIBRARIES}
+                      ArrayFire::afcpu
                       Eigen3::Eigen
                       ${Boost_LIBRARIES}
                       ${CMAKE_DL_LIBS})
 ELSE()
     # Declare compilation libraries
     TARGET_LINK_LIBRARIES(${KHIVALIB}
-            ${ArrayFire_Unified_LIBRARIES}
+            ArrayFire::af
             Eigen3::Eigen
             ${Boost_LIBRARIES}
             ${CMAKE_DL_LIBS})
