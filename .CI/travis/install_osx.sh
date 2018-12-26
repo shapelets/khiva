@@ -6,6 +6,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 brew upgrade pyenv
+brew upgrade cmake
 pyenv install 3.6.5 -s
 pyenv init -
 pyenv local 3.6.5
@@ -14,6 +15,7 @@ export PATH=$HOME/.pyenv/shims:$HOME/.pyenv/versions/${TRAVIS_PYTHON_VERSION}/bi
 export PYTHON_VERSION=$(echo $TRAVIS_PYTHON_VERSION | awk -F'.' '{print $1 "." $2}')
 
 brew install --force lcov
+brew install --force freeimage fontconfig glfw glbinding
 
 # Installing conan
 pip${PYTHON_VERSION} install --upgrade pip

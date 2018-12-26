@@ -376,7 +376,7 @@ af::array khiva::features::cwtCoefficients(af::array tss, af::array widths, int 
     af::array aux = af::abs(widths - w) * (-1);
     af::max(maximum, index, aux, 0);
     // WORKAROUND: Forcing movement of index to CPU mem, just to avoid problems with Intel GPU
-    int i = index.scalar<int>();
+    unsigned int i = index.scalar<unsigned int>();
     // Select the corresponding values of coeff and w
     return af::reorder(output(i, coeff, af::span), 0, 2, 1);
 }
@@ -1029,7 +1029,7 @@ af::array khiva::features::percentageOfReoccurringValuesToAllValues(af::array ts
         // result(0, i) = af::sum(tmp(0, aux), 1);
         af::array aux = af::where(tmp - 1);
         for (int h = 0; h < aux.dims(0); h++) {
-            result(0, i) = result(0, i) + tmp(0, aux(h).scalar<int>());
+            result(0, i) = result(0, i) + tmp(0, aux(h).scalar<unsigned int>());
         }
     }
     return result / tss.dims(0);

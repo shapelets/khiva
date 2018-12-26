@@ -6,10 +6,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 # Checks if the file already exists
-if [ ! -e "${TRAVIS_BUILD_DIR}/arrayfire/ArrayFire-no-gl-v3.5.1_OSX.pkg" ]; then
+if [ ! -e "${TRAVIS_BUILD_DIR}/arrayfire/ArrayFire-v3.6.2_OSX_x86_64.pkg" ]; then
     mkdir -p arrayfire
-    wget http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_OSX.pkg -O arrayfire/ArrayFire-no-gl-v3.5.1_OSX.pkg
+    wget http://arrayfire.s3.amazonaws.com/3.6.2/ArrayFire-v3.6.2_OSX_x86_64.pkg -O arrayfire/ArrayFire-v3.6.2_OSX_x86_64.pkg
 fi
 
 # Installs arrayfire
-sudo installer -pkg arrayfire/ArrayFire-no-gl-v3.5.1_OSX.pkg -target /
+sudo installer -pkg arrayfire/ArrayFire-v3.6.2_OSX_x86_64.pkg -target /
+
+# The new ArrayFire installer installs to /opt/arrayfire, moving to /usr/local/lib
+sudo mv /opt/arrayfire/include/* /usr/local/include
+sudo mv /opt/arrayfire/lib/* /usr/local/lib
+sudo mv /opt/arrayfire/share/* /usr/local/share
+sudo rm -rf /opt/arrayfire
