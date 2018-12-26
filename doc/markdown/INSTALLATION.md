@@ -112,7 +112,14 @@ To generate the khiva documentation run the following command:
 #### Prerequisites
 
 - Install [Python-64bits](https://www.python.org/downloads) or run `brew install python3`, 32-bits version won't work.
-- Install [ArrayFire 3.6.2](http://arrayfire.s3.amazonaws.com/3.6.2/ArrayFire-v3.6.2_OSX_x86_64.pkg) and add the path to the environment variable path.
+- Install [ArrayFire 3.6.2](http://arrayfire.s3.amazonaws.com/3.6.2/ArrayFire-v3.6.2_OSX_x86_64.pkg) and then execute the following lines to move the ArrayFire files from the default installation directory to the system path for libraries:
+
+```bash
+sudo mv /opt/arrayfire/include/* /usr/local/include
+sudo mv /opt/arrayfire/lib/* /usr/local/lib
+sudo mv /opt/arrayfire/share/* /usr/local/share
+sudo rm -rf /opt/arrayfire
+```
 
 Once we have installed all Khiva dependencies, we are ready to install Khiva from source code or by using the installers.
 
