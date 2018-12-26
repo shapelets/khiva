@@ -7,9 +7,9 @@
 
 # Check if the file already exists
 if [ ! -e "${TRAVIS_BUILD_DIR}/cmake/cmake-3.13.2-Linux-x86_64.sh" ]; then
-    mkdir -p cmake
-    wget https://github.com/Kitware/CMake/releases/download/v3.13.2/cmake-3.13.2-Linux-x86_64.sh -O cmake/cmake-3.13.2-Linux-x86_64.sh 
+    mkdir -p cmakebin
+    wget https://github.com/Kitware/CMake/releases/download/v3.13.2/cmake-3.13.2-Linux-x86_64.sh -O cmakebin/cmake-3.13.2-Linux-x86_64.sh 
 fi
 
 # Install cmake
-sudo bash cmake/cmake-3.13.2-Linux-x86_64.sh --prefix=/ --skip-license
+sudo bash cmakebin/cmake-3.13.2-Linux-x86_64.sh --prefix=./cmakebin/ --skip-license
