@@ -16,8 +16,8 @@ void polyfit1() {
 
     float expected[] = {1.0f, 0.0f};
 
-    ASSERT_NEAR(calculated[0], expected[0], EPSILON);
-    ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+    ASSERT_NEAR(calculated[0], expected[0], EPSILON * 1e1);
+    ASSERT_NEAR(calculated[1], expected[1], EPSILON * 1e1);
 }
 
 void polyfit3() {

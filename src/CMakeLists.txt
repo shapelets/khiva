@@ -7,7 +7,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
 PROJECT(KHIVALIB)
 # Find the ArrayFire package.
-FIND_PACKAGE(ArrayFire REQUIRED VERSION 3.5.1)
+FIND_PACKAGE(ArrayFire REQUIRED)
 # Find the Boost package
 FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
@@ -36,14 +36,14 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
 IF(KHIVA_ONLY_CPU_BACKEND)
     # Declare compilation libraries
     TARGET_LINK_LIBRARIES(${KHIVALIB}
-                      ${ArrayFire_CPU_LIBRARIES}
+                      ArrayFire::afcpu
                       Eigen3::Eigen
                       ${Boost_LIBRARIES}
                       ${CMAKE_DL_LIBS})
 ELSE()
     # Declare compilation libraries
     TARGET_LINK_LIBRARIES(${KHIVALIB}
-            ${ArrayFire_Unified_LIBRARIES}
+            ArrayFire::af
             Eigen3::Eigen
             ${Boost_LIBRARIES}
             ${CMAKE_DL_LIBS})

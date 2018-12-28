@@ -7,15 +7,16 @@
 #### Prerequisites
 
 - Install [Python-64bits](https://www.python.org/downloads) and add the installation path to the environment variable path, 32-bits version won't work.
-- Install [ArrayFire 3.5.1](https://arrayfire.com/download/) and add the installation path to the environment variable path.
+- Install [ArrayFire 3.6.2](https://arrayfire.com/download/) and add the installation path to the environment variable path.
 - Install [Vcpkg](https://docs.microsoft.com/es-es/cpp/vcpkg#installation) and add the installation path to the environment variable path.
 - Install [chocolatey](https://chocolatey.org/) to manage windows dependencies and add the installation path to the environment variable path.
 
-Once we have installed all Khiva dependencies,  we are ready to install Khiva by using the installers (Option 1) or from source code (Option 2).
+Once we have installed all Khiva dependencies, we are ready to install Khiva by using the installers (Option 1) or from source code (Option 2).
 
 #### (Option 1) Build using a batch installer
 
 In the tools directory you can find the script install.bat. You must indicate the path to your vcpkg installation directory.
+
 - Usage: install.bat <path_to_vcpkg>
 - Example: install.bat c:\vcpkg
 
@@ -65,9 +66,9 @@ We use Cpack and NSIS to generate the installer.
 #### Prerequisites
 
 - Install [Python-64bits](https://www.python.org/downloads) or run `apt-get install python3 python3-pip`, 32-bits version won't work.
-- Download [ArrayFire 3.5.1 no-gl](http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_Linux_x86_64.sh).
+- Download [ArrayFire 3.6.2](http://arrayfire.s3.amazonaws.com/3.6.2/ArrayFire-v3.6.2_Linux_x86_64.sh).
 - Install ArrayFire `sudo mkdir -p /opt/arrayfire`
-- Run `sudo bash arrayfire/ArrayFire-v3.5.1_Linux_x86_64.sh --prefix=/opt/arrayfire --skip-license`
+- Run `sudo bash arrayfire/ArrayFire-v3.6.2_Linux_x86_64.sh --prefix=/opt/arrayfire --skip-license`
 
 Once we have installed all Khiva dependencies, we are ready to install Khiva from source code or by using the installers.
 
@@ -111,7 +112,14 @@ To generate the khiva documentation run the following command:
 #### Prerequisites
 
 - Install [Python-64bits](https://www.python.org/downloads) or run `brew install python3`, 32-bits version won't work.
-- Install [ArrayFire 3.5.1 no-gl](http://arrayfire.s3.amazonaws.com/3.5.1/ArrayFire-no-gl-v3.5.1_OSX.pkg) and add the path to the environment variable path.
+- Install [ArrayFire 3.6.2](http://arrayfire.s3.amazonaws.com/3.6.2/ArrayFire-v3.6.2_OSX_x86_64.pkg) and then execute the following lines to move the ArrayFire files from the default installation directory to the system path for libraries:
+
+```bash
+sudo mv /opt/arrayfire/include/* /usr/local/include
+sudo mv /opt/arrayfire/lib/* /usr/local/lib
+sudo mv /opt/arrayfire/share/* /usr/local/share
+sudo rm -rf /opt/arrayfire
+```
 
 Once we have installed all Khiva dependencies, we are ready to install Khiva from source code or by using the installers.
 

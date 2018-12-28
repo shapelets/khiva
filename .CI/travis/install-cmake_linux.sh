@@ -6,15 +6,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 # Check if the file already exists
-if [ ! -e "${TRAVIS_BUILD_DIR}/cmake/cmake-3.11.3-Linux-x86_64.sh" ]; then
-    mkdir -p cmake && cd cmake
-    wget https://cmake.org/files/v3.11/cmake-3.11.3-Linux-x86_64.sh
-    cd ..
+if [ ! -e "${TRAVIS_BUILD_DIR}/cmake/cmake-3.13.2-Linux-x86_64.sh" ]; then
+    mkdir -p cmakebin
+    wget https://github.com/Kitware/CMake/releases/download/v3.13.2/cmake-3.13.2-Linux-x86_64.sh -O cmakebin/cmake-3.13.2-Linux-x86_64.sh 
 fi
 
 # Install cmake
-mkdir cmakebin
-cp cmake/cmake-3.11.3-Linux-x86_64.sh cmakebin/cmake-3.11.3-Linux-x86_64.sh
-cd cmakebin
-sudo bash cmake-3.11.3-Linux-x86_64.sh --skip-license
-cd ..
+sudo bash cmakebin/cmake-3.13.2-Linux-x86_64.sh --prefix=./cmakebin/ --skip-license
