@@ -8,7 +8,7 @@
 #include <limits>
 
 /**
- * Computes The euclidean distance fot a tiled time series agains k-means.
+ * Computes The euclidean distance for a tiled time series agains k-means.
  * @param tts The tiled time series.
  * @param means.
  * @return The distance from a time series to all k-means.
@@ -49,7 +49,7 @@ af::array calculateInitialMeans(af::array tss, int k) {
 }
 
 /**
- * Compute the new means for the ith iteration.
+ * Compute the new means for the i-th iteration.
  * @param tss The time series.
  * @param labels The ids for each time series which indicates the closest mean.
  * @param k.

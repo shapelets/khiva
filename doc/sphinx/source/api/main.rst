@@ -10,6 +10,7 @@ This is the list of namespaces that comprise the Khiva library.
    :hidden:
 
     Namespace Array <array>
+    Namespace Clustering <clustering>
     Namespace Dimensionality <dimensionality>
     Namespace Distances <distances>
     Namespace Features <features>
@@ -23,6 +24,7 @@ This is the list of namespaces that comprise the Khiva library.
     Namespace Statistics <statistics>
 
 * :ref:`namespace-array-label`
+* :ref:`namespace-clustering-label`
 * :ref:`namespace-dimensionality-label`
 * :ref:`namespace-distances-label`
 * :ref:`namespace-features-label`
@@ -34,4 +36,3 @@ This is the list of namespaces that comprise the Khiva library.
 * :ref:`namespace-regression-label` 
 * :ref:`namespace-regularization-label` 
 * :ref:`namespace-statistics-label` 
-
