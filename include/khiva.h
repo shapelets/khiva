@@ -6,6 +6,7 @@
 
 // Core header files
 #include <khiva/array.h>
+#include <khiva/clustering.h>
 #include <khiva/dimensionality.h>
 #include <khiva/distances.h>
 #include <khiva/features.h>
