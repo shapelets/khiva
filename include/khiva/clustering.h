@@ -4,11 +4,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_CLUSTERING_H
+#define KHIVA_CORE_CLUSTERING_H
+
 #include <arrayfire.h>
 #include <vector>
 
-namespace khiva {
-namespace clustering {
+namespace khiva
+{
+namespace clustering
+{
 
 /**
  * @brief Calculates the k-means algorithm.
@@ -21,5 +26,7 @@ namespace clustering {
  */
 void kmeans(af::array tss, int k, af::array &means, af::array &labels);
 
-}  // namespace clustering
-}  // namespace khiva
+} // namespace clustering
+} // namespace khiva
+
+#endif

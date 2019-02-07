@@ -4,12 +4,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_DIMENSIONALITY_H
+#define KHIVA_CORE_DIMENSIONALITY_H
+
 #include <arrayfire.h>
 #include <vector>
 
-namespace khiva {
+namespace khiva
+{
 
-namespace dimensionality {
+namespace dimensionality
+{
 
 typedef std::pair<float, float> Point;
 
@@ -201,5 +206,7 @@ std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
  */
 af::array visvalingam(af::array pointList, int numPoints);
 
-}  // namespace dimensionality
-}  // namespace khiva
+} // namespace dimensionality
+} // namespace khiva
+
+#endif

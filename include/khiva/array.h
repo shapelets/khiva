@@ -3,14 +3,18 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#ifndef KHIVA_CORE_ARRAY_H
+#define KHIVA_CORE_ARRAY_H
 
 #include <arrayfire.h>
 #include <iostream>
 #include <limits>
 
-namespace khiva {
+namespace khiva
+{
 typedef af::dtype dtype;
-namespace array {
+namespace array
+{
 
 /**
  * @brief Creates an af::array.
@@ -68,8 +72,9 @@ int getType(af::array array);
  * @brief Array class, This class provides functionality manage Arrays on the host side.
  */
 template <class T>
-class Array {
-   private:
+class Array
+{
+  private:
     T *data;
     int x;
     int y;
@@ -77,11 +82,12 @@ class Array {
     int z;
     int dims;
 
-   public:
+  public:
     /**
      * @brief Default Constructor of Array class.
      */
-    Array() {
+    Array()
+    {
         x = 0;
         y = 1;
         w = 1;
@@ -95,7 +101,8 @@ class Array {
      *
      * @param in The input af::array.
      */
-    Array(af::array in) {
+    Array(af::array in)
+    {
         x = static_cast<int>(in.dims(0));
         y = static_cast<int>(in.dims(1));
         w = static_cast<int>(in.dims(2));
@@ -108,8 +115,10 @@ class Array {
     /**
      * @brief Default destructor of Array class.
      */
-    ~Array() {
-        if (!isEmpty()) {
+    ~Array()
+    {
+        if (!isEmpty())
+        {
             data = NULL;
         }
     }
@@ -191,15 +200,18 @@ class Array {
      *
      * @return std::vector Containing the selected row.
      */
-    std::vector<T> getRow(int idx) {
-        if (dims > 2) {
+    std::vector<T> getRow(int idx)
+    {
+        if (dims > 2)
+        {
             std::cout << "We only support this function for arrays with 2 dims." << std::endl;
             std::cout << "Your array has " << dims << " dimensions." << std::endl;
             exit(0);
         }
 
         std::vector<T> res;
-        for (int i = 0; i < y; i++) {
+        for (int i = 0; i < y; i++)
+        {
             res.push_back(data[idx + i * x]);
         }
         return res;
@@ -212,14 +224,17 @@ class Array {
      *
      * @return std::vector Containing the selected column.
      */
-    std::vector<T> getColumn(int idx) {
-        if (dims != 2) {
+    std::vector<T> getColumn(int idx)
+    {
+        if (dims != 2)
+        {
             std::cout << "We only support this function for arrays with 2 dims." << std::endl;
             std::cout << "Your array has " << dims << " dimensions." << std::endl;
             exit(0);
         }
         std::vector<T> res;
-        for (int i = 0; i < y; i++) {
+        for (int i = 0; i < y; i++)
+        {
             res.push_back(data[idx * x + i]);
         }
         return res;
@@ -233,8 +248,10 @@ class Array {
      *
      * @return T The element to be extracted.
      */
-    T getElement(int row, int column) {
-        if (dims != 2) {
+    T getElement(int row, int column)
+    {
+        if (dims != 2)
+        {
             std::cout << "We only support this function for arrays with 2 dims." << std::endl;
             std::cout << "Your array has " << dims << " dimensions." << std::endl;
             exit(0);
@@ -260,26 +277,36 @@ class Array {
     /**
      * @brief Prints the content of the array.
      */
-    void print() {
-        if (isEmpty()) {
+    void print()
+    {
+        if (isEmpty())
+        {
             std::cout << "<Empty>" << std::endl;
-        } else {
+        }
+        else
+        {
             std::cout << "Dims: [" << x << " " << y << " " << w << " " << z << "]" << std::endl;
-            for (int l = 0; l < std::max(1, z); l++) {
-                for (int k = 0; k < std::max(1, w); k++) {
-                    for (int i = 0; i < std::max(1, x); i++) {
-                        for (int j = 0; j < std::max(1, y); j++) {
+            for (int l = 0; l < std::max(1, z); l++)
+            {
+                for (int k = 0; k < std::max(1, w); k++)
+                {
+                    for (int i = 0; i < std::max(1, x); i++)
+                    {
+                        for (int j = 0; j < std::max(1, y); j++)
+                        {
                             int base = i + (x * w * k) + (x * w * z * l);
                             std::cout << data[base + j * x] << "\t";
                         }
                         std::cout << std::endl;
                     }
-                    if (k > 0) {
+                    if (k > 0)
+                    {
                         std::cout << std::endl;
                         std::cout << std::endl;
                     }
                 }
-                if (l > 0) {
+                if (l > 0)
+                {
                     std::cout << std::endl;
                     std::cout << std::endl;
                     std::cout << std::endl;
@@ -297,13 +324,17 @@ class Array {
  * @return std::vector<int> with the indices of the rows with maximals.
  */
 template <typename T>
-std::vector<int> getRowsWithMaximals(khiva::array::Array<T> a) {
+std::vector<int> getRowsWithMaximals(khiva::array::Array<T> a)
+{
     std::vector<int> result;
 
-    for (int i = 0; i < a.getNumX(); i++) {
+    for (int i = 0; i < a.getNumX(); i++)
+    {
         std::vector<T> row = a.getRow(i);
-        for (int j = 0; j < a.getNumY(); j++) {
-            if (row[j] == 1) {
+        for (int j = 0; j < a.getNumY(); j++)
+        {
+            if (row[j] == 1)
+            {
                 result.push_back(i);
                 break;
             }
@@ -320,11 +351,14 @@ std::vector<int> getRowsWithMaximals(khiva::array::Array<T> a) {
  * @return std::vector<int> with the indices of the columns with maximals.
  */
 template <typename T>
-std::vector<int> getIndexMaxColums(std::vector<T> r) {
+std::vector<int> getIndexMaxColums(std::vector<T> r)
+{
     std::vector<int> result;
 
-    for (unsigned long i = 0; i < r.size(); i++) {
-        if (r[i] == 1) {
+    for (unsigned long i = 0; i < r.size(); i++)
+    {
+        if (r[i] == 1)
+        {
             result.push_back(static_cast<int>(i));
         }
     }
@@ -332,5 +366,7 @@ std::vector<int> getIndexMaxColums(std::vector<T> r) {
     return result;
 }
 
-}  // namespace array
-}  // namespace khiva
+} // namespace array
+} // namespace khiva
+
+#endif

@@ -4,11 +4,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_DISTANCES_H
+#define KHIVA_CORE_DISTANCES_H
+
 #include <arrayfire.h>
 
-namespace khiva {
+namespace khiva
+{
 
-namespace distances {
+namespace distances
+{
 
 /**
  * @brief Calculates the Dynamic Time Warping Distance.
@@ -93,5 +98,7 @@ af::array sbd(af::array tss);
  */
 af::array squaredEuclidean(af::array tss);
 
-}  // namespace distances
-}  // namespace khiva
+} // namespace distances
+} // namespace khiva
+
+#endif

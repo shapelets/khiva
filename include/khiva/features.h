@@ -4,11 +4,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_FEATURES_H
+#define KHIVA_CORE_FEATURES_H
+
 #include <arrayfire.h>
 
-namespace khiva {
+namespace khiva
+{
 
-namespace features {
+namespace features
+{
 /**
  * @brief Calculates the absolute energy of the time series which is the sum over the squared values.
  * \f[
@@ -943,5 +948,7 @@ af::array variance(af::array tss);
  */
 af::array varianceLargerThanStandardDeviation(af::array tss);
 
-}  // namespace features
-}  // namespace khiva
+} // namespace features
+} // namespace khiva
+
+#endif

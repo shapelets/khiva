@@ -4,11 +4,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_LINALG_H
+#define KHIVA_CORE_LINALG_H
+
 #include <arrayfire.h>
 
-namespace khiva {
+namespace khiva
+{
 
-namespace linalg {
+namespace linalg
+{
 
 /**
  * @brief Calculates the minimum norm least squares solution \f$x\f$ \f$(\left\lVert{A·x - b}\right\rVert^2)\f$ to
@@ -24,5 +29,7 @@ namespace linalg {
  */
 af::array lls(af::array A, af::array b);
 
-}  // namespace linalg
-}  // namespace khiva
+} // namespace linalg
+} // namespace khiva
+
+#endif

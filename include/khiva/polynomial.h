@@ -4,11 +4,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_POLYNOMIAL_H
+#define KHIVA_CORE_POLYNOMIAL_H
+
 #include <arrayfire.h>
 
-namespace khiva {
+namespace khiva
+{
 
-namespace polynomial {
+namespace polynomial
+{
 
 /**
  * @brief Least squares polynomial fit. Fit a polynomial \f$p(x) = p[0] * x^{deg} + ... + p[deg]\f$ of degree \f$deg\f$
@@ -35,5 +40,7 @@ af::array polyfit(af::array x, af::array y, int deg);
  */
 af::array roots(af::array pp);
 
-}  // namespace polynomial
-}  // namespace khiva
+} // namespace polynomial
+} // namespace khiva
+
+#endif
