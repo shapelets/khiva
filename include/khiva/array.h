@@ -3,6 +3,8 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#ifndef KHIVA_CORE_ARRAY_H
+#define KHIVA_CORE_ARRAY_H
 
 #include <arrayfire.h>
 #include <iostream>
@@ -334,3 +336,5 @@ std::vector<int> getIndexMaxColums(std::vector<T> r) {
 
 }  // namespace array
 }  // namespace khiva
+
+#endif

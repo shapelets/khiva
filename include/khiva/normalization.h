@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_NORMALIZATION_H
+#define KHIVA_CORE_NORMALIZATION_H
+
 #include <arrayfire.h>
 
 namespace khiva {
@@ -114,3 +117,5 @@ void znormInPlace(af::array &tss, double epsilon = 0.00000001);
 
 }  // namespace normalization
 }  // namespace khiva
+
+#endif
