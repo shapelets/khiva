@@ -80,3 +80,4 @@ void kShape2() {
 KHIVA_TEST(ClusteringTests, KMEANS, kmeans)
 KHIVA_TEST(ClusteringTests, KShape, kShape)
 KHIVA_TEST(ClusteringTests, KShape2, kShape2)
+
