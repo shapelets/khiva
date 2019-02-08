@@ -9,18 +9,15 @@
 
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace library
-{
+namespace library {
 
-typedef enum
-{
-    KHIVA_BACKEND_DEFAULT = af::Backend::AF_BACKEND_DEFAULT, ///< Default backend order: OpenCL -> CUDA -> CPU
-    KHIVA_BACKEND_CPU = af::Backend::AF_BACKEND_CPU,         ///< CPU a.k.a sequential algorithms
-    KHIVA_BACKEND_CUDA = af::Backend::AF_BACKEND_CUDA,       ///< CUDA Compute Backend
-    KHIVA_BACKEND_OPENCL = af::Backend::AF_BACKEND_OPENCL,   ///< OpenCL Compute Backend
+typedef enum {
+    KHIVA_BACKEND_DEFAULT = af::Backend::AF_BACKEND_DEFAULT,  ///< Default backend order: OpenCL -> CUDA -> CPU
+    KHIVA_BACKEND_CPU = af::Backend::AF_BACKEND_CPU,          ///< CPU a.k.a sequential algorithms
+    KHIVA_BACKEND_CUDA = af::Backend::AF_BACKEND_CUDA,        ///< CUDA Compute Backend
+    KHIVA_BACKEND_OPENCL = af::Backend::AF_BACKEND_OPENCL,    ///< OpenCL Compute Backend
 } khiva_backend;
 
 typedef khiva_backend Backend;
@@ -74,7 +71,7 @@ int getDevice();
  */
 int getDeviceCount();
 
-} // namespace library
-} // namespace khiva
+}  // namespace library
+}  // namespace khiva
 
 #endif

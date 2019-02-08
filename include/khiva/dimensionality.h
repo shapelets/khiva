@@ -10,11 +10,9 @@
 #include <arrayfire.h>
 #include <vector>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace dimensionality
-{
+namespace dimensionality {
 
 typedef std::pair<float, float> Point;
 
@@ -206,7 +204,7 @@ std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
  */
 af::array visvalingam(af::array pointList, int numPoints);
 
-} // namespace dimensionality
-} // namespace khiva
+}  // namespace dimensionality
+}  // namespace khiva
 
 #endif

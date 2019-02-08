@@ -9,11 +9,9 @@
 
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace matrix
-{
+namespace matrix {
 /**
  * @brief Calculates the sliding dot product of the time series 'q' against t.
  *
@@ -199,7 +197,7 @@ void findBestNMotifs(af::array profile, af::array index, long m, long n, af::arr
 void findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
                        af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin = false);
 
-} // namespace matrix
-} // namespace khiva
+}  // namespace matrix
+}  // namespace khiva
 
 #endif

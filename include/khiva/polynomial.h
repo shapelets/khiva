@@ -9,11 +9,9 @@
 
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace polynomial
-{
+namespace polynomial {
 
 /**
  * @brief Least squares polynomial fit. Fit a polynomial \f$p(x) = p[0] * x^{deg} + ... + p[deg]\f$ of degree \f$deg\f$
@@ -40,7 +38,7 @@ af::array polyfit(af::array x, af::array y, int deg);
  */
 af::array roots(af::array pp);
 
-} // namespace polynomial
-} // namespace khiva
+}  // namespace polynomial
+}  // namespace khiva
 
 #endif

@@ -9,11 +9,9 @@
 
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace statistics
-{
+namespace statistics {
 /**
  * @brief Returns the covariance matrix of the time series contained in tss.
  *
@@ -126,7 +124,7 @@ af::array sampleStdev(af::array tss);
  */
 af::array skewness(af::array tss);
 
-} // namespace statistics
-} // namespace khiva
+}  // namespace statistics
+}  // namespace khiva
 
 #endif

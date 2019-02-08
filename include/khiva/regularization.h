@@ -9,11 +9,9 @@
 
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace regularization
-{
+namespace regularization {
 
 /**
  * @brief Group by operation in the input array using nColumnsKey columns as group keys and nColumnsValue columns as
@@ -57,7 +55,7 @@ af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array
 af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array &, const dim_t), int nColumnsKey = 1,
                   int nColumnsValue = 1);
 
-} // namespace regularization
-} // namespace khiva
+}  // namespace regularization
+}  // namespace khiva
 
 #endif

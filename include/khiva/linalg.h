@@ -9,11 +9,9 @@
 
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace linalg
-{
+namespace linalg {
 
 /**
  * @brief Calculates the minimum norm least squares solution \f$x\f$ \f$(\left\lVert{A·x - b}\right\rVert^2)\f$ to
@@ -29,7 +27,7 @@ namespace linalg
  */
 af::array lls(af::array A, af::array b);
 
-} // namespace linalg
-} // namespace khiva
+}  // namespace linalg
+}  // namespace khiva
 
 #endif

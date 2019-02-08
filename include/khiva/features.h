@@ -9,11 +9,9 @@
 
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace features
-{
+namespace features {
 /**
  * @brief Calculates the absolute energy of the time series which is the sum over the squared values.
  * \f[
@@ -948,7 +946,7 @@ af::array variance(af::array tss);
  */
 af::array varianceLargerThanStandardDeviation(af::array tss);
 
-} // namespace features
-} // namespace khiva
+}  // namespace features
+}  // namespace khiva
 
 #endif

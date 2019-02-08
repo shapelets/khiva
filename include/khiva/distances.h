@@ -9,11 +9,9 @@
 
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace distances
-{
+namespace distances {
 
 /**
  * @brief Calculates the Dynamic Time Warping Distance.
@@ -98,7 +96,7 @@ af::array sbd(af::array tss);
  */
 af::array squaredEuclidean(af::array tss);
 
-} // namespace distances
-} // namespace khiva
+}  // namespace distances
+}  // namespace khiva
 
 #endif

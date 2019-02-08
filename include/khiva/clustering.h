@@ -10,10 +10,8 @@
 #include <arrayfire.h>
 #include <vector>
 
-namespace khiva
-{
-namespace clustering
-{
+namespace khiva {
+namespace clustering {
 
 /**
  * @brief Calculates the k-means algorithm.
@@ -26,7 +24,7 @@ namespace clustering
  */
 void kmeans(af::array tss, int k, af::array &means, af::array &labels);
 
-} // namespace clustering
-} // namespace khiva
+}  // namespace clustering
+}  // namespace khiva
 
 #endif

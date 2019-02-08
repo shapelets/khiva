@@ -9,11 +9,9 @@
 
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace regression
-{
+namespace regression {
 
 /**
  * @brief Calculate a linear least-squares regression for two sets of measurements. Both arrays should have the same
@@ -33,7 +31,7 @@ namespace regression
 void linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue,
             af::array &stderrest);
 
-} // namespace regression
-} // namespace khiva
+}  // namespace regression
+}  // namespace khiva
 
 #endif
