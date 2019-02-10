@@ -4,7 +4,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGC_UTIL_H
+#define KHIVA_BINDINGC_UTIL_H
+
 #include <arrayfire.h>
 #include <khiva_c/defines.h>
 
 void check_and_retain_arrays(khiva_array *a, khiva_array *b, af::array &var_a, af::array &var_b);
+
+#endif

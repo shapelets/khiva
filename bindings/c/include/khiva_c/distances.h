@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGC_DISTANCES_H
+#define KHIVA_BINDINGC_DISTANCES_H
+
 #include <khiva_c/defines.h>
 
 #ifdef __cplusplus
@@ -83,4 +86,6 @@ KHIVAAPI void squared_euclidean(khiva_array *tss, khiva_array *result);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

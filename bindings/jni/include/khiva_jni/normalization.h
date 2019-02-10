@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGJAVA_NORMALIZATION_H
+#define KHIVA_BINDINGJAVA_NORMALIZATION_H
+
 #include <jni.h>
 
 #ifdef __cplusplus
@@ -49,8 +52,8 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNorm
  * been normalized by maximum and minimum values, and scaled as per high and low parameters.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env, jobject, jlong ref,
-                                                                               jdouble high, jdouble low,
-                                                                               jdouble epsilon);
+                                                                              jdouble high, jdouble low,
+                                                                              jdouble epsilon);
 
 /**
  * @brief Same as Java_io_shapelets_khiva_Normalization_maxMinNorm, but it performs the operation in place, without
@@ -66,8 +69,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JN
  * @return The updated ref.
  */
 JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *, jobject, jlong ref,
-                                                                                 jdouble high, jdouble low,
-                                                                                 jdouble epsilon);
+                                                                                jdouble high, jdouble low,
+                                                                                jdouble epsilon);
 
 /**
  * @brief Normalizes the given time series according to its maximum-minimum value and its mean. It follows the following
@@ -111,7 +114,7 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JN
  * adjusted for zero mean and one as standard deviation.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobject, jlong ref,
-                                                                          jdouble epsilon);
+                                                                         jdouble epsilon);
 
 /**
  * @brief Adjusts the time series in the given input and performs z-norm
@@ -125,8 +128,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv 
  * @return The updated ref.
  */
 JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Normalization_znormInPlace(JNIEnv *, jobject, jlong ref,
-                                                                            jdouble epsilon);
+                                                                           jdouble epsilon);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

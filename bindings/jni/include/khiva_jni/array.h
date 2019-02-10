@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGJAVA_ARRAY_H
+#define KHIVA_BINDINGJAVA_ARRAY_H
+
 #include <arrayfire.h>
 #include <jni.h>
 
@@ -345,4 +348,6 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_as(JNIEnv *env, jobject th
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
