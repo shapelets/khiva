@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGC_DIMENSIONALITY_H
+#define KHIVA_BINDINGC_DIMENSIONALITY_H
+
 #include <khiva_c/defines.h>
 
 #ifdef __cplusplus
@@ -120,4 +123,6 @@ KHIVAAPI void visvalingam(khiva_array *points, int *num_points, khiva_array *res
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
