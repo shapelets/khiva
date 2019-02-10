@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGJAVA_LIBRARY_H
+#define KHIVA_BINDINGJAVA_LIBRARY_H
+
 #include <jni.h>
 
 #ifdef __cplusplus
@@ -66,4 +69,6 @@ JNIEXPORT jstring JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, j
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
