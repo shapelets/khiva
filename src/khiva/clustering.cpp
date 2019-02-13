@@ -80,7 +80,7 @@ float computeError(af::array means, af::array newMeans) {
     return error[0];
 }
 
-void khiva::clustering::kmeans(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance,
+void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance,
         int maxIterations) {
     float error = std::numeric_limits<float>::max();
 

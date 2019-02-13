@@ -19,7 +19,7 @@ void kmeans() {
     af::array means;
     af::array labels;
 
-    khiva::clustering::kmeans(tss, 3, means, labels);
+    khiva::clustering::kMeans(tss, 3, means, labels);
 
     ASSERT_EQ(means.dims(0), 4);
     ASSERT_EQ(means.dims(1), 3);

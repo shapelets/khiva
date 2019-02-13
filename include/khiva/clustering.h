@@ -21,7 +21,7 @@ namespace clustering {
  * @param tolerance The error tolerance to stop the computation of the centroids.
  * @param maxIterations The maximum number of iterations allowed.
  */
-void kmeans(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance = 0.0000000001, int maxIterations = 100);
+void kMeans(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance = 0.0000000001, int maxIterations = 100);
 
 /**
  * @brief Calculates the k-shape algorithm.
