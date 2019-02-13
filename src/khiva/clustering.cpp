@@ -163,10 +163,12 @@ af::array getFirstEigenVector(af::array tss) {
  * @return The normalized crosscorrelation.
  */
 af::array ncc(af::array ts, af::array centroid){
-    af::array tsNorm = af::sqrt(af::sum(af::pow(ts, 2), 0));
-    af::array centroidNorm = af::sqrt(af::sum(af::pow(centroid, 2), 0));
+    int nElements = ts.dims(0);
 
-    return af::convolve(centroidNorm, af::flip(tsNorm, 0), AF_CONV_EXPAND) / (centroidNorm * tsNorm);
+    af::array tsNorm = af::sqrt(af::sum(af::pow(ts, 2)));
+    af::array centroidNorm = af::sqrt(af::sum(af::pow(centroid, 2)));
+
+    return af::convolve(centroid, af::flip(ts, 0), AF_CONV_EXPAND) / af::tile(centroidNorm * tsNorm, nElements * 2 - 1);
 }
 
 /**
@@ -177,25 +179,39 @@ af::array ncc(af::array ts, af::array centroid){
  * @param distance The distance to the best shift of the ts.
  */
 void SBD(af::array ts, af::array centroid, af::array &shiftedTS, float &distance) {
-    float * value;
-    unsigned * index;
-
+    float value;
+    unsigned index;
+    //af_print(ts);
+    //af_print(centroid);
+    //std::cout << "Before ncc" << std::endl;
     af::array normCrossCorr = ncc(ts, centroid);
-    af::max(value, index, normCrossCorr);
+    //std::cout << "after ncc" << std::endl;
+    //af_print(normCrossCorr);
+    af::max(&value, &index, normCrossCorr);
 
-    distance = 1.0f - *value;
-    std::cout << "Length ts in ncc: " << ts.dims(0) << std::endl;
+    distance = 1.0f - value;
     int end = ts.dims(0);
-    int shift = *index - ts.dims(0);
+    int shift = index - ts.dims(0);
 
     if (shift >= 0){
-        shiftedTS = af::join(0, af::constant(0.0f, shift), ts(af::seq(1, end-shift)));
+        std::cout << "if: " << shift << " " << end << std::endl;
+
+        // Reducing one unit because seq in inclusive.
+        end = end - 1;
+
+        shiftedTS = af::join(0, af::constant(0.0f, shift), ts(af::seq(0, end-shift)));
+        //af_print(shiftedTS)
 
     }else{
-        shift = - shift;
-        shiftedTS = af::join(0, ts(af::seq(1 + shift, end)), af::constant(0.0f, shift + 1));
+        std::cout << "else: " << shift << " " << end << std::endl;
+
+        // Reducing one unit because seq in inclusive.
+        shift = - shift - 1;
+        end = end - 1;
+
+        shiftedTS = af::join(0, ts(af::seq(shift, end), af::span), af::constant(0.0f, shift));
+        //af_print(shiftedTS)
     }
-    af_print(shiftedTS);
 }
 
 /**
@@ -208,18 +224,20 @@ void SBD(af::array ts, af::array centroid, af::array &shiftedTS, float &distance
 af::array shapeExtraction(af::array tss, af::array centroid) {
     int ntss = tss.dims(1);
     int nelements = tss.dims(0);
-    af::array shiftedTSS;
-    af::array shiftedTSi;
+    af::array shiftedTSS = af::constant(0.0f, tss.dims(0), tss.dims(1));
+    af::array shiftedTSi = af::constant(0.0f, tss.dims(0), 1);
     float dist;
+
+    std::cout << "Shapelets extraction: " << std::endl;
 
     for (int i = 0; i < ntss; i++) {
         SBD(tss.col(i), centroid, shiftedTSi, dist);
-        shiftedTSS.col(i) = shiftedTSi;
-    }
+        shiftedTSS(af::span, i) = shiftedTSi;
 
-    af::array s = af::matmul(shiftedTSS.T(), shiftedTSS);
+    }
+    af::array s = af::matmul(shiftedTSS, shiftedTSS.T());
     af::array q = af::identity(nelements, nelements) - (af::constant(1.0, nelements, nelements) / nelements);
-    af::array m = af::matmul(af::matmul(q.T(), s), q);
+    af::array m = af::matmul(q.T(), s, q);
     return getFirstEigenVector(m);
 }
 
@@ -236,10 +254,12 @@ af::array refinementStep(af::array tss, af::array centroids, af::array labels){
     af::array subset;
 
     for (int j = 0; j < ncentroids; j++) {
-        for (int i = 0; i < ntss; i++) {
-            subset = selectSubset(tss, labels, j);
+        subset = selectSubset(tss, labels, j);
+        // if centroid j has at least one labeled time series.
+        //af_print(subset);
+        if (!subset.isempty()){
+            centroids(af::span, j) = shapeExtraction(subset, centroids.col(j));
         }
-        centroids.col(j) = shapeExtraction(subset, centroids.col(j));
     }
 
     // TODO: Analyse if returning centroids via &centroids is better
@@ -264,8 +284,11 @@ af::array assignmentStep(af::array tss, af::array centroids, af::array labels){
     for (int i = 0; i < tss.dims(1); i++){
         mindist = std::numeric_limits<float>::max();
         // TODO: Probably this for loop can be executed in parallel
+        std::cout << "Assignment Step: " << std::endl;
         for (int j = 0; j < centroids.dims(1); j++){
+            std::cout << "Assignment Step: " << j <<  " of "  << centroids.dims(1) << std::endl;
             SBD(tss.col(i), centroids.col(j), shiftedTS, dist);
+            //af_print(shiftedTS);
             if (dist < mindist){
                 mindist = dist;
                 nlabels(i) = j;
@@ -276,30 +299,41 @@ af::array assignmentStep(af::array tss, af::array centroids, af::array labels){
 }
 
 /**
- *  Computes the kShape algorithm, it return the computed centroids and the time series membership in labels vectors.
- * @param tss
- * @param k
- * @param centroids
- * @param labels
- * @param tolerance
- * @param maxIterations
+ *
  */
+af::array generateRandomLabels(int nTimeseries, int k){
+
+    std::vector<int> idx(nTimeseries, 0);
+
+    // Fill with sequential data
+    for(int i = 0; i < nTimeseries; i ++){
+        idx[i] = i % k;
+    }
+
+    //Randomize
+    std::random_shuffle (idx.begin(), idx.end());
+
+    af::array a(nTimeseries, 1, idx.data());
+    return a;
+}
+
 void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance,
         int maxIterations) {
     unsigned int nTimeseries = static_cast<unsigned int>(tss.dims(1));
     unsigned int nElements = static_cast<unsigned int>(tss.dims(0));
 
     if (centroids.isempty()) {
-        centroids = af::constant(0.0f, nElements, k);
+        centroids = af::constant(1.0f, nElements, k);
     }
 
     if (labels.isempty()) {
         // assigns a random centroid to every time series
-        labels = af::floor(af::randu(nTimeseries) * (k)).as(af::dtype::s32);
+        //labels = af::floor(af::randu(nTimeseries) * (k)).as(af::dtype::s32);
+        labels = generateRandomLabels(nTimeseries, k);
     }
 
     af::array normTSS = khiva::normalization::znorm(tss);
-    af::array distances = af::constant(0, nTimeseries, k);
+    af::array distances = af::constant(0.0, nTimeseries, k);
     af::array newCentroids;
 
     float error = std::numeric_limits<float>::max();
@@ -307,13 +341,16 @@ void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::a
 
     // Stop Criteria: Stop updating after convergence is reached.
     while ((error > tolerance) && (iter < maxIterations)) {
+        std::cout << "ITERATION: " << iter << std::endl;
 
         // 1. Refinement step. New centroids computation.
         af_print(centroids);
         newCentroids = refinementStep(normTSS, centroids, labels);
+        //af_print(newCentroids);
 
         // 2. Assignment step. New labels computation.
         labels = assignmentStep(normTSS, newCentroids, labels);
+        //af_print(labels);
 
         // 3. Compute convergence
         error = computeError(centroids, newCentroids);

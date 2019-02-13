@@ -28,12 +28,13 @@ void kmeans() {
 }
 
 void kShape() {
-    float a[35] = {1.0f,  2.0f,  3.0f,  4.0f,  5.0f,   6.0f,  7.0f,
-                   0.0f, 10.0f, 4.0f, 5.0f, 7.0f, -3.0f, 0.0f, -1.0f, 15.0f, -12.0f, 8.0f,  9.0f,  4.0f, 5.0f,  2.0f, 8.0f, 7.0f,
-                   -6.0f, -1.0f, 2.0f,  9.0f,  -5.0f,  -5.0f, -6.0f, 7.0f, 9.0f,  9.0f, 0.0f};
+    float a[35] = { 1.0f,  2.0f,   3.0f,   4.0f,  5.0f,  6.0f,  7.0f,
+                    0.0f, 10.0f,   4.0f,   5.0f,  7.0f, -3.0f,  0.0f,
+                   -1.0f, 15.0f, -12.0f,   8.0f,  9.0f,  4.0f,  5.0f,
+                    2.0f,  8.0f,   7.0f,  -6.0f, -1.0f,  2.0f,  9.0f,
+                   -5.0f, -5.0f,  -6.0f,   7.0f,  9.0f,  9.0f,  0.0f};
     af::array data = af::array(7, 5, a);
 
-    // int indices[5] = {1, 0, 1, 2, 0};
 
     af::array idx;
     af::array centroids;
@@ -77,7 +78,17 @@ void kShape2() {
     }*/
 }
 
+void kShape3() {
+    af::array a = af::randu(10, 4);
+    af_print(a);
+    af_print(a.T());
+    af::array aux = af::matmul(a.T(), a);
+    af_print(aux);
+}
+
 KHIVA_TEST(ClusteringTests, KMEANS, kmeans)
 KHIVA_TEST(ClusteringTests, KShape, kShape)
-KHIVA_TEST(ClusteringTests, KShape2, kShape2)
+//KHIVA_TEST(ClusteringTests, KShape2, kShape2)
+//KHIVA_TEST(ClusteringTests, KShape3, kShape3)
+
 
