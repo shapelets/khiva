@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_POLYNOMIAL_H
+#define KHIVA_CORE_POLYNOMIAL_H
+
 #include <arrayfire.h>
 
 namespace khiva {
@@ -37,3 +40,5 @@ af::array roots(af::array pp);
 
 }  // namespace polynomial
 }  // namespace khiva
+
+#endif

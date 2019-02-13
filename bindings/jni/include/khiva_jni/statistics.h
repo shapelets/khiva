@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGJAVA_STATISTICS_H
+#define KHIVA_BINDINGJAVA_STATISTICS_H
+
 #include <jni.h>
 
 #ifdef __cplusplus
@@ -20,7 +23,7 @@ extern "C" {
  * @return The updated ref and a ref to the covariance matrix of the time series.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEnv *env, jobject, jlong ref,
-                                                                            jboolean unbiased);
+                                                                           jboolean unbiased);
 
 /**
  * @brief Calculates the kurtosis of tss (calculated with the adjusted Fisher-Pearson standardized moment coefficient
@@ -89,7 +92,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_moment(JNIEnv *e
  * @return Updated refs and a ref to the values at the given quantile.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
-                                                                          jfloat precision);
+                                                                         jfloat precision);
 
 /**
  * @brief Discretizes the time series into equal-sized buckets based on sample quantiles.
@@ -103,7 +106,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv 
  * category in the first column and the end in the second category.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantilesCut(JNIEnv *env, jobject, jlong ref,
-                                                                              jfloat quantiles, jfloat precision);
+                                                                             jfloat quantiles, jfloat precision);
 
 /**
  * @brief Estimates standard deviation based on a sample. The standard deviation is calculated using the "n-1" method.
@@ -127,4 +130,6 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Statistics_skewness(JNIEnv 
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

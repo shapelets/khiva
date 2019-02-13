@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGJAVA_DIMENSIONALITY_H
+#define KHIVA_BINDINGJAVA_DIMENSIONALITY_H
+
 #include <jni.h>
 
 #ifdef __cplusplus
@@ -40,7 +43,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *
  * @return The updated ref and an array with the most Perceptually Important numberIPs.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *env, jobject, jlong ref,
-                                                                         jint numberIPs);
+                                                                        jint numberIPs);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA BottomUP) to the time series.
@@ -55,7 +58,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *
  * @return The updated reference and a reference to an Array with the reduced number of points.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref,
-                                                                                 jfloat maxError);
+                                                                                jfloat maxError);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA Sliding Window) to the time series.
@@ -70,7 +73,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(
  * @return The updated reference and a reference to an Array with the reduced number of points.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWindow(JNIEnv *env, jobject, jlong ref,
-                                                                                      jfloat maxError);
+                                                                                     jfloat maxError);
 
 /**
  * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve that is
@@ -90,7 +93,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWi
  * and y in column 1).
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject,
-                                                                                         jlong ref, jdouble epsilon);
+	       										jlong ref, jdouble epsilon);
 
 /**
  * @brief Symbolic Aggregate approXimation (SAX). It transforms a numeric time series into a time series of symbols with
@@ -110,7 +113,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglas
  * @return The updated ref and an array of symbols.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *env, jobject, jlong ref,
-                                                                         jint alphabetSize);
+                                                                        jint alphabetSize);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimun triangle area) until the number
@@ -126,8 +129,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *
  * and y in column 1).
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref,
-                                                                                 jint numPoints);
+                                                                                jint numPoints);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

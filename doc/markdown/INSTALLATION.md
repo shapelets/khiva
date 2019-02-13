@@ -96,8 +96,10 @@ For linux, either a deb or a rpm installer package can be generated. This is don
 
 We use `sphinx + doxygen` to generate our documentation. You will need to install the following packages:
 
-- Sphinx: `brew install sphinx`.
-- Doxygen: `brew install doxygen`.
+As root:
+
+- Sphinx: `apt-get install python3-sphinx`.
+- Doxygen: `apt-get install doxygen`.
 - Read the Docs Theme: `pip install sphinx_rtd_theme`.
 - Breathe: `pip install breathe`.
 

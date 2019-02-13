@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_MATRIX_H
+#define KHIVA_CORE_MATRIX_H
+
 #include <arrayfire.h>
 
 namespace khiva {
@@ -196,3 +199,5 @@ void findBestNDiscords(af::array profile, af::array index, long m, long n, af::a
 
 }  // namespace matrix
 }  // namespace khiva
+
+#endif

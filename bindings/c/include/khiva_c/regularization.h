@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGC_REGULARIZATION_H
+#define KHIVA_BINDINGC_REGULARIZATION_H
+
 #include <khiva_c/defines.h>
 
 #ifdef __cplusplus
@@ -38,4 +41,6 @@ KHIVAAPI void group_by(khiva_array *array, int *aggregation_function, int *n_col
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

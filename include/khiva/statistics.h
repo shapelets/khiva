@@ -4,13 +4,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_STATISTICS_H
+#define KHIVA_CORE_STATISTICS_H
+
 #include <arrayfire.h>
 
-namespace khiva
-{
+namespace khiva {
 
-namespace statistics
-{
+namespace statistics {
 /**
  * @brief Returns the covariance matrix of the time series contained in tss.
  *
@@ -123,5 +124,7 @@ af::array sampleStdev(af::array tss);
  */
 af::array skewness(af::array tss);
 
-} // namespace statistics
-} // namespace khiva
+}  // namespace statistics
+}  // namespace khiva
+
+#endif

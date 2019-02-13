@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_CORE_CLUSTERING_H
+#define KHIVA_CORE_CLUSTERING_H
+
 #include <arrayfire.h>
 #include <vector>
 
@@ -38,3 +41,5 @@ void kShape(af::array tss, int k, af::array &centroids, af::array &labels, float
 
 }  // namespace clustering
 }  // namespace khiva
+
+#endif

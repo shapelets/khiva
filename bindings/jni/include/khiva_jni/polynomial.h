@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGJAVA_POLYNOMIAL_H
+#define KHIVA_BINDINGJAVA_POLYNOMIAL_H
+
 #include <jni.h>
 
 #ifdef __cplusplus
@@ -21,7 +24,7 @@ extern "C" {
  * @return The updated refs and an array with the polynomial coefficients, highest power first.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY,
-                                                                         jint deg);
+                                                                        jint deg);
 
 /**
  * @brief Calculates the roots of a polynomial with coefficients given in \f$ref\f$. The values in the rank-1 array
@@ -39,4 +42,6 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *en
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

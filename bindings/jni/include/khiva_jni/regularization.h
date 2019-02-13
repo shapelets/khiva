@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGJAVA_REGULARIZATION_H
+#define KHIVA_BINDINGJAVA_REGULARIZATION_H
+
 #include <jni.h>
 
 #ifdef __cplusplus
@@ -34,9 +37,11 @@ extern "C" {
  * @return The updated ref and an array with the values of the group keys aggregated using the aggregationFunction.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
-                                                                             jint aggregationFunction, jint nColumnsKey,
-                                                                             jint nColumnsValue);
+                                                                            jint aggregationFunction, jint nColumnsKey,
+                                                                            jint nColumnsValue);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

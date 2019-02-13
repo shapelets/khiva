@@ -4,6 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef KHIVA_BINDINGC_LINALG_H
+#define KHIVA_BINDINGC_LINALG_H
+
 #include <khiva_c/defines.h>
 
 #ifdef __cplusplus
@@ -25,4 +28,6 @@ KHIVAAPI void lls(khiva_array *a, khiva_array *b, khiva_array *result);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
