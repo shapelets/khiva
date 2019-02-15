@@ -28,67 +28,41 @@ void kmeans() {
 }
 
 void kShape() {
-    float a[35] = { 1.0f,  2.0f,   3.0f,   4.0f,  5.0f,  6.0f,  7.0f,
-                    0.0f, 10.0f,   4.0f,   5.0f,  7.0f, -3.0f,  0.0f,
-                   -1.0f, 15.0f, -12.0f,   8.0f,  9.0f,  4.0f,  5.0f,
-                    2.0f,  8.0f,   7.0f,  -6.0f, -1.0f,  2.0f,  9.0f,
-                   -5.0f, -5.0f,  -6.0f,   7.0f,  9.0f,  9.0f,  0.0f};
+    float tolerance = 1e-10;
+    int maxIter = 100;
+    float a[35] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
+                   0.0f, 10.0f, 4.0f, 5.0f, 7.0f, -3.0f, 0.0f,
+                   -1.0f, 15.0f, -12.0f, 8.0f, 9.0f, 4.0f, 5.0f,
+                   2.0f, 8.0f, 7.0f, -6.0f, -1.0f, 2.0f, 9.0f,
+                   -5.0f, -5.0f, -6.0f, 7.0f, 9.0f, 9.0f, 0.0f};
+
+    unsigned int idxh[5] = {0, 1, 2, 0, 1};
+
+    float expected_c[35] = {-0.5234, 0.1560, -0.3627, -1.2764, -0.7781, 0.9135, 1.8711,
+                            -0.7825, 1.5990, 0.1701, 0.4082, 0.8845, -1.4969, -0.7825,
+                            -0.6278, 1.3812, -2.0090, 0.5022, 0.6278, 0.0000, 0.1256};
+
+    unsigned int expected_l[5] = {0, 1, 2, 0, 0};
+
     af::array data = af::array(7, 5, a);
-
-
-    af::array idx;
+    af::array idx = af::array(5, 1, idxh);
     af::array centroids;
 
-    khiva::clustering::kShape(data, 3, centroids, idx);
+    khiva::clustering::kShape(data, 3, centroids, idx, tolerance, maxIter);
 
-    af_print(idx);
-    af_print(centroids);
+    float *calculated_c = centroids.host<float>();
+    unsigned int *calculated_l = idx.host<unsigned int>();
 
-    /*float *index = idx.host<float>();
-    for (unsigned int i = 0; i < static_cast<unsigned int>(idx.dims(0)); i++) {
-        ASSERT_EQ(index[i], indices[i]);
-    }*/
-}
+    for (size_t i = 0; i < 21; i++) {
+        ASSERT_NEAR(calculated_c[i], expected_c[i], 1e-3);
+    }
 
-void kShape2() {
-    float a[80] = {1.0f,   2.0f,   3.0f,   4.0f,   5.0f,   6.0f,   7.0f,   8.0f,   9.0f,   10.0f,  15.0f, 16.0f,
-                   17.0f,  18.0f,  19.0f,  20.0f,  21.0f,  22.0f,  23.0f,  24.0f,  0.0f,   5.88f,  9.50f, 9.50f,
-                   5.9f,   0.0f,   -5.87f, -9.50f, -9.50f, -5.9f,  2.0f,   7.88f,  11.50f, 11.50f, 7.9f,  2.0f,
-                   -3.87f, -7.50f, -7.50f, -3.9f,  1.0f,   2.0f,   3.0f,   4.0f,   5.0f,   6.0f,   7.0f,  8.0f,
-                   9.0f,   10.0f,  15.0f,  16.0f,  17.0f,  18.0f,  19.0f,  20.0f,  21.0f,  22.0f,  23.0f, 24.0f,
-                   0.0f,   5.88f,  9.50f,  9.50f,  5.9f,   0.0f,   -5.87f, -9.50f, -9.50f, -5.9f,  2.0f,  7.88f,
-                   11.50f, 11.50f, 7.9f,   2.0f,   -3.87f, -7.50f, -7.50f, -3.9f};
-
-    af::array data = af::array(10, 8, a);
-    af_print(data);
-
-    af::array idx;
-    af::array centroids;
-
-    khiva::clustering::kShape(data, 2, centroids, idx);
-
-    af_print(idx);
-    af_print(centroids);
-
-    // float *index = idx.host<float>();
-
-    /*for (unsigned int i = 0; i < static_cast<unsigned int>(idx.dims(0)); i++)
-    {
-        ASSERT_EQ(index[i], indices[i]);
-    }*/
-}
-
-void kShape3() {
-    af::array a = af::randu(10, 4);
-    af_print(a);
-    af_print(a.T());
-    af::array aux = af::matmul(a.T(), a);
-    af_print(aux);
+    for (size_t i = 0; i < 5; i++) {
+        ASSERT_NEAR(calculated_l[i], expected_l[i], 1e-3);
+    }
 }
 
 KHIVA_TEST(ClusteringTests, KMEANS, kmeans)
 KHIVA_TEST(ClusteringTests, KShape, kShape)
-//KHIVA_TEST(ClusteringTests, KShape2, kShape2)
-//KHIVA_TEST(ClusteringTests, KShape3, kShape3)
 
 
