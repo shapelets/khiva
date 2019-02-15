@@ -19,10 +19,10 @@ extern "C" {
  * @param centroids      The resulting means or centroids.
  * @param labels         The resulting labels of each time series which is the closest centroid.
  * @param tolerance      The error tolerance to stop the computation of the centroids.
- * @param maxIterations  The maximum number of iterations allowed.
+ * @param max_iterations The maximum number of iterations allowed.
  */
 KHIVAAPI void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
-                      int *maxIterations);
+                      int *max_iterations);
 
 /**
  * @brief Calculates the k-means algorithm.
@@ -34,11 +34,11 @@ KHIVAAPI void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_ar
  * @param centroids         The resulting means or centroids.
  * @param labels            The resulting labels of each time series which is the closest centroid.
  * @param tolerance         The error tolerance to stop the computation of the centroids.
- * @param maxIterations     The maximum number of iterations allowed.
+ * @param max_iterations    The maximum number of iterations allowed.
  */
 KHIVAAPI void k_means_initial_values(khiva_array *tss, int *k, khiva_array *initial_centroids, khiva_array *centroids,
                                      khiva_array *initial_labels, khiva_array *labels, float *tolerance,
-                                     int *maxIterations);
+                                     int *max_iterations);
 
 /**
  * @brief Calculates the clusterization based on SBD.
@@ -49,10 +49,10 @@ KHIVAAPI void k_means_initial_values(khiva_array *tss, int *k, khiva_array *init
  * @param centroids      The resulting means or centroids.
  * @param labels         The resulting labels of each time series which is the closest centroid.
  * @param tolerance      The error tolerance to stop the computation of the centroids.
- * @param maxIterations  The maximum number of iterations allowed.
+ * @param max_iterations The maximum number of iterations allowed.
  */
 KHIVAAPI void k_shape(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
-                      int *maxIterations);
+                      int *max_iterations);
 
 /**
  * @brief Calculates the clusterization based on SBD.
@@ -64,11 +64,11 @@ KHIVAAPI void k_shape(khiva_array *tss, int *k, khiva_array *centroids, khiva_ar
  * @param centroids         The resulting means or centroids.
  * @param labels            The resulting labels of each time series which is the closest centroid.
  * @param tolerance         The error tolerance to stop the computation of the centroids.
- * @param maxIterations     The maximum number of iterations allowed.
+ * @param max_iterations    The maximum number of iterations allowed.
  */
 KHIVAAPI void k_shape_initial_values(khiva_array *tss, int *k, khiva_array *initial_centroids, khiva_array *centroids,
                                      khiva_array *initial_labels, khiva_array *labels, float *tolerance,
-                                     int *maxIterations);
+                                     int *max_iterations);
 
 #ifdef __cplusplus
 }
