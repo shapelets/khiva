@@ -21,6 +21,8 @@ void kmeans() {
 
     khiva::clustering::kMeans(tss, 3, means, labels);
 
+    af_print(means);
+
     ASSERT_EQ(means.dims(0), 4);
     ASSERT_EQ(means.dims(1), 3);
     ASSERT_EQ(labels.dims(0), 1);
@@ -36,7 +38,7 @@ void kShape() {
 
     unsigned int idxh[5] = {0, 1, 2, 0, 1};
 
-    float expected_c[35] = {-0.5234, 0.1560, -0.3627, -1.2764, -0.7781, 0.9135,  1.8711,
+    float expected_c[21] = {-0.5234, 0.1560, -0.3627, -1.2764, -0.7781, 0.9135,  1.8711,
                             -0.7825, 1.5990, 0.1701,  0.4082,  0.8845,  -1.4969, -0.7825,
                             -0.6278, 1.3812, -2.0090, 0.5022,  0.6278,  0.0000,  0.1256};
 
@@ -47,6 +49,40 @@ void kShape() {
     af::array centroids;
 
     khiva::clustering::kShape(data, 3, centroids, idx, tolerance, maxIter);
+
+    float *calculated_c = centroids.host<float>();
+    unsigned int *calculated_l = idx.host<unsigned int>();
+
+    for (size_t i = 0; i < 21; i++) {
+        ASSERT_NEAR(calculated_c[i], expected_c[i], 1e-3);
+    }
+
+    for (size_t i = 0; i < 5; i++) {
+        ASSERT_NEAR(calculated_l[i], expected_l[i], 1e-3);
+    }
+}
+
+void kShape2() {
+    float tolerance = 1e-10;
+    int maxIter = 100;
+    float a[35] = {1.0f,  2.0f,  3.0f,  4.0f,  5.0f,   6.0f,  7.0f,  0.0f, 10.0f, 4.0f, 5.0f, 7.0f,
+                   -3.0f, 0.0f,  -1.0f, 15.0f, -12.0f, 8.0f,  9.0f,  4.0f, 5.0f,  2.0f, 8.0f, 7.0f,
+                   -6.0f, -1.0f, 2.0f,  9.0f,  -5.0f,  -5.0f, -6.0f, 7.0f, 9.0f,  9.0f, 0.0f};
+
+    float expected_c[21] = {-0.5234, 0.1560, -0.3627, -1.2764, -0.7781, 0.9135,  1.8711,
+                            -0.7825, 1.5990, 0.1701,  0.4082,  0.8845,  -1.4969, -0.7825,
+                            -0.6278, 1.3812, -2.0090, 0.5022,  0.6278,  0.0000,  0.1256};
+
+    unsigned int expected_l[5] = {0, 1, 2, 0, 0};
+
+    af::array data = af::array(7, 5, a);
+    af::array idx;
+    af::array centroids;
+
+    khiva::clustering::kShape(data, 3, centroids, idx, tolerance, maxIter);
+
+    af_print(centroids);
+    af_print(idx);
 
     float *calculated_c = centroids.host<float>();
     unsigned int *calculated_l = idx.host<unsigned int>();

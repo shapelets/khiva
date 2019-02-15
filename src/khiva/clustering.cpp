@@ -146,35 +146,32 @@ af::array selectSubset(af::array tss, af::array labels, int centroidId) {
 }
 
 /**
- * This function returns the Eigenvectors of tss.
+ * This function computes the first EigenVector of a matrix.
  *
- * @param tss   The set of time series in columnar mode.
- * @return      The Eigenvectors of tss.
+ * @param m     The input matrix.
+ * @return      The first Eigen vector.
  */
-af::array getEigenVectors(af::array tss) {
-    float *matHost = tss.host<float>();
-    Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, tss.dims(0), tss.dims(1));
+af::array getFirstEigenVector(af::array m) {
+    float *matHost = m.host<float>();
+    Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, m.dims(0), m.dims(1));
 
-    Eigen::EigenSolver<Eigen::MatrixXf> solution(mat);
-    Eigen::MatrixXf re = solution.eigenvectors().real();
-
-    return af::array(tss.dims(0), tss.dims(1), re.data());
-}
-
-/**
- * Computes the Eigenvalues of tss.
- *
- * @param tss   The set of time series.
- * @return      The Eigenvalues of tss.
- */
-af::array getEigenValues(af::array tss) {
-    float *matHost = tss.host<float>();
-    Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, tss.dims(0), tss.dims(1));
-
+    // Compute Eigen Values.
     Eigen::VectorXcf eivals = mat.eigenvalues();
+    Eigen::VectorXf reEIVals = eivals.real();
+    af::array eigenValues = af::array(m.dims(0), reEIVals.data());
 
-    Eigen::VectorXf re = eivals.real();
-    return af::array(tss.dims(0), re.data());
+    // Compute Eigen Vectors.
+    Eigen::EigenSolver<Eigen::MatrixXf> solution(mat);
+    Eigen::MatrixXf reEIVectors = solution.eigenvectors().real();
+    af::array eigenVectors = af::array(m.dims(0), m.dims(1), reEIVectors.data());
+
+    // Get maximum Eigen Value
+    af::array maxEigenValue;
+    af::array indMaxEigenValue;
+    af::max(maxEigenValue, indMaxEigenValue, eigenValues, 0);
+
+    // Extract first EigenVector
+    return af::lookup(eigenVectors, indMaxEigenValue, 1);
 }
 
 /**
@@ -270,16 +267,7 @@ af::array shapeExtraction(af::array tss, af::array centroid) {
     af::array q = af::identity(nelements, nelements) - (af::constant(1.0, nelements, nelements) / nelements);
     af::array m = af::matmul(q.T(), s, q);
 
-    af::array evectors = getEigenVectors(m);
-    af::array evalues = getEigenValues(m);
-
-    // Get maximum Eigen Value
-    af::array maxEigenValue;
-    af::array indMaxEigenValue;
-    af::max(maxEigenValue, indMaxEigenValue, evalues, 0);
-
-    // Extract first EigenVector
-    af::array first = af::lookup(evectors, indMaxEigenValue, 1);
+    af::array first = getFirstEigenVector(m);
 
     // TODO: Check this normalization is necessary.
     af::array findDistance1 = af::sqrt(af::sum(af::pow((shiftedTSS(af::span, 0) - first), 2)));
@@ -367,8 +355,8 @@ void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::a
 
     if (labels.isempty()) {
         // assigns a random centroid to every time series
-        labels = af::floor(af::randu(nTimeseries) * (k)).as(af::dtype::u32);
-        // labels = generateRandomLabels(nTimeseries, k);
+        // labels = af::floor(af::randu(nTimeseries) * (k)).as(af::dtype::u32);
+        labels = generateRandomLabels(nTimeseries, k);
     }
 
     af::array normTSS = khiva::normalization::znorm(tss);
