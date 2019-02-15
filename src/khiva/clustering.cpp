@@ -74,6 +74,26 @@ af::array computeNewMeans(af::array tss, af::array labels, int k) {
 }
 
 /**
+ *  This function generates random labels for n time series.
+ *
+ * @param nTimeSeries   Number of time series to be labeled.
+ * @param k             The number of groups.
+ * @return              The random labels.
+ */
+af::array generateRandomLabels(int nTimeSeries, int k) {
+    std::vector<int> idx(nTimeSeries, 0);
+
+    // Fill with sequential data
+    for (int i = 0; i < nTimeSeries; i++) {
+        idx[i] = i % k;
+    }
+
+    // Randomize
+    // std::random_shuffle(idx.begin(), idx.end());
+    return af::array(nTimeSeries, 1, idx.data());
+}
+
+/**
  * Computes the means' difference between two iterations.
  *
  * @param means     The last iteration means
@@ -89,10 +109,19 @@ void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::a
                                int maxIterations) {
     float error = std::numeric_limits<float>::max();
 
-    // initial guess of means, select k random time series
-    centroids = calculateInitialMeans(tss, k);
+    if (centroids.isempty()) {
+        centroids = af::constant(0.0f, tss.dims(0), k);
+        // initial guess of means, select k random time series
+        // centroids = calculateInitialMeans(tss, k);
+    }
 
-    labels = af::constant(0, tss.dims(1));
+    if (labels.isempty()) {
+        // assigns a random centroid to every time series
+        // labels = af::floor(af::randu(nTimeseries) * (k)).as(af::dtype::u32);
+        // labels = af::constant(0, tss.dims(1));
+        labels = generateRandomLabels(tss.dims(1), k);
+    }
+
     af::array distances = af::constant(0.0, tss.dims(1));
     af::array newMeans;
     int iter = 0;
@@ -320,28 +349,6 @@ af::array assignmentStep(af::array tss, af::array centroids, af::array labels) {
     labels = labels.T();
 
     return labels;
-}
-
-/**
- *  This function generates random labels for n time series.
- *
- * @param nTimeSeries   Number of time series to be labeled.
- * @param k             The number of groups.
- * @return              The random labels.
- */
-af::array generateRandomLabels(int nTimeSeries, int k) {
-    std::vector<int> idx(nTimeSeries, 0);
-
-    // Fill with sequential data
-    for (int i = 0; i < nTimeSeries; i++) {
-        idx[i] = i % k;
-    }
-
-    // Randomize
-    std::random_shuffle(idx.begin(), idx.end());
-
-    af::array a(nTimeSeries, 1, idx.data());
-    return a;
 }
 
 void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance,

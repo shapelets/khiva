@@ -14,19 +14,54 @@
 void kmeans() {
     float data[] = {0.0f, 1.0f, 2.0f, 3.0f, 6.0f,  7.0f,  8.0f, 9.0f, 2.0f, -2.0f, 4.0f, -4.0f,
                     8.0f, 5.0,  3.0,  1.0,  15.0f, 10.0f, 5.0f, 0.0f, 7.0f, -7.0,  1.0f, -1.0f};
+
     af::array tss(4, 6, data);
 
+    float expected_c[] = {0.0, 0.1667, 0.3333, 0.5, 1.5, -1.5, 0.8333, -0.8333, 4.8333, 3.6667, 2.6667, 1.6667};
     af::array means;
-    af::array labels;
+
+    unsigned int initial_l[] = {0, 1, 2, 0, 1, 2};
+    af::array labels(6, 1, initial_l);
+    unsigned int expected_l[] = {0, 2, 1, 2, 2, 1};
 
     khiva::clustering::kMeans(tss, 3, means, labels);
 
-    af_print(means);
+    float *calculated_c = means.host<float>();
+    unsigned int *calculated_l = labels.host<unsigned int>();
 
-    ASSERT_EQ(means.dims(0), 4);
-    ASSERT_EQ(means.dims(1), 3);
-    ASSERT_EQ(labels.dims(0), 1);
-    ASSERT_EQ(labels.dims(1), 6);
+    for (size_t i = 0; i < 12; i++) {
+        ASSERT_NEAR(calculated_c[i], expected_c[i], 1e-3);
+    }
+
+    for (size_t i = 0; i < 6; i++) {
+        ASSERT_NEAR(calculated_l[i], expected_l[i], 1e-3);
+    }
+}
+
+void kmeans2() {
+    float data[] = {0.0f, 1.0f, 2.0f, 3.0f, 6.0f,  7.0f,  8.0f, 9.0f, 2.0f, -2.0f, 4.0f, -4.0f,
+                    8.0f, 5.0,  3.0,  1.0,  15.0f, 10.0f, 5.0f, 0.0f, 7.0f, -7.0,  1.0f, -1.0f};
+
+    af::array tss(4, 6, data);
+
+    float expected_c[] = {0.0, 0.1667, 0.3333, 0.5, 1.5, -1.5, 0.8333, -0.8333, 4.8333, 3.6667, 2.6667, 1.6667};
+    af::array means;
+
+    af::array labels;
+    unsigned int expected_l[] = {0, 2, 1, 2, 2, 1};
+
+    khiva::clustering::kMeans(tss, 3, means, labels);
+
+    float *calculated_c = means.host<float>();
+    unsigned int *calculated_l = labels.host<unsigned int>();
+
+    for (size_t i = 0; i < 12; i++) {
+        ASSERT_NEAR(calculated_c[i], expected_c[i], 1e-3);
+    }
+
+    for (size_t i = 0; i < 6; i++) {
+        ASSERT_NEAR(calculated_l[i], expected_l[i], 1e-3);
+    }
 }
 
 void kShape() {
@@ -81,9 +116,6 @@ void kShape2() {
 
     khiva::clustering::kShape(data, 3, centroids, idx, tolerance, maxIter);
 
-    af_print(centroids);
-    af_print(idx);
-
     float *calculated_c = centroids.host<float>();
     unsigned int *calculated_l = idx.host<unsigned int>();
 
@@ -96,5 +128,7 @@ void kShape2() {
     }
 }
 
-KHIVA_TEST(ClusteringTests, KMEANS, kmeans)
+KHIVA_TEST(ClusteringTests, KMeans, kmeans)
+KHIVA_TEST(ClusteringTests, KMeans2, kmeans2)
 KHIVA_TEST(ClusteringTests, KShape, kShape)
+KHIVA_TEST(ClusteringTests, KShape2, kShape2)
