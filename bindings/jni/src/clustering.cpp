@@ -9,7 +9,8 @@
 #include <khiva_jni/clustering.h>
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *env, jobject, jlong ref_tss, jint k,
-        jlong ref_centroids, jlong ref_labels, jfloat tolerance, jint maxIterations){
+                                                                       jlong ref_centroids, jlong ref_labels,
+                                                                       jfloat tolerance, jint maxIterations) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -43,8 +44,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *e
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *env, jobject, jlong ref_tss, jint k,
-        jlong ref_centroids, jlong ref_labels, jfloat tolerance, jint maxIterations){
-
+                                                                       jlong ref_centroids, jlong ref_labels,
+                                                                       jfloat tolerance, jint maxIterations) {
     const jint l = 3;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -64,7 +65,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *e
     af::array primitive_centroids;
 
     khiva::clustering::kShape(var, static_cast<int>(k), primitive_centroids, primitive_labels,
-            static_cast<float>(tolerance), static_cast<int>(maxIterations));
+                              static_cast<float>(tolerance), static_cast<int>(maxIterations));
 
     af_retain_array(&af_p_labels, primitive_labels.get());
     af_retain_array(&af_p_centroids, primitive_centroids.get());

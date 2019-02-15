@@ -8,7 +8,8 @@
 #include <khiva/clustering.h>
 #include <khiva_c/clustering.h>
 
-void kMeans(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance, int *maxIterations){
+void kMeans(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
+            int *maxIterations) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af::array primitive_labels;
@@ -20,8 +21,8 @@ void kMeans(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *label
     af_retain_array(centroids, primitive_centroids.get());
 }
 
-
-void kShape(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance, int *maxIterations){
+void kShape(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
+            int *maxIterations) {
     af::array var = af::array(*tss);
     af_retain_array(tss, var.get());
     af::array primitive_labels;

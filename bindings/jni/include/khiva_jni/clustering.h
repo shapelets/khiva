@@ -7,8 +7,7 @@
 #include <jni.h>
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /**
@@ -22,9 +21,10 @@ extern "C"
  * @param ref_labels     The resulting labels of each time series which is the closest centroid.
  * @param tolerance      The error tolerance to stop the computation of the centroids.
  * @param maxIterations  The maximum number of iterations allowed.
-*/
+ */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *env, jobject, jlong ref_tss, jint k,
-        jlong ref_centroids, jlong ref_labels, jfloat tolerance, jint maxIterations);
+                                                                       jlong ref_centroids, jlong ref_labels,
+                                                                       jfloat tolerance, jint maxIterations);
 
 /**
  * @brief Computes the kShape algorithm.
@@ -37,9 +37,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *e
  * @param ref_labels     The resulting labels of each time series which is the closest centroid.
  * @param tolerance      The error tolerance to stop the computation of the centroids.
  * @param maxIterations  The maximum number of iterations allowed.
-*/
+ */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *env, jobject, jlong ref_tss, jint k,
-        jlong ref_centroids, jlong ref_labels, jfloat tolerance, jint maxIterations);
+                                                                       jlong ref_centroids, jlong ref_labels,
+                                                                       jfloat tolerance, jint maxIterations);
 
 #ifdef __cplusplus
 }
