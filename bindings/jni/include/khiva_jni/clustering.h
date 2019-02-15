@@ -22,7 +22,7 @@ extern "C" {
  * @param tolerance      The error tolerance to stop the computation of the centroids.
  * @param maxIterations  The maximum number of iterations allowed.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *env, jobject, jlong ref_tss, jint k,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *env, jobject, jlong ref_tss, jint k,
                                                                        jlong ref_centroids, jlong ref_labels,
                                                                        jfloat tolerance, jint maxIterations);
 
