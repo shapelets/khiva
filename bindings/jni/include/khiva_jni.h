@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <khiva_jni/array.h>
+#include <khiva_jni/clustering.h>
 #include <khiva_jni/dimensionality.h>
 #include <khiva_jni/distances.h>
 #include <khiva_jni/features.h>
