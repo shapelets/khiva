@@ -43,19 +43,6 @@ void euclideanDistance(af::array tss, af::array means, af::array &minDistance, a
 }
 
 /**
- * Computes the initial means. Randomly selected.
- *
- * @param tss   The time series.
- * @param k     Number of means.
- * @return      The initial k randomly calculated means.
- */
-af::array calculateInitialMeans(af::array tss, int k) {
-    // Note idxs may have repeated values
-    af::array idxs = (af::randu(k) * tss.dims(1)).as(af::dtype::s32);
-    return af::lookup(tss, idxs, 1);
-}
-
-/**
  * Compute the new means for the i-th iteration.
  *
  * @param tss       The time series.
@@ -147,19 +134,9 @@ void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::a
  * Computes the 2-norm for each time series.
  *
  * @param tss   Contains the time series.
- * @param axis  This value sets if the normalization should be applied by columns (0) or rows (1).
  * @return      Normalized time series.
  */
-af::array matrixNorm(af::array tss, int axis = 0) {
-    af::array res;
-
-    if (axis == 0) {
-        res = af::sqrt(af::sum(af::pow(tss, 2)));
-    } else {
-        res = af::sqrt(af::sum(af::pow(tss, 2), 1));
-    }
-    return res;
-}
+af::array matrixNorm(af::array tss) { return af::sqrt(af::sum(af::pow(tss, 2))); }
 
 /**
  * This function returns a subset of time series from tss, where all time series belong to the centroid's
@@ -362,7 +339,6 @@ void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::a
 
     if (labels.isempty()) {
         // assigns a random centroid to every time series
-        // labels = af::floor(af::randu(nTimeseries) * (k)).as(af::dtype::u32);
         labels = generateRandomLabels(nTimeseries, k);
     }
 
