@@ -34,7 +34,7 @@ if not os.path.exists(doxygen_dir):
 # -- Project information -----------------------------------------------------
 
 project = u'Khiva'
-copyright = u'2018, Shapelets'
+copyright = u'2019, Shapelets'
 author = u'Shapelets'
 
 # The short X.Y version
