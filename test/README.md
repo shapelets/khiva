@@ -9,7 +9,7 @@ The `KHIVA_TEST` needs 3 parameters in the following order:
 
 Example test file:
 ```C++
-// Copyright (c) 2018 Shapelets.io
+// Copyright (c) 2019 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
