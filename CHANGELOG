@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.2.0] - 2019-02-18
 ### Added
- - KMeans algorithm
- - KShape Algorithm
+ - KMeans algorithm.
+ - KShape Algorithm.
  - Added Ljung-Box test.
  - Installation script for Windows.
  - SBD distance function.
@@ -17,13 +17,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Implementation improvement of stomp function and find motifs and discords functions.
  - Readme and installation Guide have been improved.
 
- ### Fixed
- - PAA method
+### Fixed
+ - PAA method.
  - Crosscorrelation function to work with several time series.
  - Conan script to work with new conan version.
  - Documentation generator to work with new PIP version.
  - Cmake path for windows in installation guide.
-
 
 ## [0.1.0] - 2018-06-06
 ### Added
