@@ -12,6 +12,18 @@
 #include <limits>
 
 /**
+ * Computes initial k means or centroids.
+ *
+ * @param tts       The time series.
+ * @param k         The number of centroids.
+ * @return          The new centroids.
+ */
+af::array calculateInitialMeans(af::array tss, int k) {
+    af::array indices = (af::randu(k, 1) * k).as(af::dtype::u32);
+    return af::lookup(tss, indices, 1);
+}
+
+/**
  * Computes The euclidean distance for a tiled time series agains k-means.
  *
  * @param tts       The tiled time series.
@@ -97,16 +109,15 @@ void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::a
     float error = std::numeric_limits<float>::max();
 
     if (centroids.isempty()) {
-        centroids = af::constant(0.0f, tss.dims(0), k);
         // initial guess of means, select k random time series
-        // centroids = calculateInitialMeans(tss, k);
+        centroids = calculateInitialMeans(tss, k);
     }
 
     if (labels.isempty()) {
         // assigns a random centroid to every time series
-        // labels = af::floor(af::randu(nTimeseries) * (k)).as(af::dtype::u32);
+        labels = af::floor(af::randu(tss.dims(0)) * (k)).as(af::dtype::u32);
         // labels = af::constant(0, tss.dims(1));
-        labels = generateRandomLabels(tss.dims(1), k);
+        // labels = generateRandomLabels(tss.dims(1), k);
     }
 
     af::array distances = af::constant(0.0, tss.dims(1));
@@ -143,12 +154,34 @@ af::array matrixNorm(af::array tss) { return af::sqrt(af::sum(af::pow(tss, 2)));
  * given by centroidId.
  *
  * @param tss           The set of time series in columnar mode.
- * @param labels        The centroid's id where each time series belongs to.
+ * @param labels        The centroid id where each time series belongs to.
  * @param centroidId    The given centroid ID.
  * @return              A subset of time series.
  */
 af::array selectSubset(af::array tss, af::array labels, int centroidId) {
     return af::lookup(tss, af::where((labels == centroidId)), 1);
+}
+
+af::array eigenVectors(af::array matrix) {
+    float *matHost = matrix.host<float>();
+    Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, matrix.dims(0), matrix.dims(1));
+
+    Eigen::EigenSolver<Eigen::MatrixXf> solution(mat);
+
+    Eigen::MatrixXf re;
+    re = solution.eigenvectors().real();
+
+    return af::array(matrix.dims(0), matrix.dims(1), re.data());
+}
+
+af::array eigenValues(af::array matrix) {
+    float *matHost = matrix.host<float>();
+    Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, matrix.dims(0), matrix.dims(1));
+
+    Eigen::VectorXcf eivals = mat.eigenvalues();
+
+    Eigen::VectorXf re = eivals.real();
+    return af::array(matrix.dims(0), re.data());
 }
 
 /**
@@ -273,13 +306,17 @@ af::array shapeExtraction(af::array tss, af::array centroid) {
     af::array q = af::identity(nelements, nelements) - (af::constant(1.0, nelements, nelements) / nelements);
     af::array m = af::matmul(q.T(), s, q);
 
-    af::array first = getFirstEigenVector(m);
+    // af::array first = getFirstEigenVector(m);
+    af::array eigenvalues = eigenValues(m);
+    af::array maxEigenValue;
+    af::array indMaxEigenValue;
+    af::max(maxEigenValue, indMaxEigenValue, eigenvalues, 0);
+    af::array first = af::lookup(eigenVectors(m), indMaxEigenValue, 1);  // highest order eigenvector
 
-    // TODO: Check if this normalization is necessary.
     af::array findDistance1 = af::sqrt(af::sum(af::pow((shiftedTSS(af::span, 0) - first), 2)));
     af::array findDistance2 = af::sqrt(af::sum(af::pow((shiftedTSS(af::span, 0) + first), 2)));
 
-    af::array condition = findDistance1 >= findDistance2;
+    af::array condition = findDistance1 < findDistance2;
     first = af::select(af::tile(condition, first.dims(0), 1), khiva::normalization::znorm(first * (-1)),
                        khiva::normalization::znorm(first));
 

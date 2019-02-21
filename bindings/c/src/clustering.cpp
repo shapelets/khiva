@@ -11,12 +11,12 @@
 
 void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
              int *max_iterations) {
-    af::array var = af::array(*tss);
-    af_retain_array(tss, var.get());
+    af::array var_tss = af::array(*tss);
+    af_retain_array(tss, var_tss.get());
     af::array primitive_labels;
     af::array primitive_centroids;
 
-    khiva::clustering::kMeans(var, *k, primitive_centroids, primitive_labels, *tolerance, *max_iterations);
+    khiva::clustering::kMeans(var_tss, *k, primitive_centroids, primitive_labels, *tolerance, *max_iterations);
 
     af_retain_array(labels, primitive_labels.get());
     af_retain_array(centroids, primitive_centroids.get());
@@ -41,12 +41,12 @@ void k_means_initial_values(khiva_array *tss, int *k, khiva_array *initial_centr
 
 void k_shape(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
              int *max_iterations) {
-    af::array var = af::array(*tss);
-    af_retain_array(tss, var.get());
+    af::array var_tss = af::array(*tss);
+    af_retain_array(tss, var_tss.get());
     af::array primitive_labels;
     af::array primitive_centroids;
 
-    khiva::clustering::kShape(var, *k, primitive_centroids, primitive_labels, *tolerance, *max_iterations);
+    khiva::clustering::kShape(var_tss, *k, primitive_centroids, primitive_labels, *tolerance, *max_iterations);
 
     af_retain_array(labels, primitive_labels.get());
     af_retain_array(centroids, primitive_centroids.get());
