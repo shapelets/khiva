@@ -1,4 +1,4 @@
-// Copyright (c) 2018 Shapelets.io
+// Copyright (c) 2019 Shapelets.io
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -10,6 +10,18 @@
 #include <Eigen/Eigenvalues>
 #include <iostream>
 #include <limits>
+
+/**
+ * Computes initial k means or centroids.
+ *
+ * @param tts       The time series.
+ * @param k         The number of centroids.
+ * @return          The new centroids.
+ */
+af::array calculateInitialMeans(af::array tss, int k) {
+    af::array indices = (af::randu(k, 1) * k).as(af::dtype::u32);
+    return af::lookup(tss, indices, 1);
+}
 
 /**
  * Computes The euclidean distance for a tiled time series agains k-means.
@@ -97,16 +109,15 @@ void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::a
     float error = std::numeric_limits<float>::max();
 
     if (centroids.isempty()) {
-        centroids = af::constant(0.0f, tss.dims(0), k);
         // initial guess of means, select k random time series
-        // centroids = calculateInitialMeans(tss, k);
+        centroids = calculateInitialMeans(tss, k);
     }
 
     if (labels.isempty()) {
         // assigns a random centroid to every time series
-        // labels = af::floor(af::randu(nTimeseries) * (k)).as(af::dtype::u32);
+        labels = af::floor(af::randu(tss.dims(0)) * (k)).as(af::dtype::u32);
         // labels = af::constant(0, tss.dims(1));
-        labels = generateRandomLabels(tss.dims(1), k);
+        // labels = generateRandomLabels(tss.dims(1), k);
     }
 
     af::array distances = af::constant(0.0, tss.dims(1));
@@ -126,243 +137,6 @@ void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::a
 
         // 4. Update Means
         centroids = newMeans;
-        iter++;
-    }
-}
-
-/**
- * Computes the 2-norm for each time series.
- *
- * @param tss   Contains the time series.
- * @return      Normalized time series.
- */
-af::array matrixNorm(af::array tss) { return af::sqrt(af::sum(af::pow(tss, 2))); }
-
-/**
- * This function returns a subset of time series from tss, where all time series belong to the centroid's
- * given by centroidId.
- *
- * @param tss           The set of time series in columnar mode.
- * @param labels        The centroid's id where each time series belongs to.
- * @param centroidId    The given centroid ID.
- * @return              A subset of time series.
- */
-af::array selectSubset(af::array tss, af::array labels, int centroidId) {
-    return af::lookup(tss, af::where((labels == centroidId)), 1);
-}
-
-/**
- * This function computes the first EigenVector of a matrix.
- *
- * @param m     The input matrix.
- * @return      The first Eigen vector.
- */
-af::array getFirstEigenVector(af::array m) {
-    float *matHost = m.host<float>();
-    Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, m.dims(0), m.dims(1));
-
-    // Compute Eigen Values.
-    Eigen::VectorXcf eivals = mat.eigenvalues();
-    Eigen::VectorXf reEIVals = eivals.real();
-    af::array eigenValues = af::array(m.dims(0), reEIVals.data());
-
-    // Compute Eigen Vectors.
-    Eigen::EigenSolver<Eigen::MatrixXf> solution(mat);
-    Eigen::MatrixXf reEIVectors = solution.eigenvectors().real();
-    af::array eigenVectors = af::array(m.dims(0), m.dims(1), reEIVectors.data());
-
-    // Get maximum Eigen Value
-    af::array maxEigenValue;
-    af::array indMaxEigenValue;
-    af::max(maxEigenValue, indMaxEigenValue, eigenValues, 0);
-
-    // Extract first EigenVector
-    return af::lookup(eigenVectors, indMaxEigenValue, 1);
-}
-
-/**
- * This function computes the Normalized Crosscorrelation between ts and the reference centroid.
- *
- * @param ts        The time series.
- * @param centroid  The reference centroid.
- * @return          The normalized crosscorrelation.
- */
-af::array ncc(af::array ts, af::array centroid) {
-    int nElements = ts.dims(0);
-
-    af::array tsNorm = af::sqrt(af::sum(af::pow(ts, 2)));
-    af::array centroidNorm = af::sqrt(af::sum(af::pow(centroid, 2)));
-
-    return af::convolve(centroid, af::flip(ts, 0), AF_CONV_EXPAND) / af::tile(centroidNorm * tsNorm, nElements * 2 - 1);
-}
-
-/**
- * Computes the normalized crosscorrelation for all time series and all centroids.
- *
- * @param tss       The set of time series.
- * @param centroids The set of centroids.
- * @return          The computed normalized CrossCorrelation.
- */
-af::array ncc3Dim(af::array tss, af::array centroids) {
-    // Combination of all pairs of norms
-    af::array den = af::matmul(matrixNorm(centroids).T(), matrixNorm(tss));
-    den(den == 0) = af::Inf;
-    int distanceSize = static_cast<unsigned int>(centroids.dims(0)) * 2 - 1;
-
-    af::array cc = af::constant(0, static_cast<unsigned int>(centroids.dims(1)), static_cast<unsigned int>(tss.dims(1)),
-                                distanceSize);
-    for (unsigned int i = 0; i < static_cast<unsigned int>(centroids.dims(1)); i++) {
-        for (unsigned int j = 0; j < static_cast<unsigned int>(tss.dims(1)); j++) {
-            cc(i, j, af::span) = af::convolve(tss.col(j), af::flip(centroids.col(i), 0), AF_CONV_EXPAND);
-        }
-    }
-
-    den = af::tile(den, 1, 1, distanceSize);
-    return (cc / den);
-}
-
-/**
- * This function computes the Shape based distance.
- *
- * @param ts            The target time series.
- * @param centroid      The centroid acting as reference.
- * @return              The resulting shift over the original time series that gets the maximum correlation with
- * centroid.
- */
-af::array SBDShifted(af::array ts, af::array centroid) {
-    unsigned int index;
-    float correlation;
-    af::array shiftedTS;
-    af::array normCrossCorr = ncc(ts, centroid);
-    af::max(&correlation, &index, normCrossCorr);
-
-    unsigned tsLength = static_cast<float>(ts.dims(0));
-    int shift = index - tsLength + 1;
-
-    if (shift >= 0) {
-        shiftedTS = af::join(0, af::constant(0, shift), ts(af::range(tsLength - shift), 0));
-    } else {
-        shiftedTS = af::join(0, ts(af::range(tsLength + shift) - shift, 0), af::constant(0, -shift));
-    }
-
-    return shiftedTS;
-}
-
-/**
- * This function returns an updated shape of the centroid passed as argument w.r.t. the tss.
- *
- * @param tss       The subset of time series acting on the centroid.
- * @param centroid  The given centroid.
- * @return          The updated shape of the centroid.
- */
-af::array shapeExtraction(af::array tss, af::array centroid) {
-    int ntss = tss.dims(1);
-    int nelements = tss.dims(0);
-    af::array shiftedTSS = af::constant(0.0f, tss.dims(0), tss.dims(1));
-    af::array shiftedTSi = af::constant(0.0f, tss.dims(0), 1);
-    af::array dist;
-
-    for (int i = 0; i < ntss; i++) {
-        af::array condition = af::tile(af::allTrue(af::iszero(centroid)), nelements, 1);
-        shiftedTSi = af::select(condition, tss.col(i), SBDShifted(tss.col(i), centroid));
-        shiftedTSS(af::span, i) = shiftedTSi;
-    }
-
-    shiftedTSS = khiva::normalization::znorm(shiftedTSS);
-    af::array s = af::matmul(shiftedTSS, shiftedTSS.T());
-    af::array q = af::identity(nelements, nelements) - (af::constant(1.0, nelements, nelements) / nelements);
-    af::array m = af::matmul(q.T(), s, q);
-
-    af::array first = getFirstEigenVector(m);
-
-    // TODO: Check if this normalization is necessary.
-    af::array findDistance1 = af::sqrt(af::sum(af::pow((shiftedTSS(af::span, 0) - first), 2)));
-    af::array findDistance2 = af::sqrt(af::sum(af::pow((shiftedTSS(af::span, 0) + first), 2)));
-
-    af::array condition = findDistance1 >= findDistance2;
-    first = af::select(af::tile(condition, first.dims(0), 1), khiva::normalization::znorm(first * (-1)),
-                       khiva::normalization::znorm(first));
-
-    return first;
-}
-
-/**
- * This function performs the refinement step.
- *
- * @param tss       The set of time series in columnar manner.
- * @param centroids The set of centroids in columnar mode.
- * @param labels    The set of labels.
- * @return          The new centroids.
- */
-af::array refinementStep(af::array tss, af::array centroids, af::array labels) {
-    int ntss = tss.dims(1);
-    int ncentroids = centroids.dims(1);
-    af::array subset;
-
-    for (int j = 0; j < ncentroids; j++) {
-        subset = selectSubset(tss, labels, j);
-        // if centroid j has at least one labeled time series.
-        if (!subset.isempty()) {
-            centroids(af::span, j) = shapeExtraction(subset, centroids.col(j));
-        }
-    }
-
-    return centroids;
-}
-
-/**
- * This function computes the assignment step. It is the update of time series labels w.r.t. the dinamics of the
- * centroids.
- *
- * @param tss       The set of time series in columnar manner.
- * @param centroids The set of centroids in columnar mode.
- * @param labels    The set of labels.
- * @return          The new set of labels.
- */
-af::array assignmentStep(af::array tss, af::array centroids, af::array labels) {
-    af::array min = af::constant(std::numeric_limits<float>::max(), tss.dims(1));
-    af::array distances = 1 - af::max(ncc3Dim(tss, centroids), 2);
-    af::min(min, labels, distances, 0);
-    labels = labels.T();
-
-    return labels;
-}
-
-void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance,
-                               int maxIterations) {
-    unsigned int nTimeseries = static_cast<unsigned int>(tss.dims(1));
-    unsigned int nElements = static_cast<unsigned int>(tss.dims(0));
-
-    if (centroids.isempty()) {
-        centroids = af::constant(0.0f, nElements, k);
-    }
-
-    if (labels.isempty()) {
-        // assigns a random centroid to every time series
-        labels = generateRandomLabels(nTimeseries, k);
-    }
-
-    af::array normTSS = khiva::normalization::znorm(tss);
-    af::array distances = af::constant(0.0, nTimeseries, k);
-    af::array newCentroids;
-
-    float error = std::numeric_limits<float>::max();
-    int iter = 0;
-
-    // Stop Criteria: Stop updating after convergence or maximum number iterations is reached.
-    while ((error > tolerance) && (iter < maxIterations)) {
-        // 1. Refinement step. New centroids computation.
-        newCentroids = refinementStep(normTSS, centroids, labels);
-
-        // 2. Assignment step. New labels computation.
-        labels = assignmentStep(normTSS, newCentroids, labels);
-
-        // 3. Compute convergence
-        error = computeError(centroids, newCentroids);
-
-        // 4. Update Centroids
-        centroids = newCentroids;
-
         iter++;
     }
 }

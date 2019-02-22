@@ -52,7 +52,7 @@ IF(KHIVA_USE_CONAN)
     ELSE()
         MESSAGE(WARNING "The file conanbuildinfo.cmake does not exist, you have to run conan install first.\n"
                         "Check the following instructions to run conan installation:\n"
-                        "https://github.com/shapelets/khiva/blob/master/README.md#build-from-source-code-1")
+                        "https://github.com/shapelets/khiva/blob/master/doc/markdown/INSTALLATION.md#build-from-source-code-1")
     ENDIF()
     CONAN_BASIC_SETUP()
 ENDIF()
