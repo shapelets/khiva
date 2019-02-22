@@ -30,35 +30,10 @@ void Kmeans(benchmark::State &state) {
     addMemoryCounters(state);
 }
 
-template <af::Backend BE, int D>
-void Kshape(benchmark::State &state) {
-    af::setBackend(BE);
-    af::setDevice(D);
 
-    auto n = state.range(0);
-    auto m = state.range(1);
-    int k = state.range(2);
-
-    auto t = af::randu(n, m, f32);
-
-    af::sync();
-    while (state.KeepRunning()) {
-        af::array means;
-        af::array labels;
-        khiva::clustering::kShape(t, k, means, labels);
-        means.eval();
-        af::sync();
-    }
-    addMemoryCounters(state);
-}
 
 void cudaBenchmarks() {
     BENCHMARK_TEMPLATE(Kmeans, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
-        ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 256 << 10}, {16, 128}, {8, 16}})
-        ->Unit(benchmark::TimeUnit::kMicrosecond);
-
-    BENCHMARK_TEMPLATE(Kshape, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 256 << 10}, {16, 128}, {8, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -69,20 +44,10 @@ void openclBenchmarks() {
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 256 << 10}, {16, 128}, {8, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
-
-    BENCHMARK_TEMPLATE(Kshape, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
-        ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 256 << 10}, {16, 128}, {8, 16}})
-        ->Unit(benchmark::TimeUnit::kMicrosecond);
 }
 
 void cpuBenchmarks() {
     BENCHMARK_TEMPLATE(Kmeans, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
-        ->RangeMultiplier(2)
-        ->Ranges({{1 << 10, 256 << 10}, {16, 128}, {8, 16}})
-        ->Unit(benchmark::TimeUnit::kMicrosecond);
-
-    BENCHMARK_TEMPLATE(Kshape, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 256 << 10}, {16, 128}, {8, 16}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
