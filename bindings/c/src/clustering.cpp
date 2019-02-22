@@ -21,20 +21,3 @@ void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labe
     af_retain_array(labels, primitive_labels.get());
     af_retain_array(centroids, primitive_centroids.get());
 }
-
-void k_means_initial_values(khiva_array *tss, int *k, khiva_array *initial_centroids, khiva_array *centroids,
-                            khiva_array *initial_labels, khiva_array *labels, float *tolerance, int *max_iterations) {
-    af::array var_tss = af::array(*tss);
-    af_retain_array(tss, var_tss.get());
-
-    af::array var_initial_centroids = af::array(*initial_centroids);
-    af_retain_array(initial_centroids, var_initial_centroids.get());
-
-    af::array var_initial_labels = af::array(*initial_labels);
-    af_retain_array(tss, var_initial_labels.get());
-
-    khiva::clustering::kMeans(var_tss, *k, var_initial_centroids, var_initial_labels, *tolerance, *max_iterations);
-
-    af_retain_array(labels, var_initial_labels.get());
-    af_retain_array(centroids, var_initial_centroids.get());
-}

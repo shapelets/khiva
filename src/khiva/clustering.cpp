@@ -88,7 +88,7 @@ af::array generateRandomLabels(int nTimeSeries, int k) {
     }
 
     // Randomize
-    // std::random_shuffle(idx.begin(), idx.end());
+    std::random_shuffle(idx.begin(), idx.end());
     return af::array(nTimeSeries, 1, idx.data());
 }
 
@@ -115,9 +115,7 @@ void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::a
 
     if (labels.isempty()) {
         // assigns a random centroid to every time series
-        labels = af::floor(af::randu(tss.dims(0)) * (k)).as(af::dtype::u32);
-        // labels = af::constant(0, tss.dims(1));
-        // labels = generateRandomLabels(tss.dims(1), k);
+        labels = generateRandomLabels(tss.dims(1), k);
     }
 
     af::array distances = af::constant(0.0, tss.dims(1));
