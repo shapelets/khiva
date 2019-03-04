@@ -19,9 +19,10 @@ float computeTriangleArea(khiva::dimensionality::Point a, khiva::dimensionality:
                           khiva::dimensionality::Point c) {
     float res = 0.0;
 
-    float base = std::sqrt(std::pow((c.first - a.first), 2) + std::pow((c.second - a.second), 2));
-    float height = std::abs(b.first - a.first);
-    res = base * height / 2.0f;
+    float f1 = a.first * (b.second - c.second);
+    float f2 = b.first * (c.second - a.second);
+    float f3 = c.first * (a.second - b.second);
+    res = std::abs((f1 + f2 + f3) / 2);
 
     return res;
 }
