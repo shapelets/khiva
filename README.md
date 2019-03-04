@@ -1,6 +1,6 @@
 # Khiva
 
-![Image of Khiva](https://github.com/shapelets/khiva/blob/master/assets/Khiva.png)
+<img src="[https://github.com/kubernetes/kubernetes/raw/master/logo/logo.png](https://github.com/shapelets/khiva/blob/master/assets/Khiva.png)" width="100">
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://github.com/shapelets/khiva-java/blob/master/LICENSE.txt)  [![Gitter chat](https://badges.gitter.im/shapelets-io/Lobby.svg)](https://gitter.im/shapelets-io/khiva?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
