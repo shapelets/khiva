@@ -408,7 +408,7 @@ void visvalingam() {
     std::vector<khiva::dimensionality::Point> out;
     std::vector<khiva::dimensionality::Point> expected = {
         khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
-        khiva::dimensionality::Point(5.0f, 7.0f), khiva::dimensionality::Point(7.0f, 9.0f),
+        khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(7.0f, 9.0f),
         khiva::dimensionality::Point(9.0f, 9.0f)};
 
     pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
@@ -436,7 +436,7 @@ void visvalingam2() {
     af::array points(10, 2, pointList);
     std::vector<khiva::dimensionality::Point> expected = {
         khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
-        khiva::dimensionality::Point(5.0f, 7.0f), khiva::dimensionality::Point(7.0f, 9.0f),
+        khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(7.0f, 9.0f),
         khiva::dimensionality::Point(9.0f, 9.0f)};
 
     af::array res = khiva::dimensionality::visvalingam(points, 5);
