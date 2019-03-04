@@ -563,27 +563,38 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     if (a.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
-    af::array result = af::constant(0, a.dims(), af::dtype::s32);
-    for (int k = 0; k < a.dims(1); k++) {
-        float mean_value = af::mean<float>(a);
-        float std_value = af::stdev<float>(a);
+
+    af::array result = af::constant(0.0, a.dims());
+    // Let's store the x-axis.
+    result(af::span, 0) += a.col(0);
+
+    // Let's compute the y-axis.
+    for (int k = 1; k < a.dims(1); k++) {
+        float mean_value = af::mean<float>(a.col(k));
+        float std_value = af::stdev<float>(a.col(k));
         std::vector<int> aux;
         dim_t n = a.dims(0);
 
-        std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
-        std::vector<int> alphabet = generateAlphabet(alphabet_size);
-        float *a_h = a.host<float>();
+        if (std_value > 0) {
+            std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
+            std::vector<int> alphabet = generateAlphabet(alphabet_size);
+            float *a_h = a.host<float>();
 
-        for (int i = 0; i < n; i++) {
-            size_t j = 0;
-            int alpha = alphabet[0];
+            for (int i = 0; i < n; i++) {
+                size_t j = 0;
+                int alpha = alphabet[0];
 
-            while ((j < breakingpoints.size()) && (a_h[i] > breakingpoints[j])) {
-                j++;
+                while ((j < breakingpoints.size()) && (a_h[i] > breakingpoints[j])) {
+                    j++;
+                }
+
+                alpha = alphabet[j];
+                aux.push_back(alpha);
             }
-
-            alpha = alphabet[j];
-            aux.push_back(alpha);
+        } else {
+            for (int i = 0; i < n; i++) {
+                aux.push_back(0);
+            }
         }
 
         // Int pointer to the vector data
