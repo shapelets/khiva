@@ -363,6 +363,7 @@ void ramerDouglasPeuckerException() {
 
 void sax() {
     float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+<<<<<<< HEAD
     af::array a(5, 2, pointList);
 
     af::array out = khiva::dimensionality::SAX(a, 3);
@@ -377,11 +378,32 @@ void sax() {
 
 void sax2() {
     float pointList[] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f};
+=======
+
+>>>>>>> 21d5b8de9f080096f11ac966aa1c978d23763cfc
     af::array a(5, 2, pointList);
 
     af::array out = khiva::dimensionality::SAX(a, 3);
 
     float *out_h = out.host<float>();
+<<<<<<< HEAD
+=======
+    float expected[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 0.0, 1.0, 2.0, 2.0, 2.0};
+
+    for (size_t i = 0; i < 10; i++) {
+        EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
+    }
+}
+
+void sax2() {
+    float pointList[] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f};
+    af::array a(5, 2, pointList);
+
+    af::array out = khiva::dimensionality::SAX(a, 3);
+
+    float *out_h = out.host<float>();
+
+>>>>>>> 21d5b8de9f080096f11ac966aa1c978d23763cfc
     float expected[] = {1.0, 2.0, 3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     for (size_t i = 0; i < 10; i++) {
