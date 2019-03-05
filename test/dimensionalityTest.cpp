@@ -380,12 +380,27 @@ void ramerDouglasPeuckerException() {
 }
 
 void sax() {
-    float pointList[] = {0.05f, 2.45f, 6.5f, 8.55f, 9.0f, 0.05f, 2.45f, 6.5f, 8.55f, 9.0f};
+    float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array a(5, 2, pointList);
 
-    int *out_h = khiva::dimensionality::SAX(a, 3).host<int>();
+    af::array out = khiva::dimensionality::SAX(a, 3);
 
-    int expected[] = {0, 0, 1, 2, 2, 0, 0, 1, 2, 2};
+    float *out_h = out.host<float>();
+    float expected[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 0.0, 1.0, 2.0, 2.0, 2.0};
+
+    for (size_t i = 0; i < 10; i++) {
+        EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
+    }
+}
+
+void sax2() {
+    float pointList[] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f};
+    af::array a(5, 2, pointList);
+
+    af::array out = khiva::dimensionality::SAX(a, 3);
+
+    float *out_h = out.host<float>();
+    float expected[] = {1.0, 2.0, 3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     for (size_t i = 0; i < 10; i++) {
         EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
@@ -408,7 +423,7 @@ void visvalingam() {
     std::vector<khiva::dimensionality::Point> out;
     std::vector<khiva::dimensionality::Point> expected = {
         khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
-        khiva::dimensionality::Point(5.0f, 7.0f), khiva::dimensionality::Point(7.0f, 9.0f),
+        khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(7.0f, 9.0f),
         khiva::dimensionality::Point(9.0f, 9.0f)};
 
     pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
@@ -436,7 +451,7 @@ void visvalingam2() {
     af::array points(10, 2, pointList);
     std::vector<khiva::dimensionality::Point> expected = {
         khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
-        khiva::dimensionality::Point(5.0f, 7.0f), khiva::dimensionality::Point(7.0f, 9.0f),
+        khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(7.0f, 9.0f),
         khiva::dimensionality::Point(9.0f, 9.0f)};
 
     af::array res = khiva::dimensionality::visvalingam(points, 5);
@@ -477,6 +492,7 @@ KHIVA_TEST(DimensionalityTests, RamerDouglasPeucker, ramerDouglasPeucker)
 KHIVA_TEST(DimensionalityTests, RamerDouglasPeucker2, ramerDouglasPeucker2)
 KHIVA_TEST(DimensionalityTests, RamerDouglasPeuckerException, ramerDouglasPeuckerException)
 KHIVA_TEST(DimensionalityTests, SAX, sax)
+KHIVA_TEST(DimensionalityTests, SAX2, sax2)
 KHIVA_TEST(DimensionalityTests, SAXException, saxException)
 KHIVA_TEST(DimensionalityTests, Visvalingam, visvalingam)
 KHIVA_TEST(DimensionalityTests, Visvalingam2, visvalingam2)
