@@ -37,8 +37,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *e
     af_retain_array(&af_p_centroids, primitive_centroids.get());
 
     tmp[0] = (jlong)arr;
-    tmp[1] = (jlong)af_p_labels;
-    tmp[2] = (jlong)af_p_centroids;
+    tmp[1] = (jlong)af_p_centroids;
+    tmp[2] = (jlong)af_p_labels;
 
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
     return pointers;
@@ -73,8 +73,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *e
     af_retain_array(&af_p_centroids, primitive_centroids.get());
 
     tmp[0] = (jlong)arr;
-    tmp[1] = (jlong)af_p_labels;
-    tmp[2] = (jlong)af_p_centroids;
+    tmp[1] = (jlong)af_p_centroids;
+    tmp[2] = (jlong)af_p_labels;
 
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
     return pointers;
