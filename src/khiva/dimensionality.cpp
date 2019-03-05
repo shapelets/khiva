@@ -570,16 +570,18 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
 
     // Let's compute the y-axis.
     for (int k = 1; k < a.dims(1); k++) {
-        float mean_value = af::mean<float>(a.col(k));
-        float std_value = af::stdev<float>(a.col(k));
+        af::array ts = a.col(k);
+        float mean_value = af::mean<float>(ts);
+        float std_value = af::stdev<float>(ts);
         std::vector<int> aux;
-        dim_t n = a.dims(0);
+        dim_t n = ts.dims(0);
 
         if (std_value > 0) {
             std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
             std::vector<int> alphabet = generateAlphabet(alphabet_size);
-            float *a_h = a.host<float>();
+            float *a_h = ts.host<float>();
 
+            // Iterate across elements of ts
             for (int i = 0; i < n; i++) {
                 size_t j = 0;
                 int alpha = alphabet[0];
