@@ -363,6 +363,7 @@ void ramerDouglasPeuckerException() {
 
 void sax() {
     float pointList[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+
     af::array a(5, 2, pointList);
 
     af::array out = khiva::dimensionality::SAX(a, 3);
@@ -382,6 +383,7 @@ void sax2() {
     af::array out = khiva::dimensionality::SAX(a, 3);
 
     float *out_h = out.host<float>();
+
     float expected[] = {1.0, 2.0, 3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     for (size_t i = 0; i < 10; i++) {
