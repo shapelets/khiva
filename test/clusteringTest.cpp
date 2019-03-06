@@ -48,7 +48,7 @@ void kmeans2() {
 
     float *calculated_c = means.host<float>();
 
-    for (size_t i = 0; i < 3; i++) {
+    for (size_t i = 0; i < 4; i++) {
         ASSERT_NEAR(calculated_c[i] + calculated_c[i + 4] + calculated_c[i + 8],
                     expected_c[i] + expected_c[i + 4] + expected_c[i + 8], 1e-3);
     }
@@ -63,9 +63,9 @@ void kShape() {
 
     unsigned int idxh[5] = {0, 1, 2, 0, 1};
 
-    float expected_c[21] = {-0.5234, 0.1560, -0.3627, -1.2764, -0.7781,  0.9135,  1.8711,
-                            -0.7825, 1.5990,  0.1701,  0.4082,  0.8845, -1.4969, -0.7825,
-                            -0.6278, 1.3812, -2.0090,  0.5022,  0.6278, -0.0000,  0.1256};
+    float expected_c[21] = {-0.5234, 0.1560, -0.3627, -1.2764, -0.7781, 0.9135,  1.8711,
+                            -0.7825, 1.5990, 0.1701,  0.4082,  0.8845,  -1.4969, -0.7825,
+                            -0.6278, 1.3812, -2.0090, 0.5022,  0.6278,  -0.0000, 0.1256};
     int k = 3;
     int nElements = 7;
     int ntss = 5;
