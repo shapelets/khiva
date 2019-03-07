@@ -18,10 +18,7 @@
  * @param k         The number of centroids.
  * @return          The new centroids.
  */
-af::array calculateInitialMeans(af::array tss, int k) {
-    af::array indices = (af::randu(k, 1) * k).as(af::dtype::u32);
-    return af::lookup(tss, indices, 1);
-}
+af::array calculateInitialMeans(af::array tss, int k) { return af::constant(0.0f, tss.dims(0), k); }
 
 /**
  * Computes The euclidean distance for a tiled time series agains k-means.
@@ -136,7 +133,7 @@ void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::a
         labels = generateRandomLabels(tss.dims(1), k);
     }
 
-    af::array distances = af::constant(0.0, tss.dims(1));
+    af::array distances = af::constant(0.0f, tss.dims(1));
     af::array newMeans;
     int iter = 0;
 
@@ -390,7 +387,7 @@ void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::a
     }
 
     af::array normTSS = khiva::normalization::znorm(tss);
-    af::array distances = af::constant(0.0, nTimeseries, k);
+    af::array distances = af::constant(0.0f, nTimeseries, k);
     af::array newCentroids;
 
     float error = std::numeric_limits<float>::max();
@@ -413,4 +410,3 @@ void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::a
         iter++;
     }
 }
-

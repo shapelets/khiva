@@ -19,9 +19,10 @@ float computeTriangleArea(khiva::dimensionality::Point a, khiva::dimensionality:
                           khiva::dimensionality::Point c) {
     float res = 0.0;
 
-    float base = std::sqrt(std::pow((c.first - a.first), 2) + std::pow((c.second - a.second), 2));
-    float height = std::abs(b.first - a.first);
-    res = base * height / 2.0f;
+    float f1 = a.first * (b.second - c.second);
+    float f2 = b.first * (c.second - a.second);
+    float f3 = c.first * (a.second - b.second);
+    res = std::abs((f1 + f2 + f3) / 2);
 
     return res;
 }
@@ -562,27 +563,40 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     if (a.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
-    af::array result = af::constant(0, a.dims(), af::dtype::s32);
-    for (int k = 0; k < a.dims(1); k++) {
-        float mean_value = af::mean<float>(a);
-        float std_value = af::stdev<float>(a);
+
+    af::array result = af::constant(0.0, a.dims());
+    // Let's store the x-axis.
+    result(af::span, 0) += a.col(0);
+
+    // Let's compute the y-axis.
+    for (int k = 1; k < a.dims(1); k++) {
+        af::array ts = a.col(k);
+        float mean_value = af::mean<float>(ts);
+        float std_value = af::stdev<float>(ts);
         std::vector<int> aux;
-        dim_t n = a.dims(0);
+        dim_t n = ts.dims(0);
 
-        std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
-        std::vector<int> alphabet = generateAlphabet(alphabet_size);
-        float *a_h = a.host<float>();
+        if (std_value > 0) {
+            std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
+            std::vector<int> alphabet = generateAlphabet(alphabet_size);
+            float *a_h = ts.host<float>();
 
-        for (int i = 0; i < n; i++) {
-            size_t j = 0;
-            int alpha = alphabet[0];
+            // Iterate across elements of ts
+            for (int i = 0; i < n; i++) {
+                size_t j = 0;
+                int alpha = alphabet[0];
 
-            while ((j < breakingpoints.size()) && (a_h[i] > breakingpoints[j])) {
-                j++;
+                while ((j < breakingpoints.size()) && (a_h[i] > breakingpoints[j])) {
+                    j++;
+                }
+
+                alpha = alphabet[j];
+                aux.push_back(alpha);
             }
-
-            alpha = alphabet[j];
-            aux.push_back(alpha);
+        } else {
+            for (int i = 0; i < n; i++) {
+                aux.push_back(0);
+            }
         }
 
         // Int pointer to the vector data
