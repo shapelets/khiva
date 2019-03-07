@@ -7,10 +7,11 @@
 #include <jni.h>
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-/**
+    /**
  * @brief Calculates the kMeans algorithm.
  *
  * [1] S. Lloyd. 1982. Least squares quantization in PCM. IEEE Transactions on Information Theory, 28, 2,
@@ -20,16 +21,13 @@ extern "C" {
  * same) and dimension one indicates the number of time series.
  * @brief Calculates            The clusterization based on SBD.
  * @param k                     The number of means to be computed.
- * @param ref_centroids         The resulting means or centroids.
- * @param ref_labels            The resulting labels of each time series which is the closest centroid.
  * @param tolerance             The error tolerance to stop the computation of the centroids.
  * @param maxIterations         The maximum number of iterations allowed.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *env, jobject, jlong ref_tss, jint k,
-                                                                       jlong ref_centroids, jlong ref_labels,
-                                                                       jfloat tolerance, jint maxIterations);
+    JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *env, jobject, jlong ref_tss, jint k,
+                                                                           jfloat tolerance, jint maxIterations);
 
-/**
+    /**
  * @brief Calculates the kShape algorithm.
  *
  * [1] John Paparrizos and Luis Gravano. 2016. k-Shape: Efficient and Accurate Clustering of Time Series.
@@ -39,14 +37,11 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *e
  * same) and dimension one indicates the number of time series.
  * @brief Calculates            The clusterization based on SBD.
  * @param k                     The number of means to be computed.
- * @param ref_centroids         The resulting means or centroids.
- * @param ref_labels            The resulting labels of each time series which is the closest centroid.
  * @param tolerance             The error tolerance to stop the computation of the centroids.
  * @param maxIterations         The maximum number of iterations allowed.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *env, jobject, jlong ref_tss, jint k,
-                                                                       jlong ref_centroids, jlong ref_labels,
-                                                                       jfloat tolerance, jint maxIterations);
+    JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *env, jobject, jlong ref_tss, jint k,
+                                                                           jfloat tolerance, jint maxIterations);
 
 #ifdef __cplusplus
 }
