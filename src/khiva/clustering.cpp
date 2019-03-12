@@ -18,7 +18,7 @@
  * @param k         The number of centroids.
  * @return          The new centroids.
  */
-af::array calculateInitialMeans(af::array tss, int k) { return af::constant(0.0f, tss.dims(0), k); }
+af::array calculateInitialMeans(af::array tss, int k) { return af::constant(0, tss.dims(0), k, tss.type()); }
 
 /**
  * Computes The euclidean distance for a tiled time series agains k-means.
@@ -40,13 +40,13 @@ af::array kEuclideanDistance(af::array tts, af::array means) {
  * @param labels        The ids of the closes mean for all time series.
  */
 void euclideanDistance(af::array tss, af::array means, af::array &minDistance, af::array &idxs) {
-    int nseries = tss.dims(1);
-    af::array kDistances = af::constant(0.0, means.dims(1), nseries);
+    int nSeries = tss.dims(1);
+    af::array kDistances = af::constant(0.0, means.dims(1), nSeries, tss.type());
 
     // This for loop could be parallel, not parallelized to keep memory footprint low
-    for (int i = 0; i < nseries; i++) {
-        af::array tiledSerie = af::tile(tss.col(i), 1, means.dims(1));
-        kDistances(af::span, i) = kEuclideanDistance(tiledSerie, means);
+    for (int i = 0; i < nSeries; i++) {
+        af::array tiledSeries = af::tile(tss.col(i), 1, means.dims(1));
+        kDistances(af::span, i) = kEuclideanDistance(tiledSeries, means);
     }
     af::min(minDistance, idxs, kDistances, 0);
 }
@@ -61,7 +61,7 @@ void euclideanDistance(af::array tss, af::array means, af::array &minDistance, a
  */
 af::array computeNewMeans(af::array tss, af::array labels, int k) {
     af::array labelsTiled = af::tile(labels, tss.dims(0));
-    af::array newMeans = af::constant(0.0, tss.dims(0), k);
+    af::array newMeans = af::constant(0.0, tss.dims(0), k, tss.type());
 
     gfor(af::seq ii, k) {
         newMeans(af::span, ii) = af::sum(tss * (labelsTiled == ii), 1) / (af::sum(af::sum((labels == ii), 3), 1));
@@ -133,7 +133,7 @@ void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::a
         labels = generateRandomLabels(tss.dims(1), k);
     }
 
-    af::array distances = af::constant(0.0f, tss.dims(1));
+    af::array distances = af::constant(0, tss.dims(1), tss.type());
     af::array newMeans;
     int iter = 0;
 
@@ -204,18 +204,18 @@ af::array eigenValues(af::array matrix) {
  * @return      The first Eigen vector.
  */
 af::array getFirstEigenVector(af::array m) {
-    float *matHost = m.host<float>();
+    float *matHost = m.as(af::dtype::f32).host<float>();
     Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, m.dims(0), m.dims(1));
 
     // Compute Eigen Values.
     Eigen::VectorXcf eivals = mat.eigenvalues();
     Eigen::VectorXf reEIVals = eivals.real();
-    af::array eigenValues = af::array(m.dims(0), reEIVals.data());
+    af::array eigenValues = af::array(m.dims(0), reEIVals.data()).as(m.type());
 
     // Compute Eigen Vectors.
     Eigen::EigenSolver<Eigen::MatrixXf> solution(mat);
     Eigen::MatrixXf reEIVectors = solution.eigenvectors().real();
-    af::array eigenVectors = af::array(m.dims(0), m.dims(1), reEIVectors.data());
+    af::array eigenVectors = af::array(m.dims(0), m.dims(1), reEIVectors.data()).as(m.type());
 
     // Get maximum Eigen Value
     af::array maxEigenValue;
@@ -256,7 +256,7 @@ af::array ncc3Dim(af::array tss, af::array centroids) {
     int distanceSize = static_cast<unsigned int>(centroids.dims(0)) * 2 - 1;
 
     af::array cc = af::constant(0, static_cast<unsigned int>(centroids.dims(1)), static_cast<unsigned int>(tss.dims(1)),
-                                distanceSize);
+                                distanceSize, tss.type());
     for (unsigned int i = 0; i < static_cast<unsigned int>(centroids.dims(1)); i++) {
         for (unsigned int j = 0; j < static_cast<unsigned int>(tss.dims(1)); j++) {
             cc(i, j, af::span) = af::convolve(tss.col(j), af::flip(centroids.col(i), 0), AF_CONV_EXPAND);
@@ -286,9 +286,9 @@ af::array SBDShifted(af::array ts, af::array centroid) {
     int shift = index - tsLength + 1;
 
     if (shift >= 0) {
-        shiftedTS = af::join(0, af::constant(0, shift), ts(af::range(tsLength - shift), 0));
+        shiftedTS = af::join(0, af::constant(0, shift, ts.type()), ts(af::range(tsLength - shift), 0));
     } else {
-        shiftedTS = af::join(0, ts(af::range(tsLength + shift) - shift, 0), af::constant(0, -shift));
+        shiftedTS = af::join(0, ts(af::range(tsLength + shift) - shift, 0), af::constant(0, -shift, ts.type()));
     }
 
     return shiftedTS;
@@ -304,8 +304,8 @@ af::array SBDShifted(af::array ts, af::array centroid) {
 af::array shapeExtraction(af::array tss, af::array centroid) {
     int ntss = tss.dims(1);
     int nelements = tss.dims(0);
-    af::array shiftedTSS = af::constant(0.0f, tss.dims(0), tss.dims(1));
-    af::array shiftedTSi = af::constant(0.0f, tss.dims(0), 1);
+    af::array shiftedTSS = af::constant(0, tss.dims(0), tss.dims(1), tss.type());
+    af::array shiftedTSi = af::constant(0, tss.dims(0), 1, tss.type());
     af::array dist;
 
     for (int i = 0; i < ntss; i++) {
@@ -316,7 +316,8 @@ af::array shapeExtraction(af::array tss, af::array centroid) {
 
     shiftedTSS = khiva::normalization::znorm(shiftedTSS);
     af::array s = af::matmul(shiftedTSS, shiftedTSS.T());
-    af::array q = af::identity(nelements, nelements) - (af::constant(1.0, nelements, nelements) / nelements);
+    af::array q =
+        af::identity(nelements, nelements) - (af::constant(1.0, nelements, nelements, tss.type()) / nelements);
     af::array m = af::matmul(q.T(), s, q);
 
     af::array first = getFirstEigenVector(m);
@@ -365,7 +366,7 @@ af::array refinementStep(af::array tss, af::array centroids, af::array labels) {
  * @return          The new set of labels.
  */
 af::array assignmentStep(af::array tss, af::array centroids, af::array labels) {
-    af::array min = af::constant(std::numeric_limits<float>::max(), tss.dims(1));
+    af::array min = af::constant(std::numeric_limits<float>::max(), tss.dims(1), tss.type());
     af::array distances = 1 - af::max(ncc3Dim(tss, centroids), 2);
     af::min(min, labels, distances, 0);
     labels = labels.T();
@@ -379,7 +380,7 @@ void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::a
     unsigned int nElements = static_cast<unsigned int>(tss.dims(0));
 
     if (centroids.isempty()) {
-        centroids = af::constant(0.0f, nElements, k);
+        centroids = af::constant(0, nElements, k, tss.type());
     }
 
     if (labels.isempty()) {
@@ -387,7 +388,7 @@ void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::a
     }
 
     af::array normTSS = khiva::normalization::znorm(tss);
-    af::array distances = af::constant(0.0f, nTimeseries, k);
+    af::array distances = af::constant(0, nTimeseries, k, tss.type());
     af::array newCentroids;
 
     float error = std::numeric_limits<float>::max();
