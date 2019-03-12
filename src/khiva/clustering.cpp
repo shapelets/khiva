@@ -204,18 +204,36 @@ af::array eigenValues(af::array matrix) {
  * @return      The first Eigen vector.
  */
 af::array getFirstEigenVector(af::array m) {
-    float *matHost = m.as(af::dtype::f32).host<float>();
-    Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, m.dims(0), m.dims(1));
+    af::array eigenValues;
+    af::array eigenVectors;
 
-    // Compute Eigen Values.
-    Eigen::VectorXcf eivals = mat.eigenvalues();
-    Eigen::VectorXf reEIVals = eivals.real();
-    af::array eigenValues = af::array(m.dims(0), reEIVals.data()).as(m.type());
+    if (m.type() == af::dtype::f64) {
+        double *matHost = m.host<double>();
+        Eigen::MatrixXd mat = Eigen::Map<Eigen::MatrixXd>(matHost, m.dims(0), m.dims(1));
 
-    // Compute Eigen Vectors.
-    Eigen::EigenSolver<Eigen::MatrixXf> solution(mat);
-    Eigen::MatrixXf reEIVectors = solution.eigenvectors().real();
-    af::array eigenVectors = af::array(m.dims(0), m.dims(1), reEIVectors.data()).as(m.type());
+        // Compute Eigen Values.
+        Eigen::VectorXcd eivals = mat.eigenvalues();
+        Eigen::VectorXd reEIVals = eivals.real();
+        eigenValues = af::array(m.dims(0), reEIVals.data());
+
+        // Compute Eigen Vectors.
+        Eigen::EigenSolver<Eigen::MatrixXd> solution(mat);
+        Eigen::MatrixXd reEIVectors = solution.eigenvectors().real();
+        eigenVectors = af::array(m.dims(0), m.dims(1), reEIVectors.data());
+    } else if (m.type() == af::dtype::f32) {
+        float *matHost = m.host<float>();
+        Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, m.dims(0), m.dims(1));
+
+        // Compute Eigen Values.
+        Eigen::VectorXcf eivals = mat.eigenvalues();
+        Eigen::VectorXf reEIVals = eivals.real();
+        eigenValues = af::array(m.dims(0), reEIVals.data());
+
+        // Compute Eigen Vectors.
+        Eigen::EigenSolver<Eigen::MatrixXf> solution(mat);
+        Eigen::MatrixXf reEIVectors = solution.eigenvectors().real();
+        eigenVectors = af::array(m.dims(0), m.dims(1), reEIVectors.data());
+    }
 
     // Get maximum Eigen Value
     af::array maxEigenValue;

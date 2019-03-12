@@ -54,7 +54,7 @@ void kmeans2() {
     }
 }
 
-void kShape() {
+void kShapeFloat() {
     float tolerance = 1e-10;
     int maxIter = 100;
     float a[35] = {1.0f,  2.0f,  3.0f,  4.0f,  5.0f,   6.0f,  7.0f,  0.0f, 10.0f, 4.0f, 5.0f, 7.0f,
@@ -84,6 +84,36 @@ void kShape() {
     }
 }
 
+void kShapeDouble() {
+    double tolerance = 1e-10;
+    int maxIter = 100;
+    double a[35] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0,  0.0,  10.0, 4.0, 5.0,  7.0,  -3.0, 0.0, -1.0, 15.0, -12.0, 8.0,
+                    9.0, 4.0, 5.0, 2.0, 8.0, 7.0, -6.0, -1.0, 2.0,  9.0, -5.0, -5.0, -6.0, 7.0, 9.0,  9.0,  0.0};
+
+    unsigned int idxh[5] = {0, 1, 2, 0, 1};
+
+    double expected_c[21] = {-0.5234, 0.1560, -0.3627, -1.2764, -0.7781, 0.9135,  1.8711,
+                             -0.7825, 1.5990, 0.1701,  0.4082,  0.8845,  -1.4969, -0.7825,
+                             -0.6278, 1.3812, -2.0090, 0.5022,  0.6278,  -0.0000, 0.1256};
+    int k = 3;
+    int nElements = 7;
+    int ntss = 5;
+
+    af::array data = af::array(nElements, ntss, a);
+    af::array idx = af::array(ntss, 1, idxh);
+    af::array centroids = af::constant(0, nElements, k, data.type());
+
+    khiva::clustering::kShape(data, k, centroids, idx, tolerance, maxIter);
+
+    double *calculated_c = centroids.host<double>();
+    unsigned int *calculated_l = idx.host<unsigned int>();
+
+    for (size_t i = 0; i < 21; i++) {
+        ASSERT_NEAR(calculated_c[i], expected_c[i], 1e-3);
+    }
+}
+
 KHIVA_TEST(ClusteringTests, KMeans, kmeans)
 KHIVA_TEST(ClusteringTests, KMeans2, kmeans2)
-KHIVA_TEST(ClusteringTests, KShape, kShape)
+KHIVA_TEST(ClusteringTests, KShapeFloat, kShapeFloat)
+KHIVA_TEST(ClusteringTests, KShapeDouble, kShapeDouble)
