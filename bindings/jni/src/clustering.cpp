@@ -9,7 +9,6 @@
 #include <khiva_jni/clustering.h>
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *env, jobject, jlong ref_tss, jint k,
-                                                                       jlong ref_centroids, jlong ref_labels,
                                                                        jfloat tolerance, jint maxIterations) {
     const jint l = 3;
     jlong tmp[l];
@@ -44,7 +43,6 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *e
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *env, jobject, jlong ref_tss, jint k,
-                                                                       jlong ref_centroids, jlong ref_labels,
                                                                        jfloat tolerance, jint maxIterations) {
     const jint l = 3;
     jlong tmp[l];
