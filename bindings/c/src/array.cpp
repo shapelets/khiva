@@ -14,6 +14,14 @@ void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *res
     af_retain_array(result, khiva::array::createArray(data, *ndims, dims, *type).get());
 }
 
+void delete_array(khiva_array *array) { khiva::array::deleteArray(*array); }
+
+void display(khiva_array *array) {
+    af::array var = af::array(*array);
+    khiva::array::print(var);
+    af_retain_array(array, var.get());
+}
+
 void get_data(khiva_array *array, void *data) {
     af::array var = af::array(*array);
     khiva::array::getData(var, data);
@@ -27,18 +35,18 @@ void get_dims(khiva_array *array, long long *dimens) {
     af_retain_array(array, var.get());
 }
 
-void display(khiva_array *array) {
-    af::array var = af::array(*array);
-    khiva::array::print(var);
-    af_retain_array(array, var.get());
-}
-
-void delete_array(khiva_array *array) { khiva::array::deleteArray(*array); }
-
 void get_type(khiva_array *array, int *t) {
     af::array var = af::array(*array);
     *t = khiva::array::getType(var);
     af_retain_array(array, var.get());
+}
+
+void join(int *dim, khiva_array *first, khiva_array *second, khiva_array *result) {
+    af::array var1;
+    af::array var2;
+    check_and_retain_arrays(first, second, var1, var2);
+    af::array r = khiva::array::join(*dim, var1, var2);
+    af_retain_array(result, r.get());
 }
 
 void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
