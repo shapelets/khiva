@@ -58,6 +58,11 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleCompl
                                                                                    jobjectArray objs, jlongArray dims);
 
 /**
+ * @brief Releases the array.
+ */
+JNIEXPORT void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jobject thisObj);
+
+/**
  * @brief Retrieves data from the device to host (Float, Double, Int, Boolean, Long, Short or Byte).
  *
  * @return Array with the data.
@@ -88,13 +93,6 @@ JNIEXPORT jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFro
 JNIEXPORT jobjectArray JNICALL Java_io_shapelets_khiva_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj);
 
 /**
- * @brief Gets the Array type.
- *
- * @return Integer representing the Array type.
- */
-JNIEXPORT jint JNICALL Java_io_shapelets_khiva_Array_nativeGetType(JNIEnv *env, jobject thisObj);
-
-/**
  * @brief Gets the Array dimensions.
  *
  * @return The dimensions.
@@ -102,14 +100,26 @@ JNIEXPORT jint JNICALL Java_io_shapelets_khiva_Array_nativeGetType(JNIEnv *env, 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_nativeGetDims(JNIEnv *env, jobject thisObj);
 
 /**
+ * @brief Gets the Array type.
+ *
+ * @return Integer representing the Array type.
+ */
+JNIEXPORT jint JNICALL Java_io_shapelets_khiva_Array_nativeGetType(JNIEnv *env, jobject thisObj);
+
+/**
  * @brief Prints the Array.
  */
 JNIEXPORT void JNICALL Java_io_shapelets_khiva_Array_nativePrint(JNIEnv *env, jobject thisObj);
 
 /**
- * @brief Releases the array.
+ * @brief Joins this array with the one specified as parameter along the specified dimension.
+ *
+ * @param dim The dimension along which the join occurs.
+ * @param ref_rhs Reference to the right-hand side array for the operation.
+ *
+ * @return The updated reference of the right-hand side array and the reference of the resulting array.
  */
-JNIEXPORT void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jobject thisObj);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_join(JNIEnv *env, jobject thisObj, jint dim, jlong ref_rhs);
 
 /**
  * @brief Adds this array with the one specified as parameter.

@@ -27,6 +27,13 @@ namespace array {
 af::array createArray(void *data, unsigned ndims, dim_t *dims, const int type);
 
 /**
+ * @brief Decreases the references count for the given array.
+ *
+ * @param array The Array to be deleted.
+ */
+void deleteArray(af_array array);
+
+/**
  * @brief Retrieves the data from the device to the host.
  *
  * @param array The Array that contains the data to be retrieved.
@@ -44,20 +51,6 @@ void getData(af::array array, void *data);
 af::dim4 getDims(af::array array);
 
 /**
- * @brief Prints the content of an array.
- *
- * @param array The array to be printed.
- */
-void print(af::array array);
-
-/**
- * @brief Decreases the references count for the given array.
- *
- * @param array The Array to be deleted.
- */
-void deleteArray(af_array array);
-
-/**
  * @brief Gets the type of the array.
  *
  * @param array The array to obtain the type from.
@@ -65,6 +58,24 @@ void deleteArray(af_array array);
  * @return int Value of the Dtype enumeration.
  */
 int getType(af::array array);
+
+/**
+ * @brief Joins the first and second arrays along the specified dimension.
+ *
+ * @param dim The dimension along which the join occurs.
+ * @param first The first input array.
+ * @param second The second input array.
+ *
+ * @return af::array The result of joining first and second along the specified dimension.
+ */
+af::array join(int dim, af::array first, af::array second);
+
+/**
+ * @brief Prints the content of an array.
+ *
+ * @param array The array to be printed.
+ */
+void print(af::array array);
 
 /**
  * @brief Array class, This class provides functionality manage Arrays on the host side.

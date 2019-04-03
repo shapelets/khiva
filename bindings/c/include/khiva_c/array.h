@@ -25,6 +25,20 @@ extern "C" {
 KHIVAAPI void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *result, int *type);
 
 /**
+ * @brief Decreases the references count of the given array.
+ *
+ * @param array The Array to release.
+ */
+KHIVAAPI void delete_array(khiva_array *array);
+
+/**
+ * @brief Displays an Array.
+ *
+ * @param array The array to display.
+ */
+KHIVAAPI void display(khiva_array *array);
+
+/**
  * @brief Retrieves the data from the device to the host.
  *
  * @param array The Array that contains the data to be retrieved.
@@ -41,26 +55,22 @@ KHIVAAPI void get_data(khiva_array *array, void *data);
 KHIVAAPI void get_dims(khiva_array *array, long long *dims);
 
 /**
- * @brief Displays an Array.
- *
- * @param array The array to display.
- */
-KHIVAAPI void display(khiva_array *array);
-
-/**
- * @brief Decreases the references count of the given array.
- *
- * @param array The Array to release.
- */
-KHIVAAPI void delete_array(khiva_array *array);
-
-/**
  * @brief Gets the type of the array.
  *
  * @param array The array to obtain the type information from.
  * @param type Value of the Dtype enumeration.
  */
 KHIVAAPI void get_type(khiva_array *array, int *t);
+
+/**
+ * @brief Joins the first and second arrays along the specified dimension.
+ *
+ * @param dim The dimension along which the join occurs.
+ * @param first The first input array.
+ * @param second The second input array.
+ * @param result KHIVA Array with the result of this operation.
+ */
+KHIVAAPI void join(int *dim, khiva_array *first, khiva_array *second, khiva_array *result);
 
 /**
  * @brief Adds two arrays.
