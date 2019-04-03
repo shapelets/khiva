@@ -26,6 +26,8 @@ void arrayFloat() {
         ASSERT_EQ(calculated[i], data[i]);
     }
 
+    free(calculated);
+
     ASSERT_EQ(static_cast<int>(khiva::dtype::f32), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
     dim_t *calculatedDimensions = dims.get();
@@ -57,6 +59,8 @@ void arrayComplexFloat() {
         ASSERT_EQ(calculated[i].imag, data[i].imag);
     }
 
+    free(calculated);
+
     ASSERT_EQ(static_cast<int>(khiva::dtype::c32), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
     dim_t *calculatedDimensions = dims.get();
@@ -84,6 +88,8 @@ void arrayDouble() {
     for (int i = 0; i < 24; i++) {
         ASSERT_EQ(calculated[i], data[i]);
     }
+
+    free(calculated);
 
     ASSERT_EQ(static_cast<int>(khiva::dtype::f64), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
@@ -114,6 +120,8 @@ void arrayComplexDouble() {
         ASSERT_EQ(calculated[i].imag, data[i].imag);
     }
 
+    free(calculated);
+
     ASSERT_EQ(static_cast<int>(khiva::dtype::c64), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
     dim_t *calculatedDimensions = dims.get();
@@ -140,6 +148,8 @@ void arrayBoolean() {
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(calculated[i], data[i]);
     }
+
+    free(calculated);
 
     ASSERT_EQ(static_cast<int>(khiva::dtype::b8), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
@@ -168,6 +178,8 @@ void arrayInt() {
         ASSERT_EQ(calculated[i], data[i]);
     }
 
+    free(calculated);
+
     ASSERT_EQ(static_cast<int>(khiva::dtype::s32), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
     dim_t *calculatedDimensions = dims.get();
@@ -194,6 +206,8 @@ void arrayUnsignedInt() {
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(calculated[i], data[i]);
     }
+
+    free(calculated);
 
     ASSERT_EQ(static_cast<int>(khiva::dtype::u32), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
@@ -222,6 +236,8 @@ void arrayUnsignedChar() {
         ASSERT_EQ(calculated[i], data[i]);
     }
 
+    free(calculated);
+
     ASSERT_EQ(static_cast<int>(khiva::dtype::u8), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
     dim_t *calculatedDimensions = dims.get();
@@ -236,18 +252,20 @@ void arrayUnsignedChar() {
 }
 
 void arrayLong() {
-    long data[] = {1, 0, 1, 0};
+    long long data[] = {1, 0, 1, 0};
 
     dim_t dimensions[] = {2, 2};
 
     af::array result = khiva::array::createArray(data, 2, dimensions, khiva::dtype::s64);
 
-    long *calculated = (long *)malloc(4 * sizeof(long));
+    long long *calculated = (long long *)malloc(4 * sizeof(long long));
     khiva::array::getData(result, calculated);
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(calculated[i], data[i]);
     }
+
+    free(calculated);
 
     ASSERT_EQ(static_cast<int>(khiva::dtype::s64), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
@@ -263,18 +281,20 @@ void arrayLong() {
 }
 
 void arrayUnsignedLong() {
-    unsigned long data[] = {1, 0, 1, 0};
+    unsigned long long data[] = {1, 0, 1, 0};
 
     dim_t dimensions[] = {2, 2};
 
     af::array result = khiva::array::createArray(data, 2, dimensions, khiva::dtype::u64);
 
-    unsigned long *calculated = (unsigned long *)malloc(4 * sizeof(unsigned long));
+    unsigned long long *calculated = (unsigned long long *)malloc(4 * sizeof(unsigned long long));
     khiva::array::getData(result, calculated);
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(calculated[i], data[i]);
     }
+
+    free(calculated);
 
     ASSERT_EQ(static_cast<int>(khiva::dtype::u64), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
@@ -303,6 +323,8 @@ void arrayShort() {
         ASSERT_EQ(calculated[i], data[i]);
     }
 
+    free(calculated);
+
     ASSERT_EQ(static_cast<int>(khiva::dtype::s16), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
     dim_t *calculatedDimensions = dims.get();
@@ -329,6 +351,8 @@ void arrayUnsignedShort() {
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(calculated[i], data[i]);
     }
+
+    free(calculated);
 
     ASSERT_EQ(static_cast<int>(khiva::dtype::u16), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
@@ -357,6 +381,8 @@ void arrayDefault() {
     for (int i = 0; i < 24; i++) {
         ASSERT_EQ(calculated[i], data[i]);
     }
+
+    free(calculated);
 
     ASSERT_EQ(static_cast<int>(khiva::dtype::f32), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
@@ -394,6 +420,8 @@ void arrayJoin() {
             ASSERT_EQ(calculated[i], data2[i - 4]);
         }
     }
+
+    free(calculated);
 
     ASSERT_EQ(static_cast<int>(khiva::dtype::f32), khiva::array::getType(result));
     af::dim4 dims = khiva::array::getDims(result);
