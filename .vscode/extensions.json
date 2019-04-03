@@ -5,7 +5,7 @@
         "twxs.cmake",
         "xaver.clang-format",
         "eamodio.gitlens",
-        "robertohuertasm.vscode-icons",
+        "vscode-icons.vscode-icons",
         "streetsidesoftware.code-spell-checker",
         "ymotongpoo.licenser"
     ]

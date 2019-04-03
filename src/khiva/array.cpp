@@ -49,12 +49,14 @@ af::array khiva::array::createArray(void *data, unsigned ndims, dim_t *dims, con
     }
 }
 
+void khiva::array::deleteArray(af_array array) { af_release_array(array); }
+
 void khiva::array::getData(af::array array, void *data) { array.host(data); }
 
 af::dim4 khiva::array::getDims(af::array array) { return array.dims(); }
 
+int khiva::array::getType(af::array array) { return array.type(); }
+
 void khiva::array::print(af::array array) { af_print(array); }
 
-void khiva::array::deleteArray(af_array array) { af_release_array(array); }
-
-int khiva::array::getType(af::array array) { return array.type(); }
+af::array khiva::array::join(int dim, af::array first, af::array second) { return af::join(dim, first, second); }
