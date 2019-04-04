@@ -614,16 +614,17 @@ void khiva::features::linearTrend(af::array tss, af::array &pvalue, af::array &r
 }
 
 af::array khiva::features::localMaximals(af::array tss) {
-    af::array plus = af::shift(tss, 0, -1);
-    const int plusDims1 = static_cast<const int>(plus.dims(1));
-    plus(af::span, plusDims1 - 1, af::span) = plus(af::span, plusDims1 - 2, af::span);
+    af::array up = af::shift(tss, -1, 0);
+    const int upsize = static_cast<const int>(up.dims(1));
+    up(upsize - 1, af::span) = af::constant(0.0, 1, upsize);
 
-    af::array minus = af::shift(tss, 0, 1);
-    minus(af::span, 0, af::span) = minus(af::span, 1, af::span);
+    af::array down = af::shift(tss, 1, 0);
+    down(0, af::span) = af::constant(0.0, 1, down.dims(1));
 
-    af::array res1 = (tss > plus);
-    af::array res2 = (tss > minus);
-    af::array result = (res1 * res2).as(af::dtype::s32);
+    af::array res1 = (tss > up);
+    af::array res2 = (tss > down);
+    af::array result = (res1 * res2).as(tss.type());
+
 
     return result;
 }
@@ -708,11 +709,27 @@ std::vector<int> subsValueToVector(int a, std::vector<int> v) {
     return res;
 }
 
+af::array localMaximals(af::array tss) {
+    af::array plus = af::shift(tss, 0, -1);
+    const int plusDims1 = static_cast<const int>(plus.dims(1));
+    plus(af::span, plusDims1 - 1, af::span) = plus(af::span, plusDims1 - 2, af::span);
+
+    af::array minus = af::shift(tss, 0, 1);
+    minus(af::span, 0, af::span) = minus(af::span, 1, af::span);
+
+    af::array res1 = (tss > plus);
+    af::array res2 = (tss > minus);
+    af::array result = (res1 * res2).as(af::dtype::s32);
+
+
+    return result;
+}
+
 std::vector<LineTuple> identifyRidgeLines(af::array cwt_tss, khiva::array::Array<float> maxDistances, float gapThresh) {
     std::vector<LineTuple> outLines;
 
     // Gets all local maximals
-    af::array maximals = khiva::features::localMaximals(cwt_tss);
+    af::array maximals = localMaximals(cwt_tss);
     khiva::array::Array<int> relativeMaximals(maximals);
 
     // Gets all rows which contains at least one maximal
