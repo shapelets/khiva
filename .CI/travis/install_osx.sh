@@ -23,7 +23,7 @@ pip${PYTHON_VERSION} install conan
 
 if ! [[ -z "${TRAVIS_TAG}" ]]; then
   brew install doxygen graphviz
-  pip${PYTHON_VERSION} install sphinx breathe sphinx_rtd_theme
+  pip${PYTHON_VERSION} install sphinx==1.8.3 breathe sphinx_rtd_theme
 fi
 
 # Installing library dependencies with conan
