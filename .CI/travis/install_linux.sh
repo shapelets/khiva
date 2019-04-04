@@ -13,7 +13,7 @@ sudo pip3 install conan==1.6.1
 
 if ! [[ -z "${TRAVIS_TAG}" ]]; then
   sudo apt-get install -y doxygen graphviz
-  sudo pip3 install sphinx breathe sphinx_rtd_theme
+  sudo pip3 install sphinx==1.8.3 breathe sphinx_rtd_theme
 fi
 
 # Installing library dependencies with conan
