@@ -700,6 +700,25 @@ void linearTrend() {
     ASSERT_NEAR(hstder[1], 0.37179469135129783, EPSILON);
 }
 
+void localMaximals(){
+    float data[] = {0.0, 4.0, 3.0, 5.0, 4.0, 1.0, 0.0, 6.0,
+                    0.0, 4.0, 3.0, 5.0, 4.0, 1.0, 0.0, 6.0};
+    af::array tss(8, 2, data);
+
+    af::array result = khiva::features::localMaximals(tss);
+
+    float *lm = (float *)result.host<float>();
+
+    ASSERT_EQ(lm[0], 0.0);
+    ASSERT_EQ(lm[1], 1.0);
+    ASSERT_EQ(lm[2], 0.0);
+    ASSERT_EQ(lm[3], 1.0);
+    ASSERT_EQ(lm[4], 0.0);
+    ASSERT_EQ(lm[5], 0.0);
+    ASSERT_EQ(lm[6], 0.0);
+    ASSERT_EQ(lm[7], 1.0);
+}
+
 void longestStrikeAboveMean() {
     float data[] = {20, 20, 20, 1, 1, 1, 20, 20, 20, 20, 1, 1, 1, 1, 1, 1, 1, 1, 20, 20,
                     20, 20, 20, 1, 1, 1, 20, 20, 20, 1,  1, 1, 1, 1, 1, 1, 1, 1, 20, 20};
@@ -1190,6 +1209,7 @@ KHIVA_TEST(FeaturesTests, LastLocationOfMaximum, lastLocationOfMaximum)
 KHIVA_TEST(FeaturesTests, LastLocationOfMinimum, lastLocationOfMinimum)
 KHIVA_TEST(FeaturesTests, Length, length)
 KHIVA_TEST(FeaturesTests, LinearTrend, linearTrend)
+KHIVA_TEST(FeaturesTests, LocalMaximals, localMaximals)
 KHIVA_TEST(FeaturesTests, LongestStrikeAboveMean, longestStrikeAboveMean)
 KHIVA_TEST(FeaturesTests, LongestStrikeBelowMean, longestStrikeBelowMean)
 KHIVA_TEST(FeaturesTests, MaxLangevinFixedPoint, maxLangevinFixedPoint)
