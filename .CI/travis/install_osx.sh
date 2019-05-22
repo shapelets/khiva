@@ -19,11 +19,11 @@ brew install --force freeimage fontconfig glfw glbinding
 
 # Installing conan
 pip${PYTHON_VERSION} install --upgrade pip
-pip${PYTHON_VERSION} install conan==1.15.1
+pip${PYTHON_VERSION} install conan==1.5.2
 
 if ! [[ -z "${TRAVIS_TAG}" ]]; then
   brew install doxygen graphviz
-  pip${PYTHON_VERSION} install sphinx==2.0.1 breathe==4.13.0.post0 sphinx_rtd_theme==0.4.3
+  pip${PYTHON_VERSION} install sphinx==1.7.5 breathe==4.9.1 sphinx_rtd_theme==0.4.0
 fi
 
 # Installing library dependencies with conan
