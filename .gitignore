@@ -13,3 +13,4 @@ test/versionTest.cpp
 .idea/
 *.gcov
 *.info
+.vscode/ipch
