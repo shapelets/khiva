@@ -88,10 +88,31 @@ void khiva::matrix::meanStdev(af::array t, long m, af::array &mean, af::array &s
     stdev = af::sqrt(sigma_t2);
 }
 
-af::array khiva::matrix::generateMask(long m, long batchSize, long batchStart, long tsLength, long nTimeSeries) {
-    long bandSize = static_cast<long>(std::ceil(m / 2.0f)) + 1;
+namespace 
+{
 
-    if (m * tsLength <= 2097152) {
+	af::array generateMaskCPU(long m, long batchSize, long batchStart, long tsLength, long nTimeSeries) {
+		long bandSize = static_cast<long>(std::ceil(m / 2.0f)) + 1;
+
+		std::vector<double> mask(batchSize * tsLength, 0);
+		for (long iRaw = 0; iRaw < mask.size(); iRaw++)
+		{
+			long rowLocal = iRaw % batchSize;
+			long row = rowLocal + batchStart;
+			long column = iRaw / batchSize;
+			if (std::abs(row - column) < bandSize)
+			{
+				mask[iRaw] = 1;
+			}
+		} 
+		auto maskAf = af::array(batchSize, tsLength, mask.data()); 
+		return af::tile(maskAf, 1, 1, static_cast<unsigned int>(nTimeSeries));
+	}
+}
+
+af::array khiva::matrix::generateMask(long m, long batchSize, long batchStart, long tsLength, long nTimeSeries) {
+    long bandSize = static_cast<long>(std::ceil(m / 2.0f)) + 1; 
+    if ( (std::max(batchSize, bandSize) * (tsLength + bandSize)) <= 2e6) {
         // Limit the faster method using convolve for up to the previous number of points which uses approximately
         // 1.42GB of memory
         int tmp = batchStart > 0;
@@ -107,21 +128,9 @@ af::array khiva::matrix::generateMask(long m, long batchSize, long batchStart, l
 
         // Tiling the same mask to all the time series
         mask = af::tile(mask, 1, 1, static_cast<unsigned int>(nTimeSeries));
-
         return mask;
     } else {
-        af::array mask = af::array(batchSize, tsLength);
-        af::array tmp =
-            af::transpose(af::join(0, af::constant(1, 2 * (bandSize - 1) + 1), af::constant(0, tsLength - 1)));
-        for (int i = 0; i < batchSize; i++) {
-            af::array tmp2 = af::shift(tmp, 0, i + static_cast<int>(batchStart));
-            mask(i, af::span) = tmp2(af::seq(bandSize - 1, tsLength + bandSize - 2));
-        }
-
-        // Tiling the same mask to all the time series
-        mask = af::tile(mask, 1, 1, static_cast<unsigned int>(nTimeSeries));
-
-        return mask;
+		return generateMaskCPU(m, batchSize, batchStart, tsLength, nTimeSeries);
     }
 }
 
