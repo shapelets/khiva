@@ -24,7 +24,7 @@ before_build:
         Start-Process "choco" "install doxygen.install" -NoNewWindow -Wait
         Start-Process "choco" "install graphviz" -NoNewWindow -Wait
         python -m pip install --upgrade pip
-        pip3 install sphinx breathe sphinx_rtd_theme
+        pip3 install sphinx==1.7.5 breathe==4.9.1 sphinx_rtd_theme==0.4.0
       }
 
 build_script:
