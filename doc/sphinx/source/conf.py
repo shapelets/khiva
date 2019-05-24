@@ -13,7 +13,6 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-import pip
 import subprocess
 
 # import sys
@@ -42,11 +41,6 @@ version = ''
 # The full version, including alpha/beta/rc tags
 release = subprocess.check_output(
     ["git", "describe"]).strip().decode("utf-8").split('-')[0]
-
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-
-if on_rtd:
-    subprocess.call("pip install breathe", shell=True)
 
 with open(doxygen_source_dir + "/Doxyfile.in") as f:
     newText = f.read().replace('@VERSION_SHORT@', release).replace(
@@ -138,6 +132,8 @@ html_theme_path = ["_themes"]
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['css']
+
+
 def setup(app):
     app.add_stylesheet('custom.css')
 

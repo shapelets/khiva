@@ -16,6 +16,6 @@ void check_and_retain_arrays(af_array &a, af_array &b, af::array &var_a, af::arr
         var_a = af::array(a);
         af_retain_array(&a, var_a.get());
         var_b = af::array(b);
-        af_retain_array(&b, var_a.get());
+        af_retain_array(&b, var_b.get());
     }
 }

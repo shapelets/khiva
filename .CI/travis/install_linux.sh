@@ -9,11 +9,11 @@ sudo apt-get update -y
 sudo apt-get install -y lcov python3 python3-pip rpm
 
 # Installing conan
-sudo pip3 install conan==1.6.1
+sudo pip3 install conan==1.5.2
 
 if ! [[ -z "${TRAVIS_TAG}" ]]; then
   sudo apt-get install -y doxygen graphviz
-  sudo pip3 install sphinx==1.8.3 breathe sphinx_rtd_theme
+  sudo pip3 install sphinx==1.7.5 breathe==4.9.1 sphinx_rtd_theme==0.4.0
 fi
 
 # Installing library dependencies with conan
