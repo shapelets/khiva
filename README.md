@@ -36,7 +36,7 @@ If you use `Khiva` in a scientific publication, we would appreciate citations:
 
 ```bibtex
 @misc{khiva,
- title={Khiva: Accelerated time-series anlytics on GPUs and CPU multicores},
+ title={Khiva: Accelerated time-series analytics on GPUs and CPU multicores},
  author={Ruiz-Ferrer, Justo and Vilches, Antonio and Torreno, Oscar and Cuesta, David},
  year={2018},
  note={\url{https://github.com/shapelets/khiva}}
