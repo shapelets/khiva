@@ -21,6 +21,8 @@ SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # Files to add to compilation
 FILE(GLOB_RECURSE KHIVALIB_CODE 
     "${KHIVALIB_SRC}/*.cpp"
+    "${KHIVALIB_SRC}/*.h"
+    "${KHIVALIB_SRC}/*.hpp"
     "${KHIVALIB_INC}/*.h" )
 
 # The output is a static library

@@ -32,6 +32,10 @@ int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, jobject) {
     return khiva::library::getDeviceCount();
 }
 
+void JNICALL Java_io_shapelets_khiva_Library_setDeviceMemoryInGB(JNIEnv *, jobject, jdouble memory) {
+    khiva::library::setDeviceMemoryInGB(memory);
+}
+
 jstring JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject) {
     return env->NewStringUTF(khiva::version().c_str());
 }

@@ -14,6 +14,9 @@ SET(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON) # Required
 SET(CMAKE_CXX_EXTENSIONS ON) # with compiler extensions like gnu++11
 
+# Add compile definition to avoid external users of the library to include internal headers
+ADD_DEFINITIONS(-DBUILDING_KHIVA)
+
 # Avoid conflicts with min and max functions
 IF(WIN32)
     ADD_DEFINITIONS(-DNOMINMAX)

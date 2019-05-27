@@ -7,6 +7,8 @@
 #include <arrayfire.h>
 #include <khiva/library.h>
 
+#include "libraryInternal.h"
+
 std::string khiva::library::backendInfo() { return af::infoString(); }
 
 void khiva::library::setBackend(khiva::library::Backend be) { af::setBackend(static_cast<af::Backend>(be)); }
@@ -22,3 +24,5 @@ void khiva::library::setDevice(int device) { af::setDevice(device); }
 int khiva::library::getDevice() { return af::getDevice(); }
 
 int khiva::library::getDeviceCount() { return af::getDeviceCount(); }
+
+void khiva::library::setDeviceMemoryInGB(double memory) { khiva::library::internal::setDeviceMemoryInGB(memory); }

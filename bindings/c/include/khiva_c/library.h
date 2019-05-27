@@ -61,6 +61,14 @@ KHIVAAPI void get_device_id(int *device_id);
 KHIVAAPI void get_device_count(int *device_count);
 
 /**
+ * @brief Set the memory of the device in use. This information is used for splitting some algorithms and execute them
+ * in batch mode. The default value used if it is not set is 4GB.
+ *
+ * @param memory The device memory.
+ */
+KHIVAAPI void setDeviceMemoryInGB(double *memory);
+
+/**
  * @brief Returns a string with the current version of the library.
  *
  * @param v A previously malloced character array where to copy the version.

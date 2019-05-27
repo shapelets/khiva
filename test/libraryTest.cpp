@@ -6,7 +6,10 @@
 
 #include <gtest/gtest.h>
 #include <khiva/library.h>
+
 #include "khivaTest.h"
+
+#include <khiva/libraryInternal.h>
 
 void backendInfoTest() { khiva::library::backendInfo(); }
 
@@ -99,6 +102,45 @@ void getDeviceCountTest() {
     }
 }
 
+void memoryInDeviceTest() {
+    using namespace khiva::library;
+
+    setDeviceMemoryInGB(4.0);
+    ASSERT_EQ(2048, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::LINEAR));
+    ASSERT_EQ(2048, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUADRATIC));
+    ASSERT_EQ(2048, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUBIC));
+
+    setDeviceMemoryInGB(2.0);
+    ASSERT_EQ(1024, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::LINEAR));
+    ASSERT_EQ(1448, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUADRATIC));
+    ASSERT_EQ(1625, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUBIC));
+
+    setDeviceMemoryInGB(1.0);
+    ASSERT_EQ(512, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::LINEAR));
+    ASSERT_EQ(1024, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUADRATIC));
+    ASSERT_EQ(1290, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUBIC));
+
+    setDeviceMemoryInGB(4.0);
+    ASSERT_EQ(2048, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::LINEAR));
+    ASSERT_EQ(2048, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUADRATIC));
+    ASSERT_EQ(2048, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUBIC));
+
+    setDeviceMemoryInGB(8.0);
+    ASSERT_EQ(4096, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::LINEAR));
+    ASSERT_EQ(2896, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUADRATIC));
+    ASSERT_EQ(2580, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUBIC));
+
+    setDeviceMemoryInGB(6.0);
+    ASSERT_EQ(3072, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::LINEAR));
+    ASSERT_EQ(2508, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUADRATIC));
+    ASSERT_EQ(2344, internal::getValueScaledToMemoryDevice(2048, internal::Complexity::CUBIC));
+
+    setDeviceMemoryInGB(6.0);
+    ASSERT_EQ(30e6, internal::getValueScaledToMemoryDevice(20e6, internal::Complexity::LINEAR));
+    ASSERT_EQ(24494897, internal::getValueScaledToMemoryDevice(20e6, internal::Complexity::CUADRATIC));
+    ASSERT_EQ(22894284, internal::getValueScaledToMemoryDevice(20e6, internal::Complexity::CUBIC));
+}
+
 KHIVA_TEST(LibraryTests, BackendInfoTest, backendInfoTest)
 KHIVA_TEST(LibraryTests, SetBackendTest, setBackendTest)
 KHIVA_TEST(LibraryTests, GetBackendTest, getBackendTest)
@@ -106,3 +148,4 @@ KHIVA_TEST(LibraryTests, GetBackendsTest, getBackendsTest)
 KHIVA_TEST(LibraryTests, SetDeviceTest, setDeviceTest)
 KHIVA_TEST(LibraryTests, GetDeviceTest, getDeviceTest)
 KHIVA_TEST(LibraryTests, GetDeviceCountTest, getDeviceCountTest)
+KHIVA_TEST(LibraryTests, MemoryInDeviceTest, memoryInDeviceTest)

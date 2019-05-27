@@ -16,7 +16,7 @@ extern "C" {
 /**
  * @brief JNI interface to get information from the active backend.
  */
-JNIEXPORT jstring JNICALL Java_io_shapelets_khiva_Library_backendInfo(JNIEnv * env, jobject);
+JNIEXPORT jstring JNICALL Java_io_shapelets_khiva_Library_backendInfo(JNIEnv *env, jobject);
 
 /**
  * @brief JNI interface to set the backend.
@@ -59,6 +59,14 @@ JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *, jobj
  * @return The device count.
  */
 JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, jobject);
+
+/**
+ * @brief JNI interface to set the memory of the device in use. This information is used for splitting some algorithms
+ * and execute them in batch mode. The default value used if it is not set is 4GB.
+ *
+ * @param memory The device memory.
+ */
+JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_setDeviceMemoryInGB(JNIEnv *, jobject, jdouble memory);
 
 /**
  * @brief Returns a string with the current version of the library.
