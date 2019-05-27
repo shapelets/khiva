@@ -23,4 +23,6 @@ void get_device_id(int *device_id) { *device_id = khiva::library::getDevice(); }
 
 void get_device_count(int *device_count) { *device_count = khiva::library::getDeviceCount(); }
 
+void setDeviceMemoryInGB(double *memory) { khiva::library::setDeviceMemoryInGB(*memory); }
+
 void version(char **v) { strcpy(*v, khiva::version().c_str()); }
