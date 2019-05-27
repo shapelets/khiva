@@ -62,7 +62,7 @@ JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, j
 
 /**
  * @brief JNI interface to set the memory of the device in use. This information is used for splitting some algorithms
- * and execute them in batch mode. The default value used if it is not set is 4GB
+ * and execute them in batch mode. The default value used if it is not set is 4GB.
  *
  * @param memory The device memory.
  */

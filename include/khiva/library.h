@@ -73,7 +73,7 @@ int getDeviceCount();
 
 /**
  * @brief Set the memory of the device in use. This information is used for splitting some algorithms and execute them
- * in batch mode. The default value used if it is not set is 4GB
+ * in batch mode. The default value used if it is not set is 4GB.
  *
  * @param memory The device memory.
  */
