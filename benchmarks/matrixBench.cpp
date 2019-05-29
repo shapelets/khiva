@@ -6,7 +6,8 @@
 
 #include <benchmark/benchmark.h>
 #include <khiva/matrix.h>
-#include <math.h>
+#include <math.h> 
+#include "khiva/matrixInternal.h"
 #include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
@@ -121,7 +122,7 @@ void GenerateMask(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        af::array mask = khiva::matrix::generateMask(m, 2048, batchStart, n - m + 1);
+        af::array mask = khiva::matrix::internal::generateMask(m, 2048, batchStart, n - m + 1, 0);
         mask.eval();
         af::sync();
     }
@@ -146,7 +147,7 @@ void CalculateDistanceProfile(benchmark::State &state) {
     khiva::matrix::meanStdev(t, a, m, mean, stdev);
 
     auto qt = khiva::matrix::slidingDotProduct(q, t);
-    af::array mask = khiva::matrix::generateMask(m, 1, 0, n - m + 1);
+    af::array mask = khiva::matrix::internal::generateMask(m, 1, 0, n - m + 1, 0);
 
     auto sumQ = sum(q);
     auto sumQ2 = sum(pow(q, 2));
@@ -188,7 +189,7 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
     af::array distance;
     af::array index;
 
-    af::array mask = khiva::matrix::generateMask(m, n - m + 1, 0, n - m + 1);
+    af::array mask = khiva::matrix::internal::generateMask(m, n - m + 1, 0, n - m + 1, 0);
 
     af::sync();
     while (state.KeepRunning()) {
@@ -224,7 +225,7 @@ void Mass(benchmark::State &state) {
     af::array stdev;
 
     khiva::matrix::meanStdev(t, aux, m, mean, stdev);
-    af::array mask = khiva::matrix::generateMask(m, 1, 0, n - m + 1);
+    af::array mask = khiva::matrix::internal::generateMask(m, 1, 0, n - m + 1, 0);
 
     af::sync();
     while (state.KeepRunning()) {

@@ -6,7 +6,10 @@
 
 #include <gtest/gtest.h>
 #include <khiva/matrix.h>
+
 #include <stdexcept>
+
+#include "khiva/matrixInternal.h"
 #include "khivaTest.h"
 
 void slidingDotProduct() {
@@ -92,20 +95,75 @@ void meanStdevMEqualsLength() {
     ASSERT_NEAR(resultingStdev[1], expectedStdev[0], EPSILON * 3e3);
 }
 
+void tileIsFarFromDiagonal() {
+    using namespace khiva::matrix;
+
+    // Upper-Left tile corner cross
+    ASSERT_FALSE(internal::tileIsFarFromDiagonal(5, 16, 2, 22, 5));
+
+    // Upper-Right tile corner cross
+    ASSERT_FALSE(internal::tileIsFarFromDiagonal(5, 16, 15, 12, 2));
+
+    // Lower-Left tile corner cross
+    ASSERT_FALSE(internal::tileIsFarFromDiagonal(5, 16, 0, 12, 12));
+
+    // Upper side
+    ASSERT_FALSE(internal::tileIsFarFromDiagonal(5, 25, 5, 25, 2));
+
+    // Left side
+    ASSERT_FALSE(internal::tileIsFarFromDiagonal(5, 25, 20, 125, 10));
+
+    // Far
+    ASSERT_TRUE(internal::tileIsFarFromDiagonal(5, 25, 0, 25, 75));
+}
+
 void generateMask() {
-    af::array mask = khiva::matrix::generateMask(3, 4, 2, 8, 2);
+    {
+        af::array mask = khiva::matrix::internal::generateMask(3, 4, 2, 8, 0, 2);
 
-    ASSERT_EQ(mask.dims(0), 4);
-    ASSERT_EQ(mask.dims(1), 8);
-    ASSERT_EQ(mask.dims(2), 2);
+        ASSERT_EQ(mask.dims(0), 4);
+        ASSERT_EQ(mask.dims(1), 8);
+        ASSERT_EQ(mask.dims(2), 2);
 
-    float *maskCalculated = af::transpose(mask).as(af::dtype::f32).host<float>();
+        float *maskCalculated = af::transpose(mask).as(af::dtype::f32).host<float>();
 
-    float maskExpected[] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0,
-                            0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+        float maskExpected[] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0,
+                                0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1};
 
-    for (int i = 0; i < 64; i++) {
-        ASSERT_EQ(maskCalculated[i], maskExpected[i % 32]);
+        for (int i = 0; i < 64; i++) {
+            ASSERT_EQ(maskCalculated[i], maskExpected[i % 32]);
+        }
+        af::freeHost(maskCalculated);
+    }
+
+    {
+        auto mask = khiva::matrix::internal::generateMask(3, 4, 2, 4, 4, 2);
+
+        ASSERT_EQ(mask.dims(0), 4);
+        ASSERT_EQ(mask.dims(1), 4);
+        ASSERT_EQ(mask.dims(2), 2);
+
+        int maskExpected[] = {1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1};
+
+        int *maskCalculated = mask.as(af::dtype::s32).host<int>();
+        for (int i = 0; i < 16; i++) {
+            ASSERT_EQ(maskCalculated[i], maskExpected[i]);
+        }
+        af::freeHost(maskCalculated);
+    }
+
+    {
+        auto mask = khiva::matrix::internal::generateMask(3, 4, 2, 4, 24, 2);
+
+        ASSERT_EQ(mask.dims(0), 4);
+        ASSERT_EQ(mask.dims(1), 4);
+        ASSERT_EQ(mask.dims(2), 2);
+
+        int *maskCalculated = mask.as(af::dtype::s32).host<int>();
+        for (int i = 0; i < 16; i++) {
+            ASSERT_EQ(maskCalculated[i], 0);
+        }
+        af::freeHost(maskCalculated);
     }
 }
 
@@ -167,7 +225,7 @@ void calculateDistanceProfileMiddle() {
     af::array distance;
     af::array index;
 
-    af::array mask = khiva::matrix::generateMask(m, 1, 0, 12, 2);
+    af::array mask = khiva::matrix::internal::generateMask(m, 1, 0, 12, 0, 2);
 
     khiva::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, mask,
                                             distance, index);
@@ -208,7 +266,7 @@ void massIgnoreTrivial() {
     af::array distance;
     af::array index;
 
-    af::array mask = khiva::matrix::generateMask(m, 1, 0, 12, 2);
+    af::array mask = khiva::matrix::internal::generateMask(m, 1, 0, 12, 0, 2);
 
     khiva::matrix::mass(q, tss, aux, mean, stdev, mask, distance, index);
 
@@ -792,6 +850,7 @@ void findBestDiscordsException() {
 KHIVA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct)
 KHIVA_TEST(MatrixTests, MeanStdev, meanStdev)
 KHIVA_TEST(MatrixTests, MeanStdevMEqualsLength, meanStdevMEqualsLength)
+KHIVA_TEST(MatrixTests, TileIsFarFromDiagonal, tileIsFarFromDiagonal)
 KHIVA_TEST(MatrixTests, GenerateMask, generateMask)
 KHIVA_TEST(MatrixTests, CalculateDistanceProfile, calculateDistanceProfile)
 KHIVA_TEST(MatrixTests, CalculateDistanceProfileMiddle, calculateDistanceProfileMiddle)
