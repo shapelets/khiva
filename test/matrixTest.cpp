@@ -29,6 +29,7 @@ void slidingDotProduct() {
     for (int i = 0; i < 24; i++) {
         ASSERT_EQ(result[i], expected[i % 12]);
     }
+    af::freeHost(result);
 }
 
 void meanStdev() {
@@ -67,6 +68,9 @@ void meanStdev() {
         ASSERT_NEAR(resultingMean[i], expectedMean[i % 12], EPSILON * 3e3);
         ASSERT_NEAR(resultingStdev[i], expectedStdev[i % 12], EPSILON * 3e3);
     }
+
+    af::freeHost(resultingMean);
+    af::freeHost(resultingStdev);
 }
 
 void meanStdevMEqualsLength() {
@@ -93,6 +97,9 @@ void meanStdevMEqualsLength() {
     ASSERT_NEAR(resultingMean[1], expectedMean[0], EPSILON * 3e3);
     ASSERT_NEAR(resultingStdev[0], expectedStdev[0], EPSILON * 3e3);
     ASSERT_NEAR(resultingStdev[1], expectedStdev[0], EPSILON * 3e3);
+
+    af::freeHost(resultingMean);
+    af::freeHost(resultingStdev);
 }
 
 void tileIsFarFromDiagonal() {
@@ -204,6 +211,8 @@ void calculateDistanceProfile() {
     ASSERT_NEAR(resultingDistance[1], expectedDistance, EPSILON * 1e1);
     ASSERT_EQ(resultingIndex[0], expectedIndex);
     ASSERT_EQ(resultingIndex[1], expectedIndex);
+
+    af::freeHost(resultingDistance);
 }
 
 void calculateDistanceProfileMiddle() {
@@ -245,6 +254,8 @@ void calculateDistanceProfileMiddle() {
     ASSERT_NEAR(resultingDistance[1], expectedDistance, EPSILON * 1e1);
     ASSERT_EQ(resultingIndex[0], expectedIndex);
     ASSERT_EQ(resultingIndex[1], expectedIndex);
+
+    af::freeHost(resultingDistance);
 }
 
 void massIgnoreTrivial() {
@@ -281,10 +292,12 @@ void massIgnoreTrivial() {
     unsigned int resultingIndex[2];
     index.host(&resultingIndex);
 
-    ASSERT_NEAR(resultingDistance[0], expectedDistance, 1e-2);
-    ASSERT_NEAR(resultingDistance[1], expectedDistance, 1e-2);
+    ASSERT_NEAR(resultingDistance[0], expectedDistance, 2e-2);
+    ASSERT_NEAR(resultingDistance[1], expectedDistance, 2e-2);
     ASSERT_EQ(resultingIndex[0], expectedIndex);
     ASSERT_EQ(resultingIndex[1], expectedIndex);
+
+    af::freeHost(resultingDistance);
 }
 
 void massConsiderTrivial() {
@@ -319,10 +332,12 @@ void massConsiderTrivial() {
     unsigned int resultingIndex[2];
     index.host(&resultingIndex);
 
-    ASSERT_NEAR(resultingDistance[0], expectedDistance, 1e-2);
-    ASSERT_NEAR(resultingDistance[1], expectedDistance, 1e-2);
+    ASSERT_NEAR(resultingDistance[0], expectedDistance, 2e-2);
+    ASSERT_NEAR(resultingDistance[1], expectedDistance, 2e-2);
     ASSERT_EQ(resultingIndex[0], expectedIndex);
     ASSERT_EQ(resultingIndex[1], expectedIndex);
+
+    af::freeHost(resultingDistance);
 }
 
 void stompIgnoreTrivialOneSeries() {
@@ -350,6 +365,8 @@ void stompIgnoreTrivialOneSeries() {
         ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
+
+    af::freeHost(resultingDistance);
 }
 
 void stompIgnoreTrivialOneBigSeries() {
@@ -399,6 +416,8 @@ void stompIgnoreTrivialMultipleSeries() {
         ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
+
+    af::freeHost(resultingDistance);
 }
 
 void stompConsiderTrivialOneSeries() {
@@ -419,9 +438,11 @@ void stompConsiderTrivialOneSeries() {
     index.host(&resultingIndex);
 
     for (int i = 0; i < 6; i++) {
-        ASSERT_NEAR(resultingDistance[i], 0.0, 1e-2);
+        ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
+
+    af::freeHost(resultingDistance);
 }
 
 void stompConsiderTrivialOneBigSeries() {
@@ -466,9 +487,11 @@ void stompConsiderTrivialOneSeries2() {
     index.host(&resultingIndex);
 
     for (int i = 0; i < 24; i++) {
-        ASSERT_NEAR(resultingDistance[i], 0.0, 1e-2);
+        ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
+
+    af::freeHost(resultingDistance);
 }
 
 void stompConsiderTrivialMultipleSeries() {
@@ -493,9 +516,11 @@ void stompConsiderTrivialMultipleSeries() {
     index.host(&resultingIndex);
 
     for (int i = 0; i < 36; i++) {
-        ASSERT_NEAR(resultingDistance[i], 0.0, 1e-2);
+        ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
+
+    af::freeHost(resultingDistance);
 }
 
 void stompConsiderTrivialMultipleSeriesBigM() {
@@ -517,10 +542,12 @@ void stompConsiderTrivialMultipleSeriesBigM() {
 
     for (int i = 0; i < 9; i++) {
         if (i % 4 == 0) {
-            ASSERT_NEAR(resultingDistance[i], 0.0, 1e-1);
+            ASSERT_NEAR(resultingDistance[i], 0.0, 2e-1);
             ASSERT_EQ(resultingIndex[i], 0);
         }
     }
+
+    af::freeHost(resultingDistance);
 }
 
 void findBestMotifs() {
@@ -547,8 +574,10 @@ void findBestMotifs() {
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
     ASSERT_EQ(motifsIndicesHost[0], 12);
-
     ASSERT_EQ(subsequenceIndicesHost[0], 1);
+
+    af::freeHost(motifsIndicesHost);
+    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestMotifsMultipleProfiles() {
@@ -584,6 +613,9 @@ void findBestMotifsMultipleProfiles() {
     ASSERT_EQ(subsequenceIndicesHost[1], 1);
     ASSERT_EQ(subsequenceIndicesHost[2], 1);
     ASSERT_EQ(subsequenceIndicesHost[3], 1);
+
+    af::freeHost(motifsIndicesHost);
+    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestMotifsMirror() {
@@ -611,6 +643,9 @@ void findBestMotifsMirror() {
 
     ASSERT_EQ(subsequenceIndicesHost[0], 5);
     ASSERT_EQ(subsequenceIndicesHost[1], 3);
+
+    af::freeHost(motifsIndicesHost);
+    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestMotifsConsecutive() {
@@ -634,8 +669,10 @@ void findBestMotifsConsecutive() {
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
     ASSERT_EQ(motifsIndicesHost[1], 6);
-
     ASSERT_EQ(subsequenceIndicesHost[1], 3);
+
+    af::freeHost(motifsIndicesHost);
+    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestMotifsMirrorException() {
@@ -714,6 +751,8 @@ void findBestDiscords() {
 
     ASSERT_EQ(subsequenceIndicesHost[0], 0);
     ASSERT_EQ(subsequenceIndicesHost[1], 10);
+
+    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestDiscordsMultipleProfiles() {
@@ -748,6 +787,8 @@ void findBestDiscordsMultipleProfiles() {
     ASSERT_EQ(subsequenceIndicesHost[5], 10);
     ASSERT_EQ(subsequenceIndicesHost[6], 0);
     ASSERT_EQ(subsequenceIndicesHost[7], 10);
+
+    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestDiscordsMirror() {
@@ -771,8 +812,10 @@ void findBestDiscordsMirror() {
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
     ASSERT_EQ(discordsIndicesHost[0], 3);
-
     ASSERT_EQ(subsequenceIndicesHost[0], 1);
+
+    af::freeHost(discordsIndicesHost);
+    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestDiscordsConsecutive() {
@@ -796,6 +839,8 @@ void findBestDiscordsConsecutive() {
 
     ASSERT_EQ(subsequenceIndicesHost[0], 12);
     ASSERT_NE(subsequenceIndicesHost[1], 11);
+
+    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestDiscordsMirrorException() {
