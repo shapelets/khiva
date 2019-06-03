@@ -5,11 +5,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <khiva/matrix.h>
-#include <khiva/normalization.h> 
+#include <khiva/normalization.h>
 #include <algorithm>
+#include <iostream>
 #include <iterator>
 #include <limits>
-#include <set> 
+#include <set>
 #include "libraryInternal.h"
 #include "matrixInternal.h"
 
@@ -17,7 +18,10 @@ namespace {
 constexpr long BATCH_SIZE_SQUARED = 2048;
 constexpr long BATCH_SIZE_B = 1024;
 constexpr long BATCH_SIZE_A = 8192;
-constexpr double EPSILON = 1e-8;
+
+void getMinDistance(af::array distances, af::array &minDistances, af::array &index) {
+    af::min(minDistances, index, distances, 2);
+}
 
 void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::array &profile, af::array &index) {
     long nb = static_cast<long>(tb.dims(0));
@@ -30,7 +34,7 @@ void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
     index = af::array(0, af::dtype::u32);
 
     // Computing the mean and standard deviation of all the reference time series contained in ta
-    khiva::matrix::meanStdev(ta, aux, m, mean, stdev);
+    khiva::matrix::internal::meanStdev(ta, aux, m, mean, stdev);
 
     // The chunk size cannot be greater than the length of the input time series tb minus m + 1
     long chunkSize = std::min(nb - m + 1, batch_size);
@@ -55,14 +59,18 @@ void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::arra
 
         // For all the subsequences in input for the given batch
         gfor(af::seq idx, iterationSize) {
-            af::array distance;
+            af::array distances;
+            af::array minDistance;
             af::array pidx;
 
             // Compute the distance and index profiles using Mueens algorithm for similarity search
-            khiva::matrix::mass(input(af::span, idx, af::span, af::span), ta, aux, mean, stdev, distance, pidx);
+            khiva::matrix::internal::mass(input(af::span, idx, af::span, af::span), ta, aux, mean, stdev, distances);
+
+            // Get minimium distance and index
+            getMinDistance(distances, minDistance, pidx);
 
             // Concat the profiles of the given chunk to the general result
-            profile = join(0, profile, distance);
+            profile = join(0, profile, minDistance);
             index = join(0, index, pidx);
         }
 
@@ -130,25 +138,28 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
             af::array mean;
             af::array stdev;
             // Computing the mean and standard deviation of all the reference time series contained in taChunk
-            khiva::matrix::meanStdev(taChunk, aux, m, mean, stdev);
+            khiva::matrix::internal::meanStdev(taChunk, aux, m, mean, stdev);
             // For all the subsequences in input for the given batch
             gfor(af::seq idx, iterationSizeB) {
-                af::array distanceTmp;
+                af::array distancesTmp;
+                af::array minDistanceTmp;
                 af::array pidxTmp;
 
                 // Compute the distance and index profiles using Mueens algorithm for similarity search
-                khiva::matrix::mass(input(af::span, idx, af::span, af::span), taChunk, aux, mean, stdev, distanceTmp,
-                                    pidxTmp);
+                khiva::matrix::internal::mass(input(af::span, idx, af::span, af::span), taChunk, aux, mean, stdev,
+                                              distancesTmp);
+
+                getMinDistance(distancesTmp, minDistanceTmp, pidxTmp);
 
                 // Leaving 2nd dimension blank to join the partial results using it
-                distanceTmp = af::reorder(distanceTmp, 0, 2, 1, 3);
+                minDistanceTmp = af::reorder(minDistanceTmp, 0, 2, 1, 3);
                 pidxTmp = af::reorder(pidxTmp, 0, 2, 1, 3);
 
                 // Adding the offset of the chunk to the index profile
                 pidxTmp += start;
 
                 // Concat the profiles of the given chunk to a partial result for the batch of tb
-                distance = af::join(1, distance, distanceTmp);
+                distance = af::join(1, distance, minDistanceTmp);
                 pidx = af::join(1, pidx, pidxTmp);
             }
             af::sync();
@@ -203,7 +214,7 @@ void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::
     af::array stdev;
 
     // Computing the mean and standard deviation of all the reference time series contained in ta
-    khiva::matrix::meanStdev(ta, aux, m, mean, stdev);
+    khiva::matrix::internal::meanStdev(ta, aux, m, mean, stdev);
 
     // If the iteration size has changed, resize input array
     af::array input = af::array(m, nb - m + 1, tb.dims(1), tb.type());
@@ -215,8 +226,11 @@ void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::
 
     // For all the subsequences of tb
     gfor(af::seq idx, nb - m + 1) {
+        af::array distances;
         // Compute the distance and index profiles using Mueens algorithm for similarity search
-        khiva::matrix::mass(input(af::span, idx, af::span, af::span), ta, aux, mean, stdev, profile, index);
+        khiva::matrix::internal::mass(input(af::span, idx, af::span, af::span), ta, aux, mean, stdev, distances);
+
+        getMinDistance(distances, profile, index);
     }
 
     // Moving the number of time series in tb, which is in the 4th dimension to the 3rd dimension
@@ -278,29 +292,32 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
             af::array mean;
             af::array stdev;
             // Computing the mean and standard deviation of all the reference time series contained in taChunk
-            khiva::matrix::meanStdev(tChunk, aux, m, mean, stdev);
+            khiva::matrix::internal::meanStdev(tChunk, aux, m, mean, stdev);
             // For all the subsequences in input for the given batch
             gfor(af::seq idx, iterationSizeB) {
-                af::array distanceTmp;
+                af::array distancesTmp;
+                af::array minDistanceTmp;
                 af::array pidxTmp;
 
                 // Calculating the mask required to filter the trivial matches
                 auto mask = khiva::matrix::internal::generateMask(m, iterationSizeB, i, iterationSizeA - m + 1, start,
                                                                   nTimeSeries);
                 // Compute the distance and index profiles using Mueens algorithm for similarity search
-                khiva::matrix::mass(input(af::span, idx, af::span, af::span), tChunk, aux, mean, stdev, mask,
-                                    distanceTmp, pidxTmp);
+                khiva::matrix::internal::massWithMask(input(af::span, idx, af::span, af::span), tChunk, aux, mean,
+                                                      stdev, mask, distancesTmp);
+
+                getMinDistance(distancesTmp, minDistanceTmp, pidxTmp);
 
                 // Leaving 2nd dimension blank to join the partial results using it. Using the diag method because
                 // we only want the distances of a time series with itself
-                distanceTmp = af::reorder(af::diag(af::reorder(distanceTmp, 3, 1, 0, 2)), 2, 1, 0, 3);
+                minDistanceTmp = af::reorder(af::diag(af::reorder(minDistanceTmp, 3, 1, 0, 2)), 2, 1, 0, 3);
                 pidxTmp = af::reorder(af::diag(af::reorder(pidxTmp, 3, 1, 0, 2)), 2, 1, 0, 3);
 
                 // Adding the offset of the chunk to the index profile
                 pidxTmp += start;
 
                 // Concat the profiles of the given chunk to a partial result for the batch of tb
-                distance = af::join(1, distance, distanceTmp);
+                distance = af::join(1, distance, minDistanceTmp);
                 pidx = af::join(1, pidx, pidxTmp);
             }
             af::sync();
@@ -354,7 +371,7 @@ void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
     af::array stdev;
 
     // Computing the mean and standard deviation of all the reference time series contained in ta
-    khiva::matrix::meanStdev(t, aux, m, mean, stdev);
+    khiva::matrix::internal::meanStdev(t, aux, m, mean, stdev);
 
     // If the iteration size has changed, resize input array
     af::array input = af::array(m, n - m + 1, nTimeSeries, t.type());
@@ -369,8 +386,12 @@ void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
 
     // For all the subsequences of tb
     gfor(af::seq idx, n - m + 1) {
+        af::array distances;
         // Compute the distance and index profiles using Mueens algorithm for similarity search
-        khiva::matrix::mass(input(af::span, idx, af::span, af::span), t, aux, mean, stdev, mask, profile, index);
+        khiva::matrix::internal::massWithMask(input(af::span, idx, af::span, af::span), t, aux, mean, stdev, mask,
+                                              distances);
+
+        getMinDistance(distances, profile, index);
     }
 
     // Using the diag method because
@@ -502,190 +523,37 @@ void findBestN(af::array profile, af::array index, long m, long n, af::array &di
 namespace khiva {
 namespace matrix {
 
-af::array slidingDotProduct(af::array q, af::array t) {
-    long n = static_cast<long>(t.dims(0));
-    long m = static_cast<long>(q.dims(0));
+void mass(af::array q, af::array t, af::array &distances) {
+    af::array aux, mean, stdev;
+    const long long n = t.dims(0);
 
-    // Flipping all the query sequences contained in q
-    af::array qr = af::flip(q, 0);
-
-    // Calculating the convolve of all the query sequences contained in qr
-    // against all the time series contained in t
-    af::array qt = af::real(af::convolve(t, qr, AF_CONV_EXPAND));
-
-    return qt(af::seq(m - 1, n - 1), af::span, af::span, af::span);
+    q = af::reorder(q, 0, 3, 2, 1);
+    const long long m = q.dims(0);
+    internal::meanStdev(t, aux, m, mean, stdev);
+    internal::mass(q, t, aux, mean, stdev, distances);
+    distances = af::reorder(distances, 2, 0, 1, 3);
 }
 
-void meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &stdev) {
-    long na = static_cast<long>(t.dims(0));
+void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances, af::array &indexes) {
+    if (n > t.dims(0) - q.dims(0) + 1) {
+        throw std::invalid_argument("You cannot retrieve more than (L-m+1) occurrences.");
+    }
 
-    af::array tmp = af::constant(0, 1, t.dims(1), t.type());
+    if (n < 1) {
+        throw std::invalid_argument("You cannot retrieve less than one occurrences.");
+    }
 
-    // Cumulative sum of all the time series contained in t
-    af::array cumulative_sum_t = af::join(0, tmp, af::accum(t, 0));
-    // Cumulative sum of the square of all the time series contained in t
-    af::array cumulative_sum_t2 = af::join(0, tmp, af::accum(af::pow(t, 2), 0));
+    af::array distancesGlobal;
 
-    af::array sum_t = cumulative_sum_t(af::seq(m, na), af::span) - cumulative_sum_t(af::seq(0, na - m), af::span);
-    // Cumulative sum of the element-wise square of each subsequence of all the time series contained in t
-    af::array sum_t2 = cumulative_sum_t2(af::seq(m, na), af::span) - cumulative_sum_t2(af::seq(0, na - m), af::span);
+    khiva::matrix::mass(q, t, distancesGlobal);
 
-    // Mean of each subsequence of all the time series
-    mean = sum_t / m;
-    // Mean of the element-wise square of each subsequence of t
-    af::array mean_t2 = sum_t2 / m;
-    // Square of the mean
-    af::array mean_t_p2 = af::pow(mean, 2);
-    // Variance
-    af::array sigma_t2 = mean_t2 - mean_t_p2;
-    // Standard deviation
-    stdev = af::sqrt(sigma_t2);
+    af::array sortedDistances;
+    af::array sortedIndexes;
 
-    double eps = (sigma_t2.type() == 0) ? EPSILON * 1e4 : EPSILON;
+    af::sort(sortedDistances, sortedIndexes, distancesGlobal);
 
-    af::array lessThanEpsilon = eps >= sigma_t2;
-    sigma_t2 = lessThanEpsilon * lessThanEpsilon.as(sigma_t2.type()) + !lessThanEpsilon * sigma_t2;
-
-    // Auxiliary variable to be used for the distance calculation
-    a = (sum_t2 - 2 * sum_t * mean + m * mean_t_p2) / sigma_t2;
-}
-
-void meanStdev(af::array t, long m, af::array &mean, af::array &stdev) {
-    long na = static_cast<long>(t.dims(0));
-
-    af::array tmp = af::constant(0, 1, t.dims(1), t.type());
-
-    // Cumulative sum of all the time series contained in t
-    af::array cumulative_sum_t = af::join(0, tmp, af::accum(t, 0));
-    // Cumulative sum of the square of all the time series contained in t
-    af::array cumulative_sum_t2 = af::join(0, tmp, af::accum(af::pow(t, 2), 0));
-
-    af::array sum_t = cumulative_sum_t(af::seq(m, na), af::span) - cumulative_sum_t(af::seq(0, na - m), af::span);
-    // Cumulative sum of the element-wise square of each subsequence of all the time series contained in t
-    af::array sum_t2 = cumulative_sum_t2(af::seq(m, na), af::span) - cumulative_sum_t2(af::seq(0, na - m), af::span);
-
-    // Mean of each subsequence of all the time series
-    mean = sum_t / m;
-    // Mean of the element-wise square of each subsequence of t
-    af::array mean_t2 = sum_t2 / m;
-    // Square of the mean
-    af::array mean_t_p2 = af::pow(mean, 2);
-    // Variance
-    af::array sigma_t2 = mean_t2 - mean_t_p2;
-    // Standard deviation
-    stdev = af::sqrt(sigma_t2);
-}
-
-void calculateDistanceProfile(af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
-                              af::array sigma_t, af::array mask, af::array &distance, af::array &index) {
-    long batchSize = static_cast<long>(qt.dims(3));
-    long tsLength = static_cast<long>(qt.dims(0));
-    long nTimeSeries = static_cast<long>(qt.dims(1));
-
-    // Tiling the input data to match the batch size, the time series length and the number of time series
-    af::array a_tiled = af::tile(a, 1, 1, 1, static_cast<unsigned int>(batchSize));
-    af::array sum_q_tiled =
-        af::tile(sum_q, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
-    af::array sum_q2_tiled =
-        af::tile(sum_q2, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
-    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
-    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
-
-    // Required to avoid a division by zero when the standard deviation is zero
-    double eps = (sigma_t_tiled.type() == 0) ? EPSILON * 1e4 : EPSILON;
-    af::array lessThanEpsilon = eps >= sigma_t_tiled;
-    sigma_t_tiled = lessThanEpsilon * lessThanEpsilon.as(sigma_t_tiled.type()) + !lessThanEpsilon * sigma_t_tiled;
-    // Computing the distance
-    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / sigma_t_tiled) + sum_q2_tiled;
-    dist = af::sqrt(af::abs(dist));
-
-    // The 1st dimension reflects the number of subsequences of the reference time series
-    // The 2nd dimension reflects the number of query time series
-    // The 3rd dimension reflects the number of reference time series
-    // The 4th dimension reflects the batch size of query subsequences from the query time series
-    // Reordering to match the mask band matrix dimensions
-    dist = af::reorder(dist, 3, 0, 1, 2);
-
-    // Increasing the distance using the mask band matrix to filter trivial matches
-    dist += 1 / EPSILON * mask.as(qt.type());
-
-    // The 1st dimension reflects the number of subsequences of the reference time series
-    // The 2nd dimension reflects the number of reference time series
-    // The 3rd dimension reflects the batch size of query subsequences from the query time series
-    // The 4th dimension reflects the number of query time series
-    dist = af::reorder(dist, 0, 2, 1, 3);
-
-    af::min(distance, index, dist, 2);
-}
-
-void calculateDistanceProfile(af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
-                              af::array sigma_t, af::array &distance, af::array &index) {
-    long batchSize = static_cast<long>(qt.dims(3));
-    long tsLength = static_cast<long>(qt.dims(0));
-    long nTimeSeries = static_cast<long>(qt.dims(1));
-
-    // Tiling the input data to match the batch size, the time series length and the number of time series
-    af::array a_tiled = af::tile(a, 1, 1, 1, static_cast<unsigned int>(batchSize));
-    af::array sum_q_tiled =
-        af::tile(sum_q, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
-    af::array sum_q2_tiled =
-        af::tile(sum_q2, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
-    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
-    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
-
-    // Required to avoid a division by zero when the standard deviation is zero
-    double eps = (sigma_t_tiled.type() == 0) ? EPSILON * 1e4 : EPSILON;
-    af::array lessThanEpsilon = eps >= sigma_t_tiled;
-    sigma_t_tiled = lessThanEpsilon * lessThanEpsilon.as(sigma_t_tiled.type()) + !lessThanEpsilon * sigma_t_tiled;
-    // Computing the distance
-    af::array dist = a_tiled + (-2 * (qt - sum_q_tiled * mean_t_tiled) / sigma_t_tiled) + sum_q2_tiled;
-    dist = af::sqrt(af::abs(dist));
-
-    // The 1st dimension reflects the number of subsequences of the reference time series.
-    // The 2nd dimension reflects the number of reference time series.
-    // The 3rd dimension reflects the number of query time series
-    // The 4th dimension reflects the batch size of query subsequences from the query time series
-    dist = af::reorder(dist, 3, 1, 0, 2);
-
-    af::min(distance, index, dist, 2);
-}
-
-void mass(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array mask,
-          af::array &distance, af::array &index) {
-    // Normalizing the query sequence. q can contain query sequences from multiple series
-    q = khiva::normalization::znorm(q, EPSILON);
-
-    // Sliding dot product of the subsequence q of all the query time series against all the reference time series
-    // contained in t
-    af::array qt = slidingDotProduct(q, t);
-    // Cumulative sum of all the elements contained in q (for each time series, that is why it is done using the first
-    // dimension)
-    af::array sum_q = af::sum(q, 0);
-    // Cumulative sum of squares of all the elements contained in q (for each time series, that is why it is done using
-    // the first dimension)
-    af::array sum_q2 = af::sum(af::pow(q, 2), 0);
-
-    // Calculate the distance and index profiles for all the combinations of query sequences and reference time series
-    calculateDistanceProfile(qt, a, sum_q, sum_q2, mean_t, sigma_t, mask, distance, index);
-}
-
-void mass(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array &distance,
-          af::array &index) {
-    // Normalizing the query sequence. q can contain query sequences from multiple series
-    q = khiva::normalization::znorm(q, EPSILON);
-
-    // Sliding dot product of the subsequence q of all the query time series against all the reference time series
-    // contained in t
-    af::array qt = slidingDotProduct(q, t);
-    // Cumulative sum of all the elements contained in q (for each time series, that is why it is done using the first
-    // dimension)
-    af::array sum_q = af::sum(q, 0);
-    // Cumulative sum of squares of all the elements contained in q (for each time series, that is why it is done using
-    // the first dimension)
-    af::array sum_q2 = af::sum(af::pow(q, 2), 0);
-
-    // Calculate the distance and index profiles for all the combinations of query sequences and reference time series
-    calculateDistanceProfile(qt, a, sum_q, sum_q2, mean_t, sigma_t, distance, index);
+    indexes = sortedIndexes(af::seq(n), af::span, af::span).as(t.type());
+    distances = sortedDistances(af::seq(n), af::span, af::span).as(t.type());
 }
 
 void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {

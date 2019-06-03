@@ -8,8 +8,8 @@
 #include <khiva/matrix.h>
 #include <khiva_c/matrix.h>
 #include <khiva_c/util.h>
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
 void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n, khiva_array *discord_distances,
                           khiva_array *discord_indices, khiva_array *subsequence_indices, bool *self_join) {
@@ -61,6 +61,27 @@ void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long 
     af_retain_array(motif_distances, motifs.get());
     af_retain_array(motif_indices, motifIndices.get());
     af_retain_array(subsequence_indices, subsequenceIndices.get());
+}
+
+void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, khiva_array *distances, khiva_array *indexes) {
+    af::array var_q;
+    af::array var_t;
+    check_and_retain_arrays(q, t, var_q, var_t);
+
+    af::array distancesAux, indexesAux;
+    khiva::matrix::findBestNOccurrences(var_q, var_t, *n, distancesAux, indexesAux);
+    af_retain_array(distances, distancesAux.get());
+    af_retain_array(indexes, indexesAux.get());
+}
+
+void mass(khiva_array *q, khiva_array *t, khiva_array *distances) {
+    af::array var_q;
+    af::array var_t;
+    check_and_retain_arrays(q, t, var_q, var_t);
+
+    af::array distancesAux;
+    khiva::matrix::mass(var_q, var_t, distancesAux);
+    af_retain_array(distances, distancesAux.get());
 }
 
 void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i) {

@@ -25,8 +25,8 @@ extern "C" {
  * whether the mirror similar region is included in the output or not.
  * @return The updated ref_profile and ref_index and references to:
  *           - The distance of the best N motifs.
- *           - The indices of the best N motifs.
- *           - The indices of the query sequences that produced
+ *           - The indexes of the best N motifs.
+ *           - The indexes of the query sequences that produced
  *             the minimum reported in the motifs.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
@@ -45,13 +45,62 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIE
  * whether the mirror similar region is included in the output or not.
  * @return The updated ref_profile and ref_index and references to:
  *          - The distance of the best N discords.
- *          - The indices of the best N discords.
- *          - The indices of the query sequences that produced
+ *          - The indexes of the best N discords.
+ *          - The indexes of the query sequences that produced
  *            the "N" bigger discords.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
                                                                               jlong ref_index, jlong m, jlong n,
                                                                               jboolean self_join);
+
+/**
+ * @brief Calculates the N best matches of several queries in several time series.
+ *
+ * The result has the following structure:
+ *  - 1st dimension corresponds to the nth best match.
+ *  - 2nd dimension corresponds to the number of queries.
+ *  - 3rd dimension corresponds to the number of time series.
+ *
+ * For example, the distance in the position (1, 2, 3) corresponds to the second best distance of the third query in the
+ * fourth time series. The index in the position (1, 2, 3) is the is the index of the subsequence which leads to the
+ * second best distance of the third query in the fourth time series.
+ *
+ * @param ref_query Array whose first dimension is the length of the query time series and the second dimension is the
+ * number of queries.
+ * @param ref_ts Array whose first dimension is the length of the time series and the second dimension is the number of
+ * time series.
+ * @param n Number of matches to return.
+ * @return The updated ref_query and ref_ts and references to:
+ *          - The resulting distances.
+ *          - The resulting indexes.
+ */
+JNIEXPORT jlongArray Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv *env, jobject, jlong ref_query,
+                                                                         jlong ref_ts, jlong n);
+
+/**
+ * @brief Mueen's Algorithm for Similarity Search.
+ *
+ * The result has the following structure:
+ *  - 1st dimension corresponds to the index of the subsequence in the time series.
+ *  - 2nd dimension corresponds to the number of queries.
+ *  - 3rd dimension corresponds to the number of time series.
+ *
+ * For example, the distance in the position (1, 2, 3) correspond to the distance of the third query to the fourth time
+ * series for the second subsequence in the time series.
+ *
+ * [1] Chin-Chia Michael Yeh, Yan Zhu, Liudmila Ulanova, Nurjahan Begum, Yifei Ding, Hoang Anh Dau, Diego Furtado Silva,
+ * Abdullah Mueen, Eamonn Keogh (2016). Matrix Profile I: All Pairs Similarity Joins for Time Series: A Unifying View
+ * that Includes Motifs, Discords and Shapelets. IEEE ICDM 2016.
+ *
+ * @param ref_query Array whose first dimension is the length of the query time series and the second dimension is the
+ * number of queries.
+ * @param ref_ts Array whose first dimension is the length of the time series and the second dimension is the number of
+ * time series.
+ * @return The updated ref_query and ref_ts and reference to:
+ *          - The resulting distances.
+ *
+ */
+JNIEXPORT jlongArray Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, jlong ref_query, jlong ref_ts);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length

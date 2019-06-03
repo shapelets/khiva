@@ -20,7 +20,7 @@ void slidingDotProduct() {
     float query[] = {10, 11, 12};
     af::array q = af::array(3, query);
 
-    af::array sdp = khiva::matrix::slidingDotProduct(q, tss);
+    af::array sdp = khiva::matrix::internal::slidingDotProduct(q, tss);
     ASSERT_EQ(sdp.dims(0), 12);
     ASSERT_EQ(sdp.dims(1), 2);
 
@@ -41,7 +41,7 @@ void meanStdev() {
     af::array mean;
     af::array stdev;
 
-    khiva::matrix::meanStdev(tss, m, mean, stdev);
+    khiva::matrix::internal::meanStdev(tss, m, mean, stdev);
 
     ASSERT_EQ(mean.dims(0), 12);
     ASSERT_EQ(mean.dims(1), 2);
@@ -82,7 +82,7 @@ void meanStdevMEqualsLength() {
     af::array mean;
     af::array stdev;
 
-    khiva::matrix::meanStdev(tss, m, mean, stdev);
+    khiva::matrix::internal::meanStdev(tss, m, mean, stdev);
 
     ASSERT_EQ(mean.dims(0), 1);
     ASSERT_EQ(mean.dims(1), 2);
@@ -174,6 +174,73 @@ void generateMask() {
     }
 }
 
+void findBestNOccurrences() {
+    float data[] = {10, 10, 11, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 11};
+    af::array t = af::array(14, data);
+    af::array tss = af::tile(t, 1, 2);
+
+    float query[] = {10, 11, 12};
+    af::array q = af::array(3, query);
+
+    af::array distance, index;
+
+    khiva::matrix::findBestNOccurrences(q, tss, 1, distance, index);
+
+    float expectedDistance = 0.0f;
+    int expectedIndex = 7;
+
+    ASSERT_EQ(distance.dims(), af::dim4(1, 1, 2, 1));
+    ASSERT_EQ(index.dims(), af::dim4(1, 1, 2, 1));
+
+    distance = distance.as(f32);
+    index = index.as(s64);
+
+    ASSERT_NEAR(distance(0, 0, 0, 0).scalar<float>(), expectedDistance, 1e-2);
+    ASSERT_NEAR(distance(0, 0, 1, 0).scalar<float>(), expectedDistance, 1e-2);
+    ASSERT_EQ(index(0, 0, 0, 0).scalar<long long>(), expectedIndex);
+    ASSERT_EQ(index(0, 0, 0, 0).scalar<long long>(), expectedIndex);
+}
+
+void findBestNOccurrencesMultipleQueries() {
+    float data[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 11, 10, 11, 10, 10};
+    float data2[] = {11, 10, 10, 11, 10, 11, 11, 10, 11, 11, 14, 10, 11, 10};
+
+    float query[] = {11, 11, 10, 11};
+    float query2[] = {10, 11, 11, 12};
+
+    long n = 14;
+    long m = 4;
+
+    af::array ts1 = af::array(n, 1, data);
+    af::array ts2 = af::array(n, 1, data2);
+    af::array q1 = af::array(m, 1, query);
+    af::array q2 = af::array(m, 1, query2);
+    af::array q = af::join(1, q1, q2);
+    af::array tss = af::join(1, ts1, ts2);
+
+    af::array distance, index;
+
+    khiva::matrix::findBestNOccurrences(q, tss, 4, distance, index);
+
+    float expectedDistanceFirstQ1TS2 = 0.014f;
+    int expectedIndexFirstQ1TS2 = 5;
+
+    float expectedDistanceSecondQ2TS2 = 1.5307f;
+    int expectedIndexSecondQ2TS2 = 2;
+
+    ASSERT_EQ(distance.dims(), af::dim4(4, 2, 2, 1));
+    ASSERT_EQ(index.dims(), af::dim4(4, 2, 2, 1));
+
+    distance = distance.as(f32);
+    index = index.as(s64);
+
+    ASSERT_NEAR(distance(0, 0, 1, 0).scalar<float>(), expectedDistanceFirstQ1TS2, 2e-2);
+    ASSERT_EQ(index(0, 0, 1, 0).scalar<long long>(), expectedIndexFirstQ1TS2);
+
+    ASSERT_NEAR(distance(1, 1, 1, 0).scalar<float>(), expectedDistanceSecondQ2TS2, 1e-2);
+    ASSERT_EQ(index(1, 1, 1, 0).scalar<long long>(), expectedIndexSecondQ2TS2);
+}
+
 void calculateDistanceProfile() {
     float data[] = {10, 10, 11, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 11};
     af::array t = af::array(14, data);
@@ -187,14 +254,16 @@ void calculateDistanceProfile() {
     af::array stdev;
     af::array aux;
 
-    af::array qtss = khiva::matrix::slidingDotProduct(q, tss);
-    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
+    af::array qtss = khiva::matrix::internal::slidingDotProduct(q, tss);
+    khiva::matrix::internal::meanStdev(tss, aux, m, mean, stdev);
 
+    af::array distances;
     af::array distance;
     af::array index;
 
-    khiva::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, distance,
-                                            index);
+    khiva::matrix::internal::calculateDistances(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev,
+                                                distances);
+    af::min(distance, index, distances, 2);
 
     float expectedDistance = 19.0552097998f;
     int expectedIndex = 7;
@@ -228,16 +297,18 @@ void calculateDistanceProfileMiddle() {
     af::array stdev;
     af::array aux;
 
-    af::array qtss = khiva::matrix::slidingDotProduct(q, tss);
-    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
+    af::array qtss = khiva::matrix::internal::slidingDotProduct(q, tss);
+    khiva::matrix::internal::meanStdev(tss, aux, m, mean, stdev);
 
+    af::array distances;
     af::array distance;
     af::array index;
 
     af::array mask = khiva::matrix::internal::generateMask(m, 1, 0, 12, 0, 2);
 
-    khiva::matrix::calculateDistanceProfile(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, mask,
-                                            distance, index);
+    khiva::matrix::internal::calculateDistances(qtss, aux, af::sum(q, 0), af::sum(af::pow(q, 2), 0), mean, stdev, mask,
+                                                distances);
+    af::min(distance, index, distances, 2);
 
     float expectedDistance = 19.0552097998f;
     int expectedIndex = 7;
@@ -258,6 +329,40 @@ void calculateDistanceProfileMiddle() {
     af::freeHost(resultingDistance);
 }
 
+void massPublic() {
+    float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 14, 10, 10};
+    af::array t = af::array(14, data);
+    af::array tss = af::tile(t, 1, 2);
+
+    float query[] = {4, 3, 8};
+    af::array q = af::array(3, query);
+
+    long m = 3;
+    long n = 14;
+
+    af::array mean;
+    af::array stdev;
+    af::array aux;
+
+    af::array distances;
+
+    khiva::matrix::mass(q, tss, distances);
+
+    std::vector<float> expectedDistances = {1.7321f, 0.3286f, 1.2101f, 3.1509f, 3.2458f, 2.8221f,
+                                            0.3286f, 1.2101f, 3.1509f, 0.2481f, 3.3019f, 2.8221f};
+    std::vector<float> resultingDistances(n - m + 1, 0.0f);
+    distances(af::span, 0, 0, 0).host(resultingDistances.data());
+
+    ASSERT_EQ(distances.dims(), af::dim4(n - m + 1, 1, 2, 1));
+
+    ASSERT_EQ(expectedDistances.size(), resultingDistances.size());
+
+    for (auto itRes = resultingDistances.begin(), itExpect = expectedDistances.begin();
+         itRes != resultingDistances.end(); ++itRes, ++itExpect) {
+        ASSERT_NEAR(*itRes, *itExpect, 1e-3);
+    }
+}
+
 void massIgnoreTrivial() {
     float data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(14, data);
@@ -272,14 +377,16 @@ void massIgnoreTrivial() {
     af::array stdev;
     af::array aux;
 
-    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
+    khiva::matrix::internal::meanStdev(tss, aux, m, mean, stdev);
 
+    af::array distances;
     af::array distance;
     af::array index;
 
     af::array mask = khiva::matrix::internal::generateMask(m, 1, 0, 12, 0, 2);
 
-    khiva::matrix::mass(q, tss, aux, mean, stdev, mask, distance, index);
+    khiva::matrix::internal::massWithMask(q, tss, aux, mean, stdev, mask, distances);
+    af::min(distance, index, distances, 2);
 
     float expectedDistance = 0.0;
     int expectedIndex = 7;
@@ -314,12 +421,14 @@ void massConsiderTrivial() {
     af::array stdev;
     af::array aux;
 
-    khiva::matrix::meanStdev(tss, aux, m, mean, stdev);
+    khiva::matrix::internal::meanStdev(tss, aux, m, mean, stdev);
 
+    af::array distances;
     af::array distance;
     af::array index;
 
-    khiva::matrix::mass(q, tss, aux, mean, stdev, distance, index);
+    khiva::matrix::internal::mass(q, tss, aux, mean, stdev, distances);
+    af::min(distance, index, distances, 2);
 
     float expectedDistance = 0.0;
     int expectedIndex = 7;
@@ -749,8 +858,8 @@ void findBestDiscords() {
 
     unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
 
-    ASSERT_EQ(subsequenceIndicesHost[0], 0);
-    ASSERT_EQ(subsequenceIndicesHost[1], 10);
+    ASSERT_TRUE((subsequenceIndicesHost[0] == 0 && subsequenceIndicesHost[1] == 10) ||
+                (subsequenceIndicesHost[0] == 10 && subsequenceIndicesHost[1] == 0));
 
     af::freeHost(subsequenceIndicesHost);
 }
@@ -899,8 +1008,11 @@ KHIVA_TEST(MatrixTests, TileIsFarFromDiagonal, tileIsFarFromDiagonal)
 KHIVA_TEST(MatrixTests, GenerateMask, generateMask)
 KHIVA_TEST(MatrixTests, CalculateDistanceProfile, calculateDistanceProfile)
 KHIVA_TEST(MatrixTests, CalculateDistanceProfileMiddle, calculateDistanceProfileMiddle)
+KHIVA_TEST(MatrixTests, MassPublic, massPublic)
 KHIVA_TEST(MatrixTests, MassIgnoreTrivial, massIgnoreTrivial)
 KHIVA_TEST(MatrixTests, MassConsiderTrivial, massConsiderTrivial)
+KHIVA_TEST(MatrixTests, FindBestNOccurrences, findBestNOccurrences)
+KHIVA_TEST(MatrixTests, FindBestNOccurrencesMultipleQueries, findBestNOccurrencesMultipleQueries)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialOneSeries, stompIgnoreTrivialOneSeries)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialOneBigSeries, stompIgnoreTrivialOneBigSeries)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialMultipleSeries, stompIgnoreTrivialMultipleSeries)

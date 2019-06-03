@@ -8,8 +8,8 @@
 #include <khiva/matrix.h>
 #include <khiva_jni/matrix.h>
 #include <khiva_jni/util.h>
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
                                                                     jlong ref_index, jlong m, jlong n,
@@ -112,6 +112,74 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, j
     tmp[2] = (jlong)af_p_motif_distances;
     tmp[3] = (jlong)af_p_motif_indices;
     tmp[4] = (jlong)af_p_subsequence_indices;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
+jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv *env, jobject, jlong ref_query,
+                                                                       jlong ref_ts, jlong n) {
+    const jint l = 4;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr_q = (af_array)ref_query;
+    af::array var_q;
+
+    af_array arr_ts = (af_array)ref_ts;
+    af::array var_ts;
+
+    check_and_retain_arrays(arr_q, arr_ts, var_q, var_ts);
+
+    jlong raw_pointer_distance = 0;
+    af_array af_p_distance = (af_array)raw_pointer_distance;
+
+    jlong raw_pointer_index = 0;
+    af_array af_p_index = (af_array)raw_pointer_index;
+
+    af::array distance;
+    af::array index;
+    long num_occurrences = static_cast<long>(n);
+
+    khiva::matrix::findBestNOccurrences(var_q, var_ts, num_occurrences, distance, index);
+
+    af_retain_array(&af_p_distance, distance.get());
+    af_retain_array(&af_p_index, index.get());
+
+    tmp[0] = (jlong)arr_q;
+    tmp[1] = (jlong)arr_ts;
+    tmp[2] = (jlong)af_p_distance;
+    tmp[3] = (jlong)af_p_index;
+
+    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+    return pointers;
+}
+
+jlongArray JNICALL Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, jlong ref_query, jlong ref_ts) {
+    const jint l = 3;
+    jlong tmp[l];
+    jlongArray pointers = env->NewLongArray(l);
+
+    af_array arr_q = (af_array)ref_query;
+    af::array var_q;
+
+    af_array arr_ts = (af_array)ref_ts;
+    af::array var_ts;
+
+    check_and_retain_arrays(arr_q, arr_ts, var_q, var_ts);
+
+    jlong raw_pointer_distance = 0;
+    af_array af_p_distance = (af_array)raw_pointer_distance;
+
+    af::array distance;
+
+    khiva::matrix::mass(var_q, var_ts, distance);
+
+    af_retain_array(&af_p_distance, distance.get());
+
+    tmp[0] = (jlong)arr_q;
+    tmp[1] = (jlong)arr_ts;
+    tmp[2] = (jlong)af_p_distance;
 
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
     return pointers;
