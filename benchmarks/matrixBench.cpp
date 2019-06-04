@@ -6,7 +6,7 @@
 
 #include <benchmark/benchmark.h>
 #include <khiva/matrix.h>
-#include <math.h> 
+#include <math.h>
 #include "khiva/matrixInternal.h"
 #include "khivaBenchmark.h"
 
@@ -23,7 +23,7 @@ void SlidingDotProduct(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        auto sdp = khiva::matrix::slidingDotProduct(q, t);
+        auto sdp = khiva::matrix::internal::slidingDotProduct(q, t);
         sdp.eval();
         af::sync();
     }
@@ -50,7 +50,7 @@ void SlidingDotProductParallel(benchmark::State &state) {
     af::sync();
     while (state.KeepRunning()) {
         gfor(af::seq idx, n - m) {
-            auto sdp = khiva::matrix::slidingDotProduct(input(af::span, idx, af::span, af::span), t);
+            auto sdp = khiva::matrix::internal::slidingDotProduct(input(af::span, idx, af::span, af::span), t);
             sdp.eval();
         }
         af::sync();
@@ -74,7 +74,7 @@ void MeanStdevAuxiliary(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        khiva::matrix::meanStdev(t, a, m, mean, stdev);
+        khiva::matrix::internal::meanStdev(t, a, m, mean, stdev);
         mean.eval();
         stdev.eval();
         af::sync();
@@ -98,7 +98,7 @@ void MeanStdev(benchmark::State &state) {
 
     af::sync();
     while (state.KeepRunning()) {
-        khiva::matrix::meanStdev(t, a, m, mean, stdev);
+        khiva::matrix::internal::meanStdev(t, a, m, mean, stdev);
         mean.eval();
         stdev.eval();
         af::sync();
@@ -131,7 +131,7 @@ void GenerateMask(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
-void CalculateDistanceProfile(benchmark::State &state) {
+void CalculateDistances(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
 
@@ -144,22 +144,20 @@ void CalculateDistanceProfile(benchmark::State &state) {
     af::array mean;
     af::array stdev;
 
-    khiva::matrix::meanStdev(t, a, m, mean, stdev);
+    khiva::matrix::internal::meanStdev(t, a, m, mean, stdev);
 
-    auto qt = khiva::matrix::slidingDotProduct(q, t);
+    auto qt = khiva::matrix::internal::slidingDotProduct(q, t);
     af::array mask = khiva::matrix::internal::generateMask(m, 1, 0, n - m + 1, 0);
 
     auto sumQ = sum(q);
     auto sumQ2 = sum(pow(q, 2));
 
-    af::array distance;
-    af::array index;
+    af::array distances;
 
     af::sync();
     while (state.KeepRunning()) {
-        khiva::matrix::calculateDistanceProfile(qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
-        distance.eval();
-        index.eval();
+        khiva::matrix::internal::calculateDistances(qt, a, sumQ, sumQ2, mean, stdev, mask, distances);
+        distances.eval();
         af::sync();
     }
     addMemoryCounters(state);
@@ -178,7 +176,7 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
     af::array mean;
     af::array stdev;
 
-    khiva::matrix::meanStdev(t, a, m, mean, stdev);
+    khiva::matrix::internal::meanStdev(t, a, m, mean, stdev);
 
     auto input = af::array(m, n - m + 1, t.type());
 
@@ -186,8 +184,7 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
         input(i, af::span, af::span, af::span) = t(af::seq(i, n - m + i));
     }
 
-    af::array distance;
-    af::array index;
+    af::array distances;
 
     af::array mask = khiva::matrix::internal::generateMask(m, n - m + 1, 0, n - m + 1, 0);
 
@@ -197,10 +194,9 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
             auto q = input(af::span, idx, af::span, af::span);
             auto sumQ = sum(q);
             auto sumQ2 = sum(pow(q, 2));
-            auto qt = khiva::matrix::slidingDotProduct(q, t);
-            khiva::matrix::calculateDistanceProfile(qt, a, sumQ, sumQ2, mean, stdev, mask, distance, index);
-            distance.eval();
-            index.eval();
+            auto qt = khiva::matrix::internal::slidingDotProduct(q, t);
+            khiva::matrix::internal::calculateDistances(qt, a, sumQ, sumQ2, mean, stdev, mask, distances);
+            distances.eval();
         }
         af::sync();
     }
@@ -218,20 +214,18 @@ void Mass(benchmark::State &state) {
     auto t = af::randu(n, f64);
     auto q = t(af::seq(0, m - 1));
 
-    af::array distance;
-    af::array index;
+    af::array distances;
     af::array aux;
     af::array mean;
     af::array stdev;
 
-    khiva::matrix::meanStdev(t, aux, m, mean, stdev);
+    khiva::matrix::internal::meanStdev(t, aux, m, mean, stdev);
     af::array mask = khiva::matrix::internal::generateMask(m, 1, 0, n - m + 1, 0);
 
     af::sync();
     while (state.KeepRunning()) {
-        khiva::matrix::mass(q, t, aux, mean, stdev, mask, distance, index);
-        distance.eval();
-        index.eval();
+        khiva::matrix::internal::massWithMask(q, t, aux, mean, stdev, mask, distances);
+        distances.eval();
         af::sync();
     }
 
@@ -418,7 +412,7 @@ void cudaBenchmarks() {
         ->Ranges({{2 << 10, 128 << 10}, {128, 1024}, {16 << 9, 32 << 9}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(CalculateDistances, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(8)
         ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -485,7 +479,7 @@ void openclBenchmarks() {
         ->Ranges({{2 << 10, 128 << 10}, {128, 1024}, {16 << 9, 32 << 9}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(CalculateDistances, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(8)
         ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
@@ -552,7 +546,7 @@ void cpuBenchmarks() {
         ->Ranges({{2 << 10, 128 << 10}, {128, 1024}, {16 << 9, 32 << 9}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
-    BENCHMARK_TEMPLATE(CalculateDistanceProfile, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+    BENCHMARK_TEMPLATE(CalculateDistances, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(8)
         ->Ranges({{1 << 10, 32 << 10}, {16, 512}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
