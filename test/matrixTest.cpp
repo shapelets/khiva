@@ -192,13 +192,10 @@ void findBestNOccurrences() {
     ASSERT_EQ(distance.dims(), af::dim4(1, 1, 2, 1));
     ASSERT_EQ(index.dims(), af::dim4(1, 1, 2, 1));
 
-    distance = distance.as(f32);
-    index = index.as(s64);
-
     ASSERT_NEAR(distance(0, 0, 0, 0).scalar<float>(), expectedDistance, 1e-2);
     ASSERT_NEAR(distance(0, 0, 1, 0).scalar<float>(), expectedDistance, 1e-2);
-    ASSERT_EQ(index(0, 0, 0, 0).scalar<long long>(), expectedIndex);
-    ASSERT_EQ(index(0, 0, 0, 0).scalar<long long>(), expectedIndex);
+    ASSERT_EQ(index(0, 0, 0, 0).scalar<unsigned int>(), expectedIndex);
+    ASSERT_EQ(index(0, 0, 1, 0).scalar<unsigned int>(), expectedIndex);
 }
 
 void findBestNOccurrencesMultipleQueries() {
