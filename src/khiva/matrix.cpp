@@ -553,7 +553,7 @@ void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances
     af::sort(sortedDistances, sortedIndexes, distancesGlobal);
 
     indexes = sortedIndexes(af::seq(n), af::span, af::span);
-    distances = sortedDistances(af::seq(n), af::span, af::span).as(t.type());
+    distances = sortedDistances(af::seq(n), af::span, af::span);
 }
 
 void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
