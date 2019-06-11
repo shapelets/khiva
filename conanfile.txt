@@ -9,6 +9,7 @@ gtest:shared=False
 gtest:build_gmock=True
 gtest:fPIC=True
 boost:shared=True # False
+boost:header_only=True # False
 
 [generators]
 cmake
