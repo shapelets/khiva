@@ -7,6 +7,8 @@
 #ifndef KHIVA_CORE_LIBRARY_H
 #define KHIVA_CORE_LIBRARY_H
 
+#include <khiva/defines.h>
+
 #include <arrayfire.h>
 
 namespace khiva {
@@ -27,49 +29,49 @@ typedef khiva_backend Backend;
  *
  * @return std::string The information of the backend.
  */
-std::string backendInfo();
+KHIVAAPI std::string backendInfo();
 
 /**
  * @brief Set the backend.
  *
  * @param be The desired backend.
  */
-void setBackend(khiva::library::Backend be);
+KHIVAAPI void setBackend(khiva::library::Backend be);
 
 /**
  * @brief Get the active backend.
  *
  * @return khiva::library::Backend The active backend.
  */
-khiva::library::Backend getBackend();
+KHIVAAPI khiva::library::Backend getBackend();
 
 /**
  * @brief Get the available backends.
  *
  * @return int The available backends.
  */
-int getBackends();
+KHIVAAPI int getBackends();
 
 /**
  * @brief Set the device.
  *
  * @param device The desired device.
  */
-void setDevice(int device);
+KHIVAAPI void setDevice(int device);
 
 /**
  * @brief Get the active device.
  *
  * @return int The active device.
  */
-int getDevice();
+KHIVAAPI int getDevice();
 
 /**
  * @brief Get the device count.
  *
  * @return int The device count.
  */
-int getDeviceCount();
+KHIVAAPI int getDeviceCount();
 
 /**
  * @brief Set the memory of the device in use. This information is used for splitting some algorithms and execute them
@@ -77,7 +79,7 @@ int getDeviceCount();
  *
  * @param memory The device memory.
  */
-void setDeviceMemoryInGB(double memory);
+KHIVAAPI void setDeviceMemoryInGB(double memory);
 
 }  // namespace library
 }  // namespace khiva

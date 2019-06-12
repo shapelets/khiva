@@ -13,6 +13,10 @@
 #include <set>
 #include "libraryInternal.h"
 #include "matrixInternal.h"
+#include "vector.h"
+
+#include <SCAMP/src/common.h>
+#include <SCAMP/src/SCAMP.h>
 
 namespace {
 constexpr long BATCH_SIZE_SQUARED = 2048;
@@ -603,6 +607,161 @@ void findBestNDiscords(af::array profile, af::array index, long m, long n, af::a
                        af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin) {
     findBestN(profile, index, m, n, discords, discordsIndices, subsequenceIndices, selfJoin, false);
 }
+
+// TODO: Check if the if statements checking the self_join flag are correct 
+void InitProfileMemory(SCAMP::SCAMPArgs &args) {
+  switch (args.profile_type) {
+    case SCAMP::PROFILE_TYPE_1NN_INDEX: {
+      SCAMP::mp_entry e;
+      e.floats[0] = std::numeric_limits<float>::lowest();
+      e.ints[1] = -1u;
+      args.profile_a.data.emplace_back();
+      args.profile_a.data[0].uint64_value.resize(
+          args.timeseries_a.size() - args.window + 1, e.ulong);
+      if (args.has_b) {
+        args.profile_b.data.emplace_back();
+        args.profile_b.data[0].uint64_value.resize(
+            args.timeseries_b.size() - args.window + 1, e.ulong);
+      }
+    }
+    case SCAMP::PROFILE_TYPE_1NN: {
+      args.profile_a.data.emplace_back();
+      args.profile_a.data[0].float_value.resize(
+          args.timeseries_a.size() - args.window + 1,
+          std::numeric_limits<float>::lowest());
+      if (args.has_b) {
+        args.profile_b.data.emplace_back();
+        args.profile_b.data[0].float_value.resize(
+            args.timeseries_b.size() - args.window + 1,
+            std::numeric_limits<float>::lowest());
+      }
+    }
+    case SCAMP::PROFILE_TYPE_SUM_THRESH: {
+      args.profile_a.data.emplace_back();
+      args.profile_a.data[0].double_value.resize(
+          args.timeseries_a.size() - args.window + 1, 0);
+      if (args.has_b) {
+        args.profile_b.data.emplace_back();
+        args.profile_b.data[0].double_value.resize(
+            args.timeseries_b.size() - args.window + 1, 0);
+      }
+    }
+    default:
+      break;
+  }
+}
+
+
+float convertToEuclidean(float val, uint64_t window) {
+	// If there was no match, we can't do a valid conversion, just return NaN
+	if (val < -1) {
+		return std::numeric_limits<float>::max();
+	}
+	return std::sqrt(std::max(2.0 * window * (1.0 - val), 0.0));
+
+}
+
+std::pair<std::vector<double>, std::vector<unsigned int>> getProfileOutput(const SCAMP::Profile& p, uint64_t window) {
+	std::vector<double> distances;
+	std::vector<unsigned int> indexes;
+
+	const auto& arr = p.data[0].uint64_value; 
+	distances.resize(arr.size());
+	indexes.resize(arr.size());
+
+	for (int i = 0; i < arr.size(); ++i) {
+		SCAMP::mp_entry e;
+		e.ulong = arr[i];
+		distances[i] = static_cast<double>(convertToEuclidean(e.floats[0], window));
+		indexes[i] = (e.floats[0] < -1) ? -1 : e.ints[1] + 1;
+
+		//if (FLAGS_output_pearson) {
+		//	mp_out << std::setprecision(10) << e.floats[0] << std::endl;
+		//} else {
+		//	mp_out << std::setprecision(10)
+		//		<< ConvertToEuclidean<float>(e.floats[0]) << std::endl;
+		//}
+		//int index;
+		//// If there was no match, set index to -1
+		//if (e.floats[0] < -1) {
+		//	index = -1;
+		//} else {
+		//	index = e.ints[1] + 1;
+		//}
+		//mpi_out << index << std::endl;
+	}
+	return std::make_pair(std::move(distances), std::move(indexes));
+}
+
+
+std::pair<std::vector<double>, std::vector<unsigned int>> matrixProfile(std::vector<double>&& tss, long m) {
+	int n_x = tss.size() - m + 1;
+	int n_y = n_x;
+//	int n_y;
+//	if (self_join) {
+//		n_y = n_x;
+//	} else {
+//		n_y = Tb_h.size() - FLAGS_window + 1;
+//	}
+
+	std::vector<int> devices;
+#ifdef _HAS_CUDA_
+	// Use all available devices
+	int num_dev;
+	cudaGetDeviceCount(&num_dev);
+	for (int i = 0; i < num_dev; ++i) {
+		devices.push_back(i);
+	}
+	// TODO: set numWorkersCPU as param
+	const int numWorkersCPU = 0;
+	auto precision = SCAMP::PRECISION_SINGLE;
+#else
+	// TODO: set numWorkersCPU as param
+	const int numWorkersCPU = 1; 
+	auto precision = SCAMP::PRECISION_DOUBLE;
+#endif
+
+	SCAMP::SCAMPArgs args;
+	args.window = m;
+	args.max_tile_size = 1 << 20;
+	args.has_b = false;
+	args.distributed_start_row = -1;
+	args.distributed_start_col = -1;
+	args.distance_threshold = std::numeric_limits<double>::max();
+	args.computing_columns = true;
+	args.computing_rows = true;
+	args.profile_a.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
+	args.profile_b.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
+	args.precision_type = precision;
+	args.profile_type = SCAMP::PROFILE_TYPE_1NN_INDEX;
+	args.keep_rows_separate = false;
+	args.is_aligned = false;
+	args.timeseries_a = std::move(tss);
+
+	InitProfileMemory(args);
+
+	SCAMP::do_SCAMP(&args, devices, numWorkersCPU);
+
+	return getProfileOutput(args.profile_a, args.window);
+}
+
+void matrixProfile(af::array tss, long m, af::array& profile, af::array& index) {
+	if(tss.dims(2) > 1 || tss.dims(3) > 1) {
+        throw std::invalid_argument("Dimension 2 o dimension 3 is bigger than 1");
+	}
+	
+	profile = af::array(tss.dims(0) - m + 1, tss.dims(1), f64);
+	index = af::array(tss.dims(0) - m + 1, tss.dims(1), u32);
+
+	tss = tss.as(f64);
+	for(dim_t tssIdx = 0; tssIdx < tss.dims(1); ++tssIdx ) {
+		auto vect = khiva::vector::get<double>(tss(af::span, tssIdx));
+		auto res = matrixProfile(std::move(vect), m);
+		profile(af::span, tssIdx) = khiva::vector::createArray<double>(res.first);
+		index(af::span, tssIdx) = khiva::vector::createArray<unsigned int>(res.second);
+	}
+}
+
 
 }  // namespace matrix
 }  // namespace khiva

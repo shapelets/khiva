@@ -11,6 +11,8 @@
 #error Internal headers cannot be included from user code
 #endif
 
+#include <khiva/defines.h>
+
 #include <arrayfire.h>
 
 namespace khiva {
@@ -27,7 +29,7 @@ namespace internal {
  * @return array Returns an array with as many elements as 't' in the first dimension and as many elements as the last
  * dimension of 'q' in the last dimension.
  */
-af::array slidingDotProduct(af::array q, af::array t);
+KHIVAAPI af::array slidingDotProduct(af::array q, af::array t);
 
 /**
  * @brief Calculates the moving average and standard deviation of the time series 't'.
@@ -39,7 +41,7 @@ af::array slidingDotProduct(af::array q, af::array t);
  * @param mean Output array containing the moving average.
  * @param stdev Output array containing the moving standard deviation.
  */
-void meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &stdev);
+KHIVAAPI void meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &stdev);
 
 /**
  * @brief Calculates the moving average and standard deviation of the time series 't'.
@@ -49,7 +51,7 @@ void meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &st
  * @param mean Output array containing the moving average.
  * @param stdev Output array containing the moving standard deviation.
  */
-void meanStdev(af::array t, long m, af::array &mean, af::array &stdev);
+KHIVAAPI void meanStdev(af::array t, long m, af::array &mean, af::array &stdev);
 
 /**
  * @brief Calculates the distance between 'q' and the time series 't', which produced the sliding. Multiple queries can
@@ -65,7 +67,7 @@ void meanStdev(af::array t, long m, af::array &mean, af::array &stdev);
  * @param mask Mask band matrix to filter the trivial match of a subsequence with itself.
  * @param distances Resulting distances.
  */
-void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
+KHIVAAPI void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
                         af::array sigma_t, af::array mask, af::array &distances);
 
 /**
@@ -81,7 +83,7 @@ void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array su
  * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements in 'q'.
  * @param distances Resulting distances.
  */
-void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
+KHIVAAPI void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
                         af::array sigma_t, af::array &distances);
 
 /**
@@ -96,7 +98,7 @@ void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array su
  *
  * @return If it is far or not.
  */
-bool tileIsFarFromDiagonal(long bandSize, long numRows, long row, long numColumns, long column);
+KHIVAAPI bool tileIsFarFromDiagonal(long bandSize, long numRows, long row, long numColumns, long column);
 
 /**
  * @brief Generate an identity band matrix for a given tile indices.
@@ -110,7 +112,7 @@ bool tileIsFarFromDiagonal(long bandSize, long numRows, long row, long numColumn
  *
  * @return The mask.
  */
-af::array generateMask(long m, long numRows, long row, long numColumns, long column, long nTimeSeries = 1);
+KHIVAAPI af::array generateMask(long m, long numRows, long row, long numColumns, long column, long nTimeSeries = 1);
 
 /**
  * @brief Calculates the Mueen distance.
@@ -129,7 +131,7 @@ af::array generateMask(long m, long numRows, long row, long numColumns, long col
  * @param mask Specifies the elements that should not be considered in the computation.
  * @param distances Resulting distances.
  */
-void massWithMask(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array mask,
+KHIVAAPI void massWithMask(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array mask,
                   af::array &distances);
 
 /**
@@ -144,7 +146,7 @@ void massWithMask(af::array q, af::array t, af::array a, af::array mean_t, af::a
  * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements in 'q'.
  * @param distances Resulting distances.
  */
-void mass(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array &distance);
+KHIVAAPI void mass(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array &distance);
 
 }  // namespace internal
 }  // namespace matrix

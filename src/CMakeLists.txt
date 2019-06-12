@@ -6,13 +6,30 @@
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
 
+include(CheckLanguage)
+
 # Compile with C++11 support.
 SET(CMAKE_CXX_STANDARD 14)
-SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON) 
+
+PROJECT(KHIVALIB) 
+
+if(NOT ${KHIVA_ONLY_CPU_BACKEND})
+	check_language(CUDA)
+endif()
+
+if(CMAKE_CUDA_COMPILER)
+	message(STATUS "CUDA compiler found: ${CMAKE_CUDA_COMPILER}")
+	enable_language(CUDA)
+  	add_definitions("-D_HAS_CUDA_")
+  	include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+elseif(${KHIVA_ONLY_CPU_BACKEND})
+else()
+	message(STATUS "No CUDA compiler found, building SCAMP without CUDA.")
+endif() 
 
 ADD_SUBDIRECTORY(scamp)
 
-PROJECT(KHIVALIB)
 # Find the ArrayFire package.
 FIND_PACKAGE(ArrayFire REQUIRED)
 # Find the Boost package
@@ -30,10 +47,13 @@ FILE(GLOB_RECURSE KHIVALIB_CODE
     "${KHIVALIB_INC}/*.h" )
 
 # The output is a static library
-ADD_LIBRARY(${KHIVALIB} STATIC ${KHIVALIB_CODE})
+ADD_LIBRARY(${KHIVALIB} SHARED ${KHIVALIB_CODE})
 
 # Declare include directories
-TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
+TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} 
+						PRIVATE
+						   ${SCAMP_INCLUDE_DIRS}						
+						PUBLIC
                            $<BUILD_INTERFACE:${KHIVALIB_INC}>
                            $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
                            ${ArrayFire_INCLUDE_DIRS}
@@ -41,13 +61,14 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
 
 # Declare compilation libraries
 TARGET_LINK_LIBRARIES(${KHIVALIB}
-	$<IF:$<BOOL:${KHIVA_ONLY_CPU_BACKEND}>,ArrayFire::afcpu,ArrayFire::af>
+	PRIVATE scamp
+	PUBLIC $<IF:$<BOOL:${KHIVA_ONLY_CPU_BACKEND}>,ArrayFire::afcpu,ArrayFire::af>
 	Eigen3::Eigen
 	${CMAKE_DL_LIBS})
-                           
+
 
 # Add compile definitions
-TARGET_COMPILE_DEFINITIONS(${KHIVALIB} PRIVATE KHIVA_STATICLIB PUBLIC AF_UNIFIED)
+TARGET_COMPILE_DEFINITIONS(${KHIVALIB} PRIVATE KHIVA_EXPORTS PUBLIC AF_UNIFIED)
 
 # Add metadata
 SET_TARGET_PROPERTIES(${KHIVALIB} PROPERTIES 

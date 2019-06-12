@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <khiva/defines.h>
+
 #include <string>
 
 constexpr char versionMajor[] = "@VERSION_MAJOR@";
@@ -22,6 +24,6 @@ namespace khiva {
  *
  * @return std::string A string containing the version number of Khiva library.
  */
-std::string version();
+KHIVAAPI std::string version();
 
 } // namespace khiva

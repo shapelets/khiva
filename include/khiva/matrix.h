@@ -7,7 +7,11 @@
 #ifndef KHIVA_CORE_MATRIX_H
 #define KHIVA_CORE_MATRIX_H
 
+#include <khiva/defines.h>
+
 #include <arrayfire.h>
+#include <utility>
+#include <vector>
 
 namespace khiva {
 
@@ -33,7 +37,7 @@ namespace matrix {
  * @param distances Resulting distances.
  * @param indexes Resulting indexes.
  */
-void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances, af::array &indexes);
+KHIVAAPI void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances, af::array &indexes);
 
 /**
  * @brief Mueen's Algorithm for Similarity Search.
@@ -56,7 +60,7 @@ void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances
  * series.
  * @param distances Resulting distances.
  */
-void mass(af::array q, af::array t, af::array &distances);
+KHIVAAPI void mass(af::array q, af::array t, af::array &distances);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
@@ -72,7 +76,7 @@ void mass(af::array q, af::array t, af::array &distances);
  * in 'tb'.
  * @param index The matrix profile index, which points to where the aforementioned minimum is located.
  */
-void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
+KHIVAAPI void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length of 'm'.
@@ -88,7 +92,7 @@ void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &in
  * different location of itself.
  * @param index The matrix profile index, which points to where the aforementioned minimum is located.
  */
-void stomp(af::array t, long m, af::array &profile, af::array &index);
+KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
 
 /**
  * @brief This function extracts the best N motifs from a previously calculated matrix profile.
@@ -104,7 +108,7 @@ void stomp(af::array t, long m, af::array &profile, af::array &index);
  * @param selfJoin Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-void findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs, af::array &motifsIndices,
+KHIVAAPI void findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs, af::array &motifsIndices,
                      af::array &subsequenceIndices, bool selfJoin = false);
 
 /**
@@ -121,8 +125,12 @@ void findBestNMotifs(af::array profile, af::array index, long m, long n, af::arr
  * @param selfJoin Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-void findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
+KHIVAAPI void findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
                        af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin = false);
+
+KHIVAAPI std::pair<std::vector<double>, std::vector<unsigned int>> matrixProfile(std::vector<double>&& tss, long m);
+
+KHIVAAPI void matrixProfile(af::array tss, long m, af::array& profile, af::array& index);
 
 }  // namespace matrix
 }  // namespace khiva

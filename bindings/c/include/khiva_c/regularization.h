@@ -36,7 +36,7 @@ extern "C" {
  *
  * @param result An array with the values of the group keys aggregated using the aggregation_function.
  */
-KHIVAAPI void group_by(khiva_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
+KHIVA_C_API void group_by(khiva_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
                        khiva_array *result);
 
 #ifdef __cplusplus

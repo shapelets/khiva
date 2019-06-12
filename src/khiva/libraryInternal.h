@@ -11,6 +11,8 @@
 #error Internal headers cannot be included from user code
 #endif
 
+#include <khiva/defines.h>
+
 namespace khiva {
 namespace library {
 namespace internal {
@@ -23,7 +25,7 @@ enum class Complexity { LINEAR, CUADRATIC, CUBIC };
  *
  * @param memory The device memory.
  */
-void setDeviceMemoryInGB(double memory);
+KHIVAAPI void setDeviceMemoryInGB(double memory);
 
 /**
  * @brief Get the value scaled to the memory of the device taking into account the Memory complexity.
@@ -33,7 +35,7 @@ void setDeviceMemoryInGB(double memory);
  *
  * @return the scaled value.
  */
-long getValueScaledToMemoryDevice(long value, Complexity complexity);
+KHIVAAPI long getValueScaledToMemoryDevice(long value, Complexity complexity);
 
 }  // namespace internal
 }  // namespace library

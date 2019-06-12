@@ -30,7 +30,7 @@ extern "C" {
  * @param self_join Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-KHIVAAPI void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n,
+KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n,
                                    khiva_array *discord_distances, khiva_array *discord_indices,
                                    khiva_array *subsequence_indices, bool *self_join);
 
@@ -50,7 +50,7 @@ KHIVAAPI void find_best_n_discords(khiva_array *profile, khiva_array *index, lon
  * @param self_join Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-KHIVAAPI void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n,
+KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n,
                                  khiva_array *motif_distances, khiva_array *motif_indices,
                                  khiva_array *subsequence_indices, bool *self_join);
 
@@ -74,7 +74,7 @@ KHIVAAPI void find_best_n_motifs(khiva_array *profile, khiva_array *index, long 
  * @param distances Resulting distances.
  * @param indexes Resulting indexes.
  */
-KHIVAAPI void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, khiva_array *distances,
+KHIVA_C_API void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, khiva_array *distances,
                                       khiva_array *indexes);
 
 /**
@@ -98,7 +98,7 @@ KHIVAAPI void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, k
  * series.
  * @param distances Resulting distances.
  */
-KHIVAAPI void mass(khiva_array *q, khiva_array *t, khiva_array *distances);
+KHIVA_C_API void mass(khiva_array *q, khiva_array *t, khiva_array *distances);
 
 /**
  * @brief  Primitive of the STOMP algorithm.
@@ -114,7 +114,7 @@ KHIVAAPI void mass(khiva_array *q, khiva_array *t, khiva_array *distances);
  * from 'tssa' in 'tssb'.
  * @param i The matrix profile index, which points to where the aforementioned minimum is located.
  */
-KHIVAAPI void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i);
+KHIVA_C_API void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i);
 
 /**
  * @brief Primitive of the STOMP self join algorithm.
@@ -129,7 +129,7 @@ KHIVAAPI void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *
  * from 'tss' in a different location of itself
  * @param i The matrix profile index, which points to where the aforementioned minimum is located
  */
-KHIVAAPI void stomp_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i);
+KHIVA_C_API void stomp_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i);
 
 #ifdef __cplusplus
 }

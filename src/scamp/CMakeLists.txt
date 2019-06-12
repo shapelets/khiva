@@ -1,31 +1,13 @@
-include(CheckLanguage)
-# ----------------------------------------------------------------------------------------
-#                              ===== Project Setup =====
-project(SCAMP LANGUAGES CXX)
-set(VERSION_MAJOR 1)
-set(VERSION_MINOR 1)
-
-# Use cuda if available
-check_language(CUDA)
-if(CMAKE_CUDA_COMPILER)
-	enable_language(CUDA)
-endif()
-
-if(NOT CMAKE_CUDA_COMPILER)
-	message(STATUS "No CUDA compiler found, building SCAMP without CUDA.")
-else()
-	message(STATUS "CUDA compiler found: ${CMAKE_CUDA_COMPILER}")
-endif()
 
 # ----------------------------------------------------------------------------------------
 #                         ===== CUDA Configuration =====
 
 if (CMAKE_CUDA_COMPILER)
-  add_definitions("-D_HAS_CUDA_")
   set(CMAKE_CUDA_STANDARD 14)
   find_library(CUDART_LIBRARY cudart ${CMAKE_CUDA_IMPLICIT_LINK_DIRECTORIES})
   include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
   set(CUDA_SEPARABLE_COMPILATION ON)
+  set(CUDA_RESOLVE_DEVICE_SYMBOLS ON)
   set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr -lineinfo")
   set(CMAKE_CUDA_FLAGS_RELEASE "${CMAKE_CUDA_FLAGS_RELEASE}")
   set(CUDA_GENCODE_FLAGS "${CUDA_GENCODE_FLAGS} -gencode arch=compute_60,code=sm_70")
@@ -58,24 +40,29 @@ endif()
 
 add_library(common SCAMP/src/common.cpp)
 
-if (CMAKE_CUDA_COMPILER) 
-  target_link_libraries(common -lcudart_static)
-endif()
-
-add_library(qt_helper SCAMP/src/qt_helper.cpp)
-
 if (CMAKE_CUDA_COMPILER)
   add_library(qt_kernels SCAMP/src/qt_kernels.cu)
-  target_link_libraries(qt_helper -lcufft qt_kernels common)
-else()
-  target_link_libraries(qt_helper common)
-endif()
+  set_target_properties(qt_kernels
+                      PROPERTIES
+                      POSITION_INDEPENDENT_CODE ON
+					  COMPILE_FLAGS "${COMPILE_FLAGS} ${CUDA_GENCODE_FLAGS}") 
 
 
-if (CMAKE_CUDA_COMPILER)
   add_library(gpu_kernels SCAMP/src/kernels.cu)
   target_link_libraries(gpu_kernels common)
+  set_target_properties(gpu_kernels
+                      PROPERTIES
+                      POSITION_INDEPENDENT_CODE ON
+					  COMPILE_FLAGS "${COMPILE_FLAGS} ${CUDA_GENCODE_FLAGS}") 
+
 endif()
+
+add_library(qt_helper SCAMP/src/qt_helper.cpp) 
+target_link_libraries(qt_helper 
+					common
+					$<$<BOOL:${CMAKE_CUDA_COMPILER}>:cufft>
+					$<$<BOOL:${CMAKE_CUDA_COMPILER}>:qt_kernels>)
+
 
 add_library(cpu_stats SCAMP/src/cpu_stats.cpp)
 target_link_libraries(cpu_stats common)
@@ -83,21 +70,40 @@ target_link_libraries(cpu_stats common)
 add_library(cpu_kernels SCAMP/src/cpu_kernels.cpp)
 target_link_libraries(cpu_kernels common)
 
-add_library(tile SCAMP/src/tile.cpp)
+add_library(tile SCAMP/src/tile.cpp) 
+target_link_libraries(tile 
+					$<$<BOOL:${CMAKE_CUDA_COMPILER}>:gpu_kernels>
+					cpu_kernels 
+					qt_helper) 
 
 
-if (CMAKE_CUDA_COMPILER)
-  target_link_libraries(tile common gpu_kernels cpu_kernels qt_helper)
-else()
-  target_link_libraries(tile common cpu_kernels qt_helper)
-endif()
+add_library(scamp SCAMP/src/SCAMP.cpp) 
+target_link_libraries(scamp PRIVATE tile cpu_stats)
 
-add_library(scamp SCAMP/src/SCAMP.cpp)
 
-target_link_libraries(scamp -lpthread tile cpu_stats common qt_helper)
+set_target_properties(scamp
+	PROPERTIES
+	POSITION_INDEPENDENT_CODE ON) 
 
-if (CMAKE_CUDA_COMPILER)
-  set_target_properties(gpu_kernels PROPERTIES
-    COMPILE_FLAGS "${COMPILE_FLAGS} ${CUDA_GENCODE_FLAGS}"
-  )
-endif()
+set_target_properties(common
+                      PROPERTIES
+                      POSITION_INDEPENDENT_CODE ON) 
+
+set_target_properties(qt_helper
+                      PROPERTIES
+                      POSITION_INDEPENDENT_CODE ON) 
+
+set_target_properties(cpu_stats
+                      PROPERTIES
+                      POSITION_INDEPENDENT_CODE ON) 
+
+set_target_properties(cpu_kernels
+                      PROPERTIES
+                      POSITION_INDEPENDENT_CODE ON) 
+
+set_target_properties(tile
+                      PROPERTIES
+                      POSITION_INDEPENDENT_CODE ON) 
+
+set(SCAMP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
+

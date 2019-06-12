@@ -24,7 +24,7 @@ extern "C" {
  * @param tolerance      The error tolerance to stop the computation of the centroids.
  * @param max_iterations The maximum number of iterations allowed.
  */
-KHIVAAPI void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
+KHIVA_C_API void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
                       int *max_iterations);
 
 /**
@@ -41,7 +41,7 @@ KHIVAAPI void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_ar
  * @param tolerance      The error tolerance to stop the computation of the centroids.
  * @param max_iterations The maximum number of iterations allowed.
  */
-KHIVAAPI void k_shape(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
+KHIVA_C_API void k_shape(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
                       int *max_iterations);
 
 #ifdef __cplusplus

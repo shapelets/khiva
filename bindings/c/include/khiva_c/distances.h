@@ -22,7 +22,7 @@ extern "C" {
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
-KHIVAAPI void dtw(khiva_array *tss, khiva_array *result);
+KHIVA_C_API void dtw(khiva_array *tss, khiva_array *result);
 
 /**
  * @brief Calculates euclidean distances between time series.
@@ -34,7 +34,7 @@ KHIVAAPI void dtw(khiva_array *tss, khiva_array *result);
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-KHIVAAPI void euclidean(khiva_array *tss, khiva_array *result);
+KHIVA_C_API void euclidean(khiva_array *tss, khiva_array *result);
 
 /**
  * @brief Calculates Hamming distances between time series.
@@ -45,7 +45,7 @@ KHIVAAPI void euclidean(khiva_array *tss, khiva_array *result);
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-KHIVAAPI void hamming(khiva_array *tss, khiva_array *result);
+KHIVA_C_API void hamming(khiva_array *tss, khiva_array *result);
 
 /**
  * @brief Calculates Manhattan distances between time series.
@@ -57,7 +57,7 @@ KHIVAAPI void hamming(khiva_array *tss, khiva_array *result);
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-KHIVAAPI void manhattan(khiva_array *tss, khiva_array *result);
+KHIVA_C_API void manhattan(khiva_array *tss, khiva_array *result);
 
 /**
  * @brief Calculates the Shape-Based distance (SBD). It computes the normalized cross-correlation and it returns 1.0
@@ -70,7 +70,7 @@ KHIVAAPI void manhattan(khiva_array *tss, khiva_array *result);
  * Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between time series 0
  * and time series 1.
  */
-KHIVAAPI void sbd(khiva_array *tss, khiva_array *result);
+KHIVA_C_API void sbd(khiva_array *tss, khiva_array *result);
 
 /**
  * @brief Calculates the non squared version of the euclidean distance.
@@ -82,7 +82,7 @@ KHIVAAPI void sbd(khiva_array *tss, khiva_array *result);
  * Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between time series 0
  * and time series 1.
  */
-KHIVAAPI void squared_euclidean(khiva_array *tss, khiva_array *result);
+KHIVA_C_API void squared_euclidean(khiva_array *tss, khiva_array *result);
 
 #ifdef __cplusplus
 }

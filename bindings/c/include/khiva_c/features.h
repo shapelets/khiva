@@ -22,7 +22,7 @@ extern "C" {
  * @param result An array with the same dimensions as array, whose values (time series in dimension 0)
  * contains the sum of the squares values in the time series.
  */
-KHIVAAPI void abs_energy(khiva_array *array, khiva_array *result);
+KHIVA_C_API void abs_energy(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the sum over the absolute value of consecutive changes in the time series.
@@ -33,7 +33,7 @@ KHIVAAPI void abs_energy(khiva_array *array, khiva_array *result);
  * @param result An array with the same dimensions as array, whose values (time series in dimension 0)
  * contains absolute value of consecutive changes in the time series.
  */
-KHIVAAPI void absolute_sum_of_changes(khiva_array *array, khiva_array *result);
+KHIVA_C_API void absolute_sum_of_changes(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
@@ -55,7 +55,7 @@ KHIVAAPI void absolute_sum_of_changes(khiva_array *array, khiva_array *result);
  *          }
  * @param result An array whose values contains the aggregated correaltion for each time series.
  */
-KHIVAAPI void aggregated_autocorrelation(khiva_array *array, int *aggregation_function, khiva_array *result);
+KHIVA_C_API void aggregated_autocorrelation(khiva_array *array, int *aggregation_function, khiva_array *result);
 
 /**
  * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
@@ -80,7 +80,7 @@ KHIVAAPI void aggregated_autocorrelation(khiva_array *array, int *aggregation_fu
  * using Wald Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
  */
-KHIVAAPI void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregation_function,
+KHIVA_C_API void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregation_function,
                                       khiva_array *slope, khiva_array *intercept, khiva_array *rvalue,
                                       khiva_array *pvalue, khiva_array *stderrest);
 
@@ -99,7 +99,7 @@ KHIVAAPI void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *
  * @param r Filtering level, must be positive.
  * @param result The vectorized approximate entropy for all the input time series in array.
  */
-KHIVAAPI void approximate_entropy(khiva_array *array, int *m, float *r, khiva_array *result);
+KHIVA_C_API void approximate_entropy(khiva_array *array, int *m, float *r, khiva_array *result);
 
 /**
  * @brief Calculates the cross-covariance of the given time series.
@@ -114,7 +114,7 @@ KHIVAAPI void approximate_entropy(khiva_array *array, int *m, float *r, khiva_ar
  * n (if false).
  * @param result The cross-covariance value for the given time series.
  */
-KHIVAAPI void cross_covariance(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_array *result);
+KHIVA_C_API void cross_covariance(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_array *result);
 
 /**
  * @brief Calculates the auto-covariance the given time series.
@@ -126,7 +126,7 @@ KHIVAAPI void cross_covariance(khiva_array *xss, khiva_array *yss, bool *unbiase
  * n (if false).
  * @param result The auto-covariance value for the given time series.
  */
-KHIVAAPI void auto_covariance(khiva_array *array, bool *unbiased, khiva_array *result);
+KHIVA_C_API void auto_covariance(khiva_array *array, bool *unbiased, khiva_array *result);
 
 /**
  * @brief Calculates the cross-correlation of the given time series.
@@ -141,7 +141,7 @@ KHIVAAPI void auto_covariance(khiva_array *array, bool *unbiased, khiva_array *r
  * n (if false).
  * @param result The cross-correlation value for the given time series.
  */
-KHIVAAPI void cross_correlation(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_array *result);
+KHIVA_C_API void cross_correlation(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_array *result);
 
 /**
  * @brief Calculates the autocorrelation of the specified lag for the given time.
@@ -154,7 +154,7 @@ KHIVAAPI void cross_correlation(khiva_array *xss, khiva_array *yss, bool *unbias
  * @param unbiased Determines whether it divides by n - lag (if true) or n ( if false)
  * @param result The autocorrelation value for the given time series.
  */
-KHIVAAPI void auto_correlation(khiva_array *array, long *max_lag, bool *unbiased, khiva_array *result);
+KHIVA_C_API void auto_correlation(khiva_array *array, long *max_lag, bool *unbiased, khiva_array *result);
 
 /**
  * @brief Calculates the binned entropy for the given time series and number of bins.
@@ -165,7 +165,7 @@ KHIVAAPI void auto_correlation(khiva_array *array, long *max_lag, bool *unbiased
  * @param max_bins The number of bins.
  * @param result The binned entropy value for the given time series.
  */
-KHIVAAPI void binned_entropy(khiva_array *array, int *max_bins, khiva_array *result);
+KHIVA_C_API void binned_entropy(khiva_array *array, int *max_bins, khiva_array *result);
 
 /**
  * @brief Calculates the Schreiber, T. and Schmitz, A. (1997) measure of non-linearity
@@ -177,7 +177,7 @@ KHIVAAPI void binned_entropy(khiva_array *array, int *max_bins, khiva_array *res
  * @param lag The lag
  * @param result The non-linearity value for the given time series.
  */
-KHIVAAPI void c3(khiva_array *array, long *lag, khiva_array *result);
+KHIVA_C_API void c3(khiva_array *array, long *lag, khiva_array *result);
 
 /**
  * @brief Calculates an estimate for the time series complexity defined by
@@ -190,7 +190,7 @@ KHIVAAPI void c3(khiva_array *array, long *lag, khiva_array *result);
  * @param zNormalize Controls whether the time series should be z-normalized or not.
  * @param result The complexity value for the given time series.
  */
-KHIVAAPI void cid_ce(khiva_array *array, bool *zNormalize, khiva_array *result);
+KHIVA_C_API void cid_ce(khiva_array *array, bool *zNormalize, khiva_array *result);
 
 /**
  * @brief Calculates the number of values in the time series that are higher than
@@ -202,7 +202,7 @@ KHIVAAPI void cid_ce(khiva_array *array, bool *zNormalize, khiva_array *result);
  * @param result The number of values in the time series that are higher
  * than the mean.
  */
-KHIVAAPI void count_above_mean(khiva_array *array, khiva_array *result);
+KHIVA_C_API void count_above_mean(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the number of values in the time series that are lower than
@@ -214,7 +214,7 @@ KHIVAAPI void count_above_mean(khiva_array *array, khiva_array *result);
  * @param result The number of values in the time series that are lower
  * than the mean.
  */
-KHIVAAPI void count_below_mean(khiva_array *array, khiva_array *result);
+KHIVA_C_API void count_below_mean(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates a Continuous wavelet transform for the Ricker wavelet, also known as
@@ -238,7 +238,7 @@ KHIVAAPI void count_below_mean(khiva_array *array, khiva_array *result);
  * @param w Width of interest.
  * @param result Result of calculated coefficients.
  */
-KHIVAAPI void cwt_coefficients(khiva_array *array, khiva_array *width, int *coeff, int *w, khiva_array *result);
+KHIVA_C_API void cwt_coefficients(khiva_array *array, khiva_array *width, int *coeff, int *w, khiva_array *result);
 
 /**
  * @brief Calculates the sum of squares of chunk i out of N chunks expressed as a ratio.
@@ -252,7 +252,7 @@ KHIVAAPI void cwt_coefficients(khiva_array *array, khiva_array *width, int *coef
  * @param segment_focus The segment number (starting at zero) to return a feature on.
  * @param result The energy ratio by chunk of the time series.
  */
-KHIVAAPI void energy_ratio_by_chunks(khiva_array *array, long *num_segments, long *segment_focus, khiva_array *result);
+KHIVA_C_API void energy_ratio_by_chunks(khiva_array *array, long *num_segments, long *segment_focus, khiva_array *result);
 
 /**
  * @brief Calculates the spectral centroid(mean), variance, skew, and kurtosis of the absolute fourier transform
@@ -264,7 +264,7 @@ KHIVAAPI void energy_ratio_by_chunks(khiva_array *array, long *num_segments, lon
  * @param result The spectral centroid (mean), variance, skew, and kurtosis of the absolute fourier transform
  * spectrum.
  */
-KHIVAAPI void fft_aggregated(khiva_array *array, khiva_array *result);
+KHIVA_C_API void fft_aggregated(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the fourier coefficients of the one-dimensional discrete
@@ -279,7 +279,7 @@ KHIVAAPI void fft_aggregated(khiva_array *array, khiva_array *result);
  * @param absolute The absolute value of the coefficient.
  * @param angle The angle of the coefficient.
  */
-KHIVAAPI void fft_coefficient(khiva_array *array, long *coefficient, khiva_array *real, khiva_array *imag,
+KHIVA_C_API void fft_coefficient(khiva_array *array, long *coefficient, khiva_array *real, khiva_array *imag,
                               khiva_array *absolute, khiva_array *angle);
 
 /**
@@ -291,7 +291,7 @@ KHIVAAPI void fft_coefficient(khiva_array *array, long *coefficient, khiva_array
  * @param result The first relative location of the maximum value to the length of the time series,
  *  for each time series.
  */
-KHIVAAPI void first_location_of_maximum(khiva_array *array, khiva_array *result);
+KHIVA_C_API void first_location_of_maximum(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the first location of the minimal value of each time series. The position
@@ -302,7 +302,7 @@ KHIVAAPI void first_location_of_maximum(khiva_array *array, khiva_array *result)
  * series.
  * @param result The first relative location of the minimal value of each series.
  */
-KHIVAAPI void first_location_of_minimum(khiva_array *array, khiva_array *result);
+KHIVA_C_API void first_location_of_minimum(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Coefficients of polynomial \f$h(x)\f$, which has been fitted to the deterministic
@@ -321,7 +321,7 @@ KHIVAAPI void first_location_of_minimum(khiva_array *array, khiva_array *result)
  * @param r Number of quantils to use for averaging.
  * @param result The coefficients for each time series.
  */
-KHIVAAPI void friedrich_coefficients(khiva_array *array, int *m, float *r, khiva_array *result);
+KHIVA_C_API void friedrich_coefficients(khiva_array *array, int *m, float *r, khiva_array *result);
 
 /**
  * @brief Calculates if the input time series contain duplicated elements.
@@ -332,7 +332,7 @@ KHIVAAPI void friedrich_coefficients(khiva_array *array, int *m, float *r, khiva
  * @param result Array containing True if the time series contains duplicated elements
  * and false otherwise.
  */
-KHIVAAPI void has_duplicates(khiva_array *array, khiva_array *result);
+KHIVA_C_API void has_duplicates(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates if the maximum within input time series is duplicated.
@@ -343,7 +343,7 @@ KHIVAAPI void has_duplicates(khiva_array *array, khiva_array *result);
  * @param result Array containing True if the maximum value of the time series is duplicated
  * and false otherwise.
  */
-KHIVAAPI void has_duplicate_max(khiva_array *array, khiva_array *result);
+KHIVA_C_API void has_duplicate_max(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates if the minimum of the input time series is duplicated.
@@ -354,7 +354,7 @@ KHIVAAPI void has_duplicate_max(khiva_array *array, khiva_array *result);
  * @param result Array containing True if the minimum of the time series is duplicated
  * and false otherwise.
  */
-KHIVAAPI void has_duplicate_min(khiva_array *array, khiva_array *result);
+KHIVA_C_API void has_duplicate_min(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the index of the max quantile.
@@ -365,7 +365,7 @@ KHIVAAPI void has_duplicate_min(khiva_array *array, khiva_array *result);
  * @param q The quantile.
  * @param result The index of the max quantile q.
  */
-KHIVAAPI void index_mass_quantile(khiva_array *array, float *q, khiva_array *result);
+KHIVA_C_API void index_mass_quantile(khiva_array *array, float *q, khiva_array *result);
 
 /**
  * @brief Returns the kurtosis of array (calculated with the adjusted Fisher-Pearson
@@ -376,7 +376,7 @@ KHIVAAPI void index_mass_quantile(khiva_array *array, float *q, khiva_array *res
  * series.
  * @param result The kurtosis of each array.
  */
-KHIVAAPI void kurtosis(khiva_array *array, khiva_array *result);
+KHIVA_C_API void kurtosis(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Checks if the time series within array have a large standard deviation.
@@ -387,7 +387,7 @@ KHIVAAPI void kurtosis(khiva_array *array, khiva_array *result);
  * @param r The threshold.
  * @param result  Array containing True for those time series in array that have a large standard deviation.
  */
-KHIVAAPI void large_standard_deviation(khiva_array *array, float *r, khiva_array *result);
+KHIVA_C_API void large_standard_deviation(khiva_array *array, float *r, khiva_array *result);
 
 /**
  * @brief Calculates the last location of the maximum value of each time series. The position
@@ -398,7 +398,7 @@ KHIVAAPI void large_standard_deviation(khiva_array *array, float *r, khiva_array
  * series.
  * @param result The last relative location of the maximum value of each series.
  */
-KHIVAAPI void last_location_of_maximum(khiva_array *array, khiva_array *result);
+KHIVA_C_API void last_location_of_maximum(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the last location of the minimum value of each time series. The position
@@ -409,7 +409,7 @@ KHIVAAPI void last_location_of_maximum(khiva_array *array, khiva_array *result);
  * series.
  * @param result The last relative location of the minimum value of each series.
  */
-KHIVAAPI void last_location_of_minimum(khiva_array *array, khiva_array *result);
+KHIVA_C_API void last_location_of_minimum(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Returns the length of the input time series.
@@ -419,7 +419,7 @@ KHIVAAPI void last_location_of_minimum(khiva_array *array, khiva_array *result);
  * series.
  * @param result The length of the time series.
  */
-KHIVAAPI void length(khiva_array *array, khiva_array *result);
+KHIVA_C_API void length(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculate a linear least-squares regression for the values of the time series versus the sequence from 0 to
@@ -434,7 +434,7 @@ KHIVAAPI void length(khiva_array *array, khiva_array *result);
  * @param slope The slope for all time series.
  * @param stdrr The stderr values for all time series.
  */
-KHIVAAPI void linear_trend(khiva_array *array, khiva_array *pvalue, khiva_array *rvalue, khiva_array *intercept,
+KHIVA_C_API void linear_trend(khiva_array *array, khiva_array *pvalue, khiva_array *rvalue, khiva_array *intercept,
                            khiva_array *slope, khiva_array *stdrr);
 
 /**
@@ -444,7 +444,7 @@ KHIVAAPI void linear_trend(khiva_array *array, khiva_array *pvalue, khiva_array 
  * and dimension one indicates the number of time series.
  * @param result The calculated local maximals for each time series in array.
  */
-KHIVAAPI void local_maximals(khiva_array *array, khiva_array *result);
+KHIVA_C_API void local_maximals(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the length of the longest consecutive subsequence in array that is bigger than the mean of array.
@@ -455,7 +455,7 @@ KHIVAAPI void local_maximals(khiva_array *array, khiva_array *result);
  * @param result The length of the longest consecutive subsequence in the input time series that is bigger than the
  * mean.
  */
-KHIVAAPI void longest_strike_above_mean(khiva_array *array, khiva_array *result);
+KHIVA_C_API void longest_strike_above_mean(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the length of the longest consecutive subsequence in array that is below the mean of array.
@@ -465,7 +465,7 @@ KHIVAAPI void longest_strike_above_mean(khiva_array *array, khiva_array *result)
  * series.
  * @param result The length of the longest consecutive subsequence in the input time series that is below the mean.
  */
-KHIVAAPI void longest_strike_below_mean(khiva_array *array, khiva_array *result);
+KHIVA_C_API void longest_strike_below_mean(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Largest fixed point of dynamics \f$\max_x {h(x)=0}\f$ estimated from polynomial
@@ -483,7 +483,7 @@ KHIVAAPI void longest_strike_below_mean(khiva_array *array, khiva_array *result)
  * @param r Number of quantiles to use for averaging.
  * @param result Largest fixed point of deterministic dynamics.
  */
-KHIVAAPI void max_langevin_fixed_point(khiva_array *array, int *m, float *r, khiva_array *result);
+KHIVA_C_API void max_langevin_fixed_point(khiva_array *array, int *m, float *r, khiva_array *result);
 
 /**
  * @brief Calculates the maximum value for each time series within array.
@@ -493,7 +493,7 @@ KHIVAAPI void max_langevin_fixed_point(khiva_array *array, int *m, float *r, khi
  * series.
  * @param result The maximum value of each time series within array.
  */
-KHIVAAPI void maximum(khiva_array *array, khiva_array *result);
+KHIVA_C_API void maximum(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the mean value for each time series within array.
@@ -503,7 +503,7 @@ KHIVAAPI void maximum(khiva_array *array, khiva_array *result);
  * series.
  * @param result The mean value of each time series within array.
  */
-KHIVAAPI void mean(khiva_array *array, khiva_array *result);
+KHIVA_C_API void mean(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the mean over the absolute differences between subsequent time series values in array.
@@ -513,7 +513,7 @@ KHIVAAPI void mean(khiva_array *array, khiva_array *result);
  * series.
  * @param result The maximum value of each time series within array.
  */
-KHIVAAPI void mean_absolute_change(khiva_array *array, khiva_array *result);
+KHIVA_C_API void mean_absolute_change(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the mean over the differences between subsequent time series values in array.
@@ -523,7 +523,7 @@ KHIVAAPI void mean_absolute_change(khiva_array *array, khiva_array *result);
  * series.
  * @param result The mean over the differences between subsequent time series values.
  */
-KHIVAAPI void mean_change(khiva_array *array, khiva_array *result);
+KHIVA_C_API void mean_change(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates mean value of a central approximation of the second derivative for each time series in array.
@@ -533,7 +533,7 @@ KHIVAAPI void mean_change(khiva_array *array, khiva_array *result);
  * series.
  * @param result The mean value of a central approximation of the second derivative for each time series.
  */
-KHIVAAPI void mean_second_derivative_central(khiva_array *array, khiva_array *result);
+KHIVA_C_API void mean_second_derivative_central(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the median value for each time series within array.
@@ -543,7 +543,7 @@ KHIVAAPI void mean_second_derivative_central(khiva_array *array, khiva_array *re
  * series.
  * @param result The median value of each time series within array.
  */
-KHIVAAPI void median(khiva_array *array, khiva_array *result);
+KHIVA_C_API void median(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the minimum value for each time series within array.
@@ -553,7 +553,7 @@ KHIVAAPI void median(khiva_array *array, khiva_array *result);
  * series.
  * @param result The minimum value of each time series within array.
  */
-KHIVAAPI void minimum(khiva_array *array, khiva_array *result);
+KHIVA_C_API void minimum(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the number of m-crossings. A m-crossing is defined as two sequential values where the first
@@ -566,7 +566,7 @@ KHIVAAPI void minimum(khiva_array *array, khiva_array *result);
  * @param m The m value.
  * @param result The number of m-crossings of each time series within array.
  */
-KHIVAAPI void number_crossing_m(khiva_array *array, int *m, khiva_array *result);
+KHIVA_C_API void number_crossing_m(khiva_array *array, int *m, khiva_array *result);
 
 /**
  * @brief This feature calculator searches for different peaks. To do so, the time series is smoothed by a ricker
@@ -578,7 +578,7 @@ KHIVAAPI void number_crossing_m(khiva_array *array, int *m, khiva_array *result)
  * @param max_w The maximum width to consider.
  * @param result The number of peaks for each time series.
  */
-KHIVAAPI void number_cwt_peaks(khiva_array *array, int *max_w, khiva_array *result);
+KHIVA_C_API void number_cwt_peaks(khiva_array *array, int *max_w, khiva_array *result);
 
 /**
  * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$array\f$. A peak of support
@@ -591,7 +591,7 @@ KHIVAAPI void number_cwt_peaks(khiva_array *array, int *max_w, khiva_array *resu
  * @param n The support of the peak.
  * @param result The number of peaks of at least support \f$n\f$.
  */
-KHIVAAPI void number_peaks(khiva_array *array, int *n, khiva_array *result);
+KHIVA_C_API void number_peaks(khiva_array *array, int *n, khiva_array *result);
 
 /**
  * @brief Calculates the value of the partial autocorrelation function at the given lag. The lag \f$k\f$ partial
@@ -619,7 +619,7 @@ KHIVAAPI void number_peaks(khiva_array *array, int *n, khiva_array *result);
  * @param lags Indicates the lags to be calculated.
  * @param result Returns partial autocorrelation for each time series for the given lag.
  */
-KHIVAAPI void partial_autocorrelation(khiva_array *array, khiva_array *lags, khiva_array *result);
+KHIVA_C_API void partial_autocorrelation(khiva_array *array, khiva_array *lags, khiva_array *result);
 
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
@@ -635,7 +635,7 @@ KHIVAAPI void partial_autocorrelation(khiva_array *array, khiva_array *lags, khi
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the percentage of unique values, that are present in the time series more than once.
  */
-KHIVAAPI void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_array *array, bool *is_sorted,
+KHIVA_C_API void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_array *array, bool *is_sorted,
                                                                      khiva_array *result);
 
 /**
@@ -651,7 +651,7 @@ KHIVAAPI void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_array
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the percentage of unique values, that are present in the time series more than once.
  */
-KHIVAAPI void percentage_of_reoccurring_values_to_all_values(khiva_array *array, bool *is_sorted, khiva_array *result);
+KHIVA_C_API void percentage_of_reoccurring_values_to_all_values(khiva_array *array, bool *is_sorted, khiva_array *result);
 
 /**
  * @brief Returns values at the given quantile.
@@ -663,7 +663,7 @@ KHIVAAPI void percentage_of_reoccurring_values_to_all_values(khiva_array *array,
  * @param precision Number of decimals expected.
  * @param result Values at the given quantile.
  */
-KHIVAAPI void quantile(khiva_array *array, khiva_array *q, float *precision, khiva_array *result);
+KHIVA_C_API void quantile(khiva_array *array, khiva_array *q, float *precision, khiva_array *result);
 
 /**
  * @brief Counts observed values within the interval [min, max).
@@ -675,7 +675,7 @@ KHIVAAPI void quantile(khiva_array *array, khiva_array *q, float *precision, khi
  * @param max Value that sets the upper limit.
  * @param result Values at the given range.
  */
-KHIVAAPI void range_count(khiva_array *array, float *min, float *max, khiva_array *result);
+KHIVA_C_API void range_count(khiva_array *array, float *min, float *max, khiva_array *result);
 
 /**
  * @brief Calculates the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
@@ -688,7 +688,7 @@ KHIVAAPI void range_count(khiva_array *array, float *min, float *max, khiva_arra
  * @param result The ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
  * \f$x\f$.
  */
-KHIVAAPI void ratio_beyond_r_sigma(khiva_array *array, float *r, khiva_array *result);
+KHIVA_C_API void ratio_beyond_r_sigma(khiva_array *array, float *r, khiva_array *result);
 
 /**
  * @brief Calculates a factor which is 1 if all values in the time series occur only once, and below one if this is
@@ -702,7 +702,7 @@ KHIVAAPI void ratio_beyond_r_sigma(khiva_array *array, float *r, khiva_array *re
  * dimension one indicates the number of time series.
  * @param result The ratio of unique values with respect to the total number of values.
  */
-KHIVAAPI void ratio_value_number_to_time_series_length(khiva_array *array, khiva_array *result);
+KHIVA_C_API void ratio_value_number_to_time_series_length(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates a vectorized sample entropy algorithm.
@@ -719,7 +719,7 @@ KHIVAAPI void ratio_value_number_to_time_series_length(khiva_array *array, khiva
  * @param result An array with the same dimensions as array, whose values (time series in dimension 0)
  * contains the vectorized sample entropy for all the input time series in array.
  */
-KHIVAAPI void sample_entropy(khiva_array *array, khiva_array *result);
+KHIVA_C_API void sample_entropy(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the sample skewness of array (calculated with the adjusted Fisher-Pearson standardized
@@ -730,7 +730,7 @@ KHIVAAPI void sample_entropy(khiva_array *array, khiva_array *result);
  * series.
  * @param result Array containing the skewness of each time series in array.
  */
-KHIVAAPI void skewness(khiva_array *array, khiva_array *result);
+KHIVA_C_API void skewness(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Estimates the cross power spectral density of the time series array at different frequencies. To do so, the
@@ -750,7 +750,7 @@ KHIVAAPI void skewness(khiva_array *array, khiva_array *result);
  * @param result Array containing the power spectrum of the different frequencies for each time series in
  * array.
  */
-KHIVAAPI void spkt_welch_density(khiva_array *array, int *coeff, khiva_array *result);
+KHIVA_C_API void spkt_welch_density(khiva_array *array, int *coeff, khiva_array *result);
 
 /**
  * @brief Calculates the standard deviation of each time series within array.
@@ -760,7 +760,7 @@ KHIVAAPI void spkt_welch_density(khiva_array *array, int *coeff, khiva_array *re
  * series.
  * @param result The standard deviation of each time series within array.
  */
-KHIVAAPI void standard_deviation(khiva_array *array, khiva_array *result);
+KHIVA_C_API void standard_deviation(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates the sum of all data points, that are present in the time series more than once.
@@ -771,7 +771,7 @@ KHIVAAPI void standard_deviation(khiva_array *array, khiva_array *result);
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the sum of all data points, that are present in the time series more than once.
  */
-KHIVAAPI void sum_of_reoccurring_datapoints(khiva_array *array, bool *is_sorted, khiva_array *result);
+KHIVA_C_API void sum_of_reoccurring_datapoints(khiva_array *array, bool *is_sorted, khiva_array *result);
 
 /**
  * @brief Calculates the sum of all values, that are present in the time series more than once.
@@ -781,7 +781,7 @@ KHIVAAPI void sum_of_reoccurring_datapoints(khiva_array *array, bool *is_sorted,
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the sum of all values, that are present in the time series more than once.
  */
-KHIVAAPI void sum_of_reoccurring_values(khiva_array *array, bool *is_sorted, khiva_array *result);
+KHIVA_C_API void sum_of_reoccurring_values(khiva_array *array, bool *is_sorted, khiva_array *result);
 
 /**
  * @brief Calculates the sum over the time series array.
@@ -790,7 +790,7 @@ KHIVAAPI void sum_of_reoccurring_values(khiva_array *array, bool *is_sorted, khi
  * dimension one indicates the number of time series.
  * @param result An array containing the sum of values in each time series.
  */
-KHIVAAPI void sum_values(khiva_array *array, khiva_array *result);
+KHIVA_C_API void sum_values(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates if the distribution of array *looks symmetric*. This is the case if
@@ -804,7 +804,7 @@ KHIVAAPI void sum_values(khiva_array *array, khiva_array *result);
  * @param r The percentage of the range to compare with.
  * @param result An array denoting if the input time series look symmetric.
  */
-KHIVAAPI void symmetry_looking(khiva_array *array, float *r, khiva_array *result);
+KHIVA_C_API void symmetry_looking(khiva_array *array, float *r, khiva_array *result);
 
 /**
  * @brief This function calculates the value of:
@@ -826,7 +826,7 @@ KHIVAAPI void symmetry_looking(khiva_array *array, float *r, khiva_array *result
  * @param lag The lag to be computed.
  * @param result An array containing the time reversal asymetry statistic value in each time series.
  */
-KHIVAAPI void time_reversal_asymmetry_statistic(khiva_array *array, int *lag, khiva_array *result);
+KHIVA_C_API void time_reversal_asymmetry_statistic(khiva_array *array, int *lag, khiva_array *result);
 
 /**
  * @brief Counts occurrences of value in the time series array.
@@ -837,7 +837,7 @@ KHIVAAPI void time_reversal_asymmetry_statistic(khiva_array *array, int *lag, kh
  * @param v The value to be counted.
  * @param result An array containing the count of the given value in each time series.
  */
-KHIVAAPI void value_count(khiva_array *array, float *v, khiva_array *result);
+KHIVA_C_API void value_count(khiva_array *array, float *v, khiva_array *result);
 
 /**
  * @brief Computes the variance for the time series array.
@@ -846,7 +846,7 @@ KHIVAAPI void value_count(khiva_array *array, float *v, khiva_array *result);
  * dimension one indicates the number of time series.
  * @param result An array containing the variance in each time series.
  */
-KHIVAAPI void variance(khiva_array *array, khiva_array *result);
+KHIVA_C_API void variance(khiva_array *array, khiva_array *result);
 
 /**
  * @brief Calculates if the variance of array is greater than the standard deviation. In other words, if the variance of
@@ -856,7 +856,7 @@ KHIVAAPI void variance(khiva_array *array, khiva_array *result);
  * dimension one indicates the number of time series.
  * @param result An array denoting if the variance of array is greater than the standard deviation.
  */
-KHIVAAPI void variance_larger_than_standard_deviation(khiva_array *array, khiva_array *result);
+KHIVA_C_API void variance_larger_than_standard_deviation(khiva_array *array, khiva_array *result);
 
 #ifdef __cplusplus
 }
