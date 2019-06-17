@@ -11,6 +11,7 @@
 #include <iterator>
 #include <limits>
 #include <set>
+#include <thread>
 #include "libraryInternal.h"
 #include "matrixInternal.h"
 #include "vector.h"
@@ -673,22 +674,7 @@ std::pair<std::vector<double>, std::vector<unsigned int>> getProfileOutput(const
 		SCAMP::mp_entry e;
 		e.ulong = arr[i];
 		distances[i] = static_cast<double>(convertToEuclidean(e.floats[0], window));
-		indexes[i] = (e.floats[0] < -1) ? -1 : e.ints[1] + 1;
-
-		//if (FLAGS_output_pearson) {
-		//	mp_out << std::setprecision(10) << e.floats[0] << std::endl;
-		//} else {
-		//	mp_out << std::setprecision(10)
-		//		<< ConvertToEuclidean<float>(e.floats[0]) << std::endl;
-		//}
-		//int index;
-		//// If there was no match, set index to -1
-		//if (e.floats[0] < -1) {
-		//	index = -1;
-		//} else {
-		//	index = e.ints[1] + 1;
-		//}
-		//mpi_out << index << std::endl;
+		indexes[i] = (e.floats[0] < -1) ? -1 : e.ints[1];
 	}
 	return std::make_pair(std::move(distances), std::move(indexes));
 }
@@ -697,12 +683,6 @@ std::pair<std::vector<double>, std::vector<unsigned int>> getProfileOutput(const
 std::pair<std::vector<double>, std::vector<unsigned int>> matrixProfile(std::vector<double>&& tss, long m) {
 	int n_x = tss.size() - m + 1;
 	int n_y = n_x;
-//	int n_y;
-//	if (self_join) {
-//		n_y = n_x;
-//	} else {
-//		n_y = Tb_h.size() - FLAGS_window + 1;
-//	}
 
 	std::vector<int> devices;
 #ifdef _HAS_CUDA_
@@ -712,13 +692,13 @@ std::pair<std::vector<double>, std::vector<unsigned int>> matrixProfile(std::vec
 	for (int i = 0; i < num_dev; ++i) {
 		devices.push_back(i);
 	}
-	// TODO: set numWorkersCPU as param
+    // When using GPUs do not use CPU workers as they are much slower currently
+    // and can cause unnecessary latency
 	const int numWorkersCPU = 0;
-	auto precision = SCAMP::PRECISION_SINGLE;
 #else
 	// TODO: set numWorkersCPU as param
-	const int numWorkersCPU = 1; 
-	auto precision = SCAMP::PRECISION_DOUBLE;
+    // TODO: By default use all CPU cores
+	const int numWorkersCPU = std::thread::hardware_concurrency(); 
 #endif
 
 	SCAMP::SCAMPArgs args;
@@ -732,7 +712,7 @@ std::pair<std::vector<double>, std::vector<unsigned int>> matrixProfile(std::vec
 	args.computing_rows = true;
 	args.profile_a.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
 	args.profile_b.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
-	args.precision_type = precision;
+	args.precision_type = SCAMP::PRECISION_DOUBLE;
 	args.profile_type = SCAMP::PROFILE_TYPE_1NN_INDEX;
 	args.keep_rows_separate = false;
 	args.is_aligned = false;
@@ -760,8 +740,7 @@ void matrixProfile(af::array tss, long m, af::array& profile, af::array& index) 
 		profile(af::span, tssIdx) = khiva::vector::createArray<double>(res.first);
 		index(af::span, tssIdx) = khiva::vector::createArray<unsigned int>(res.second);
 	}
-}
-
+} 
 
 }  // namespace matrix
 }  // namespace khiva
