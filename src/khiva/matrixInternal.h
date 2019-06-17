@@ -68,7 +68,7 @@ KHIVAAPI void meanStdev(af::array t, long m, af::array &mean, af::array &stdev);
  * @param distances Resulting distances.
  */
 KHIVAAPI void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
-                        af::array sigma_t, af::array mask, af::array &distances);
+                                 af::array sigma_t, af::array mask, af::array &distances);
 
 /**
  * @brief Calculates the distance between 'q' and the time series 't', which produced the sliding. Multiple queries can
@@ -84,7 +84,7 @@ KHIVAAPI void calculateDistances(af::array qt, af::array a, af::array sum_q, af:
  * @param distances Resulting distances.
  */
 KHIVAAPI void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
-                        af::array sigma_t, af::array &distances);
+                                 af::array sigma_t, af::array &distances);
 
 /**
  * @brief Given a tile indices and sizes it returns true when tile would not be affected
@@ -132,7 +132,7 @@ KHIVAAPI af::array generateMask(long m, long numRows, long row, long numColumns,
  * @param distances Resulting distances.
  */
 KHIVAAPI void massWithMask(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array mask,
-                  af::array &distances);
+                           af::array &distances);
 
 /**
  * @brief Mueen's Algorithm for Similarity Search.
@@ -151,21 +151,21 @@ KHIVAAPI void mass(af::array q, af::array t, af::array a, af::array mean_t, af::
 KHIVAAPI void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::array &profile, af::array &index);
 
 KHIVAAPI void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_size_b, long batch_size_a,
-                              af::array &profile, af::array &index);
+                                       af::array &profile, af::array &index);
 
 KHIVAAPI void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
 
 KHIVAAPI void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch_size_a, af::array &profile,
-                              af::array &index);
+                                       af::array &index);
 
 KHIVAAPI void stomp_parallel(af::array t, long m, af::array &profile, af::array &index);
 
 KHIVAAPI void findBestN(af::array profile, af::array index, long m, long n, af::array &distance, af::array &indices,
-               af::array &subsequenceIndices, bool selfJoin, bool lookForMotifs);
+                        af::array &subsequenceIndices, bool selfJoin, bool lookForMotifs);
 
-KHIVAAPI void scamp(af::array tss, long m, af::array& profile, af::array& index);
+KHIVAAPI void scamp(af::array tss, long m, af::array &profile, af::array &index);
 
-KHIVAAPI void scamp(af::array ta, af::array tb, long m, af::array& profile, af::array& index);
+KHIVAAPI void scamp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
 
 }  // namespace internal
 }  // namespace matrix

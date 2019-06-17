@@ -215,7 +215,7 @@ void MassComplete(benchmark::State &state) {
     auto q = t(af::seq(0, m - 1));
 
     af::array distances;
-	
+
     af::sync();
     while (state.KeepRunning()) {
         khiva::matrix::mass(q, t, distances);

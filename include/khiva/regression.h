@@ -30,8 +30,8 @@ namespace regression {
  * Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
  */
-KHIVAAPI void linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue,
-            af::array &stderrest);
+KHIVAAPI void linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue,
+                     af::array &pvalue, af::array &stderrest);
 
 }  // namespace regression
 }  // namespace khiva

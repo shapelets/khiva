@@ -8,13 +8,13 @@
 #define _KHIVA_HEADER_
 
 #if defined(_WIN32) || defined(_MSC_VER)
-	#if defined(KHIVA_EXPORTS)
-		#define KHIVAAPI __declspec(dllexport)
-	#else
-		#define KHIVAAPI __declspec(dllimport)
-	#endif
+#if defined(KHIVA_EXPORTS)
+#define KHIVAAPI __declspec(dllexport)
 #else
-	#define KHIVAAPI 
+#define KHIVAAPI __declspec(dllimport)
+#endif
+#else
+#define KHIVAAPI
 #endif
 
 #endif

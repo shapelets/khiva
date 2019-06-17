@@ -30,7 +30,7 @@ namespace clustering {
  * @param maxIterations The maximum number of iterations allowed.
  */
 KHIVAAPI void kMeans(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance = 0.0000000001,
-            int maxIterations = 100);
+                     int maxIterations = 100);
 
 /**
  * @brief Calculates the k-shape algorithm.
@@ -47,7 +47,7 @@ KHIVAAPI void kMeans(af::array tss, int k, af::array &centroids, af::array &labe
  * @param maxIterations The maximum number of iterations allowed.
  */
 KHIVAAPI void kShape(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance = 0.0000000001,
-            int maxIterations = 100);
+                     int maxIterations = 100);
 
 }  // namespace clustering
 }  // namespace khiva

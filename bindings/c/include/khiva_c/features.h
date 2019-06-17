@@ -81,8 +81,8 @@ KHIVA_C_API void aggregated_autocorrelation(khiva_array *array, int *aggregation
  * @param stderrest Standard error of the estimated gradient.
  */
 KHIVA_C_API void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregation_function,
-                                      khiva_array *slope, khiva_array *intercept, khiva_array *rvalue,
-                                      khiva_array *pvalue, khiva_array *stderrest);
+                                         khiva_array *slope, khiva_array *intercept, khiva_array *rvalue,
+                                         khiva_array *pvalue, khiva_array *stderrest);
 
 /**
  * @brief Calculates a vectorized Approximate entropy algorithm.
@@ -252,7 +252,8 @@ KHIVA_C_API void cwt_coefficients(khiva_array *array, khiva_array *width, int *c
  * @param segment_focus The segment number (starting at zero) to return a feature on.
  * @param result The energy ratio by chunk of the time series.
  */
-KHIVA_C_API void energy_ratio_by_chunks(khiva_array *array, long *num_segments, long *segment_focus, khiva_array *result);
+KHIVA_C_API void energy_ratio_by_chunks(khiva_array *array, long *num_segments, long *segment_focus,
+                                        khiva_array *result);
 
 /**
  * @brief Calculates the spectral centroid(mean), variance, skew, and kurtosis of the absolute fourier transform
@@ -280,7 +281,7 @@ KHIVA_C_API void fft_aggregated(khiva_array *array, khiva_array *result);
  * @param angle The angle of the coefficient.
  */
 KHIVA_C_API void fft_coefficient(khiva_array *array, long *coefficient, khiva_array *real, khiva_array *imag,
-                              khiva_array *absolute, khiva_array *angle);
+                                 khiva_array *absolute, khiva_array *angle);
 
 /**
  * @brief Calculates the first relative location of the maximal value for each time series.
@@ -435,7 +436,7 @@ KHIVA_C_API void length(khiva_array *array, khiva_array *result);
  * @param stdrr The stderr values for all time series.
  */
 KHIVA_C_API void linear_trend(khiva_array *array, khiva_array *pvalue, khiva_array *rvalue, khiva_array *intercept,
-                           khiva_array *slope, khiva_array *stdrr);
+                              khiva_array *slope, khiva_array *stdrr);
 
 /**
  * @brief Calculates all Local Maximals fot the time series in array.
@@ -636,7 +637,7 @@ KHIVA_C_API void partial_autocorrelation(khiva_array *array, khiva_array *lags, 
  * @param result Returns the percentage of unique values, that are present in the time series more than once.
  */
 KHIVA_C_API void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_array *array, bool *is_sorted,
-                                                                     khiva_array *result);
+                                                                        khiva_array *result);
 
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
@@ -651,7 +652,8 @@ KHIVA_C_API void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_ar
  * @param is_sorted Indicates if the input time series is sorted or not. Defaults to false.
  * @param result Returns the percentage of unique values, that are present in the time series more than once.
  */
-KHIVA_C_API void percentage_of_reoccurring_values_to_all_values(khiva_array *array, bool *is_sorted, khiva_array *result);
+KHIVA_C_API void percentage_of_reoccurring_values_to_all_values(khiva_array *array, bool *is_sorted,
+                                                                khiva_array *result);
 
 /**
  * @brief Returns values at the given quantile.

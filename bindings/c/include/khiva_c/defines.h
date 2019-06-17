@@ -8,13 +8,13 @@
 #define KHIVA_BINDINGC_DEFINES_H
 
 #if defined(_WIN32) || defined(_MSC_VER)
-	#if defined(KHIVA_C_EXPORTS)
-		#define KHIVA_C_API __declspec(dllexport)
-	#else
-		#define KHIVA_C_API __declspec(dllimport)
-	#endif
+#if defined(KHIVA_C_EXPORTS)
+#define KHIVA_C_API __declspec(dllexport)
 #else
-	#define KHIVA_C_API 
+#define KHIVA_C_API __declspec(dllimport)
+#endif
+#else
+#define KHIVA_C_API
 #endif
 
 typedef void *khiva_array;

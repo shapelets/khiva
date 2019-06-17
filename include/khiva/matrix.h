@@ -18,8 +18,8 @@ namespace khiva {
 namespace matrix {
 
 enum class Algorithm {
-	SCRIMP = 0,
-	STOMP,
+    SCRIMP = 0,
+    STOMP,
 };
 
 /**
@@ -81,8 +81,8 @@ KHIVAAPI void mass(af::array q, af::array t, af::array &distances);
  * @param selfJoin Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-KHIVAAPI void findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs, af::array &motifsIndices,
-                     af::array &subsequenceIndices, bool selfJoin = false);
+KHIVAAPI void findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs,
+                              af::array &motifsIndices, af::array &subsequenceIndices, bool selfJoin = false);
 
 /**
  * @brief This function extracts the best N discords from a previously calculated matrix profile.
@@ -99,7 +99,7 @@ KHIVAAPI void findBestNMotifs(af::array profile, af::array index, long m, long n
  * whether the mirror similar region is included in the output or not.
  */
 KHIVAAPI void findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
-                       af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin = false);
+                                af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin = false);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
@@ -133,9 +133,9 @@ KHIVAAPI void stomp(af::array ta, af::array tb, long m, af::array &profile, af::
  */
 KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
 
-KHIVAAPI void matrixProfile(af::array tss, long m, af::array& profile, af::array& index);
+KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array &index);
 
-KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array& profile, af::array& index);
+KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
 
 }  // namespace matrix
 }  // namespace khiva

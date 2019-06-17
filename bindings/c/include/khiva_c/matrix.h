@@ -31,8 +31,8 @@ extern "C" {
  * whether the mirror similar region is included in the output or not.
  */
 KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n,
-                                   khiva_array *discord_distances, khiva_array *discord_indices,
-                                   khiva_array *subsequence_indices, bool *self_join);
+                                      khiva_array *discord_distances, khiva_array *discord_indices,
+                                      khiva_array *subsequence_indices, bool *self_join);
 
 /**
  * @brief Primitive of the findBestNMotifs function.
@@ -51,8 +51,8 @@ KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, 
  * whether the mirror similar region is included in the output or not.
  */
 KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n,
-                                 khiva_array *motif_distances, khiva_array *motif_indices,
-                                 khiva_array *subsequence_indices, bool *self_join);
+                                    khiva_array *motif_distances, khiva_array *motif_indices,
+                                    khiva_array *subsequence_indices, bool *self_join);
 
 /**
  * @brief Calculates the N best matches of several queries in several time series.
@@ -75,7 +75,7 @@ KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, lo
  * @param indexes Resulting indexes.
  */
 KHIVA_C_API void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, khiva_array *distances,
-                                      khiva_array *indexes);
+                                         khiva_array *indexes);
 
 /**
  * @brief Mueen's Algorithm for Similarity Search.

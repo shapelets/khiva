@@ -18,8 +18,8 @@
 #include "matrixInternal.h"
 #include "vector.h"
 
-#include <SCAMP/src/common.h>
 #include <SCAMP/src/SCAMP.h>
+#include <SCAMP/src/common.h>
 
 namespace {
 constexpr double EPSILON = 1e-8;
@@ -53,137 +53,130 @@ bool isFiltered(std::set<std::pair<unsigned int, unsigned int>> pairs, std::pair
     return false;
 }
 
-// TODO: Check if the if statements checking the self_join flag are correct 
+// TODO: Check if the if statements checking the self_join flag are correct
 void InitProfileMemory(SCAMP::SCAMPArgs &args) {
-  switch (args.profile_type) {
-    case SCAMP::PROFILE_TYPE_1NN_INDEX: {
-      SCAMP::mp_entry e;
-      e.floats[0] = std::numeric_limits<float>::lowest();
-      e.ints[1] = -1u;
-      args.profile_a.data.emplace_back();
-      args.profile_a.data[0].uint64_value.resize(
-          args.timeseries_a.size() - args.window + 1, e.ulong);
-      if (args.has_b) {
-        args.profile_b.data.emplace_back();
-        args.profile_b.data[0].uint64_value.resize(
-            args.timeseries_b.size() - args.window + 1, e.ulong);
-      }
+    switch (args.profile_type) {
+        case SCAMP::PROFILE_TYPE_1NN_INDEX: {
+            SCAMP::mp_entry e;
+            e.floats[0] = std::numeric_limits<float>::lowest();
+            e.ints[1] = -1u;
+            args.profile_a.data.emplace_back();
+            args.profile_a.data[0].uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong);
+            if (args.has_b) {
+                args.profile_b.data.emplace_back();
+                args.profile_b.data[0].uint64_value.resize(args.timeseries_b.size() - args.window + 1, e.ulong);
+            }
+        }
+        case SCAMP::PROFILE_TYPE_1NN: {
+            args.profile_a.data.emplace_back();
+            args.profile_a.data[0].float_value.resize(args.timeseries_a.size() - args.window + 1,
+                                                      std::numeric_limits<float>::lowest());
+            if (args.has_b) {
+                args.profile_b.data.emplace_back();
+                args.profile_b.data[0].float_value.resize(args.timeseries_b.size() - args.window + 1,
+                                                          std::numeric_limits<float>::lowest());
+            }
+        }
+        case SCAMP::PROFILE_TYPE_SUM_THRESH: {
+            args.profile_a.data.emplace_back();
+            args.profile_a.data[0].double_value.resize(args.timeseries_a.size() - args.window + 1, 0);
+            if (args.has_b) {
+                args.profile_b.data.emplace_back();
+                args.profile_b.data[0].double_value.resize(args.timeseries_b.size() - args.window + 1, 0);
+            }
+        }
+        default:
+            break;
     }
-    case SCAMP::PROFILE_TYPE_1NN: {
-      args.profile_a.data.emplace_back();
-      args.profile_a.data[0].float_value.resize(
-          args.timeseries_a.size() - args.window + 1,
-          std::numeric_limits<float>::lowest());
-      if (args.has_b) {
-        args.profile_b.data.emplace_back();
-        args.profile_b.data[0].float_value.resize(
-            args.timeseries_b.size() - args.window + 1,
-            std::numeric_limits<float>::lowest());
-      }
-    }
-    case SCAMP::PROFILE_TYPE_SUM_THRESH: {
-      args.profile_a.data.emplace_back();
-      args.profile_a.data[0].double_value.resize(
-          args.timeseries_a.size() - args.window + 1, 0);
-      if (args.has_b) {
-        args.profile_b.data.emplace_back();
-        args.profile_b.data[0].double_value.resize(
-            args.timeseries_b.size() - args.window + 1, 0);
-      }
-    }
-    default:
-      break;
-  }
 }
 
 SCAMP::SCAMPArgs getDefaultArgs() {
-	SCAMP::SCAMPArgs args;
-	args.max_tile_size = 1 << 20;
-	args.distributed_start_row = -1;
-	args.distributed_start_col = -1;
-	args.distance_threshold = std::numeric_limits<double>::max();
-	args.computing_columns = true;
-	args.computing_rows = true;
-	args.profile_a.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
-	args.profile_b.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
-	args.precision_type = SCAMP::PRECISION_DOUBLE;
-	args.profile_type = SCAMP::PROFILE_TYPE_1NN_INDEX;
-	args.keep_rows_separate = false;
-	args.is_aligned = false;
-	return args;
+    SCAMP::SCAMPArgs args;
+    args.max_tile_size = 1 << 20;
+    args.distributed_start_row = -1;
+    args.distributed_start_col = -1;
+    args.distance_threshold = std::numeric_limits<double>::max();
+    args.computing_columns = true;
+    args.computing_rows = true;
+    args.profile_a.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
+    args.profile_b.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
+    args.precision_type = SCAMP::PRECISION_DOUBLE;
+    args.profile_type = SCAMP::PROFILE_TYPE_1NN_INDEX;
+    args.keep_rows_separate = false;
+    args.is_aligned = false;
+    return args;
 }
-
 
 float convertToEuclidean(float val, uint64_t window) {
-	// If there was no match, we can't do a valid conversion, just return NaN
-	if (val < -1) {
-		return std::numeric_limits<float>::max();
-	}
-	return std::sqrt(std::max(2.0 * window * (1.0 - val), 0.0));
-
+    // If there was no match, we can't do a valid conversion, just return NaN
+    if (val < -1) {
+        return std::numeric_limits<float>::max();
+    }
+    return std::sqrt(std::max(2.0 * window * (1.0 - val), 0.0));
 }
 
-std::pair<std::vector<double>, std::vector<unsigned int>> getProfileOutput(const SCAMP::Profile& p, uint64_t window) {
-	std::vector<double> distances;
-	std::vector<unsigned int> indexes;
+std::pair<std::vector<double>, std::vector<unsigned int>> getProfileOutput(const SCAMP::Profile &p, uint64_t window) {
+    std::vector<double> distances;
+    std::vector<unsigned int> indexes;
 
-	const auto& arr = p.data[0].uint64_value; 
-	distances.resize(arr.size());
-	indexes.resize(arr.size());
+    const auto &arr = p.data[0].uint64_value;
+    distances.resize(arr.size());
+    indexes.resize(arr.size());
 
-	for (int i = 0; i < arr.size(); ++i) {
-		SCAMP::mp_entry e;
-		e.ulong = arr[i];
-		distances[i] = static_cast<double>(convertToEuclidean(e.floats[0], window));
-		indexes[i] = (e.floats[0] < -1) ? -1 : e.ints[1];
-	}
-	return std::make_pair(std::move(distances), std::move(indexes));
+    for (int i = 0; i < arr.size(); ++i) {
+        SCAMP::mp_entry e;
+        e.ulong = arr[i];
+        distances[i] = static_cast<double>(convertToEuclidean(e.floats[0], window));
+        indexes[i] = (e.floats[0] < -1) ? -1 : e.ints[1];
+    }
+    return std::make_pair(std::move(distances), std::move(indexes));
 }
 
-std::pair<std::vector<double>, std::vector<unsigned int>> runScamp(SCAMP::SCAMPArgs&& args){
-	std::vector<int> devices;
+std::pair<std::vector<double>, std::vector<unsigned int>> runScamp(SCAMP::SCAMPArgs &&args) {
+    std::vector<int> devices;
 #ifdef _HAS_CUDA_
-	// Use all available devices
-	int num_dev;
-	cudaGetDeviceCount(&num_dev);
-	for (int i = 0; i < num_dev; ++i) {
-		devices.push_back(i);
-	}
+    // Use all available devices
+    int num_dev;
+    cudaGetDeviceCount(&num_dev);
+    for (int i = 0; i < num_dev; ++i) {
+        devices.push_back(i);
+    }
     // When using GPUs do not use CPU workers as they are much slower currently
     // and can cause unnecessary latency
-	int numWorkersCPU = 0;
-	if(khiva::library::getBackend() == khiva::library::Backend::KHIVA_BACKEND_CPU) {
-		devices.clear();
-		numWorkersCPU = std::thread::hardware_concurrency();
-	}
+    int numWorkersCPU = 0;
+    if (khiva::library::getBackend() == khiva::library::Backend::KHIVA_BACKEND_CPU) {
+        devices.clear();
+        numWorkersCPU = std::thread::hardware_concurrency();
+    }
 #else
-	// TODO: set numWorkersCPU as param
+    // TODO: set numWorkersCPU as param
     // TODO: By default use all CPU cores
-	int numWorkersCPU = 1;//std::thread::hardware_concurrency(); 
+    int numWorkersCPU = 1;  // std::thread::hardware_concurrency();
 #endif
 
-	InitProfileMemory(args);
+    InitProfileMemory(args);
 
-	SCAMP::do_SCAMP(&args, devices, numWorkersCPU);
+    SCAMP::do_SCAMP(&args, devices, numWorkersCPU);
 
-	return getProfileOutput(args.profile_a, args.window); 
+    return getProfileOutput(args.profile_a, args.window);
 }
 
-std::pair<std::vector<double>, std::vector<unsigned int>> scamp(std::vector<double>&& tss, long m) {
-	auto args = getDefaultArgs();
-	args.window = m;
-	args.has_b = false;
-	args.timeseries_a = std::move(tss);
-	return runScamp(std::move(args));
+std::pair<std::vector<double>, std::vector<unsigned int>> scamp(std::vector<double> &&tss, long m) {
+    auto args = getDefaultArgs();
+    args.window = m;
+    args.has_b = false;
+    args.timeseries_a = std::move(tss);
+    return runScamp(std::move(args));
 }
 
-std::pair<std::vector<double>, std::vector<unsigned int>> scamp(std::vector<double>&& ta, std::vector<double>&& tb, long m) {
-	auto args = getDefaultArgs();
-	args.window = m;
-	args.has_b = true;
-	args.timeseries_a = std::move(ta);
-	args.timeseries_b = std::move(tb);
-	return runScamp(std::move(args)); 
+std::pair<std::vector<double>, std::vector<unsigned int>> scamp(std::vector<double> &&ta, std::vector<double> &&tb,
+                                                                long m) {
+    auto args = getDefaultArgs();
+    args.window = m;
+    args.has_b = true;
+    args.timeseries_a = std::move(ta);
+    args.timeseries_b = std::move(tb);
+    return runScamp(std::move(args));
 }
 
 }  // namespace
@@ -416,43 +409,43 @@ void mass(af::array q, af::array t, af::array a, af::array mean_t, af::array sig
     calculateDistances(qt, a, sum_q, sum_q2, mean_t, sigma_t, distances);
 }
 
-void scamp(af::array tss, long m, af::array& profile, af::array& index) {
-	if(tss.dims(2) > 1 || tss.dims(3) > 1) {
+void scamp(af::array tss, long m, af::array &profile, af::array &index) {
+    if (tss.dims(2) > 1 || tss.dims(3) > 1) {
         throw std::invalid_argument("Dimension 2 o dimension 3 is bigger than 1");
-	}
-	
-	profile = af::array(tss.dims(0) - m + 1, tss.dims(1), f64);
-	index = af::array(tss.dims(0) - m + 1, tss.dims(1), u32);
+    }
 
-	tss = tss.as(f64);
-	for(dim_t tssIdx = 0; tssIdx < tss.dims(1); ++tssIdx ) {
-		auto vect = khiva::vector::get<double>(tss(af::span, tssIdx));
-		auto res = ::scamp(std::move(vect), m);
-		profile(af::span, tssIdx) = khiva::vector::createArray<double>(res.first);
-		index(af::span, tssIdx) = khiva::vector::createArray<unsigned int>(res.second);
-	}
-} 
+    profile = af::array(tss.dims(0) - m + 1, tss.dims(1), f64);
+    index = af::array(tss.dims(0) - m + 1, tss.dims(1), u32);
 
-void scamp(af::array ta, af::array tb, long m, af::array& profile, af::array& index) {
-	if(ta.dims(2) > 1 || ta.dims(3) > 1 || tb.dims(2) > 1 || tb.dims(3) > 1) {
-	}
-	
-	profile = af::array(tb.dims(0) - m + 1, ta.dims(1), tb.dims(1), f64);
-	index = af::array(tb.dims(0) - m + 1, ta.dims(1), tb.dims(1), u32);
+    tss = tss.as(f64);
+    for (dim_t tssIdx = 0; tssIdx < tss.dims(1); ++tssIdx) {
+        auto vect = khiva::vector::get<double>(tss(af::span, tssIdx));
+        auto res = ::scamp(std::move(vect), m);
+        profile(af::span, tssIdx) = khiva::vector::createArray<double>(res.first);
+        index(af::span, tssIdx) = khiva::vector::createArray<unsigned int>(res.second);
+    }
+}
 
-	ta = ta.as(f64);
-	tb = tb.as(f64);
+void scamp(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
+    if (ta.dims(2) > 1 || ta.dims(3) > 1 || tb.dims(2) > 1 || tb.dims(3) > 1) {
+    }
 
-	for (dim_t tbIdx = 0; tbIdx < tb.dims(1); ++tbIdx) {
-		for (dim_t taIdx = 0; taIdx < ta.dims(1); ++taIdx) {
-			auto vectA = khiva::vector::get<double>(ta(af::span, taIdx));
-			auto vectB = khiva::vector::get<double>(tb(af::span, tbIdx));
-			auto res = ::scamp(std::move(vectB), std::move(vectA), m);
-			profile(af::span, taIdx, tbIdx) = khiva::vector::createArray<double>(res.first);
-			index(af::span, taIdx, tbIdx) = khiva::vector::createArray<unsigned int>(res.second);
-		}
-	}
-} 
+    profile = af::array(tb.dims(0) - m + 1, ta.dims(1), tb.dims(1), f64);
+    index = af::array(tb.dims(0) - m + 1, ta.dims(1), tb.dims(1), u32);
+
+    ta = ta.as(f64);
+    tb = tb.as(f64);
+
+    for (dim_t tbIdx = 0; tbIdx < tb.dims(1); ++tbIdx) {
+        for (dim_t taIdx = 0; taIdx < ta.dims(1); ++taIdx) {
+            auto vectA = khiva::vector::get<double>(ta(af::span, taIdx));
+            auto vectB = khiva::vector::get<double>(tb(af::span, tbIdx));
+            auto res = ::scamp(std::move(vectB), std::move(vectA), m);
+            profile(af::span, taIdx, tbIdx) = khiva::vector::createArray<double>(res.first);
+            index(af::span, taIdx, tbIdx) = khiva::vector::createArray<unsigned int>(res.second);
+        }
+    }
+}
 
 void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::array &profile, af::array &index) {
     long nb = static_cast<long>(tb.dims(0));
@@ -927,4 +920,3 @@ void findBestN(af::array profile, af::array index, long m, long n, af::array &di
 }  // namespace internal
 }  // namespace matrix
 }  // namespace khiva
-

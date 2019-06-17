@@ -58,8 +58,27 @@ KHIVAAPI af::array absoluteSumOfChanges(af::array tss);
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correlation for each time series.
  */
+KHIVAAPI af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array &,
+                                                                                             const bool, const dim_t));
+
+/**
+ * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
+ * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
+ * lags (1 to length of x).
+ * \f[
+ * \frac{1}{n-1} \sum_{l=1,\ldots, n} \frac{1}{(n-l)\sigma^{2}} \sum_{t=1}^{n-l}(X_{t}-\mu )(X_{t+l}-\mu),
+ * \f]
+ *  where \f$n\f$ is the length of the time series \f$X_i\f$, \f$\sigma^2\f$ its variance and \f$\mu\f$ its mean.
+ *
+ * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
+ * dimension one indicates the number of time series.
+ * @param aggregationFunction The function to summarise all autocorrelation with different lags.
+ *
+ * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
+ * contains the aggregated correlation for each time series.
+ */
 KHIVAAPI af::array aggregatedAutocorrelation(af::array tss,
-                                    af::array (*aggregationFunction)(const af::array &, const bool, const dim_t));
+                                             af::array (*aggregationFunction)(const af::array &, const int));
 
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
@@ -77,43 +96,8 @@ KHIVAAPI af::array aggregatedAutocorrelation(af::array tss,
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correlation for each time series.
  */
-KHIVAAPI af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array &, const int));
-
-/**
- * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
- * (Compare to http://en.wikipedia.org/wiki/Autocorrelation#Estimation), taken over different all possible
- * lags (1 to length of x).
- * \f[
- * \frac{1}{n-1} \sum_{l=1,\ldots, n} \frac{1}{(n-l)\sigma^{2}} \sum_{t=1}^{n-l}(X_{t}-\mu )(X_{t+l}-\mu),
- * \f]
- *  where \f$n\f$ is the length of the time series \f$X_i\f$, \f$\sigma^2\f$ its variance and \f$\mu\f$ its mean.
- *
- * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
- * dimension one indicates the number of time series.
- * @param aggregationFunction The function to summarise all autocorrelation with different lags.
- *
- * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
- * contains the aggregated correlation for each time series.
- */
-KHIVAAPI af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array &, const dim_t));
-
-/**
- * @brief Calculates a linear least-squares regression for values of the time series that were aggregated over chunks
- * versus the sequence from 0 up to the number of chunks minus one.
- *
- * @param t The time series to calculate the features of.
- * @param chunkSize The chunkSize used to aggregate the data.
- * @param aggregationFunction Function to be used in the aggregation.
- * @param slope Slope of the regression line.
- * @param intercept Intercept of the regression line.
- * @param rvalue Correlation coefficient.
- * @param pvalue Two-sided p-value for a hypothesis test whose null hypothesis is that the slope is zero, using
- * Wald Test with t-distribution of the test statistic.
- * @param stderrest Standard error of the estimated gradient.
- */
-KHIVAAPI void aggregatedLinearTrend(af::array t, long chunkSize, af::array (*aggregationFunction)(const af::array &, const int),
-                           af::array &slope, af::array &intercept, af::array &rvalue, af::array &pvalue,
-                           af::array &stderrest);
+KHIVAAPI af::array aggregatedAutocorrelation(af::array tss,
+                                             af::array (*aggregationFunction)(const af::array &, const dim_t));
 
 /**
  * @brief Calculates a linear least-squares regression for values of the time series that were aggregated over chunks
@@ -130,8 +114,26 @@ KHIVAAPI void aggregatedLinearTrend(af::array t, long chunkSize, af::array (*agg
  * @param stderrest Standard error of the estimated gradient.
  */
 KHIVAAPI void aggregatedLinearTrend(af::array t, long chunkSize,
-                           af::array (*aggregationFunction)(const af::array &, const dim_t), af::array &slope,
-                           af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
+                                    af::array (*aggregationFunction)(const af::array &, const int), af::array &slope,
+                                    af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
+
+/**
+ * @brief Calculates a linear least-squares regression for values of the time series that were aggregated over chunks
+ * versus the sequence from 0 up to the number of chunks minus one.
+ *
+ * @param t The time series to calculate the features of.
+ * @param chunkSize The chunkSize used to aggregate the data.
+ * @param aggregationFunction Function to be used in the aggregation.
+ * @param slope Slope of the regression line.
+ * @param intercept Intercept of the regression line.
+ * @param rvalue Correlation coefficient.
+ * @param pvalue Two-sided p-value for a hypothesis test whose null hypothesis is that the slope is zero, using
+ * Wald Test with t-distribution of the test statistic.
+ * @param stderrest Standard error of the estimated gradient.
+ */
+KHIVAAPI void aggregatedLinearTrend(af::array t, long chunkSize,
+                                    af::array (*aggregationFunction)(const af::array &, const dim_t), af::array &slope,
+                                    af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
 
 /**
  * @brief Calculates a vectorized Approximate entropy algorithm (https://en.wikipedia.org/wiki/Approximate_entropy).
@@ -347,7 +349,7 @@ KHIVAAPI af::array fftAggregated(af::array tss);
  * @param angle The angle of the coefficient.
  */
 KHIVAAPI void fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &abs,
-                    af::array &angle);
+                             af::array &angle);
 
 /**
  * @brief Calculates the first relative location of the maximal value for each time series.
@@ -501,7 +503,7 @@ KHIVAAPI af::array length(af::array tss);
  * @param stder The stderr values for all time series.
  */
 KHIVAAPI void linearTrend(af::array tss, af::array &pvalue, af::array &rvalue, af::array &intercept, af::array &slope,
-                 af::array &stder);
+                          af::array &stder);
 
 /**
  * @brief Calculates all Local Maximals for the time series in tss.

@@ -8,11 +8,11 @@
 #include "libraryInternal.h"
 #include "matrixInternal.h"
 
-namespace { 
+namespace {
 constexpr long BATCH_SIZE_SQUARED = 2048;
 constexpr long BATCH_SIZE_B = 1024;
 constexpr long BATCH_SIZE_A = 8192;
-}
+}  // namespace
 
 namespace khiva {
 namespace matrix {
@@ -27,8 +27,8 @@ void mass(af::array q, af::array t, af::array &distances) {
     internal::mass(q, t, aux, mean, stdev, distances);
     distances = af::reorder(distances, 2, 0, 1, 3);
 
-	//af::array indexes;
-	//khiva::matrix::matrixProfile(q, t, q.dims(0), distances, indexes); 
+    // af::array indexes;
+    // khiva::matrix::matrixProfile(q, t, q.dims(0), distances, indexes);
 }
 
 void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances, af::array &indexes) {
@@ -60,7 +60,7 @@ void findBestNMotifs(af::array profile, af::array index, long m, long n, af::arr
 
 void findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
                        af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin) {
-	internal::findBestN(profile, index, m, n, discords, discordsIndices, subsequenceIndices, selfJoin, false);
+    internal::findBestN(profile, index, m, n, discords, discordsIndices, subsequenceIndices, selfJoin, false);
 }
 
 void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
@@ -101,12 +101,12 @@ void stomp(af::array t, long m, af::array &profile, af::array &index) {
     }
 }
 
-void matrixProfile(af::array tss, long m, af::array& profile, af::array& index) {
-	internal::scamp(tss, m, profile, index);
+void matrixProfile(af::array tss, long m, af::array &profile, af::array &index) {
+    internal::scamp(tss, m, profile, index);
 }
 
-void matrixProfile(af::array ta, af::array tb, long m, af::array& profile, af::array& index) {
-	internal::scamp(ta, tb, m, profile, index);
+void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
+    internal::scamp(ta, tb, m, profile, index);
 }
 
 }  // namespace matrix
