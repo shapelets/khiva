@@ -40,7 +40,8 @@ OPTION(KHIVA_BUILD_EXAMPLES "Build examples of the Khiva library" ON)
 OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen, GraphViz and Sphinx)" ON)
 OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependencies of the Khiva library" ON)
 OPTION(KHIVA_ENABLE_COVERAGE "This flag anables Code Coverage of the code" OFF)
-OPTION(KHIVA_ONLY_CPU_BACKEND "This flag limits the execution to the CPU Backend" OFF)
+OPTION(KHIVA_BUILD_C_BINDINGS "Build C bindings" ON)
+OPTION(KHIVA_BUILD_C_BINDINGS "Build JNI bindings" ON)
 
 IF(KHIVA_ENABLE_COVERAGE AND NOT WIN32)
     # Setting compiler flags for code coverage
@@ -57,7 +58,7 @@ IF(KHIVA_USE_CONAN)
                         "Check the following instructions to run conan installation:\n"
                         "https://github.com/shapelets/khiva/blob/master/doc/markdown/INSTALLATION.md#build-from-source-code-1")
     ENDIF()
-    CONAN_BASIC_SETUP()
+    CONAN_BASIC_SETUP(KEEP_RPATHS)
 ENDIF()
 
 # Set the base directory to parent so src and include become equaly visible

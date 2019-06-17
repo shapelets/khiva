@@ -8,6 +8,8 @@
 #include "libraryInternal.h"
 #include "matrixInternal.h"
 
+#include <stdexcept>
+
 namespace {
 constexpr long BATCH_SIZE_SQUARED = 2048;
 constexpr long BATCH_SIZE_B = 1024;
@@ -19,16 +21,12 @@ namespace matrix {
 
 void mass(af::array q, af::array t, af::array &distances) {
     af::array aux, mean, stdev;
-    const long long n = t.dims(0);
 
     q = af::reorder(q, 0, 3, 2, 1);
     const long long m = q.dims(0);
     internal::meanStdev(t, aux, m, mean, stdev);
     internal::mass(q, t, aux, mean, stdev, distances);
     distances = af::reorder(distances, 2, 0, 1, 3);
-
-    // af::array indexes;
-    // khiva::matrix::matrixProfile(q, t, q.dims(0), distances, indexes);
 }
 
 void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances, af::array &indexes) {

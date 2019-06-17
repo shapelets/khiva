@@ -28,7 +28,7 @@ else()
 	message(STATUS "No CUDA compiler found, building SCAMP without CUDA.")
 endif() 
 
-if(NOT EXISTS scamp/CMakeLists.txt)
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/scamp/SCAMP/CMakeLists.txt")
 	message(FATAL_ERROR "git submodule was not initialized.")
 endif()
 
