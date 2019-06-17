@@ -28,6 +28,10 @@ else()
 	message(STATUS "No CUDA compiler found, building SCAMP without CUDA.")
 endif() 
 
+if(NOT EXISTS scamp/CMakeLists.txt)
+	message(FATAL_ERROR "git submodule was not initialized.")
+endif()
+
 ADD_SUBDIRECTORY(scamp)
 
 # Find the ArrayFire package.
