@@ -148,6 +148,25 @@ KHIVAAPI void massWithMask(af::array q, af::array t, af::array a, af::array mean
  */
 KHIVAAPI void mass(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array &distance);
 
+KHIVAAPI void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::array &profile, af::array &index);
+
+KHIVAAPI void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_size_b, long batch_size_a,
+                              af::array &profile, af::array &index);
+
+KHIVAAPI void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
+
+KHIVAAPI void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch_size_a, af::array &profile,
+                              af::array &index);
+
+KHIVAAPI void stomp_parallel(af::array t, long m, af::array &profile, af::array &index);
+
+KHIVAAPI void findBestN(af::array profile, af::array index, long m, long n, af::array &distance, af::array &indices,
+               af::array &subsequenceIndices, bool selfJoin, bool lookForMotifs);
+
+KHIVAAPI void scamp(af::array tss, long m, af::array& profile, af::array& index);
+
+KHIVAAPI void scamp(af::array ta, af::array tb, long m, af::array& profile, af::array& index);
+
 }  // namespace internal
 }  // namespace matrix
 }  // namespace khiva
