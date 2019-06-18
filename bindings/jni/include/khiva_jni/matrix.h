@@ -137,6 +137,41 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, j
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m);
 
+/**
+ * @brief Calculate the matrix profile between 'ta' and 'tb' using a subsequence length
+ * of 'm'.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param ref_a Query time series.
+ * @param ref_b Reference time series.
+ * @param m The length of the subsequence.
+ * @return The updated ref_a and ref_b and references to:
+ *          - The distance profile.
+ *          - The index profile.
+ */
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
+                                                                  jlong m);
+
+/**
+ * @brief Calculate the matrix profile between 't' and itself using a subsequence length
+ * of 'm'. This method filters the trivial matches.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param ref_a Query and reference time series.
+ * @param m Subsequence length.Subsequence length.
+ * @return The updated ref_a and references to:
+ *          - The matrix profile, which reflects the distance to the closer element of the subsequence
+ *            from 't' in a different location of itself.
+ *          - The matrix profile index, which points to where the aforementioned minimum is located.
+ */
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m);
+
 #ifdef __cplusplus
 }
 #endif
