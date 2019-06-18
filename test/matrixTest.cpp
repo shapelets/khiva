@@ -10,6 +10,7 @@
 #include <stdexcept>
 
 #include "khiva/matrixInternal.h"
+#include "khiva/vector.h"
 #include "khivaTest.h"
 
 void slidingDotProduct() {
@@ -444,6 +445,85 @@ void massConsiderTrivial() {
     ASSERT_EQ(resultingIndex[1], expectedIndex);
 
     af::freeHost(resultingDistance);
+}
+
+void matrixProfile() {
+    auto ta = khiva::vector::createArray(
+        {-0.9247, 0.1808,  2.5441,  0.3516,  -0.3452, 0.2191, -0.7687, 0.2413,  -1.1948, 0.8927,  -0.5378,
+         0.2270,  0.9354,  -0.7613, 0.5787,  -0.6174, 0.5889, 0.7897,  -0.0645, 0.9520,  -1.1411, 0.8281,
+         -0.7363, -0.7446, -0.8415, 1.2991,  0.0883,  0.6588, -0.2788, 1.4143,  -1.1650, -0.6629, -0.5807,
+         -0.1699, -0.7265, -0.1506, -0.2785, -0.0063, 0.4021, 1.3925,  -0.2417, 0.1139,  -1.6279, 0.1488},
+        8, 3);
+
+    auto tb = khiva::vector::createArray(
+        {0.2512,  0.6436,  -2.3651, -0.7734, -0.0511, 1.6693,  1.9453,  -1.9047, 0.8149, -0.1831, -0.1542, -1.3490,
+         1.2285,  -1.0472, 0.3911,  -0.0637, -1.2594, -2.2675, 0.7161,  -2.5572, 0.7361, 0.1402,  -0.0910, 0.3245,
+         -1.0920, 0.8766,  1.2113,  -0.0861, -0.4919, -1.3485, -1.3932, 1.1820,  0.2298, 0.6310,  -0.9343, -1.9329},
+        8, 2);
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::matrixProfile(ta, tb, m, distance, index);
+
+    ASSERT_EQ(distance.dims(0), 6);
+    ASSERT_EQ(distance.dims(1), 3);
+    ASSERT_EQ(distance.dims(2), 2);
+    ASSERT_EQ(distance.dims(3), 1);
+
+    ASSERT_EQ(index.dims(0), 6);
+    ASSERT_EQ(index.dims(1), 3);
+    ASSERT_EQ(index.dims(2), 2);
+    ASSERT_EQ(index.dims(3), 1);
+
+    auto distanceVect = khiva::vector::get<double>(distance);
+    auto indexVect = khiva::vector::get<unsigned int>(index);
+    ASSERT_NEAR(0.0112, distanceVect[7], 1e-3);
+    ASSERT_EQ(1, indexVect[7]);
+    ASSERT_NEAR(0.2810, distanceVect[17], 1e-3);
+    ASSERT_EQ(0, indexVect[17]);
+    ASSERT_NEAR(0.4467, distanceVect[18], 1e-3);
+    ASSERT_EQ(2, indexVect[18]);
+    ASSERT_NEAR(0.0162, distanceVect[27], 1e-3);
+    ASSERT_EQ(5, indexVect[27]);
+    ASSERT_NEAR(0.9187, distanceVect[35], 1e-3);
+    ASSERT_EQ(4, indexVect[35]);
+}
+
+void matrixProfileSelfJoin() {
+    auto ta = khiva::vector::createArray(
+        {0.6010, 0.0278, 0.9806, 0.2126, 0.0655, 0.5497, 0.2864, 0.3410, 0.7509, 0.4105, 0.1583, 0.3712,
+         0.3543, 0.6450, 0.9675, 0.3636, 0.4165, 0.5814, 0.8962, 0.3712, 0.6755, 0.6105, 0.5232, 0.5567,
+         0.7896, 0.8966, 0.0536, 0.5775, 0.2908, 0.9941, 0.5143, 0.3670, 0.3336, 0.0363, 0.5349, 0.0123,
+         0.3988, 0.9787, 0.2308, 0.6244, 0.7917, 0.1654, 0.8657, 0.3766, 0.7331, 0.2522, 0.9644, 0.4711},
+        16, 3);
+
+    long m = 6;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::matrixProfile(ta, m, distance, index);
+
+    ASSERT_EQ(distance.dims(0), 11);
+    ASSERT_EQ(distance.dims(1), 3);
+    ASSERT_EQ(distance.dims(2), 1);
+    ASSERT_EQ(distance.dims(3), 1);
+
+    ASSERT_EQ(index.dims(0), 11);
+    ASSERT_EQ(index.dims(1), 3);
+    ASSERT_EQ(index.dims(2), 1);
+    ASSERT_EQ(index.dims(3), 1);
+
+    auto distanceVect = khiva::vector::get<double>(distance);
+    auto indexVect = khiva::vector::get<unsigned int>(index);
+    ASSERT_NEAR(1.2237, distanceVect[7], 1e-3);
+    ASSERT_EQ(1, indexVect[7]);
+    ASSERT_NEAR(2.5324, distanceVect[21], 1e-3);
+    ASSERT_EQ(1, indexVect[21]);
+    ASSERT_NEAR(1.979, distanceVect[25], 1e-3);
+    ASSERT_EQ(6, indexVect[25]);
 }
 
 void stompIgnoreTrivialOneSeries() {
@@ -1010,6 +1090,8 @@ KHIVA_TEST(MatrixTests, MassIgnoreTrivial, massIgnoreTrivial)
 KHIVA_TEST(MatrixTests, MassConsiderTrivial, massConsiderTrivial)
 KHIVA_TEST(MatrixTests, FindBestNOccurrences, findBestNOccurrences)
 KHIVA_TEST(MatrixTests, FindBestNOccurrencesMultipleQueries, findBestNOccurrencesMultipleQueries)
+KHIVA_TEST(MatrixTests, MatrixProfile, matrixProfile)
+KHIVA_TEST(MatrixTests, MatrixProfileSelfJoin, matrixProfileSelfJoin)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialOneSeries, stompIgnoreTrivialOneSeries)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialOneBigSeries, stompIgnoreTrivialOneBigSeries)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialMultipleSeries, stompIgnoreTrivialMultipleSeries)

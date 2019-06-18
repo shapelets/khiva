@@ -17,11 +17,6 @@ namespace khiva {
 
 namespace matrix {
 
-enum class Algorithm {
-    SCRIMP = 0,
-    STOMP,
-};
-
 /**
  * @brief Calculates the N best matches of several queries in several time series.
  *
@@ -133,8 +128,36 @@ KHIVAAPI void stomp(af::array ta, af::array tb, long m, af::array &profile, af::
  */
 KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
 
-KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array &index);
+ /**
+ * @brief Calculate the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param ta Query time series.
+ * @param tb Reference time series.
+ * @param m Subsequence length.
+ * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 'ta'
+ * in 'tb'.
+ * @param index The matrix profile index, which points to where the aforementioned minimum is located.
+ */
+KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array &index); 
 
+/**
+ * @brief Calculate the matrix profile between 't' and itself using a subsequence length of 'm'.
+ * This method filters the trivial matches.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param t Query and reference time series.
+ * @param m Subsequence length.
+ * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 't' in a
+ * different location of itself.
+ * @param index The matrix profile index, which points to where the aforementioned minimum is located.
+ */
 KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
 
 }  // namespace matrix

@@ -8,7 +8,10 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
 
 # Find the ArrayFire package.
 FIND_PACKAGE(ArrayFire REQUIRED)
-FIND_PACKAGE(JNI REQUIRED)
+FIND_PACKAGE(JNI)
+IF(NOT JNI_FOUND)
+	MESSAGE(FATAL_ERROR "JDK not found. Please install JDK or disable building JNI bindings by using the flag KHIVA_BUILD_JNI_BINDINGS.")
+ENDIF()
 PROJECT(KHIVALIB_JNI)
 
 # Compile with C++11 support.
