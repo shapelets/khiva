@@ -53,36 +53,21 @@ bool isFiltered(std::set<std::pair<unsigned int, unsigned int>> pairs, std::pair
     return false;
 }
 
-// TODO: Check if the if statements checking the self_join flag are correct
 void InitProfileMemory(SCAMP::SCAMPArgs &args) {
     switch (args.profile_type) {
         case SCAMP::PROFILE_TYPE_1NN_INDEX: {
             SCAMP::mp_entry e;
             e.floats[0] = std::numeric_limits<float>::lowest();
             e.ints[1] = -1u;
-            args.profile_a.data.emplace_back();
-            args.profile_a.data[0].uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong);
+            args.profile_a.data.uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong);
             if (args.has_b) {
-                args.profile_b.data.emplace_back();
-                args.profile_b.data[0].uint64_value.resize(args.timeseries_b.size() - args.window + 1, e.ulong);
-            }
-        }
-        case SCAMP::PROFILE_TYPE_1NN: {
-            args.profile_a.data.emplace_back();
-            args.profile_a.data[0].float_value.resize(args.timeseries_a.size() - args.window + 1,
-                                                      std::numeric_limits<float>::lowest());
-            if (args.has_b) {
-                args.profile_b.data.emplace_back();
-                args.profile_b.data[0].float_value.resize(args.timeseries_b.size() - args.window + 1,
-                                                          std::numeric_limits<float>::lowest());
+                args.profile_b.data.uint64_value.resize(args.timeseries_b.size() - args.window + 1, e.ulong);
             }
         }
         case SCAMP::PROFILE_TYPE_SUM_THRESH: {
-            args.profile_a.data.emplace_back();
-            args.profile_a.data[0].double_value.resize(args.timeseries_a.size() - args.window + 1, 0);
+            args.profile_a.data.double_value.resize(args.timeseries_a.size() - args.window + 1, 0);
             if (args.has_b) {
-                args.profile_b.data.emplace_back();
-                args.profile_b.data[0].double_value.resize(args.timeseries_b.size() - args.window + 1, 0);
+                args.profile_b.data.double_value.resize(args.timeseries_b.size() - args.window + 1, 0);
             }
         }
         default:
@@ -102,8 +87,10 @@ SCAMP::SCAMPArgs getDefaultArgs() {
     args.profile_b.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
     args.precision_type = SCAMP::PRECISION_DOUBLE;
     args.profile_type = SCAMP::PROFILE_TYPE_1NN_INDEX;
+    args.reduction_type = SCAMP::Reduction::FULL;
     args.keep_rows_separate = false;
     args.is_aligned = false;
+    args.silent_mode = true;
     return args;
 }
 
@@ -119,7 +106,7 @@ std::pair<std::vector<double>, std::vector<unsigned int>> getProfileOutput(const
     std::vector<double> distances;
     std::vector<unsigned int> indexes;
 
-    const auto &arr = p.data[0].uint64_value;
+    const auto &arr = p.data.uint64_value;
     distances.resize(arr.size());
     indexes.resize(arr.size());
 
