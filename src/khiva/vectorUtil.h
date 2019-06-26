@@ -15,6 +15,8 @@
 
 #include <arrayfire.h>
 
+#include <vector>
+
 namespace khiva {
 namespace vector {
 

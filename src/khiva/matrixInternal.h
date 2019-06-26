@@ -15,9 +15,19 @@
 
 #include <arrayfire.h>
 
+#include <vector>
+#include <utility> 
+
 namespace khiva {
 namespace matrix {
 namespace internal {
+
+using DistancesVector = std::vector<double>;
+using IndexesVector = std::vector<unsigned int>;
+using MatrixProfilePair = std::pair<DistancesVector, IndexesVector>;
+using LeftRightProfilePair = std::pair<MatrixProfilePair, MatrixProfilePair>;
+using Chain = std::vector<unsigned int>;
+using ChainVector = std::vector<Chain>;
 
 /**
  * @brief Calculates the sliding dot product of the time series 'q' against t.
@@ -166,6 +176,10 @@ KHIVAAPI void findBestN(af::array profile, af::array index, long m, long n, af::
 KHIVAAPI void scamp(af::array tss, long m, af::array &profile, af::array &index);
 
 KHIVAAPI void scamp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
+
+KHIVAAPI void getChains(af::array tss, long m, af::array &chains);
+
+KHIVAAPI ChainVector extractAllChains(const IndexesVector& profileLeft, const IndexesVector& profileRight);
 
 }  // namespace internal
 }  // namespace matrix

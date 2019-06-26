@@ -160,6 +160,8 @@ KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array
  */
 KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
 
+KHIVAAPI void getChains(af::array ta, long m, af::array &chains);
+
 }  // namespace matrix
 }  // namespace khiva
 

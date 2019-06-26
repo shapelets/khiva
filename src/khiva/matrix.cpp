@@ -107,5 +107,9 @@ void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::a
     internal::scamp(ta, tb, m, profile, index);
 }
 
+void getChains(af::array ta, long m, af::array &chains) {
+	internal::getChains(ta, m, chains);
+}
+
 }  // namespace matrix
 }  // namespace khiva

@@ -10,7 +10,7 @@
 #include <stdexcept>
 
 #include "khiva/matrixInternal.h"
-#include "khiva/vector.h"
+#include "khiva/vectorUtil.h"
 #include "khivaTest.h"
 
 void slidingDotProduct() {

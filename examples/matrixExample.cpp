@@ -4,7 +4,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <../src/khiva/vector.h>
+#include <../src/khiva/vectorUtil.h>
 #include <arrayfire.h>
 #include <khiva.h>
 
@@ -134,7 +134,7 @@ void printProfile(af::array distances, af::array indexes, const std::string &fil
 }
 
 void testLeftRight() {
-    khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_CUDA);
+    khiva::library::setBackend(khiva::library::Backend::KHIVA_BACKEND_CPU);
     int n = 128;
     int m = 12;
     auto ta = khiva::vector::createArray(
@@ -153,24 +153,25 @@ void testLeftRight() {
          182.3497,  -152.1112, 150.9720,  77.0329,   58.4420,   50.0252,   -36.1718,  -55.2495},
         n);
 
-    {
-        std::ofstream ofs("WholeInfo.csv", std::ofstream::out);
-        for (int j = 0; j < n - m + 1; ++j) {
-            for (int i = 0; i < n - m + 1; ++i) {
-                auto input =
-                    af::join(1, ta(af::seq(m) + static_cast<double>(j)), ta(af::seq(m) + static_cast<double>(i)));
-                auto znormed = khiva::normalization::znorm(input);
-                auto res = khiva::distances::euclidean(znormed);
-                ofs << j << ";" << i << ";" << res(0, 1).scalar<double>() << "\n";
-            }
-        }
-        ofs.close();
-    }
+    //{
+    //    std::ofstream ofs("WholeInfo.csv", std::ofstream::out);
+    //    for (int j = 0; j < n - m + 1; ++j) {
+    //        for (int i = 0; i < n - m + 1; ++i) {
+    //            auto input =
+    //                af::join(1, ta(af::seq(m) + static_cast<double>(j)), ta(af::seq(m) + static_cast<double>(i)));
+    //            auto znormed = khiva::normalization::znorm(input);
+    //            auto res = khiva::distances::euclidean(znormed);
+    //            ofs << j << ";" << i << ";" << res(0, 1).scalar<double>() << "\n";
+    //        }
+    //    }
+    //    ofs.close();
+    //}
 
     af::array distances;
     af::array indexes;
     khiva::matrix::matrixProfile(ta, m, distances, indexes);
-    printProfile(distances, indexes, "profile.csv");
+    //printProfile(distances, indexes, "profile.csv");
+    af_print(distances);
     af_print(indexes);
 }
 

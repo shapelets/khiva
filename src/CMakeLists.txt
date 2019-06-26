@@ -36,9 +36,6 @@ ADD_SUBDIRECTORY(scamp)
 
 # Find the ArrayFire package.
 FIND_PACKAGE(ArrayFire REQUIRED)
-# Find the Boost package
-FIND_PACKAGE(Boost REQUIRED)
-FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
 
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -60,15 +57,16 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB}
 						PUBLIC
                            $<BUILD_INTERFACE:${KHIVALIB_INC}>
                            $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
-                           ${ArrayFire_INCLUDE_DIRS}
-                           ${Boost_INCLUDE_DIRS})
+                           ${ArrayFire_INCLUDE_DIRS})
 
 # Declare compilation libraries
 TARGET_LINK_LIBRARIES(${KHIVALIB}
-	PRIVATE scamp
-	PUBLIC $<IF:$<BOOL:${KHIVA_ONLY_CPU_BACKEND}>,ArrayFire::afcpu,ArrayFire::af>
-	Eigen3::Eigen
-	${CMAKE_DL_LIBS})
+	PRIVATE 
+		scamp
+	PUBLIC 
+		$<IF:$<BOOL:${KHIVA_ONLY_CPU_BACKEND}>,ArrayFire::afcpu,ArrayFire::af>
+		${CMAKE_DL_LIBS}
+)
 
 
 # Add compile definitions
