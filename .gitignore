@@ -14,3 +14,4 @@ test/versionTest.cpp
 *.gcov
 *.info
 .vscode/ipch
+cmake-build-*
