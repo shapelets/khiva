@@ -18,7 +18,7 @@
 #include <vector>
 
 namespace khiva {
-namespace vector {
+namespace vectorutil {
 
 template <typename T>
 std::vector<T> get(af::array arr) {

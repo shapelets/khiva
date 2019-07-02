@@ -14,7 +14,7 @@ void vector1Dim() {
     int data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(14, data);
 
-    auto vect = khiva::vector::get<int>(t);
+    auto vect = khiva::vectorutil::get<int>(t);
 
     for (int i = 0; i < vect.size(); ++i) {
         ASSERT_EQ(vect[i], data[i]);
@@ -25,7 +25,7 @@ void vector2Dim() {
     int data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
     af::array t = af::array(7, 2, data);
 
-    auto vect = khiva::vector::get<int>(t);
+    auto vect = khiva::vectorutil::get<int>(t);
 
     ASSERT_EQ(vect.size(), 14);
     for (int i = 0; i < vect.size(); ++i) {
@@ -37,7 +37,7 @@ void vector3Dim() {
     int data[] = {10, 10, 10, 11, 12, 11, 10, 10};
     af::array t = af::array(2, 2, 2, data);
 
-    auto vect = khiva::vector::get<int>(t);
+    auto vect = khiva::vectorutil::get<int>(t);
 
     ASSERT_EQ(vect.size(), 8);
     for (int i = 0; i < vect.size(); ++i) {
@@ -49,7 +49,7 @@ void vector4Dim() {
     int data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10, 12, 44};
     af::array t = af::array(2, 2, 2, 2, data);
 
-    auto vect = khiva::vector::get<int>(t);
+    auto vect = khiva::vectorutil::get<int>(t);
 
     ASSERT_EQ(vect.size(), 16);
     for (int i = 0; i < vect.size(); ++i) {
@@ -59,7 +59,7 @@ void vector4Dim() {
 
 void arr0Dim() {
     std::vector<int> vect = {1, 3, 2};
-    auto arr = khiva::vector::createArray(vect);
+    auto arr = khiva::vectorutil::createArray(vect);
     ASSERT_EQ(arr.dims(0), 3);
     ASSERT_EQ(arr.dims(1), 1);
     ASSERT_EQ(arr.dims(2), 1);
@@ -67,7 +67,7 @@ void arr0Dim() {
 }
 
 void arr0DimInitializer() {
-    auto arr = khiva::vector::createArray({1, 3, 2});
+    auto arr = khiva::vectorutil::createArray({1, 3, 2});
     ASSERT_EQ(arr.dims(0), 3);
     ASSERT_EQ(arr.dims(1), 1);
     ASSERT_EQ(arr.dims(2), 1);
@@ -76,7 +76,7 @@ void arr0DimInitializer() {
 
 void arr1Dim() {
     std::vector<int> vect = {1, 3, 2, 4};
-    auto arr = khiva::vector::createArray(vect, 4);
+    auto arr = khiva::vectorutil::createArray(vect, 4);
     ASSERT_EQ(arr.dims(0), 4);
     ASSERT_EQ(arr.dims(1), 1);
     ASSERT_EQ(arr.dims(2), 1);
@@ -84,7 +84,7 @@ void arr1Dim() {
 }
 
 void arr1DimInitializer() {
-    auto arr = khiva::vector::createArray({1, 3, 2, 4}, 4);
+    auto arr = khiva::vectorutil::createArray({1, 3, 2, 4}, 4);
     ASSERT_EQ(arr.dims(0), 4);
     ASSERT_EQ(arr.dims(1), 1);
     ASSERT_EQ(arr.dims(2), 1);
@@ -93,7 +93,7 @@ void arr1DimInitializer() {
 
 void arr2Dim() {
     std::vector<int> vect = {1, 3, 2, 4};
-    auto arr = khiva::vector::createArray(vect, 2, 2);
+    auto arr = khiva::vectorutil::createArray(vect, 2, 2);
     ASSERT_EQ(arr.dims(0), 2);
     ASSERT_EQ(arr.dims(1), 2);
     ASSERT_EQ(arr.dims(2), 1);
@@ -101,7 +101,7 @@ void arr2Dim() {
 }
 
 void arr2DimInitializer() {
-    auto arr = khiva::vector::createArray({1, 3, 2, 4}, 2, 2);
+    auto arr = khiva::vectorutil::createArray({1, 3, 2, 4}, 2, 2);
     ASSERT_EQ(arr.dims(0), 2);
     ASSERT_EQ(arr.dims(1), 2);
     ASSERT_EQ(arr.dims(2), 1);

@@ -181,6 +181,8 @@ KHIVAAPI void getChains(af::array tss, long m, af::array &chains);
 
 KHIVAAPI ChainVector extractAllChains(const IndexesVector& profileLeft, const IndexesVector& profileRight);
 
+KHIVAAPI LeftRightProfilePair scampLR(std::vector<double> &&ta, long m);
+
 }  // namespace internal
 }  // namespace matrix
 }  // namespace khiva

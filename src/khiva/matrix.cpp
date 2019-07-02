@@ -107,8 +107,8 @@ void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::a
     internal::scamp(ta, tb, m, profile, index);
 }
 
-void getChains(af::array ta, long m, af::array &chains) {
-	internal::getChains(ta, m, chains);
+void getChains(af::array tss, long m, af::array &chains) {
+	internal::getChains(tss, m, chains);
 }
 
 }  // namespace matrix

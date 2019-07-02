@@ -67,12 +67,17 @@ void InitProfileMemory(SCAMP::SCAMPArgs &args) {
             if (args.has_b) {
                 args.profile_b.data.uint64_value.resize(args.timeseries_b.size() - args.window + 1, e.ulong);
             }
+			if(args.reduction_type == SCAMP::Reduction::LEFT_RIGHT) {
+                args.profile_b.data.uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong); 
+			}
+			break;
         }
         case SCAMP::PROFILE_TYPE_SUM_THRESH: {
             args.profile_a.data.double_value.resize(args.timeseries_a.size() - args.window + 1, 0);
             if (args.has_b) {
                 args.profile_b.data.double_value.resize(args.timeseries_b.size() - args.window + 1, 0);
             }
+			break;
         }
         default:
             break;
@@ -106,13 +111,6 @@ float convertToEuclidean(float val, uint64_t window) {
     return std::sqrt(std::max(2.0 * window * (1.0 - val), 0.0));
 }
 
-//using DistancesVector = std::vector<double>;
-//using IndexesVector = std::vector<unsigned int>;
-//using MatrixProfilePair = std::pair<DistancesVector, IndexesVector>;
-//using LeftRightProfilePair = std::pair<MatrixProfilePair, MatrixProfilePair>;
-//using Chain = std::vector<unsigned int>;
-//using ChainVector = std::vector<Chain>;
-
 MatrixProfilePair getProfileOutput(const SCAMP::Profile &p, uint64_t window) {
     DistancesVector distances;
     IndexesVector indexes;
@@ -144,20 +142,18 @@ void runScamp(SCAMP::SCAMPArgs &args) {
     int numWorkersCPU = 0;
     if (khiva::library::getBackend() == khiva::library::Backend::KHIVA_BACKEND_CPU) {
         devices.clear();
-        numWorkersCPU = std::thread::hardware_concurrency();
+        numWorkersCPU = 1; //std::thread::hardware_concurrency();
     }
 #else
-    // TODO: set numWorkersCPU as param
-    // TODO: By default use all CPU cores
-    int numWorkersCPU = 1;  // std::thread::hardware_concurrency();
+    int numWorkersCPU = 1; //std::thread::hardware_concurrency();
 #endif
 
     InitProfileMemory(args);
 
 	try {
-    SCAMP::do_SCAMP(&args, devices, numWorkersCPU); 
+		SCAMP::do_SCAMP(&args, devices, numWorkersCPU);
 	}
-	catch(SCAMPException& e) {
+	catch (SCAMPException& e) {
 		return;
 	}
 }
@@ -182,15 +178,21 @@ MatrixProfilePair scamp(std::vector<double> &&ta, std::vector<double> &&tb,
     return getProfileOutput(args.profile_a, args.window);
 }
 
-LeftRightProfilePair scampLR(std::vector<double> &&ta, long m) {
-    auto args = getDefaultArgs();
-    args.window = m;
-    args.has_b = true;
-    args.timeseries_a = std::move(ta);
-	args.reduction_type = SCAMP::Reduction::LEFT_RIGHT;
-    runScamp(args);
-    return std::make_pair(getProfileOutput(args.profile_a, args.window), 
-		getProfileOutput(args.profile_b, args.window));
+void sortChains(ChainVector& chains) {
+	chains.erase(std::remove_if(chains.begin(), chains.end(), [](const Chain& currChain){ return currChain.empty();}), chains.end());
+	std::sort(chains.begin(), chains.end(), [](const Chain& lhs, const Chain& rhs){return lhs.size() > rhs.size(); }); 
+}
+
+std::pair<std::vector<unsigned int>, std::vector<unsigned int>> buildFlattenedWithIndexes(const ChainVector& chains) {
+	std::pair<std::vector<unsigned int>, std::vector<unsigned int>> retPair;
+	auto& flattenChains = retPair.first;
+	auto& chainIndexes = retPair.second;
+	int chainIdx = 1;
+	for(const auto& currChain : chains) {
+		std::fill_n(std::back_inserter(chainIndexes), currChain.size(), chainIdx++);
+		std::copy(currChain.begin(), currChain.end(), std::back_inserter(flattenChains));
+	}
+	return retPair;
 } 
 
 }  // namespace
@@ -433,10 +435,10 @@ void scamp(af::array tss, long m, af::array &profile, af::array &index) {
 
     tss = tss.as(f64);
     for (dim_t tssIdx = 0; tssIdx < tss.dims(1); ++tssIdx) {
-        auto vect = khiva::vector::get<double>(tss(af::span, tssIdx));
+        auto vect = khiva::vectorutil::get<double>(tss(af::span, tssIdx));
         auto res = ::scamp(std::move(vect), m);
-        profile(af::span, tssIdx) = khiva::vector::createArray<double>(res.first);
-        index(af::span, tssIdx) = khiva::vector::createArray<unsigned int>(res.second);
+        profile(af::span, tssIdx) = khiva::vectorutil::createArray<double>(res.first);
+        index(af::span, tssIdx) = khiva::vectorutil::createArray<unsigned int>(res.second);
     }
 }
 
@@ -452,47 +454,67 @@ void scamp(af::array ta, af::array tb, long m, af::array &profile, af::array &in
 
     for (dim_t tbIdx = 0; tbIdx < tb.dims(1); ++tbIdx) {
         for (dim_t taIdx = 0; taIdx < ta.dims(1); ++taIdx) {
-            auto vectA = khiva::vector::get<double>(ta(af::span, taIdx));
-            auto vectB = khiva::vector::get<double>(tb(af::span, tbIdx));
+            auto vectA = khiva::vectorutil::get<double>(ta(af::span, taIdx));
+            auto vectB = khiva::vectorutil::get<double>(tb(af::span, tbIdx));
             auto res = ::scamp(std::move(vectB), std::move(vectA), m);
-            profile(af::span, taIdx, tbIdx) = khiva::vector::createArray<double>(res.first);
-            index(af::span, taIdx, tbIdx) = khiva::vector::createArray<unsigned int>(res.second);
+            profile(af::span, taIdx, tbIdx) = khiva::vectorutil::createArray<double>(res.first);
+            index(af::span, taIdx, tbIdx) = khiva::vectorutil::createArray<unsigned int>(res.second);
         }
     }
 }
 
-ChainVector extractAllChains(const IndexesVector& profileLeft, const IndexesVector& profileRight) {
-	ChainVector chains;
+LeftRightProfilePair scampLR(std::vector<double> &&ta, long m) {
+    auto args = getDefaultArgs();
+    args.window = m;
+    args.has_b = false;
+    args.timeseries_a = std::move(ta);
+	args.reduction_type = SCAMP::Reduction::LEFT_RIGHT;
+    runScamp(args);
+    return std::make_pair(getProfileOutput(args.profile_a, args.window), 
+		getProfileOutput(args.profile_b, args.window));
+} 
 
+ChainVector extractAllChains(const IndexesVector& profileLeft, const IndexesVector& profileRight) {
+	ChainVector chains; 
 	std::vector<int> chainLenghts(profileRight.size(), 1);
 	for(int anchorIdx = 0; anchorIdx < profileRight.size(); ++anchorIdx) {
 		if(chainLenghts[anchorIdx] == 1) {
 			chains.emplace_back();
 			auto& currChain = chains.back();
 			auto linkIdx = anchorIdx;
-			// TODO: Check linkIdx invalidation
-			while(linkIdx < profileRight.size() && profileLeft[profileRight[linkIdx]] == linkIdx) {
+			while(linkIdx != std::numeric_limits<unsigned int>::max() &&
+					linkIdx < profileRight.size() &&
+					profileRight[linkIdx] != std::numeric_limits<unsigned int>::max() &&
+					profileLeft[profileRight[linkIdx]] == linkIdx) {
+				if(currChain.empty()) {
+					currChain.emplace_back(anchorIdx);
+				}
 				linkIdx = profileRight[linkIdx];
-				chainLenghts[linkIdx] = 1;
+				chainLenghts[linkIdx] = -1;
 				chainLenghts[anchorIdx] += 1;
+				currChain.emplace_back(linkIdx);
 			}
 		}
 	}
 	return chains;
-}
+} 
 
  void getChains(af::array tss, long m, af::array &chains) {
     if (tss.dims(2) > 1 || tss.dims(3) > 1) {
         throw std::invalid_argument("Dimension 2 o dimension 3 is bigger than 1");
     }
 
-    chains = af::array(tss.dims(0) - m + 1, tss.dims(1), u32);
+    chains = af::constant(0, tss.dims(0) - m + 1, 2, tss.dims(1), u32);
 
     tss = tss.as(f64);
     for (dim_t tssIdx = 0; tssIdx < tss.dims(1); ++tssIdx) {
-        auto vect = khiva::vector::get<double>(tss(af::span, tssIdx));
+        auto vect = khiva::vectorutil::get<double>(tss(af::span, tssIdx));
         auto res = ::scampLR(std::move(vect), m);
 		auto currArrChains = extractAllChains(res.first.second, res.second.second);
+		sortChains(currArrChains);
+		auto flattenedIndexesPair = buildFlattenedWithIndexes(currArrChains); 
+        chains(af::seq(flattenedIndexesPair.first.size()), 0, tssIdx) = khiva::vectorutil::createArray<unsigned int>(flattenedIndexesPair.first);
+        chains(af::seq(flattenedIndexesPair.second.size()), 1, tssIdx) = khiva::vectorutil::createArray<unsigned int>(flattenedIndexesPair.second);
     }
 }
 
