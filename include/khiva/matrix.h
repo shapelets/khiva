@@ -175,6 +175,7 @@ KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profi
 		- [0] corresponds to all the indexes in the chains flattened
 		- [1] corresponds to the index of the chain that the value in [0] belongs to.
  *  - 3rd dimension corresponds to the number of time series.
+ *
  *  Notice that the size of the first dimension is the maximum possible size which is n - m + 1. If the number of
  *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies 
  *  that 0 is an invalid chain index.

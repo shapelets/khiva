@@ -172,6 +172,27 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m);
 
+/**
+ * @brief Calculate all the chains within 'tss' using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Makoto Imamura, Daniel Nikovski, and Eamonn Keogh. Matrix Profile VII: Time Series Chains: A New
+*  Primitive for Time Series Data Mining. IEEE ICDM 2017
+ *
+ * @param ref_a Time series to compute the chains within them.
+ * @param m Subsequence length.
+ * @return The updated ref_a and reference to the calculated chains with the following topology:
+ *  - 1st dimension corresponds to the chains indexes flattened.
+ *  - 2nd dimension: 
+		- [0] corresponds to all the indexes in the chains flattened
+		- [1] corresponds to the index of the chain that the value in [0] belongs to.
+ *  - 3rd dimension corresponds to the number of time series.
+ * 
+ *  Notice that the size of the first dimension is the maximum possible size which is n - m + 1. If the number of
+ *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies 
+ *  that 0 is an invalid chain index.
+ */
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *env, jobject, jlong ref_a, jlong m);
+
 #ifdef __cplusplus
 }
 #endif
