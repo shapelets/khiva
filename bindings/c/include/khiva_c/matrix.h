@@ -181,7 +181,7 @@ KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array
  *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies 
  *  that 0 is an invalid chain index.
  */
-KHIVA_C_API void getChains(khiva_array *tss, long *m, khiva_array *chains);
+KHIVA_C_API void get_chains(khiva_array *tss, long *m, khiva_array *chains);
 
 #ifdef __cplusplus
 }
