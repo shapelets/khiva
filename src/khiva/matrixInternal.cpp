@@ -67,7 +67,7 @@ void InitProfileMemory(SCAMP::SCAMPArgs &args) {
             if (args.has_b) {
                 args.profile_b.data.uint64_value.resize(args.timeseries_b.size() - args.window + 1, e.ulong);
             }
-			if(args.reduction_type == SCAMP::Reduction::LEFT_RIGHT) {
+			if(args.left_right) {
                 args.profile_b.data.uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong); 
 			}
 			break;
@@ -96,7 +96,7 @@ SCAMP::SCAMPArgs getDefaultArgs() {
     args.profile_b.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
     args.precision_type = SCAMP::PRECISION_DOUBLE;
     args.profile_type = SCAMP::PROFILE_TYPE_1NN_INDEX;
-    args.reduction_type = SCAMP::Reduction::FULL;
+    args.left_right = false;
     args.keep_rows_separate = false;
     args.is_aligned = false;
     args.silent_mode = true;
@@ -142,10 +142,10 @@ void runScamp(SCAMP::SCAMPArgs &args) {
     int numWorkersCPU = 0;
     if (khiva::library::getBackend() == khiva::library::Backend::KHIVA_BACKEND_CPU) {
         devices.clear();
-        numWorkersCPU = 1; //std::thread::hardware_concurrency();
+        numWorkersCPU = std::thread::hardware_concurrency();
     }
 #else
-    int numWorkersCPU = 1; //std::thread::hardware_concurrency();
+    int numWorkersCPU = std::thread::hardware_concurrency();
 #endif
 
     InitProfileMemory(args);
@@ -468,7 +468,7 @@ LeftRightProfilePair scampLR(std::vector<double> &&ta, long m) {
     args.window = m;
     args.has_b = false;
     args.timeseries_a = std::move(ta);
-	args.reduction_type = SCAMP::Reduction::LEFT_RIGHT;
+	args.left_right = true;
     runScamp(args);
     return std::make_pair(getProfileOutput(args.profile_a, args.window), 
 		getProfileOutput(args.profile_b, args.window));
