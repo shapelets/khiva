@@ -1,14 +1,14 @@
 [requires]
 gtest/1.8.0@bincrafters/stable
 google-benchmark/1.4.1@mpusz/stable
-boost/1.66.0@conan/stable
+boost/1.70.0@conan/stable
 eigen/3.3.4@conan/stable
 
 [options]
 gtest:shared=False
 gtest:build_gmock=True
 gtest:fPIC=True
-boost:shared=True # False
+boost:header_only=True # False
 
 [generators]
 cmake

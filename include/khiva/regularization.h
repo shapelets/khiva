@@ -7,6 +7,8 @@
 #ifndef KHIVA_CORE_REGULARIZATION_H
 #define KHIVA_CORE_REGULARIZATION_H
 
+#include <khiva/defines.h>
+
 #include <arrayfire.h>
 
 namespace khiva {
@@ -24,8 +26,8 @@ namespace regularization {
  *
  * @return af::array Array with the values of the group keys aggregated using the aggregationFunction.
  */
-af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array &, bool, const dim_t),
-                  int nColumnsKey = 1, int nColumnsValue = 1);
+KHIVAAPI af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array &, bool, const dim_t),
+                           int nColumnsKey = 1, int nColumnsValue = 1);
 
 /**
  * @brief Group by operation in the input array using nColumnsKey columns as group keys and nColumnsValue columns as
@@ -38,8 +40,8 @@ af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array
  *
  * @return af::array Array with the values of the group keys aggregated using the aggregationFunction.
  */
-af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array &, const int), int nColumnsKey = 1,
-                  int nColumnsValue = 1);
+KHIVAAPI af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array &, const int),
+                           int nColumnsKey = 1, int nColumnsValue = 1);
 
 /**
  * @brief Group by operation in the input array using nColumnsKey columns as group keys and nColumnsValue columns as
@@ -52,8 +54,8 @@ af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array
  *
  * @return af::array Array with the values of the group keys aggregated using the aggregationFunction.
  */
-af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array &, const dim_t), int nColumnsKey = 1,
-                  int nColumnsValue = 1);
+KHIVAAPI af::array groupBy(af::array in, af::array (*aggregationFunction)(const af::array &, const dim_t),
+                           int nColumnsKey = 1, int nColumnsValue = 1);
 
 }  // namespace regularization
 }  // namespace khiva

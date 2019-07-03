@@ -7,7 +7,9 @@
 #ifndef KHIVA_CORE_UTILS_H
 #define KHIVA_CORE_UTILS_H
 
+#include <khiva/defines.h>
 #include <khiva/dimensionality.h>
+
 #include <iostream>
 
 void printVectorSegment(std::vector<khiva::dimensionality::Segment> seg, std::vector<khiva::dimensionality::Point> ts) {

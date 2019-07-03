@@ -5,54 +5,72 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
-PROJECT(KHIVALIB)
-# Find the ArrayFire package.
-FIND_PACKAGE(ArrayFire REQUIRED)
-# Find the Boost package
-FIND_PACKAGE(Boost REQUIRED)
-FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
+
+include(CheckLanguage)
 
 # Compile with C++11 support.
-SET(CMAKE_CXX_STANDARD 11)
-SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_STANDARD 14)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON) 
+
+PROJECT(KHIVALIB) 
+
+if(NOT ${KHIVA_ONLY_CPU_BACKEND})
+	check_language(CUDA)
+endif()
+
+if(CMAKE_CUDA_COMPILER)
+	message(STATUS "CUDA compiler found: ${CMAKE_CUDA_COMPILER}")
+	enable_language(CUDA)
+  	add_definitions("-D_HAS_CUDA_")
+  	include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+elseif(${KHIVA_ONLY_CPU_BACKEND})
+else()
+	message(STATUS "No CUDA compiler found, building SCAMP without CUDA.")
+endif() 
+
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/scamp/SCAMP/CMakeLists.txt")
+	message(FATAL_ERROR "git submodule was not initialized.")
+endif()
+
+ADD_SUBDIRECTORY(scamp)
+
+# Find the ArrayFire package.
+FIND_PACKAGE(ArrayFire REQUIRED)
 
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Files to add to compilation
+SET(KHIVA_INTERNAL_SOURCES_PATH "${KHIVALIB_SRC}/khiva")
 FILE(GLOB_RECURSE KHIVALIB_CODE 
-    "${KHIVALIB_SRC}/*.cpp"
-    "${KHIVALIB_SRC}/*.h"
-    "${KHIVALIB_SRC}/*.hpp"
+    "${KHIVA_INTERNAL_SOURCES_PATH}/*.cpp"
+    "${KHIVA_INTERNAL_SOURCES_PATH}/*.h"
+    "${KHIVA_INTERNAL_SOURCES_PATH}/*.hpp"
     "${KHIVALIB_INC}/*.h" )
 
 # The output is a static library
-ADD_LIBRARY(${KHIVALIB} STATIC ${KHIVALIB_CODE})
+ADD_LIBRARY(${KHIVALIB} SHARED ${KHIVALIB_CODE})
 
 # Declare include directories
-TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} PUBLIC
+TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} 
+						PRIVATE
+						   ${SCAMP_INCLUDE_DIRS}						
+						PUBLIC
                            $<BUILD_INTERFACE:${KHIVALIB_INC}>
                            $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
-                           ${ArrayFire_INCLUDE_DIRS}
-                           ${Boost_INCLUDE_DIRS})
-                           
-IF(KHIVA_ONLY_CPU_BACKEND)
-    # Declare compilation libraries
-    TARGET_LINK_LIBRARIES(${KHIVALIB}
-                      ArrayFire::afcpu
-                      Eigen3::Eigen
-                      ${Boost_LIBRARIES}
-                      ${CMAKE_DL_LIBS})
-ELSE()
-    # Declare compilation libraries
-    TARGET_LINK_LIBRARIES(${KHIVALIB}
-            ArrayFire::af
-            Eigen3::Eigen
-            ${Boost_LIBRARIES}
-            ${CMAKE_DL_LIBS})
-ENDIF()
+                           ${ArrayFire_INCLUDE_DIRS})
+
+# Declare compilation libraries
+TARGET_LINK_LIBRARIES(${KHIVALIB}
+	PRIVATE 
+		scamp
+	PUBLIC 
+		$<IF:$<BOOL:${KHIVA_ONLY_CPU_BACKEND}>,ArrayFire::afcpu,ArrayFire::af>
+		${CMAKE_DL_LIBS}
+)
+
 
 # Add compile definitions
-TARGET_COMPILE_DEFINITIONS(${KHIVALIB} PRIVATE KHIVA_STATICLIB PUBLIC AF_UNIFIED)
+TARGET_COMPILE_DEFINITIONS(${KHIVALIB} PRIVATE KHIVA_EXPORTS PUBLIC AF_UNIFIED)
 
 # Add metadata
 SET_TARGET_PROPERTIES(${KHIVALIB} PROPERTIES 

@@ -7,6 +7,8 @@
 #ifndef KHIVA_CORE_STATISTICS_H
 #define KHIVA_CORE_STATISTICS_H
 
+#include <khiva/defines.h>
+
 #include <arrayfire.h>
 
 namespace khiva {
@@ -21,7 +23,7 @@ namespace statistics {
  *
  * @return af::array The covariance matrix of the time series.
  */
-af::array covariance(af::array tss, bool unbiased = true);
+KHIVAAPI af::array covariance(af::array tss, bool unbiased = true);
 
 /**
  * @brief Returns the kurtosis of tss (calculated with the adjusted Fisher-Pearson standardized moment coefficient G2).
@@ -31,7 +33,7 @@ af::array covariance(af::array tss, bool unbiased = true);
  *
  * @return af::array The kurtosis of tss.
  */
-af::array kurtosis(af::array tss);
+KHIVAAPI af::array kurtosis(af::array tss);
 
 /**
  * @brief Returns the kth moment of the given time series.
@@ -42,7 +44,7 @@ af::array kurtosis(af::array tss);
  *
  * @return af::array The kth moment of the given time series.
  */
-af::array moment(af::array tss, int k);
+KHIVAAPI af::array moment(af::array tss, int k);
 
 /**
  * @brief The Ljung–Box test checks that data within the time series are independently distributed (i.e. the
@@ -76,7 +78,7 @@ af::array moment(af::array tss, int k);
  *
  * @return af::array Ljung-Box statistic test.
  */
-af::array ljungBox(af::array tss, long lags);
+KHIVAAPI af::array ljungBox(af::array tss, long lags);
 
 /**
  * @brief Returns values at the given quantile.
@@ -88,7 +90,7 @@ af::array ljungBox(af::array tss, long lags);
  *
  * @return af::array Values at the given quantile.
  */
-af::array quantile(af::array tss, af::array q, float precision = 100000000);
+KHIVAAPI af::array quantile(af::array tss, af::array q, float precision = 100000000);
 
 /**
  * @brief Discretizes the time series into equal-sized buckets based on sample quantiles.
@@ -101,7 +103,7 @@ af::array quantile(af::array tss, af::array q, float precision = 100000000);
  * @return af::array Matrix with the categories, one category per row, the start of the category in the first column and
  * the end in the second category.
  */
-af::array quantilesCut(af::array tss, float quantiles, float precision = 0.00000001);
+KHIVAAPI af::array quantilesCut(af::array tss, float quantiles, float precision = 0.00000001);
 
 /**
  * @brief Estimates standard deviation based on a sample. The standard deviation is calculated using the "n-1" method.
@@ -111,7 +113,7 @@ af::array quantilesCut(af::array tss, float quantiles, float precision = 0.00000
  *
  * @return af::array The sample standard deviation.
  */
-af::array sampleStdev(af::array tss);
+KHIVAAPI af::array sampleStdev(af::array tss);
 
 /**
  * @brief Calculates the sample skewness of tss (calculated with the adjusted Fisher-Pearson standardized moment
@@ -122,7 +124,7 @@ af::array sampleStdev(af::array tss);
  *
  * @return af::array Array containing the skewness of each time series in tss.
  */
-af::array skewness(af::array tss);
+KHIVAAPI af::array skewness(af::array tss);
 
 }  // namespace statistics
 }  // namespace khiva

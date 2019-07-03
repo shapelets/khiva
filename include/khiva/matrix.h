@@ -7,7 +7,11 @@
 #ifndef KHIVA_CORE_MATRIX_H
 #define KHIVA_CORE_MATRIX_H
 
+#include <khiva/defines.h>
+
 #include <arrayfire.h>
+#include <utility>
+#include <vector>
 
 namespace khiva {
 
@@ -33,7 +37,7 @@ namespace matrix {
  * @param distances Resulting distances.
  * @param indexes Resulting indexes.
  */
-void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances, af::array &indexes);
+KHIVAAPI void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances, af::array &indexes);
 
 /**
  * @brief Mueen's Algorithm for Similarity Search.
@@ -56,39 +60,7 @@ void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances
  * series.
  * @param distances Resulting distances.
  */
-void mass(af::array q, af::array t, af::array &distances);
-
-/**
- * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
- *
- * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
- * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
- * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
- *
- * @param ta Query time series.
- * @param tb Reference time series.
- * @param m Subsequence length.
- * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 'ta'
- * in 'tb'.
- * @param index The matrix profile index, which points to where the aforementioned minimum is located.
- */
-void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
-
-/**
- * @brief STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length of 'm'.
- * This method filters the trivial matches.
- *
- * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
- * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
- * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
- *
- * @param t Query and reference time series.
- * @param m Subsequence length.
- * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 't' in a
- * different location of itself.
- * @param index The matrix profile index, which points to where the aforementioned minimum is located.
- */
-void stomp(af::array t, long m, af::array &profile, af::array &index);
+KHIVAAPI void mass(af::array q, af::array t, af::array &distances);
 
 /**
  * @brief This function extracts the best N motifs from a previously calculated matrix profile.
@@ -104,8 +76,8 @@ void stomp(af::array t, long m, af::array &profile, af::array &index);
  * @param selfJoin Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-void findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs, af::array &motifsIndices,
-                     af::array &subsequenceIndices, bool selfJoin = false);
+KHIVAAPI void findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs,
+                              af::array &motifsIndices, af::array &subsequenceIndices, bool selfJoin = false);
 
 /**
  * @brief This function extracts the best N discords from a previously calculated matrix profile.
@@ -121,8 +93,93 @@ void findBestNMotifs(af::array profile, af::array index, long m, long n, af::arr
  * @param selfJoin Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-void findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
-                       af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin = false);
+KHIVAAPI void findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
+                                af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin = false);
+
+/**
+ * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param ta Query time series.
+ * @param tb Reference time series.
+ * @param m Subsequence length.
+ * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 'ta'
+ * in 'tb'.
+ * @param index The matrix profile index, which points to where the aforementioned minimum is located.
+ */
+KHIVAAPI void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
+
+/**
+ * @brief STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length of 'm'.
+ * This method filters the trivial matches.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param t Query and reference time series.
+ * @param m Subsequence length.
+ * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 't' in a
+ * different location of itself.
+ * @param index The matrix profile index, which points to where the aforementioned minimum is located.
+ */
+KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
+
+/**
+ * @brief Calculate the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param ta Query time series.
+ * @param tb Reference time series.
+ * @param m Subsequence length.
+ * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 'ta'
+ * in 'tb'.
+ * @param index The matrix profile index, which points to where the aforementioned minimum is located.
+ */
+KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array &index);
+
+/**
+ * @brief Calculate the matrix profile between 't' and itself using a subsequence length of 'm'.
+ * This method filters the trivial matches.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param t Query and reference time series.
+ * @param m Subsequence length.
+ * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 't' in a
+ * different location of itself.
+ * @param index The matrix profile index, which points to where the aforementioned minimum is located.
+ */
+KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
+
+/**
+ * @brief Calculate all the chains within 'tss' using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Makoto Imamura, Daniel Nikovski, and Eamonn Keogh. Matrix Profile VII: Time Series Chains: A New
+*  Primitive for Time Series Data Mining. IEEE ICDM 2017
+ *
+ * @param tss Time series to compute the chains within them.
+ * @param m Subsequence length.
+ * @param chains The calculated chains with the following topology:
+ *  - 1st dimension corresponds to the chains indexes flattened.
+ *  - 2nd dimension:
+                - [0] corresponds to all the indexes in the chains flattened
+                - [1] corresponds to the index of the chain that the value in [0] belongs to.
+ *  - 3rd dimension corresponds to the number of time series.
+ *
+ *  Notice that the size of the first dimension is the maximum possible size which is n - m + 1. If the number of
+ *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies
+ *  that 0 is an invalid chain index.
+ */
+KHIVAAPI void getChains(af::array tss, long m, af::array &chains);
 
 }  // namespace matrix
 }  // namespace khiva

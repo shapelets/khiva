@@ -13,7 +13,10 @@ matrix:
     sudo: required
     compiler:
     - gcc
+    git:
+        submodules: false
     before_install:
+    - git submodule update --init
     - source .CI/travis/install_linux.sh
     - source .CI/travis/install-arrayfire_linux.sh
     - source .CI/travis/install-cmake_linux.sh
@@ -24,7 +27,10 @@ matrix:
     sudo: required
     compiler:
     - clang
+    git:
+        submodules: false
     before_install:
+    - git submodule update --init
     - source .CI/travis/install_linux.sh
     - source .CI/travis/install-arrayfire_linux.sh
     - source .CI/travis/install-cmake_linux.sh
@@ -64,7 +70,10 @@ matrix:
       - "${TRAVIS_BUILD_DIR}/arrayfire"
       - "$HOME/.pyenv"
       - "$HOME/Library/Caches/Homebrew"
+    git:
+        submodules: false
     before_install:
+    - git submodule update --init
     - source .CI/travis/install_osx.sh
     - source .CI/travis/install-arrayfire_osx.sh
     script:
@@ -82,7 +91,10 @@ matrix:
       - "${TRAVIS_BUILD_DIR}/arrayfire"
       - "$HOME/.pyenv"
       - "$HOME/Library/Caches/Homebrew"
+    git:
+        submodules: false
     before_install:
+    - git submodule update --init
     - source .CI/travis/install_osx.sh
     - source .CI/travis/install-arrayfire_osx.sh
     script:

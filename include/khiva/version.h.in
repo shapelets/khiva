@@ -6,14 +6,16 @@
 
 #pragma once
 
+#include <khiva/defines.h>
+
 #include <string>
 
 constexpr char versionMajor[] = "@VERSION_MAJOR@";
 constexpr char versionMinor[] = "@VERSION_MINOR@";
 constexpr char versionPatch[] = "@VERSION_PATCH@";
-constexpr char versionSha1[]  = "@VERSION_SHA1@";
+constexpr char versionSha1[] = "@VERSION_SHA1@";
 constexpr char versionShort[] = "@VERSION_SHORT@";
-constexpr char buildType[]    = "@CMAKE_BUILD_TYPE@";
+constexpr char buildType[] = "@CMAKE_BUILD_TYPE@";
 
 namespace khiva {
 
@@ -22,6 +24,6 @@ namespace khiva {
  *
  * @return std::string A string containing the version number of Khiva library.
  */
-std::string version();
+KHIVAAPI std::string version();
 
-} // namespace khiva
+}  // namespace khiva

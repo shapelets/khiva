@@ -204,6 +204,29 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
 }
 
 template <af::Backend BE, int D>
+void MassComplete(benchmark::State &state) {
+    af::setBackend(BE);
+    af::setDevice(D);
+
+    auto n = state.range(0);
+    auto m = state.range(1);
+
+    auto t = af::randu(n, f64);
+    auto q = t(af::seq(0, m - 1));
+
+    af::array distances;
+
+    af::sync();
+    while (state.KeepRunning()) {
+        khiva::matrix::mass(q, t, distances);
+        distances.eval();
+        af::sync();
+    }
+
+    addMemoryCounters(state);
+}
+
+template <af::Backend BE, int D>
 void Mass(benchmark::State &state) {
     af::setBackend(BE);
     af::setDevice(D);
@@ -427,6 +450,11 @@ void cudaBenchmarks() {
         ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(MassComplete, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 20, 4 << 20}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_CUDA, CUDA_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 16 << 10}, {16, 512}})
@@ -494,6 +522,11 @@ void openclBenchmarks() {
         ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
+    BENCHMARK_TEMPLATE(MassComplete, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 20, 4 << 20}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
     BENCHMARK_TEMPLATE(StompDataCPU, af::Backend::AF_BACKEND_OPENCL, OPENCL_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 16 << 10}, {16, 512}})
@@ -559,6 +592,11 @@ void cpuBenchmarks() {
     BENCHMARK_TEMPLATE(Mass, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
         ->RangeMultiplier(2)
         ->Ranges({{1 << 10, 4 << 10}, {16, 512}})
+        ->Unit(benchmark::TimeUnit::kMicrosecond);
+
+    BENCHMARK_TEMPLATE(MassComplete, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)
+        ->RangeMultiplier(2)
+        ->Ranges({{1 << 20, 4 << 20}, {16, 512}})
         ->Unit(benchmark::TimeUnit::kMicrosecond);
 
     BENCHMARK_TEMPLATE(Stomp, af::Backend::AF_BACKEND_CPU, CPU_BENCHMARKING_DEVICE)

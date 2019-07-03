@@ -3,7 +3,7 @@ image:
 environment:
   BOOST_PATH: C:\Libraries\boost_1_67_0
   AF_PATH: C:\Program Files\ArrayFire\v3
-  PATH: $(AF_PATH)\lib;C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
+  PATH: $(AF_PATH)\lib;C:\Python36-x64;C:\Python36-x64\Scripts;C:\khiva\build\src\Release;$(PATH)
   matrix:
     - GENERATOR: "Visual Studio 15 Win64"
     - GENERATOR: "Visual Studio 14 Win64"
@@ -26,6 +26,7 @@ before_build:
         python -m pip install --upgrade pip
         pip3 install sphinx==1.7.5 breathe==4.9.1 sphinx_rtd_theme==0.4.0
       }
+  - git submodule update --init
 
 build_script:
   - mkdir build && cd build

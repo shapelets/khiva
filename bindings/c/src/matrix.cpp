@@ -107,3 +107,37 @@ void stomp_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i) 
     af_retain_array(p, profile.get());
     af_retain_array(i, index.get());
 }
+
+void matrix_profile(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i) {
+    af::array var_tssa;
+    af::array var_tssb;
+    check_and_retain_arrays(tssa, tssb, var_tssa, var_tssb);
+
+    af::array distance;
+    af::array index;
+    khiva::matrix::matrixProfile(var_tssa, var_tssb, *m, distance, index);
+    af_retain_array(p, distance.get());
+    af_retain_array(i, index.get());
+}
+
+void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i) {
+    af::array var_tss = af::array(*tss);
+    af_retain_array(tss, var_tss.get());
+
+    af::array profile;
+    af::array index;
+
+    khiva::matrix::matrixProfile(var_tss, *m, profile, index);
+    af_retain_array(p, profile.get());
+    af_retain_array(i, index.get());
+}
+
+void get_chains(khiva_array *tss, long *m, khiva_array *c) {
+    af::array var_tss = af::array(*tss);
+    af_retain_array(tss, var_tss.get());
+
+    af::array chains;
+
+    khiva::matrix::getChains(var_tss, *m, chains);
+    af_retain_array(c, chains.get());
+}
