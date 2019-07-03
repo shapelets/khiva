@@ -30,9 +30,9 @@ extern "C" {
  * @param self_join Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-KHIVAAPI void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n,
-                                   khiva_array *discord_distances, khiva_array *discord_indices,
-                                   khiva_array *subsequence_indices, bool *self_join);
+KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n,
+                                      khiva_array *discord_distances, khiva_array *discord_indices,
+                                      khiva_array *subsequence_indices, bool *self_join);
 
 /**
  * @brief Primitive of the findBestNMotifs function.
@@ -50,9 +50,9 @@ KHIVAAPI void find_best_n_discords(khiva_array *profile, khiva_array *index, lon
  * @param self_join Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-KHIVAAPI void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n,
-                                 khiva_array *motif_distances, khiva_array *motif_indices,
-                                 khiva_array *subsequence_indices, bool *self_join);
+KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n,
+                                    khiva_array *motif_distances, khiva_array *motif_indices,
+                                    khiva_array *subsequence_indices, bool *self_join);
 
 /**
  * @brief Calculates the N best matches of several queries in several time series.
@@ -74,8 +74,8 @@ KHIVAAPI void find_best_n_motifs(khiva_array *profile, khiva_array *index, long 
  * @param distances Resulting distances.
  * @param indexes Resulting indexes.
  */
-KHIVAAPI void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, khiva_array *distances,
-                                      khiva_array *indexes);
+KHIVA_C_API void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, khiva_array *distances,
+                                         khiva_array *indexes);
 
 /**
  * @brief Mueen's Algorithm for Similarity Search.
@@ -98,7 +98,7 @@ KHIVAAPI void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, k
  * series.
  * @param distances Resulting distances.
  */
-KHIVAAPI void mass(khiva_array *q, khiva_array *t, khiva_array *distances);
+KHIVA_C_API void mass(khiva_array *q, khiva_array *t, khiva_array *distances);
 
 /**
  * @brief  Primitive of the STOMP algorithm.
@@ -114,7 +114,7 @@ KHIVAAPI void mass(khiva_array *q, khiva_array *t, khiva_array *distances);
  * from 'tssa' in 'tssb'.
  * @param i The matrix profile index, which points to where the aforementioned minimum is located.
  */
-KHIVAAPI void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i);
+KHIVA_C_API void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i);
 
 /**
  * @brief Primitive of the STOMP self join algorithm.
@@ -129,7 +129,59 @@ KHIVAAPI void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *
  * from 'tss' in a different location of itself
  * @param i The matrix profile index, which points to where the aforementioned minimum is located
  */
-KHIVAAPI void stomp_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i);
+KHIVA_C_API void stomp_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i);
+
+/**
+ * @brief Matrix Profile algorithm
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param tssa Query time series
+ * @param tssb Reference time series
+ * @param m Pointer to a long with the length of the subsequence.
+ * @param p The matrix profile, which reflects the distance to the closer element of the subsequence
+ * from 'tssa' in 'tssb'.
+ * @param i The matrix profile index, which points to where the aforementioned minimum is located.
+ */
+KHIVA_C_API void matrix_profile(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i);
+
+/**
+ * @brief Matrix Profile self join algorithm.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param tss Query and reference time series
+ * @param m Pointer to a long with the length of the subsequence.
+ * @param p The matrix profile, which reflects the distance to the closer element of the subsequence
+ * from 'tss' in a different location of itself
+ * @param i The matrix profile index, which points to where the aforementioned minimum is located
+ */
+KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i);
+
+/**
+ * @brief Calculate all the chains within 'tss' using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Makoto Imamura, Daniel Nikovski, and Eamonn Keogh. Matrix Profile VII: Time Series Chains: A New
+*  Primitive for Time Series Data Mining. IEEE ICDM 2017
+ *
+ * @param tss Time series to compute the chains within them.
+ * @param m Subsequence length.
+ * @param chains The calculated chains with the following topology:
+ *  - 1st dimension corresponds to the chains indexes flattened.
+ *  - 2nd dimension:
+                - [0] corresponds to all the indexes in the chains flattened
+                - [1] corresponds to the index of the chain that the value in [0] belongs to.
+ *  - 3rd dimension corresponds to the number of time series.
+ *
+ *  Notice that the size of the first dimension is the maximum possible size which is n - m + 1. If the number of
+ *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies
+ *  that 0 is an invalid chain index.
+ */
+KHIVA_C_API void get_chains(khiva_array *tss, long *m, khiva_array *chains);
 
 #ifdef __cplusplus
 }

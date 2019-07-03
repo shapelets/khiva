@@ -6,6 +6,8 @@
 #ifndef KHIVA_CORE_ARRAY_H
 #define KHIVA_CORE_ARRAY_H
 
+#include <khiva/defines.h>
+
 #include <arrayfire.h>
 #include <iostream>
 #include <limits>
@@ -24,14 +26,14 @@ namespace array {
  *
  * @return af::array Containing the data.
  */
-af::array createArray(void *data, unsigned ndims, dim_t *dims, const int type);
+KHIVAAPI af::array createArray(void *data, unsigned ndims, dim_t *dims, const int type);
 
 /**
  * @brief Decreases the references count for the given array.
  *
  * @param array The Array to be deleted.
  */
-void deleteArray(af_array array);
+KHIVAAPI void deleteArray(af_array array);
 
 /**
  * @brief Retrieves the data from the device to the host.
@@ -39,7 +41,7 @@ void deleteArray(af_array array);
  * @param array The Array that contains the data to be retrieved.
  * @param data Pointer to a preallocated block of memory in the host.
  */
-void getData(af::array array, void *data);
+KHIVAAPI void getData(af::array array, void *data);
 
 /**
  * @brief Returns the dimensions from a given array.
@@ -48,7 +50,7 @@ void getData(af::array array, void *data);
  *
  * @return af::dim4 The dimensions.
  */
-af::dim4 getDims(af::array array);
+KHIVAAPI af::dim4 getDims(af::array array);
 
 /**
  * @brief Gets the type of the array.
@@ -57,7 +59,7 @@ af::dim4 getDims(af::array array);
  *
  * @return int Value of the Dtype enumeration.
  */
-int getType(af::array array);
+KHIVAAPI int getType(af::array array);
 
 /**
  * @brief Joins the first and second arrays along the specified dimension.
@@ -68,14 +70,14 @@ int getType(af::array array);
  *
  * @return af::array The result of joining first and second along the specified dimension.
  */
-af::array join(int dim, af::array first, af::array second);
+KHIVAAPI af::array join(int dim, af::array first, af::array second);
 
 /**
  * @brief Prints the content of an array.
  *
  * @param array The array to be printed.
  */
-void print(af::array array);
+KHIVAAPI void print(af::array array);
 
 /**
  * @brief Array class, This class provides functionality manage Arrays on the host side.

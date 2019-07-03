@@ -28,7 +28,7 @@ extern "C" {
  * @param bins Sets the total number of divisions.
  * @param result An array of points with the reduced dimensionality.
  */
-KHIVAAPI void paa(khiva_array *a, int *bins, khiva_array *result);
+KHIVA_C_API void paa(khiva_array *a, int *bins, khiva_array *result);
 
 /**
  * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.
@@ -40,7 +40,7 @@ KHIVAAPI void paa(khiva_array *a, int *bins, khiva_array *result);
  * @param number_ips The number of points to be returned.
  * @param result Array with the most Perceptually Important number_ips.
  */
-KHIVAAPI void pip(khiva_array *a, int *number_ips, khiva_array *result);
+KHIVA_C_API void pip(khiva_array *a, int *number_ips, khiva_array *result);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA BottomUP) to the time series.
@@ -53,7 +53,7 @@ KHIVAAPI void pip(khiva_array *a, int *number_ips, khiva_array *result);
  * @param max_error The maximum approximation error allowed.
  * @param result The reduced number of points.
  */
-KHIVAAPI void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *result);
+KHIVA_C_API void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *result);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA Sliding Window) to the time series.
@@ -66,7 +66,7 @@ KHIVAAPI void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *resu
  * @param max_error The maximum approximation error allowed.
  * @param result The reduced number of points.
  */
-KHIVAAPI void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array *result);
+KHIVA_C_API void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array *result);
 
 /**
  * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve
@@ -86,7 +86,7 @@ KHIVAAPI void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array 
  * @param res_points Array with the x-coordinates and y-coordinates of the selected points (x in column 0 and y in
  * column 1).
  */
-KHIVAAPI void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_array *res_points);
+KHIVA_C_API void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_array *res_points);
 
 /**
  * @brief Symbolic Aggregate approXimation (SAX). It transforms a numeric time series into a time series of symbols with
@@ -104,7 +104,7 @@ KHIVAAPI void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_
  * @param alphabet_size Number of element within the alphabet.
  * @param result An array of symbols.
  */
-KHIVAAPI void sax(khiva_array *a, int *alphabet_size, khiva_array *result);
+KHIVA_C_API void sax(khiva_array *a, int *alphabet_size, khiva_array *result);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number
@@ -119,7 +119,7 @@ KHIVAAPI void sax(khiva_array *a, int *alphabet_size, khiva_array *result);
  * @param res_points Array with the x-coordinates and y-coordinates of the selected points (x in column 0 and y in
  * column 1).
  */
-KHIVAAPI void visvalingam(khiva_array *points, int *num_points, khiva_array *res_points);
+KHIVA_C_API void visvalingam(khiva_array *points, int *num_points, khiva_array *res_points);
 
 #ifdef __cplusplus
 }
