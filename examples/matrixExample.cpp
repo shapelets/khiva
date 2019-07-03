@@ -4,8 +4,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <../src/khiva/vectorUtil.h>
 #include <../src/khiva/matrixInternal.h>
+#include <../src/khiva/vectorUtil.h>
 #include <arrayfire.h>
 #include <khiva.h>
 
@@ -152,60 +152,59 @@ void testLeftRight() {
          182.3497,  -152.1112, 150.9720,  77.0329,   58.4420,   50.0252,   -36.1718,  -55.2495},
         n);
 
-	//int n = 69875;
-	//int m = 128;
+    // int n = 69875;
+    // int m = 128;
 
-	//auto ta = af::randn(n);
+    // auto ta = af::randn(n);
 
- //   {
- //       std::ofstream ofs("WholeInfo.csv", std::ofstream::out);
- //       for (int j = 0; j < n - m + 1; ++j) {
- //           for (int i = 0; i < n - m + 1; ++i) {
- //               auto input =
- //                   af::join(1, ta(af::seq(m) + static_cast<double>(j)), ta(af::seq(m) + static_cast<double>(i)));
- //               auto znormed = khiva::normalization::znorm(input);
- //               auto res = khiva::distances::euclidean(znormed);
- //               ofs << j << ";" << i << ";" << res(0, 1).scalar<double>() << "\n";
- //           }
- //       }
- //       ofs.close();
- //   }
+    //   {
+    //       std::ofstream ofs("WholeInfo.csv", std::ofstream::out);
+    //       for (int j = 0; j < n - m + 1; ++j) {
+    //           for (int i = 0; i < n - m + 1; ++i) {
+    //               auto input =
+    //                   af::join(1, ta(af::seq(m) + static_cast<double>(j)), ta(af::seq(m) + static_cast<double>(i)));
+    //               auto znormed = khiva::normalization::znorm(input);
+    //               auto res = khiva::distances::euclidean(znormed);
+    //               ofs << j << ";" << i << ";" << res(0, 1).scalar<double>() << "\n";
+    //           }
+    //       }
+    //       ofs.close();
+    //   }
 
- //   {
- //       std::ofstream ofs("WholeInfoMatrix.csv", std::ofstream::out);
- //       for (int j = 0; j < n - m + 1; ++j) {
- //           for (int i = 0; i < n - m + 1; ++i) {
- //               auto input =
- //                   af::join(1, ta(af::seq(m) + static_cast<double>(j)), ta(af::seq(m) + static_cast<double>(i)));
- //               auto znormed = khiva::normalization::znorm(input);
- //               auto res = khiva::distances::euclidean(znormed);
- //               ofs << res(0, 1).scalar<double>() << ";";
- //           }
-	//		ofs << "\n";
- //       }
- //       ofs.close();
- //   }
+    //   {
+    //       std::ofstream ofs("WholeInfoMatrix.csv", std::ofstream::out);
+    //       for (int j = 0; j < n - m + 1; ++j) {
+    //           for (int i = 0; i < n - m + 1; ++i) {
+    //               auto input =
+    //                   af::join(1, ta(af::seq(m) + static_cast<double>(j)), ta(af::seq(m) + static_cast<double>(i)));
+    //               auto znormed = khiva::normalization::znorm(input);
+    //               auto res = khiva::distances::euclidean(znormed);
+    //               ofs << res(0, 1).scalar<double>() << ";";
+    //           }
+    //		ofs << "\n";
+    //       }
+    //       ofs.close();
+    //   }
 
- //   af::array distances;
- //   af::array indexes;
- //   khiva::matrix::matrixProfile(ta, m, distances, indexes);
- //   //printProfile(distances, indexes, "profile.csv");
- //   af_print(distances);
- //   af_print(indexes);
+    //   af::array distances;
+    //   af::array indexes;
+    //   khiva::matrix::matrixProfile(ta, m, distances, indexes);
+    //   //printProfile(distances, indexes, "profile.csv");
+    //   af_print(distances);
+    //   af_print(indexes);
 
-	////af_print(ta);
+    ////af_print(ta);
 
-	af::array chains;
+    af::array chains;
     khiva::matrix::getChains(ta, m, chains);
-	auto chainValues = khiva::vectorutil::get<unsigned int>(chains(af::span, 0, 0));
-	auto chainIndexes = khiva::vectorutil::get<unsigned int>(chains(af::span, 1, 0));
-	int i = 0;
-	while(chainIndexes[i] < 12) {
-		std::cout << chainIndexes[i] << ";" << chainValues[i] << "\n";
-		i++;
-	}
+    auto chainValues = khiva::vectorutil::get<unsigned int>(chains(af::span, 0, 0));
+    auto chainIndexes = khiva::vectorutil::get<unsigned int>(chains(af::span, 1, 0));
+    int i = 0;
+    while (chainIndexes[i] < 12) {
+        std::cout << chainIndexes[i] << ";" << chainValues[i] << "\n";
+        i++;
+    }
 }
-
 
 int main() {
     testLeftRight();
@@ -216,8 +215,9 @@ int main() {
     // auto ta = af::join(1, ta1, ta2);
     //{
 
-    //	//auto ta = khiva::vectorutil::createArray({   -0.9247, 0.1808, 2.5441, 0.3516, -0.3452, 0.2191, -0.7687, 0.2413,
-    //-1.1948, 0.8927, -0.5378, 0.2270, 0.9354, -0.7613, 0.5787, -0.6174, 0.5889, 0.7897, -0.0645, 0.9520, -1.1411,
+    //	//auto ta = khiva::vectorutil::createArray({   -0.9247, 0.1808, 2.5441, 0.3516, -0.3452, 0.2191, -0.7687,
+    //0.2413, -1.1948, 0.8927, -0.5378, 0.2270, 0.9354, -0.7613, 0.5787, -0.6174, 0.5889, 0.7897, -0.0645, 0.9520,
+    //-1.1411,
     // 0.8281, -0.7363, -0.7446, -0.8415, 1.2991, 0.0883, 0.6588, -0.2788, 1.4143, -1.1650, -0.6629},
     //	//									 32, 1);
     //	//									 //8, 2);

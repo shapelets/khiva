@@ -152,8 +152,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv
  *          - The distance profile.
  *          - The index profile.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
-                                                                  jlong m);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv *env, jobject, jlong ref_a,
+                                                                          jlong ref_b, jlong m);
 
 /**
  * @brief Calculate the matrix profile between 't' and itself using a subsequence length
@@ -170,7 +170,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv
  *            from 't' in a different location of itself.
  *          - The matrix profile index, which points to where the aforementioned minimum is located.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoin(JNIEnv *env, jobject, jlong ref_a,
+                                                                                  jlong m);
 
 /**
  * @brief Calculate all the chains within 'tss' using a subsequence length of 'm'.
@@ -182,13 +183,13 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoi
  * @param m Subsequence length.
  * @return The updated ref_a and reference to the calculated chains with the following topology:
  *  - 1st dimension corresponds to the chains indexes flattened.
- *  - 2nd dimension: 
-		- [0] corresponds to all the indexes in the chains flattened
-		- [1] corresponds to the index of the chain that the value in [0] belongs to.
+ *  - 2nd dimension:
+                - [0] corresponds to all the indexes in the chains flattened
+                - [1] corresponds to the index of the chain that the value in [0] belongs to.
  *  - 3rd dimension corresponds to the number of time series.
- * 
+ *
  *  Notice that the size of the first dimension is the maximum possible size which is n - m + 1. If the number of
- *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies 
+ *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies
  *  that 0 is an invalid chain index.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *env, jobject, jlong ref_a, jlong m);

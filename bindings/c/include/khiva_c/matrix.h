@@ -31,8 +31,8 @@ extern "C" {
  * whether the mirror similar region is included in the output or not.
  */
 KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n,
-                                   khiva_array *discord_distances, khiva_array *discord_indices,
-                                   khiva_array *subsequence_indices, bool *self_join);
+                                      khiva_array *discord_distances, khiva_array *discord_indices,
+                                      khiva_array *subsequence_indices, bool *self_join);
 
 /**
  * @brief Primitive of the findBestNMotifs function.
@@ -51,8 +51,8 @@ KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, 
  * whether the mirror similar region is included in the output or not.
  */
 KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n,
-                                 khiva_array *motif_distances, khiva_array *motif_indices,
-                                 khiva_array *subsequence_indices, bool *self_join);
+                                    khiva_array *motif_distances, khiva_array *motif_indices,
+                                    khiva_array *subsequence_indices, bool *self_join);
 
 /**
  * @brief Calculates the N best matches of several queries in several time series.
@@ -75,7 +75,7 @@ KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, lo
  * @param indexes Resulting indexes.
  */
 KHIVA_C_API void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, khiva_array *distances,
-                                      khiva_array *indexes);
+                                         khiva_array *indexes);
 
 /**
  * @brief Mueen's Algorithm for Similarity Search.
@@ -172,13 +172,13 @@ KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array
  * @param m Subsequence length.
  * @param chains The calculated chains with the following topology:
  *  - 1st dimension corresponds to the chains indexes flattened.
- *  - 2nd dimension: 
-		- [0] corresponds to all the indexes in the chains flattened
-		- [1] corresponds to the index of the chain that the value in [0] belongs to.
+ *  - 2nd dimension:
+                - [0] corresponds to all the indexes in the chains flattened
+                - [1] corresponds to the index of the chain that the value in [0] belongs to.
  *  - 3rd dimension corresponds to the number of time series.
- * 
+ *
  *  Notice that the size of the first dimension is the maximum possible size which is n - m + 1. If the number of
- *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies 
+ *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies
  *  that 0 is an invalid chain index.
  */
 KHIVA_C_API void get_chains(khiva_array *tss, long *m, khiva_array *chains);

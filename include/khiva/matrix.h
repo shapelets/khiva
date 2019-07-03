@@ -128,7 +128,7 @@ KHIVAAPI void stomp(af::array ta, af::array tb, long m, af::array &profile, af::
  */
 KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
 
- /**
+/**
  * @brief Calculate the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
  *
  * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
@@ -142,7 +142,7 @@ KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
  * in 'tb'.
  * @param index The matrix profile index, which points to where the aforementioned minimum is located.
  */
-KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array &index); 
+KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array &index);
 
 /**
  * @brief Calculate the matrix profile between 't' and itself using a subsequence length of 'm'.
@@ -160,7 +160,6 @@ KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array
  */
 KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
 
-
 /**
  * @brief Calculate all the chains within 'tss' using a subsequence length of 'm'.
  *
@@ -171,13 +170,13 @@ KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profi
  * @param m Subsequence length.
  * @param chains The calculated chains with the following topology:
  *  - 1st dimension corresponds to the chains indexes flattened.
- *  - 2nd dimension: 
-		- [0] corresponds to all the indexes in the chains flattened
-		- [1] corresponds to the index of the chain that the value in [0] belongs to.
+ *  - 2nd dimension:
+                - [0] corresponds to all the indexes in the chains flattened
+                - [1] corresponds to the index of the chain that the value in [0] belongs to.
  *  - 3rd dimension corresponds to the number of time series.
  *
  *  Notice that the size of the first dimension is the maximum possible size which is n - m + 1. If the number of
- *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies 
+ *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies
  *  that 0 is an invalid chain index.
  */
 KHIVAAPI void getChains(af::array tss, long m, af::array &chains);

@@ -255,7 +255,8 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, job
     return pointers;
 }
 
-jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv *env, jobject, jlong ref_a, jlong ref_b, jlong m) {
+jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
+                                                                jlong m) {
     const jint l = 4;
     jlong tmp[l];
     jlongArray pointers = env->NewLongArray(l);
@@ -325,7 +326,6 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoin(JNIEnv *
     return pointers;
 }
 
-
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *env, jobject, jlong ref_a, jlong m) {
     const jint l = 2;
     jlong tmp[l];
@@ -351,5 +351,4 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *en
 
     env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
     return pointers;
-
 }

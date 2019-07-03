@@ -19,11 +19,11 @@
 #include "matrixInternal.h"
 #include "vectorUtil.h"
 
+#include <SCAMP/src/SCAMP.h>
 #include <SCAMP/src/common.h>
 #include <SCAMP/src/scamp_exception.h>
-#include <SCAMP/src/SCAMP.h>
 
- namespace {
+namespace {
 using namespace khiva::matrix::internal;
 
 constexpr double EPSILON = 1e-8;
@@ -67,17 +67,17 @@ void InitProfileMemory(SCAMP::SCAMPArgs &args) {
             if (args.has_b) {
                 args.profile_b.data.uint64_value.resize(args.timeseries_b.size() - args.window + 1, e.ulong);
             }
-			if(args.left_right) {
-                args.profile_b.data.uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong); 
-			}
-			break;
+            if (args.left_right) {
+                args.profile_b.data.uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong);
+            }
+            break;
         }
         case SCAMP::PROFILE_TYPE_SUM_THRESH: {
             args.profile_a.data.double_value.resize(args.timeseries_a.size() - args.window + 1, 0);
             if (args.has_b) {
                 args.profile_b.data.double_value.resize(args.timeseries_b.size() - args.window + 1, 0);
             }
-			break;
+            break;
         }
         default:
             break;
@@ -150,12 +150,11 @@ void runScamp(SCAMP::SCAMPArgs &args) {
 
     InitProfileMemory(args);
 
-	try {
-		SCAMP::do_SCAMP(&args, devices, numWorkersCPU);
-	}
-	catch (SCAMPException& e) {
-		return;
-	}
+    try {
+        SCAMP::do_SCAMP(&args, devices, numWorkersCPU);
+    } catch (SCAMPException &e) {
+        return;
+    }
 }
 
 MatrixProfilePair scamp(std::vector<double> &&tss, long m) {
@@ -167,8 +166,7 @@ MatrixProfilePair scamp(std::vector<double> &&tss, long m) {
     return getProfileOutput(args.profile_a, args.window);
 }
 
-MatrixProfilePair scamp(std::vector<double> &&ta, std::vector<double> &&tb,
-                                                                long m) {
+MatrixProfilePair scamp(std::vector<double> &&ta, std::vector<double> &&tb, long m) {
     auto args = getDefaultArgs();
     args.window = m;
     args.has_b = true;
@@ -178,22 +176,23 @@ MatrixProfilePair scamp(std::vector<double> &&ta, std::vector<double> &&tb,
     return getProfileOutput(args.profile_a, args.window);
 }
 
-void sortChains(ChainVector& chains) {
-	chains.erase(std::remove_if(chains.begin(), chains.end(), [](const Chain& currChain){ return currChain.empty();}), chains.end());
-	std::sort(chains.begin(), chains.end(), [](const Chain& lhs, const Chain& rhs){return lhs.size() > rhs.size(); }); 
+void sortChains(ChainVector &chains) {
+    chains.erase(std::remove_if(chains.begin(), chains.end(), [](const Chain &currChain) { return currChain.empty(); }),
+                 chains.end());
+    std::sort(chains.begin(), chains.end(), [](const Chain &lhs, const Chain &rhs) { return lhs.size() > rhs.size(); });
 }
 
-std::pair<std::vector<unsigned int>, std::vector<unsigned int>> buildFlattenedWithIndexes(const ChainVector& chains) {
-	std::pair<std::vector<unsigned int>, std::vector<unsigned int>> retPair;
-	auto& flattenChains = retPair.first;
-	auto& chainIndexes = retPair.second;
-	int chainIdx = 1;
-	for(const auto& currChain : chains) {
-		std::fill_n(std::back_inserter(chainIndexes), currChain.size(), chainIdx++);
-		std::copy(currChain.begin(), currChain.end(), std::back_inserter(flattenChains));
-	}
-	return retPair;
-} 
+std::pair<std::vector<unsigned int>, std::vector<unsigned int>> buildFlattenedWithIndexes(const ChainVector &chains) {
+    std::pair<std::vector<unsigned int>, std::vector<unsigned int>> retPair;
+    auto &flattenChains = retPair.first;
+    auto &chainIndexes = retPair.second;
+    int chainIdx = 1;
+    for (const auto &currChain : chains) {
+        std::fill_n(std::back_inserter(chainIndexes), currChain.size(), chainIdx++);
+        std::copy(currChain.begin(), currChain.end(), std::back_inserter(flattenChains));
+    }
+    return retPair;
+}
 
 }  // namespace
 
@@ -468,38 +467,36 @@ LeftRightProfilePair scampLR(std::vector<double> &&ta, long m) {
     args.window = m;
     args.has_b = false;
     args.timeseries_a = std::move(ta);
-	args.left_right = true;
+    args.left_right = true;
     runScamp(args);
-    return std::make_pair(getProfileOutput(args.profile_a, args.window), 
-		getProfileOutput(args.profile_b, args.window));
-} 
+    return std::make_pair(getProfileOutput(args.profile_a, args.window), getProfileOutput(args.profile_b, args.window));
+}
 
-ChainVector extractAllChains(const IndexesVector& profileLeft, const IndexesVector& profileRight) {
-	ChainVector chains; 
-	std::vector<int> chainLenghts(profileRight.size(), 1);
-	for(int anchorIdx = 0; anchorIdx < profileRight.size(); ++anchorIdx) {
-		if(chainLenghts[anchorIdx] == 1) {
-			chains.emplace_back();
-			auto& currChain = chains.back();
-			auto linkIdx = anchorIdx;
-			while(linkIdx != std::numeric_limits<unsigned int>::max() &&
-					linkIdx < profileRight.size() &&
-					profileRight[linkIdx] != std::numeric_limits<unsigned int>::max() &&
-					profileLeft[profileRight[linkIdx]] == linkIdx) {
-				if(currChain.empty()) {
-					currChain.emplace_back(anchorIdx);
-				}
-				linkIdx = profileRight[linkIdx];
-				chainLenghts[linkIdx] = -1;
-				chainLenghts[anchorIdx] += 1;
-				currChain.emplace_back(linkIdx);
-			}
-		}
-	}
-	return chains;
-} 
+ChainVector extractAllChains(const IndexesVector &profileLeft, const IndexesVector &profileRight) {
+    ChainVector chains;
+    std::vector<int> chainLenghts(profileRight.size(), 1);
+    for (int anchorIdx = 0; anchorIdx < profileRight.size(); ++anchorIdx) {
+        if (chainLenghts[anchorIdx] == 1) {
+            chains.emplace_back();
+            auto &currChain = chains.back();
+            auto linkIdx = anchorIdx;
+            while (linkIdx != std::numeric_limits<unsigned int>::max() && linkIdx < profileRight.size() &&
+                   profileRight[linkIdx] != std::numeric_limits<unsigned int>::max() &&
+                   profileLeft[profileRight[linkIdx]] == linkIdx) {
+                if (currChain.empty()) {
+                    currChain.emplace_back(anchorIdx);
+                }
+                linkIdx = profileRight[linkIdx];
+                chainLenghts[linkIdx] = -1;
+                chainLenghts[anchorIdx] += 1;
+                currChain.emplace_back(linkIdx);
+            }
+        }
+    }
+    return chains;
+}
 
- void getChains(af::array tss, long m, af::array &chains) {
+void getChains(af::array tss, long m, af::array &chains) {
     if (tss.dims(2) > 1 || tss.dims(3) > 1) {
         throw std::invalid_argument("Dimension 2 o dimension 3 is bigger than 1");
     }
@@ -510,11 +507,13 @@ ChainVector extractAllChains(const IndexesVector& profileLeft, const IndexesVect
     for (dim_t tssIdx = 0; tssIdx < tss.dims(1); ++tssIdx) {
         auto vect = khiva::vectorutil::get<double>(tss(af::span, tssIdx));
         auto res = ::scampLR(std::move(vect), m);
-		auto currArrChains = extractAllChains(res.first.second, res.second.second);
-		sortChains(currArrChains);
-		auto flattenedIndexesPair = buildFlattenedWithIndexes(currArrChains); 
-        chains(af::seq(flattenedIndexesPair.first.size()), 0, tssIdx) = khiva::vectorutil::createArray<unsigned int>(flattenedIndexesPair.first);
-        chains(af::seq(flattenedIndexesPair.second.size()), 1, tssIdx) = khiva::vectorutil::createArray<unsigned int>(flattenedIndexesPair.second);
+        auto currArrChains = extractAllChains(res.first.second, res.second.second);
+        sortChains(currArrChains);
+        auto flattenedIndexesPair = buildFlattenedWithIndexes(currArrChains);
+        chains(af::seq(flattenedIndexesPair.first.size()), 0, tssIdx) =
+            khiva::vectorutil::createArray<unsigned int>(flattenedIndexesPair.first);
+        chains(af::seq(flattenedIndexesPair.second.size()), 1, tssIdx) =
+            khiva::vectorutil::createArray<unsigned int>(flattenedIndexesPair.second);
     }
 }
 

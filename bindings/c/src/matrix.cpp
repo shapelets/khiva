@@ -132,12 +132,12 @@ void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_a
     af_retain_array(i, index.get());
 }
 
- void get_chains(khiva_array *tss, long *m, khiva_array *c) {
+void get_chains(khiva_array *tss, long *m, khiva_array *c) {
     af::array var_tss = af::array(*tss);
     af_retain_array(tss, var_tss.get());
 
     af::array chains;
 
     khiva::matrix::getChains(var_tss, *m, chains);
-    af_retain_array(c, chains.get()); 
+    af_retain_array(c, chains.get());
 }

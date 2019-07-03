@@ -50,7 +50,7 @@ af::array createArray(const std::vector<T> &values) {
     return af::array(values.size(), 1, 1, 1, values.data());
 }
 
-}  // namespace vector
+}  // namespace vectorutil
 }  // namespace khiva
 
 #endif

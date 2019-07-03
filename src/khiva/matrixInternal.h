@@ -15,8 +15,8 @@
 
 #include <arrayfire.h>
 
+#include <utility>
 #include <vector>
-#include <utility> 
 
 namespace khiva {
 namespace matrix {
@@ -179,7 +179,7 @@ KHIVAAPI void scamp(af::array ta, af::array tb, long m, af::array &profile, af::
 
 KHIVAAPI void getChains(af::array tss, long m, af::array &chains);
 
-KHIVAAPI ChainVector extractAllChains(const IndexesVector& profileLeft, const IndexesVector& profileRight);
+KHIVAAPI ChainVector extractAllChains(const IndexesVector &profileLeft, const IndexesVector &profileRight);
 
 KHIVAAPI LeftRightProfilePair scampLR(std::vector<double> &&ta, long m);
 
