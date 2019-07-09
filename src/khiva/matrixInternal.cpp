@@ -63,19 +63,21 @@ void InitProfileMemory(SCAMP::SCAMPArgs &args) {
             SCAMP::mp_entry e;
             e.floats[0] = std::numeric_limits<float>::lowest();
             e.ints[1] = -1u;
-            args.profile_a.data.uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong);
-            if (args.has_b) {
-                args.profile_b.data.uint64_value.resize(args.timeseries_b.size() - args.window + 1, e.ulong);
-            }
-            if (args.left_right) {
-                args.profile_b.data.uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong);
-            }
+			args.profile_a.data.emplace_back();
+            args.profile_a.data[0].uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong);
+			if(args.keep_rows_separate) {
+				auto b_size = args.has_b ? args.timeseries_b.size() : args.timeseries_a.size();
+				args.profile_b.data.emplace_back();
+				args.profile_b.data[0].uint64_value.resize(b_size - args.window + 1, e.ulong);
+			}
             break;
         }
         case SCAMP::PROFILE_TYPE_SUM_THRESH: {
-            args.profile_a.data.double_value.resize(args.timeseries_a.size() - args.window + 1, 0);
+			args.profile_a.data.emplace_back();
+            args.profile_a.data[0].double_value.resize(args.timeseries_a.size() - args.window + 1, 0);
             if (args.has_b) {
-                args.profile_b.data.double_value.resize(args.timeseries_b.size() - args.window + 1, 0);
+			args.profile_b.data.emplace_back();
+                args.profile_b.data[0].double_value.resize(args.timeseries_b.size() - args.window + 1, 0);
             }
             break;
         }
@@ -96,7 +98,6 @@ SCAMP::SCAMPArgs getDefaultArgs() {
     args.profile_b.type = SCAMP::PROFILE_TYPE_1NN_INDEX;
     args.precision_type = SCAMP::PRECISION_DOUBLE;
     args.profile_type = SCAMP::PROFILE_TYPE_1NN_INDEX;
-    args.left_right = false;
     args.keep_rows_separate = false;
     args.is_aligned = false;
     args.silent_mode = true;
@@ -115,7 +116,7 @@ MatrixProfilePair getProfileOutput(const SCAMP::Profile &p, uint64_t window) {
     DistancesVector distances;
     IndexesVector indexes;
 
-    const auto &arr = p.data.uint64_value;
+    const auto &arr = p.data[0].uint64_value;
     distances.resize(arr.size());
     indexes.resize(arr.size());
 
@@ -467,7 +468,7 @@ LeftRightProfilePair scampLR(std::vector<double> &&ta, long m) {
     args.window = m;
     args.has_b = false;
     args.timeseries_a = std::move(ta);
-    args.left_right = true;
+    args.keep_rows_separate = true;
     runScamp(args);
     return std::make_pair(getProfileOutput(args.profile_a, args.window), getProfileOutput(args.profile_b, args.window));
 }
