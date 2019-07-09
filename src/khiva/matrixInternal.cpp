@@ -63,20 +63,20 @@ void InitProfileMemory(SCAMP::SCAMPArgs &args) {
             SCAMP::mp_entry e;
             e.floats[0] = std::numeric_limits<float>::lowest();
             e.ints[1] = -1u;
-			args.profile_a.data.emplace_back();
+            args.profile_a.data.emplace_back();
             args.profile_a.data[0].uint64_value.resize(args.timeseries_a.size() - args.window + 1, e.ulong);
-			if(args.keep_rows_separate) {
-				auto b_size = args.has_b ? args.timeseries_b.size() : args.timeseries_a.size();
-				args.profile_b.data.emplace_back();
-				args.profile_b.data[0].uint64_value.resize(b_size - args.window + 1, e.ulong);
-			}
+            if (args.keep_rows_separate) {
+                auto b_size = args.has_b ? args.timeseries_b.size() : args.timeseries_a.size();
+                args.profile_b.data.emplace_back();
+                args.profile_b.data[0].uint64_value.resize(b_size - args.window + 1, e.ulong);
+            }
             break;
         }
         case SCAMP::PROFILE_TYPE_SUM_THRESH: {
-			args.profile_a.data.emplace_back();
+            args.profile_a.data.emplace_back();
             args.profile_a.data[0].double_value.resize(args.timeseries_a.size() - args.window + 1, 0);
             if (args.has_b) {
-			args.profile_b.data.emplace_back();
+                args.profile_b.data.emplace_back();
                 args.profile_b.data[0].double_value.resize(args.timeseries_b.size() - args.window + 1, 0);
             }
             break;
