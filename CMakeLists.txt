@@ -41,7 +41,7 @@ OPTION(KHIVA_BUILD_DOCUMENTATION "Create and install the HTML based API document
 OPTION(KHIVA_USE_CONAN "Use the conan package manager to download the dependencies of the Khiva library" ON)
 OPTION(KHIVA_ENABLE_COVERAGE "This flag anables Code Coverage of the code" OFF)
 OPTION(KHIVA_BUILD_C_BINDINGS "Build C bindings" ON)
-OPTION(KHIVA_BUILD_C_BINDINGS "Build JNI bindings" ON)
+OPTION(KHIVA_BUILD_JNI_BINDINGS "Build JNI bindings" ON)
 
 IF(KHIVA_ENABLE_COVERAGE AND NOT WIN32)
     # Setting compiler flags for code coverage

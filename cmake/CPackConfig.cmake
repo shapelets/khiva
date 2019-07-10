@@ -138,16 +138,20 @@ cpack_add_component(core
   DESCRIPTION "Khiva Core"
   GROUP khiva
   REQUIRED)
-cpack_add_component(c_binding
-  DISPLAY_NAME "C Binding"
-  DESCRIPTION "C binding to connect with the Python, R and MATLAB programming languages"
-  GROUP khiva
-  REQUIRED)
-cpack_add_component(jni_binding
-  DISPLAY_NAME "JNI Binding"
-  DESCRIPTION "JNI Binding to connect with the Java programming language"
-  GROUP khiva
-  REQUIRED)
+if(KHIVA_BUILD_C_BINDINGS)
+  cpack_add_component(c_binding
+    DISPLAY_NAME "C Binding"
+    DESCRIPTION "C binding to connect with the Python, R and MATLAB programming languages"
+    GROUP khiva
+    REQUIRED)
+endif()
+if(KHIVA_BUILD_JNI_BINDINGS)
+  cpack_add_component(jni_binding
+    DISPLAY_NAME "JNI Binding"
+    DESCRIPTION "JNI Binding to connect with the Java programming language"
+    GROUP khiva
+    REQUIRED)
+endif()
 cpack_add_component(headers
   DISPLAY_NAME "C/C++ Headers"
   DESCRIPTION "Headers for the Khiva Library."
