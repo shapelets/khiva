@@ -1,2 +1,5 @@
 fixes:
   - "khiva/::"
+
+ignore:
+  - src/scamp
