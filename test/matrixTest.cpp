@@ -658,6 +658,7 @@ void extractAllChains() {
     ASSERT_TRUE(expectedRes == chains);
 };
 
+#include <iterator>
 void getChains() {
     int n = 128;
     int m = 12;
@@ -693,6 +694,14 @@ void getChains() {
 
     af::array chains;
     khiva::matrix::getChains(ta, m, chains);
+
+	auto values = khiva::vectorutil::get<unsigned int>(chains(af::span, 0, 0));
+	auto indexes = khiva::vectorutil::get<unsigned int>(chains(af::span, 1, 0));
+
+	std::copy(values.begin(), values.end(), std::ostream_iterator<unsigned int>(std::cout, ","));
+	std::cout << "\n";
+	std::copy(indexes.begin(), indexes.end(), std::ostream_iterator<unsigned int>(std::cout, ","));
+	std::cout << "\n";
 
     ASSERT_TRUE(khiva::vectorutil::get<unsigned int>(chains(af::span, 0, 0)) == chainValues);
     ASSERT_TRUE(khiva::vectorutil::get<unsigned int>(chains(af::span, 1, 0)) == chainIndexes);
