@@ -1,9 +1,8 @@
 image:
   - Visual Studio 2017
 environment:
-  BOOST_PATH: C:\Libraries\boost_1_67_0
   AF_PATH: C:\Program Files\ArrayFire\v3
-  PATH: $(AF_PATH)\lib;C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
+  PATH: $(AF_PATH)\lib;C:\Python36-x64;C:\Python36-x64\Scripts;C:\khiva\build\src\Release;$(PATH)
   matrix:
     - GENERATOR: "Visual Studio 15 Win64"
     - GENERATOR: "Visual Studio 14 Win64"
@@ -17,7 +16,7 @@ before_build:
   - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ appveyor DownloadFile "https://www.dropbox.com/s/13wnbd1qynjmw0i/ArrayFire-v3.6.2.zip?dl=1" -FileName ArrayFire-v3.6.2.zip }
   - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ 7z x ArrayFire-v3.6.2.zip -o"C:\Program Files" }
   - reg add HKCU\Software\Kitware\CMake\Packages\ArrayFire /v ArrayFire_CMake_DIR /d "C:\Program Files\ArrayFire\v3\cmake" /f
-  - vcpkg install --triplet x64-windows gtest eigen3
+  - vcpkg install --triplet x64-windows gtest eigen3 boost
   - ps: |
       Start-Process "choco" "install nsis" -NoNewWindow -Wait
       if($($env:APPVEYOR_REPO_TAG) -eq "true"){
@@ -26,15 +25,16 @@ before_build:
         python -m pip install --upgrade pip
         pip3 install sphinx==1.7.5 breathe==4.9.1 sphinx_rtd_theme==0.4.0
       }
+  - git submodule update --init
 
 build_script:
   - mkdir build && cd build
   - ps: |
       if($($env:APPVEYOR_REPO_TAG) -eq "true"){
         vcpkg install --triplet x64-windows benchmark
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DBOOST_ROOT="$($env:BOOST_PATH)" -DKHIVA_USE_CONAN=OFF -G"$($env:GENERATOR)"
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -G"$($env:GENERATOR)"
       } else {
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DBOOST_ROOT="$($env:BOOST_PATH)" -DKHIVA_USE_CONAN=OFF -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_BENCHMARKS=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"$($env:GENERATOR)"
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_BENCHMARKS=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"$($env:GENERATOR)"
       }
   - cmake --build . --config Release -- /m
 test_script:

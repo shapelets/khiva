@@ -7,6 +7,8 @@
 #ifndef KHIVA_CORE_POLYNOMIAL_H
 #define KHIVA_CORE_POLYNOMIAL_H
 
+#include <khiva/defines.h>
+
 #include <arrayfire.h>
 
 namespace khiva {
@@ -23,7 +25,7 @@ namespace polynomial {
  *
  * @return af::array Polynomial coefficients, highest power first.
  */
-af::array polyfit(af::array x, af::array y, int deg);
+KHIVAAPI af::array polyfit(af::array x, af::array y, int deg);
 
 /**
  * @brief Calculates the roots of a polynomial with coefficients given in \f$p\f$. The values in the rank-1 array
@@ -36,7 +38,7 @@ af::array polyfit(af::array x, af::array y, int deg);
  *
  * @return af::array Containing the roots of the polynomial.
  */
-af::array roots(af::array pp);
+KHIVAAPI af::array roots(af::array pp);
 
 }  // namespace polynomial
 }  // namespace khiva

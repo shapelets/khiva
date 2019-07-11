@@ -10,6 +10,7 @@
 #include <stdexcept>
 
 #include "khiva/matrixInternal.h"
+#include "khiva/vectorUtil.h"
 #include "khivaTest.h"
 
 void slidingDotProduct() {
@@ -444,6 +445,279 @@ void massConsiderTrivial() {
     ASSERT_EQ(resultingIndex[1], expectedIndex);
 
     af::freeHost(resultingDistance);
+}
+
+void matrixProfile() {
+    auto ta = khiva::vectorutil::createArray(
+        {-0.9247, 0.1808,  2.5441, 0.3516,  -0.3452, 0.2191, -0.7687, 0.2413, -1.1948, 0.8927, -0.5378, 0.2270,
+         0.9354,  -0.7613, 0.5787, -0.6174, 0.5889,  0.7897, -0.0645, 0.9520, -1.1411, 0.8281, -0.7363, -0.7446},
+        8, 3);
+
+    auto tb = khiva::vectorutil::createArray({0.2512, 0.6436, -2.3651, -0.7734, -0.0511, 1.6693, 1.9453, -1.9047,
+                                              0.8149, -0.1831, -0.1542, -1.3490, 1.2285, -1.0472, 0.3911, -0.0637},
+                                             8, 2);
+    long m = 3;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::matrixProfile(ta, tb, m, distance, index);
+
+    ASSERT_EQ(distance.dims(0), 6);
+    ASSERT_EQ(distance.dims(1), 3);
+    ASSERT_EQ(distance.dims(2), 2);
+    ASSERT_EQ(distance.dims(3), 1);
+
+    ASSERT_EQ(index.dims(0), 6);
+    ASSERT_EQ(index.dims(1), 3);
+    ASSERT_EQ(index.dims(2), 2);
+    ASSERT_EQ(index.dims(3), 1);
+
+    auto distanceVect = khiva::vectorutil::get<double>(distance);
+    auto indexVect = khiva::vectorutil::get<unsigned int>(index);
+    ASSERT_NEAR(0.0112, distanceVect[7], 1e-3);
+    ASSERT_EQ(1, indexVect[7]);
+    ASSERT_NEAR(0.2810, distanceVect[17], 1e-3);
+    ASSERT_EQ(0, indexVect[17]);
+    ASSERT_NEAR(0.4467, distanceVect[18], 1e-3);
+    ASSERT_EQ(2, indexVect[18]);
+    ASSERT_NEAR(0.0162, distanceVect[27], 1e-3);
+    ASSERT_EQ(5, indexVect[27]);
+    ASSERT_NEAR(0.9187, distanceVect[35], 1e-3);
+    ASSERT_EQ(4, indexVect[35]);
+}
+
+void matrixProfileSelfJoin() {
+    auto ta = khiva::vectorutil::createArray(
+        {0.6010, 0.0278, 0.9806, 0.2126, 0.0655, 0.5497, 0.2864, 0.3410, 0.7509, 0.4105, 0.1583, 0.3712,
+         0.3543, 0.6450, 0.9675, 0.3636, 0.4165, 0.5814, 0.8962, 0.3712, 0.6755, 0.6105, 0.5232, 0.5567,
+         0.7896, 0.8966, 0.0536, 0.5775, 0.2908, 0.9941, 0.5143, 0.3670, 0.3336, 0.0363, 0.5349, 0.0123,
+         0.3988, 0.9787, 0.2308, 0.6244, 0.7917, 0.1654, 0.8657, 0.3766, 0.7331, 0.2522, 0.9644, 0.4711},
+        16, 3);
+
+    long m = 6;
+
+    af::array distance;
+    af::array index;
+
+    khiva::matrix::matrixProfile(ta, m, distance, index);
+
+    ASSERT_EQ(distance.dims(0), 11);
+    ASSERT_EQ(distance.dims(1), 3);
+    ASSERT_EQ(distance.dims(2), 1);
+    ASSERT_EQ(distance.dims(3), 1);
+
+    ASSERT_EQ(index.dims(0), 11);
+    ASSERT_EQ(index.dims(1), 3);
+    ASSERT_EQ(index.dims(2), 1);
+    ASSERT_EQ(index.dims(3), 1);
+
+    auto distanceVect = khiva::vectorutil::get<double>(distance);
+    auto indexVect = khiva::vectorutil::get<unsigned int>(index);
+    ASSERT_NEAR(1.2237, distanceVect[7], 1e-3);
+    ASSERT_EQ(1, indexVect[7]);
+    ASSERT_NEAR(2.5324, distanceVect[21], 1e-3);
+    ASSERT_EQ(1, indexVect[21]);
+    ASSERT_NEAR(1.979, distanceVect[25], 1e-3);
+    ASSERT_EQ(6, indexVect[25]);
+}
+
+void matrixProfileLR() {
+    int n = 128;
+    int m = 12;
+    const auto ta = khiva::vectorutil::createArray<double>(
+        {-92.4662,  18.0826,   254.4097,  35.1582,   -34.5167,  21.9123,   -76.8666,  24.1255,   -119.4840, 89.2692,
+         -53.7780,  22.6983,   93.5360,   -76.1285,  57.8707,   -61.7367,  58.8945,   78.9682,   -6.4519,   95.2034,
+         -114.1063, 82.8133,   -73.6341,  -74.4575,  -84.1459,  129.9067,  8.8310,    65.8802,   -27.8835,  141.4345,
+         -116.4987, -66.2915,  -58.0665,  -16.9934,  -72.6471,  -15.0601,  -27.8524,  -0.6336,   40.2054,   139.2524,
+         -24.1727,  11.3927,   -162.7895, 14.8781,   25.1250,   64.3562,   -236.5118, -77.3420,  -5.1106,   166.9285,
+         194.5296,  -190.4659, 81.4878,   -18.3076,  -15.4175,  -134.8966, 122.8539,  -104.7209, 39.1123,   -6.3669,
+         -125.9402, -226.7495, 71.6115,   -255.7238, 73.6051,   14.0193,   -9.0993,   32.4544,   -109.1953, 87.6599,
+         121.1325,  -8.6135,   -49.1869,  -134.8533, -139.3240, 118.1974,  22.9832,   63.0970,   -93.4303,  -193.2919,
+         -43.6712,  -4.2870,   -93.5555,  -86.3817,  -26.6190,  94.3234,   -100.8066, 70.5622,   75.9013,   36.3536,
+         -138.5388, 72.8221,   -145.1508, 73.7886,   -1.6499,   24.0054,   113.4099,  7.9198,    77.7093,   33.7550,
+         -68.3262,  -126.4960, 120.4121,  -181.5796, -110.4838, 88.8343,   -256.1250, 3.1551,    125.7766,  -76.7836,
+         0.5753,    -25.1363,  49.2497,   -74.0528,  -100.8634, -56.5037,  -75.5141,  -7.2044,   -51.6655,  -116.6414,
+         182.3497,  -152.1112, 150.9720,  77.0329,   58.4420,   50.0252,   -36.1718,  -55.2495},
+        n);
+
+    const std::vector<unsigned int> leftProfile = {
+        4294967295, 4294967295, 4294967295, 0,  1,  0,  1,  0,  1,  4,  5,  4,  7,  8,  0,  1,  2,  1,  8,  9,
+        10,         13,         14,         15, 16, 17, 16, 17, 18, 19, 20, 19, 20, 21, 22, 13, 24, 25, 28, 27,
+        35,         3,          4,          5,  13, 14, 15, 0,  17, 2,  19, 24, 25, 16, 48, 18, 3,  4,  3,  6,
+        7,          8,          9,          32, 38, 34, 53, 9,  63, 37, 64, 65, 66, 67, 26, 27, 28, 29, 60, 31,
+        51,         52,         53,         54, 55, 56, 57, 58, 59, 60, 61, 14, 46, 53, 54, 49, 93, 94, 95, 56,
+        57,         58,         59,         60, 13, 62, 23, 24, 25, 74, 75, 76, 77, 78, 79, 57, 58};
+
+    const std::vector<unsigned int> rightProfile = {
+        47,  48,  49,  87,  88,  10,  59,  60,  61,  62,  111, 88,  89,         90,         91,        46,  53,
+        48,  28,  50,  80,  81,  82,  106, 107, 108, 74,  75,  76,  77,         61,         79,        82,  83,
+        84,  67,  93,  94,  64,  65,  84,  85,  86,  89,  90,  91,  92,         82,         83,        84,  108,
+        80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  105, 90,         70,         71,        84,  73,
+        95,  96,  97,  98,  93,  94,  109, 110, 111, 112, 113, 114, 115,        92,         93,        94,  113,
+        99,  115, 116, 102, 103, 104, 105, 95,  96,  97,  98,  99,  112,        113,        114,       115, 116,
+        105, 115, 116, 108, 116, 110, 113, 114, 115, 114, 115, 116, 4294967295, 4294967295, 4294967295};
+
+    auto mpLR = khiva::matrix::internal::scampLR(khiva::vectorutil::get<double>(ta), m);
+
+    ASSERT_TRUE(leftProfile == mpLR.first.second);
+    ASSERT_TRUE(rightProfile == mpLR.second.second);
+}
+
+void extractAllChains() {
+    const std::vector<unsigned int> leftProfile = {
+        4294967295, 4294967295, 4294967295, 0,  1,  0,  1,  0,  1,  4,  5,  4,  7,  8,  0,  1,  2,  1,  8,  9,
+        10,         13,         14,         15, 16, 17, 16, 17, 18, 19, 20, 19, 20, 21, 22, 13, 24, 25, 28, 27,
+        35,         3,          4,          5,  13, 14, 15, 0,  17, 2,  19, 24, 25, 16, 48, 18, 3,  4,  3,  6,
+        7,          8,          9,          32, 38, 34, 53, 9,  63, 37, 64, 65, 66, 67, 26, 27, 28, 29, 60, 31,
+        51,         52,         53,         54, 55, 56, 57, 58, 59, 60, 61, 14, 46, 53, 54, 49, 93, 94, 95, 56,
+        57,         58,         59,         60, 13, 62, 23, 24, 25, 74, 75, 76, 77, 78, 79, 57, 58};
+
+    const std::vector<unsigned int> rightProfile = {
+        47,  48,  49,  87,  88,  10,  59,  60,  61,  62,  111, 88,  89,         90,         91,        46,  53,
+        48,  28,  50,  80,  81,  82,  106, 107, 108, 74,  75,  76,  77,         61,         79,        82,  83,
+        84,  67,  93,  94,  64,  65,  84,  85,  86,  89,  90,  91,  92,         82,         83,        84,  108,
+        80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  105, 90,         70,         71,        84,  73,
+        95,  96,  97,  98,  93,  94,  109, 110, 111, 112, 113, 114, 115,        92,         93,        94,  113,
+        99,  115, 116, 102, 103, 104, 105, 95,  96,  97,  98,  99,  112,        113,        114,       115, 116,
+        105, 115, 116, 108, 116, 110, 113, 114, 115, 114, 115, 116, 4294967295, 4294967295, 4294967295};
+
+    const std::vector<std::vector<unsigned int>> expectedRes = {{0, 47},
+                                                                {},
+                                                                {2, 49},
+                                                                {},
+                                                                {},
+                                                                {5, 10},
+                                                                {6, 59, 88},
+                                                                {7, 60, 89},
+                                                                {8, 61, 90},
+                                                                {9, 62, 105},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {14, 91},
+                                                                {15, 46, 92},
+                                                                {16, 53, 82},
+                                                                {17, 48},
+                                                                {18, 28, 76, 111},
+                                                                {19, 50},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {23, 106},
+                                                                {24, 107},
+                                                                {25, 108},
+                                                                {26, 74, 109},
+                                                                {27, 75, 110},
+                                                                {29, 77, 112},
+                                                                {},
+                                                                {31, 79, 114},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {38, 64, 70},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {51, 80},
+                                                                {52, 81},
+                                                                {54, 83},
+                                                                {55, 84},
+                                                                {56, 85},
+                                                                {57, 86},
+                                                                {58, 87},
+                                                                {},
+                                                                {65, 71},
+                                                                {},
+                                                                {67, 73},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {78, 113},
+                                                                {93, 96},
+                                                                {94, 97},
+                                                                {95, 98},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {},
+                                                                {}};
+
+    auto chains = khiva::matrix::internal::extractAllChains(leftProfile, rightProfile);
+
+    ASSERT_TRUE(expectedRes == chains);
+};
+
+void assert_chain(const std::vector<unsigned int>& chainValues, const std::vector<unsigned int>& chain) {
+	auto itFind = std::find(chainValues.begin(), chainValues.end(), chain.front());
+	ASSERT_TRUE(itFind != chainValues.end());
+	for(const auto& chainValue : chain) {
+		ASSERT_TRUE(chainValue == *itFind);
+		++itFind;
+	}
+}
+
+void getChains() {
+    int n = 128;
+    int m = 12;
+    const auto ta = khiva::vectorutil::createArray<double>(
+        {-92.4662,  18.0826,   254.4097,  35.1582,   -34.5167,  21.9123,   -76.8666,  24.1255,   -119.4840, 89.2692,
+         -53.7780,  22.6983,   93.5360,   -76.1285,  57.8707,   -61.7367,  58.8945,   78.9682,   -6.4519,   95.2034,
+         -114.1063, 82.8133,   -73.6341,  -74.4575,  -84.1459,  129.9067,  8.8310,    65.8802,   -27.8835,  141.4345,
+         -116.4987, -66.2915,  -58.0665,  -16.9934,  -72.6471,  -15.0601,  -27.8524,  -0.6336,   40.2054,   139.2524,
+         -24.1727,  11.3927,   -162.7895, 14.8781,   25.1250,   64.3562,   -236.5118, -77.3420,  -5.1106,   166.9285,
+         194.5296,  -190.4659, 81.4878,   -18.3076,  -15.4175,  -134.8966, 122.8539,  -104.7209, 39.1123,   -6.3669,
+         -125.9402, -226.7495, 71.6115,   -255.7238, 73.6051,   14.0193,   -9.0993,   32.4544,   -109.1953, 87.6599,
+         121.1325,  -8.6135,   -49.1869,  -134.8533, -139.3240, 118.1974,  22.9832,   63.0970,   -93.4303,  -193.2919,
+         -43.6712,  -4.2870,   -93.5555,  -86.3817,  -26.6190,  94.3234,   -100.8066, 70.5622,   75.9013,   36.3536,
+         -138.5388, 72.8221,   -145.1508, 73.7886,   -1.6499,   24.0054,   113.4099,  7.9198,    77.7093,   33.7550,
+         -68.3262,  -126.4960, 120.4121,  -181.5796, -110.4838, 88.8343,   -256.1250, 3.1551,    125.7766,  -76.7836,
+         0.5753,    -25.1363,  49.2497,   -74.0528,  -100.8634, -56.5037,  -75.5141,  -7.2044,   -51.6655,  -116.6414,
+         182.3497,  -152.1112, 150.9720,  77.0329,   58.4420,   50.0252,   -36.1718,  -55.2495},
+        n);
+
+	// It is not being checked directly due to a sorting difference with Travis
+    //const std::vector<unsigned int> chainValues = {
+    //    18,  28, 76,  111, 27, 75, 110, 16, 53, 82,  26, 74, 109, 6,  59, 88, 7,  60, 89,  8,  61,  90, 9,   62,
+    //    105, 15, 46,  92,  29, 77, 112, 31, 79, 114, 38, 64, 70,  17, 48, 19, 50, 23, 106, 24, 107, 25, 108, 0,
+    //    47,  2,  49,  5,   10, 14, 91,  51, 80, 52,  81, 54, 83,  55, 84, 56, 85, 57, 86,  58, 87,  65, 71,  67,
+    //    73,  78, 113, 93,  96, 94, 97,  95, 98, 0,   0,  0,  0,   0,  0,  0,  0,  0,  0,   0,  0,   0,  0,   0,
+    //    0,   0,  0,   0,   0,  0,  0,   0,  0,  0,   0,  0,  0,   0,  0,  0,  0,  0,  0,   0,  0};
+
+    const std::vector<unsigned int> chainIndexes = {
+        1,  1,  1,  1,  2,  2,  2,  3,  3,  3,  4,  4,  4,  5,  5,  5,  6,  6,  6,  7,  7,  7,  8,  8,
+        8,  9,  9,  9,  10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18,
+        18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 30,
+        30, 31, 31, 32, 32, 33, 33, 34, 34, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0};
+
+    af::array chains;
+    khiva::matrix::getChains(ta, m, chains);
+
+	std::vector<std::vector<unsigned int>> chainsToCheck = {
+		{18, 28, 76, 111},
+		{27, 75, 110},
+		{26, 74, 109},
+		{6,  59, 88},
+		{15, 46,  92},
+		{95, 98}, 
+	};
+	const auto& chainValues = khiva::vectorutil::get<unsigned int>(chains(af::span, 0, 0));
+	for(const auto& currChain : chainsToCheck) {
+		assert_chain(chainValues, currChain);
+	}
+
+    ASSERT_TRUE(khiva::vectorutil::get<unsigned int>(chains(af::span, 1, 0)) == chainIndexes);
 }
 
 void stompIgnoreTrivialOneSeries() {
@@ -1010,6 +1284,11 @@ KHIVA_TEST(MatrixTests, MassIgnoreTrivial, massIgnoreTrivial)
 KHIVA_TEST(MatrixTests, MassConsiderTrivial, massConsiderTrivial)
 KHIVA_TEST(MatrixTests, FindBestNOccurrences, findBestNOccurrences)
 KHIVA_TEST(MatrixTests, FindBestNOccurrencesMultipleQueries, findBestNOccurrencesMultipleQueries)
+KHIVA_TEST(MatrixTests, MatrixProfile, matrixProfile)
+KHIVA_TEST(MatrixTests, MatrixProfileSelfJoin, matrixProfileSelfJoin)
+KHIVA_TEST(MatrixTests, MatrixProfileLR, matrixProfileLR)
+KHIVA_TEST(MatrixTests, ExtractAllChains, extractAllChains)
+KHIVA_TEST(MatrixTests, GetChains, getChains)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialOneSeries, stompIgnoreTrivialOneSeries)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialOneBigSeries, stompIgnoreTrivialOneBigSeries)
 KHIVA_TEST(MatrixTests, StompIgnoreTrivialMultipleSeries, stompIgnoreTrivialMultipleSeries)

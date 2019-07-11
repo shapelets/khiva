@@ -28,8 +28,8 @@ extern "C" {
  * Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
  */
-KHIVAAPI void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array *intercept,
-                     khiva_array *rvalue, khiva_array *pvalue, khiva_array *stderrest);
+KHIVA_C_API void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array *intercept,
+                        khiva_array *rvalue, khiva_array *pvalue, khiva_array *stderrest);
 
 #ifdef __cplusplus
 }

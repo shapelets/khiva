@@ -137,6 +137,63 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, j
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m);
 
+/**
+ * @brief Calculate the matrix profile between 'ta' and 'tb' using a subsequence length
+ * of 'm'.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param ref_a Query time series.
+ * @param ref_b Reference time series.
+ * @param m The length of the subsequence.
+ * @return The updated ref_a and ref_b and references to:
+ *          - The distance profile.
+ *          - The index profile.
+ */
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv *env, jobject, jlong ref_a,
+                                                                          jlong ref_b, jlong m);
+
+/**
+ * @brief Calculate the matrix profile between 't' and itself using a subsequence length
+ * of 'm'. This method filters the trivial matches.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param ref_a Query and reference time series.
+ * @param m Subsequence length.Subsequence length.
+ * @return The updated ref_a and references to:
+ *          - The matrix profile, which reflects the distance to the closer element of the subsequence
+ *            from 't' in a different location of itself.
+ *          - The matrix profile index, which points to where the aforementioned minimum is located.
+ */
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoin(JNIEnv *env, jobject, jlong ref_a,
+                                                                                  jlong m);
+
+/**
+ * @brief Calculate all the chains within 'tss' using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Makoto Imamura, Daniel Nikovski, and Eamonn Keogh. Matrix Profile VII: Time Series Chains: A New
+*  Primitive for Time Series Data Mining. IEEE ICDM 2017
+ *
+ * @param ref_a Time series to compute the chains within them.
+ * @param m Subsequence length.
+ * @return The updated ref_a and reference to the calculated chains with the following topology:
+ *  - 1st dimension corresponds to the chains indexes flattened.
+ *  - 2nd dimension:
+                - [0] corresponds to all the indexes in the chains flattened
+                - [1] corresponds to the index of the chain that the value in [0] belongs to.
+ *  - 3rd dimension corresponds to the number of time series.
+ *
+ *  Notice that the size of the first dimension is the maximum possible size which is n - m + 1. If the number of
+ *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies
+ *  that 0 is an invalid chain index.
+ */
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *env, jobject, jlong ref_a, jlong m);
+
 #ifdef __cplusplus
 }
 #endif

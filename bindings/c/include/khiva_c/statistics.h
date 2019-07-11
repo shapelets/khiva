@@ -21,7 +21,7 @@ extern "C" {
  * @param unbiased Determines whether it divides by n - 1 (if false) or n (if true).
  * @param result The covariance matrix of the time series.
  */
-KHIVAAPI void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_array *result);
+KHIVA_C_API void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_array *result);
 
 /**
  * @brief Returns the kurtosis of tss (calculated with the adjusted Fisher-Pearson standardized moment coefficient G2).
@@ -30,7 +30,7 @@ KHIVAAPI void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_arra
  * one indicates the number of time series.
  * @param result The kurtosis of tss.
  */
-KHIVAAPI void kurtosis_statistics(khiva_array *tss, khiva_array *result);
+KHIVA_C_API void kurtosis_statistics(khiva_array *tss, khiva_array *result);
 
 /**
  * @brief The Ljung–Box test checks that data whithin the time series are independently distributed (i.e. the
@@ -63,7 +63,7 @@ KHIVAAPI void kurtosis_statistics(khiva_array *tss, khiva_array *result);
  * @param lags Number of lags being tested.
  * @param The Ljung-Box statistic test.
  */
-KHIVAAPI void ljung_box(khiva_array *tss, long *lags, khiva_array *result);
+KHIVA_C_API void ljung_box(khiva_array *tss, long *lags, khiva_array *result);
 
 /**
  * @brief Returns the kth moment of the given time series.
@@ -73,7 +73,7 @@ KHIVAAPI void ljung_box(khiva_array *tss, long *lags, khiva_array *result);
  * @param k The specific moment to be calculated.
  * @param result The kth moment of the given time series.
  */
-KHIVAAPI void moment_statistics(khiva_array *tss, int *k, khiva_array *result);
+KHIVA_C_API void moment_statistics(khiva_array *tss, int *k, khiva_array *result);
 
 /**
  * @brief Returns values at the given quantile.
@@ -84,7 +84,7 @@ KHIVAAPI void moment_statistics(khiva_array *tss, int *k, khiva_array *result);
  * @param precision Number of decimals expected.
  * @param result Values at the given quantile.
  */
-KHIVAAPI void quantile_statistics(khiva_array *tss, khiva_array *q, float *precision, khiva_array *result);
+KHIVA_C_API void quantile_statistics(khiva_array *tss, khiva_array *q, float *precision, khiva_array *result);
 
 /**
  * @brief Discretizes the time series into equal-sized buckets based on sample quantiles.
@@ -96,7 +96,7 @@ KHIVAAPI void quantile_statistics(khiva_array *tss, khiva_array *q, float *preci
  * @param result Matrix with the categories, one category per row, the start of the category in the first column and
  * the end in the second category.
  */
-KHIVAAPI void quantiles_cut_statistics(khiva_array *tss, float *quantiles, float *precision, khiva_array *result);
+KHIVA_C_API void quantiles_cut_statistics(khiva_array *tss, float *quantiles, float *precision, khiva_array *result);
 
 /**
  * @brief Estimates standard deviation based on a sample. The standard deviation is calculated using the "n-1" method.
@@ -105,7 +105,7 @@ KHIVAAPI void quantiles_cut_statistics(khiva_array *tss, float *quantiles, float
  * one indicates the number of time series.
  * @param result The sample standard deviation.
  */
-KHIVAAPI void sample_stdev_statistics(khiva_array *tss, khiva_array *result);
+KHIVA_C_API void sample_stdev_statistics(khiva_array *tss, khiva_array *result);
 
 /**
  * @brief Calculates the sample skewness of tss (calculated with the adjusted Fisher-Pearson standardized moment
@@ -115,7 +115,7 @@ KHIVAAPI void sample_stdev_statistics(khiva_array *tss, khiva_array *result);
  * one indicates the number of time series.
  * @param result Array containing the skewness of each time series in tss.
  */
-KHIVAAPI void skewness_statistics(khiva_array *tss, khiva_array *result);
+KHIVA_C_API void skewness_statistics(khiva_array *tss, khiva_array *result);
 
 #ifdef __cplusplus
 }
