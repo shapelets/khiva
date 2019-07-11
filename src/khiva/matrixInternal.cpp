@@ -237,13 +237,11 @@ void meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &st
     af::array mean_t_p2 = af::pow(mean, 2);
     // Variance
     af::array sigma_t2 = mean_t2 - mean_t_p2;
-    // Standard deviation
-    stdev = af::sqrt(sigma_t2);
-
-    double eps = (sigma_t2.type() == 0) ? EPSILON * 1e4 : EPSILON;
-
+    // Standard deviation 
+    double eps = (sigma_t2.type() == 0) ? EPSILON * 1e4 : EPSILON; 
     af::array lessThanEpsilon = eps >= sigma_t2;
     sigma_t2 = lessThanEpsilon * lessThanEpsilon.as(sigma_t2.type()) + !lessThanEpsilon * sigma_t2;
+    stdev = af::sqrt(sigma_t2);
 
     // Auxiliary variable to be used for the distance calculation
     a = (sum_t2 - 2 * sum_t * mean + m * mean_t_p2) / sigma_t2;
