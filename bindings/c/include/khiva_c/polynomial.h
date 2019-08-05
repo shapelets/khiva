@@ -22,7 +22,7 @@ extern "C" {
  * @param deg Degree of the fitting polynomial.
  * @param result Polynomial coefficients, highest power first.
  */
-KHIVA_C_API void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result);
+KHIVA_C_API void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Calculates the roots of a polynomial with coefficients given in \f$p\f$. The values in the rank-1 array
@@ -34,7 +34,7 @@ KHIVA_C_API void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *
  * @param pp Array of polynomial coefficients.
  * @param result Array containing the roots of the polynomial.
  */
-KHIVA_C_API void roots(khiva_array *p, khiva_array *result);
+KHIVA_C_API void roots(khiva_array *p, khiva_array *result, int *error_code, char * error_message);
 
 #ifdef __cplusplus
 }

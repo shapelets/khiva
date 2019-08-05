@@ -9,7 +9,8 @@
 #include <khiva_c/regularization.h>
 
 void group_by(khiva_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
-              khiva_array *result) {
+              khiva_array *result, int* error_code, char* error_message) {
+	try {
     af::array var = af::array(*array);
     af_retain_array(array, var.get());
 
@@ -42,5 +43,11 @@ void group_by(khiva_array *array, int *aggregation_function, int *n_columns_key,
             af_retain_array(result,
                             khiva::regularization::groupBy(var, af::mean, *n_columns_key, *n_columns_value).get());
             break;
+			*error_code = 0;
+    } catch(const std::exception& e) {
+       fill_error("group_by", e.what(), error_message, error_code, 1);
+    } catch(...) {
+        fill_unknown("group_by", error_message, error_code, -1);
+    }
     }
 }

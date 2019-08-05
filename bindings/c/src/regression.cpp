@@ -10,7 +10,8 @@
 #include <khiva_c/util.h>
 
 void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array *intercept, khiva_array *rvalue,
-            khiva_array *pvalue, khiva_array *stderrest) {
+            khiva_array *pvalue, khiva_array *stderrest, int* error_code, char* error_message) {
+	try {
     af::array var_xss;
     af::array var_yss;
     check_and_retain_arrays(xss, yss, var_xss, var_yss);
@@ -29,4 +30,10 @@ void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array 
     af_retain_array(rvalue, rvalue_primitive.get());
     af_retain_array(pvalue, pvalue_primitive.get());
     af_retain_array(stderrest, stderrest_primitive.get());
+	*error_code = 0;
+    } catch(const std::exception& e) {
+       fill_error("linear", e.what(), error_message, error_code, 1);
+    } catch(...) {
+        fill_unknown("linear", error_message, error_code, -1);
+    }
 }
