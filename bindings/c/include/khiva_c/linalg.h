@@ -24,7 +24,7 @@ extern "C" {
  * @param b A vector with the measured values.
  * @param result Contains the solution to the linear equation problem minimizing the norm 2.
  */
-KHIVA_C_API void lls(khiva_array *a, khiva_array *b, khiva_array *result);
+KHIVA_C_API void lls(khiva_array *a, khiva_array *b, khiva_array *result, int *error_code, char * error_message);
 
 #ifdef __cplusplus
 }
