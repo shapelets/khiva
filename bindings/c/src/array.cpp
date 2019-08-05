@@ -56,13 +56,21 @@ void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
     af::array r = var1 + var2;
     af_retain_array(result, r.get());
 }
+void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char* error_message) {
 
-void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
-    af::array var1;
-    af::array var2;
-    check_and_retain_arrays(lhs, rhs, var1, var2);
-    af::array r = var1 * var2;
-    af_retain_array(result, r.get());
+    try {
+        af::array var1;
+        af::array var2;
+        check_and_retain_arrays(lhs, rhs, var1, var2);
+        af::array r = var1 * var2;
+        af_retain_array(result, r.get());
+
+        *error_code = 0;
+    } catch(const std::exception& e) {
+       fill_error("khiva_mul", e.what(), error_message, error_code, 1);
+    } catch(...) {
+        fill_unknown("khiva_mul", error_message, error_code, -1);
+    }
 }
 
 void khiva_sub(khiva_array *lhs, khiva_array *rhs, khiva_array *result) {
