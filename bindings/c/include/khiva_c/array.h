@@ -79,7 +79,7 @@ KHIVA_C_API void join(int *dim, khiva_array *first, khiva_array *second, khiva_a
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Multiplies two arrays.
@@ -97,7 +97,7 @@ KHIVA_C_API void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_sub(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_sub(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Divides lhs by rhs (element-wise).
@@ -106,7 +106,7 @@ KHIVA_C_API void khiva_sub(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_div(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_div(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Performs the modulo operation of lhs by rhs.
@@ -115,7 +115,7 @@ KHIVA_C_API void khiva_div(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_mod(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_mod(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Powers lhs with rhs.
@@ -124,7 +124,7 @@ KHIVA_C_API void khiva_mod(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation. Exponent.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_pow(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_pow(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Compares (element-wise) if lhs is lower than rhs.
@@ -133,7 +133,7 @@ KHIVA_C_API void khiva_pow(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_lt(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_lt(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Compares (element-wise) if lhs is greater than rhs.
@@ -142,7 +142,7 @@ KHIVA_C_API void khiva_lt(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_gt(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_gt(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Compares (element-wise) if lhs is lower or equal than rhs.
@@ -151,7 +151,7 @@ KHIVA_C_API void khiva_gt(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_le(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_le(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Compares (element-wise) if lhs is greater or equal than rhs.
@@ -160,7 +160,7 @@ KHIVA_C_API void khiva_le(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_ge(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_ge(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Compares (element-wise) if rhs is equal to rhs.
@@ -169,7 +169,7 @@ KHIVA_C_API void khiva_ge(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_eq(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_eq(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Compares (element-wise) if lhs is not equal to rhs.
@@ -178,7 +178,7 @@ KHIVA_C_API void khiva_eq(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_ne(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_ne(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Performs an AND operation (element-wise) with lhs and rhs.
@@ -187,7 +187,7 @@ KHIVA_C_API void khiva_ne(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_bitand(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_bitand(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Performs an OR operation (element-wise) with lhs and rhs.
@@ -196,7 +196,7 @@ KHIVA_C_API void khiva_bitand(khiva_array *lhs, khiva_array *rhs, khiva_array *r
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_bitor(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_bitor(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Performs an eXclusive-OR operation (element-wise) with lhs and rhs.
@@ -205,7 +205,7 @@ KHIVA_C_API void khiva_bitor(khiva_array *lhs, khiva_array *rhs, khiva_array *re
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_bitxor(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_bitxor(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Performs a left bit shift operation (element-wise) to array as many times as specified in the parameter n.
@@ -214,7 +214,7 @@ KHIVA_C_API void khiva_bitxor(khiva_array *lhs, khiva_array *rhs, khiva_array *r
  * @param n Number of bits to be shifted.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_bitshiftl(khiva_array *array, int *n, khiva_array *result);
+KHIVA_C_API void khiva_bitshiftl(khiva_array *array, int *n, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Performs a right bit shift operation (element-wise) to array as many times as specified in the parameter n.
@@ -223,7 +223,7 @@ KHIVA_C_API void khiva_bitshiftl(khiva_array *array, int *n, khiva_array *result
  * @param n Number of bits to be shifted.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_bitshiftr(khiva_array *array, int *n, khiva_array *result);
+KHIVA_C_API void khiva_bitshiftr(khiva_array *array, int *n, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Logical NOT operation to array.
@@ -231,7 +231,7 @@ KHIVA_C_API void khiva_bitshiftr(khiva_array *array, int *n, khiva_array *result
  * @param array KHIVA Array to negate.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_not(khiva_array *array, khiva_array *result);
+KHIVA_C_API void khiva_not(khiva_array *array, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Transposes array.
@@ -240,7 +240,7 @@ KHIVA_C_API void khiva_not(khiva_array *array, khiva_array *result);
  * @param conjugate If true a conjugate transposition is performed.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_transpose(khiva_array *array, bool *conjugate, khiva_array *result);
+KHIVA_C_API void khiva_transpose(khiva_array *array, bool *conjugate, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Retrieves a given column of array.
@@ -249,7 +249,7 @@ KHIVA_C_API void khiva_transpose(khiva_array *array, bool *conjugate, khiva_arra
  * @param index The column to be retrieved.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_col(khiva_array *array, int *index, khiva_array *result);
+KHIVA_C_API void khiva_col(khiva_array *array, int *index, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Retrieves a subset of columns of array, starting at first and finishing at last, both inclusive.
@@ -259,7 +259,7 @@ KHIVA_C_API void khiva_col(khiva_array *array, int *index, khiva_array *result);
  * @param last End of the subset of columns to be retrieved.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_cols(khiva_array *array, int *first, int *last, khiva_array *result);
+KHIVA_C_API void khiva_cols(khiva_array *array, int *first, int *last, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Retrieves a given row of array.
@@ -268,7 +268,7 @@ KHIVA_C_API void khiva_cols(khiva_array *array, int *first, int *last, khiva_arr
  * @param index The row to be retrieved.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_row(khiva_array *array, int *index, khiva_array *result);
+KHIVA_C_API void khiva_row(khiva_array *array, int *index, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Retrieves a subset of rows of array, starting at first and finishing at last, both inclusive.
@@ -278,7 +278,7 @@ KHIVA_C_API void khiva_row(khiva_array *array, int *index, khiva_array *result);
  * @param last End of the subset of rows to be retrieved.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_rows(khiva_array *array, int *first, int *last, khiva_array *result);
+KHIVA_C_API void khiva_rows(khiva_array *array, int *first, int *last, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Creates a KHIVA array from an ArrayFire array.
@@ -286,7 +286,7 @@ KHIVA_C_API void khiva_rows(khiva_array *array, int *first, int *last, khiva_arr
  * @param arrayfire ArrayFire array reference.
  * @param result KHIVA Array.
  */
-KHIVA_C_API void from_arrayfire(khiva_array *arrayfire, khiva_array *result);
+KHIVA_C_API void from_arrayfire(khiva_array *arrayfire, khiva_array *result, int *error_code, char * error_message);
 
 /**
  * @brief Performs a matrix multiplication of lhs and rhs.
@@ -295,14 +295,14 @@ KHIVA_C_API void from_arrayfire(khiva_array *arrayfire, khiva_array *result);
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_matmul(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_matmul(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char * error_message);
 /**
  * @brief Performs a deep copy of array.
  *
  * @param array KHIVA Array.
  * @param result KHIVA Array which contains a copy of array.
  */
-KHIVA_C_API void copy(khiva_array *array, khiva_array *result);
+KHIVA_C_API void copy(khiva_array *array, khiva_array *result, int *error_code, char * error_message);
 /**
  * @brief Changes the type of array.
  *
@@ -310,7 +310,7 @@ KHIVA_C_API void copy(khiva_array *array, khiva_array *result);
  * @param type Target type of the output array.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_as(khiva_array *array, const int *type, khiva_array *result);
+KHIVA_C_API void khiva_as(khiva_array *array, const int *type, khiva_array *result, int *error_code, char * error_message);
 
 #ifdef __cplusplus
 }
