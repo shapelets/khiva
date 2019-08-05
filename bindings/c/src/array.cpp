@@ -106,7 +106,6 @@ void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *err
         check_and_retain_arrays(lhs, rhs, var1, var2);
         af::array r = var1 * var2;
         af_retain_array(result, r.get());
-
         *error_code = 0;
     } catch(const std::exception& e) {
        fill_error("khiva_mul", e.what(), error_message, error_code, 1);

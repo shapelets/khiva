@@ -20,6 +20,10 @@ void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, lon
     af::array discords;
     af::array discordIndices;
     af::array subsequenceIndices;
+    
+    af_retain_array(discord_distances, discords.get());
+    af_retain_array(discord_indices, discordIndices.get());
+    af_retain_array(subsequence_indices, subsequenceIndices.get());
 
     try {
         khiva::matrix::findBestNDiscords(var_profile, var_index, *m, *n, discords, discordIndices, subsequenceIndices,
@@ -31,10 +35,6 @@ void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, lon
         std::cerr << re.what() << std::endl;
         exit(-1);
     }
-
-    af_retain_array(discord_distances, discords.get());
-    af_retain_array(discord_indices, discordIndices.get());
-    af_retain_array(subsequence_indices, subsequenceIndices.get());
 }
 
 void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n, khiva_array *motif_distances,
@@ -46,7 +46,10 @@ void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long 
     af::array motifs;
     af::array motifIndices;
     af::array subsequenceIndices;
-
+    af_retain_array(motif_distances, motifs.get());
+    af_retain_array(motif_indices, motifIndices.get());
+    af_retain_array(subsequence_indices, subsequenceIndices.get());
+    
     try {
         khiva::matrix::findBestNMotifs(var_profile, var_index, *m, *n, motifs, motifIndices, subsequenceIndices,
                                        self_join);
@@ -57,10 +60,6 @@ void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long 
         std::cerr << re.what() << std::endl;
         exit(-1);
     }
-
-    af_retain_array(motif_distances, motifs.get());
-    af_retain_array(motif_indices, motifIndices.get());
-    af_retain_array(subsequence_indices, subsequenceIndices.get());
 }
 
 void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, khiva_array *distances, khiva_array *indexes, int* error_code, char* error_message) {

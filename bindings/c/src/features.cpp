@@ -81,7 +81,11 @@ void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregati
     af::array primitive_rvalue;
     af::array primitive_pvalue;
     af::array primitive_stderrest;
-
+    af_retain_array(slope, primitive_slope.get());
+    af_retain_array(intercept, primitive_intercept.get());
+    af_retain_array(rvalue, primitive_rvalue.get());
+    af_retain_array(pvalue, primitive_pvalue.get());
+    af_retain_array(stderrest, primitive_stderrest.get());
     switch (*aggregation_function) {
         case 0:
             khiva::features::aggregatedLinearTrend(var, *chunkSize, af::mean, primitive_slope, primitive_intercept,
@@ -114,11 +118,7 @@ void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregati
         fill_unknown("aggregated_linear_trend", error_message, error_code, -1);
     }
     }
-    af_retain_array(slope, primitive_slope.get());
-    af_retain_array(intercept, primitive_intercept.get());
-    af_retain_array(rvalue, primitive_rvalue.get());
-    af_retain_array(pvalue, primitive_pvalue.get());
-    af_retain_array(stderrest, primitive_stderrest.get());
+    
 }
 
 void approximate_entropy(khiva_array *array, int *m, float *r, khiva_array *result, int* error_code, char* error_message) {
