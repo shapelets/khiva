@@ -88,7 +88,7 @@ KHIVA_C_API void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *result);
+KHIVA_C_API void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int * error_code, char * error_message);
 
 /**
  * @brief Subtracts two arrays.
