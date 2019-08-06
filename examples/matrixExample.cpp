@@ -86,6 +86,9 @@ void newCheck(){
 
         float dataB[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 10, 10, 11, 10, 11, 11, 10};
         af::array tb = af::array(10, 1, dataB);
+
+        ta += tb;
+
     } catch (const std::exception &e) {
         std::cout << "Exception" << std::endl;
     } catch (...) {
@@ -99,6 +102,7 @@ int main() {
 //
 //    stompConsiderTrivialOneSeries();
 //    stompConsiderTrivialMultipleSeries();
+    newCheck();
 
     return 0;
 }

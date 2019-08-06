@@ -9,6 +9,8 @@
 #include <khiva_c/array.h>
 #include <khiva_c/util.h>
 
+#include <thread>
+
 void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *result, int *type) {
     af_retain_array(result, khiva::array::createArray(data, *ndims, dims, *type).get());
 }
