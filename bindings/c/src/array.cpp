@@ -8,7 +8,6 @@
 #include <khiva/array.h>
 #include <khiva_c/array.h>
 #include <khiva_c/util.h>
-#include <cstring>
 
 void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *result, int *type) {
     af_retain_array(result, khiva::array::createArray(data, *ndims, dims, *type).get());
@@ -69,8 +68,8 @@ void get_type(khiva_array *array, int *t, int *error_code, char *error_message) 
     }
 }
 
-void
-join(int *dim, khiva_array *first, khiva_array *second, khiva_array *result, int *error_code, char *error_message) {
+void join(int *dim, khiva_array *first, khiva_array *second, khiva_array *result, int *error_code,
+          char *error_message) {
     try {
         af::array var1;
         af::array var2;
@@ -101,7 +100,6 @@ void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *err
 }
 
 void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message) {
-
     try {
         af::array var1;
         af::array var2;

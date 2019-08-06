@@ -7,7 +7,6 @@
 #include <khiva/array.h>
 #include <khiva_jni/array.h>
 #include <khiva_jni/util.h>
-#include <cstring>
 
 #define CREATE_T_ARRAY(Ty, ty, dty)                                                                           \
     jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFrom##Ty(JNIEnv *env, jobject, j##ty##Array elems, \
@@ -21,12 +20,19 @@
         env->Release##Ty##ArrayElements(elems, (j##ty *)inptr, 0);                                            \
         return jlong(ret);                                                                                    \
     }
+
 CREATE_T_ARRAY(Float, float, khiva::dtype::f32)
+
 CREATE_T_ARRAY(Double, double, khiva::dtype::f64)
+
 CREATE_T_ARRAY(Int, int, khiva::dtype::s32)
+
 CREATE_T_ARRAY(Boolean, boolean, khiva::dtype::b8)
+
 CREATE_T_ARRAY(Long, long, khiva::dtype::s64)
+
 CREATE_T_ARRAY(Short, short, khiva::dtype::s16)
+
 CREATE_T_ARRAY(Byte, byte, khiva::dtype::u8)
 
 #undef CREATE_T_ARRAY
@@ -129,13 +135,21 @@ void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jobject this
         env->Release##Ty##ArrayElements(result, resf, 0);                                                 \
         return result;                                                                                    \
     }
+
 GET_T_FROM_ARRAY(Float, float)
+
 GET_T_FROM_ARRAY(Double, double)
+
 GET_T_FROM_ARRAY(Int, int)
+
 GET_T_FROM_ARRAY(Boolean, boolean)
+
 GET_T_FROM_ARRAY(Long, long)
+
 GET_T_FROM_ARRAY(Short, short)
+
 GET_T_FROM_ARRAY(Byte, byte)
+
 #undef GET_T_FROM_ARRAY
 
 jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj) {

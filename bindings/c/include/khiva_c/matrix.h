@@ -32,7 +32,8 @@ extern "C" {
  */
 KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n,
                                       khiva_array *discord_distances, khiva_array *discord_indices,
-                                      khiva_array *subsequence_indices, bool *self_join, int *error_code, char * error_message);
+                                      khiva_array *subsequence_indices, bool *self_join, int *error_code,
+                                      char *error_message);
 
 /**
  * @brief Primitive of the findBestNMotifs function.
@@ -52,7 +53,8 @@ KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, 
  */
 KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n,
                                     khiva_array *motif_distances, khiva_array *motif_indices,
-                                    khiva_array *subsequence_indices, bool *self_join, int *error_code, char * error_message);
+                                    khiva_array *subsequence_indices, bool *self_join, int *error_code,
+                                    char *error_message);
 
 /**
  * @brief Calculates the N best matches of several queries in several time series.
@@ -75,7 +77,7 @@ KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, lo
  * @param indexes Resulting indexes.
  */
 KHIVA_C_API void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, khiva_array *distances,
-                                         khiva_array *indexes, int *error_code, char * error_message);
+                                         khiva_array *indexes, int *error_code, char *error_message);
 
 /**
  * @brief Mueen's Algorithm for Similarity Search.
@@ -98,7 +100,7 @@ KHIVA_C_API void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n
  * series.
  * @param distances Resulting distances.
  */
-KHIVA_C_API void mass(khiva_array *q, khiva_array *t, khiva_array *distances, int *error_code, char * error_message);
+KHIVA_C_API void mass(khiva_array *q, khiva_array *t, khiva_array *distances, int *error_code, char *error_message);
 
 /**
  * @brief  Primitive of the STOMP algorithm.
@@ -114,7 +116,8 @@ KHIVA_C_API void mass(khiva_array *q, khiva_array *t, khiva_array *distances, in
  * from 'tssa' in 'tssb'.
  * @param i The matrix profile index, which points to where the aforementioned minimum is located.
  */
-KHIVA_C_API void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i, int *error_code, char * error_message);
+KHIVA_C_API void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i, int *error_code,
+                       char *error_message);
 
 /**
  * @brief Primitive of the STOMP self join algorithm.
@@ -129,7 +132,8 @@ KHIVA_C_API void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_arra
  * from 'tss' in a different location of itself
  * @param i The matrix profile index, which points to where the aforementioned minimum is located
  */
-KHIVA_C_API void stomp_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i, int *error_code, char * error_message);
+KHIVA_C_API void stomp_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i, int *error_code,
+                                 char *error_message);
 
 /**
  * @brief Matrix Profile algorithm
@@ -145,7 +149,8 @@ KHIVA_C_API void stomp_self_join(khiva_array *tss, long *m, khiva_array *p, khiv
  * from 'tssa' in 'tssb'.
  * @param i The matrix profile index, which points to where the aforementioned minimum is located.
  */
-KHIVA_C_API void matrix_profile(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i, int *error_code, char * error_message);
+KHIVA_C_API void matrix_profile(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i,
+                                int *error_code, char *error_message);
 
 /**
  * @brief Matrix Profile self join algorithm.
@@ -160,7 +165,8 @@ KHIVA_C_API void matrix_profile(khiva_array *tssa, khiva_array *tssb, long *m, k
  * from 'tss' in a different location of itself
  * @param i The matrix profile index, which points to where the aforementioned minimum is located
  */
-KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i, int *error_code, char * error_message);
+KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i, int *error_code,
+                                          char *error_message);
 
 /**
  * @brief Calculate all the chains within 'tss' using a subsequence length of 'm'.
@@ -181,7 +187,7 @@ KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array
  *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies
  *  that 0 is an invalid chain index.
  */
-KHIVA_C_API void get_chains(khiva_array *tss, long *m, khiva_array *chains, int *error_code, char * error_message);
+KHIVA_C_API void get_chains(khiva_array *tss, long *m, khiva_array *chains, int *error_code, char *error_message);
 
 #ifdef __cplusplus
 }

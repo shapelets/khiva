@@ -6,7 +6,6 @@
 
 #include <arrayfire.h>
 #include <khiva_c/util.h>
-#include <string.h>
 
 void check_and_retain_arrays(khiva_array *a, khiva_array *b, af::array &var_a, af::array &var_b) {
     if (a == b) {
@@ -22,10 +21,9 @@ void check_and_retain_arrays(khiva_array *a, khiva_array *b, af::array &var_a, a
 }
 
 void fill_error(const char *function_name, const char *src_message, char *dst_message, int *error_code, int error) {
-
     // Fill error_message
     int len = strlen(function_name) + strlen(src_message) + strlen(": ");
-    char *total_message = (char *) malloc(sizeof(char) * len);
+    char *total_message = (char *)malloc(sizeof(char) * len);
     strcpy(total_message, function_name);
     strcat(total_message, ": ");
     strcat(total_message, src_message);

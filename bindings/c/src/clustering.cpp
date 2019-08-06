@@ -7,8 +7,8 @@
 #include <arrayfire.h>
 #include <khiva/clustering.h>
 #include <khiva_c/clustering.h>
-#include <iostream>
 #include <khiva_c/util.h>
+#include <iostream>
 
 void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
              int *max_iterations, int *error_code, char *error_message) {

@@ -22,9 +22,8 @@ void group_by(khiva_array *array, int *aggregation_function, int *n_columns_key,
                 *error_code = 0;
                 break;
             case 1:
-                af_retain_array(result,
-                                khiva::regularization::groupBy(var, af::median, *n_columns_key,
-                                                               *n_columns_value).get());
+                af_retain_array(
+                    result, khiva::regularization::groupBy(var, af::median, *n_columns_key, *n_columns_value).get());
                 *error_code = 0;
                 break;
             case 2:

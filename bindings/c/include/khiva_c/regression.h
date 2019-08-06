@@ -29,7 +29,8 @@ extern "C" {
  * @param stderrest Standard error of the estimated gradient.
  */
 KHIVA_C_API void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array *intercept,
-                        khiva_array *rvalue, khiva_array *pvalue, khiva_array *stderrest, int *error_code, char * error_message);
+                        khiva_array *rvalue, khiva_array *pvalue, khiva_array *stderrest, int *error_code,
+                        char *error_message);
 
 #ifdef __cplusplus
 }

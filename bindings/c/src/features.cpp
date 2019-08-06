@@ -102,8 +102,8 @@ void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregati
                 break;
             case 1:
                 khiva::features::aggregatedLinearTrend(var, *chunkSize, af::median, primitive_slope,
-                                                       primitive_intercept,
-                                                       primitive_rvalue, primitive_pvalue, primitive_stderrest);
+                                                       primitive_intercept, primitive_rvalue, primitive_pvalue,
+                                                       primitive_stderrest);
                 *error_code = 0;
                 break;
             case 2:
@@ -132,11 +132,10 @@ void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregati
     } catch (...) {
         fill_unknown("aggregated_linear_trend", error_message, error_code, -1);
     }
-
 }
 
-void
-approximate_entropy(khiva_array *array, int *m, float *r, khiva_array *result, int *error_code, char *error_message) {
+void approximate_entropy(khiva_array *array, int *m, float *r, khiva_array *result, int *error_code,
+                         char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -753,8 +752,8 @@ void quantile(khiva_array *array, khiva_array *q, float *precision, khiva_array 
     }
 }
 
-void
-range_count(khiva_array *array, float *min, float *max, khiva_array *result, int *error_code, char *error_message) {
+void range_count(khiva_array *array, float *min, float *max, khiva_array *result, int *error_code,
+                 char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -940,8 +939,8 @@ void variance(khiva_array *array, khiva_array *result, int *error_code, char *er
     }
 }
 
-void
-variance_larger_than_standard_deviation(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void variance_larger_than_standard_deviation(khiva_array *array, khiva_array *result, int *error_code,
+                                             char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());

@@ -6,7 +6,6 @@
 
 #include <khiva/dimensionality.h>
 #include <khiva_jni/dimensionality.h>
-#include <stdexcept>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *env, jobject, jlong ref, jint bins) {
     const jint l = 2;

@@ -7,7 +7,6 @@
 #include <khiva/library.h>
 #include <khiva/version.h>
 #include <khiva_c/library.h>
-#include <cstring>
 
 void backend_info(char **info) { strcpy(*info, khiva::library::backendInfo().c_str()); }
 

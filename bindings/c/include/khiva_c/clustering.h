@@ -25,7 +25,7 @@ extern "C" {
  * @param max_iterations The maximum number of iterations allowed.
  */
 KHIVA_C_API void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
-                         int *max_iterations, int *error_code, char * error_message);
+                         int *max_iterations, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the K-Shape algorithm.
@@ -42,7 +42,7 @@ KHIVA_C_API void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva
  * @param max_iterations The maximum number of iterations allowed.
  */
 KHIVA_C_API void k_shape(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
-                         int *max_iterations, int *error_code, char * error_message);
+                         int *max_iterations, int *error_code, char *error_message);
 
 #ifdef __cplusplus
 }

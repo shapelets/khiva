@@ -9,7 +9,6 @@
 #include <khiva_c/matrix.h>
 #include <khiva_c/util.h>
 #include <iostream>
-#include <stdexcept>
 
 void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n, khiva_array *discord_distances,
                           khiva_array *discord_indices, khiva_array *subsequence_indices, bool *self_join) {

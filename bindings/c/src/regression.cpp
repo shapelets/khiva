@@ -23,8 +23,7 @@ void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array 
         af::array stderrest_primitive;
 
         khiva::regression::linear(var_xss, var_yss, slope_primitive, intercept_primtive, rvalue_primitive,
-                                  pvalue_primitive,
-                                  stderrest_primitive);
+                                  pvalue_primitive, stderrest_primitive);
 
         af_retain_array(slope, slope_primitive.get());
         af_retain_array(intercept, intercept_primtive.get());
