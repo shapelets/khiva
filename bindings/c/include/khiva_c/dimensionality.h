@@ -53,8 +53,7 @@ KHIVA_C_API void pip(khiva_array *a, int *number_ips, khiva_array *result, int *
  * @param max_error The maximum approximation error allowed.
  * @param result The reduced number of points.
  */
-KHIVA_C_API void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *result, int *error_code,
-                               char *error_message);
+KHIVA_C_API void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA Sliding Window) to the time series.
@@ -67,8 +66,7 @@ KHIVA_C_API void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *r
  * @param max_error The maximum approximation error allowed.
  * @param result The reduced number of points.
  */
-KHIVA_C_API void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array *result, int *error_code,
-                                    char *error_message);
+KHIVA_C_API void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve
@@ -122,8 +120,7 @@ KHIVA_C_API void sax(khiva_array *a, int *alphabet_size, khiva_array *result, in
  * @param res_points Array with the x-coordinates and y-coordinates of the selected points (x in column 0 and y in
  * column 1).
  */
-KHIVA_C_API void visvalingam(khiva_array *points, int *num_points, khiva_array *res_points, int *error_code,
-                             char *error_message);
+KHIVA_C_API void visvalingam(khiva_array *points, int *num_points, khiva_array *res_points, int *error_code, char *error_message);
 
 #ifdef __cplusplus
 }

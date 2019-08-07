@@ -11,11 +11,26 @@
 
 #include <thread>
 
-void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *result, int *type) {
-    af_retain_array(result, khiva::array::createArray(data, *ndims, dims, *type).get());
+void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *result, int *type, int *error_code,
+                  char *error_message) {
+    try {
+        af_retain_array(result, khiva::array::createArray(data, *ndims, dims, *type).get());
+    } catch (const std::exception &e) {
+        fill_error("display", e.what(), error_message, error_code, 1);
+    } catch (...) {
+        fill_unknown("display", error_message, error_code, -1);
+    }
 }
 
-void delete_array(khiva_array *array) { khiva::array::deleteArray(*array); }
+void delete_array(khiva_array *array, int *error_code, char *error_message) {
+    try {
+        khiva::array::deleteArray(*array);
+    } catch (const std::exception &e) {
+        fill_error("display", e.what(), error_message, error_code, 1);
+    } catch (...) {
+        fill_unknown("display", error_message, error_code, -1);
+    }
+}
 
 void display(khiva_array *array, int *error_code, char *error_message) {
     try {
@@ -35,6 +50,7 @@ void get_data(khiva_array *array, void *data, int *error_code, char *error_messa
         af::array var = af::array(*array);
         khiva::array::getData(var, data);
         af_retain_array(array, var.get());
+
         *error_code = 0;
     } catch (const std::exception &e) {
         fill_error("get_data", e.what(), error_message, error_code, 1);

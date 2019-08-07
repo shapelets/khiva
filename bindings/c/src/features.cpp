@@ -89,44 +89,41 @@ void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregati
         af::array primitive_rvalue;
         af::array primitive_pvalue;
         af::array primitive_stderrest;
-        af_retain_array(slope, primitive_slope.get());
-        af_retain_array(intercept, primitive_intercept.get());
-        af_retain_array(rvalue, primitive_rvalue.get());
-        af_retain_array(pvalue, primitive_pvalue.get());
-        af_retain_array(stderrest, primitive_stderrest.get());
+
         switch (*aggregation_function) {
             case 0:
                 khiva::features::aggregatedLinearTrend(var, *chunkSize, af::mean, primitive_slope, primitive_intercept,
                                                        primitive_rvalue, primitive_pvalue, primitive_stderrest);
-                *error_code = 0;
                 break;
             case 1:
                 khiva::features::aggregatedLinearTrend(var, *chunkSize, af::median, primitive_slope,
                                                        primitive_intercept, primitive_rvalue, primitive_pvalue,
                                                        primitive_stderrest);
-                *error_code = 0;
                 break;
             case 2:
                 khiva::features::aggregatedLinearTrend(var, *chunkSize, af::min, primitive_slope, primitive_intercept,
                                                        primitive_rvalue, primitive_pvalue, primitive_stderrest);
-                *error_code = 0;
                 break;
             case 3:
                 khiva::features::aggregatedLinearTrend(var, *chunkSize, af::max, primitive_slope, primitive_intercept,
                                                        primitive_rvalue, primitive_pvalue, primitive_stderrest);
-                *error_code = 0;
                 break;
             case 4:
                 khiva::features::aggregatedLinearTrend(var, *chunkSize, af::stdev, primitive_slope, primitive_intercept,
                                                        primitive_rvalue, primitive_pvalue, primitive_stderrest);
-                *error_code = 0;
                 break;
             default:
                 khiva::features::aggregatedLinearTrend(var, *chunkSize, af::mean, primitive_slope, primitive_intercept,
                                                        primitive_rvalue, primitive_pvalue, primitive_stderrest);
-                *error_code = 0;
                 break;
         }
+        af_retain_array(slope, primitive_slope.get());
+        af_retain_array(intercept, primitive_intercept.get());
+        af_retain_array(rvalue, primitive_rvalue.get());
+        af_retain_array(pvalue, primitive_pvalue.get());
+        af_retain_array(stderrest, primitive_stderrest.get());
+
+        *error_code = 0;
     } catch (const std::exception &e) {
         fill_error("aggregated_linear_trend", e.what(), error_message, error_code, 1);
     } catch (...) {

@@ -22,21 +22,22 @@ extern "C" {
  * @param result Array created.
  * @param type Data type.
  */
-KHIVA_C_API void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *result, int *type);
+KHIVA_C_API void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *result, int *type,
+                              int *error_code, char *error_message);
 
 /**
  * @brief Decreases the references count of the given array.
  *
  * @param array The Array to release.
  */
-KHIVA_C_API void delete_array(khiva_array *array);
+KHIVA_C_API void delete_array(khiva_array *array, int *error_code, char *error_message);
 
 /**
  * @brief Displays an Array.
  *
  * @param array The array to display.
  */
-KHIVA_C_API void display(khiva_array *array);
+KHIVA_C_API void display(khiva_array *array, int *error_code, char *error_message);
 
 /**
  * @brief Retrieves the data from the device to the host.
@@ -44,7 +45,7 @@ KHIVA_C_API void display(khiva_array *array);
  * @param array The Array that contains the data to be retrieved.
  * @param data Pointer to previously allocated memory in the host.
  */
-KHIVA_C_API void get_data(khiva_array *array, void *data);
+KHIVA_C_API void get_data(khiva_array *array, void *data, int *error_code, char *error_message);
 
 /**
  * @brief Gets the Array dimensions.
@@ -52,7 +53,7 @@ KHIVA_C_API void get_data(khiva_array *array, void *data);
  * @param array Array from which to get the dimensions.
  * @param dims The dimensions.
  */
-KHIVA_C_API void get_dims(khiva_array *array, long long *dims);
+KHIVA_C_API void get_dims(khiva_array *array, long long *dims, int *error_code, char *error_message);
 
 /**
  * @brief Gets the type of the array.
@@ -60,7 +61,7 @@ KHIVA_C_API void get_dims(khiva_array *array, long long *dims);
  * @param array The array to obtain the type information from.
  * @param type Value of the Dtype enumeration.
  */
-KHIVA_C_API void get_type(khiva_array *array, int *t);
+KHIVA_C_API void get_type(khiva_array *array, int *t, int *error_code, char *error_message);
 
 /**
  * @brief Joins the first and second arrays along the specified dimension.
@@ -70,7 +71,8 @@ KHIVA_C_API void get_type(khiva_array *array, int *t);
  * @param second The second input array.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void join(int *dim, khiva_array *first, khiva_array *second, khiva_array *result);
+KHIVA_C_API void join(int *dim, khiva_array *first, khiva_array *second, khiva_array *result, int *error_code,
+                      char *error_message);
 
 /**
  * @brief Adds two arrays.
@@ -79,8 +81,7 @@ KHIVA_C_API void join(int *dim, khiva_array *first, khiva_array *second, khiva_a
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                           char *error_message);
+KHIVA_C_API void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Multiplies two arrays.
@@ -89,8 +90,7 @@ KHIVA_C_API void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                           char *error_message);
+KHIVA_C_API void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Subtracts two arrays.
@@ -99,8 +99,7 @@ KHIVA_C_API void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_sub(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                           char *error_message);
+KHIVA_C_API void khiva_sub(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Divides lhs by rhs (element-wise).
@@ -109,8 +108,7 @@ KHIVA_C_API void khiva_sub(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_div(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                           char *error_message);
+KHIVA_C_API void khiva_div(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Performs the modulo operation of lhs by rhs.
@@ -119,8 +117,7 @@ KHIVA_C_API void khiva_div(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_mod(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                           char *error_message);
+KHIVA_C_API void khiva_mod(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Powers lhs with rhs.
@@ -129,8 +126,7 @@ KHIVA_C_API void khiva_mod(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation. Exponent.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_pow(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                           char *error_message);
+KHIVA_C_API void khiva_pow(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Compares (element-wise) if lhs is lower than rhs.
@@ -139,8 +135,7 @@ KHIVA_C_API void khiva_pow(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_lt(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                          char *error_message);
+KHIVA_C_API void khiva_lt(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Compares (element-wise) if lhs is greater than rhs.
@@ -149,8 +144,7 @@ KHIVA_C_API void khiva_lt(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_gt(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                          char *error_message);
+KHIVA_C_API void khiva_gt(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Compares (element-wise) if lhs is lower or equal than rhs.
@@ -159,8 +153,7 @@ KHIVA_C_API void khiva_gt(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_le(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                          char *error_message);
+KHIVA_C_API void khiva_le(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Compares (element-wise) if lhs is greater or equal than rhs.
@@ -169,8 +162,7 @@ KHIVA_C_API void khiva_le(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_ge(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                          char *error_message);
+KHIVA_C_API void khiva_ge(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Compares (element-wise) if rhs is equal to rhs.
@@ -179,8 +171,7 @@ KHIVA_C_API void khiva_ge(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_eq(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                          char *error_message);
+KHIVA_C_API void khiva_eq(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Compares (element-wise) if lhs is not equal to rhs.
@@ -189,8 +180,7 @@ KHIVA_C_API void khiva_eq(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_ne(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                          char *error_message);
+KHIVA_C_API void khiva_ne(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Performs an AND operation (element-wise) with lhs and rhs.
@@ -199,8 +189,7 @@ KHIVA_C_API void khiva_ne(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_bitand(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                              char *error_message);
+KHIVA_C_API void khiva_bitand(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Performs an OR operation (element-wise) with lhs and rhs.
@@ -209,8 +198,7 @@ KHIVA_C_API void khiva_bitand(khiva_array *lhs, khiva_array *rhs, khiva_array *r
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_bitor(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                             char *error_message);
+KHIVA_C_API void khiva_bitor(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Performs an eXclusive-OR operation (element-wise) with lhs and rhs.
@@ -219,8 +207,7 @@ KHIVA_C_API void khiva_bitor(khiva_array *lhs, khiva_array *rhs, khiva_array *re
  * @param rhs Right-hand side KHIVA array for the operation.
  * @param result KHIVA Array with the result of this operation.
  */
-KHIVA_C_API void khiva_bitxor(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
-                              char *error_message);
+KHIVA_C_API void khiva_bitxor(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Performs a left bit shift operation (element-wise) to array as many times as specified in the parameter n.

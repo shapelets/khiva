@@ -43,7 +43,8 @@ int JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *env, jobject) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Library_getBackend. Unknown reason");
     }
-    return NULL;
+    // It shouldn't reach this point
+    return -1;
 }
 
 int JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *env, jobject) {
@@ -56,7 +57,8 @@ int JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *env, jobject) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Library_getBackends. Unknown reason");
     }
-    return NULL;
+    // It shouldn't reach this point
+    return -1;
 }
 
 void JNICALL Java_io_shapelets_khiva_Library_setDevice(JNIEnv *env, jobject, jint device) {
@@ -81,7 +83,8 @@ int JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *env, jobject) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Library_getDeviceID. Unknown reason");
     }
-    return NULL;
+    // It shouldn't reach this point
+    return -1;
 }
 
 int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *env, jobject) {
@@ -94,7 +97,8 @@ int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *env, jobject)
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Library_getDeviceCount. Unknown reason");
     }
-    return NULL;
+    // It shouldn't reach this point
+    return -1;
 }
 
 void JNICALL Java_io_shapelets_khiva_Library_setDeviceMemoryInGB(JNIEnv *env, jobject, jdouble memory) {

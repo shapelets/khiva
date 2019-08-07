@@ -310,7 +310,7 @@ jint JNICALL Java_io_shapelets_khiva_Array_nativeGetType(JNIEnv *env, jobject th
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in nativeGetType. Unknown reason");
     }
-    return NULL;
+    return (jint) 0;
 }
 
 void JNICALL Java_io_shapelets_khiva_Array_nativePrint(JNIEnv *env, jobject thisObj) {
