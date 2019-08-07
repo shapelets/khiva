@@ -9,47 +9,65 @@
 #include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY, jint deg) {
-    const jint l = 3;
-    jlong tmp[l];
-    jlongArray pointers = env->NewLongArray(l);
+    try {
+        const jint l = 3;
+        jlong tmp[l];
+        jlongArray pointers = env->NewLongArray(l);
 
-    af_array xx = (af_array)refX;
-    af::array x;
-    af_array yy = (af_array)refY;
-    af::array y;
-    jlong raw_pointer = 0;
-    af_array af_p = (af_array)raw_pointer;
+        af_array xx = (af_array) refX;
+        af::array x;
+        af_array yy = (af_array) refY;
+        af::array y;
+        jlong raw_pointer = 0;
+        af_array af_p = (af_array) raw_pointer;
 
-    check_and_retain_arrays(xx, yy, x, y);
+        check_and_retain_arrays(xx, yy, x, y);
 
-    af_retain_array(&af_p, khiva::polynomial::polyfit(x, y, deg).get());
-    tmp[0] = (jlong)xx;
-    tmp[1] = (jlong)yy;
-    tmp[2] = (jlong)af_p;
+        af_retain_array(&af_p, khiva::polynomial::polyfit(x, y, deg).get());
+        tmp[0] = (jlong) xx;
+        tmp[1] = (jlong) yy;
+        tmp[2] = (jlong) af_p;
 
-    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
 
-    return pointers;
+        return pointers;
+    } catch (const std::exception &e) {
+        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        env->ThrowNew(exceptionClass, e.what());
+    } catch (...) {
+        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+    }
+    return NULL;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref) {
-    const jint l = 2;
-    jlong tmp[l];
-    jlongArray pointers = env->NewLongArray(l);
+    try {
+        const jint l = 2;
+        jlong tmp[l];
+        jlongArray pointers = env->NewLongArray(l);
 
-    af_array arr = (af_array)ref;
-    af::array var = af::array(arr);
+        af_array arr = (af_array) ref;
+        af::array var = af::array(arr);
 
-    jlong raw_pointer = 0;
-    af_array af_p = (af_array)raw_pointer;
+        jlong raw_pointer = 0;
+        af_array af_p = (af_array) raw_pointer;
 
-    af_retain_array(&arr, var.get());
-    af_retain_array(&af_p, khiva::polynomial::roots(var).get());
+        af_retain_array(&arr, var.get());
+        af_retain_array(&af_p, khiva::polynomial::roots(var).get());
 
-    tmp[0] = (jlong)arr;
-    tmp[1] = (jlong)af_p;
+        tmp[0] = (jlong) arr;
+        tmp[1] = (jlong) af_p;
 
-    env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
 
-    return pointers;
+        return pointers;
+    } catch (const std::exception &e) {
+        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        env->ThrowNew(exceptionClass, e.what());
+    } catch (...) {
+        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+    }
+    return NULL;
 }
