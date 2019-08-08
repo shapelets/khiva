@@ -12,7 +12,7 @@ include(KhivaVersion)
 include(CPackIFW)
 
 set(CPACK_GENERATOR "STGZ;TGZ" CACHE STRING "STGZ;TGZ;DEB;RPM;productbuild")
-set_property(CACHE CPACK_GENERATOR PROPERTY STRING STGZ DEB RPM productbuild)
+set_property(CACHE CPACK_GENERATOR PROPERTY STRINGS STGZ DEB RPM productbuild)
 mark_as_advanced(CPACK_GENERATOR)
 
 set(VENDOR_NAME "Shapelets")
