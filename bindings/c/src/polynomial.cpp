@@ -11,15 +11,29 @@
 #include <khiva_c/polynomial.h>
 #include <khiva_c/util.h>
 
-void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result) {
-    af::array xx;
-    af::array yy;
-    check_and_retain_arrays(x, y, xx, yy);
-    af_retain_array(result, khiva::polynomial::polyfit(xx, yy, *deg).get());
+void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result, int *error_code, char *error_message) {
+    try {
+        af::array xx;
+        af::array yy;
+        check_and_retain_arrays(x, y, xx, yy);
+        af_retain_array(result, khiva::polynomial::polyfit(xx, yy, *deg).get());
+        *error_code = 0;
+    } catch (const std::exception &e) {
+        fill_error("polyfit", e.what(), error_message, error_code, 1);
+    } catch (...) {
+        fill_unknown("polyfit", error_message, error_code, -1);
+    }
 }
 
-void roots(khiva_array *p, khiva_array *result) {
-    af::array var = af::array(*p);
-    af_retain_array(p, var.get());
-    af_retain_array(result, khiva::polynomial::roots(var).get());
+void roots(khiva_array *p, khiva_array *result, int *error_code, char *error_message) {
+    try {
+        af::array var = af::array(*p);
+        af_retain_array(p, var.get());
+        af_retain_array(result, khiva::polynomial::roots(var).get());
+        *error_code = 0;
+    } catch (const std::exception &e) {
+        fill_error("roots", e.what(), error_message, error_code, 1);
+    } catch (...) {
+        fill_unknown("roots", error_message, error_code, -1);
+    }
 }

@@ -92,8 +92,8 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWi
  * @return The updated ref and an array with the x-coordinates and y-coordinates of the selected points (x in column 0
  * and y in column 1).
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject,
-	       										jlong ref, jdouble epsilon);
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject, jlong ref,
+                                                                                        jdouble epsilon);
 
 /**
  * @brief Symbolic Aggregate approXimation (SAX). It transforms a numeric time series into a time series of symbols with

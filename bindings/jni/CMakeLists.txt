@@ -9,9 +9,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
 # Find the ArrayFire package.
 FIND_PACKAGE(ArrayFire REQUIRED)
 FIND_PACKAGE(JNI)
-IF(NOT JNI_FOUND)
-	MESSAGE(FATAL_ERROR "JDK not found. Please install JDK or disable building JNI bindings by using the flag KHIVA_BUILD_JNI_BINDINGS.")
-ENDIF()
+IF (NOT JNI_FOUND)
+    MESSAGE(FATAL_ERROR "JDK not found. Please install JDK or disable building JNI bindings by using the flag KHIVA_BUILD_JNI_BINDINGS.")
+ENDIF ()
 PROJECT(KHIVALIB_JNI)
 
 # Compile with C++11 support.
@@ -30,42 +30,42 @@ SET(KHIVALIB_JNI_INC "${KHIVALIB_JNI_BASE_DIR}/include")
 SET(KHIVALIB_JNI "khiva_jni")
 
 # Files to add to compilation
-FILE(GLOB_RECURSE KHIVALIB_JNI_CODE 
-    "${KHIVALIB_JNI_SRC}/*.cpp"
-    "${KHIVALIB_JNI_INC}/*.h" )
+FILE(GLOB_RECURSE KHIVALIB_JNI_CODE
+        "${KHIVALIB_JNI_SRC}/*.cpp"
+        "${KHIVALIB_JNI_INC}/*.h")
 
 # The output is a static library
 ADD_LIBRARY(${KHIVALIB_JNI} SHARED ${KHIVALIB_JNI_CODE})
 
 # Declare include directories
-TARGET_INCLUDE_DIRECTORIES(${KHIVALIB_JNI} PUBLIC 
-                           ${KHIVALIB_INC}
-                           ${KHIVALIB_JNI_INC} PRIVATE
-                           ${ArrayFire_INCLUDE_DIRS}
-                           ${JNI_INCLUDE_DIRS})
+TARGET_INCLUDE_DIRECTORIES(${KHIVALIB_JNI} PUBLIC
+        ${KHIVALIB_INC}
+        ${KHIVALIB_JNI_INC} PRIVATE
+        ${ArrayFire_INCLUDE_DIRS}
+        ${JNI_INCLUDE_DIRS})
 
 # Declare compilation libraries
 TARGET_LINK_LIBRARIES(${KHIVALIB_JNI} PUBLIC
-                      ${KHIVALIB} PRIVATE
-                      ${ArrayFire_Unified_LIBRARIES}
-                      ${CMAKE_DL_LIBS})
+        ${KHIVALIB} PRIVATE
+        ${ArrayFire_Unified_LIBRARIES}
+        ${CMAKE_DL_LIBS})
 
 # Add metadata
-SET_TARGET_PROPERTIES(${KHIVALIB_JNI} PROPERTIES 
-    VERSION ${VERSION_SHORT}
-    SOVERSION ${VERSION_MAJOR}
-	FOLDER bindings
-    PUBLIC_HEADER "${KHIVALIB_JNI_INC}/khiva_jni.h")
+SET_TARGET_PROPERTIES(${KHIVALIB_JNI} PROPERTIES
+        VERSION ${VERSION_SHORT}
+        SOVERSION ${VERSION_MAJOR}
+        FOLDER bindings
+        PUBLIC_HEADER "${KHIVALIB_JNI_INC}/khiva_jni.h")
 
 # JNI binding
 INSTALL(TARGETS ${KHIVALIB_JNI} DESTINATION ${KHIVA_INSTALL_LIB_DIR}
         COMPONENT jni_binding
         PUBLIC_HEADER DESTINATION ${KHIVA_INSTALL_INC_DIR})
 
-INSTALL(DIRECTORY ${KHIVALIB_JNI_INC}/ 
+INSTALL(DIRECTORY ${KHIVALIB_JNI_INC}/
         DESTINATION ${KHIVA_INSTALL_INC_DIR}
         COMPONENT headers
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN ".gitignore" EXCLUDE
-)
+        )

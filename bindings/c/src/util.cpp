@@ -19,3 +19,24 @@ void check_and_retain_arrays(khiva_array *a, khiva_array *b, af::array &var_a, a
         af_retain_array(b, var_b.get());
     }
 }
+
+void fill_error(const char *function_name, const char *src_message, char *dst_message, int *error_code, int error) {
+    // Fill error_message
+    int len = strlen(function_name) + strlen(src_message) + strlen(": ");
+    char *total_message = (char *)malloc(sizeof(char) * len);
+    strcpy(total_message, function_name);
+    strcat(total_message, ": ");
+    strcat(total_message, src_message);
+    strncpy(dst_message, total_message, KHIVA_ERROR_LENGTH - 1);
+    if (strlen(src_message) >= KHIVA_ERROR_LENGTH - 1) {
+        dst_message[KHIVA_ERROR_LENGTH - 1] = '\0';
+    }
+    free(total_message);
+
+    // Fill error_code
+    *error_code = error;
+}
+
+void fill_unknown(const char *function_name, char *dst_message, int *error_code, int error) {
+    fill_error(function_name, "Unknown error.", dst_message, error_code, error);
+}

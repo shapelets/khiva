@@ -21,8 +21,11 @@ extern "C" {
  * @param y y-coordinates of the sample points.
  * @param deg Degree of the fitting polynomial.
  * @param result Polynomial coefficients, highest power first.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result);
+KHIVA_C_API void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result, int *error_code,
+                         char *error_message);
 
 /**
  * @brief Calculates the roots of a polynomial with coefficients given in \f$p\f$. The values in the rank-1 array
@@ -33,8 +36,10 @@ KHIVA_C_API void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *
  *
  * @param pp Array of polynomial coefficients.
  * @param result Array containing the roots of the polynomial.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void roots(khiva_array *p, khiva_array *result);
+KHIVA_C_API void roots(khiva_array *p, khiva_array *result, int *error_code, char *error_message);
 
 #ifdef __cplusplus
 }

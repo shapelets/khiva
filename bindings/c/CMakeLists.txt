@@ -26,31 +26,31 @@ SET(KHIVALIB_C_INC "${KHIVALIB_C_BASE_DIR}/include")
 SET(KHIVALIB_C "khiva_c")
 
 # Files to add to compilation
-FILE(GLOB_RECURSE KHIVALIB_C_CODE 
-    "${KHIVALIB_C_SRC}/*.cpp"
-    "${KHIVALIB_C_INC}/*.h" )
+FILE(GLOB_RECURSE KHIVALIB_C_CODE
+        "${KHIVALIB_C_SRC}/*.cpp"
+        "${KHIVALIB_C_INC}/*.h")
 
 # The output is a static library
 ADD_LIBRARY(${KHIVALIB_C} SHARED ${KHIVALIB_C_CODE})
 
 # Declare include directories
-TARGET_INCLUDE_DIRECTORIES(${KHIVALIB_C} PUBLIC 
-                           ${KHIVALIB_INC}
-                           ${KHIVALIB_C_INC})
+TARGET_INCLUDE_DIRECTORIES(${KHIVALIB_C} PUBLIC
+        ${KHIVALIB_INC}
+        ${KHIVALIB_C_INC})
 
 # Declare compilation libraries
 TARGET_LINK_LIBRARIES(${KHIVALIB_C} PUBLIC
-                      ${KHIVALIB} PRIVATE
-                      ${CMAKE_DL_LIBS})
+        ${KHIVALIB} PRIVATE
+        ${CMAKE_DL_LIBS})
 # Add compile definitions
 TARGET_COMPILE_DEFINITIONS(${KHIVALIB_C} PRIVATE KHIVA_C_EXPORTS)
 
 # Add metadata
 SET_TARGET_PROPERTIES(${KHIVALIB_C} PROPERTIES
-	FOLDER bindings
-    VERSION ${VERSION_SHORT}
-    SOVERSION ${VERSION_MAJOR}
-    PUBLIC_HEADER "${KHIVALIB_C_INC}/khiva_c.h")
+        FOLDER bindings
+        VERSION ${VERSION_SHORT}
+        SOVERSION ${VERSION_MAJOR}
+        PUBLIC_HEADER "${KHIVALIB_C_INC}/khiva_c.h")
 
 # Install bindings
 # C binding
@@ -58,10 +58,10 @@ INSTALL(TARGETS ${KHIVALIB_C} DESTINATION ${KHIVA_INSTALL_LIB_DIR}
         COMPONENT c_binding
         PUBLIC_HEADER DESTINATION ${KHIVA_INSTALL_INC_DIR})
 
-INSTALL(DIRECTORY ${KHIVALIB_C_INC}/ 
+INSTALL(DIRECTORY ${KHIVALIB_C_INC}/
         DESTINATION ${KHIVA_INSTALL_INC_DIR}
         COMPONENT headers
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN ".gitignore" EXCLUDE
-)
+        )
