@@ -36,7 +36,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobje
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Polynomial_polyfit. Unknown reason");
     }
     return NULL;
 }
@@ -67,7 +67,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Polynomial_roots. Unknown reason");
     }
     return NULL;
 }

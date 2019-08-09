@@ -34,7 +34,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEnv *env, jo
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Statistics_covariance. Unknown reason");
     }
     return NULL;
 }
@@ -64,7 +64,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_moment(JNIEnv *env, jobjec
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Statistics_moment. Unknown reason");
     }
     return NULL;
 }
@@ -94,7 +94,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_sampleStdev(JNIEnv *env, j
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Statistics_sampleStdev. Unknown reason");
     }
     return NULL;
 }
@@ -124,7 +124,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_kurtosis(JNIEnv *env, jobj
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Statistics_kurtosis. Unknown reason");
     }
     return NULL;
 }
@@ -154,7 +154,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_skewness(JNIEnv *env, jobj
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Statistics_skewness. Unknown reason");
     }
     return NULL;
 }
@@ -188,7 +188,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobj
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Statistics_quantile. Unknown reason");
     }
     return NULL;
 }
@@ -219,7 +219,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantilesCut(JNIEnv *env, 
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Statistics_quantilesCut. Unknown reason");
     }
     return NULL;
 }
@@ -250,7 +250,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_ljungBox(JNIEnv *env, jobj
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Statistics_ljungBox. Unknown reason");
     }
     return NULL;
 }

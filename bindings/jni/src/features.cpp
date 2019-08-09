@@ -34,7 +34,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_absEnergy(JNIEnv *env, jobje
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_absEnergy. Unknown reason");
     }
     return NULL;
 }
@@ -64,7 +64,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_absoluteSumOfChanges(JNIEnv 
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_absoluteSumOfChanges. Unknown reason");
     }
     return NULL;
 }
@@ -121,7 +121,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorrelation(JN
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_aggregatedAutocorrelation. Unknown reason");
     }
     return NULL;
 }
@@ -210,7 +210,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTrend(JNIEnv
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_aggregatedLinearTrend. Unknown reason");
     }
     return NULL;
 }
@@ -241,7 +241,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_approximateEntropy(JNIEnv *e
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_approximateEntropy. Unknown reason");
     }
     return NULL;
 }
@@ -274,7 +274,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JNIEnv *env,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_crossCovariance. Unknown reason");
     }
     return NULL;
 }
@@ -305,7 +305,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCovariance(JNIEnv *env, 
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_autoCovariance. Unknown reason");
     }
     return NULL;
 }
@@ -340,7 +340,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCorrelation(JNIEnv *env
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_crossCorrelation. Unknown reason");
     }
     return NULL;
 }
@@ -372,7 +372,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCorrelation(JNIEnv *env,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_autoCorrelation. Unknown reason");
     }
     return NULL;
 }
@@ -403,7 +403,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_binnedEntropy(JNIEnv *env, j
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_binnedEntropy. Unknown reason");
     }
     return NULL;
 }
@@ -434,7 +434,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_c3(JNIEnv *env, jobject, jlo
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_c3. Unknown reason");
     }
     return NULL;
 }
@@ -465,7 +465,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_cidCe(JNIEnv *env, jobject, 
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_cidCe. Unknown reason");
     }
     return NULL;
 }
@@ -496,7 +496,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_countAboveMean(JNIEnv *env, 
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_countAboveMean. Unknown reason");
     }
     return NULL;
 }
@@ -527,7 +527,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_countBelowMean(JNIEnv *env, 
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_countBelowMean. Unknown reason");
     }
     return NULL;
 }
@@ -564,7 +564,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_cwtCoefficients(JNIEnv *env,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_cwtCoefficients. Unknown reason");
     }
     return NULL;
 }
@@ -598,7 +598,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_energyRatioByChunks(JNIEnv *
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_energyRatioByChunks. Unknown reason");
     }
     return NULL;
 }
@@ -629,7 +629,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_fftAggregated(JNIEnv *env, j
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_fftAggregated. Unknown reason");
     }
     return NULL;
 }
@@ -683,7 +683,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_fftCoefficient(JNIEnv *env, 
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_fftCoefficient. Unknown reason");
     }
     return NULL;
 }
@@ -714,7 +714,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMaximum(JNIEn
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_firstLocationOfMaximum. Unknown reason");
     }
     return NULL;
 }
@@ -745,7 +745,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMinimum(JNIEn
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_firstLocationOfMinimum. Unknown reason");
     }
     return NULL;
 }
@@ -777,7 +777,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_friedrichCoefficients(JNIEnv
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_friedrichCoefficients. Unknown reason");
     }
     return NULL;
 }
@@ -808,7 +808,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicates(JNIEnv *env, j
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_hasDuplicates. Unknown reason");
     }
     return NULL;
 }
@@ -839,7 +839,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMax(JNIEnv *env,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_hasDuplicateMax. Unknown reason");
     }
     return NULL;
 }
@@ -870,7 +870,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMin(JNIEnv *env,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_hasDuplicateMin. Unknown reason");
     }
     return NULL;
 }
@@ -901,7 +901,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_indexMassQuantile(JNIEnv *en
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_indexMassQuantile. Unknown reason");
     }
     return NULL;
 }
@@ -932,7 +932,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_kurtosis(JNIEnv *env, jobjec
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_kurtosis. Unknown reason");
     }
     return NULL;
 }
@@ -963,7 +963,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_largeStandardDeviation(JNIEn
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_largeStandardDeviation. Unknown reason");
     }
     return NULL;
 }
@@ -994,7 +994,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMaximum(JNIEnv
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_lastLocationOfMaximum. Unknown reason");
     }
     return NULL;
 }
@@ -1025,7 +1025,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMinimum(JNIEnv
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_lastLocationOfMinimum. Unknown reason");
     }
     return NULL;
 }
@@ -1056,7 +1056,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_length(JNIEnv *env, jobject,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_length. Unknown reason");
     }
     return NULL;
 }
@@ -1116,7 +1116,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_linearTrend(JNIEnv *env, job
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_linearTrend. Unknown reason");
     }
     return NULL;
 }
@@ -1147,7 +1147,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_localMaximals(JNIEnv *env, j
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_localMaximals. Unknown reason");
     }
     return NULL;
 }
@@ -1178,7 +1178,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeAboveMean(JNIEn
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_longestStrikeAboveMean. Unknown reason");
     }
     return NULL;
 }
@@ -1209,7 +1209,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeBelowMean(JNIEn
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_longestStrikeBelowMean. Unknown reason");
     }
     return NULL;
 }
@@ -1241,7 +1241,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_maxLangevinFixedPoint(JNIEnv
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_maxLangevinFixedPoint. Unknown reason");
     }
     return NULL;
 }
@@ -1272,7 +1272,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_maximum(JNIEnv *env, jobject
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_maximum. Unknown reason");
     }
     return NULL;
 }
@@ -1303,7 +1303,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_mean(JNIEnv *env, jobject, j
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_mean. Unknown reason");
     }
     return NULL;
 }
@@ -1334,7 +1334,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_meanAbsoluteChange(JNIEnv *e
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_meanAbsoluteChange. Unknown reason");
     }
     return NULL;
 }
@@ -1365,7 +1365,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_meanChange(JNIEnv *env, jobj
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_meanChange. Unknown reason");
     }
     return NULL;
 }
@@ -1396,7 +1396,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_meanSecondDerivativeCentral(
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_meanSecondDerivativeCentral. Unknown reason");
     }
     return NULL;
 }
@@ -1427,7 +1427,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_median(JNIEnv *env, jobject,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_median. Unknown reason");
     }
     return NULL;
 }
@@ -1458,7 +1458,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_minimum(JNIEnv *env, jobject
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_minimum. Unknown reason");
     }
     return NULL;
 }
@@ -1489,7 +1489,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCrossingM(JNIEnv *env,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_numberCrossingM. Unknown reason");
     }
     return NULL;
 }
@@ -1520,7 +1520,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCwtPeaks(JNIEnv *env, 
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_numberCwtPeaks. Unknown reason");
     }
     return NULL;
 }
@@ -1551,7 +1551,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_numberPeaks(JNIEnv *env, job
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_numberPeaks. Unknown reason");
     }
     return NULL;
 }
@@ -1587,7 +1587,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_partialAutocorrelation(JNIEn
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_partialAutocorrelation. Unknown reason");
     }
     return NULL;
 }
@@ -1621,7 +1621,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringDatap
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_percentageOfReoccurringDatapointsToAllDatapoints. Unknown reason");
     }
     return NULL;
 }
@@ -1654,7 +1654,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringValue
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_percentageOfReoccurringValuesToAllValues. Unknown reason");
     }
     return NULL;
 }
@@ -1690,7 +1690,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *env, jobjec
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_quantile. Unknown reason");
     }
     return NULL;
 }
@@ -1722,7 +1722,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_rangeCount(JNIEnv *env, jobj
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_rangeCount. Unknown reason");
     }
     return NULL;
 }
@@ -1753,7 +1753,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioBeyondRSigma(JNIEnv *en
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_ratioBeyondRSigma. Unknown reason");
     }
     return NULL;
 }
@@ -1785,7 +1785,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioValueNumberToTimeSeries
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_ratioValueNumberToTimeSeriesLength. Unknown reason");
     }
     return NULL;
 }
@@ -1816,7 +1816,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sampleEntropy(JNIEnv *env, j
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_sampleEntropy. Unknown reason");
     }
     return NULL;
 }
@@ -1847,7 +1847,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_skewness(JNIEnv *env, jobjec
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_skewness. Unknown reason");
     }
     return NULL;
 }
@@ -1878,7 +1878,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_spktWelchDensity(JNIEnv *env
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_spktWelchDensity. Unknown reason");
     }
     return NULL;
 }
@@ -1909,7 +1909,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_standardDeviation(JNIEnv *en
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_standardDeviation. Unknown reason");
     }
     return NULL;
 }
@@ -1941,7 +1941,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringDatapoints(J
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_sumOfReoccurringDatapoints. Unknown reason");
     }
     return NULL;
 }
@@ -1973,7 +1973,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringValues(JNIEn
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_sumOfReoccurringValues. Unknown reason");
     }
     return NULL;
 }
@@ -2004,7 +2004,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sumValues(JNIEnv *env, jobje
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_sumValues. Unknown reason");
     }
     return NULL;
 }
@@ -2035,7 +2035,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_symmetryLooking(JNIEnv *env,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_symmetryLooking. Unknown reason");
     }
     return NULL;
 }
@@ -2067,7 +2067,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_timeReversalAsymmetryStatist
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_timeReversalAsymmetryStatistic. Unknown reason");
     }
     return NULL;
 }
@@ -2098,7 +2098,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_valueCount(JNIEnv *env, jobj
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_valueCount. Unknown reason");
     }
     return NULL;
 }
@@ -2129,7 +2129,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_variance(JNIEnv *env, jobjec
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_variance. Unknown reason");
     }
     return NULL;
 }
@@ -2161,7 +2161,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_varianceLargerThanStandardDe
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Features_varianceLargerThanStandardDeviation. Unknown reason");
     }
     return NULL;
 }

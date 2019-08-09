@@ -57,7 +57,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, j
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Regularization_groupBy. Unknown reason");
     }
     return NULL;
 }

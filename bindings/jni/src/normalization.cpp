@@ -33,7 +33,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNorm(JNIE
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Normalization_decimalScalingNorm. Unknown reason");
     }
     return NULL;
 }
@@ -51,7 +51,7 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNormInPlace(JN
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Normalization_decimalScalingNormInPlace. Unknown reason");
     }
     return NULL;
 }
@@ -83,7 +83,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Normalization_maxMinNorm. Unknown reason");
     }
     return NULL;
 }
@@ -102,7 +102,7 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *en
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in maxMinNormInPlace. Unknown reason");
     }
     return NULL;
 }
@@ -133,7 +133,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_meanNorm(JNIEnv *env, j
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Normalization_meanNorm. Unknown reason");
     }
     return NULL;
 }
@@ -151,7 +151,7 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JNIEnv *env,
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Normalization_meanNormInPlace. Unknown reason");
     }
     return NULL;
 }
@@ -182,7 +182,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobj
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in MatrixNormalization_znorm. Unknown reason");
     }
     return NULL;
 }
@@ -200,7 +200,7 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_znormInPlace(JNIEnv *env, jo
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
+        env->ThrowNew(exceptionClass, "Error in Normalization_znormInPlace. Unknown reason");
     }
     return NULL;
 }
