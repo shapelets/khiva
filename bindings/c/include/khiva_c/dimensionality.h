@@ -27,6 +27,8 @@ extern "C" {
  * @param a Set of points.
  * @param bins Sets the total number of divisions.
  * @param result An array of points with the reduced dimensionality.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void paa(khiva_array *a, int *bins, khiva_array *result, int *error_code, char *error_message);
 
@@ -39,6 +41,8 @@ KHIVA_C_API void paa(khiva_array *a, int *bins, khiva_array *result, int *error_
  * @param a Expects an input array whose dimension zero is the length of the time series.
  * @param number_ips The number of points to be returned.
  * @param result Array with the most Perceptually Important number_ips.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void pip(khiva_array *a, int *number_ips, khiva_array *result, int *error_code, char *error_message);
 
@@ -52,6 +56,8 @@ KHIVA_C_API void pip(khiva_array *a, int *number_ips, khiva_array *result, int *
  * the first column and the second component of the points in the second column.
  * @param max_error The maximum approximation error allowed.
  * @param result The reduced number of points.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *result, int *error_code, char *error_message);
 
@@ -65,6 +71,8 @@ KHIVA_C_API void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *r
  * the first column and the second component of the points in the second column.
  * @param max_error The maximum approximation error allowed.
  * @param result The reduced number of points.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array *result, int *error_code, char *error_message);
 
@@ -85,6 +93,8 @@ KHIVA_C_API void pla_sliding_window(khiva_array *ts, float *max_error, khiva_arr
  * @param epsilon It acts as the threshold value to decide which points should be considered meaningful or not.
  * @param res_points Array with the x-coordinates and y-coordinates of the selected points (x in column 0 and y in
  * column 1).
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_array *res_points, int *error_code,
                                        char *error_message);
@@ -104,6 +114,8 @@ KHIVA_C_API void ramer_douglas_peucker(khiva_array *points, double *epsilon, khi
  * @param a Array with the input time series.
  * @param alphabet_size Number of element within the alphabet.
  * @param result An array of symbols.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void sax(khiva_array *a, int *alphabet_size, khiva_array *result, int *error_code, char *error_message);
 
@@ -119,6 +131,8 @@ KHIVA_C_API void sax(khiva_array *a, int *alphabet_size, khiva_array *result, in
  * @param num_points Sets the number of points returned after the execution of the method.
  * @param res_points Array with the x-coordinates and y-coordinates of the selected points (x in column 0 and y in
  * column 1).
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void visvalingam(khiva_array *points, int *num_points, khiva_array *res_points, int *error_code, char *error_message);
 

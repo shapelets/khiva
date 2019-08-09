@@ -21,6 +21,10 @@ extern "C" {
  * @param result An upper triangular matrix where each position corresponds to the distance between
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void dtw(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
@@ -33,6 +37,10 @@ KHIVA_C_API void dtw(khiva_array *tss, khiva_array *result, int *error_code, cha
  * @param result An upper triangular matrix where each position corresponds to the distance between two
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void euclidean(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
@@ -44,6 +52,10 @@ KHIVA_C_API void euclidean(khiva_array *tss, khiva_array *result, int *error_cod
  * @param result An upper triangular matrix where each position corresponds to the distance between two
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void hamming(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
@@ -56,6 +68,10 @@ KHIVA_C_API void hamming(khiva_array *tss, khiva_array *result, int *error_code,
  * @param result An upper triangular matrix where each position corresponds to the distance between two
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void manhattan(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
@@ -69,6 +85,10 @@ KHIVA_C_API void manhattan(khiva_array *tss, khiva_array *result, int *error_cod
  * @return array An upper triangular matrix where each position corresponds to the distance between two time series.
  * Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between time series 0
  * and time series 1.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void sbd(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
@@ -81,6 +101,10 @@ KHIVA_C_API void sbd(khiva_array *tss, khiva_array *result, int *error_code, cha
  * @param result An upper triangular matrix where each position corresponds to the distance between two time series.
  * Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between time series 0
  * and time series 1.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void squared_euclidean(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 

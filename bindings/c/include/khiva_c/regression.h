@@ -27,6 +27,8 @@ extern "C" {
  * @param pvalue Two-sided p-value for a hypothesis test whose null hypothesis is that the slope is zero, using Wald
  * Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array *intercept,
                         khiva_array *rvalue, khiva_array *pvalue, khiva_array *stderrest, int *error_code,

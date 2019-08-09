@@ -20,6 +20,8 @@ extern "C" {
  * one indicates the number of time series.
  * @param unbiased Determines whether it divides by n - 1 (if false) or n (if true).
  * @param result The covariance matrix of the time series.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_array *result, int *error_code,
                                        char *error_message);
@@ -30,6 +32,8 @@ KHIVA_C_API void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_a
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
  * @param result The kurtosis of tss.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void kurtosis_statistics(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
@@ -63,6 +67,8 @@ KHIVA_C_API void kurtosis_statistics(khiva_array *tss, khiva_array *result, int 
  * one indicates the number of time series.
  * @param lags Number of lags being tested.
  * @param The Ljung-Box statistic test.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void ljung_box(khiva_array *tss, long *lags, khiva_array *result, int *error_code, char *error_message);
 
@@ -73,6 +79,8 @@ KHIVA_C_API void ljung_box(khiva_array *tss, long *lags, khiva_array *result, in
  * one indicates the number of time series.
  * @param k The specific moment to be calculated.
  * @param result The kth moment of the given time series.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void moment_statistics(khiva_array *tss, int *k, khiva_array *result, int *error_code, char *error_message);
 
@@ -84,6 +92,8 @@ KHIVA_C_API void moment_statistics(khiva_array *tss, int *k, khiva_array *result
  * @param q Percentile(s) at which to extract score(s). One or many.
  * @param precision Number of decimals expected.
  * @param result Values at the given quantile.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void quantile_statistics(khiva_array *tss, khiva_array *q, float *precision, khiva_array *result,
                                      int *error_code, char *error_message);
@@ -97,6 +107,8 @@ KHIVA_C_API void quantile_statistics(khiva_array *tss, khiva_array *q, float *pr
  * @param precision Number of decimals expected.
  * @param result Matrix with the categories, one category per row, the start of the category in the first column and
  * the end in the second category.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void quantiles_cut_statistics(khiva_array *tss, float *quantiles, float *precision, khiva_array *result,
                                           int *error_code, char *error_message);
@@ -107,6 +119,8 @@ KHIVA_C_API void quantiles_cut_statistics(khiva_array *tss, float *quantiles, fl
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
  * @param result The sample standard deviation.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void sample_stdev_statistics(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
@@ -117,6 +131,8 @@ KHIVA_C_API void sample_stdev_statistics(khiva_array *tss, khiva_array *result, 
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
  * @param result Array containing the skewness of each time series in tss.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void skewness_statistics(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 

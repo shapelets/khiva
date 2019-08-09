@@ -27,9 +27,9 @@ void fill_error(const char *function_name, const char *src_message, char *dst_me
     strcpy(total_message, function_name);
     strcat(total_message, ": ");
     strcat(total_message, src_message);
-    strncpy(dst_message, total_message, ERROR_LENGTH - 1);
-    if (strlen(src_message) >= ERROR_LENGTH - 1) {
-        dst_message[ERROR_LENGTH - 1] = '\0';
+    strncpy(dst_message, total_message, KHIVA_ERROR_LENGTH - 1);
+    if (strlen(src_message) >= KHIVA_ERROR_LENGTH - 1) {
+        dst_message[KHIVA_ERROR_LENGTH - 1] = '\0';
     }
     free(total_message);
 

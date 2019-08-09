@@ -22,6 +22,8 @@ extern "C" {
  * @param result An array with the same dimensions as tss, whose values (time series in dimension 0) have been
  * normalized by dividing each number by 10^j, where j is the number of integer digits of the max number in the time
  * series.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void decimal_scaling_norm(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
@@ -30,6 +32,8 @@ KHIVA_C_API void decimal_scaling_norm(khiva_array *tss, khiva_array *result, int
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void decimal_scaling_norm_in_place(khiva_array *tss, int *error_code, char *error_message);
 
@@ -45,6 +49,8 @@ KHIVA_C_API void decimal_scaling_norm_in_place(khiva_array *tss, int *error_code
  * between min and max values in the tss.
  * @param result Array with the same dimensions as tss, whose values (time series in dimension 0) have been
  * normalized by maximum and minimum values, and scaled as per high and low parameters.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void max_min_norm(khiva_array *tss, double *high, double *low, double *epsilon, khiva_array *result,
                               int *error_code, char *error_message);
@@ -58,6 +64,8 @@ KHIVA_C_API void max_min_norm(khiva_array *tss, double *high, double *low, doubl
  * @param low  Minimum final value (Defaults to 0.0).
  * @param epsilon Safeguard for constant (or near constant) time series as the operation implies a unit scale operation
  * between min and max values in the tss.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void max_min_norm_in_place(khiva_array *tss, double *high, double *low, double *epsilon, int *error_code,
                                        char *error_message);
@@ -75,6 +83,8 @@ KHIVA_C_API void max_min_norm_in_place(khiva_array *tss, double *high, double *l
  * @param result An array with the same dimensions as tss, whose values (time series in dimension 0) have been
  * normalized by substracting the mean from each number and dividing each number by \f$ max(x) - min(x)\f$, in the
  * time series.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void mean_norm(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
@@ -87,6 +97,8 @@ KHIVA_C_API void mean_norm(khiva_array *tss, khiva_array *result, int *error_cod
  *
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and dimension
  * one indicates the number of time series.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void mean_norm_in_place(khiva_array *tss, int *error_code, char *error_message);
 
@@ -100,6 +112,8 @@ KHIVA_C_API void mean_norm_in_place(khiva_array *tss, int *error_code, char *err
  * those time series that may be constant or near constant.
  * @param result Array with the same dimensions as tss where the time series have been
  * adjusted for zero mean and one as standard deviation.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void znorm(khiva_array *tss, double *epsilon, khiva_array *result, int *error_code, char *error_message);
 
@@ -112,6 +126,8 @@ KHIVA_C_API void znorm(khiva_array *tss, double *epsilon, khiva_array *result, i
  * time series.
  * @param epsilon Minimum standard deviation to consider. It acts as a gatekeeper for
  * those time series that may be constant or near constant.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
 KHIVA_C_API void znorm_in_place(khiva_array *tss, double *epsilon, int *error_code, char *error_message);
 
