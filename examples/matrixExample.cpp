@@ -79,30 +79,12 @@ void stompConsiderTrivialMultipleSeries() {
     index.host(&resultingIndex);
 }
 
-void newCheck(){
-    try {
-        float dataA[] = {10, 10, 11, 11, 10, 11, 10, 10, 10, 10, 11, 11, 10, 11, 10, 10, 11, 10, 10, 11, 10, 11, 11, 10};
-        af::array ta = af::array(8, 1, dataA);
-
-        float dataB[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 10, 10, 11, 10, 11, 11, 10};
-        af::array tb = af::array(10, 1, dataB);
-
-        ta += tb;
-
-    } catch (const std::exception &e) {
-        std::cout << "Exception" << std::endl;
-    } catch (...) {
-        std::cout << "Unknown Exception" << std::endl;
-    }
-}
-
 int main() {
-//    stompIgnoreTrivialOneSeries();
-//    stompIgnoreTrivialMultipleSeries();
-//
-//    stompConsiderTrivialOneSeries();
-//    stompConsiderTrivialMultipleSeries();
-    newCheck();
+    stompIgnoreTrivialOneSeries();
+    stompIgnoreTrivialMultipleSeries();
+
+    stompConsiderTrivialOneSeries();
+    stompConsiderTrivialMultipleSeries();
 
     return 0;
 }
