@@ -8,7 +8,7 @@
 #include <khiva/array.h>
 #include <khiva_c/array.h>
 #include <khiva_c/util.h>
-
+#include <cstring>
 #include <thread>
 
 void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *result, int *type, int *error_code,
@@ -63,7 +63,7 @@ void get_dims(khiva_array *array, long long *dimens, int *error_code, char *erro
     try {
         af::array var = af::array(*array);
         af::dim4 d = khiva::array::getDims(var);
-        memcpy(dimens, d.dims, sizeof(d.dims));
+        std::memcpy(dimens, d.dims, sizeof(d.dims));
         af_retain_array(array, var.get());
         *error_code = 0;
     } catch (const std::exception &e) {
