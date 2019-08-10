@@ -275,7 +275,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_nativeGetDims(JNIEnv *env, jobj
         jlong result[4];
         jlongArray p = env->NewLongArray(4);
 
-        memcpy(result, d.dims, sizeof(d.dims));
+        std::memcpy(result, d.dims, sizeof(d.dims));
 
         af_retain_array(&a, var.get());
         env->SetLongField(thisObj, fidf, jlong(a));
