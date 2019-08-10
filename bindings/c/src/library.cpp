@@ -8,10 +8,11 @@
 #include <khiva/version.h>
 #include <khiva_c/library.h>
 #include <khiva_c/util.h>
+#include <cstring>
 
 void backend_info(char **info, int *error_code, char *error_message) {
     try{
-        strcpy(*info, khiva::library::backendInfo().c_str());
+        std::strcpy(*info, khiva::library::backendInfo().c_str());
     } catch (const std::exception &e) {
         fill_error("backend_info", e.what(), error_message, error_code, 1);
     } catch (...) {
