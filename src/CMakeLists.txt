@@ -39,8 +39,6 @@ FIND_PACKAGE(ArrayFire REQUIRED)
 FIND_PACKAGE(Boost REQUIRED)
 FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
 
-MESSAGE("***ANTONIO***: ${Eigen_INCLUDE_DIRS}")
-
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Files to add to compilation
@@ -59,7 +57,7 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB}
 						PRIVATE
 						   ${SCAMP_INCLUDE_DIRS}						
 						   ${Boost_INCLUDE_DIRS}
-						   ${Eigen_INCLUDE_DIRS}
+						   ${EIGEN3_INCLUDE_DIRS}
 						PUBLIC
                            $<BUILD_INTERFACE:${KHIVALIB_INC}>
                            $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
