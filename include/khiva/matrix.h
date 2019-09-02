@@ -129,7 +129,8 @@ KHIVAAPI void stomp(af::array ta, af::array tb, long m, af::array &profile, af::
 KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
 
 /**
- * @brief Calculate the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
+ * @brief Calculate the matrix profile between 't' and itself using a subsequence length of 'm'.
+ * This method filters the trivial matches.
  *
  * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
  * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
@@ -145,8 +146,7 @@ KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
 KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array &index);
 
 /**
- * @brief Calculate the matrix profile between 't' and itself using a subsequence length of 'm'.
- * This method filters the trivial matches.
+ * @brief Calculate the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
  *
  * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
  * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
@@ -159,6 +159,24 @@ KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array
  * @param index The matrix profile index, which points to where the aforementioned minimum is located.
  */
 KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
+
+/**
+ * @brief Calculate the matrix profile to the left and to the right between 't' and using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Makoto Imamura, Daniel Nikovski, and Eamonn Keogh. Matrix Profile VII: Time Series Chains: A New
+ * Primitive for Time Series Data Mining. IEEE ICDM 2017
+ *
+ * @param tss Time series to compute the matrix profile.
+ * @param m Subsequence length.
+ * @param profileLeft The matrix profile distance to the left.
+ * @param indexLeft The subsequence index of the matrix profile to the left.
+ * @param profileRight The matrix profile distance to the right.
+ * @param indexRight The subsequence index of the matrix profile to the right.
+ *
+ *  Notice that when there is no match the subsequence index is the length of tss.
+ */
+KHIVAAPI void matrixProfileLR(af::array tss, long m, af::array &profileLeft, af::array &indexLeft,
+                              af::array &profileRight, af::array &indexRight);
 
 /**
  * @brief Calculate all the chains within 'tss' using a subsequence length of 'm'.
