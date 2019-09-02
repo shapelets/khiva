@@ -163,12 +163,7 @@ void test() {
 }
 
 void testLR() {
-//    auto wholeDataVect = loadFile("/home/jesus.recuerda/Datasets/few_points.csv");
-    std::vector<double> wholeDataVect = {1,2,5,2,55,22,111,4,54,87,44,1,1,11215,57,5,51,251,54,15,4,7,78,78,9898,654,54,21,54,4,6,54,32,65,89,65,32,65,65,68,
-                                         1,2,5,2,55,22,111,4,54,87,44,1,1,11215,57,5,51,251,54,15,4,7,78,78,9898,654,54,21,54,4,6,54,32,65,89,65,32,65,65,68,
-                                         1,2,5,2,55,22,111,4,54,87,44,1,1,11215,57,5,51,251,54,15,4,7,78,78,9898,654,54,21,54,4,6,54,32,65,89,65,32,65,65,68,
-                                         1,2,5,2,55,22,111,4,54,87,44,1,1,11215,57,5,51,251,54,15,4,7,78,78,9898,654,54,21,54,4,6,54,32,65,89,65,32,65,65,68,
-                                         1,2,5,2,55,22,111,4,54,87,44,1,1,11215,57,5,51,251,54,15,4,7,78,78,9898,654,54,21,54,4,6,54,32,65,89,65,32,65,65,68};
+    auto wholeDataVect = loadFile("/home/jesus.recuerda/Datasets/few_points.csv");
     auto wholeData = khiva::vectorutil::createArray(wholeDataVect);
     std::cout << "SIZE = " << wholeData.dims()[0] << std::endl;
 
@@ -198,7 +193,6 @@ void testLR() {
 
 int main() {
     // test();
-
     testLR();
 
     // stompIgnoreTrivialOneSeries();
