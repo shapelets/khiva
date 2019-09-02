@@ -72,7 +72,7 @@ void InitProfileMemory(SCAMP::SCAMPArgs &args) {
             }
             break;
         }
-        //case SCAMP::PROFILE_TYPE_SUM_THRESH: {
+        // case SCAMP::PROFILE_TYPE_SUM_THRESH: {
         //    args.profile_a.data.emplace_back();
         //    args.profile_a.data[0].double_value.resize(args.timeseries_a.size() - args.window + 1, 0);
         //    if (args.has_b) {
@@ -237,8 +237,8 @@ void meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &st
     af::array mean_t_p2 = af::pow(mean, 2);
     // Variance
     af::array sigma_t2 = mean_t2 - mean_t_p2;
-    // Standard deviation 
-    double eps = (sigma_t2.type() == 0) ? EPSILON * 1e4 : EPSILON; 
+    // Standard deviation
+    double eps = (sigma_t2.type() == 0) ? EPSILON * 1e4 : EPSILON;
     af::array lessThanEpsilon = eps >= sigma_t2;
     sigma_t2 = lessThanEpsilon * lessThanEpsilon.as(sigma_t2.type()) + !lessThanEpsilon * sigma_t2;
     stdev = af::sqrt(sigma_t2);
@@ -442,6 +442,7 @@ void scamp(af::array tss, long m, af::array &profile, af::array &index) {
 
 void scamp(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
     if (ta.dims(2) > 1 || ta.dims(3) > 1 || tb.dims(2) > 1 || tb.dims(3) > 1) {
+        throw std::invalid_argument("Dimension 2 o dimension 3 is bigger than 1");
     }
 
     profile = af::array(tb.dims(0) - m + 1, ta.dims(1), tb.dims(1), f64);
@@ -469,6 +470,36 @@ LeftRightProfilePair scampLR(std::vector<double> &&ta, long m) {
     args.keep_rows_separate = true;
     runScamp(args);
     return std::make_pair(getProfileOutput(args.profile_a, args.window), getProfileOutput(args.profile_b, args.window));
+}
+
+void scampLR(af::array tss, long m, af::array &profileLeft, af::array &indexLeft, af::array &profileRight,
+             af::array &indexRight) {
+    if (tss.dims(2) > 1 || tss.dims(3) > 1) {
+        throw std::invalid_argument("Dimension 2 o dimension 3 is bigger than 1");
+    }
+
+    profileLeft = af::array(tss.dims(0) - m + 1, tss.dims(1), f64);
+    profileRight = af::array(tss.dims(0) - m + 1, tss.dims(1), f64);
+    indexLeft = af::array(tss.dims(0) - m + 1, tss.dims(1), u32);
+    indexRight = af::array(tss.dims(0) - m + 1, tss.dims(1), u32);
+
+    auto typeBefore = tss.type();
+    tss = tss.as(f64);
+    for (dim_t tssIdx = 0; tssIdx < tss.dims(1); ++tssIdx) {
+        auto vect = khiva::vectorutil::get<double>(tss(af::span, tssIdx));
+        auto res = ::scampLR(std::move(vect), m);
+        profileLeft(af::span, tssIdx) = khiva::vectorutil::createArray<double>(res.first.first);
+        indexLeft(af::span, tssIdx) = khiva::vectorutil::createArray<unsigned int>(res.first.second);
+        profileRight(af::span, tssIdx) = khiva::vectorutil::createArray<double>(res.second.first);
+        indexRight(af::span, tssIdx) = khiva::vectorutil::createArray<unsigned int>(res.second.second);
+    }
+
+    auto invalidIndex = tss.dims(0);
+    af::replace(indexLeft, indexLeft != std::numeric_limits<unsigned int>::max(), invalidIndex);
+    af::replace(indexRight, indexRight != std::numeric_limits<unsigned int>::max(), invalidIndex);
+
+    profileLeft = profileLeft.as(typeBefore);
+    profileRight = profileRight.as(typeBefore);
 }
 
 ChainVector extractAllChains(const IndexesVector &profileLeft, const IndexesVector &profileRight) {
