@@ -57,7 +57,7 @@ TARGET_INCLUDE_DIRECTORIES(${KHIVALIB}
 						PRIVATE
 						   ${SCAMP_INCLUDE_DIRS}						
 						   ${Boost_INCLUDE_DIRS}
-						   ${Eigen_INCLUDE_DIRS}
+						   ${EIGEN3_INCLUDE_DIRS}
 						PUBLIC
                            $<BUILD_INTERFACE:${KHIVALIB_INC}>
                            $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
