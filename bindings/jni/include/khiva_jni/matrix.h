@@ -138,7 +138,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, j
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m);
 
 /**
- * @brief Calculate the matrix profile between 'ta' and 'tb' using a subsequence length
+ * @brief Calculates the matrix profile between 'ta' and 'tb' using a subsequence length
  * of 'm'.
  *
  * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
@@ -156,7 +156,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv
                                                                           jlong ref_b, jlong m);
 
 /**
- * @brief Calculate the matrix profile between 't' and itself using a subsequence length
+ * @brief Calculates the matrix profile between 't' and itself using a subsequence length
  * of 'm'. This method filters the trivial matches.
  *
  * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
@@ -174,10 +174,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoi
                                                                                   jlong m);
 
 /**
- * @brief Calculate the matrix profile to the left and to the right between 't' and using a subsequence length of 'm'.
+ * @brief Calculates the matrix profile to the left and to the right between 't' and using a subsequence length of 'm'.
  *
  * [1] Yan Zhu, Makoto Imamura, Daniel Nikovski, and Eamonn Keogh. Matrix Profile VII: Time Series Chains: A New
- * Primitive for Time Series Data Mining. IEEE ICDM 2017
+ * Primitive for Time Series Data Mining. IEEE ICDM 2017.
  *
  * @param ref_a Time series to compute the matrix profile.
  * @param m Subsequence length.
@@ -192,10 +192,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoi
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileLR(JNIEnv *env, jobject, jlong ref_a, jlong m);
 
 /**
- * @brief Calculate all the chains within 'tss' using a subsequence length of 'm'.
+ * @brief Calculates all the chains within 'tss' using a subsequence length of 'm'.
  *
  * [1] Yan Zhu, Makoto Imamura, Daniel Nikovski, and Eamonn Keogh. Matrix Profile VII: Time Series Chains: A New
-*  Primitive for Time Series Data Mining. IEEE ICDM 2017
+*  Primitive for Time Series Data Mining. IEEE ICDM 2017.
  *
  * @param ref_a Time series to compute the chains within them.
  * @param m Subsequence length.
