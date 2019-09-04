@@ -612,14 +612,14 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     return result;
 }
 
-struct VisagramPoint{
+struct VisvalingamSummaryPoint{
     float x;
     float y;
     float area;
 };
 
-void computeTriangleArea(VisagramPoint &a, VisagramPoint &b,
-                         VisagramPoint &c) {
+void computeTriangleArea(VisvalingamSummaryPoint &a, VisvalingamSummaryPoint &b,
+                         VisvalingamSummaryPoint &c) {
     float res = 0.0;
 
     float f1 = a.x * (b.y - c.y);
@@ -640,9 +640,9 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
         std::vector<khiva::dimensionality::Point> pointList, int num_points_allowed) {
 
     // variables
-    std::vector<VisagramPoint> out(pointList.size());
+    std::vector<VisvalingamSummaryPoint> out(pointList.size());
     std::transform(pointList.begin(), pointList.end(), out.begin(), [](const khiva::dimensionality::Point& point)
-        { return VisagramPoint {point.first, point.second, std::numeric_limits<float>::max()}; });
+        { return VisvalingamSummaryPoint {point.first, point.second, std::numeric_limits<float>::max()}; });
 
     int iterations = static_cast<int>(out.size()) - num_points_allowed;
 
@@ -659,7 +659,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
 
     // One point to be deleted on each iteration
     for (int iter = 0; iter < iterations; iter++) {
-        auto min_element = std::min_element(out.cbegin(), out.cend(), [](const VisagramPoint &v1, const VisagramPoint &v2){
+        auto min_element = std::min_element(out.cbegin(), out.cend(), [](const VisvalingamSummaryPoint &v1, const VisvalingamSummaryPoint &v2){
             return v1.area < v2.area;
         });
         auto min_position = std::distance(out.cbegin(), min_element);
@@ -682,7 +682,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
     }
 
     std::vector<khiva::dimensionality::Point> outVector(num_points_allowed);
-    std::transform(out.begin(), out.end(), outVector.begin(), [](const VisagramPoint &point){
+    std::transform(out.begin(), out.end(), outVector.begin(), [](const VisvalingamSummaryPoint &point){
         return khiva::dimensionality::Point {point.x, point.y};
     });
 
