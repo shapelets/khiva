@@ -6,6 +6,8 @@
 
 #include <arrayfire.h>
 #include <khiva.h>
+#include <chrono>
+
 
 void stompIgnoreTrivialOneSeries() {
     float data[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 11, 10, 11, 10, 10};
@@ -79,12 +81,26 @@ void stompConsiderTrivialMultipleSeries() {
     index.host(&resultingIndex);
 }
 
+void testVisvalingam(){
+    auto ind = af::range(100000);
+    auto values = af::randn(100000);
+    auto data = af::join(1, ind, values);
+
+    auto start = std::chrono::steady_clock::now();
+    auto res = khiva::dimensionality::visvalingam(data, 2000);
+
+    auto end = std::chrono::steady_clock::now();
+
+    std::cout << "Elapsed time in milliseconds : "
+         << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+}
+
 int main() {
-    stompIgnoreTrivialOneSeries();
-    stompIgnoreTrivialMultipleSeries();
-
-    stompConsiderTrivialOneSeries();
-    stompConsiderTrivialMultipleSeries();
-
+//    stompIgnoreTrivialOneSeries();
+//    stompIgnoreTrivialMultipleSeries();
+//
+//    stompConsiderTrivialOneSeries();
+//    stompConsiderTrivialMultipleSeries();
+    testVisvalingam();
     return 0;
 }

@@ -6,6 +6,7 @@
 
 #include <khiva/dimensionality.h>
 #include <boost/math/distributions/normal.hpp>
+#include <iterator>
 
 float computeTriangleArea(khiva::dimensionality::Point a, khiva::dimensionality::Point b,
                           khiva::dimensionality::Point c) {
@@ -644,8 +645,6 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
             areas[min_position] = computeTriangleArea(out[min_position], out[min_position + 1], out[min_position + 2]);
             areas[min_position - 1] = computeTriangleArea(out[min_position - 1], out[min_position],
                                                           out[min_position + 1]);
-            //areas[min_position-2] = computeTriangleArea(out[min_position - 2], out[min_position - 1], out[min_position]);
-
         } else if (min_position >= out.size() - 3) {
             out.erase(std::begin(out) + min_position + 1);
             areas.erase(std::begin(areas) + min_position);
