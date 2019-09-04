@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
+#include <stdexcept>
 
 float computeTriangleArea(khiva::dimensionality::Point a, khiva::dimensionality::Point b,
                           khiva::dimensionality::Point c) {
@@ -611,12 +612,38 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     return result;
 }
 
+struct VisagramPoint{
+    float x;
+    float y;
+    float area;
+};
+
+void computeTriangleArea(VisagramPoint &a, VisagramPoint &b,
+                         VisagramPoint &c) {
+    float res = 0.0;
+
+    float f1 = a.x * (b.y - c.y);
+    float f2 = b.x * (c.y - a.y);
+    float f3 = c.x * (a.y - b.y);
+    a.area = std::abs((f1 + f2 + f3) / 2);
+}
+
+#include <iterator>
+template <typename Iter, typename Distance>
+Iter shiftIterator(Iter iter, Distance positions){
+    auto it_shifted = iter;
+    std::advance(it_shifted, positions);
+    return it_shifted;
+}
+
 std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
         std::vector<khiva::dimensionality::Point> pointList, int num_points_allowed) {
 
     // variables
-    std::vector<khiva::dimensionality::Point> out(pointList.begin(), pointList.end());
-    std::vector<float> areas = std::vector<float>(static_cast<int>(out.size()), std::numeric_limits<float>::max());
+    std::vector<VisagramPoint> out(pointList.size());
+    std::transform(pointList.begin(), pointList.end(), out.begin(), [](const khiva::dimensionality::Point& point)
+        { return VisagramPoint {point.first, point.second, std::numeric_limits<float>::max()}; });
+
     int iterations = static_cast<int>(out.size()) - num_points_allowed;
 
     if (pointList.size() < 4 || num_points_allowed < 3) {
@@ -626,39 +653,42 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
     }
 
     // Precompute areas
-    for (auto p = 0; p < out.size() - 2; p++) {
-        float area = computeTriangleArea(out[p], out[p + 1], out[p + 2]);
-        areas[p] = area;
+    for(auto it = out.begin(); it != shiftIterator(out.end(), -2); ++it){
+        computeTriangleArea(*it, *shiftIterator(it, 1), *shiftIterator(it, 2));
     }
-    areas[out.size() - 2] = std::numeric_limits<float>::max();
-    areas[out.size() - 1] = std::numeric_limits<float>::max();
 
     // One point to be deleted on each iteration
     for (int iter = 0; iter < iterations; iter++) {
-        auto min_element = std::min_element(areas.cbegin(), areas.cend());
-        auto min_position = std::distance(areas.cend(), min_element);
+        auto min_element = std::min_element(out.cbegin(), out.cend(), [](const VisagramPoint &v1, const VisagramPoint &v2){
+            return v1.area < v2.area;
+        });
+        auto min_position = std::distance(out.cbegin(), min_element);
 
         //delete point and area with smallest area
-        if (min_position < 2) {
-            out.erase(out.begin() + min_position + 1);
-            areas.erase(areas.begin() + min_position + 1);
-            areas[0] = computeTriangleArea(out[0], out[1], out[2]);
-            areas[1] = computeTriangleArea(out[1], out[2], out[3]);
-            areas[2] = computeTriangleArea(out[2], out[3], out[4]);
+        out.erase(shiftIterator(out.begin(), min_position + 1));
+        auto beg = out.begin();
+        if(min_position < 2) {
+            computeTriangleArea(*beg, *shiftIterator(beg, 1), *shiftIterator(beg, 2));
+            computeTriangleArea(*shiftIterator(beg, 1), *shiftIterator(beg, 2), *shiftIterator(beg, 3));
+            computeTriangleArea(*shiftIterator(beg, 2), *shiftIterator(beg, 3), *shiftIterator(beg, 4));
 
-        } else if (min_position >= 2 && min_position < out.size() - 3) {
-            out.erase(out.begin() + min_position + 1);
-            areas.erase(areas.begin() + min_position + 1);
-            areas[min_position] = computeTriangleArea(out[min_position], out[min_position + 1], out[min_position + 2]);
-            areas[min_position - 1] = computeTriangleArea(out[min_position - 1], out[min_position],
-                                                          out[min_position + 1]);
-        } else if (min_position >= out.size() - 3) {
-            out.erase(out.begin() + min_position + 1);
-            areas.erase(areas.begin() + min_position);
+        } else if (min_position >= 2 && min_position < out.size() - 3){
+            computeTriangleArea(*shiftIterator(beg, min_position), *shiftIterator(beg, min_position + 1), *shiftIterator(beg, min_position + 2));
+            computeTriangleArea(*shiftIterator(beg, min_position - 1), *shiftIterator(beg, min_position), *shiftIterator(beg, min_position + 1));
+
+        } else  if (min_position >= out.size() - 3) {
+            (*shiftIterator(beg, min_position)).area = std::numeric_limits<float>::max();
         }
     }
-    return out;
-}
+
+    std::vector<khiva::dimensionality::Point> outVector(num_points_allowed);
+    std::transform(out.begin(), out.end(), outVector.begin(), [](const VisagramPoint &point){
+        return khiva::dimensionality::Point {point.x, point.y};
+    });
+
+    return outVector;
+ }
+
 
 af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints) {
     if (pointList.dims(1) != 2) {
