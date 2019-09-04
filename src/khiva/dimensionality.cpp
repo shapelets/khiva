@@ -635,26 +635,26 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
 
     // One point to be deleted on each iteration
     for (int iter = 0; iter < iterations; iter++) {
-        auto min_element = std::min_element(std::cbegin(areas), std::cend(areas));
-        auto min_position = std::distance(std::cbegin(areas), min_element);
+        auto min_element = std::min_element(areas.cbegin(), areas.cend());
+        auto min_position = std::distance(areas.cend(), min_element);
 
         //delete point and area with smallest area
         if (min_position < 2) {
-            out.erase(std::begin(out) + min_position + 1);
-            areas.erase(std::begin(areas) + min_position + 1);
+            out.erase(out.begin() + min_position + 1);
+            areas.erase(areas.begin() + min_position + 1);
             areas[0] = computeTriangleArea(out[0], out[1], out[2]);
             areas[1] = computeTriangleArea(out[1], out[2], out[3]);
             areas[2] = computeTriangleArea(out[2], out[3], out[4]);
 
         } else if (min_position >= 2 && min_position < out.size() - 3) {
-            out.erase(std::begin(out) + min_position + 1);
-            areas.erase(std::begin(areas) + min_position + 1);
+            out.erase(out.begin() + min_position + 1);
+            areas.erase(areas.begin() + min_position + 1);
             areas[min_position] = computeTriangleArea(out[min_position], out[min_position + 1], out[min_position + 2]);
             areas[min_position - 1] = computeTriangleArea(out[min_position - 1], out[min_position],
                                                           out[min_position + 1]);
         } else if (min_position >= out.size() - 3) {
-            out.erase(std::begin(out) + min_position + 1);
-            areas.erase(std::begin(areas) + min_position);
+            out.erase(out.begin() + min_position + 1);
+            areas.erase(areas.begin() + min_position);
         }
     }
     return out;
