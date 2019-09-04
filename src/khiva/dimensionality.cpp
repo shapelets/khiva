@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
+#include <stdexcept>
 
 float computeTriangleArea(khiva::dimensionality::Point a, khiva::dimensionality::Point b,
                           khiva::dimensionality::Point c) {
@@ -32,7 +33,7 @@ std::vector<float> computeBreakpoints(int alphabet_size, float mean_value, float
     boost::math::normal dist(mean_value, std_value);
 
     for (int i = 1; i < alphabet_size; i++) {
-        float value = static_cast<float>(quantile(dist, (float)i * (1 / (float)alphabet_size)));
+        float value = static_cast<float>(quantile(dist, (float) i * (1 / (float) alphabet_size)));
         res.push_back(value);
     }
     return res;
@@ -151,7 +152,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
 
     // Iterating over the time series
     for (auto i = begin; i != last; i++) {
-        int pos = static_cast<int>(std::min((*i).first * reduction, (float)(bins - 1)));
+        int pos = static_cast<int>(std::min((*i).first * reduction, (float) (bins - 1)));
         sum[pos] += (*i).second;
         counter[pos] = counter[pos] + 1;
     }
@@ -164,7 +165,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
     return result;
 }
 
-template <typename T>
+template<typename T>
 af::array PAA_CPU(af::array a, int bins) {
     af::array result;
     int n = a.dims(0);
@@ -294,8 +295,8 @@ af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
     }
 
     // Converting from vector to array
-    float *x = (float *)malloc(sizeof(float) * selected.size());
-    float *y = (float *)malloc(sizeof(float) * selected.size());
+    float *x = (float *) malloc(sizeof(float) * selected.size());
+    float *y = (float *) malloc(sizeof(float) * selected.size());
     for (size_t i = 0; i < selected.size(); i++) {
         x[i] = selected[i].first;
         y[i] = selected[i].second;
@@ -397,8 +398,8 @@ af::array khiva::dimensionality::PLABottomUp(af::array ts, float maxError) {
     }
 
     std::vector<khiva::dimensionality::Point> reducedPoints = khiva::dimensionality::PLABottomUp(points, maxError);
-    float *x = (float *)malloc(sizeof(float) * reducedPoints.size());
-    float *y = (float *)malloc(sizeof(float) * reducedPoints.size());
+    float *x = (float *) malloc(sizeof(float) * reducedPoints.size());
+    float *y = (float *) malloc(sizeof(float) * reducedPoints.size());
 
     // Converting from vector to array
     for (size_t i = 0; i < reducedPoints.size(); i++) {
@@ -418,7 +419,7 @@ af::array khiva::dimensionality::PLABottomUp(af::array ts, float maxError) {
 }
 
 std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLASlidingWindow(
-    std::vector<khiva::dimensionality::Point> ts, float maxError) {
+        std::vector<khiva::dimensionality::Point> ts, float maxError) {
     std::vector<khiva::dimensionality::Point> result;
     std::vector<khiva::dimensionality::Segment> segments;
 
@@ -466,8 +467,8 @@ af::array khiva::dimensionality::PLASlidingWindow(af::array ts, float maxError) 
     }
 
     std::vector<khiva::dimensionality::Point> reducedPoints = khiva::dimensionality::PLASlidingWindow(points, maxError);
-    float *x = (float *)malloc(sizeof(float) * reducedPoints.size());
-    float *y = (float *)malloc(sizeof(float) * reducedPoints.size());
+    float *x = (float *) malloc(sizeof(float) * reducedPoints.size());
+    float *y = (float *) malloc(sizeof(float) * reducedPoints.size());
 
     // Converting from vector to array
     for (size_t i = 0; i < reducedPoints.size(); i++) {
@@ -487,7 +488,7 @@ af::array khiva::dimensionality::PLASlidingWindow(af::array ts, float maxError) 
 }
 
 std::vector<khiva::dimensionality::Point> khiva::dimensionality::ramerDouglasPeucker(
-    std::vector<khiva::dimensionality::Point> pointList, double epsilon) {
+        std::vector<khiva::dimensionality::Point> pointList, double epsilon) {
     std::vector<khiva::dimensionality::Point> out;
 
     if (pointList.size() < 2) throw std::invalid_argument("Not enough points to simplify ...");
@@ -611,29 +612,83 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     return result;
 }
 
+struct VisvalingamSummaryPoint{
+    float x;
+    float y;
+    float area;
+};
+
+void computeTriangleArea(VisvalingamSummaryPoint &a, VisvalingamSummaryPoint &b,
+                         VisvalingamSummaryPoint &c) {
+    float res = 0.0;
+
+    float f1 = a.x * (b.y - c.y);
+    float f2 = b.x * (c.y - a.y);
+    float f3 = c.x * (a.y - b.y);
+    a.area = std::abs((f1 + f2 + f3) / 2);
+}
+
+#include <iterator>
+template <typename Iter, typename Distance>
+Iter shiftIterator(Iter iter, Distance positions){
+    auto it_shifted = iter;
+    std::advance(it_shifted, positions);
+    return it_shifted;
+}
+
 std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
-    std::vector<khiva::dimensionality::Point> pointList, int num_points_allowed) {
+        std::vector<khiva::dimensionality::Point> pointList, int num_points_allowed) {
+
     // variables
-    std::vector<khiva::dimensionality::Point> out(pointList.begin(), pointList.end());
-    float min_area = std::numeric_limits<float>::max();
-    int candidate_point = -1;
+    std::vector<VisvalingamSummaryPoint> out(pointList.size());
+    std::transform(pointList.begin(), pointList.end(), out.begin(), [](const khiva::dimensionality::Point& point)
+        { return VisvalingamSummaryPoint {point.first, point.second, std::numeric_limits<float>::max()}; });
+
     int iterations = static_cast<int>(out.size()) - num_points_allowed;
 
-    // One point to be deleted in each iteration
-    for (int iter = 0; iter < iterations; iter++) {
-        for (size_t p = 0; p < out.size() - 2; p++) {
-            float area = computeTriangleArea(out[p], out[p + 1], out[p + 2]);
-            if (area < min_area) {
-                min_area = area;
-                candidate_point = static_cast<int>(p + 1);
-            }
-        }
-        std::vector<khiva::dimensionality::Point>::iterator nth = out.begin() + candidate_point;
-        out.erase(nth);
-        min_area = std::numeric_limits<float>::max();
+    if (pointList.size() < 4 || num_points_allowed < 3) {
+        throw std::invalid_argument(
+                "Invalid dimension of the series. Series to be reduce should be larger than 3 points "
+                "and the number of resulting points larger than 2.");
     }
-    return out;
-}
+
+    // Precompute areas
+    for(auto it = out.begin(); it != shiftIterator(out.end(), -2); ++it){
+        computeTriangleArea(*it, *shiftIterator(it, 1), *shiftIterator(it, 2));
+    }
+
+    // One point to be deleted on each iteration
+    for (int iter = 0; iter < iterations; iter++) {
+        auto min_element = std::min_element(out.cbegin(), out.cend(), [](const VisvalingamSummaryPoint &v1, const VisvalingamSummaryPoint &v2){
+            return v1.area < v2.area;
+        });
+        auto min_position = std::distance(out.cbegin(), min_element);
+
+        //delete point and area with smallest area
+        out.erase(shiftIterator(out.begin(), min_position + 1));
+        auto beg = out.begin();
+        if(min_position < 2) {
+            computeTriangleArea(*beg, *shiftIterator(beg, 1), *shiftIterator(beg, 2));
+            computeTriangleArea(*shiftIterator(beg, 1), *shiftIterator(beg, 2), *shiftIterator(beg, 3));
+            computeTriangleArea(*shiftIterator(beg, 2), *shiftIterator(beg, 3), *shiftIterator(beg, 4));
+
+        } else if (min_position >= 2 && min_position < out.size() - 3){
+            computeTriangleArea(*shiftIterator(beg, min_position), *shiftIterator(beg, min_position + 1), *shiftIterator(beg, min_position + 2));
+            computeTriangleArea(*shiftIterator(beg, min_position - 1), *shiftIterator(beg, min_position), *shiftIterator(beg, min_position + 1));
+
+        } else  if (min_position >= out.size() - 3) {
+            (*shiftIterator(beg, min_position)).area = std::numeric_limits<float>::max();
+        }
+    }
+
+    std::vector<khiva::dimensionality::Point> outVector(num_points_allowed);
+    std::transform(out.begin(), out.end(), outVector.begin(), [](const VisvalingamSummaryPoint &point){
+        return khiva::dimensionality::Point {point.x, point.y};
+    });
+
+    return outVector;
+ }
+
 
 af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints) {
     if (pointList.dims(1) != 2) {
