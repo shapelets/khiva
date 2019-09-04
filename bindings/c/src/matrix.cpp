@@ -22,8 +22,7 @@ void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, lon
         af::array discordIndices;
         af::array subsequenceIndices;
 
-        khiva::matrix::findBestNDiscords(var_profile, var_index, *m, *n, discords, discordIndices,
-                                         subsequenceIndices,
+        khiva::matrix::findBestNDiscords(var_profile, var_index, *m, *n, discords, discordIndices, subsequenceIndices,
                                          self_join);
         af_retain_array(discord_distances, discords.get());
         af_retain_array(discord_indices, discordIndices.get());
@@ -180,6 +179,28 @@ void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_a
     }
 }
 
+void matrix_profile_lr(khiva_array *tss, long *m, khiva_array *pleft, khiva_array *ileft, khiva_array *pright,
+                       khiva_array *iright, int *error_code, char *error_message) {
+    try {
+        af::array var_tss = af::array(*tss);
+        af_retain_array(tss, var_tss.get());
+        af::array profileLeft, indexesLeft, profileRight, indexesRight;
+
+        khiva::matrix::matrixProfileLR(var_tss, *m, profileLeft, indexesLeft, profileRight, indexesRight);
+
+        af_retain_array(pleft, profileLeft.get());
+        af_retain_array(ileft, indexesLeft.get());
+        af_retain_array(pright, profileRight.get());
+        af_retain_array(iright, indexesRight.get());
+
+        *error_code = 0;
+    } catch (const std::exception &e) {
+        fill_error("matrix_profile_lr", e.what(), error_message, error_code, 1);
+    } catch (...) {
+        fill_unknown("matrix_profile_lr", error_message, error_code, -1);
+    }
+}
+
 void get_chains(khiva_array *tss, long *m, khiva_array *c, int *error_code, char *error_message) {
     try {
         af::array var_tss = af::array(*tss);
@@ -187,7 +208,7 @@ void get_chains(khiva_array *tss, long *m, khiva_array *c, int *error_code, char
         af::array chains;
 
         khiva::matrix::getChains(var_tss, *m, chains);
-        
+
         af_retain_array(c, chains.get());
         *error_code = 0;
     } catch (const std::exception &e) {

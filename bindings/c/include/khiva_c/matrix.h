@@ -185,7 +185,27 @@ KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array
                                           char *error_message);
 
 /**
- * @brief Calculate all the chains within 'tss' using a subsequence length of 'm'.
+ * @brief Calculates the matrix profile to the left and to the right between 't' and using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Makoto Imamura, Daniel Nikovski, and Eamonn Keogh. Matrix Profile VII: Time Series Chains: A New
+ * Primitive for Time Series Data Mining. IEEE ICDM 2017.
+ *
+ * @param tss Time series to compute the matrix profile.
+ * @param m Subsequence length.
+ * @param pleft The matrix profile distance to the left.
+ * @param ileft The subsequence index of the matrix profile to the left.
+ * @param pright The matrix profile distance to the right.
+ * @param iright The subsequence index of the matrix profile to the right.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
+ *
+ *  Notice that when there is no match the subsequence index is the length of tss.
+ */
+KHIVA_C_API void matrix_profile_lr(khiva_array *tss, long *m, khiva_array *pleft, khiva_array *ileft,
+                                   khiva_array *pright, khiva_array *iright, int *error_code, char *error_message);
+
+/**
+ * @brief Calculates all the chains within 'tss' using a subsequence length of 'm'.
  *
  * [1] Yan Zhu, Makoto Imamura, Daniel Nikovski, and Eamonn Keogh. Matrix Profile VII: Time Series Chains: A New
 *  Primitive for Time Series Data Mining. IEEE ICDM 2017
