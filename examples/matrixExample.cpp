@@ -6,8 +6,6 @@
 
 #include <arrayfire.h>
 #include <khiva.h>
-#include <chrono>
-
 
 void stompIgnoreTrivialOneSeries() {
     float data[] = {10, 10, 11, 11, 10, 11, 10, 10, 11, 11, 10, 11, 10, 10};
