@@ -5,8 +5,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <khiva/dimensionality.h>
+#include <algorithm>
 #include <boost/math/distributions/normal.hpp>
+#include <cmath>
+#include <iostream>
 #include <iterator>
+#include <limits>
+#include <stdexcept>
+#include <utility>
+#include <vector>
 
 float computeTriangleArea(khiva::dimensionality::Point a, khiva::dimensionality::Point b,
                           khiva::dimensionality::Point c) {
