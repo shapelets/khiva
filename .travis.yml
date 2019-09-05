@@ -1,6 +1,6 @@
 language: cpp
 sudo: required
-dist: trusty
+dist: bionic
 cache:
   directories:
   - "${HOME}/.conan"
@@ -9,12 +9,12 @@ cache:
 matrix:
   include:
   - os: linux
-    dist: trusty
+    dist: bionic
     sudo: required
     compiler:
     - gcc
     git:
-        submodules: false
+      submodules: false
     before_install:
     - git submodule update --init
     - source .CI/travis/install_linux.sh
@@ -23,12 +23,12 @@ matrix:
     script:
     - source .CI/travis/build_linux.sh
   - os: linux
-    dist: trusty
+    dist: bionic
     sudo: required
     compiler:
     - clang
     git:
-        submodules: false
+      submodules: false
     before_install:
     - git submodule update --init
     - source .CI/travis/install_linux.sh
@@ -37,22 +37,22 @@ matrix:
     script:
     - source .CI/travis/build_linux.sh
     before_deploy:
-      - cpack
-      - cpack -G DEB
-      - cpack -G RPM
-      - mv khiva.sh khiva-${TRAVIS_TAG}.sh
+    - cpack
+    - cpack -G DEB
+    - cpack -G RPM
+    - mv khiva.sh khiva-${TRAVIS_TAG}.sh
     deploy:
-      name: '${TRAVIS_TAG} - Linux'
-      body: '${TRAVIS_COMMIT_MESSAGE}'
+      name: "${TRAVIS_TAG} - Linux"
+      body: "${TRAVIS_COMMIT_MESSAGE}"
       skip_cleanup: true
       provider: releases
       api_key:
-        secure: q90u02PfCMuzI+5g7eY1geeY64W8qjvsAU+QM2cvd2xJyra26moKPcwi2LTg3XRZZa4om6RUClBcwwnLW2rYk92KJePxkvfWX8lW5b/WPyn9gdtB9SCfv0D36zjAh+6qP/EG5Tmp1GlCUZmcWUBqVS4WY6Gq/x8kVdTcBj8sJelosblsmo/NSs1ixMyaoStkzo11i/LFFjt3wqL07FoIDx0s2PblrY0+iPZDTxWgMM5hgSfk+8j16FdsGa1wDmMTd17MBNXpXR983wpS+KAGpUqzO0m1UGdbRFxGnn1/M8Zc34jYbADBcN2PWhNZM1Oo1LB4YNBh66cqGa03LViRW0NhRXw+u9E/pGC95aEpEE1ml9vnESExRmWFca+pfJeJg5MBPa3/8HR8wXYL82Uwp67ND03/DJvT4HjmaLuGyXukmJyszzSzsVV1ybRK2VlAsFKmNOtrsHl2YefsbEGDHbTHNDTQk/NTgD9YE5q3PYCYaswp/hdVNbLUN2x2hZ5FojB2WgmYi+/huGC2aWhV2VGDpVJCuhGVGmZXZVr2/lOGIjhTEJTGYf7Vf+7E3CEdIZRNWcdpWSKM/mBP5TZo7NFcJIF32zntLNDVBP34TdEwB62kmPBwFTG1xSr477d3AmhIdTWEHYCEmhrF+kkf19ceuxS7FrQvnSif/BoSbt0=
+        secure: Y98Op/ZzDuUHNwtwRmzdz3mtOmfge5fxDvRBZnI4IABb/lDOMVNo9EWG4czCsXTByubr5bzFrlu8FCC29plGNctFWyFy6L9EQQANy+oo1WHIuFepVzDSmGj+3FTSP3QYUJrWv+OdjOJ14IJHavL7I6HiJe08dJF0NNSnLTi5AJ4MB4sj12K7BXNqQTVV9og7zTt9ASpO+1V9d/+qhU0dACVqqMG0gXmYS3Vd53SsnZ+AyWbkg59OnhUaVikN0HfeDsZnXZl11cRY8UKbzJ0wvUHEk5xqOLBiFDn1HuAIGqehybDo1dhrsgM3Ov2sZofFcuF3xOkMUvt+DkClGcLNBwwKppE1P2c5Lkdvr/Eeu+TbSQ7I3YaZ8cWcqrvFEs9o9EOiR+nOHIsuKwMaH1LGE2PvMf72+3HKCVCPEfyi+zEoBKM6+/dWfEptTmEFtDJnB5p/wnhuZQEo2AZpR/k70vnlFiDtd0aC/gZbfzklFaKG2/fgr2lfjZlq45rjehx/mw05kSg2VNOf613xzYQwHVxYgaxrOvjdRnHIMjuTNvLHdAtdwhvB2i83SpkZhJYywacbK2Pl14xgYsSNWTgUasJI+eoMthEcJfIlQM5L5WqJxLoVBt0FKN06NYqAYC/PZSTghVhboKe25aInzQJDVBq+FmugD2nWbSXDkGhqBmQ=
       file_glob: true
       file:
-        - ${TRAVIS_BUILD_DIR}/build/khiva-*.deb
-        - ${TRAVIS_BUILD_DIR}/build/khiva-*.rpm
-        - ${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.sh
+      - "${TRAVIS_BUILD_DIR}/build/khiva-*.deb"
+      - "${TRAVIS_BUILD_DIR}/build/khiva-*.rpm"
+      - "${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.sh"
       draft: true
       prerelease: false
       on:
@@ -62,7 +62,7 @@ matrix:
     compiler:
     - gcc
     env:
-      - TRAVIS_PYTHON_VERSION=3.6.5
+    - TRAVIS_PYTHON_VERSION=3.6.5
     cache:
       directories:
       - "${HOME}/.conan"
@@ -71,7 +71,7 @@ matrix:
       - "$HOME/.pyenv"
       - "$HOME/Library/Caches/Homebrew"
     git:
-        submodules: false
+      submodules: false
     before_install:
     - git submodule update --init
     - source .CI/travis/install_osx.sh
@@ -83,7 +83,7 @@ matrix:
     compiler:
     - clang
     env:
-      - TRAVIS_PYTHON_VERSION=3.6.5
+    - TRAVIS_PYTHON_VERSION=3.6.5
     cache:
       directories:
       - "${HOME}/.conan"
@@ -92,7 +92,7 @@ matrix:
       - "$HOME/.pyenv"
       - "$HOME/Library/Caches/Homebrew"
     git:
-        submodules: false
+      submodules: false
     before_install:
     - git submodule update --init
     - source .CI/travis/install_osx.sh
@@ -104,17 +104,21 @@ matrix:
     - source .CI/travis/codecov.sh
     - cd ${TRAVIS_BUILD_DIR}
     before_deploy:
-      - cd build
-      - cpack -G productbuild
+    - cd build
+    - cpack -G productbuild
     deploy:
-      name: '${TRAVIS_TAG} - MacOS'
-      body: '${TRAVIS_COMMIT_MESSAGE}'
+      name: "${TRAVIS_TAG} - MacOS"
+      body: "${TRAVIS_COMMIT_MESSAGE}"
       skip_cleanup: true
       provider: releases
       api_key:
-        secure: q90u02PfCMuzI+5g7eY1geeY64W8qjvsAU+QM2cvd2xJyra26moKPcwi2LTg3XRZZa4om6RUClBcwwnLW2rYk92KJePxkvfWX8lW5b/WPyn9gdtB9SCfv0D36zjAh+6qP/EG5Tmp1GlCUZmcWUBqVS4WY6Gq/x8kVdTcBj8sJelosblsmo/NSs1ixMyaoStkzo11i/LFFjt3wqL07FoIDx0s2PblrY0+iPZDTxWgMM5hgSfk+8j16FdsGa1wDmMTd17MBNXpXR983wpS+KAGpUqzO0m1UGdbRFxGnn1/M8Zc34jYbADBcN2PWhNZM1Oo1LB4YNBh66cqGa03LViRW0NhRXw+u9E/pGC95aEpEE1ml9vnESExRmWFca+pfJeJg5MBPa3/8HR8wXYL82Uwp67ND03/DJvT4HjmaLuGyXukmJyszzSzsVV1ybRK2VlAsFKmNOtrsHl2YefsbEGDHbTHNDTQk/NTgD9YE5q3PYCYaswp/hdVNbLUN2x2hZ5FojB2WgmYi+/huGC2aWhV2VGDpVJCuhGVGmZXZVr2/lOGIjhTEJTGYf7Vf+7E3CEdIZRNWcdpWSKM/mBP5TZo7NFcJIF32zntLNDVBP34TdEwB62kmPBwFTG1xSr477d3AmhIdTWEHYCEmhrF+kkf19ceuxS7FrQvnSif/BoSbt0=
-      file: ${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.pkg
+        secure: Y98Op/ZzDuUHNwtwRmzdz3mtOmfge5fxDvRBZnI4IABb/lDOMVNo9EWG4czCsXTByubr5bzFrlu8FCC29plGNctFWyFy6L9EQQANy+oo1WHIuFepVzDSmGj+3FTSP3QYUJrWv+OdjOJ14IJHavL7I6HiJe08dJF0NNSnLTi5AJ4MB4sj12K7BXNqQTVV9og7zTt9ASpO+1V9d/+qhU0dACVqqMG0gXmYS3Vd53SsnZ+AyWbkg59OnhUaVikN0HfeDsZnXZl11cRY8UKbzJ0wvUHEk5xqOLBiFDn1HuAIGqehybDo1dhrsgM3Ov2sZofFcuF3xOkMUvt+DkClGcLNBwwKppE1P2c5Lkdvr/Eeu+TbSQ7I3YaZ8cWcqrvFEs9o9EOiR+nOHIsuKwMaH1LGE2PvMf72+3HKCVCPEfyi+zEoBKM6+/dWfEptTmEFtDJnB5p/wnhuZQEo2AZpR/k70vnlFiDtd0aC/gZbfzklFaKG2/fgr2lfjZlq45rjehx/mw05kSg2VNOf613xzYQwHVxYgaxrOvjdRnHIMjuTNvLHdAtdwhvB2i83SpkZhJYywacbK2Pl14xgYsSNWTgUasJI+eoMthEcJfIlQM5L5WqJxLoVBt0FKN06NYqAYC/PZSTghVhboKe25aInzQJDVBq+FmugD2nWbSXDkGhqBmQ=
+      file: "${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.pkg"
       draft: true
       prerelease: false
       on:
         tags: true
+env:
+  global:
+  - secure: H8sDB7V7gq9d2vWBayFWZ5quai1gG13Q1MvY91awNLOLTPM1HTKGqFSWA6psyhQvWndFdht/BXVV+P5ssczJRn1xbhVYSEvifLxV0e75insR6CvuvBW+jsJsZJnom0pYMviyLP9/S+bxXRK79DovMog0Nud2oQ3wbQjVP4pOQ3TuaZMCID9vvS6oA68AKbuCuz5qnuNCBKnC++Rp12tSiCH/NeKlTPpaJk/OPeL8T4ezLTvwVkM3cJx1/rbp7BS0LRMI4pvmrm7KN9QzbpLng8XaslSTUzmS7663Vo84H4rPFoRYxvmd9W3oP+m7my/dT68cojhWYIabZM0Tfyg/AcQJbdGHQEtYRrugwYZv7R/rrLt6tBkcxWyav2VcAIRWTeeb/NwIbBtkf+otVLWs5uewfNZycNI0BGsf20TlqXGJZtL2ZXCxqlktapvAl+2uO11EMGamRp5nxcnwLNADn+SjlRUMIsS4DIuUQwSxeszUdMmMGzAOcTJr4zG98yIcGCNP75Ej+A2YScc2ernZtM1853+hWXQC4t57Zhu/LYon2eETUyN8/CXoykP0oQ+KduE3/ep6O1OKM3VmOKhMtW2bNoB4ED0Gk8kfJhQcob9UBRFL49SRzNjw+TA68TxMk9Ni9H3ln3x4WAEYzkT7201t6G1GwEUN67xKFdVifSU=
+  - secure: WYZqoj1KSGtbFrqYVEzGOqd1VoxTjKtuMJcHIOxSNoDtxpT2F+88cCUyE9hkAaujMDHXeKkVwrzv8j1DMGBTal56sgxa1LzRGcgWYQFabKzMFSp3ToH8s6TXQC/NrdJZ6o3eTRf+k64vveUpV44FSc2q2wVnvJ/MRdiG+KkfPRm8g4lxIrvHgeMUbIuq/gggpqdVNDiK40GexOoDMEUfvaYXyc0uZHpIBXWJeqaChwytMf3qe8gVC5uq1Pzop5fxz/5ana4XQLtPAO9B89atloKbaAN6oFRSe+9TMK+d8z/gusk5hhAj8WQNba2vCZQ/lCJ84/ctG6O8OAPumHYnfF5rzWYV4UI1v0AJJg2hXeaYLjk3tvcfVYQ3LGg5x1BlIr8WkUgIub0cQK3d0VSQ3vrCg6laLHbjcYpGJeRH4lsmJFyQNd1amhoktnhjFdp6fxEw6s22YWFYE6J4eBYXURNFYsQ62VOlNBpN5m4Cjm+oa+Zinpfxtsj7D+yUrKmvAwMzwhssCsQWy2S6+ouFokfRgwFqYaHbhTe/FqvS4+2k81nIFWd1hRoEK8Z7CkZmg/HbD/SBjDw0hCdiP/2FiywnjjqXAPrrhVKoaHkHF+m5XfmcsgFUB2WFVnA/NwTF4+NtMYGYfOWv4ZUoGb48VH3h4v0zNFrIXnFu5H8aTtk=

@@ -14,7 +14,6 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
-#include <stdexcept>
 
 float computeTriangleArea(khiva::dimensionality::Point a, khiva::dimensionality::Point b,
                           khiva::dimensionality::Point c) {
