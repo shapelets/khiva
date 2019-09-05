@@ -6,8 +6,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 sudo apt-get update -y
-sudo apt-get install -y lcov python3 python3-pip rpm
-sudo sudo apt-get install python-setuptools
+sudo apt-get install -y lcov python3 python3-pip rpm python-setuptools
 
 # Installing conan
 sudo pip3 install conan==1.5.2
