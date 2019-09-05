@@ -60,7 +60,7 @@ deploy:
   description: "$(APPVEYOR_REPO_COMMIT_MESSAGE)"
   provider: GitHub
   auth_token:
-    secure: FnIWCjj+kBbuZdV6gISzXn2jVG6A2jRg5JyfouYa6zqtOLx/lSKgDsjnhbxTkUoI
+    secure: Mo+p9cIu47QXoiqHuX4VdhThV32Vzol1HmL8GwzybC3VxW09btUG7LJcDLr9X1c3
   artifact: installer
   draft: true
   prerelease: false
