@@ -14,3 +14,5 @@ fi
 # Installs arrayfire
 sudo mkdir -p /opt/arrayfire
 sudo bash arrayfire/ArrayFire-v3.6.2_Linux_x86_64.sh --prefix=/opt/arrayfire --skip-license
+sudo echo /opt/arrayfire/lib64 > /etc/ld.so.conf.d/arrayfire.conf
+sudo ldconfig
