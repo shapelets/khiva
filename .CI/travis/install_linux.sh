@@ -9,7 +9,7 @@ sudo apt-get update -y
 sudo apt-get install -y lcov python3 python3-pip rpm
 
 # Installing conan
-sudo pip3 install conan==1.5.2
+sudo pip3 install conan==1.5.2 setuptools==41.2.0
 
 if ! [[ -z "${TRAVIS_TAG}" ]]; then
   sudo apt-get install -y doxygen graphviz
