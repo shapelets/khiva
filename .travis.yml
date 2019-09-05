@@ -1,6 +1,6 @@
 language: cpp
 sudo: required
-dist: trusty
+dist: bionic
 cache:
   directories:
   - "${HOME}/.conan"
@@ -9,7 +9,7 @@ cache:
 matrix:
   include:
   - os: linux
-    dist: trusty
+    dist: bionic
     sudo: required
     compiler:
     - gcc
@@ -23,7 +23,7 @@ matrix:
     script:
     - source .CI/travis/build_linux.sh
   - os: linux
-    dist: trusty
+    dist: bionic
     sudo: required
     compiler:
     - clang

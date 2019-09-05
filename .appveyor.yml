@@ -4,8 +4,8 @@ environment:
   AF_PATH: C:\Program Files\ArrayFire\v3
   PATH: $(AF_PATH)\lib;C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
   matrix:
-    - GENERATOR: "Visual Studio 15 Win64"
-    - GENERATOR: "Visual Studio 14 Win64"
+    - GENERATOR: "Visual Studio 15 2017 Win64"
+    - GENERATOR: "Visual Studio 14 2015 Win64"
 cache:
   - c:\tools\vcpkg\installed\
   - C:\Program Files\ArrayFire
