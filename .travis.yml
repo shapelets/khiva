@@ -47,7 +47,7 @@ matrix:
       skip_cleanup: true
       provider: releases
       api_key:
-        secure: nq+uAF9nr8CufNHlsIxLhhADjci6fte+qXA32Dfq0A8ljWQiDsmbLY3e7+ilBoD9HoBrHElERb/UGHEjAF6DUc9JVut2PfquX9akZbLT8gF98ELodmt3AwdCCQTMm6xuxZU5P1T4RbrAYdrzvqZYCwiY84JSwGs3Wh66MzDxk+LYnFxXkVqPLQy2bwfRhN1LEhw/WoZBW2sWxJEPHxgOG/tXsWLkfY8T+tGFfu0Gw2qkS8s2HjEZXWuaEXu4CMZUzYaRAMn2utW1OtUZR++MlR7Fge4jX9Z0Q8kFAb22Zd7L6orcTyvX2w9ZPTB1NOLmjye503xsnfPS8n49+Z4EDIcgEYNzBEJlbrKr3jPoCp8I1GNsC4WSLGWMkGuqz4u6UJVHc9c9D/FHLITpaImo5pF+yUVD/PJK0ZBAFpzgMomV4kVlOLIWkbGcKcgyW6AryFs9CnT37RTTSzFNkUX5+ew81nNg3YJBjYSOGiC4KGLzpetUweMME4uxr8LGsLvW9HqOvFLSQIgIxivOwyqZmfoQiigtv+jl7+SA1cMRkg5GMohwnvkoRqnamQKYK4TYNsFpEUDmSgcZDVbDODQyUCvG6aa2/pgPtzrSBLRGzLwkUIXqaucG3UrN85i41XNltiqOpDEpTYRRpESJ3yzNLGqfDj9lfprTIWR3EgWFHUg=
+        secure: "aJmfhcML6BcvuKEPSGAEiEY+b6uhbaGaM/uUn0Xth+huXpQmjNExzR3/kPTFvfLH8irla6v91QVKrSRVPkCdtYOx8DO+H+YGH85dG52FpXA6NbhOYzO/pbH9ScD9SL3pr90r9FfdxyoIh5tLNPujoDtk3A2zUnw0jQYjFSx6aeCTTwYBBVnzGlvjZ9ybkYFlOX5BUQUmdMhB3UsJy/5Q1rpcigSlV8yCm6Sl7ucek8DP+iOtks8Xw51dMkRpgJpIkBq0JOypfCSyKiYgYHMXN8bIU5aeKGBmED9DCac+VhZkbROYbWwCXyadwvr6tuBVwFmgExKLhJnvQXOmnodaesZkyg0cCHQjLgSsouATo9vDAg3gpJUdITDUETE8GTan3/6xW5pFfStb2hyFd6Q9ZopAYuz24vHmdKCNWSMp2AwFALWVXt1xGwJ28XUdgVFGObdkSOtXa4PbnqGZvLNPFLJcibUXq2ei+C51TN7bv8KQIfgDJltZe99eUdjiZJX2rTDv1lX07bFMXiHI4ipDPhFOzyZvYVAiMJbudQUurpzwY+6KG+Gagt142k8aATg4e40RaYFPVakx2TtxFApVyGDIgrkzZ3s1X2IsC3Dklb9f5Iqx5gf59hKFG3vAsUxLw2u+rthWAu7jnsAbQZSsIAicLlMec1fAW9xA2rkt2ZY="
         file_glob: true
       file:
       - "${TRAVIS_BUILD_DIR}/build/khiva-*.deb"
@@ -112,9 +112,10 @@ matrix:
       skip_cleanup: true
       provider: releases
       api_key:
-        secure: nq+uAF9nr8CufNHlsIxLhhADjci6fte+qXA32Dfq0A8ljWQiDsmbLY3e7+ilBoD9HoBrHElERb/UGHEjAF6DUc9JVut2PfquX9akZbLT8gF98ELodmt3AwdCCQTMm6xuxZU5P1T4RbrAYdrzvqZYCwiY84JSwGs3Wh66MzDxk+LYnFxXkVqPLQy2bwfRhN1LEhw/WoZBW2sWxJEPHxgOG/tXsWLkfY8T+tGFfu0Gw2qkS8s2HjEZXWuaEXu4CMZUzYaRAMn2utW1OtUZR++MlR7Fge4jX9Z0Q8kFAb22Zd7L6orcTyvX2w9ZPTB1NOLmjye503xsnfPS8n49+Z4EDIcgEYNzBEJlbrKr3jPoCp8I1GNsC4WSLGWMkGuqz4u6UJVHc9c9D/FHLITpaImo5pF+yUVD/PJK0ZBAFpzgMomV4kVlOLIWkbGcKcgyW6AryFs9CnT37RTTSzFNkUX5+ew81nNg3YJBjYSOGiC4KGLzpetUweMME4uxr8LGsLvW9HqOvFLSQIgIxivOwyqZmfoQiigtv+jl7+SA1cMRkg5GMohwnvkoRqnamQKYK4TYNsFpEUDmSgcZDVbDODQyUCvG6aa2/pgPtzrSBLRGzLwkUIXqaucG3UrN85i41XNltiqOpDEpTYRRpESJ3yzNLGqfDj9lfprTIWR3EgWFHUg=
-      file: "${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.pkg"
+        secure: "aJmfhcML6BcvuKEPSGAEiEY+b6uhbaGaM/uUn0Xth+huXpQmjNExzR3/kPTFvfLH8irla6v91QVKrSRVPkCdtYOx8DO+H+YGH85dG52FpXA6NbhOYzO/pbH9ScD9SL3pr90r9FfdxyoIh5tLNPujoDtk3A2zUnw0jQYjFSx6aeCTTwYBBVnzGlvjZ9ybkYFlOX5BUQUmdMhB3UsJy/5Q1rpcigSlV8yCm6Sl7ucek8DP+iOtks8Xw51dMkRpgJpIkBq0JOypfCSyKiYgYHMXN8bIU5aeKGBmED9DCac+VhZkbROYbWwCXyadwvr6tuBVwFmgExKLhJnvQXOmnodaesZkyg0cCHQjLgSsouATo9vDAg3gpJUdITDUETE8GTan3/6xW5pFfStb2hyFd6Q9ZopAYuz24vHmdKCNWSMp2AwFALWVXt1xGwJ28XUdgVFGObdkSOtXa4PbnqGZvLNPFLJcibUXq2ei+C51TN7bv8KQIfgDJltZe99eUdjiZJX2rTDv1lX07bFMXiHI4ipDPhFOzyZvYVAiMJbudQUurpzwY+6KG+Gagt142k8aATg4e40RaYFPVakx2TtxFApVyGDIgrkzZ3s1X2IsC3Dklb9f5Iqx5gf59hKFG3vAsUxLw2u+rthWAu7jnsAbQZSsIAicLlMec1fAW9xA2rkt2ZY="
+        file: "${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.pkg"
       draft: true
       prerelease: false
       on:
+        repo: shapelets/khiva
         tags: true
