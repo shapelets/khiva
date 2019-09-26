@@ -139,6 +139,7 @@ For more information and alternative installation options, please refer to [cona
 
 - Run the commands below:
 `git submodule update --init`
+`conan install .. --build missing`
 `cmake ..`
 `make -j8`
 
