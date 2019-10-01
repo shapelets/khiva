@@ -44,7 +44,7 @@ Once the build process is finished you can install the library in your system fo
 
 ### Generating the Khiva installer
 
-We use Cpack and NSIS to generate the installer.
+We use CPack and NSIS to generate the installer.
 
 **Notes:** Before generating the installer, the project has to be built by following the previous `Build from source code` section. The generated package is stored in the `build` folder.
 
@@ -67,18 +67,28 @@ We use Cpack and NSIS to generate the installer.
 
 - Install [Python-64bits](https://www.python.org/downloads) or run `apt-get install python3 python3-pip`, 32-bits version won't work.
 - Download [ArrayFire 3.6.2](http://arrayfire.s3.amazonaws.com/3.6.2/ArrayFire-v3.6.2_Linux_x86_64.sh).
-- Install ArrayFire `sudo mkdir -p /opt/arrayfire`
-- Run `sudo bash arrayfire/ArrayFire-v3.6.2_Linux_x86_64.sh --prefix=/opt/arrayfire --skip-license`
+- Install ArrayFire:
+
+   ```bash
+   ./Arrayfire_*_Linux_x86_64.sh --include-subdir --prefix=/opt
+   echo /opt/arrayfire/lib64 > /etc/ld.so.conf.d/arrayfire.conf
+   sudo ldconfig
+   ```   
 
 Once we have installed all Khiva dependencies, we are ready to install Khiva from source code or by using the installers.
 
 #### Build from source code
 
 - Install conan, c++ package manager, preferably running `pip install conan`. For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
-- Run `conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`.
-- Create `build` folder and, after moving into the new folder, run `conan install .. --build missing`.
-- Run `cmake ..`.
-- Run `make -j8`.
+- Run:
+  ```bash
+  conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
+  git submodule update --init
+  mkdir build && cd build
+  conan install .. --build missing
+  cmake ..
+  make -j8
+  ```
 
 #### Install Khiva library from source code
 
