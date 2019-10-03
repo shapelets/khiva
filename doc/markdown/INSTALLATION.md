@@ -73,7 +73,8 @@ We use CPack and NSIS to generate the installer.
    ./Arrayfire_*_Linux_x86_64.sh --include-subdir --prefix=/opt
    echo /opt/arrayfire/lib64 > /etc/ld.so.conf.d/arrayfire.conf
    sudo ldconfig
-   ```   
+   ```
+- Install opencl libraries. Follow [Intel guide](https://software.intel.com/en-us/articles/opencl-drivers#inpage-nav-1-1-1)
 
 Once we have installed all Khiva dependencies, we are ready to install Khiva from source code or by using the installers.
 
