@@ -115,8 +115,10 @@ af::array generateUniformLabels(int nTimeSeries, int k) {
  * @return          The accumulated change ratio between iterations.
  */
 float computeError(af::array means, af::array newMeans) {
-    float *error = af::sum(af::sqrt(af::sum(af::pow(means - newMeans, 2), 0))).as(af::dtype::f32).host<float>();
-    return error[0];
+    auto *error = af::sum(af::sqrt(af::sum(af::pow(means - newMeans, 2), 0))).as(af::dtype::f32).host<float>();
+    auto res = error[0];
+    af::freeHost(error);
+    return res;
 }
 
 void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance,
@@ -176,25 +178,28 @@ af::array selectSubset(af::array tss, af::array labels, int centroidId) {
 }
 
 af::array eigenVectors(af::array matrix) {
-    float *matHost = matrix.host<float>();
+    auto *matHost = matrix.host<float>();
     Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, matrix.dims(0), matrix.dims(1));
 
     Eigen::EigenSolver<Eigen::MatrixXf> solution(mat);
 
     Eigen::MatrixXf re;
     re = solution.eigenvectors().real();
-
-    return af::array(matrix.dims(0), matrix.dims(1), re.data());
+    auto res = af::array(matrix.dims(0), matrix.dims(1), re.data());
+    af::freeHost(matHost);
+    return res;
 }
 
 af::array eigenValues(af::array matrix) {
-    float *matHost = matrix.host<float>();
+    auto *matHost = matrix.host<float>();
     Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, matrix.dims(0), matrix.dims(1));
 
     Eigen::VectorXcf eivals = mat.eigenvalues();
 
     Eigen::VectorXf re = eivals.real();
-    return af::array(matrix.dims(0), re.data());
+    auto res = af::array(matrix.dims(0), re.data());
+    af::freeHost(matHost);
+    return res;
 }
 
 /**
@@ -208,7 +213,7 @@ af::array getFirstEigenVector(af::array m) {
     af::array eigenVectors;
 
     if (m.type() == af::dtype::f64) {
-        double *matHost = m.host<double>();
+        auto *matHost = m.host<double>();
         Eigen::MatrixXd mat = Eigen::Map<Eigen::MatrixXd>(matHost, m.dims(0), m.dims(1));
 
         // Compute Eigen Values.
@@ -220,8 +225,9 @@ af::array getFirstEigenVector(af::array m) {
         Eigen::EigenSolver<Eigen::MatrixXd> solution(mat);
         Eigen::MatrixXd reEIVectors = solution.eigenvectors().real();
         eigenVectors = af::array(m.dims(0), m.dims(1), reEIVectors.data());
+        af::freeHost(matHost);
     } else if (m.type() == af::dtype::f32) {
-        float *matHost = m.host<float>();
+        auto *matHost = m.host<float>();
         Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost, m.dims(0), m.dims(1));
 
         // Compute Eigen Values.
@@ -233,6 +239,7 @@ af::array getFirstEigenVector(af::array m) {
         Eigen::EigenSolver<Eigen::MatrixXf> solution(mat);
         Eigen::MatrixXf reEIVectors = solution.eigenvectors().real();
         eigenVectors = af::array(m.dims(0), m.dims(1), reEIVectors.data());
+        af::freeHost(matHost);
     }
 
     // Get maximum Eigen Value

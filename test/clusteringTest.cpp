@@ -32,6 +32,7 @@ void kmeans() {
         ASSERT_NEAR(calculated_c[i] + calculated_c[i + 4] + calculated_c[i + 8],
                     expected_c[i] + expected_c[i + 4] + expected_c[i + 8], 1e-3);
     }
+    af::freeHost(calculated_c);
 }
 
 void kmeans2() {
@@ -46,12 +47,13 @@ void kmeans2() {
     af::array labels;
     khiva::clustering::kMeans(tss, 3, means, labels);
 
-    float *calculated_c = means.host<float>();
+    auto *calculated_c = means.host<float>();
 
     for (size_t i = 0; i < 4; i++) {
         ASSERT_NEAR(calculated_c[i] + calculated_c[i + 4] + calculated_c[i + 8],
                     expected_c[i] + expected_c[i + 4] + expected_c[i + 8], 1e-3);
     }
+    af::freeHost(calculated_c);
 }
 
 void kShapeFloat() {
@@ -76,12 +78,14 @@ void kShapeFloat() {
 
     khiva::clustering::kShape(data, k, centroids, idx, tolerance, maxIter);
 
-    float *calculated_c = centroids.host<float>();
-    unsigned int *calculated_l = idx.host<unsigned int>();
+    auto *calculated_c = centroids.host<float>();
+    auto *calculated_l = idx.host<unsigned int>();
 
     for (size_t i = 0; i < 21; i++) {
         ASSERT_NEAR(calculated_c[i], expected_c[i], 1e-3);
     }
+    af::freeHost(calculated_c);
+    af::freeHost(calculated_l);
 }
 
 void kShapeDouble() {
@@ -105,12 +109,14 @@ void kShapeDouble() {
 
     khiva::clustering::kShape(data, k, centroids, idx, tolerance, maxIter);
 
-    double *calculated_c = centroids.host<double>();
-    unsigned int *calculated_l = idx.host<unsigned int>();
+    auto *calculated_c = centroids.host<double>();
+    auto *calculated_l = idx.host<unsigned int>();
 
     for (size_t i = 0; i < 21; i++) {
         ASSERT_NEAR(calculated_c[i], expected_c[i], 1e-3);
     }
+    af::freeHost(calculated_c);
+    af::freeHost(calculated_l);
 }
 
 KHIVA_TEST(ClusteringTests, KMeans, kmeans)

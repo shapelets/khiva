@@ -697,7 +697,7 @@ void extractAllChains() {
     auto chains = khiva::matrix::internal::extractAllChains(leftProfile, rightProfile);
 
     ASSERT_TRUE(expectedRes == chains);
-};
+}
 
 void assert_chain(const std::vector<unsigned int> &chainValues, const std::vector<unsigned int> &chain) {
     auto itFind = std::find(chainValues.begin(), chainValues.end(), chain.front());

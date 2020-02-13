@@ -207,7 +207,6 @@ af::array slidingDotProduct(af::array q, af::array t) {
 
     // Flipping all the query sequences contained in q
     af::array qr = af::flip(q, 0);
-
     // Calculating the convolve of all the query sequences contained in qr
     // against all the time series contained in t
     af::array qt = af::real(af::convolve(t, qr, AF_CONV_EXPAND));

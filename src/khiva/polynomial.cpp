@@ -48,7 +48,7 @@ af::array khiva::polynomial::roots(af::array pp) {
         p = (-1 * p(af::seq(1, static_cast<double>(p.dims(0)) - 1), af::span)) /
             af::tile(p(0, af::span), static_cast<unsigned int>(p.dims(0)) - 1);
 
-        float *coeffs = p.as(af::dtype::f32).host<float>();
+        auto *coeffs = p.as(af::dtype::f32).host<float>();
 
         Eigen::VectorXf vec = Eigen::VectorXf::Ones(p.dims(0));
         Eigen::MatrixXf diag = vec.asDiagonal();
@@ -61,6 +61,7 @@ af::array khiva::polynomial::roots(af::array pp) {
         Eigen::VectorXcf eivals = diag2.eigenvalues();
 
         result(af::span, i) = af::array(p.dims(0), (af::cfloat *)eivals.data());
+        af::freeHost(coeffs);
     }
 
     return result;

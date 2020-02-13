@@ -55,10 +55,11 @@ void khiva::regression::linear(af::array xss, af::array yss, af::array &slope, a
     // It would be better to move this computation to the GPU
     // Converting to af::dtype::f32 and back to the original type later on
     // to avoid templating this function and all the ones using it
-    float *aux = af::abs(t).as(af::dtype::f32).host<float>();
+    auto *aux = af::abs(t).as(af::dtype::f32).host<float>();
     for (long i = 0; i < t.dims(1); i++) {
         aux[i] = 2.0f * (1.0f - static_cast<float>(boost::math::cdf(dist, aux[i])));
     }
     pvalue = af::array(1, t.dims(1), aux).as(xss.type());
     stderrest = af::sqrt((1 - af::pow(r, 2)) * ssym / ssxm / df);
+    af::freeHost(aux);
 }

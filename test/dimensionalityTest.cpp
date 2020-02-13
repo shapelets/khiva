@@ -23,6 +23,7 @@ void paaDivisible() {
     for (size_t i = 0; i < 5; i++) {
         ASSERT_EQ(out_h[i], expected[i]);
     }
+    af::freeHost(out_h);
 }
 
 void paaNonDivisibleFloat() {
@@ -32,8 +33,8 @@ void paaNonDivisibleFloat() {
 
     af::array out = khiva::dimensionality::PAA(a, 3);
 
-    float *col0 = out.col(0).host<float>();
-    float *col1 = out.col(1).host<float>();
+    auto *col0 = out.col(0).host<float>();
+    auto *col1 = out.col(1).host<float>();
     std::vector<float> col0_expected = {1.0, 4.0f, 7.5f};
     std::vector<float> col1_expected = {0.0f, 6.0f, 8.7750f};
 
@@ -41,6 +42,8 @@ void paaNonDivisibleFloat() {
         ASSERT_NEAR(col0[i], col0_expected[i], EPSILON);
         ASSERT_NEAR(col1[i], col1_expected[i], EPSILON);
     }
+    af::freeHost(col0);
+    af::freeHost(col1);
 }
 
 void paaNonDivisibleDouble() {
@@ -50,8 +53,8 @@ void paaNonDivisibleDouble() {
 
     af::array out = khiva::dimensionality::PAA(a, 3);
 
-    double *col0 = out.col(0).host<double>();
-    double *col1 = out.col(1).host<double>();
+    auto *col0 = out.col(0).host<double>();
+    auto *col1 = out.col(1).host<double>();
     std::vector<double> col0_expected = {1.0, 4.0, 7.5};
     std::vector<double> col1_expected = {0.0, 6.0, 8.7750};
 
@@ -59,6 +62,8 @@ void paaNonDivisibleDouble() {
         ASSERT_NEAR(col0[i], col0_expected[i], EPSILON);
         ASSERT_NEAR(col1[i], col1_expected[i], EPSILON);
     }
+    af::freeHost(col0);
+    af::freeHost(col1);
 }
 
 void paaNorm() {
@@ -111,13 +116,15 @@ void pip() {
 
     af::array pointsOut = khiva::dimensionality::PIP(tss, 6);
 
-    float *pox_h = pointsOut.col(0).host<float>();
-    float *poy_h = pointsOut.col(1).host<float>();
+    auto *pox_h = pointsOut.col(0).host<float>();
+    auto *poy_h = pointsOut.col(1).host<float>();
 
     for (size_t i = 0; i < 6; i++) {
         ASSERT_EQ(pox_h[i], exp_x[i]);
         ASSERT_EQ(poy_h[i], exp_y[i]);
     }
+    af::freeHost(pox_h);
+    af::freeHost(poy_h);
 }
 
 void pipException() {
@@ -188,8 +195,8 @@ void plaBottomUp2() {
     af::array tss = join(1, tsx, tsy);
 
     auto d_out = khiva::dimensionality::PLABottomUp(tss, maxError);
-    float *pox = d_out.col(0).host<float>();
-    float *poy = d_out.col(1).host<float>();
+    auto *pox = d_out.col(0).host<float>();
+    auto *poy = d_out.col(1).host<float>();
 
     std::vector<khiva::dimensionality::Point> expected = {
         khiva::dimensionality::Point(0.0, 0.0),  khiva::dimensionality::Point(1.0, 0.1),
@@ -220,6 +227,9 @@ void plaBottomUp2() {
 
     ASSERT_EQ(pox[7], expected[7].first);
     ASSERT_EQ(poy[7], expected[7].second);
+
+    af::freeHost(pox);
+    af::freeHost(poy);
 }
 
 void plaBottomUpException() {
@@ -289,8 +299,8 @@ void plaSlidingWindow2() {
 
     auto out = khiva::dimensionality::PLASlidingWindow(tss, maxError);
 
-    float *pox_h = out.col(0).host<float>();
-    float *poy_h = out.col(1).host<float>();
+    auto *pox_h = out.col(0).host<float>();
+    auto *poy_h = out.col(1).host<float>();
 
     ASSERT_EQ(pox_h[0], expected[0].first);
     ASSERT_EQ(poy_h[0], expected[0].second);
@@ -309,6 +319,9 @@ void plaSlidingWindow2() {
 
     ASSERT_EQ(pox_h[5], expected[5].first);
     ASSERT_EQ(poy_h[5], expected[5].second);
+
+    af::freeHost(pox_h);
+    af::freeHost(poy_h);
 }
 
 void plaSlidingWindowException() {
@@ -359,13 +372,15 @@ void ramerDouglasPeucker2() {
         khiva::dimensionality::Point(9.0f, 9.0f)};
 
     af::array res = khiva::dimensionality::ramerDouglasPeucker(points, 1.0);
-    float *points_x = res.col(0).host<float>();
-    float *points_y = res.col(1).host<float>();
+    auto *points_x = res.col(0).host<float>();
+    auto *points_y = res.col(1).host<float>();
 
     for (size_t i = 0; i < expected.size(); i++) {
         ASSERT_EQ(points_x[i], expected[i].first);
         ASSERT_EQ(points_y[i], expected[i].second);
     }
+    af::freeHost(points_x);
+    af::freeHost(points_y);
 }
 
 void ramerDouglasPeuckerException() {
@@ -385,12 +400,13 @@ void sax() {
 
     af::array out = khiva::dimensionality::SAX(a, 3);
 
-    float *out_h = out.host<float>();
+    auto *out_h = out.host<float>();
     float expected[] = {0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 0.0, 1.0, 2.0, 2.0, 2.0};
 
     for (size_t i = 0; i < 10; i++) {
         EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
     }
+    af::freeHost(out_h);
 }
 
 void sax2() {
@@ -399,12 +415,13 @@ void sax2() {
 
     af::array out = khiva::dimensionality::SAX(a, 3);
 
-    float *out_h = out.host<float>();
+    auto *out_h = out.host<float>();
     float expected[] = {1.0, 2.0, 3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     for (size_t i = 0; i < 10; i++) {
         EXPECT_DOUBLE_EQ(out_h[i], expected[i]);
     }
+    af::freeHost(out_h);
 }
 
 void saxException() {
@@ -455,13 +472,15 @@ void visvalingam2() {
         khiva::dimensionality::Point(9.0f, 9.0f)};
 
     af::array res = khiva::dimensionality::visvalingam(points, 5);
-    float *points_x = res.col(0).host<float>();
-    float *points_y = res.col(1).host<float>();
+    auto *points_x = res.col(0).host<float>();
+    auto *points_y = res.col(1).host<float>();
 
     for (size_t i = 0; i < expected.size(); i++) {
         ASSERT_EQ(points_x[i], expected[i].first);
         ASSERT_EQ(points_y[i], expected[i].second);
     }
+    af::freeHost(points_x);
+    af::freeHost(points_y);
 }
 
 void visvalingamException() {

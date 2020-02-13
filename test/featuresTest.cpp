@@ -15,11 +15,12 @@ void absEnergy() {
     auto result = khiva::features::absEnergy(tss);
 
     float expected[] = {385};
-    float *host_res = result.host<float>();
+    auto *host_res = result.host<float>();
 
     for (int i = 0; i < 1; i++) {
         ASSERT_NEAR(host_res[i], expected[i], EPSILON);
     }
+    af::freeHost(host_res);
 }
 
 void absEnergy2() {
@@ -29,11 +30,12 @@ void absEnergy2() {
     auto result = khiva::features::absEnergy(tss);
 
     float expected[] = {30, 30, 30};
-    float *host_res = result.row(0).host<float>();
+    auto *host_res = result.row(0).host<float>();
 
     for (int i = 0; i < 3; i++) {
         ASSERT_NEAR(host_res[i], expected[i], EPSILON);
     }
+    af::freeHost(host_res);
 }
 
 void absoluteSumOfChanges() {
@@ -50,10 +52,11 @@ void absoluteSumOfChanges() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    float *hostResult = asoc.host<float>();
+    auto *hostResult = asoc.host<float>();
     ASSERT_EQ(3, hostResult[0]);
     ASSERT_EQ(6, hostResult[1]);
     ASSERT_EQ(9, hostResult[2]);
+    af::freeHost(hostResult);
 }
 
 void aggregatedCorrelationMean() {
@@ -61,10 +64,11 @@ void aggregatedCorrelationMean() {
     af::array tss(6, 2, data);
 
     af::array res = khiva::features::aggregatedAutocorrelation(tss, af::mean);
-    float *r = res.host<float>();
+    auto *r = res.host<float>();
     float a[] = {-0.6571428571428571f, -0.6571428571428571f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
     ASSERT_NEAR(r[1], a[1], EPSILON);
+    af::freeHost(r);
 }
 
 void aggregatedCorrelationMedian() {
@@ -72,10 +76,11 @@ void aggregatedCorrelationMedian() {
     af::array tss(6, 2, data);
 
     af::array res = khiva::features::aggregatedAutocorrelation(tss, af::median);
-    float *r = res.host<float>();
+    auto *r = res.host<float>();
     float a[] = {-0.54285717010498047, -0.54285717010498047};
     ASSERT_NEAR(r[0], a[0], EPSILON);
     ASSERT_NEAR(r[1], a[1], EPSILON);
+    af::freeHost(r);
 }
 
 void aggregatedCorrelationMin() {
@@ -83,10 +88,11 @@ void aggregatedCorrelationMin() {
     af::array tss(6, 2, data);
 
     af::array res = khiva::features::aggregatedAutocorrelation(tss, af::min);
-    float *r = res.host<float>();
+    auto *r = res.host<float>();
     float a[] = {-2.142857142857143f, -2.142857142857143f};
     ASSERT_NEAR(r[0], a[0], EPSILON * 2);
     ASSERT_NEAR(r[1], a[1], EPSILON * 2);
+    af::freeHost(r);
 }
 
 void aggregatedCorrelationMax() {
@@ -94,10 +100,11 @@ void aggregatedCorrelationMax() {
     af::array tss(6, 2, data);
 
     af::array res = khiva::features::aggregatedAutocorrelation(tss, af::max);
-    float *r = res.host<float>();
+    auto *r = res.host<float>();
     float a[] = {0.6f, 0.6f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
     ASSERT_NEAR(r[1], a[1], EPSILON);
+    af::freeHost(r);
 }
 
 void aggregatedCorrelationStdev() {
@@ -105,10 +112,11 @@ void aggregatedCorrelationStdev() {
     af::array tss(6, 2, data);
 
     af::array res = khiva::features::aggregatedAutocorrelation(tss, af::stdev);
-    float *r = res.host<float>();
+    auto *r = res.host<float>();
     float a[] = {0.9744490855905009f, 0.9744490855905009f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
     ASSERT_NEAR(r[1], a[1], EPSILON);
+    af::freeHost(r);
 }
 
 void aggregatedCorrelationVar() {
@@ -116,10 +124,11 @@ void aggregatedCorrelationVar() {
     af::array tss(6, 2, data);
 
     af::array res = khiva::features::aggregatedAutocorrelation(tss, af::var);
-    float *r = res.host<float>();
+    auto *r = res.host<float>();
     float a[] = {0.9495510204081633f, 0.9495510204081633f};
     ASSERT_NEAR(r[0], a[0], EPSILON);
     ASSERT_NEAR(r[1], a[1], EPSILON);
+    af::freeHost(r);
 }
 
 void aggregatedLinearTrendMean() {
@@ -177,11 +186,11 @@ void aggregatedLinearTrendMultipleSeriesMean() {
 
     khiva::features::aggregatedLinearTrend(tss, 3, af::mean, slope, intercept, rvalue, pvalue, stderrest);
 
-    float *slopeCalculated = slope.host<float>();
-    float *interceptCalculated = intercept.host<float>();
-    float *rvalueCalculated = rvalue.host<float>();
-    float *pvalueCalculated = pvalue.host<float>();
-    float *stderrestCalculated = stderrest.host<float>();
+    auto *slopeCalculated = slope.host<float>();
+    auto *interceptCalculated = intercept.host<float>();
+    auto *rvalueCalculated = rvalue.host<float>();
+    auto *pvalueCalculated = pvalue.host<float>();
+    auto *stderrestCalculated = stderrest.host<float>();
 
     ASSERT_NEAR(slopeCalculated[0], 1.0, EPSILON);
     ASSERT_NEAR(interceptCalculated[0], 2.0, EPSILON);
@@ -193,6 +202,11 @@ void aggregatedLinearTrendMultipleSeriesMean() {
     ASSERT_NEAR(rvalueCalculated[1], 1.0, EPSILON);
     ASSERT_NEAR(pvalueCalculated[1], 0.0, EPSILON);
     ASSERT_NEAR(stderrestCalculated[1], 0.0, EPSILON);
+    af::freeHost(slopeCalculated);
+    af::freeHost(interceptCalculated);
+    af::freeHost(rvalueCalculated);
+    af::freeHost(pvalueCalculated);
+    af::freeHost(stderrestCalculated);
 }
 
 void aggregatedLinearTrendMultipleSeriesMin() {
@@ -204,11 +218,11 @@ void aggregatedLinearTrendMultipleSeriesMin() {
 
     khiva::features::aggregatedLinearTrend(tss, 3, af::mean, slope, intercept, rvalue, pvalue, stderrest);
 
-    float *slopeCalculated = slope.host<float>();
-    float *interceptCalculated = intercept.host<float>();
-    float *rvalueCalculated = rvalue.host<float>();
-    float *pvalueCalculated = pvalue.host<float>();
-    float *stderrestCalculated = stderrest.host<float>();
+    auto *slopeCalculated = slope.host<float>();
+    auto *interceptCalculated = intercept.host<float>();
+    auto *rvalueCalculated = rvalue.host<float>();
+    auto *pvalueCalculated = pvalue.host<float>();
+    auto *stderrestCalculated = stderrest.host<float>();
 
     ASSERT_NEAR(slopeCalculated[0], 1.0, EPSILON);
     ASSERT_NEAR(interceptCalculated[0], 2.0, EPSILON);
@@ -220,6 +234,11 @@ void aggregatedLinearTrendMultipleSeriesMin() {
     ASSERT_NEAR(rvalueCalculated[1], 1.0, EPSILON);
     ASSERT_NEAR(pvalueCalculated[1], 0.0, EPSILON);
     ASSERT_NEAR(stderrestCalculated[1], 0.0, EPSILON);
+    af::freeHost(slopeCalculated);
+    af::freeHost(interceptCalculated);
+    af::freeHost(rvalueCalculated);
+    af::freeHost(pvalueCalculated);
+    af::freeHost(stderrestCalculated);
 }
 
 void approximateEntropy() {
@@ -232,12 +251,13 @@ void approximateEntropy() {
 
     af::array res = khiva::features::approximateEntropy(a, m, r);
 
-    float *resCalculated = res.host<float>();
+    auto *resCalculated = res.host<float>();
 
     float expected[] = {0.13484275341033936, 0.13484275341033936};
 
     ASSERT_NEAR(resCalculated[0], expected[0], EPSILON);
     ASSERT_NEAR(resCalculated[1], expected[1], EPSILON);
+    af::freeHost(resCalculated);
 }
 
 void crossCovariance() {
@@ -249,7 +269,7 @@ void crossCovariance() {
 
     af::array calculated = khiva::features::crossCovariance(xss, yss, false);
 
-    float *calculatedHost = calculated.host<float>();
+    auto *calculatedHost = calculated.host<float>();
 
     // Expected results obtained using statsmodels
     for (int i = 0; i < 4; i++) {
@@ -259,6 +279,7 @@ void crossCovariance() {
         ASSERT_EQ(calculatedHost[(i * 5) + 3], -1.25);
         ASSERT_EQ(calculatedHost[(i * 5) + 4], -1.5);
     }
+    af::freeHost(calculatedHost);
 }
 
 void crossCovarianceBiased() {
@@ -270,7 +291,7 @@ void crossCovarianceBiased() {
 
     af::array calculated = khiva::features::crossCovariance(xss, yss, false);
 
-    float *calculatedHost = calculated.host<float>();
+    auto *calculatedHost = calculated.host<float>();
 
     // Expected results obtained using statsmodels
     for (int i = 0; i < 2; i++) {
@@ -287,6 +308,7 @@ void crossCovarianceBiased() {
         ASSERT_NEAR(calculatedHost[(i * 12) + 10], -0.666666666, EPSILON * 1e1);
         ASSERT_NEAR(calculatedHost[(i * 12) + 11], 6.25, EPSILON);
     }
+    af::freeHost(calculatedHost);
 }
 
 void crossCovarianceUnbiased() {
@@ -298,7 +320,7 @@ void crossCovarianceUnbiased() {
 
     af::array calculated = khiva::features::crossCovariance(xss, yss, true);
 
-    float *calculatedHost = calculated.host<float>();
+    auto *calculatedHost = calculated.host<float>();
 
     // Expected results obtained using statsmodels
     for (int i = 0; i < 4; i++) {
@@ -307,6 +329,7 @@ void crossCovarianceUnbiased() {
         ASSERT_EQ(calculatedHost[(i * 4) + 2], -1.5);
         ASSERT_EQ(calculatedHost[(i * 4) + 3], -4.5);
     }
+    af::freeHost(calculatedHost);
 }
 
 void autoCovariance() {
@@ -315,7 +338,7 @@ void autoCovariance() {
 
     af::array calculated = khiva::features::autoCovariance(tss);
 
-    float *calculatedHost = calculated.host<float>();
+    auto *calculatedHost = calculated.host<float>();
 
     // Expected results obtained using statsmodels
     ASSERT_EQ(calculatedHost[0], 1.25);
@@ -326,6 +349,7 @@ void autoCovariance() {
     ASSERT_EQ(calculatedHost[5], 0.3125);
     ASSERT_EQ(calculatedHost[6], -0.375);
     ASSERT_EQ(calculatedHost[7], -0.5625);
+    af::freeHost(calculatedHost);
 }
 
 void crossCorrelation() {
@@ -337,7 +361,7 @@ void crossCorrelation() {
 
     af::array calculated = khiva::features::crossCorrelation(xs, ys, false);
 
-    float *calculatedHost = calculated.host<float>();
+    auto *calculatedHost = calculated.host<float>();
 
     // // Expected results obtained using statsmodels
     for (int i = 0; i < 4; i++) {
@@ -347,6 +371,7 @@ void crossCorrelation() {
         ASSERT_NEAR(calculatedHost[(i * 5) + 3], -0.395284707, EPSILON);
         ASSERT_NEAR(calculatedHost[(i * 5) + 4], -0.474341649, EPSILON);
     }
+    af::freeHost(calculatedHost);
 }
 
 void autoCorrelation() {
@@ -355,7 +380,7 @@ void autoCorrelation() {
 
     af::array calculated2 = khiva::features::autoCorrelation(tss, 4);
 
-    float *calculated2Host = calculated2.host<float>();
+    auto *calculated2Host = calculated2.host<float>();
 
     // Expected results obtained using tsfresh
     ASSERT_EQ(calculated2Host[0], 1.0);
@@ -366,6 +391,7 @@ void autoCorrelation() {
     ASSERT_EQ(calculated2Host[5], 0.25);
     ASSERT_NEAR(calculated2Host[6], -0.3, EPSILON);
     ASSERT_NEAR(calculated2Host[7], -0.45, EPSILON);
+    af::freeHost(calculated2Host);
 }
 
 void binnedEntropy() {
@@ -377,10 +403,11 @@ void binnedEntropy() {
 
     af::array output = khiva::features::binnedEntropy(tss, 5);
 
-    float *h_out = output.host<float>();
+    auto *h_out = output.host<float>();
     float a[] = {1.6094379124341005f, 1.5614694247763998f};
     ASSERT_NEAR(h_out[0], a[0], EPSILON);
     ASSERT_NEAR(h_out[1], a[1], EPSILON);
+    af::freeHost(h_out);
 }
 
 void c3() {
@@ -389,10 +416,11 @@ void c3() {
 
     af::array c3Result = khiva::features::c3(tss, 2);
 
-    float *c3Calculated = c3Result.host<float>();
+    auto *c3Calculated = c3Result.host<float>();
 
     ASSERT_EQ(c3Calculated[0], 7.5);
     ASSERT_EQ(c3Calculated[1], 586.5);
+    af::freeHost(c3Calculated);
 }
 
 void cidCe() {
@@ -401,17 +429,19 @@ void cidCe() {
 
     af::array cidCeResult = khiva::features::cidCe(tss);
 
-    float *cidCeCalculated = cidCeResult.host<float>();
+    auto *cidCeCalculated = cidCeResult.host<float>();
 
     ASSERT_NEAR(cidCeCalculated[0], 2.23606797749979, EPSILON);
     ASSERT_NEAR(cidCeCalculated[1], 2.23606797749979, EPSILON);
+    af::freeHost(cidCeCalculated);
 
     af::array cidCeResult2 = khiva::features::cidCe(tss, true);
 
-    float *cidCeCalculated2 = cidCeResult2.host<float>();
+    auto *cidCeCalculated2 = cidCeResult2.host<float>();
 
     ASSERT_NEAR(cidCeCalculated2[0], 1.30930734141595, EPSILON);
     ASSERT_NEAR(cidCeCalculated2[1], 1.30930734141595, EPSILON);
+    af::freeHost(cidCeCalculated2);
 }
 
 void countAboveMean() {
@@ -420,10 +450,11 @@ void countAboveMean() {
 
     af::array countAboveMeanResult = khiva::features::countAboveMean(tss);
 
-    unsigned int *countAboveMeanCalculated = countAboveMeanResult.host<unsigned int>();
+    auto *countAboveMeanCalculated = countAboveMeanResult.host<unsigned int>();
 
     ASSERT_EQ(countAboveMeanCalculated[0], 3);
     ASSERT_EQ(countAboveMeanCalculated[1], 3);
+    af::freeHost(countAboveMeanCalculated);
 }
 
 void countBelowMean() {
@@ -432,10 +463,11 @@ void countBelowMean() {
 
     af::array countBelowMeanResult = khiva::features::countBelowMean(tss);
 
-    unsigned int *countBelowMeanCalculated = countBelowMeanResult.host<unsigned int>();
+    auto *countBelowMeanCalculated = countBelowMeanResult.host<unsigned int>();
 
     ASSERT_EQ(countBelowMeanCalculated[0], 3);
     ASSERT_EQ(countBelowMeanCalculated[1], 3);
+    af::freeHost(countBelowMeanCalculated);
 }
 
 void cwtCoefficients() {
@@ -445,13 +477,14 @@ void cwtCoefficients() {
     af::array widths_d(3, 1, widths);
     af::array result = khiva::features::cwtCoefficients(data_d, widths_d, 2, 2);
 
-    float *cwt = result.host<float>();
+    auto *cwt = result.host<float>();
 
     float r0 = 0.26517161726951599;
     float r1 = 0.26517161726951599;
 
     ASSERT_NEAR(r0, cwt[0], EPSILON);
     ASSERT_NEAR(r1, cwt[1], EPSILON);
+    af::freeHost(cwt);
 }
 
 void energyRatioByChunk() {
@@ -460,10 +493,11 @@ void energyRatioByChunk() {
 
     af::array energyRatioByChunkResult = khiva::features::energyRatioByChunks(tss, 2, 0);
 
-    float *energyRatioByChunkCalculated = energyRatioByChunkResult.host<float>();
+    auto *energyRatioByChunkCalculated = energyRatioByChunkResult.host<float>();
 
     ASSERT_NEAR(energyRatioByChunkCalculated[0], 0.090909091, EPSILON);
     ASSERT_NEAR(energyRatioByChunkCalculated[1], 0.330376940, EPSILON);
+    af::freeHost(energyRatioByChunkCalculated);
 
     af::array energyRatioByChunkResult2 = khiva::features::energyRatioByChunks(tss, 2, 1);
 
@@ -471,6 +505,7 @@ void energyRatioByChunk() {
 
     ASSERT_NEAR(energyRatioByChunkCalculated2[0], 0.909090909, EPSILON);
     ASSERT_NEAR(energyRatioByChunkCalculated2[1], 0.669623060, EPSILON);
+    af::freeHost(energyRatioByChunkCalculated2);
 }
 
 void fftAggregated() {
@@ -479,7 +514,7 @@ void fftAggregated() {
 
     af::array fftAgg = khiva::features::fftAggregated(tss);
 
-    float *fft = fftAgg.host<float>();
+    auto *fft = fftAgg.host<float>();
     float f1 = 1.135143f;
     float f2 = 2.368324f;
     float f3 = 1.248777f;
@@ -494,6 +529,7 @@ void fftAggregated() {
     ASSERT_NEAR(fft[5], f2, EPSILON);
     ASSERT_NEAR(fft[6], f3, EPSILON);
     ASSERT_NEAR(fft[7], f4, EPSILON);
+    af::freeHost(fft);
 }
 
 void fftCoefficient() {
@@ -504,10 +540,10 @@ void fftCoefficient() {
 
     khiva::features::fftCoefficient(tss, 0, real, imag, _abs, angle);
 
-    float *realCalculated = real.host<float>();
-    float *imagCalculated = imag.host<float>();
-    float *_absCalculated = _abs.host<float>();
-    float *angleCalculated = angle.host<float>();
+    auto *realCalculated = real.host<float>();
+    auto *imagCalculated = imag.host<float>();
+    auto *_absCalculated = _abs.host<float>();
+    auto *angleCalculated = angle.host<float>();
 
     ASSERT_EQ(realCalculated[0], 15.0);
     ASSERT_EQ(realCalculated[1], 51.0);
@@ -517,6 +553,10 @@ void fftCoefficient() {
     ASSERT_EQ(_absCalculated[1], 51.0);
     ASSERT_EQ(angleCalculated[0], 0.0);
     ASSERT_EQ(angleCalculated[1], 0.0);
+    af::freeHost(realCalculated);
+    af::freeHost(imagCalculated);
+    af::freeHost(_absCalculated);
+    af::freeHost(angleCalculated);
 }
 
 void firstLocationOfMaximum() {
@@ -525,10 +565,11 @@ void firstLocationOfMaximum() {
 
     af::array result = khiva::features::firstLocationOfMaximum(tss);
 
-    float *hr = result.host<float>();
+    auto *hr = result.host<float>();
 
     ASSERT_EQ(hr[0], 0.0f);
     ASSERT_EQ(hr[1], 0.3f);
+    af::freeHost(hr);
 }
 
 void firstLocationOfMinimum() {
@@ -537,10 +578,11 @@ void firstLocationOfMinimum() {
 
     af::array result = khiva::features::firstLocationOfMinimum(tss);
 
-    float *firstMinimumCalculated = result.host<float>();
+    auto *firstMinimumCalculated = result.host<float>();
 
     ASSERT_NEAR(firstMinimumCalculated[0], 0.5, EPSILON);
     ASSERT_NEAR(firstMinimumCalculated[1], 0.5, EPSILON);
+    af::freeHost(firstMinimumCalculated);
 }
 
 void friedrichCoefficients() {
@@ -551,13 +593,14 @@ void friedrichCoefficients() {
     float r = 2;
     af::array result = khiva::features::friedrichCoefficients(tss, m, r);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     ASSERT_NEAR(calculated[0], -0.00099125632550567389, EPSILON);
     ASSERT_NEAR(calculated[1], -0.0027067768387496471, EPSILON);
     ASSERT_NEAR(calculated[2], -0.00015192681166809052, EPSILON);
     ASSERT_NEAR(calculated[3], 0.10512571036815643, EPSILON);
     ASSERT_NEAR(calculated[4], 0.89872437715530396, EPSILON);
+    af::freeHost(calculated);
 }
 
 void hasDuplicates() {
@@ -566,10 +609,11 @@ void hasDuplicates() {
 
     af::array duplicates = khiva::features::hasDuplicates(tss);
 
-    bool *duplicatesCalculated = (bool *)duplicates.host<char>();
+    auto *duplicatesCalculated = (bool *)duplicates.host<char>();
 
     ASSERT_EQ(duplicatesCalculated[0], true);
     ASSERT_EQ(duplicatesCalculated[1], false);
+    af::freeHost(duplicatesCalculated);
 }
 
 void hasDuplicateMax() {
@@ -578,10 +622,11 @@ void hasDuplicateMax() {
 
     af::array out = khiva::features::hasDuplicateMax(tss);
 
-    bool *hout = (bool *)out.host<char>();
+    auto *hout = (bool *)out.host<char>();
 
     ASSERT_EQ(hout[0], true);
     ASSERT_EQ(hout[1], false);
+    af::freeHost(hout);
 }
 
 void hasDuplicateMin() {
@@ -590,10 +635,11 @@ void hasDuplicateMin() {
 
     af::array duplicateMin = khiva::features::hasDuplicateMin(tss);
 
-    bool *duplicateMinCalculated = (bool *)duplicateMin.host<char>();
+    auto *duplicateMinCalculated = (bool *)duplicateMin.host<char>();
 
     ASSERT_EQ(duplicateMinCalculated[0], true);
     ASSERT_EQ(duplicateMinCalculated[1], false);
+    af::freeHost(duplicateMinCalculated);
 }
 
 void indexMassQuantile() {
@@ -603,11 +649,12 @@ void indexMassQuantile() {
 
     af::array result = khiva::features::indexMassQuantile(tss, q);
 
-    float *hresult = result.host<float>();
+    auto *hresult = result.host<float>();
     float expected[] = {0.333333333f, 0.3333333333f};
 
     ASSERT_NEAR(hresult[0], expected[0], EPSILON);
     ASSERT_NEAR(hresult[1], expected[1], EPSILON);
+    af::freeHost(hresult);
 }
 
 void kurtosis() {
@@ -616,11 +663,12 @@ void kurtosis() {
 
     float dataExpected[] = {-1.2f, -2.66226722f};
 
-    float *result = khiva::features::kurtosis(tss).host<float>();
+    auto *result = khiva::features::kurtosis(tss).host<float>();
 
     for (int i = 0; i < 2; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e1);
     }
+    af::freeHost(result);
 }
 
 void largeStandardDeviation() {
@@ -628,10 +676,11 @@ void largeStandardDeviation() {
     af::array tss(6, 2, data);
     float r = 0.4f;
 
-    bool *result = (bool *)khiva::features::largeStandardDeviation(tss, r).host<char>();
+    auto *result = (bool *)khiva::features::largeStandardDeviation(tss, r).host<char>();
 
     ASSERT_EQ(result[0], true);
     ASSERT_EQ(result[1], false);
+    af::freeHost(result);
 }
 
 void lastLocationOfMaximum() {
@@ -640,10 +689,11 @@ void lastLocationOfMaximum() {
 
     af::array result = khiva::features::lastLocationOfMaximum(tss);
 
-    float *lastMaximumCalculated = result.host<float>();
+    auto *lastMaximumCalculated = result.host<float>();
 
     ASSERT_NEAR(lastMaximumCalculated[0], 0.8333333333333334, EPSILON);
     ASSERT_NEAR(lastMaximumCalculated[1], 0.8333333333333334, EPSILON);
+    af::freeHost(lastMaximumCalculated);
 }
 
 void lastLocationOfMinimum() {
@@ -654,10 +704,11 @@ void lastLocationOfMinimum() {
 
     af::array result = khiva::features::lastLocationOfMinimum(tss);
 
-    float *out = result.host<float>();
+    auto *out = result.host<float>();
 
     ASSERT_EQ(out[0], 0.875f);
     ASSERT_EQ(out[1], 0.875f);
+    af::freeHost(out);
 }
 
 void length() {
@@ -666,10 +717,11 @@ void length() {
 
     af::array result = khiva::features::length(tss);
 
-    int *lengthCalculated = result.host<int>();
+    auto *lengthCalculated = result.host<int>();
 
     ASSERT_EQ(lengthCalculated[0], 6);
     ASSERT_EQ(lengthCalculated[1], 6);
+    af::freeHost(lengthCalculated);
 }
 
 void linearTrend() {
@@ -679,25 +731,30 @@ void linearTrend() {
     af::array pvalue, rvalue, intercept, slope, stder;
     khiva::features::linearTrend(tss, pvalue, rvalue, intercept, slope, stder);
 
-    float *hpvalue = pvalue.host<float>();
+    auto *hpvalue = pvalue.host<float>();
     ASSERT_NEAR(hpvalue[0], 0.6260380997892747, EPSILON);
     ASSERT_NEAR(hpvalue[1], 0.5272201945463578, EPSILON);
+    af::freeHost(hpvalue);
 
-    float *hrvalue = rvalue.host<float>();
+    auto *hrvalue = rvalue.host<float>();
     ASSERT_NEAR(hrvalue[0], 0.2548235957188128, EPSILON);
     ASSERT_NEAR(hrvalue[1], 0.3268228676411533, EPSILON);
+    af::freeHost(hrvalue);
 
-    float *hintercept = intercept.host<float>();
+    auto *hintercept = intercept.host<float>();
     ASSERT_NEAR(hintercept[0], 2.2857142857142856, EPSILON);
     ASSERT_NEAR(hintercept[1], 2.1904761904761907, EPSILON);
+    af::freeHost(hintercept);
 
-    float *hslope = slope.host<float>();
+    auto *hslope = slope.host<float>();
     ASSERT_NEAR(hslope[0], 0.2857142857142857, EPSILON);
     ASSERT_NEAR(hslope[1], 0.2571428571428572, EPSILON);
+    af::freeHost(hslope);
 
-    float *hstder = stder.host<float>();
+    auto *hstder = stder.host<float>();
     ASSERT_NEAR(hstder[0], 0.5421047417431507, EPSILON);
     ASSERT_NEAR(hstder[1], 0.37179469135129783, EPSILON);
+    af::freeHost(hstder);
 }
 
 void localMaximals(){
@@ -707,7 +764,7 @@ void localMaximals(){
 
     af::array result = khiva::features::localMaximals(tss);
 
-    float *lm = (float *)result.host<float>();
+    auto *lm = (float *)result.host<float>();
 
     ASSERT_EQ(lm[0], 0.0);
     ASSERT_EQ(lm[1], 1.0);
@@ -717,6 +774,7 @@ void localMaximals(){
     ASSERT_EQ(lm[5], 0.0);
     ASSERT_EQ(lm[6], 0.0);
     ASSERT_EQ(lm[7], 1.0);
+    af::freeHost(lm);
 }
 
 void longestStrikeAboveMean() {
@@ -726,10 +784,11 @@ void longestStrikeAboveMean() {
 
     af::array result = khiva::features::longestStrikeAboveMean(tss);
 
-    float *longestCalculated = result.host<float>();
+    auto *longestCalculated = result.host<float>();
 
     ASSERT_EQ(longestCalculated[0], 4);
     ASSERT_EQ(longestCalculated[1], 3);
+    af::freeHost(longestCalculated);
 }
 
 void longestStrikeBelowMean() {
@@ -739,10 +798,11 @@ void longestStrikeBelowMean() {
 
     af::array result = khiva::features::longestStrikeBelowMean(tss);
 
-    float *longestCalculated = result.host<float>();
+    auto *longestCalculated = result.host<float>();
 
     ASSERT_EQ(longestCalculated[0], 8);
     ASSERT_EQ(longestCalculated[1], 9);
+    af::freeHost(longestCalculated);
 }
 
 void maxLangevinFixedPoint() {
@@ -751,12 +811,14 @@ void maxLangevinFixedPoint() {
 
     af::array result = khiva::features::maxLangevinFixedPoint(tss, 7, 2);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {4.562970585f, 4.562970585f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON * 1e4);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON * 1e4);
+    af::freeHost(calculated);
+
 }
 
 void maximum() {
@@ -766,10 +828,11 @@ void maximum() {
 
     af::array result = khiva::features::maximum(tss);
 
-    float *maximum = result.host<float>();
+    auto *maximum = result.host<float>();
 
     ASSERT_EQ(maximum[0], 50);
     ASSERT_EQ(maximum[1], 30);
+    af::freeHost(maximum);
 }
 
 void mean() {
@@ -779,10 +842,11 @@ void mean() {
 
     af::array result = khiva::features::mean(tss);
 
-    float *mean = result.host<float>();
+    auto *mean = result.host<float>();
 
     ASSERT_NEAR(mean[0], 18.55, EPSILON * 2);
     ASSERT_NEAR(mean[1], 12.7, EPSILON * 2);
+    af::freeHost(mean);
 }
 
 void meanAbsoluteChange() {
@@ -793,9 +857,10 @@ void meanAbsoluteChange() {
 
     // check distances
     float r = 5.0f / 6.0f;
-    float *hostResult = result.host<float>();
+    auto *hostResult = result.host<float>();
     ASSERT_NEAR(r, hostResult[0], EPSILON);
     ASSERT_NEAR(r * 2.0, hostResult[1], EPSILON);
+    af::freeHost(hostResult);
 }
 
 void meanChange() {
@@ -806,9 +871,10 @@ void meanChange() {
 
     // check distances
     float r = 5.0f / 6.0f;
-    float *hostResult = result.host<float>();
+    auto *hostResult = result.host<float>();
     ASSERT_NEAR(r, hostResult[0], EPSILON);
     ASSERT_NEAR(r * 2.0, hostResult[1], EPSILON);
+    af::freeHost(hostResult);
 }
 
 void meanSecondDerivativeCentral() {
@@ -820,9 +886,10 @@ void meanSecondDerivativeCentral() {
     // check distances
     float r0 = 1.0f / 5.0f;
     float r1 = -3.0f / 5.0f;
-    float *hostResult = result.host<float>();
+    auto *hostResult = result.host<float>();
     ASSERT_NEAR(r0, hostResult[0], EPSILON);
     ASSERT_NEAR(r1, hostResult[1], EPSILON);
+    af::freeHost(hostResult);
 }
 
 void median() {
@@ -832,10 +899,11 @@ void median() {
 
     af::array result = khiva::features::median(tss);
 
-    float *median = result.host<float>();
+    auto *median = result.host<float>();
 
     ASSERT_NEAR(median[0], 20, EPSILON * 2);
     ASSERT_NEAR(median[1], 18.5, EPSILON * 2);
+    af::freeHost(median);
 }
 
 void minimum() {
@@ -845,10 +913,11 @@ void minimum() {
 
     af::array result = khiva::features::minimum(tss);
 
-    float *minimum = result.host<float>();
+    auto *minimum = result.host<float>();
 
     ASSERT_EQ(minimum[0], 1);
     ASSERT_EQ(minimum[1], 2);
+    af::freeHost(minimum);
 }
 
 void numberCrossingM() {
@@ -858,10 +927,11 @@ void numberCrossingM() {
 
     af::array result = khiva::features::numberCrossingM(tss, 0);
 
-    float *ncm = result.host<float>();
+    auto *ncm = result.host<float>();
 
     ASSERT_EQ(ncm[0], 7);
     ASSERT_EQ(ncm[1], 7);
+    af::freeHost(ncm);
 }
 
 void numberCwtPeaks() {
@@ -871,10 +941,11 @@ void numberCwtPeaks() {
 
     af::array result = khiva::features::numberCwtPeaks(tss, 2);
 
-    float *ncp = result.host<float>();
+    auto *ncp = result.host<float>();
 
     ASSERT_EQ(ncp[0], 2);
     ASSERT_EQ(ncp[1], 2);
+    af::freeHost(ncp);
 }
 
 void numberPeaks() {
@@ -883,15 +954,16 @@ void numberPeaks() {
 
     af::array result = khiva::features::numberPeaks(tss, 2);
 
-    float *np = result.host<float>();
+    auto *np = result.host<float>();
 
     ASSERT_EQ(np[0], 1);
     ASSERT_EQ(np[1], 1);
+    af::freeHost(np);
 }
 
 void partialAutocorrelation() {
     float len = 3000.0;
-    float *input = (float *)malloc(sizeof(float) * static_cast<size_t>(len));
+    auto *input = (float *)malloc(sizeof(float) * static_cast<size_t>(len));
     float step = 1.0f / (len - 1);
     for (int i = 0; i < len; i++) {
         input[i] = step * i;
@@ -904,7 +976,7 @@ void partialAutocorrelation() {
     af::array lags_d(10, 1, lags);
 
     af::array result = khiva::features::partialAutocorrelation(tss, lags_d);
-    float *pa = result.col(0).host<float>();
+    auto *pa = result.col(0).host<float>();
 
     ASSERT_NEAR(pa[0], 1.0, 1e-3);
     ASSERT_NEAR(pa[1], 0.9993331432342529, 1e-3);
@@ -916,6 +988,7 @@ void partialAutocorrelation() {
     ASSERT_NEAR(pa[7], -0.0004690756904893, 1e-3);
     ASSERT_NEAR(pa[8], -0.0008041299879551, 1e-3);
     ASSERT_NEAR(pa[9], -0.0007371196406893, 1e-3);
+    af::freeHost(pa);
 }
 
 void percentageOfReoccurringDatapointsToAllDatapoints() {
@@ -924,12 +997,13 @@ void percentageOfReoccurringDatapointsToAllDatapoints() {
 
     af::array result = khiva::features::percentageOfReoccurringDatapointsToAllDatapoints(tss, false);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {0.25, 0.25};
 
     ASSERT_EQ(calculated[0], expected[0]);
     ASSERT_EQ(calculated[1], expected[1]);
+    af::freeHost(calculated);
 }
 
 void percentageOfReoccurringValuesToAllValues() {
@@ -938,12 +1012,13 @@ void percentageOfReoccurringValuesToAllValues() {
 
     af::array result = khiva::features::percentageOfReoccurringValuesToAllValues(tss, false);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {4.0 / 8.0, 2.0 / 8.0};
 
     ASSERT_EQ(calculated[0], expected[0]);
     ASSERT_EQ(calculated[1], expected[1]);
+    af::freeHost(calculated);
 }
 
 void quantile() {
@@ -957,12 +1032,13 @@ void quantile() {
 
     af::array result = khiva::features::quantile(tss, qq);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {1.79999999f, 1.79999999f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+    af::freeHost(calculated);
 }
 
 void rangeCount() {
@@ -971,12 +1047,13 @@ void rangeCount() {
 
     af::array result = khiva::features::rangeCount(tss, 2, 12);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {2, 3};
 
     ASSERT_EQ(calculated[0], expected[0]);
     ASSERT_EQ(calculated[1], expected[1]);
+    af::freeHost(calculated);
 }
 
 void ratioBeyondRSigma() {
@@ -985,12 +1062,13 @@ void ratioBeyondRSigma() {
 
     af::array result = khiva::features::ratioBeyondRSigma(tss, 0.5);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {0.7142857142857143f, 0.7142857142857143f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+    af::freeHost(calculated);
 }
 
 void ratioValueNumberToTimeSeriesLength() {
@@ -999,12 +1077,13 @@ void ratioValueNumberToTimeSeriesLength() {
 
     af::array result = khiva::features::ratioValueNumberToTimeSeriesLength(tss);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {4.0f / 7.0f, 6.0f / 7.0f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+    af::freeHost(calculated);
 }
 
 void sampleEntropy() {
@@ -1013,12 +1092,13 @@ void sampleEntropy() {
 
     af::array result = khiva::features::sampleEntropy(tss);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {1.252762968495368f, 1.252762968495368f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+    af::freeHost(calculated);
 }
 
 void skewness() {
@@ -1027,12 +1107,14 @@ void skewness() {
 
     af::array result = khiva::features::skewness(tss);
 
-    float *calculated = result.host<float>();
+    float *calculated;
+    calculated = result.host<float>();
 
     float expected[] = {2.038404735373753f, 2.038404735373753f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
+    af::freeHost(calculated);
 }
 
 void spktWelchDensity() {
@@ -1041,12 +1123,13 @@ void spktWelchDensity() {
     int coeff = 0;
 
     af::array result = khiva::features::spktWelchDensity(tss, coeff);
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {1.6666667461395264, 1.6666667461395264};
 
     ASSERT_NEAR(calculated[0], expected[0], 1e-5);
     ASSERT_NEAR(calculated[1], expected[1], 1e-5);
+    af::freeHost(calculated);
 }
 
 void standardDeviation() {
@@ -1056,10 +1139,11 @@ void standardDeviation() {
 
     af::array result = khiva::features::standardDeviation(tss);
 
-    float *stdev = result.host<float>();
+    auto *stdev = result.host<float>();
 
     ASSERT_NEAR(stdev[0], 12.363150892875165, EPSILON);
     ASSERT_NEAR(stdev[1], 9.51367436903324, EPSILON);
+    af::freeHost(stdev);
 }
 
 void sumOfReoccurringDatapoints() {
@@ -1068,12 +1152,13 @@ void sumOfReoccurringDatapoints() {
 
     af::array result = khiva::features::sumOfReoccurringDatapoints(tss, false);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {32, 32};
 
     ASSERT_EQ(calculated[0], expected[0]);
     ASSERT_EQ(calculated[1], expected[1]);
+    af::freeHost(calculated);
 }
 
 void sumOfReoccurringValues() {
@@ -1082,12 +1167,13 @@ void sumOfReoccurringValues() {
 
     af::array result = khiva::features::sumOfReoccurringValues(tss, false);
 
-    float *calculated = result.host<float>();
+    auto *calculated = result.host<float>();
 
     float expected[] = {10, 15};
 
     ASSERT_EQ(calculated[0], expected[0]);
     ASSERT_EQ(calculated[1], expected[1]);
+    af::freeHost(calculated);
 }
 
 void sumValues() {
@@ -1096,11 +1182,12 @@ void sumValues() {
 
     af::array result = khiva::features::sumValues(tss);
 
-    float *sv = (float *)result.host<float>();
+    auto *sv = (float *)result.host<float>();
     float expected[] = {10.1f, -10.2f};
 
     ASSERT_EQ(sv[0], expected[0]);
     ASSERT_EQ(sv[1], expected[1]);
+    af::freeHost(sv);
 }
 
 void symmetryLooking() {
@@ -1110,10 +1197,11 @@ void symmetryLooking() {
 
     af::array result = khiva::features::symmetryLooking(tss, 0.1f);
 
-    bool *sl = (bool *)result.host<char>();
+    auto *sl = (bool *)result.host<char>();
 
     ASSERT_EQ(sl[0], 1);
     ASSERT_EQ(sl[1], 0);
+    af::freeHost(sl);
 }
 
 void timeReversalAsymmetryStatistic() {
@@ -1123,10 +1211,11 @@ void timeReversalAsymmetryStatistic() {
 
     af::array result = khiva::features::timeReversalAsymmetryStatistic(tss, 2);
 
-    float *r = result.host<float>();
+    auto *r = result.host<float>();
 
     ASSERT_EQ(r[0], 1052);
     ASSERT_EQ(r[1], -150.625);
+    af::freeHost(r);
 }
 
 void valueCount() {
@@ -1136,10 +1225,11 @@ void valueCount() {
 
     af::array result = khiva::features::valueCount(tss, 20);
 
-    unsigned int *vc = result.host<unsigned int>();
+    auto *vc = result.host<unsigned int>();
 
     ASSERT_EQ(vc[0], 9);
     ASSERT_EQ(vc[1], 8);
+    af::freeHost(vc);
 }
 
 void variance() {
@@ -1148,10 +1238,11 @@ void variance() {
 
     af::array result = khiva::features::variance(tss);
 
-    float *v = result.host<float>();
+    auto *v = result.host<float>();
 
     ASSERT_EQ(v[0], 1.0);
     ASSERT_EQ(v[1], 2.5);
+    af::freeHost(v);
 }
 
 void varianceLargerThanStandardDeviation() {
@@ -1161,10 +1252,11 @@ void varianceLargerThanStandardDeviation() {
 
     af::array result = khiva::features::varianceLargerThanStandardDeviation(tss);
 
-    bool *vlts = (bool *)result.host<char>();
+    auto *vlts = (bool *)result.host<char>();
 
     ASSERT_EQ(vlts[0], 1);
     ASSERT_EQ(vlts[1], 1);
+    af::freeHost(vlts);
 }
 
 KHIVA_TEST(FeaturesTests, AbsEnergy, absEnergy)
