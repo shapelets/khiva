@@ -7,6 +7,7 @@
 #include <arrayfire.h>
 #include <khiva_c/internal/util.h>
 #include <cstring>
+#include <algorithm>
 
 void check_and_retain_arrays(khiva_array *a, khiva_array *b, af::array &var_a, af::array &var_b) {
     if (a == b) {
