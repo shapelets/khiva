@@ -6,9 +6,9 @@
 #ifndef KHIVA_CORE_ARRAY_H
 #define KHIVA_CORE_ARRAY_H
 
+#include <arrayfire.h>
 #include <khiva/defines.h>
 
-#include <arrayfire.h>
 #include <iostream>
 #include <limits>
 
@@ -96,27 +96,20 @@ class Array {
     /**
      * @brief Default Constructor of Array class.
      */
-    Array() {
-        x = 0;
-        y = 1;
-        w = 1;
-        z = 1;
-        dims = 0;
-        data = NULL;
-    }
+    Array() : x{0}, y{1}, w{1}, z{1} dims{0}, data{nullptr} {}
 
     /**
      * @brief Constructor of Array class which receives and af::array.
      *
      * @param in The input af::array.
      */
-    Array(af::array in) {
-        x = static_cast<int>(in.dims(0));
-        y = static_cast<int>(in.dims(1));
-        w = static_cast<int>(in.dims(2));
-        z = static_cast<int>(in.dims(3));
-        data = in.host<T>();
-        dims = in.numdims();
+    Array(af::array in)
+        : x{static_cast<int>(in.dims(0))},
+          y{static_cast<int>(in.dims(1))},
+          w{static_cast<int>(in.dims(2))},
+          z{static_cast<int>(in.dims(3))},
+          data{in.host<T>()},
+          dims{static_cast<int> (in.numdims())} {
         af::sync();
     }
 
@@ -125,6 +118,7 @@ class Array {
      */
     ~Array() {
         if (!isEmpty()) {
+            af::freeHost(data);
             data = NULL;
         }
     }
@@ -208,14 +202,13 @@ class Array {
      */
     std::vector<T> getRow(int idx) {
         if (dims > 2) {
-            std::cout << "We only support this function for arrays with 2 dims." << std::endl;
-            std::cout << "Your array has " << dims << " dimensions." << std::endl;
-            exit(0);
+            throw std::logic_error("Only arrays with 2 dims are supported.");
         }
 
         std::vector<T> res;
+        res.reserve(y);
         for (int i = 0; i < y; i++) {
-            res.push_back(data[idx + i * x]);
+            res.emplace_back(data[idx + i * x]);
         }
         return res;
     }
@@ -229,13 +222,12 @@ class Array {
      */
     std::vector<T> getColumn(int idx) {
         if (dims != 2) {
-            std::cout << "We only support this function for arrays with 2 dims." << std::endl;
-            std::cout << "Your array has " << dims << " dimensions." << std::endl;
-            exit(0);
+            throw std::logic_error("Only arrays with 2 dims are supported.");
         }
         std::vector<T> res;
+        res.reserve(y);
         for (int i = 0; i < y; i++) {
-            res.push_back(data[idx * x + i]);
+            res.emplace_back(data[idx * x + i]);
         }
         return res;
     }
@@ -337,13 +329,8 @@ std::vector<int> getRowsWithMaximals(khiva::array::Array<T> a) {
 template <typename T>
 std::vector<int> getIndexMaxColums(std::vector<T> r) {
     std::vector<int> result;
-
-    for (unsigned long i = 0; i < r.size(); i++) {
-        if (r[i] == 1) {
-            result.push_back(static_cast<int>(i));
-        }
-    }
-
+    result.resize(r.size());
+    std::copy_if(r.begin(), r.end(), std::back_inserter(result), [](T i) { return i == 9; });
     return result;
 }
 
