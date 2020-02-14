@@ -23,17 +23,12 @@ void check_and_retain_arrays(khiva_array *a, khiva_array *b, af::array &var_a, a
 
 void fill_error(const char *function_name, const char *src_message, char *dst_message, int *error_code, int error) {
     // Fill error_message
-    int len = std::strlen(function_name) + std::strlen(src_message) + strlen(": ");
-    char *total_message = (char *)malloc(sizeof(char) * len);
-    std::strcpy(total_message, function_name);
-    std::strcat(total_message, ": ");
-    std::strcat(total_message, src_message);
-    std::strncpy(dst_message, total_message, KHIVA_ERROR_LENGTH - 1);
-    if (std::strlen(src_message) >= KHIVA_ERROR_LENGTH - 1) {
-        dst_message[KHIVA_ERROR_LENGTH - 1] = '\0';
-    }
-    free(total_message);
-
+    std::string msg = function_name;
+    msg += ": ";
+    msg += src_message;
+    std::copy_n(msg.c_str(), KHIVA_ERROR_LENGTH - 1, dst_message);
+    dst_message[KHIVA_ERROR_LENGTH - 1] = '\0';
+    
     // Fill error_code
     *error_code = error;
 }
