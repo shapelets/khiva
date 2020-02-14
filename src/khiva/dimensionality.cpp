@@ -699,7 +699,7 @@ af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints)
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
     std::vector<khiva::dimensionality::Point> points;
-    points.resize(pointList.dims(0));
+    points.reserve(pointList.dims(0));
     auto *x = pointList.col(0).host<float>();
     auto *y = pointList.col(1).host<float>();
 
@@ -712,8 +712,10 @@ af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints)
     std::vector<khiva::dimensionality::Point> rPoints = khiva::dimensionality::visvalingam(points, numPoints);
     af::array out = af::constant(0, rPoints.size(), 2);
 
-    std::vector<float> vx(rPoints.size(), 0);
-    std::vector<float> vy(rPoints.size(), 0);
+    std::vector<float> vx;
+    vx.reserve(rPoints.size());
+    std::vector<float> vy;
+    vy.reserve(rPoints.size());
 
     for (const auto& rPoint : rPoints) {
         vx.emplace_back(rPoint.first);

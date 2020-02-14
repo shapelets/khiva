@@ -90,7 +90,7 @@ void visvalingam(khiva_array *points, int *num_points, khiva_array *res_points, 
     try {
         af::array var = af::array(*points);
         af_retain_array(points, var.get());
-            af_retain_array(res_points, khiva::dimensionality::visvalingam(var, *num_points).get());
+        af_retain_array(res_points, khiva::dimensionality::visvalingam(var, *num_points).get());
     } catch (const std::exception &e) {
         fill_error("Visvalingam", e.what(), error_message, error_code, 1);
     } catch (...) {
