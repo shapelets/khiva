@@ -97,7 +97,7 @@ class Array {
     /**
      * @brief Default Constructor of Array class.
      */
-    Array() : x{0}, y{1}, w{1}, z{1} dims{0}, data{nullptr} {}
+    Array() : x{0}, y{1}, w{1}, z{1}, dims{0}, data{nullptr} {}
 
     /**
      * @brief Constructor of Array class which receives and af::array.
