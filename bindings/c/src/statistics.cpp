@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/statistics.h>
 #include <khiva_c/statistics.h>
-#include <khiva_c/util.h>
+#include <khiva_c/internal/util.h>
 
 void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_array *result, int *error_code,
                            char *error_message) {

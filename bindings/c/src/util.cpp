@@ -5,7 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
-#include <khiva_c/util.h>
+#include <khiva_c/internal/util.h>
 #include <cstring>
 
 void check_and_retain_arrays(khiva_array *a, khiva_array *b, af::array &var_a, af::array &var_b) {

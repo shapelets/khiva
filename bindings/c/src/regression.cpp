@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/regression.h>
 #include <khiva_c/regression.h>
-#include <khiva_c/util.h>
+#include <khiva_c/internal/util.h>
 
 void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array *intercept, khiva_array *rvalue,
             khiva_array *pvalue, khiva_array *stderrest, int *error_code, char *error_message) {

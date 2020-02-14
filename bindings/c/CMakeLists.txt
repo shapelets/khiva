@@ -28,7 +28,8 @@ SET(KHIVALIB_C "khiva_c")
 # Files to add to compilation
 FILE(GLOB_RECURSE KHIVALIB_C_CODE
         "${KHIVALIB_C_SRC}/*.cpp"
-        "${KHIVALIB_C_INC}/*.h")
+        "${KHIVALIB_C_INC}/*.h"
+        "${KHIVALIB_C_INC}/internal/*.h")
 
 # The output is a static library
 ADD_LIBRARY(${KHIVALIB_C} SHARED ${KHIVALIB_C_CODE})
@@ -36,6 +37,7 @@ ADD_LIBRARY(${KHIVALIB_C} SHARED ${KHIVALIB_C_CODE})
 # Declare include directories
 TARGET_INCLUDE_DIRECTORIES(${KHIVALIB_C} PUBLIC
         ${KHIVALIB_INC}
+        ${KHIVALIB_INC}/internal
         ${KHIVALIB_C_INC})
 
 # Declare compilation libraries
@@ -64,4 +66,5 @@ INSTALL(DIRECTORY ${KHIVALIB_C_INC}/
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN ".gitignore" EXCLUDE
+        PATTERN "internal/*.h" EXCLUDE
         )

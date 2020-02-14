@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/features.h>
 #include <khiva_c/features.h>
-#include <khiva_c/util.h>
+#include <khiva_c/internal/util.h>
 
 void abs_energy(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {

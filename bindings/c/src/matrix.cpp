@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/matrix.h>
 #include <khiva_c/matrix.h>
-#include <khiva_c/util.h>
+#include <khiva_c/internal/util.h>
 #include <iostream>
 
 void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n, khiva_array *discord_distances,

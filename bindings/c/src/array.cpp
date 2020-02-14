@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/array.h>
 #include <khiva_c/array.h>
-#include <khiva_c/util.h>
+#include <khiva_c/internal/util.h>
 #include <cstring>
 #include <thread>
 
