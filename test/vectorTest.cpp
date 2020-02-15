@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <gtest/gtest.h>
 #include <khiva.h>
-#include <khiva/vectorUtil.h>
+#include <khiva/internal/vectorUtil.h>
 #include "khivaTest.h"
 
 void vector1Dim() {

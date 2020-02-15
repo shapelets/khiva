@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 #include <khiva/regularization.h>
 #include <khiva/statistics.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void groupBySingleKeyColumn() {
@@ -15,12 +16,11 @@ void groupBySingleKeyColumn() {
 
     float expected[] = {0, 3, 1, 2};
 
-    auto *result = khiva::regularization::groupBy(tss, af::mean).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(tss, af::mean).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(result[i], expected[i]);
     }
-    af::freeHost(result);
 }
 
 void groupByDoubleKeyColumn() {
@@ -29,12 +29,11 @@ void groupByDoubleKeyColumn() {
 
     float expected[] = {0, 3, 1, 2};
 
-    auto *result = khiva::regularization::groupBy(tss, af::mean, 2).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(tss, af::mean, 2).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(result[i], expected[i]);
     }
-    af::freeHost(result);
 }
 
 void groupByDoubleKeyColumn2() {
@@ -43,12 +42,11 @@ void groupByDoubleKeyColumn2() {
 
     float expected[] = {1, 2, 3.5, 5};
 
-    auto *result = khiva::regularization::groupBy(tss, af::mean, 2).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(tss, af::mean, 2).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(result[i], expected[i]);
     }
-    af::freeHost(result);
 }
 
 void groupByDoubleKeyDoubleValueColumn() {
@@ -63,12 +61,11 @@ void groupByDoubleKeyDoubleValueColumn() {
 
     float expected[] = {1, 3.5, 1, 1};
 
-    auto *result = khiva::regularization::groupBy(input, af::mean, 2, 2).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(input, af::mean, 2, 2).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_NEAR(result[i], expected[i], EPSILON);
     }
-    af::freeHost(result);
 }
 
 void groupByMin() {
@@ -77,12 +74,11 @@ void groupByMin() {
 
     float expected[] = {0, 3, 1, 2};
 
-    auto *result = khiva::regularization::groupBy(tss, af::min).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(tss, af::min).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(result[i], expected[i]);
     }
-    af::freeHost(result);
 }
 
 void groupByVar() {
@@ -91,12 +87,11 @@ void groupByVar() {
 
     float expected[] = {0, 0, 0, 0};
 
-    auto *result = khiva::regularization::groupBy(tss, af::var).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(tss, af::var).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(result[i], expected[i]);
     }
-    af::freeHost(result);
 }
 
 // Testing only in the first available device

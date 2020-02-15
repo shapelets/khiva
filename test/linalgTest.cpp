@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <khiva/linalg.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void lls() {
@@ -17,13 +18,12 @@ void lls() {
 
     af::array x = khiva::linalg::lls(A, b);
 
-    auto *calculated = x.host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(x.host<float>());
 
     float expected[] = {1, 1};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
-    af::freeHost(calculated);
 }
 
 void llsMoreEquations() {
@@ -35,13 +35,12 @@ void llsMoreEquations() {
 
     af::array x = khiva::linalg::lls(A, b);
 
-    auto *calculated = x.host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(x.host<float>());
 
     float expected[] = {1, 1};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
-    af::freeHost(calculated);
 }
 
 void llsMoreVariables() {
@@ -53,14 +52,13 @@ void llsMoreVariables() {
 
     af::array x = khiva::linalg::lls(A, b);
 
-    auto *calculated = x.host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(x.host<float>());
 
     float expected[] = {0.3934987f, 0.2968349f, 0.0290847f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON);
     ASSERT_NEAR(calculated[2], expected[2], EPSILON);
-    af::freeHost(calculated);
 }
 
 KHIVA_TEST(LinAlgTests, Lls, lls)

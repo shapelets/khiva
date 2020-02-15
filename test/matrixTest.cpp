@@ -9,8 +9,10 @@
 
 #include <stdexcept>
 
-#include "khiva/matrixInternal.h"
-#include "khiva/vectorUtil.h"
+#include <khiva/internal/matrixInternal.h>
+#include <khiva/internal/vectorUtil.h>
+#include <khiva/internal/scopedHostPtr.h>
+
 #include "khivaTest.h"
 
 void slidingDotProduct() {
@@ -26,11 +28,10 @@ void slidingDotProduct() {
     ASSERT_EQ(sdp.dims(1), 2);
 
     float expected[] = {330, 342, 365, 374, 361, 340, 342, 365, 374, 361, 340, 330};
-    float *result = sdp.host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(sdp.host<float>());
     for (int i = 0; i < 24; i++) {
         ASSERT_EQ(result[i], expected[i % 12]);
     }
-    af::freeHost(result);
 }
 
 void meanStdev() {
@@ -63,15 +64,12 @@ void meanStdev() {
                             10.333333333f};
     float expectedStdev[] = {0.471404521f, 0.471404521f, 0.471404521f, 0.471404521f, 0.816496581f, 0.471404521f,
                              0.471404521f, 0.816496581f, 0.471404521f, 0.816496581f, 0.471404521f, 0.471404521f};
-    float *resultingMean = mean.host<float>();
-    float *resultingStdev = stdev.host<float>();
+    auto resultingMean = khiva::utils::makeScopedHostPtr(mean.host<float>());
+    auto resultingStdev = khiva::utils::makeScopedHostPtr(stdev.host<float>());
     for (int i = 0; i < 24; i++) {
         ASSERT_NEAR(resultingMean[i], expectedMean[i % 12], EPSILON * 3e3);
         ASSERT_NEAR(resultingStdev[i], expectedStdev[i % 12], EPSILON * 3e3);
     }
-
-    af::freeHost(resultingMean);
-    af::freeHost(resultingStdev);
 }
 
 void meanStdevMEqualsLength() {
@@ -92,15 +90,12 @@ void meanStdevMEqualsLength() {
 
     float expectedMean[] = {10.714285f};
     float expectedStdev[] = {0.699862f};
-    float *resultingMean = mean.host<float>();
-    float *resultingStdev = stdev.host<float>();
+    auto resultingMean = khiva::utils::makeScopedHostPtr(mean.host<float>());
+    auto resultingStdev = khiva::utils::makeScopedHostPtr(stdev.host<float>());
     ASSERT_NEAR(resultingMean[0], expectedMean[0], EPSILON * 3e3);
     ASSERT_NEAR(resultingMean[1], expectedMean[0], EPSILON * 3e3);
     ASSERT_NEAR(resultingStdev[0], expectedStdev[0], EPSILON * 3e3);
     ASSERT_NEAR(resultingStdev[1], expectedStdev[0], EPSILON * 3e3);
-
-    af::freeHost(resultingMean);
-    af::freeHost(resultingStdev);
 }
 
 void tileIsFarFromDiagonal() {
@@ -133,7 +128,7 @@ void generateMask() {
         ASSERT_EQ(mask.dims(1), 8);
         ASSERT_EQ(mask.dims(2), 2);
 
-        float *maskCalculated = af::transpose(mask).as(af::dtype::f32).host<float>();
+        auto maskCalculated = khiva::utils::makeScopedHostPtr(af::transpose(mask).as(af::dtype::f32).host<float>());
 
         float maskExpected[] = {1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0,
                                 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1};
@@ -141,7 +136,6 @@ void generateMask() {
         for (int i = 0; i < 64; i++) {
             ASSERT_EQ(maskCalculated[i], maskExpected[i % 32]);
         }
-        af::freeHost(maskCalculated);
     }
 
     {
@@ -153,11 +147,10 @@ void generateMask() {
 
         int maskExpected[] = {1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1};
 
-        int *maskCalculated = mask.as(af::dtype::s32).host<int>();
+        auto maskCalculated = khiva::utils::makeScopedHostPtr(mask.as(af::dtype::s32).host<int>());
         for (int i = 0; i < 16; i++) {
             ASSERT_EQ(maskCalculated[i], maskExpected[i]);
         }
-        af::freeHost(maskCalculated);
     }
 
     {
@@ -167,11 +160,10 @@ void generateMask() {
         ASSERT_EQ(mask.dims(1), 4);
         ASSERT_EQ(mask.dims(2), 2);
 
-        int *maskCalculated = mask.as(af::dtype::s32).host<int>();
+        auto maskCalculated = khiva::utils::makeScopedHostPtr(mask.as(af::dtype::s32).host<int>());
         for (int i = 0; i < 16; i++) {
             ASSERT_EQ(maskCalculated[i], 0);
         }
-        af::freeHost(maskCalculated);
     }
 }
 
@@ -269,7 +261,7 @@ void calculateDistanceProfile() {
     ASSERT_EQ(distance.dims(), af::dim4(1, 2, 1, 1));
     ASSERT_EQ(index.dims(), af::dim4(1, 2, 1, 1));
 
-    float *resultingDistance = distance.host<float>();
+    auto resultingDistance = khiva::utils::makeScopedHostPtr(distance.host<float>());
 
     unsigned int resultingIndex[2];
     index.host(&resultingIndex);
@@ -278,8 +270,6 @@ void calculateDistanceProfile() {
     ASSERT_NEAR(resultingDistance[1], expectedDistance, EPSILON * 1e1);
     ASSERT_EQ(resultingIndex[0], expectedIndex);
     ASSERT_EQ(resultingIndex[1], expectedIndex);
-
-    af::freeHost(resultingDistance);
 }
 
 void calculateDistanceProfileMiddle() {
@@ -314,7 +304,7 @@ void calculateDistanceProfileMiddle() {
     ASSERT_EQ(distance.dims(), af::dim4(1, 2, 1, 1));
     ASSERT_EQ(index.dims(), af::dim4(1, 2, 1, 1));
 
-    float *resultingDistance = distance.host<float>();
+    auto resultingDistance = khiva::utils::makeScopedHostPtr(distance.host<float>());
 
     unsigned int resultingIndex[2];
     index.host(&resultingIndex);
@@ -323,8 +313,6 @@ void calculateDistanceProfileMiddle() {
     ASSERT_NEAR(resultingDistance[1], expectedDistance, EPSILON * 1e1);
     ASSERT_EQ(resultingIndex[0], expectedIndex);
     ASSERT_EQ(resultingIndex[1], expectedIndex);
-
-    af::freeHost(resultingDistance);
 }
 
 void massPublic() {
@@ -392,7 +380,7 @@ void massIgnoreTrivial() {
     ASSERT_EQ(distance.dims(), af::dim4(1, 2, 1, 1));
     ASSERT_EQ(index.dims(), af::dim4(1, 2, 1, 1));
 
-    float *resultingDistance = distance.host<float>();
+    auto resultingDistance = khiva::utils::makeScopedHostPtr(distance.host<float>());
 
     unsigned int resultingIndex[2];
     index.host(&resultingIndex);
@@ -401,8 +389,6 @@ void massIgnoreTrivial() {
     ASSERT_NEAR(resultingDistance[1], expectedDistance, 2e-2);
     ASSERT_EQ(resultingIndex[0], expectedIndex);
     ASSERT_EQ(resultingIndex[1], expectedIndex);
-
-    af::freeHost(resultingDistance);
 }
 
 void massConsiderTrivial() {
@@ -434,7 +420,7 @@ void massConsiderTrivial() {
     ASSERT_EQ(distance.dims(), af::dim4(1, 2, 1, 1));
     ASSERT_EQ(index.dims(), af::dim4(1, 2, 1, 1));
 
-    float *resultingDistance = distance.host<float>();
+    auto resultingDistance = khiva::utils::makeScopedHostPtr(distance.host<float>());
 
     unsigned int resultingIndex[2];
     index.host(&resultingIndex);
@@ -443,8 +429,6 @@ void massConsiderTrivial() {
     ASSERT_NEAR(resultingDistance[1], expectedDistance, 2e-2);
     ASSERT_EQ(resultingIndex[0], expectedIndex);
     ASSERT_EQ(resultingIndex[1], expectedIndex);
-
-    af::freeHost(resultingDistance);
 }
 
 void matrixProfile() {
@@ -772,7 +756,7 @@ void stompIgnoreTrivialOneSeries() {
     ASSERT_EQ(distance.dims(), af::dim4(12, 1, 1, 1));
     ASSERT_EQ(index.dims(), af::dim4(12, 1, 1, 1));
 
-    float *resultingDistance = distance.host<float>();
+    auto resultingDistance = khiva::utils::makeScopedHostPtr(distance.host<float>());
 
     unsigned int resultingIndex[12];
     index.host(&resultingIndex);
@@ -781,8 +765,6 @@ void stompIgnoreTrivialOneSeries() {
         ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
-
-    af::freeHost(resultingDistance);
 }
 
 void stompIgnoreTrivialOneBigSeries() {
@@ -823,7 +805,7 @@ void stompIgnoreTrivialMultipleSeries() {
     ASSERT_EQ(distance.dims(), af::dim4(12, 2, 1, 1));
     ASSERT_EQ(index.dims(), af::dim4(12, 2, 1, 1));
 
-    float *resultingDistance = distance.host<float>();
+    auto resultingDistance = khiva::utils::makeScopedHostPtr(distance.host<float>());
 
     unsigned int resultingIndex[24];
     index.host(&resultingIndex);
@@ -832,8 +814,6 @@ void stompIgnoreTrivialMultipleSeries() {
         ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
-
-    af::freeHost(resultingDistance);
 }
 
 void stompConsiderTrivialOneSeries() {
@@ -848,7 +828,7 @@ void stompConsiderTrivialOneSeries() {
     khiva::matrix::stomp(t, t, m, distance, index);
 
     unsigned int expectedIndex[] = {0, 1, 2, 3, 4, 5};
-    float *resultingDistance = distance.host<float>();
+    auto resultingDistance = khiva::utils::makeScopedHostPtr(distance.host<float>());
 
     unsigned int resultingIndex[6];
     index.host(&resultingIndex);
@@ -857,8 +837,6 @@ void stompConsiderTrivialOneSeries() {
         ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
-
-    af::freeHost(resultingDistance);
 }
 
 void stompConsiderTrivialOneBigSeries() {
@@ -897,7 +875,7 @@ void stompConsiderTrivialOneSeries2() {
     khiva::matrix::stomp(ta, tb, m, distance, index);
 
     unsigned int expectedIndex[] = {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1};
-    float *resultingDistance = distance.host<float>();
+    auto resultingDistance = khiva::utils::makeScopedHostPtr(distance.host<float>());
 
     unsigned int resultingIndex[24];
     index.host(&resultingIndex);
@@ -906,8 +884,6 @@ void stompConsiderTrivialOneSeries2() {
         ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
-
-    af::freeHost(resultingDistance);
 }
 
 void stompConsiderTrivialMultipleSeries() {
@@ -926,7 +902,7 @@ void stompConsiderTrivialMultipleSeries() {
 
     unsigned int expectedIndex[] = {0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 1, 4, 5, 3, 2, 0,
                                     5, 0, 4, 3, 1, 2, 5, 0, 4, 3, 1, 2, 0, 1, 2, 3, 4, 5};
-    float *resultingDistance = distance.host<float>();
+    auto resultingDistance = khiva::utils::makeScopedHostPtr(distance.host<float>());
 
     unsigned int resultingIndex[36];
     index.host(&resultingIndex);
@@ -935,8 +911,6 @@ void stompConsiderTrivialMultipleSeries() {
         ASSERT_NEAR(resultingDistance[i], 0.0, 2e-2);
         ASSERT_EQ(resultingIndex[i], expectedIndex[i]);
     }
-
-    af::freeHost(resultingDistance);
 }
 
 void stompConsiderTrivialMultipleSeriesBigM() {
@@ -951,7 +925,7 @@ void stompConsiderTrivialMultipleSeriesBigM() {
 
     khiva::matrix::stomp(ta, tb, m, distance, index);
 
-    float *resultingDistance = distance.host<float>();
+    auto resultingDistance = khiva::utils::makeScopedHostPtr(distance.host<float>());
 
     unsigned int resultingIndex[9];
     index.host(&resultingIndex);
@@ -962,8 +936,6 @@ void stompConsiderTrivialMultipleSeriesBigM() {
             ASSERT_EQ(resultingIndex[i], 0);
         }
     }
-
-    af::freeHost(resultingDistance);
 }
 
 void findBestMotifs() {
@@ -986,14 +958,11 @@ void findBestMotifs() {
 
     khiva::matrix::findBestNMotifs(distance, index, 3, 1, motifs, motifsIndices, subsequenceIndices);
 
-    unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
-    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+    auto motifsIndicesHost = khiva::utils::makeScopedHostPtr(motifsIndices.host<unsigned int>());
+    auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
 
     ASSERT_EQ(motifsIndicesHost[0], 12);
     ASSERT_EQ(subsequenceIndicesHost[0], 1);
-
-    af::freeHost(motifsIndicesHost);
-    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestMotifsMultipleProfiles() {
@@ -1017,8 +986,8 @@ void findBestMotifsMultipleProfiles() {
 
     khiva::matrix::findBestNMotifs(distance, index, 3, 1, motifs, motifsIndices, subsequenceIndices);
 
-    unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
-    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+    auto motifsIndicesHost = khiva::utils::makeScopedHostPtr(motifsIndices.host<unsigned int>());
+    auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
 
     ASSERT_EQ(motifsIndicesHost[0], 12);
     ASSERT_EQ(motifsIndicesHost[1], 12);
@@ -1029,9 +998,6 @@ void findBestMotifsMultipleProfiles() {
     ASSERT_EQ(subsequenceIndicesHost[1], 1);
     ASSERT_EQ(subsequenceIndicesHost[2], 1);
     ASSERT_EQ(subsequenceIndicesHost[3], 1);
-
-    af::freeHost(motifsIndicesHost);
-    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestMotifsMirror() {
@@ -1051,17 +1017,14 @@ void findBestMotifsMirror() {
 
     khiva::matrix::findBestNMotifs(distance, index, 3, 2, motifs, motifsIndices, subsequenceIndices, true);
 
-    unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
-    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+    auto motifsIndicesHost = khiva::utils::makeScopedHostPtr(motifsIndices.host<unsigned int>());
+    auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
 
     ASSERT_EQ(motifsIndicesHost[0], 0);
     ASSERT_EQ(motifsIndicesHost[1], 0);
 
     ASSERT_EQ(subsequenceIndicesHost[0], 5);
     ASSERT_EQ(subsequenceIndicesHost[1], 3);
-
-    af::freeHost(motifsIndicesHost);
-    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestMotifsConsecutive() {
@@ -1081,14 +1044,11 @@ void findBestMotifsConsecutive() {
 
     khiva::matrix::findBestNMotifs(distance, index, 3, 2, motifs, motifsIndices, subsequenceIndices, true);
 
-    unsigned int *motifsIndicesHost = motifsIndices.host<unsigned int>();
-    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+    auto motifsIndicesHost = khiva::utils::makeScopedHostPtr(motifsIndices.host<unsigned int>());
+    auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
 
     ASSERT_EQ(motifsIndicesHost[1], 6);
     ASSERT_EQ(subsequenceIndicesHost[1], 3);
-
-    af::freeHost(motifsIndicesHost);
-    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestMotifsMirrorException() {
@@ -1163,12 +1123,10 @@ void findBestDiscords() {
 
     khiva::matrix::findBestNDiscords(distance, index, 3, 2, discords, discordsIndices, subsequenceIndices);
 
-    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+    auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
 
     ASSERT_TRUE((subsequenceIndicesHost[0] == 0 && subsequenceIndicesHost[1] == 10) ||
                 (subsequenceIndicesHost[0] == 10 && subsequenceIndicesHost[1] == 0));
-
-    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestDiscordsMultipleProfiles() {
@@ -1193,7 +1151,7 @@ void findBestDiscordsMultipleProfiles() {
 
     khiva::matrix::findBestNDiscords(distance, index, 3, 2, discords, discordsIndices, subsequenceIndices);
 
-    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+    auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
 
     ASSERT_EQ(subsequenceIndicesHost[0], 0);
     ASSERT_EQ(subsequenceIndicesHost[1], 10);
@@ -1203,8 +1161,6 @@ void findBestDiscordsMultipleProfiles() {
     ASSERT_EQ(subsequenceIndicesHost[5], 10);
     ASSERT_EQ(subsequenceIndicesHost[6], 0);
     ASSERT_EQ(subsequenceIndicesHost[7], 10);
-
-    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestDiscordsMirror() {
@@ -1224,14 +1180,11 @@ void findBestDiscordsMirror() {
 
     khiva::matrix::findBestNDiscords(distance, index, 3, 1, discords, discordsIndices, subsequenceIndices, true);
 
-    unsigned int *discordsIndicesHost = discordsIndices.host<unsigned int>();
-    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+    auto discordsIndicesHost = khiva::utils::makeScopedHostPtr(discordsIndices.host<unsigned int>());
+    auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
 
     ASSERT_EQ(discordsIndicesHost[0], 3);
     ASSERT_EQ(subsequenceIndicesHost[0], 1);
-
-    af::freeHost(discordsIndicesHost);
-    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestDiscordsConsecutive() {
@@ -1251,12 +1204,10 @@ void findBestDiscordsConsecutive() {
 
     khiva::matrix::findBestNDiscords(distance, index, 3, 2, discords, discordsIndices, subsequenceIndices, true);
 
-    unsigned int *subsequenceIndicesHost = subsequenceIndices.host<unsigned int>();
+    auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
 
     ASSERT_EQ(subsequenceIndicesHost[0], 12);
     ASSERT_NE(subsequenceIndicesHost[1], 11);
-
-    af::freeHost(subsequenceIndicesHost);
 }
 
 void findBestDiscordsMirrorException() {

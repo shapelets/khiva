@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <khiva/distances.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void dtw() {
@@ -46,7 +47,7 @@ void dtw2() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    auto *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     int i = 0;
     ASSERT_EQ(0.0f, hostResult[i++]);
     ASSERT_EQ(0.0f, hostResult[i++]);
@@ -77,7 +78,6 @@ void dtw2() {
     ASSERT_EQ(10.0f, hostResult[i++]);
     ASSERT_EQ(5.0f, hostResult[i++]);
     ASSERT_EQ(0.0f, hostResult[i++]);
-    af::freeHost(hostResult);
 }
 
 void euclidean() {
@@ -94,7 +94,7 @@ void euclidean() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    auto *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     ASSERT_EQ(0.0f, hostResult[0]);
     ASSERT_EQ(0.0f, hostResult[1]);
     ASSERT_EQ(0.0f, hostResult[2]);
@@ -104,7 +104,6 @@ void euclidean() {
     ASSERT_EQ(16.0f, hostResult[6]);
     ASSERT_EQ(8.0f, hostResult[7]);
     ASSERT_EQ(0.0f, hostResult[8]);
-    af::freeHost(hostResult);
 }
 
 void hamming() {
@@ -121,7 +120,7 @@ void hamming() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    auto *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     int i = 0;
     ASSERT_EQ(0.0f, hostResult[i++]);
     ASSERT_EQ(0.0f, hostResult[i++]);
@@ -152,7 +151,6 @@ void hamming() {
     ASSERT_EQ(5.0f, hostResult[i++]);
     ASSERT_EQ(5.0f, hostResult[i++]);
     ASSERT_EQ(0.0f, hostResult[i++]);
-    af::freeHost(hostResult);
 }
 
 void manhattan() {
@@ -169,7 +167,7 @@ void manhattan() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    auto *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     int i = 0;
     ASSERT_EQ(0.0f, hostResult[i++]);
     ASSERT_EQ(0.0f, hostResult[i++]);
@@ -200,7 +198,6 @@ void manhattan() {
     ASSERT_EQ(10.0f, hostResult[i++]);
     ASSERT_EQ(5.0f, hostResult[i++]);
     ASSERT_EQ(0.0f, hostResult[i++]);
-    af::freeHost(hostResult);
 }
 
 void sbd() {
@@ -217,7 +214,7 @@ void sbd() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    auto *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     ASSERT_EQ(0.0f, hostResult[0]);
     ASSERT_EQ(0.0f, hostResult[1]);
     ASSERT_EQ(0.0f, hostResult[2]);
@@ -227,7 +224,6 @@ void sbd() {
     ASSERT_NEAR(0.458583f, hostResult[6], EPSILON);
     ASSERT_NEAR(0.564093f, hostResult[7], EPSILON);
     ASSERT_EQ(0.0f, hostResult[8]);
-    af::freeHost(hostResult);
 }
 
 void squaredEuclidean() {
@@ -244,7 +240,7 @@ void squaredEuclidean() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    auto *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     ASSERT_EQ(0.0f, hostResult[0]);
     ASSERT_EQ(0.0f, hostResult[1]);
     ASSERT_EQ(0.0f, hostResult[2]);
@@ -254,7 +250,6 @@ void squaredEuclidean() {
     ASSERT_EQ(256.0f, hostResult[6]);
     ASSERT_EQ(64.0f, hostResult[7]);
     ASSERT_EQ(0.0f, hostResult[8]);
-    af::freeHost(hostResult);
 }
 
 KHIVA_TEST(DistanceTests, DTW, dtw)

@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <khiva/regression.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void linear() {
@@ -50,11 +51,11 @@ void linearMultipleTimeSeries() {
 
     khiva::regression::linear(xss, yss, slope, intercept, rvalue, pvalue, stderrest);
 
-    auto *slope_host = slope.host<float>();
-    auto *intercept_host = intercept.host<float>();
-    auto *rvalue_host = rvalue.host<float>();
-    auto *pvalue_host = pvalue.host<float>();
-    auto *stderrest_host = stderrest.host<float>();
+    auto slope_host = khiva::utils::makeScopedHostPtr(slope.host<float>());
+    auto intercept_host = khiva::utils::makeScopedHostPtr(intercept.host<float>());
+    auto rvalue_host = khiva::utils::makeScopedHostPtr(rvalue.host<float>());
+    auto pvalue_host = khiva::utils::makeScopedHostPtr(pvalue.host<float>());
+    auto stderrest_host = khiva::utils::makeScopedHostPtr(stderrest.host<float>());
 
     ASSERT_NEAR(slope_host[0], 0.344864266, EPSILON);
     ASSERT_NEAR(slope_host[1], 0.344864266, EPSILON);
@@ -66,14 +67,6 @@ void linearMultipleTimeSeries() {
     ASSERT_NEAR(pvalue_host[1], 0.427239418, EPSILON);
     ASSERT_NEAR(stderrest_host[0], 0.412351891, EPSILON);
     ASSERT_NEAR(stderrest_host[1], 0.412351891, EPSILON);
-
-    af::freeHost(slope_host);
-    af::freeHost(intercept_host);
-    af::freeHost(rvalue_host);
-    af::freeHost(pvalue_host);
-    af::freeHost(stderrest_host);
-
-
 }
 
 KHIVA_TEST(RegressionTests, Linear, linear)

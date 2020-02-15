@@ -6,19 +6,19 @@
 
 #include <gtest/gtest.h>
 #include <khiva/polynomial.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void polyfit1() {
     float data[] = {0, 1, 2, 3, 4, 5};
     af::array x = af::array(6, data);
 
-    auto *calculated = khiva::polynomial::polyfit(x, x, 1).host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(khiva::polynomial::polyfit(x, x, 1).host<float>());
 
     float expected[] = {1.0f, 0.0f};
 
     ASSERT_NEAR(calculated[0], expected[0], EPSILON * 1e1);
     ASSERT_NEAR(calculated[1], expected[1], EPSILON * 1e1);
-    af::freeHost(calculated);
 }
 
 void polyfit3() {
@@ -28,14 +28,13 @@ void polyfit3() {
     float dataY[] = {0.0f, 0.8f, 0.9f, 0.1f, -0.8f, -1.0f};
     af::array y = af::array(6, dataY);
 
-    auto *calculated = khiva::polynomial::polyfit(x, y, 3).host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(khiva::polynomial::polyfit(x, y, 3).host<float>());
 
     float expected[] = {0.08703704f, -0.81349206f, 1.69312169f, -0.03968254f};
 
     for (int i = 0; i < 4; i++) {
         ASSERT_NEAR(calculated[i], expected[i], EPSILON * 1e2f);
     }
-    af::freeHost(calculated);
 }
 
 void roots() {
@@ -44,7 +43,7 @@ void roots() {
 
     af::array roots = khiva::polynomial::roots(p);
 
-    auto *calculated = roots.host<af::cfloat>();
+    auto calculated = khiva::utils::makeScopedHostPtr(roots.host<af::cfloat>());
 
     af::cfloat expected[5];
     expected[0] = af::cfloat(2, 0);
@@ -57,7 +56,6 @@ void roots() {
         ASSERT_NEAR(calculated[i].real, expected[i].real, 1e-2);
         ASSERT_NEAR(calculated[i].imag, expected[i].imag, 1e-2);
     }
-    af::freeHost(calculated);
 }
 
 KHIVA_TEST(PolynomialTests, Polyfit1, polyfit1)

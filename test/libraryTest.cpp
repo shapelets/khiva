@@ -9,7 +9,7 @@
 
 #include "khivaTest.h"
 
-#include <khiva/libraryInternal.h>
+#include <khiva/internal/libraryInternal.h>
 
 void backendInfoTest() { khiva::library::backendInfo(); }
 

@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <khiva/statistics.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void covarianceBiased() {
@@ -15,12 +16,11 @@ void covarianceBiased() {
     float dataExpected[] = {7.80666667f, -2.85733333f, -2.85733333f, -2.85733333f, 1.42942222f,
                             1.42942222f, -2.85733333f, 1.42942222f,  1.42942222f};
 
-    auto *result = khiva::statistics::covariance(tss, false).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::statistics::covariance(tss, false).host<float>());
 
     for (int i = 0; i < 9; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], EPSILON);
     }
-    af::freeHost(result);
 }
 
 void covarianceUnbiased() {
@@ -30,13 +30,11 @@ void covarianceUnbiased() {
     float dataExpected[] = {11.70999999f, -4.286f, -4.286f,     -4.286f,    2.14413333f,
                             2.14413333f,  -4.286f, 2.14413333f, 2.14413333f};
 
-    auto *result = khiva::statistics::covariance(tss, true).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::statistics::covariance(tss, true).host<float>());
 
     for (int i = 0; i < 9; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], EPSILON);
     }
-    af::freeHost(result);
-
 }
 
 void kurtosis() {
@@ -45,12 +43,11 @@ void kurtosis() {
 
     float dataExpected[] = {-1.2f, -2.66226722f};
 
-    auto *result = khiva::statistics::kurtosis(tss).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::statistics::kurtosis(tss).host<float>());
 
     for (int i = 0; i < 2; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e2);
     }
-    af::freeHost(result);
 }
 
 void ljungBox() {
@@ -58,12 +55,11 @@ void ljungBox() {
     af::array tss(4, 2, data);
 
     af::array result = khiva::statistics::ljungBox(tss, 3);
-    auto *calculated = result.host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(result.host<float>());
 
     float expected[] = {6.4400f, 6.4400f};
     ASSERT_NEAR(expected[0], calculated[0], EPSILON);
     ASSERT_NEAR(expected[1], calculated[1], EPSILON);
-    af::freeHost(calculated);
 }
 
 void moment() {
@@ -73,19 +69,17 @@ void moment() {
 
     float dataExpected = 9.166666666f;
 
-    auto *result_a = khiva::statistics::moment(xss, 2).host<float>();
+    auto result_a = khiva::utils::makeScopedHostPtr(khiva::statistics::moment(xss, 2).host<float>());
 
     ASSERT_NEAR(result_a[0], dataExpected, EPSILON);
     ASSERT_NEAR(result_a[1], dataExpected, EPSILON);
-    af::freeHost(result_a);
-
+    
     dataExpected = 163.1666666666f;
 
-    auto *result_b = khiva::statistics::moment(xss, 4).host<float>();
+    auto result_b = khiva::utils::makeScopedHostPtr(khiva::statistics::moment(xss, 4).host<float>());
 
     ASSERT_NEAR(result_b[0], dataExpected, EPSILON * 1e2);
     ASSERT_NEAR(result_b[1], dataExpected, EPSILON * 1e2);
-    af::freeHost(result_b);
 }
 
 void quantile() {
@@ -96,13 +90,12 @@ void quantile() {
 
     af::array q = af::array(2, quantiles);
 
-    auto *calculated = khiva::statistics::quantile(tss, q).host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(khiva::statistics::quantile(tss, q).host<float>());
 
     float expected[] = {0.5, 1.0, 6.5, 7.0};
 
     ASSERT_EQ(calculated[0], expected[0]);
     ASSERT_EQ(calculated[1], expected[1]);
-    af::freeHost(calculated);
 }
 
 void quantilesCut2() {
@@ -113,7 +106,7 @@ void quantilesCut2() {
 
     af::array result = af::transpose(khiva::statistics::quantilesCut(tss, quantiles));
 
-    auto *calculated = result.host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(result.host<float>());
 
     float expected[] = {-0.00000001f, 2.5f, -0.00000001f, 2.5f,  -0.00000001f, 2.5f,  2.5f, 5.0f,
                         2.5f,         5.0f, 2.5f,         5.0f,  6.0f,         8.5f,  6.0f, 8.5f,
@@ -122,7 +115,6 @@ void quantilesCut2() {
     for (int i = 0; i < 24; i++) {
         ASSERT_NEAR(expected[i], calculated[i], EPSILON);
     }
-    af::freeHost(calculated);
 }
 
 void quantilesCut3() {
@@ -133,7 +125,7 @@ void quantilesCut3() {
 
     af::array result = af::transpose(khiva::statistics::quantilesCut(tss, quantiles));
 
-    auto *calculated = result.host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(result.host<float>());
 
     float expected[] = {-0.00000001f, 1.66666667f, -0.00000001f, 1.6666667f, 1.6666667f, 3.3333333f,
                         1.6666667f,   3.3333333f,  3.3333333f,   5.0f,       3.3333333f, 5.0f,
@@ -143,7 +135,6 @@ void quantilesCut3() {
     for (int i = 0; i < 24; i++) {
         ASSERT_NEAR(expected[i], calculated[i], EPSILON);
     }
-    af::freeHost(calculated);
 }
 
 void quantilesCut7() {
@@ -154,7 +145,7 @@ void quantilesCut7() {
 
     af::array result = af::transpose(khiva::statistics::quantilesCut(tss, quantiles));
 
-    auto *calculated = result.host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(result.host<float>());
 
     float expected[] = {0,          0.7142857f, 0.7142857f, 1.4285715f,  1.4285715f,  2.1428573f,
                         2.8571429f, 3.5714288f, 3.5714288f, 4.2857146f,  4.2857146f,  5,
@@ -164,7 +155,6 @@ void quantilesCut7() {
     for (int i = 0; i < 24; i++) {
         ASSERT_NEAR(expected[i], calculated[i], EPSILON);
     }
-    af::freeHost(calculated);
 }
 
 void sampleStdev() {
@@ -173,11 +163,10 @@ void sampleStdev() {
 
     float dataExpected[] = {1.870828693f, 12.988456413f};
 
-    auto *result = khiva::statistics::sampleStdev(tss).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::statistics::sampleStdev(tss).host<float>());
 
     ASSERT_NEAR(result[0], dataExpected[0], EPSILON);
     ASSERT_NEAR(result[1], dataExpected[1], EPSILON);
-    af::freeHost(result);
 }
 
 void skewness() {
@@ -186,12 +175,11 @@ void skewness() {
 
     float dataExpected[] = {0.0f, 0.236177069879499f};
 
-    auto *result = khiva::statistics::skewness(tss).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::statistics::skewness(tss).host<float>());
 
     for (int i = 0; i < 2; i++) {
         ASSERT_NEAR(dataExpected[i], result[i], EPSILON * 1e2);
     }
-    af::freeHost(result);
 }
 
 KHIVA_TEST(StatisticsTests, CovarianceBiased, covarianceBiased)
