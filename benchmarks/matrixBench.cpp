@@ -5,12 +5,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
+#include <khiva/internal/matrixInternal.h>
 #include <khiva/matrix.h>
 #include <math.h>
 
 #include <algorithm>
 
-#include "khiva/matrixInternal.h"
 #include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>

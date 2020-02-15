@@ -725,7 +725,7 @@ af::array localMaximals(af::array tss) {
     return result;
 }
 
-std::vector<LineTuple> identifyRidgeLines(af::array cwt_tss, khiva::array::Array<float> maxDistances, float gapThresh) {
+std::vector<LineTuple> identifyRidgeLines(af::array cwt_tss, const khiva::array::Array<float>& maxDistances, float gapThresh) {
     std::vector<LineTuple> outLines;
 
     // Gets all local maximals
@@ -863,7 +863,7 @@ float scoreAtPercentile(std::vector<float> row, int start, int end, float noiseP
 }
 
 std::vector<LineTuple> filterFunction(std::vector<LineTuple> ridgeLines, std::vector<float> noises,
-                                      khiva::array::Array<float> cwt, int minSnr, int minLength) {
+                                      const khiva::array::Array<float>& cwt, int minSnr, int minLength) {
     std::vector<LineTuple> res;
 
     for (auto line : ridgeLines) {
