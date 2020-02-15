@@ -10,7 +10,7 @@ conan install .. --build missing
 if [[ -z "${TRAVIS_TAG}" ]]; then
   ../cmakebin/bin/cmake .. -DKHIVA_ENABLE_COVERAGE=ON -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
   cmake --build . -- -j8
-  ctest
+  ctest --output-on-failure
 else
   ../cmakebin/bin/cmake ..
   cmake --build . -- -j8
