@@ -274,18 +274,18 @@ void crossCovarianceBiased() {
     
     // Expected results obtained using statsmodels
     for (int i = 0; i < 2; i++) {
-        ASSERT_EQ(calculatedHost.get()[(i * 12)], 2.5);
-        ASSERT_NEAR(calculatedHost.get()[(i * 12) + 1], 2.499999999, EPSILON);
-        ASSERT_EQ(calculatedHost.get()[(i * 12) + 2], 2.5);
-        ASSERT_NEAR(calculatedHost.get()[(i * 12) + 3], -0.124999999, EPSILON * 1e3);
-        ASSERT_NEAR(calculatedHost.get()[(i * 12) + 4], -1.75, EPSILON * 1e1);
-        ASSERT_NEAR(calculatedHost.get()[(i * 12) + 5], -1.874999999, EPSILON);
-        ASSERT_NEAR(calculatedHost.get()[(i * 12) + 6], 2.5, EPSILON);
-        ASSERT_NEAR(calculatedHost.get()[(i * 12) + 7], 2.5, EPSILON);
-        ASSERT_EQ(calculatedHost.get()[(i * 12) + 8], -7.25);
-        ASSERT_NEAR(calculatedHost.get()[(i * 12) + 9], -5, EPSILON * 1e1);
-        ASSERT_NEAR(calculatedHost.get()[(i * 12) + 10], -0.666666666, EPSILON * 1e1);
-        ASSERT_NEAR(calculatedHost.get()[(i * 12) + 11], 6.25, EPSILON);
+        ASSERT_EQ(calculatedHost[(i * 12)], 2.5);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 1], 2.499999999, EPSILON);
+        ASSERT_EQ(calculatedHost[(i * 12) + 2], 2.5);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 3], -0.124999999, EPSILON * 1e3);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 4], -1.75, EPSILON * 1e1);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 5], -1.874999999, EPSILON);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 6], 2.5, EPSILON);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 7], 2.5, EPSILON);
+        ASSERT_EQ(calculatedHost[(i * 12) + 8], -7.25);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 9], -5, EPSILON * 1e1);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 10], -0.666666666, EPSILON * 1e1);
+        ASSERT_NEAR(calculatedHost[(i * 12) + 11], 6.25, EPSILON);
     }
 }
 
