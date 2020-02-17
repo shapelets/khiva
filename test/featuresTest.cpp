@@ -264,15 +264,16 @@ void crossCovariance() {
 }
 
 void crossCovarianceBiased() {
-    auto data1 = std::vector<float> {0, 1, 2, 3, 10, 11, 12, 13};
+    auto data1 = std::vector<float>{0, 1, 2, 3, 10, 11, 12, 13};
     af::array xss(4, 2, data1.data());
 
-    auto data2 = std::vector<float> {4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 0};
+    auto data2 = std::vector<float>{4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 0};
     af::array yss(6, 2, data2.data());
     af::array calculated = khiva::features::crossCovariance(xss, yss, false);
     auto calculatedHost = khiva::utils::makeScopedHostPtr(calculated.host<float>());
     // Expected results obtained using statsmodels.
-    auto expected = std::vector<float>{2.5, 2.5, 2.5, -0.125, -1.75, -1.875, 2.5, 2.5, -7.25, -5, -0.666666, 6.25};
+    auto expected =
+        std::vector<float>{2.5f, 2.5f, 2.5f, -0.125f, -1.75f, -1.875f, 2.5f, 2.5f, -7.25f, -5.f, -0.666666f, 6.25f};
     int i = 0;
     for (const auto value : expected) {
         EXPECT_NEAR(calculatedHost[i + 12], value, 1e-4);
