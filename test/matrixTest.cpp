@@ -1187,9 +1187,9 @@ void findBestDiscordsMirror() {
 }
 
 void findBestDiscordsConsecutive() {
-    auto data_a = std::vector<float>{10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 9.999f, 9.998f};
+    auto data_a =
+        std::vector<float>{10.f, 11.f, 14.f, 11.f, -2.f, 11.f, 18.f, 11.f, 1.f, 25.f, 10.f, 11.f, 1.f, 0.f, 19.f};
     af::array ta = af::array(data_a.size(), data_a.data());
-    af::print("ta", ta);
     constexpr auto subSequenceLength = 3L;
     constexpr auto numDiscords = 2L;
 
@@ -1197,8 +1197,6 @@ void findBestDiscordsConsecutive() {
     af::array index;
 
     khiva::matrix::stomp(ta, subSequenceLength, distance, index);
-    af::print("distance", distance);
-    af::print("index", index);
 
     af::array discords;
     af::array discordsIndices;
@@ -1206,13 +1204,9 @@ void findBestDiscordsConsecutive() {
 
     khiva::matrix::findBestNDiscords(distance, index, subSequenceLength, numDiscords, discords, discordsIndices,
                                      subsequenceIndices, true);
-    af::print("discords", discords);
-    af::print("discordsIndices", discordsIndices);
-    af::print("subsequenceIndices", subsequenceIndices);
     auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
-    af::print("subsequenceIndices", subsequenceIndices);
-    ASSERT_EQ(subsequenceIndicesHost[0], 12);
-    ASSERT_NE(subsequenceIndicesHost[1], 11);
+    ASSERT_EQ(subsequenceIndicesHost[0], 9);
+    ASSERT_EQ(subsequenceIndicesHost[1], 3);
 }
 
 void findBestDiscordsMirrorException() {
