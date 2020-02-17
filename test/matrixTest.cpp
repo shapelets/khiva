@@ -1189,7 +1189,7 @@ void findBestDiscordsMirror() {
 void findBestDiscordsConsecutive() {
     auto data_a = std::vector<float>{10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 9.999f, 9.998f};
     af::array ta = af::array(data_a.size(), data_a.data());
-
+    af::print("ta", ta);
     constexpr auto subSequenceLength = 3L;
     constexpr auto numDiscords = 2L;
 
