@@ -6,8 +6,6 @@
 
 cmake_minimum_required(VERSION 3.9.6)
 
-# Find the ArrayFire package.
-find_package(ArrayFire REQUIRED)
 project(KHIVALIB_C)
 
 # Compile with C++11 support.

@@ -61,8 +61,7 @@ target_include_directories(${KHIVALIB}
 						PUBLIC
                            $<BUILD_INTERFACE:${KHIVALIB_INC}>
                            $<BUILD_INTERFACE:${KHIVALIB_INC}/internal>
-                           $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
-                           ${ArrayFire_INCLUDE_DIRS})
+                           $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>)
 
 # Declare compilation libraries
 target_link_libraries(${KHIVALIB}

@@ -142,9 +142,6 @@ Once we have installed all Khiva dependencies, we are ready to install Khiva fro
 `pip install conan`
 For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
 
-- Next, run:
-`conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`
-
 - Create build folder and move into the new folder:
 `mkdir build && cd build`
 

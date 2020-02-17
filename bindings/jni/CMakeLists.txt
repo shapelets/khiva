@@ -41,13 +41,12 @@ add_library(${KHIVALIB_JNI} SHARED ${KHIVALIB_JNI_CODE})
 target_include_directories(${KHIVALIB_JNI} PUBLIC
         ${KHIVALIB_INC}
         ${KHIVALIB_JNI_INC} PRIVATE
-        ${ArrayFire_INCLUDE_DIRS}
         ${JNI_INCLUDE_DIRS})
 
 # Declare compilation libraries
 target_link_libraries(${KHIVALIB_JNI} PUBLIC
         ${KHIVALIB} PRIVATE
-        ${ArrayFire_Unified_LIBRARIES}
+        ArrayFire::af
         ${CMAKE_DL_LIBS})
 
 # Add metadata
