@@ -1197,6 +1197,8 @@ void findBestDiscordsConsecutive() {
     af::array index;
 
     khiva::matrix::stomp(ta, subSequenceLength, distance, index);
+    af::print("distance", distance);
+    af::print("index", index);
 
     af::array discords;
     af::array discordsIndices;
@@ -1204,9 +1206,11 @@ void findBestDiscordsConsecutive() {
 
     khiva::matrix::findBestNDiscords(distance, index, subSequenceLength, numDiscords, discords, discordsIndices,
                                      subsequenceIndices, true);
-
+    af::print("discords", discords);
+    af::print("discordsIndices", discordsIndices);
+    af::print("subsequenceIndices", subsequenceIndices);
     auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
-
+    af::print("subsequenceIndices", subsequenceIndices);
     ASSERT_EQ(subsequenceIndicesHost[0], 12);
     ASSERT_NE(subsequenceIndicesHost[1], 11);
 }
