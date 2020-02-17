@@ -6,7 +6,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 mkdir -p build && cd build
-conan profile update settings.compiler.libcxx=libstdc++11
+conan profile update settings.compiler.libcxx=libstdc++11 default
 conan profile show default
 conan install .. --build missing
 if [[ -z "${TRAVIS_TAG}" ]]; then
