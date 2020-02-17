@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 #include <khiva/features.h>
 #include <khiva/internal/scopedHostPtr.h>
+
 #include "khivaTest.h"
 
 void absEnergy() {
@@ -263,29 +264,19 @@ void crossCovariance() {
 }
 
 void crossCovarianceBiased() {
-    float data1[] = {0, 1, 2, 3, 10, 11, 12, 13};
-    af::array xss(4, 2, data1);
+    auto data1 = std::vector<float> {0, 1, 2, 3, 10, 11, 12, 13};
+    af::array xss(4, 2, data1.data());
 
-    float data2[] = {4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24};
-    af::array yss(6, 2, data2);
-
+    auto data2 = std::vector<float> {4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 0};
+    af::array yss(6, 2, data2.data());
     af::array calculated = khiva::features::crossCovariance(xss, yss, false);
     auto calculatedHost = khiva::utils::makeScopedHostPtr(calculated.host<float>());
-    
-    // Expected results obtained using statsmodels
-    for (int i = 0; i < 2; i++) {
-        ASSERT_EQ(calculatedHost[(i * 12)], 2.5);
-        ASSERT_NEAR(calculatedHost[(i * 12) + 1], 2.499999999, EPSILON);
-        ASSERT_EQ(calculatedHost[(i * 12) + 2], 2.5);
-        ASSERT_NEAR(calculatedHost[(i * 12) + 3], -0.124999999, EPSILON * 1e3);
-        ASSERT_NEAR(calculatedHost[(i * 12) + 4], -1.75, EPSILON * 1e1);
-        ASSERT_NEAR(calculatedHost[(i * 12) + 5], -1.874999999, EPSILON);
-        ASSERT_NEAR(calculatedHost[(i * 12) + 6], 2.5, EPSILON);
-        ASSERT_NEAR(calculatedHost[(i * 12) + 7], 2.5, EPSILON);
-        ASSERT_EQ(calculatedHost[(i * 12) + 8], -7.25);
-        ASSERT_NEAR(calculatedHost[(i * 12) + 9], -5, EPSILON * 1e1);
-        ASSERT_NEAR(calculatedHost[(i * 12) + 10], -0.666666666, EPSILON * 1e1);
-        ASSERT_NEAR(calculatedHost[(i * 12) + 11], 6.25, EPSILON);
+    // Expected results obtained using statsmodels.
+    auto expected = std::vector<float>{2.5, 2.5, 2.5, -0.125, -1.75, -1.875, 2.5, 2.5, -7.25, -5, -0.666666, 6.25};
+    int i = 0;
+    for (const auto value : expected) {
+        EXPECT_NEAR(calculatedHost[i + 12], value, 1e-4);
+        EXPECT_NEAR(calculatedHost[i++], value, 1e-4);
     }
 }
 

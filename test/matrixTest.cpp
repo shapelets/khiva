@@ -5,13 +5,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <gtest/gtest.h>
+#include <khiva/internal/matrixInternal.h>
+#include <khiva/internal/scopedHostPtr.h>
+#include <khiva/internal/vectorUtil.h>
 #include <khiva/matrix.h>
 
 #include <stdexcept>
-
-#include <khiva/internal/matrixInternal.h>
-#include <khiva/internal/vectorUtil.h>
-#include <khiva/internal/scopedHostPtr.h>
 
 #include "khivaTest.h"
 
@@ -1188,21 +1187,23 @@ void findBestDiscordsMirror() {
 }
 
 void findBestDiscordsConsecutive() {
-    float data_a[] = {10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 9.999f, 9.998f};
-    af::array ta = af::array(15, data_a);
+    auto data_a = std::vector<float>{10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 11, 10, 9.999f, 9.998f};
+    af::array ta = af::array(data_a.size(), data_a.data());
 
-    long m = 3;
+    constexpr auto subSequenceLength = 3L;
+    constexpr auto numDiscords = 2L;
 
     af::array distance;
     af::array index;
 
-    khiva::matrix::stomp(ta, m, distance, index);
+    khiva::matrix::stomp(ta, subSequenceLength, distance, index);
 
     af::array discords;
     af::array discordsIndices;
     af::array subsequenceIndices;
 
-    khiva::matrix::findBestNDiscords(distance, index, 3, 2, discords, discordsIndices, subsequenceIndices, true);
+    khiva::matrix::findBestNDiscords(distance, index, subSequenceLength, numDiscords, discords, discordsIndices,
+                                     subsequenceIndices, true);
 
     auto subsequenceIndicesHost = khiva::utils::makeScopedHostPtr(subsequenceIndices.host<unsigned int>());
 
