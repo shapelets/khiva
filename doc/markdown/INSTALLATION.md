@@ -74,7 +74,8 @@ We use CPack and NSIS to generate the installer.
    ./Arrayfire_*_Linux_x86_64.sh --include-subdir --prefix=/opt
    echo /opt/arrayfire/lib64 > /etc/ld.so.conf.d/arrayfire.conf
    sudo ldconfig
-   ```   
+   ```
+- Install opencl libraries. Follow [Intel guide](https://software.intel.com/en-us/articles/opencl-drivers#inpage-nav-1-1-1)
 
 Once we have installed all Khiva dependencies, we are ready to install Khiva from source code or by using the installers.
 
@@ -83,7 +84,6 @@ Once we have installed all Khiva dependencies, we are ready to install Khiva fro
 - Install conan, c++ package manager, preferably running `pip install conan`. For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
 - Run:
   ```bash
-  conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
   git submodule update --init
   mkdir build && cd build
   conan install .. --build missing
