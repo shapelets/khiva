@@ -7,9 +7,9 @@
 #include <benchmark/benchmark.h>
 #include <khiva/internal/matrixInternal.h>
 #include <khiva/matrix.h>
-#include <math.h>
 
 #include <algorithm>
+#include <cmath>
 
 #include "khivaBenchmark.h"
 
