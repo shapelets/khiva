@@ -6,13 +6,23 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 # Build the project
+function check-error() {
+  KHIVA_ERROR=$?
+  if [ $KHIVA_ERROR -ne 0 ]; then
+      echo "$1: $KHIVA_ERROR"
+      exit $KHIVA_ERROR
+  fi
+}
+
 mkdir -p build && cd build
 conan install .. -s compiler=apple-clang -s compiler.version=9.1 -s compiler.libcxx=libc++ --build missing
 if [[ -z "${TRAVIS_TAG}" ]]; then
   cmake .. -DKHIVA_ENABLE_COVERAGE=ON -DKHIVA_ONLY_CPU_BACKEND=ON -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
-  cmake --build . -- -j8
-  ctest -V
 else
   cmake ..
-  cmake --build . -- -j8
 fi
+check-error "Error generating CMake configuration"
+cmake --build . -- -j8
+check-error "Error building Khiva"
+ctest --output-on-failure
+check-error "Error executing tests"

@@ -57,7 +57,6 @@ target_include_directories(${KHIVALIB}
 						PRIVATE
 						   ${SCAMP_INCLUDE_DIRS}						
 						   ${Boost_INCLUDE_DIRS}
-						   ${EIGEN3_INCLUDE_DIRS}
 						PUBLIC
                            $<BUILD_INTERFACE:${KHIVALIB_INC}>
                            $<BUILD_INTERFACE:${KHIVALIB_INC}/internal>
@@ -67,6 +66,7 @@ target_include_directories(${KHIVALIB}
 target_link_libraries(${KHIVALIB}
 	PRIVATE 
 		scamp
+		Eigen3::Eigen
 	PUBLIC 
 		$<IF:$<BOOL:${KHIVA_ONLY_CPU_BACKEND}>,ArrayFire::afcpu,ArrayFire::af>
 		${CMAKE_DL_LIBS}

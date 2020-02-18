@@ -19,7 +19,6 @@ matrix:
     - git submodule update --init
     - source .CI/travis/install_linux.sh
     - source .CI/travis/install-arrayfire_linux.sh
-    - source .CI/travis/install-cmake_linux.sh
     script:
     - source .CI/travis/build_linux.sh
   - os: linux
@@ -33,7 +32,6 @@ matrix:
     - git submodule update --init
     - source .CI/travis/install_linux.sh
     - source .CI/travis/install-arrayfire_linux.sh
-    - source .CI/travis/install-cmake_linux.sh
     script:
     - source .CI/travis/build_linux.sh
     before_deploy:
