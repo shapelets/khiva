@@ -12,14 +12,15 @@ function check-error() {
   fi
 }
 
+cmake --version
 mkdir -p build && cd build
-conan profile new --detect --force
+conan profile new --detect --force default
 conan profile update settings.compiler.libcxx=libstdc++11 default
 conan install .. --build missing
 if [[ -z "${TRAVIS_TAG}" ]]; then
-  ../cmakebin/bin/cmake .. -DKHIVA_ENABLE_COVERAGE=ON -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
+  cmake .. -DKHIVA_ENABLE_COVERAGE=ON -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
 else
-  ../cmakebin/bin/cmake ..
+  cmake ..
 fi
 check-error "Error generating CMake configuration"
 cmake --build . -- -j8

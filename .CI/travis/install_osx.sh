@@ -14,6 +14,8 @@ pyenv local 3.6.5
 export PATH=$HOME/.pyenv/shims:$HOME/.pyenv/versions/${TRAVIS_PYTHON_VERSION}/bin:$PATH
 export PYTHON_VERSION=$(echo $TRAVIS_PYTHON_VERSION | awk -F'.' '{print $1 "." $2}')
 
+brew uninstall wget
+brew install wget
 brew install --force lcov
 brew install --force freeimage fontconfig glfw glbinding
 
