@@ -13,6 +13,9 @@ matrix:
     sudo: required
     compiler:
     - gcc
+    env:
+      - CC=/usr/bin/gcc-7
+      - CXX=/usr/bin/g++-7
     git:
       submodules: false
     before_install:
@@ -27,6 +30,9 @@ matrix:
     sudo: required
     compiler:
     - clang
+    env:
+      - CC=/usr/bin/clang
+      - CXX=/usr/bin/clang++
     git:
       submodules: false
     before_install:
