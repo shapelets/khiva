@@ -4,15 +4,15 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
+cmake_minimum_required(VERSION 3.9.6)
 
 include(CheckLanguage)
 
 # Compile with C++11 support.
-SET(CMAKE_CXX_STANDARD 14)
-SET(CMAKE_CXX_STANDARD_REQUIRED ON) 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON) 
 
-PROJECT(KHIVALIB) 
+project(KHIVALIB) 
 
 if(NOT ${KHIVA_ONLY_CPU_BACKEND})
 	check_language(CUDA)
@@ -32,39 +32,39 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/scamp/SCAMP/CMakeLists.txt")
 	message(FATAL_ERROR "git submodule was not initialized.")
 endif()
 
-ADD_SUBDIRECTORY(scamp)
+add_subdirectory(scamp)
 
 # Find packages.
-FIND_PACKAGE(ArrayFire REQUIRED)
-FIND_PACKAGE(Boost REQUIRED)
-FIND_PACKAGE(Eigen3 CONFIG REQUIRED)
+find_package(ArrayFire REQUIRED)
+find_package(Boost REQUIRED)
+find_package(Eigen3 CONFIG REQUIRED)
 
-SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Files to add to compilation
-SET(KHIVA_INTERNAL_SOURCES_PATH "${KHIVALIB_SRC}/khiva")
-FILE(GLOB_RECURSE KHIVALIB_CODE 
+set(KHIVA_INTERNAL_SOURCES_PATH "${KHIVALIB_SRC}/khiva")
+file(GLOB_RECURSE KHIVALIB_CODE 
     "${KHIVA_INTERNAL_SOURCES_PATH}/*.cpp"
     "${KHIVA_INTERNAL_SOURCES_PATH}/*.h"
     "${KHIVA_INTERNAL_SOURCES_PATH}/*.hpp"
     "${KHIVALIB_INC}/*.h" )
 
 # The output is a static library
-ADD_LIBRARY(${KHIVALIB} SHARED ${KHIVALIB_CODE})
+add_library(${KHIVALIB} SHARED ${KHIVALIB_CODE})
 
 # Declare include directories
-TARGET_INCLUDE_DIRECTORIES(${KHIVALIB} 
+target_include_directories(${KHIVALIB} 
 						PRIVATE
 						   ${SCAMP_INCLUDE_DIRS}						
 						   ${Boost_INCLUDE_DIRS}
 						   ${EIGEN3_INCLUDE_DIRS}
 						PUBLIC
                            $<BUILD_INTERFACE:${KHIVALIB_INC}>
-                           $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>
-                           ${ArrayFire_INCLUDE_DIRS})
+                           $<BUILD_INTERFACE:${KHIVALIB_INC}/internal>
+                           $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>)
 
 # Declare compilation libraries
-TARGET_LINK_LIBRARIES(${KHIVALIB}
+target_link_libraries(${KHIVALIB}
 	PRIVATE 
 		scamp
 	PUBLIC 
@@ -74,16 +74,16 @@ TARGET_LINK_LIBRARIES(${KHIVALIB}
 
 
 # Add compile definitions
-TARGET_COMPILE_DEFINITIONS(${KHIVALIB} PRIVATE KHIVA_EXPORTS PUBLIC AF_UNIFIED)
+target_compile_definitions(${KHIVALIB} PRIVATE KHIVA_EXPORTS PUBLIC AF_UNIFIED)
 
 # Add metadata
-SET_TARGET_PROPERTIES(${KHIVALIB} PROPERTIES 
+set_target_properties(${KHIVALIB} PROPERTIES 
     VERSION ${VERSION_SHORT}
     SOVERSION ${VERSION_MAJOR}
     PUBLIC_HEADER "${KHIVALIB_INC}/khiva.h")
 
 # Installation
-INSTALL(TARGETS ${KHIVALIB}
+install(TARGETS ${KHIVALIB}
         EXPORT Khiva
         COMPONENT core
         PUBLIC_HEADER DESTINATION ${KHIVA_INSTALL_INC_DIR}
@@ -92,24 +92,25 @@ INSTALL(TARGETS ${KHIVALIB}
         ARCHIVE DESTINATION ${KHIVA_INSTALL_LIB_DIR}
         INCLUDES DESTINATION ${KHIVA_INSTALL_INC_DIR})
 
-INSTALL(EXPORT Khiva
+install(EXPORT Khiva
          NAMESPACE Khiva::
          DESTINATION ${KHIVA_INSTALL_CMAKE_DIR}
          COMPONENT core)
 
-EXPORT(EXPORT Khiva
+export(EXPORT Khiva
         NAMESPACE Khiva::
         FILE cmake/KhivaTargets.cmake)
 
-INSTALL(DIRECTORY ${KHIVALIB_INC}/ 
+install(DIRECTORY ${KHIVALIB_INC}/ 
         DESTINATION ${KHIVA_INSTALL_INC_DIR}
         COMPONENT headers
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN ".gitignore" EXCLUDE
+        PATTERN "internal/*.h" EXCLUDE
 )
 
-INSTALL(FILES ${CMAKE_BINARY_DIR}/cmake/install/KhivaConfig.cmake
+install(FILES ${CMAKE_BINARY_DIR}/cmake/install/KhivaConfig.cmake
               ${CMAKE_BINARY_DIR}/cmake/install/KhivaConfigVersion.cmake
               DESTINATION ${KHIVA_INSTALL_CMAKE_DIR}
               COMPONENT cmake)

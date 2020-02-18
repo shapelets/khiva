@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <khiva/regression.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void linear() {
@@ -50,11 +51,11 @@ void linearMultipleTimeSeries() {
 
     khiva::regression::linear(xss, yss, slope, intercept, rvalue, pvalue, stderrest);
 
-    float *slope_host = slope.host<float>();
-    float *intercept_host = intercept.host<float>();
-    float *rvalue_host = rvalue.host<float>();
-    float *pvalue_host = pvalue.host<float>();
-    float *stderrest_host = stderrest.host<float>();
+    auto slope_host = khiva::utils::makeScopedHostPtr(slope.host<float>());
+    auto intercept_host = khiva::utils::makeScopedHostPtr(intercept.host<float>());
+    auto rvalue_host = khiva::utils::makeScopedHostPtr(rvalue.host<float>());
+    auto pvalue_host = khiva::utils::makeScopedHostPtr(pvalue.host<float>());
+    auto stderrest_host = khiva::utils::makeScopedHostPtr(stderrest.host<float>());
 
     ASSERT_NEAR(slope_host[0], 0.344864266, EPSILON);
     ASSERT_NEAR(slope_host[1], 0.344864266, EPSILON);

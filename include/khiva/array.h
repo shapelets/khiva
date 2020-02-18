@@ -6,9 +6,10 @@
 #ifndef KHIVA_CORE_ARRAY_H
 #define KHIVA_CORE_ARRAY_H
 
+#include <arrayfire.h>
 #include <khiva/defines.h>
 
-#include <arrayfire.h>
+#include <algorithm>
 #include <iostream>
 #include <limits>
 
@@ -96,35 +97,34 @@ class Array {
     /**
      * @brief Default Constructor of Array class.
      */
-    Array() {
-        x = 0;
-        y = 1;
-        w = 1;
-        z = 1;
-        dims = 0;
-        data = NULL;
-    }
+    Array() : x{0}, y{1}, w{1}, z{1}, dims{0}, data{nullptr} {}
 
     /**
      * @brief Constructor of Array class which receives and af::array.
      *
      * @param in The input af::array.
      */
-    Array(af::array in) {
-        x = static_cast<int>(in.dims(0));
-        y = static_cast<int>(in.dims(1));
-        w = static_cast<int>(in.dims(2));
-        z = static_cast<int>(in.dims(3));
-        data = in.host<T>();
-        dims = in.numdims();
+    Array(af::array in)
+        : x{static_cast<int>(in.dims(0))},
+          y{static_cast<int>(in.dims(1))},
+          w{static_cast<int>(in.dims(2))},
+          z{static_cast<int>(in.dims(3))},
+          data{in.host<T>()},
+          dims{static_cast<int>(in.numdims())} {
         af::sync();
     }
+
+    Array(const Array &other) = delete;
+    Array(const Array &&other) = delete;
+    Array &operator=(const Array &other) = delete;
+    Array &operator=(const Array &&other) = delete;
 
     /**
      * @brief Default destructor of Array class.
      */
     ~Array() {
         if (!isEmpty()) {
+            af::freeHost(data);
             data = NULL;
         }
     }
@@ -169,35 +169,35 @@ class Array {
      *
      * @return int the Cardinality of the first dimension.
      */
-    int getNumX() { return x; };
+    int getNumX() const { return x; };
 
     /**
      * @brief Gets the cardinality of the second dimension.
      *
      * @return int the Cardinality of the second dimension.
      */
-    int getNumY() { return y; };
+    int getNumY() const { return y; };
 
     /**
      * @brief Gets the cardinality of the third dimension.
      *
      * @return int the Cardinality of the third dimension.
      */
-    int getNumW() { return w; };
+    int getNumW() const { return w; };
 
     /**
      * @brief Gets the cardinality of the fourth dimension.
      *
      * @return int the Cardinality of the fourth dimension.
      */
-    int getNumZ() { return z; };
+    int getNumZ() const { return z; };
 
     /**
      * @brief Gets the number of elements in data.
      *
      * @return int the Cardinality of the number of elements.
      */
-    int getNumElements() { return std::max(1, x) * std::max(1, y) * std::max(1, w) * std::max(1, z); }
+    int getNumElements() const { return std::max(1, x) * std::max(1, y) * std::max(1, w) * std::max(1, z); }
 
     /**
      * @brief Gets the row number given by idx.
@@ -206,16 +206,15 @@ class Array {
      *
      * @return std::vector Containing the selected row.
      */
-    std::vector<T> getRow(int idx) {
+    std::vector<T> getRow(int idx) const {
         if (dims > 2) {
-            std::cout << "We only support this function for arrays with 2 dims." << std::endl;
-            std::cout << "Your array has " << dims << " dimensions." << std::endl;
-            exit(0);
+            throw std::logic_error("Only arrays with 2 dims are supported.");
         }
 
         std::vector<T> res;
+        res.reserve(y);
         for (int i = 0; i < y; i++) {
-            res.push_back(data[idx + i * x]);
+            res.emplace_back(data[idx + i * x]);
         }
         return res;
     }
@@ -227,15 +226,14 @@ class Array {
      *
      * @return std::vector Containing the selected column.
      */
-    std::vector<T> getColumn(int idx) {
+    std::vector<T> getColumn(int idx) const {
         if (dims != 2) {
-            std::cout << "We only support this function for arrays with 2 dims." << std::endl;
-            std::cout << "Your array has " << dims << " dimensions." << std::endl;
-            exit(0);
+            throw std::logic_error("Only arrays with 2 dims are supported.");
         }
         std::vector<T> res;
+        res.reserve(y);
         for (int i = 0; i < y; i++) {
-            res.push_back(data[idx * x + i]);
+            res.emplace_back(data[idx * x + i]);
         }
         return res;
     }
@@ -248,11 +246,9 @@ class Array {
      *
      * @return T The element to be extracted.
      */
-    T getElement(int row, int column) {
+    T getElement(int row, int column) const {
         if (dims != 2) {
-            std::cout << "We only support this function for arrays with 2 dims." << std::endl;
-            std::cout << "Your array has " << dims << " dimensions." << std::endl;
-            exit(0);
+            throw std::logic_error("Only arrays with 2 dims are supported.");
         }
 
         return data[x * column + row];
@@ -290,14 +286,11 @@ class Array {
                         std::cout << std::endl;
                     }
                     if (k > 0) {
-                        std::cout << std::endl;
-                        std::cout << std::endl;
+                        std::cout << std::endl << std::endl;
                     }
                 }
                 if (l > 0) {
-                    std::cout << std::endl;
-                    std::cout << std::endl;
-                    std::cout << std::endl;
+                    std::cout << std::endl << std::endl << std::endl;
                 }
             }
         }
@@ -312,16 +305,14 @@ class Array {
  * @return std::vector<int> with the indices of the rows with maximals.
  */
 template <typename T>
-std::vector<int> getRowsWithMaximals(khiva::array::Array<T> a) {
+std::vector<int> getRowsWithMaximals(const khiva::array::Array<T> &a) {
     std::vector<int> result;
-
+    result.reserve(a.getNumX());
     for (int i = 0; i < a.getNumX(); i++) {
         std::vector<T> row = a.getRow(i);
-        for (int j = 0; j < a.getNumY(); j++) {
-            if (row[j] == 1) {
-                result.push_back(i);
-                break;
-            }
+        auto found = std::find_if(row.begin(), row.end(), [](T j) { return j == 1; });
+        if (found != row.end()) {
+            result.emplace_back(std::distance(row.begin(), found));
         }
     }
     return result;
@@ -335,15 +326,14 @@ std::vector<int> getRowsWithMaximals(khiva::array::Array<T> a) {
  * @return std::vector<int> with the indices of the columns with maximals.
  */
 template <typename T>
-std::vector<int> getIndexMaxColums(std::vector<T> r) {
+std::vector<int> getIndexMaxColums(const std::vector<T> &r) {
     std::vector<int> result;
-
+    result.reserve(r.size());
     for (unsigned long i = 0; i < r.size(); i++) {
         if (r[i] == 1) {
             result.push_back(static_cast<int>(i));
         }
     }
-
     return result;
 }
 

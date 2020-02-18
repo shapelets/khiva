@@ -49,26 +49,4 @@ void printArray(T *array, int len) {
     std::cout << std::endl;
 }
 
-// void printRidgeLines(std::vector<CWTTuple> ridgeLines) {
-//     for (auto r : ridgeLines) {
-//         std::cout << "Rows" << std::endl;
-//         printVector(std::get<0>(r));
-//         std::cout << "Cols" << std::endl;
-//         printVector(std::get<1>(r));
-//         std::cout << "Gap" << std::endl;
-//         std::cout << std::get<2>(r) << std::endl;
-//         ;
-//     }
-// }
-
-// void printRidgeLines(std::vector<LineTuple> ridgeLines) {
-//     for (auto r : ridgeLines) {
-//         std::cout << "Rows" << std::endl;
-//         printVector(std::get<0>(r));
-//         std::cout << "Cols" << std::endl;
-//         printVector(std::get<1>(r));
-//         ;
-//     }
-// }
-
 #endif

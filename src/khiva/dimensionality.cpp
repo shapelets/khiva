@@ -5,6 +5,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <khiva/dimensionality.h>
+#include <khiva/internal/scopedHostPtr.h>
+
 #include <algorithm>
 #include <boost/math/distributions/normal.hpp>
 #include <cmath>
@@ -32,7 +34,7 @@ std::vector<float> computeBreakpoints(int alphabet_size, float mean_value, float
     boost::math::normal dist(mean_value, std_value);
 
     for (int i = 1; i < alphabet_size; i++) {
-        float value = static_cast<float>(quantile(dist, (float) i * (1 / (float) alphabet_size)));
+        float value = static_cast<float>(quantile(dist, (float)i * (1 / (float)alphabet_size)));
         res.push_back(value);
     }
     return res;
@@ -151,7 +153,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
 
     // Iterating over the time series
     for (auto i = begin; i != last; i++) {
-        int pos = static_cast<int>(std::min((*i).first * reduction, (float) (bins - 1)));
+        int pos = static_cast<int>(std::min((*i).first * reduction, (float)(bins - 1)));
         sum[pos] += (*i).second;
         counter[pos] = counter[pos] + 1;
     }
@@ -164,7 +166,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
     return result;
 }
 
-template<typename T>
+template <typename T>
 af::array PAA_CPU(af::array a, int bins) {
     af::array result;
     int n = a.dims(0);
@@ -254,13 +256,13 @@ af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
     }
 
     // Extracting info from af::array
-    float *h_x = ts.col(0).host<float>();
-    float *h_y = ts.col(1).host<float>();
+    auto h_x = khiva::utils::makeScopedHostPtr(ts.col(0).host<float>());
+    auto h_y = khiva::utils::makeScopedHostPtr(ts.col(1).host<float>());
 
     // Converting c-arrays to vector of points
     std::vector<Point> points;
     for (int i = 0; i < n; i++) {
-        points.push_back(std::make_pair(h_x[i], h_y[i]));
+        points.emplace_back(h_x[i], h_y[i]);
     }
 
     // Allocating vectors for selected points
@@ -294,8 +296,8 @@ af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
     }
 
     // Converting from vector to array
-    float *x = (float *) malloc(sizeof(float) * selected.size());
-    float *y = (float *) malloc(sizeof(float) * selected.size());
+    float *x = (float *)malloc(sizeof(float) * selected.size());
+    float *y = (float *)malloc(sizeof(float) * selected.size());
     for (size_t i = 0; i < selected.size(); i++) {
         x[i] = selected[i].first;
         y[i] = selected[i].second;
@@ -386,39 +388,38 @@ af::array khiva::dimensionality::PLABottomUp(af::array ts, float maxError) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
     // Extracting info from af::array
-    float *h_x = ts.col(0).host<float>();
-    float *h_y = ts.col(1).host<float>();
+    auto h_x = khiva::utils::makeScopedHostPtr(ts.col(0).host<float>());
+    auto h_y = khiva::utils::makeScopedHostPtr(ts.col(1).host<float>());
 
     std::vector<khiva::dimensionality::Point> points;
 
     // Creating a vector of Points
     for (int i = 0; i < ts.dims(0); i++) {
-        points.push_back(std::make_pair(h_x[i], h_y[i]));
+        points.emplace_back(h_x[i], h_y[i]);
     }
 
     std::vector<khiva::dimensionality::Point> reducedPoints = khiva::dimensionality::PLABottomUp(points, maxError);
-    float *x = (float *) malloc(sizeof(float) * reducedPoints.size());
-    float *y = (float *) malloc(sizeof(float) * reducedPoints.size());
+    std::vector<float> x;
+    x.reserve(reducedPoints.size());
+    std::vector<float> y;
+    y.reserve(reducedPoints.size());
 
     // Converting from vector to array
-    for (size_t i = 0; i < reducedPoints.size(); i++) {
-        x[i] = reducedPoints[i].first;
-        y[i] = reducedPoints[i].second;
+    for (const auto &point : reducedPoints) {
+        x.emplace_back(point.first);
+        y.emplace_back(point.second);
     }
 
     // from c-array to af::array
-    af::array tsx(reducedPoints.size(), 1, x);
-    af::array tsy(reducedPoints.size(), 1, y);
+    af::array tsx(reducedPoints.size(), 1, x.data());
+    af::array tsy(reducedPoints.size(), 1, y.data());
     af::array res = af::join(1, tsx, tsy);
-
-    free(x);
-    free(y);
 
     return res;
 }
 
 std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLASlidingWindow(
-        std::vector<khiva::dimensionality::Point> ts, float maxError) {
+    std::vector<khiva::dimensionality::Point> ts, float maxError) {
     std::vector<khiva::dimensionality::Point> result;
     std::vector<khiva::dimensionality::Segment> segments;
 
@@ -434,17 +435,17 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLASlidingWindo
         }
 
         if ((anchor + i) == (ts.size() - 1)) {
-            segments.push_back(std::make_pair(anchor, anchor + i));
+            segments.emplace_back(anchor, anchor + i);
         } else {
-            segments.push_back(std::make_pair(anchor, anchor + i - 1));
+            segments.emplace_back(anchor, anchor + i - 1);
         }
         anchor += i;
     }
 
     // Build a polyline from a set of segments
-    for (size_t j = 0; j < segments.size(); j++) {
-        result.push_back(ts[segments[j].first]);
-        result.push_back(ts[segments[j].second]);
+    for (auto &segment : segments) {
+        result.emplace_back(ts[segment.first]);
+        result.emplace_back(ts[segment.second]);
     }
 
     return result;
@@ -455,39 +456,37 @@ af::array khiva::dimensionality::PLASlidingWindow(af::array ts, float maxError) 
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
     // Extracting info from af::array
-    float *h_x = ts.col(0).host<float>();
-    float *h_y = ts.col(1).host<float>();
+    auto h_x = khiva::utils::makeScopedHostPtr(ts.col(0).host<float>());
+    auto h_y = khiva::utils::makeScopedHostPtr(ts.col(1).host<float>());
 
     std::vector<khiva::dimensionality::Point> points;
 
     // Creating a vector of Points
     for (int i = 0; i < ts.dims(0); i++) {
-        points.push_back(std::make_pair(h_x[i], h_y[i]));
+        points.emplace_back(h_x[i], h_y[i]);
     }
 
     std::vector<khiva::dimensionality::Point> reducedPoints = khiva::dimensionality::PLASlidingWindow(points, maxError);
-    float *x = (float *) malloc(sizeof(float) * reducedPoints.size());
-    float *y = (float *) malloc(sizeof(float) * reducedPoints.size());
-
+    std::vector<float> x;
+    x.reserve(reducedPoints.size());
+    std::vector<float> y;
+    y.reserve(reducedPoints.size());
     // Converting from vector to array
-    for (size_t i = 0; i < reducedPoints.size(); i++) {
-        x[i] = reducedPoints[i].first;
-        y[i] = reducedPoints[i].second;
+    for (const auto &point : reducedPoints) {
+        x.emplace_back(point.first);
+        y.emplace_back(point.second);
     }
 
     // from c-array to af::array
-    af::array tsx(reducedPoints.size(), 1, x);
-    af::array tsy(reducedPoints.size(), 1, y);
+    af::array tsx(reducedPoints.size(), 1, x.data());
+    af::array tsy(reducedPoints.size(), 1, y.data());
     af::array res = af::join(1, tsx, tsy);
-
-    free(x);
-    free(y);
 
     return res;
 }
 
 std::vector<khiva::dimensionality::Point> khiva::dimensionality::ramerDouglasPeucker(
-        std::vector<khiva::dimensionality::Point> pointList, double epsilon) {
+    std::vector<khiva::dimensionality::Point> pointList, double epsilon) {
     std::vector<khiva::dimensionality::Point> out;
 
     if (pointList.size() < 2) throw std::invalid_argument("Not enough points to simplify ...");
@@ -532,29 +531,28 @@ af::array khiva::dimensionality::ramerDouglasPeucker(af::array pointList, double
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
     std::vector<khiva::dimensionality::Point> points;
-    float *x = pointList.col(0).host<float>();
-    float *y = pointList.col(1).host<float>();
+    auto x = khiva::utils::makeScopedHostPtr(pointList.col(0).host<float>());
+    auto y = khiva::utils::makeScopedHostPtr(pointList.col(1).host<float>());
 
     for (int i = 0; i < pointList.dims(0); i++) {
-        points.push_back(std::make_pair(x[i], y[i]));
+        points.emplace_back(x[i], y[i]);
     }
 
     std::vector<khiva::dimensionality::Point> rPoints = khiva::dimensionality::ramerDouglasPeucker(points, epsilon);
     af::array out = af::constant(0, rPoints.size(), 2);
 
-    std::vector<float> vx(rPoints.size(), 0);
-    std::vector<float> vy(rPoints.size(), 0);
+    std::vector<float> vx;
+    vx.reserve(rPoints.size());
+    std::vector<float> vy;
+    vy.reserve(rPoints.size());
 
-    for (size_t i = 0; i < rPoints.size(); i++) {
-        vx[i] = rPoints[i].first;
-        vy[i] = rPoints[i].second;
+    for (const auto &rPoint : rPoints) {
+        vx.emplace_back(rPoint.first);
+        vy.emplace_back(rPoint.second);
     }
 
-    float *ax = &vx[0];
-    float *ay = &vy[0];
-
-    af::array ox(rPoints.size(), ax);
-    af::array oy(rPoints.size(), ay);
+    af::array ox(rPoints.size(), vx.data());
+    af::array oy(rPoints.size(), vy.data());
 
     return af::join(1, ox, oy);
 }
@@ -571,39 +569,28 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     // Let's compute the y-axis.
     for (int k = 1; k < a.dims(1); k++) {
         af::array ts = a.col(k);
-        float mean_value = af::mean<float>(ts);
-        float std_value = af::stdev<float>(ts);
-        std::vector<int> aux;
+        auto mean_value = af::mean<float>(ts);
+        auto std_value = af::stdev<float>(ts);
         dim_t n = ts.dims(0);
-
+        std::vector<int> aux(n, 0);
+        
         if (std_value > 0) {
-            std::vector<float> breakingpoints = computeBreakpoints(alphabet_size, mean_value, std_value);
+            std::vector<float> breakingPoints = computeBreakpoints(alphabet_size, mean_value, std_value);
             std::vector<int> alphabet = generateAlphabet(alphabet_size);
-            float *a_h = ts.host<float>();
+            auto a_h = khiva::utils::makeScopedHostPtr(ts.host<float>());
 
             // Iterate across elements of ts
             for (int i = 0; i < n; i++) {
-                size_t j = 0;
-                int alpha = alphabet[0];
-
-                while ((j < breakingpoints.size()) && (a_h[i] > breakingpoints[j])) {
+                size_t j = 0;                
+                while ((j < breakingPoints.size()) && (a_h[i] > breakingPoints[j])) {
                     j++;
                 }
-
-                alpha = alphabet[j];
-                aux.push_back(alpha);
-            }
-        } else {
-            for (int i = 0; i < n; i++) {
-                aux.push_back(0);
+                aux[i] = alphabet[j];
             }
         }
 
-        // Int pointer to the vector data
-        int *auxx = &aux[0];
-
         // from c-array to af::array
-        af::array res(aux.size(), 1, auxx);
+        af::array res(aux.size(), 1, aux.data());
 
         result(af::span, k) += res;
     }
@@ -611,14 +598,13 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     return result;
 }
 
-struct VisvalingamSummaryPoint{
+struct VisvalingamSummaryPoint {
     float x;
     float y;
     float area;
 };
 
-void computeTriangleArea(VisvalingamSummaryPoint &a, VisvalingamSummaryPoint &b,
-                         VisvalingamSummaryPoint &c) {
+void computeTriangleArea(VisvalingamSummaryPoint &a, VisvalingamSummaryPoint &b, VisvalingamSummaryPoint &c) {
     float res = 0.0;
 
     float f1 = a.x * (b.y - c.y);
@@ -629,94 +615,95 @@ void computeTriangleArea(VisvalingamSummaryPoint &a, VisvalingamSummaryPoint &b,
 
 #include <iterator>
 template <typename Iter, typename Distance>
-Iter shiftIterator(Iter iter, Distance positions){
+Iter shiftIterator(Iter iter, Distance positions) {
     auto it_shifted = iter;
     std::advance(it_shifted, positions);
     return it_shifted;
 }
 
 std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
-        std::vector<khiva::dimensionality::Point> pointList, int num_points_allowed) {
-
+    std::vector<khiva::dimensionality::Point> pointList, int num_points_allowed) {
     // variables
     std::vector<VisvalingamSummaryPoint> out(pointList.size());
-    std::transform(pointList.begin(), pointList.end(), out.begin(), [](const khiva::dimensionality::Point& point)
-        { return VisvalingamSummaryPoint {point.first, point.second, std::numeric_limits<float>::max()}; });
+    std::transform(pointList.begin(), pointList.end(), out.begin(), [](const khiva::dimensionality::Point &point) {
+        return VisvalingamSummaryPoint{point.first, point.second, std::numeric_limits<float>::max()};
+    });
 
     int iterations = static_cast<int>(out.size()) - num_points_allowed;
 
     if (pointList.size() < 4 || num_points_allowed < 3) {
         throw std::invalid_argument(
-                "Invalid dimension of the series. Series to be reduce should be larger than 3 points "
-                "and the number of resulting points larger than 2.");
+            "Invalid dimension of the series. Series to be reduce should be larger than 3 points "
+            "and the number of resulting points larger than 2.");
     }
 
     // Precompute areas
-    for(auto it = out.begin(); it != shiftIterator(out.end(), -2); ++it){
+    for (auto it = out.begin(); it != shiftIterator(out.end(), -2); ++it) {
         computeTriangleArea(*it, *shiftIterator(it, 1), *shiftIterator(it, 2));
     }
 
     // One point to be deleted on each iteration
     for (int iter = 0; iter < iterations; iter++) {
-        auto min_element = std::min_element(out.cbegin(), out.cend(), [](const VisvalingamSummaryPoint &v1, const VisvalingamSummaryPoint &v2){
-            return v1.area < v2.area;
-        });
+        auto min_element = std::min_element(
+            out.cbegin(), out.cend(),
+            [](const VisvalingamSummaryPoint &v1, const VisvalingamSummaryPoint &v2) { return v1.area < v2.area; });
         auto min_position = std::distance(out.cbegin(), min_element);
 
-        //delete point and area with smallest area
+        // delete point and area with smallest area
         out.erase(shiftIterator(out.begin(), min_position + 1));
         auto beg = out.begin();
-        if(min_position < 2) {
+        if (min_position < 2) {
             computeTriangleArea(*beg, *shiftIterator(beg, 1), *shiftIterator(beg, 2));
             computeTriangleArea(*shiftIterator(beg, 1), *shiftIterator(beg, 2), *shiftIterator(beg, 3));
             computeTriangleArea(*shiftIterator(beg, 2), *shiftIterator(beg, 3), *shiftIterator(beg, 4));
 
-        } else if (min_position >= 2 && min_position < out.size() - 3){
-            computeTriangleArea(*shiftIterator(beg, min_position), *shiftIterator(beg, min_position + 1), *shiftIterator(beg, min_position + 2));
-            computeTriangleArea(*shiftIterator(beg, min_position - 1), *shiftIterator(beg, min_position), *shiftIterator(beg, min_position + 1));
+        } else if (min_position >= 2 && min_position < out.size() - 3) {
+            computeTriangleArea(*shiftIterator(beg, min_position), *shiftIterator(beg, min_position + 1),
+                                *shiftIterator(beg, min_position + 2));
+            computeTriangleArea(*shiftIterator(beg, min_position - 1), *shiftIterator(beg, min_position),
+                                *shiftIterator(beg, min_position + 1));
 
-        } else  if (min_position >= out.size() - 3) {
+        } else if (min_position >= out.size() - 3) {
             (*shiftIterator(beg, min_position)).area = std::numeric_limits<float>::max();
         }
     }
 
     std::vector<khiva::dimensionality::Point> outVector(num_points_allowed);
-    std::transform(out.begin(), out.end(), outVector.begin(), [](const VisvalingamSummaryPoint &point){
-        return khiva::dimensionality::Point {point.x, point.y};
+    std::transform(out.begin(), out.end(), outVector.begin(), [](const VisvalingamSummaryPoint &point) {
+        return khiva::dimensionality::Point{point.x, point.y};
     });
 
     return outVector;
- }
-
+}
 
 af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints) {
     if (pointList.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
-    std::vector<khiva::dimensionality::Point> points(pointList.dims(0));
-    float *x = pointList.col(0).host<float>();
-    float *y = pointList.col(1).host<float>();
+    std::vector<khiva::dimensionality::Point> points;
+    points.reserve(pointList.dims(0));
+    auto x = khiva::utils::makeScopedHostPtr(pointList.col(0).host<float>());
+    auto y = khiva::utils::makeScopedHostPtr(pointList.col(1).host<float>());
 
     for (int i = 0; i < pointList.dims(0); i++) {
-        points[i] = std::make_pair(x[i], y[i]);
+        points.emplace_back(x[i], y[i]);
     }
 
     std::vector<khiva::dimensionality::Point> rPoints = khiva::dimensionality::visvalingam(points, numPoints);
     af::array out = af::constant(0, rPoints.size(), 2);
 
-    std::vector<float> vx(rPoints.size(), 0);
-    std::vector<float> vy(rPoints.size(), 0);
+    std::vector<float> vx;
+    vx.reserve(rPoints.size());
+    std::vector<float> vy;
+    vy.reserve(rPoints.size());
 
-    for (size_t i = 0; i < rPoints.size(); i++) {
-        vx[i] = rPoints[i].first;
-        vy[i] = rPoints[i].second;
+    for (const auto &rPoint : rPoints) {
+        vx.emplace_back(rPoint.first);
+        vy.emplace_back(rPoint.second);
     }
 
-    float *ax = &vx[0];
-    float *ay = &vy[0];
-
-    af::array ox(rPoints.size(), ax);
-    af::array oy(rPoints.size(), ay);
+    af::array ox(rPoints.size(), vx.data());
+    af::array oy(rPoints.size(), vy.data());
 
     return af::join(1, ox, oy);
 }

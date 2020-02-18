@@ -4,9 +4,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include "matrixInternal.h"
+#include "khiva/internal/matrixInternal.h"
+
+#include <SCAMP/src/SCAMP.h>
+#include <SCAMP/src/common.h>
+#include <SCAMP/src/scamp_exception.h>
+#include <khiva/internal/libraryInternal.h>
+#include <khiva/internal/vectorUtil.h>
 #include <khiva/library.h>
 #include <khiva/normalization.h>
+
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -15,13 +22,6 @@
 #include <set>
 #include <thread>
 #include <utility>
-#include "libraryInternal.h"
-#include "matrixInternal.h"
-#include "vectorUtil.h"
-
-#include <SCAMP/src/SCAMP.h>
-#include <SCAMP/src/common.h>
-#include <SCAMP/src/scamp_exception.h>
 
 namespace {
 using namespace khiva::matrix::internal;
@@ -207,7 +207,6 @@ af::array slidingDotProduct(af::array q, af::array t) {
 
     // Flipping all the query sequences contained in q
     af::array qr = af::flip(q, 0);
-
     // Calculating the convolve of all the query sequences contained in qr
     // against all the time series contained in t
     af::array qt = af::real(af::convolve(t, qr, AF_CONV_EXPAND));

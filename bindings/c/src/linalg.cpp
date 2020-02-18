@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/linalg.h>
 #include <khiva_c/linalg.h>
-#include <khiva_c/util.h>
+#include <khiva_c/internal/util.h>
 
 void lls(khiva_array *a, khiva_array *b, khiva_array *result, int *error_code, char *error_message) {
     try {

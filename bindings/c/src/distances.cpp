@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/distances.h>
 #include <khiva_c/distances.h>
-#include <khiva_c/util.h>
+#include <khiva_c/internal/util.h>
 
 void euclidean(khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
     try {

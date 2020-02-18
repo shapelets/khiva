@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/library.h>
 
-#include "libraryInternal.h"
+#include "khiva/internal/libraryInternal.h"
 
 std::string khiva::library::backendInfo() { return af::infoString(); }
 
