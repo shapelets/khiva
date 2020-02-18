@@ -13,6 +13,7 @@ function check-error() {
 }
 
 mkdir -p build && cd build
+conan profile new --detect --force
 conan profile update settings.compiler.libcxx=libstdc++11 default
 conan install .. --build missing
 if [[ -z "${TRAVIS_TAG}" ]]; then
