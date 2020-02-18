@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 #include <khiva/regularization.h>
 #include <khiva/statistics.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void groupBySingleKeyColumn() {
@@ -15,7 +16,7 @@ void groupBySingleKeyColumn() {
 
     float expected[] = {0, 3, 1, 2};
 
-    float *result = khiva::regularization::groupBy(tss, af::mean).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(tss, af::mean).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(result[i], expected[i]);
@@ -28,7 +29,7 @@ void groupByDoubleKeyColumn() {
 
     float expected[] = {0, 3, 1, 2};
 
-    float *result = khiva::regularization::groupBy(tss, af::mean, 2).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(tss, af::mean, 2).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(result[i], expected[i]);
@@ -41,7 +42,7 @@ void groupByDoubleKeyColumn2() {
 
     float expected[] = {1, 2, 3.5, 5};
 
-    float *result = khiva::regularization::groupBy(tss, af::mean, 2).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(tss, af::mean, 2).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(result[i], expected[i]);
@@ -60,7 +61,7 @@ void groupByDoubleKeyDoubleValueColumn() {
 
     float expected[] = {1, 3.5, 1, 1};
 
-    float *result = khiva::regularization::groupBy(input, af::mean, 2, 2).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(input, af::mean, 2, 2).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_NEAR(result[i], expected[i], EPSILON);
@@ -73,7 +74,7 @@ void groupByMin() {
 
     float expected[] = {0, 3, 1, 2};
 
-    float *result = khiva::regularization::groupBy(tss, af::min).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(tss, af::min).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(result[i], expected[i]);
@@ -86,7 +87,7 @@ void groupByVar() {
 
     float expected[] = {0, 0, 0, 0};
 
-    float *result = khiva::regularization::groupBy(tss, af::var).host<float>();
+    auto result = khiva::utils::makeScopedHostPtr(khiva::regularization::groupBy(tss, af::var).host<float>());
 
     for (int i = 0; i < 4; i++) {
         ASSERT_EQ(result[i], expected[i]);

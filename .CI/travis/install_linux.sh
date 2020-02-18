@@ -9,12 +9,9 @@ sudo apt-get update -y
 sudo apt-get install -y lcov python3 python3-pip rpm python3-setuptools
 
 # Installing conan
-sudo pip3 install conan==1.5.2
+sudo pip3 install conan==1.22.2
 
 if ! [[ -z "${TRAVIS_TAG}" ]]; then
   sudo apt-get install -y doxygen graphviz
   sudo pip3 install sphinx==1.7.5 breathe==4.9.1 sphinx_rtd_theme==0.4.0
 fi
-
-# Installing library dependencies with conan
-conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz

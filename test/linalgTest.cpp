@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <khiva/linalg.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void lls() {
@@ -17,7 +18,7 @@ void lls() {
 
     af::array x = khiva::linalg::lls(A, b);
 
-    float *calculated = x.host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(x.host<float>());
 
     float expected[] = {1, 1};
 
@@ -34,7 +35,7 @@ void llsMoreEquations() {
 
     af::array x = khiva::linalg::lls(A, b);
 
-    float *calculated = x.host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(x.host<float>());
 
     float expected[] = {1, 1};
 
@@ -51,7 +52,7 @@ void llsMoreVariables() {
 
     af::array x = khiva::linalg::lls(A, b);
 
-    float *calculated = x.host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(x.host<float>());
 
     float expected[] = {0.3934987f, 0.2968349f, 0.0290847f};
 

@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/regularization.h>
 #include <khiva_c/regularization.h>
-#include <khiva_c/util.h>
+#include <khiva_c/internal/util.h>
 
 void group_by(khiva_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
               khiva_array *result, int *error_code, char *error_message) {

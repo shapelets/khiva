@@ -5,9 +5,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <benchmark/benchmark.h>
+#include <khiva/internal/matrixInternal.h>
 #include <khiva/matrix.h>
-#include <math.h>
-#include "khiva/matrixInternal.h"
+
+#include <algorithm>
+#include <cmath>
+
 #include "khivaBenchmark.h"
 
 template <af::Backend BE, int D>
@@ -289,25 +292,22 @@ void StompDataCPU(benchmark::State &state) {
     auto m = state.range(1);
 
     std::srand(0);
-    double *t_host = (double *)malloc(n * sizeof(double));
-    for (long i = 0; i < n; i++) {
-        t_host[i] = std::rand();
-    }
+    std::vector<double> t_host;
+    t_host.reserve(n);
+    std::generate_n(std::back_inserter(t_host), n, std::rand);
 
     af::array profile;
     af::array index;
 
     af::sync();
     while (state.KeepRunning()) {
-        khiva::matrix::stomp(af::array(n, t_host), af::array(n, t_host), m, profile, index);
+        khiva::matrix::stomp(af::array(n, t_host.data()), af::array(n, t_host.data()), m, profile, index);
         profile.eval();
         index.eval();
         af::sync();
     }
 
     addMemoryCounters(state);
-
-    free(t_host);
 }
 
 template <af::Backend BE, int D>

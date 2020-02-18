@@ -6,6 +6,7 @@
 
 #include <gtest/gtest.h>
 #include <khiva/distances.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void dtw() {
@@ -46,7 +47,7 @@ void dtw2() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    float *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     int i = 0;
     ASSERT_EQ(0.0f, hostResult[i++]);
     ASSERT_EQ(0.0f, hostResult[i++]);
@@ -93,7 +94,7 @@ void euclidean() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    float *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     ASSERT_EQ(0.0f, hostResult[0]);
     ASSERT_EQ(0.0f, hostResult[1]);
     ASSERT_EQ(0.0f, hostResult[2]);
@@ -119,7 +120,7 @@ void hamming() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    float *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     int i = 0;
     ASSERT_EQ(0.0f, hostResult[i++]);
     ASSERT_EQ(0.0f, hostResult[i++]);
@@ -166,7 +167,7 @@ void manhattan() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    float *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     int i = 0;
     ASSERT_EQ(0.0f, hostResult[i++]);
     ASSERT_EQ(0.0f, hostResult[i++]);
@@ -213,7 +214,7 @@ void sbd() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    float *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     ASSERT_EQ(0.0f, hostResult[0]);
     ASSERT_EQ(0.0f, hostResult[1]);
     ASSERT_EQ(0.0f, hostResult[2]);
@@ -239,7 +240,7 @@ void squaredEuclidean() {
     ASSERT_EQ(dims[3], 1);
 
     // check distances
-    float *hostResult = result.host<float>();
+    auto hostResult = khiva::utils::makeScopedHostPtr(result.host<float>());
     ASSERT_EQ(0.0f, hostResult[0]);
     ASSERT_EQ(0.0f, hostResult[1]);
     ASSERT_EQ(0.0f, hostResult[2]);

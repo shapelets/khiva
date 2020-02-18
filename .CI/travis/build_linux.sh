@@ -6,12 +6,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 mkdir -p build && cd build
+conan profile update settings.compiler.libcxx=libstdc++11 default
 conan install .. --build missing
 if [[ -z "${TRAVIS_TAG}" ]]; then
   ../cmakebin/bin/cmake .. -DKHIVA_ENABLE_COVERAGE=ON -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_EXAMPLES=OFF -DKHIVA_BUILD_BENCHMARKS=OFF
-  cmake --build . -- -j8
-  ctest
+
 else
   ../cmakebin/bin/cmake ..
-  cmake --build . -- -j8
 fi
+cmake --build . -- -j8
+ctest --output-on-failure

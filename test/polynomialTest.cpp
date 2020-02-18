@@ -6,13 +6,14 @@
 
 #include <gtest/gtest.h>
 #include <khiva/polynomial.h>
+#include <khiva/internal/scopedHostPtr.h>
 #include "khivaTest.h"
 
 void polyfit1() {
     float data[] = {0, 1, 2, 3, 4, 5};
     af::array x = af::array(6, data);
 
-    float *calculated = khiva::polynomial::polyfit(x, x, 1).host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(khiva::polynomial::polyfit(x, x, 1).host<float>());
 
     float expected[] = {1.0f, 0.0f};
 
@@ -27,7 +28,7 @@ void polyfit3() {
     float dataY[] = {0.0f, 0.8f, 0.9f, 0.1f, -0.8f, -1.0f};
     af::array y = af::array(6, dataY);
 
-    float *calculated = khiva::polynomial::polyfit(x, y, 3).host<float>();
+    auto calculated = khiva::utils::makeScopedHostPtr(khiva::polynomial::polyfit(x, y, 3).host<float>());
 
     float expected[] = {0.08703704f, -0.81349206f, 1.69312169f, -0.03968254f};
 
@@ -42,7 +43,7 @@ void roots() {
 
     af::array roots = khiva::polynomial::roots(p);
 
-    af::cfloat *calculated = roots.host<af::cfloat>();
+    auto calculated = khiva::utils::makeScopedHostPtr(roots.host<af::cfloat>());
 
     af::cfloat expected[5];
     expected[0] = af::cfloat(2, 0);

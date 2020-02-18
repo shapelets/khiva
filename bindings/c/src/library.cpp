@@ -7,7 +7,7 @@
 #include <khiva/library.h>
 #include <khiva/version.h>
 #include <khiva_c/library.h>
-#include <khiva_c/util.h>
+#include <khiva_c/internal/util.h>
 #include <cstring>
 
 void backend_info(char **info, int *error_code, char *error_message) {

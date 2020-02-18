@@ -11,7 +11,8 @@ void maxMinNorm() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7};
     af::array tss(4, 2, data);
 
-    float *resultingData = khiva::normalization::maxMinNorm(tss, 2.0, 1.0).host<float>();
+    auto *resultingData = khiva::normalization::maxMinNorm(tss, 2.0, 1.0).host<float>();
+    af::freeHost(resultingData);
 }
 
 void maxMinNormInPlace() {
@@ -20,14 +21,16 @@ void maxMinNormInPlace() {
 
     khiva::normalization::maxMinNormInPlace(tss, 2.0, 1.0);
 
-    float *resultingData = tss.host<float>();
+    auto *resultingData = tss.host<float>();
+    af::freeHost(resultingData);
 }
 
 void zNorm() {
     float data[] = {0, 1, 2, 3, 4, 5, 6, 7};
     af::array tss(4, 2, data);
 
-    float *resultingData = khiva::normalization::znorm(tss).host<float>();
+    auto *resultingData = khiva::normalization::znorm(tss).host<float>();
+    af::freeHost(resultingData);
 }
 
 void zNormInPlace() {
@@ -36,7 +39,8 @@ void zNormInPlace() {
 
     khiva::normalization::znormInPlace(tss);
 
-    float *resultingData = tss.host<float>();
+    auto *resultingData = tss.host<float>();
+    af::freeHost(resultingData);
 }
 
 int main() {

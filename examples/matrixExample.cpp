@@ -18,10 +18,11 @@ void stompIgnoreTrivialOneSeries() {
 
     khiva::matrix::stomp(tss, m, distance, index);
 
-    float *resultingDistance = distance.host<float>();
+    auto *resultingDistance = distance.host<float>();
 
     unsigned int resultingIndex[12];
     index.host(&resultingIndex);
+    af::freeHost(resultingDistance);
 }
 
 void stompIgnoreTrivialMultipleSeries() {
@@ -36,10 +37,11 @@ void stompIgnoreTrivialMultipleSeries() {
 
     khiva::matrix::stomp(tss, m, distance, index);
 
-    float *resultingDistance = distance.host<float>();
+    auto *resultingDistance = distance.host<float>();
 
     unsigned int resultingIndex[24];
     index.host(&resultingIndex);
+    af::freeHost(resultingDistance);
 }
 
 void stompConsiderTrivialOneSeries() {
@@ -53,10 +55,11 @@ void stompConsiderTrivialOneSeries() {
 
     khiva::matrix::stomp(t, t, m, distance, index);
 
-    float *resultingDistance = distance.host<float>();
+    auto *resultingDistance = distance.host<float>();
 
     unsigned int resultingIndex[6];
     index.host(&resultingIndex);
+    af::freeHost(resultingDistance);
 }
 
 void stompConsiderTrivialMultipleSeries() {
@@ -73,10 +76,11 @@ void stompConsiderTrivialMultipleSeries() {
 
     khiva::matrix::stomp(ta, tb, m, distance, index);
 
-    float *resultingDistance = distance.host<float>();
+    auto *resultingDistance = distance.host<float>();
 
     unsigned int resultingIndex[36];
     index.host(&resultingIndex);
+    af::freeHost(resultingDistance);
 }
 
 int main() {

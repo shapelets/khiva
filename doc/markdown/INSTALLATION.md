@@ -7,7 +7,7 @@
 #### Prerequisites
 
 - Install [Python-64bits](https://www.python.org/downloads) and add the installation path to the environment variable path, 32-bits version won't work.
-- Install [ArrayFire 3.6.2](https://arrayfire.com/download/) and add the installation path to the environment variable path.
+- Install [ArrayFire 3.6.2](http://arrayfire.s3.amazonaws.com/index.html#!/3.6.2%2F) and add the installation path to the environment variable path.
 - Install [Vcpkg](https://docs.microsoft.com/es-es/cpp/vcpkg#installation) and add the installation path to the environment variable path.
 - Install [chocolatey](https://chocolatey.org/) to manage windows dependencies and add the installation path to the environment variable path.
 
@@ -33,6 +33,7 @@ First, go to the source directory.
 - Run `vcpkg install --triplet x64-windows gtest eigen3 benchmark boost`.
 - Create a `build` folder in the root path of the project.
 - Browse inside the `build` folder.
+- Run `git submodule update --init`
 - Run `cmake .. -DCMAKE_TOOLCHAIN_FILE="<PATH_TO_VPKG>/scripts/buildsystems/vcpkg.cmake" -DKHIVA_USE_CONAN=OFF -G "Visual Studio 15 2017 Win64"` (Note: Replace <PATH_TO_VPKG> with your vcpkg installation path and do not forget to clean the build directory everytime before running this command).
 - Run `cmake --build . --config Release -- /m` to compile.
 
@@ -83,7 +84,6 @@ Once we have installed all Khiva dependencies, we are ready to install Khiva fro
 - Install conan, c++ package manager, preferably running `pip install conan`. For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
 - Run:
   ```bash
-  conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz
   git submodule update --init
   mkdir build && cd build
   conan install .. --build missing
@@ -141,9 +141,6 @@ Once we have installed all Khiva dependencies, we are ready to install Khiva fro
 - First you need to install conan, c++ manager, preferably running:
 `pip install conan`
 For more information and alternative installation options, please refer to [conan manual page](http://docs.conan.io/en/latest/installation.html).
-
-- Next, run:
-`conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz`
 
 - Create build folder and move into the new folder:
 `mkdir build && cd build`

@@ -7,6 +7,7 @@
 #include <khiva/linalg.h>
 #include <khiva/polynomial.h>
 #include <Eigen/Eigenvalues>
+#include <khiva/internal/scopedHostPtr.h>
 
 using namespace Eigen;
 
@@ -48,14 +49,14 @@ af::array khiva::polynomial::roots(af::array pp) {
         p = (-1 * p(af::seq(1, static_cast<double>(p.dims(0)) - 1), af::span)) /
             af::tile(p(0, af::span), static_cast<unsigned int>(p.dims(0)) - 1);
 
-        float *coeffs = p.as(af::dtype::f32).host<float>();
+        auto coeffs = khiva::utils::makeScopedHostPtr(p.as(af::dtype::f32).host<float>());
 
         Eigen::VectorXf vec = Eigen::VectorXf::Ones(p.dims(0));
         Eigen::MatrixXf diag = vec.asDiagonal();
 
         Eigen::MatrixXf diag2(diag.rows(), diag.cols());
         int rest = static_cast<int>(diag.rows()) - 1;
-        diag2.topRows(1) = Eigen::Map<Eigen::MatrixXf>(coeffs, 1, p.dims(0));
+        diag2.topRows(1) = Eigen::Map<Eigen::MatrixXf>(coeffs.get(), 1, p.dims(0));
         diag2.bottomRows(rest) = diag.topRows(rest);
 
         Eigen::VectorXcf eivals = diag2.eigenvalues();

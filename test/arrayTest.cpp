@@ -49,8 +49,6 @@ void arrayComplexFloat() {
 
     af::array result = khiva::array::createArray(data, 2, dimensions, khiva::dtype::c32);
 
-    khiva::array::print(result);
-
     af::cfloat *calculated = (af::cfloat *)malloc(4 * sizeof(af::cfloat));
     khiva::array::getData(result, calculated);
 

@@ -4,17 +4,17 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 3.9.6)
-SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+cmake_minimum_required(VERSION 3.9.6)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-SET(KHIVALIB_INC "${KHIVALIB_BASE_DIR}/include")
+set(KHIVALIB_INC "${KHIVALIB_BASE_DIR}/include")
 
 # build bindings for c and jni
 
-IF (KHIVA_BUILD_C_BINDINGS)
-    ADD_SUBDIRECTORY(c)
-ENDIF ()
+if (KHIVA_BUILD_C_BINDINGS)
+    add_subdirectory(c)
+endif ()
 
-IF (KHIVA_BUILD_JNI_BINDINGS)
-    ADD_SUBDIRECTORY(jni)
-ENDIF ()
+if (KHIVA_BUILD_JNI_BINDINGS)
+    add_subdirectory(jni)
+endif ()

@@ -1,8 +1,8 @@
 [requires]
-gtest/1.8.0@bincrafters/stable
-google-benchmark/1.4.1@mpusz/stable
-boost/1.70.0@conan/stable
-eigen/3.3.4@conan/stable
+gtest/1.10.0
+benchmark/1.5.0
+boost/1.70.0
+eigen/3.3.7
 
 [options]
 gtest:shared=False
