@@ -16,7 +16,7 @@ before_build:
   - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ appveyor DownloadFile "https://www.dropbox.com/s/13wnbd1qynjmw0i/ArrayFire-v3.6.2.zip?dl=1" -FileName ArrayFire-v3.6.2.zip }
   - ps: if(!(Test-Path -Path "C:\Program Files\ArrayFire" )){ 7z x ArrayFire-v3.6.2.zip -o"C:\Program Files" }
   - reg add HKCU\Software\Kitware\CMake\Packages\ArrayFire /v ArrayFire_CMake_DIR /d "C:\Program Files\ArrayFire\v3\cmake" /f
-  - vcpkg install --triplet x64-windows gtest eigen3 boost
+  - vcpkg install --triplet x64-windows gtest eigen3 boost benchmark
   - ps: |
       Start-Process "choco" "install nsis" -NoNewWindow -Wait
       Start-Process "choco" "install doxygen.install" -NoNewWindow -Wait
@@ -26,10 +26,8 @@ before_build:
   - git submodule update --init
 
 build_script:
-  - ps: mkdir build && cd build
-  - ps: |
-      vcpkg install --triplet x64-windows benchmark
-      cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -Wno-dev -G"$($env:GENERATOR)"
+  - mkdir build && cd build
+  - ps: cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -Wno-dev -G"$($env:GENERATOR)"
   - ps: cmake --build . --config Release -- /m
 test_script:
   - ctest -C Release --no-compress-output --output-on-failure -T test
