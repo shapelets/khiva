@@ -35,7 +35,7 @@ endif()
 add_subdirectory(scamp)
 
 # Find packages.
-find_package(ArrayFire REQUIRED)
+find_package(ArrayFire CONFIG REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 
