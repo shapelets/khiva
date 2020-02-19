@@ -27,14 +27,21 @@ before_build:
 
 build_script:
   - mkdir build && cd build
-  - ps: cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -Wno-dev -G"$($env:GENERATOR)"
+  - ps: |
+      if($env:GENERATOR -eq "Visual Studio 14 2015 Win64") {
+        $env:BUILD_BENCHMARK="OFF"
+      }
+      else {
+        $env:BUILD_BENCHMARK="ON"
+      }
+      cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -Wno-dev -G"$env:GENERATOR" -DKHIVA_BUILD_BENCHMARKS=$env:BUILD_BENCHMARK
   - ps: cmake --build . --config Release -- /m
 test_script:
   - ctest -C Release --no-compress-output --output-on-failure -T test
 on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   - ps: |
-      if($($env:APPVEYOR_REPO_TAG) -eq "false"){
+      if($env:APPVEYOR_REPO_TAG -eq "false"){
         $xsl = "C:\khiva\.CI\appveyor\ctest-to-junit.xsl"
         $ctest_xml = (Resolve-Path C:\khiva\build\Testing\**\Test.xml)
         $junit_xml = "C:\khiva\build\Testing\results-junit.xml"
