@@ -4,10 +4,10 @@ environment:
   AF_PATH: C:\Program Files\ArrayFire\v3
   PATH: $(AF_PATH)\lib;C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
   matrix:
-    - GENERATOR: "Visual Studio 15 2017 Win64"
-      VCPKG_VISUAL_STUDIO_PATH: "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
-    - GENERATOR: "Visual Studio 14 2015 Win64"
-      VCPKG_VISUAL_STUDIO_PATH: "C:\Program Files (x86)\Microsoft Visual Studio 14.0"
+    - GENERATOR: Visual Studio 15 2017 Win64
+      VCPKG_VISUAL_STUDIO_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2017\Community
+    - GENERATOR: Visual Studio 14 2015 Win64
+      VCPKG_VISUAL_STUDIO_PATH: C:\Program Files (x86)\Microsoft Visual Studio 14.0
 cache:
   - c:\tools\vcpkg\installed\
   - C:\Program Files\ArrayFire
@@ -34,10 +34,7 @@ build_script:
 test_script:
   - ctest -C Release --no-compress-output --output-on-failure -T test
 on_finish:
-  - ps: |
-      if($env:GENERATOR -eq "Visual Studio 14 2015 Win64") {
-        $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-      }  
+  #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   - ps: |
       if($env:APPVEYOR_REPO_TAG -eq "false"){
         $xsl = "C:\khiva\.CI\appveyor\ctest-to-junit.xsl"
