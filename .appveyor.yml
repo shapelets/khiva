@@ -19,26 +19,20 @@ before_build:
   - vcpkg install --triplet x64-windows gtest eigen3 boost
   - ps: |
       Start-Process "choco" "install nsis" -NoNewWindow -Wait
-      if($($env:APPVEYOR_REPO_TAG) -eq "true"){
-        Start-Process "choco" "install doxygen.install" -NoNewWindow -Wait
-        Start-Process "choco" "install graphviz" -NoNewWindow -Wait
-        python -m pip install --upgrade pip
-        pip3 install sphinx==1.7.5 breathe==4.9.1 sphinx_rtd_theme==0.4.0
-      }
+      Start-Process "choco" "install doxygen.install" -NoNewWindow -Wait
+      Start-Process "choco" "install graphviz" -NoNewWindow -Wait
+      python -m pip install --upgrade pip
+      pip3 install sphinx==1.7.5 breathe==4.9.1 sphinx_rtd_theme==0.4.0
   - git submodule update --init
 
 build_script:
-  - mkdir build && cd build
+  - ps: mkdir build && cd build
   - ps: |
-      if($($env:APPVEYOR_REPO_TAG) -eq "true"){
-        vcpkg install --triplet x64-windows benchmark
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -Wno-dev -G"$($env:GENERATOR)"
-      } else {
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -DKHIVA_BUILD_DOCUMENTATION=OFF -DKHIVA_BUILD_BENCHMARKS=OFF -DKHIVA_ONLY_CPU_BACKEND=ON -G"$($env:GENERATOR)"
-      }
-  - cmake --build . --config Release -- /m
+      vcpkg install --triplet x64-windows benchmark
+      cmake .. -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -Wno-dev -G"$($env:GENERATOR)"
+  - ps: cmake --build . --config Release -- /m
 test_script:
-  - if "%APPVEYOR_REPO_TAG%" == "false" ctest -C Release --no-compress-output --output-on-failure -T test
+  - ctest -C Release --no-compress-output --output-on-failure -T test
 on_finish:
   - ps: |
       if($($env:APPVEYOR_REPO_TAG) -eq "false"){
