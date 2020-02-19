@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION 3.9.6)
 
 # Find the ArrayFire package.
-find_package(ArrayFire REQUIRED)
+find_package(ArrayFire CONFIG REQUIRED)
 find_package(JNI)
 if (NOT JNI_FOUND)
     message(FATAL_ERROR "JDK not found. Please install JDK or disable building JNI bindings by using the flag KHIVA_BUILD_JNI_BINDINGS.")
