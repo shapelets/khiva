@@ -27,14 +27,7 @@ before_build:
 
 build_script:
   - mkdir build && cd build
-  - ps: |
-      if($env:GENERATOR -eq "Visual Studio 14 2015 Win64") {
-        $env:BUILD_BENCHMARK="OFF"
-      }
-      else {
-        $env:BUILD_BENCHMARK="ON"
-      }
-      cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -Wno-dev -G"$env:GENERATOR" -DKHIVA_BUILD_BENCHMARKS=$env:BUILD_BENCHMARK
+  - ps: cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DKHIVA_USE_CONAN=OFF -Wno-dev -G"$env:GENERATOR"
   - ps: cmake --build . --config Release -- /m
 test_script:
   - ctest -C Release --no-compress-output --output-on-failure -T test
