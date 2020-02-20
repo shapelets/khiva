@@ -55,8 +55,7 @@ add_library(${KHIVALIB} SHARED ${KHIVALIB_CODE})
 # Declare include directories
 target_include_directories(${KHIVALIB} 
 						PRIVATE
-						   ${SCAMP_INCLUDE_DIRS}						
-						   ${Boost_INCLUDE_DIRS}
+						   ${SCAMP_INCLUDE_DIRS}
 						PUBLIC
                            $<BUILD_INTERFACE:${KHIVALIB_INC}>
                            $<BUILD_INTERFACE:${KHIVALIB_INC}/internal>
@@ -67,6 +66,7 @@ target_link_libraries(${KHIVALIB}
 	PRIVATE 
 		scamp
 		Eigen3::Eigen
+        Boost::boost
 	PUBLIC 
 		$<IF:$<BOOL:${KHIVA_ONLY_CPU_BACKEND}>,ArrayFire::afcpu,ArrayFire::af>
 		${CMAKE_DL_LIBS}
