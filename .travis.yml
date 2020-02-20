@@ -41,7 +41,7 @@ matrix:
     - mv khiva.sh khiva-${TRAVIS_TAG}.sh
     deploy:
       name: "${TRAVIS_TAG} - Linux"
-      body: "${TRAVIS_COMMIT_MESSAGE}"
+      body: "${TRAVIS_TAG}"
       skip_cleanup: true
       provider: releases
       api_key:
