@@ -19,7 +19,6 @@ matrix:
     - git submodule update --init
     - source .CI/travis/install_linux.sh
     - source .CI/travis/install-arrayfire_linux.sh
-    - source .CI/travis/install-cmake_linux.sh
     script:
     - source .CI/travis/build_linux.sh
   - os: linux
@@ -33,7 +32,6 @@ matrix:
     - git submodule update --init
     - source .CI/travis/install_linux.sh
     - source .CI/travis/install-arrayfire_linux.sh
-    - source .CI/travis/install-cmake_linux.sh
     script:
     - source .CI/travis/build_linux.sh
     before_deploy:
@@ -43,7 +41,7 @@ matrix:
     - mv khiva.sh khiva-${TRAVIS_TAG}.sh
     deploy:
       name: "${TRAVIS_TAG} - Linux"
-      body: "${TRAVIS_COMMIT_MESSAGE}"
+      body: "${TRAVIS_TAG}"
       skip_cleanup: true
       provider: releases
       api_key:

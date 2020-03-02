@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iterator>
 
 #include "khivaBenchmark.h"
 
