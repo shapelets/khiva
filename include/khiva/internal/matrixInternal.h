@@ -28,6 +28,7 @@ using MatrixProfilePair = std::pair<DistancesVector, IndexesVector>;
 using LeftRightProfilePair = std::pair<MatrixProfilePair, MatrixProfilePair>;
 using Chain = std::vector<unsigned int>;
 using ChainVector = std::vector<Chain>;
+using SumCorrelationsVector = std::vector<double>;
 
 /**
  * @brief Calculates the sliding dot product of the time series 'q' against t.
@@ -185,6 +186,10 @@ KHIVAAPI LeftRightProfilePair scampLR(std::vector<double> &&ta, long m);
 
 KHIVAAPI void scampLR(af::array tss, long m, af::array &profileLeft, af::array &indexLeft, af::array &profileRight,
                       af::array &indexRight);
+
+KHIVAAPI void scampThresh(af::array tss, long m, double threshold, af::array &sumCorrelation);
+
+KHIVAAPI void scampThresh(af::array ta, af::array tb, long m, double threshold, af::array &sumCorrelation);
 
 }  // namespace internal
 }  // namespace matrix
