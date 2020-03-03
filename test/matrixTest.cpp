@@ -1258,6 +1258,61 @@ void findBestDiscordsException() {
     }
 }
 
+void matrixSumCorrelation() {
+    auto ta = khiva::vectorutil::createArray(
+        {-0.9247, 0.1808,  2.5441, 0.3516,  -0.3452, 0.2191, -0.7687, 0.2413, -1.1948, 0.8927, -0.5378, 0.2270,
+         0.9354,  -0.7613, 0.5787, -0.6174, 0.5889,  0.7897, -0.0645, 0.9520, -1.1411, 0.8281, -0.7363, -0.7446},
+        8, 3);
+
+    auto tb = khiva::vectorutil::createArray({0.2512, 0.6436, -2.3651, -0.7734, -0.0511, 1.6693, 1.9453, -1.9047,
+                                              0.8149, -0.1831, -0.1542, -1.3490, 1.2285, -1.0472, 0.3911, -0.0637},
+                                             8, 2);
+    long m = 3;
+    double threshold = 0.5;
+
+    af::array sumCorrelation;
+
+    khiva::matrix::matrixProfileThresh(ta, tb, m, threshold, sumCorrelation);
+
+    ASSERT_EQ(sumCorrelation.dims(0), 6);
+    ASSERT_EQ(sumCorrelation.dims(1), 3);
+    ASSERT_EQ(sumCorrelation.dims(2), 2);
+    ASSERT_EQ(sumCorrelation.dims(3), 1);
+
+    auto sumCorrelationVect = khiva::vectorutil::get<double>(sumCorrelation);
+    ASSERT_NEAR(1.9584, sumCorrelationVect[7], 1e-3);
+    ASSERT_NEAR(1.8904, sumCorrelationVect[17], 1e-3);
+    ASSERT_NEAR(2.1383, sumCorrelationVect[18], 1e-3);
+    ASSERT_NEAR(2.7268, sumCorrelationVect[27], 1e-3);
+    ASSERT_NEAR(0.8593, sumCorrelationVect[35], 1e-3);
+}
+
+void matrixSumCorrelationSelfJoin() {
+    auto ta = khiva::vectorutil::createArray(
+        {0.6010, 0.0278, 0.9806, 0.2126, 0.0655, 0.5497, 0.2864, 0.3410, 0.7509, 0.4105, 0.1583, 0.3712,
+         0.3543, 0.6450, 0.9675, 0.3636, 0.4165, 0.5814, 0.8962, 0.3712, 0.6755, 0.6105, 0.5232, 0.5567,
+         0.7896, 0.8966, 0.0536, 0.5775, 0.2908, 0.9941, 0.5143, 0.3670, 0.3336, 0.0363, 0.5349, 0.0123,
+         0.3988, 0.9787, 0.2308, 0.6244, 0.7917, 0.1654, 0.8657, 0.3766, 0.7331, 0.2522, 0.9644, 0.4711},
+        16, 3);
+
+    long m = 6;
+    double threshold = 0.5;
+
+    af::array sumCorrelation;
+
+    khiva::matrix::matrixProfileThresh(ta, m, threshold, sumCorrelation);
+
+    ASSERT_EQ(sumCorrelation.dims(0), 11);
+    ASSERT_EQ(sumCorrelation.dims(1), 3);
+    ASSERT_EQ(sumCorrelation.dims(2), 1);
+    ASSERT_EQ(sumCorrelation.dims(3), 1);
+
+    auto sumCorrelationVect = khiva::vectorutil::get<double>(sumCorrelation);
+    ASSERT_NEAR(0.8752, sumCorrelationVect[7], 1e-3);
+    ASSERT_NEAR(0.0, sumCorrelationVect[21], 1e-3);
+    ASSERT_NEAR(1.3062, sumCorrelationVect[25], 1e-3);
+}
+
 KHIVA_TEST(MatrixTests, SlidingDotProduct, slidingDotProduct)
 KHIVA_TEST(MatrixTests, MeanStdev, meanStdev)
 KHIVA_TEST(MatrixTests, MeanStdevMEqualsLength, meanStdevMEqualsLength)
@@ -1296,3 +1351,5 @@ KHIVA_TEST(MatrixTests, FindBestDiscordsMirror, findBestDiscordsMirror)
 KHIVA_TEST(MatrixTests, FindBestDiscordsConsecutive, findBestDiscordsConsecutive)
 KHIVA_TEST(MatrixTests, FindBestDiscordsMirrorException, findBestDiscordsMirrorException)
 KHIVA_TEST(MatrixTests, FindBestDiscordsException, findBestDiscordsException)
+KHIVA_TEST(MatrixTests, MatrixSumCorrelation, matrixSumCorrelation)
+KHIVA_TEST(MatrixTests, MatrixSumCorrelationSelfJoin, matrixSumCorrelationSelfJoin)

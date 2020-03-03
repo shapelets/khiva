@@ -129,18 +129,17 @@ KHIVAAPI void stomp(af::array ta, af::array tb, long m, af::array &profile, af::
 KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
 
 /**
- * @brief Calculates the matrix profile between 't' and itself using a subsequence length of 'm'.
+ * @brief Calculates the matrix profile between 'tss' and itself using a subsequence length of 'm'.
  * This method filters the trivial matches.
  *
  * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
  * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
  * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
  *
- * @param ta Query time series.
- * @param tb Reference time series.
+ * @param tss Query and reference time series.
  * @param m Subsequence length.
- * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 'ta'
- * in 'tb'.
+ * @param profile The matrix profile, which reflects the distance to the closest element of the subsequence from 'tss'
+ * in a different location of itself.
  * @param index The matrix profile index, which points to where the aforementioned minimum is located.
  */
 KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array &index);
@@ -152,10 +151,11 @@ KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array
  * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
  * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
  *
- * @param t Query and reference time series.
+ * @param ta Query time series.
+ * @param tb Reference time series.
  * @param m Subsequence length.
- * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 't' in a
- * different location of itself.
+ * @param profile The matrix profile, which reflects the distance to the closest element of the subsequence from 'ta'
+ * in 'tb'.
  * @param index The matrix profile index, which points to where the aforementioned minimum is located.
  */
 KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
@@ -198,6 +198,36 @@ KHIVAAPI void matrixProfileLR(af::array tss, long m, af::array &profileLeft, af:
  *  that 0 is an invalid chain index.
  */
 KHIVAAPI void getChains(af::array tss, long m, af::array &chains);
+
+/**
+ * @brief Calculates the sum of correlations above a threshold between 'tss' and itself using a subsequence
+ * length of 'm' at each location in 'tss'.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param tss Query and reference time series.
+ * @param m Subsequence length.
+ * @param sumCorrelation The sum of correlations above a threshold between 'tss' and itself using a subsequence length
+ * of 'm' at each location in 'tss'.
+ */
+KHIVAAPI void matrixProfileThresh(af::array tss, long m, double threshold, af::array &sumCorrelation);
+
+/**
+ * @brief Calculates the sum of correlations above a threshold between 'ta' and 'tb' using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param ta Query time series.
+ * @param tb Reference time series.
+ * @param m Subsequence length.
+ * @param sumCorrelation The sum of correlations above a threshold between 'ta' and 'tb' using a subsequence length of
+ * 'm' at each location in 'ta'.
+ */
+KHIVAAPI void matrixProfileThresh(af::array ta, af::array tb, long m, double threshold, af::array &sumCorrelation);
 
 }  // namespace matrix
 }  // namespace khiva
