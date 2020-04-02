@@ -10,18 +10,24 @@
 #include <algorithm>
 #include <boost/math/distributions/normal.hpp>
 #include <cmath>
-#include <iostream>
 #include <iterator>
 #include <limits>
 #include <stdexcept>
 #include <utility>
 #include <vector>
 #include <map>
-#include <iterator>
 #include <set>
 
-float computeTriangleArea(khiva::dimensionality::Point a, khiva::dimensionality::Point b,
-                          khiva::dimensionality::Point c) {
+namespace khiva {
+namespace dimensionality {
+
+struct VisvalingamSummaryPoint {
+    float x;
+    float y;
+    int64_t area;
+};
+
+float computeTriangleArea(Point a, Point b, Point c) {
     float res = 0.0;
 
     float f1 = a.first * (b.second - c.second);
@@ -51,8 +57,7 @@ std::vector<int> generateAlphabet(int alphabet_size) {
     return res;
 }
 
-double PerpendicularDistance(const khiva::dimensionality::Point &pt, const khiva::dimensionality::Point &lineStart,
-                             const khiva::dimensionality::Point &lineEnd) {
+double PerpendicularDistance(const Point &pt, const Point &lineStart, const Point &lineEnd) {
     double dx = lineEnd.first - lineStart.first;
     double dy = lineEnd.second - lineStart.second;
 
@@ -84,8 +89,7 @@ double PerpendicularDistance(const khiva::dimensionality::Point &pt, const khiva
  * @brief We compute the vertical distance of the point p w.r.t. the line that connects start and end points.
  * We use the point-slope equiation to solve it.
  */
-float verticalDistance(khiva::dimensionality::Point p, khiva::dimensionality::Point start,
-                       khiva::dimensionality::Point end) {
+float verticalDistance(Point p, Point start, Point end) {
     float res = 0.0;
     float dy = end.second - start.second;
     float dx = end.first - start.first;
@@ -99,8 +103,8 @@ float verticalDistance(khiva::dimensionality::Point p, khiva::dimensionality::Po
 /**
  * @brief This function just inserts a point in the given position of a vector.
  */
-void insertPointBetweenSelected(khiva::dimensionality::Point p, int position,
-                                std::vector<khiva::dimensionality::Point> &selected) {
+void insertPointBetweenSelected(Point p, int position,
+                                std::vector<Point> &selected) {
     auto it = selected.begin();
     selected.insert(it + position, p);
 }
@@ -108,7 +112,7 @@ void insertPointBetweenSelected(khiva::dimensionality::Point p, int position,
 /**
  * @brief This function just checks if the given point is already in the vector.
  */
-bool isPointInDesiredList(khiva::dimensionality::Point point, std::vector<khiva::dimensionality::Point> selected) {
+bool isPointInDesiredList(Point point, std::vector<Point> selected) {
     bool found = false;
     for (size_t i = 0; i < selected.size(); i++) {
         // We just compare the horizontal component as it is unique
@@ -123,8 +127,8 @@ bool isPointInDesiredList(khiva::dimensionality::Point point, std::vector<khiva:
 /**
  * @brief This function calculates the segment indices that we need to compare the point.
  */
-std::pair<int, int> getSegmentFromSelected(khiva::dimensionality::Point point,
-                                           std::vector<khiva::dimensionality::Point> selected) {
+std::pair<int, int> getSegmentFromSelected(Point point,
+                                           std::vector<Point> selected) {
     int lower = 0, upper = 0;
     // We do not check the first element, as it is fixed and set to the first element of the time series
     size_t i = 0;
@@ -142,7 +146,7 @@ std::pair<int, int> getSegmentFromSelected(khiva::dimensionality::Point point,
     return std::make_pair(lower, upper);
 }
 
-std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector<khiva::dimensionality::Point> points,
+std::vector<Point> PAA(std::vector<Point> points,
                                                                      int bins) {
     auto begin = points.begin();
     auto last = points.end();
@@ -152,7 +156,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PAA(std::vector
 
     std::vector<float> sum(bins, 0.0);
     std::vector<int> counter(bins, 0);
-    std::vector<khiva::dimensionality::Point> result(bins, khiva::dimensionality::Point(0.0, 0.0));
+    std::vector<Point> result(bins, Point(0.0, 0.0));
 
     // Iterating over the time series
     for (auto i = begin; i != last; i++) {
@@ -221,7 +225,7 @@ af::array PAA_CPU(af::array a, int bins) {
     return result;
 }
 
-af::array khiva::dimensionality::PAA(af::array a, int bins) {
+af::array PAA(af::array a, int bins) {
     // Resulting array
     af::array result;
 
@@ -245,7 +249,7 @@ af::array khiva::dimensionality::PAA(af::array a, int bins) {
     return result;
 }
 
-af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
+af::array PIP(af::array ts, int numberIPs) {
     if (ts.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
@@ -269,7 +273,7 @@ af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
     }
 
     // Allocating vectors for selected points
-    std::vector<khiva::dimensionality::Point> selected;
+    std::vector<Point> selected;
     selected.push_back(points[0]);
     selected.push_back(points[end]);
 
@@ -317,11 +321,11 @@ af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
     return res;
 }
 
-float calculateError(std::vector<khiva::dimensionality::Point> ts, int start, int end) {
+float calculateError(std::vector<Point> ts, int start, int end) {
     float res = 0;
 
-    khiva::dimensionality::Point p1 = ts[start];
-    khiva::dimensionality::Point p2 = ts[end];
+    Point p1 = ts[start];
+    Point p2 = ts[end];
 
     // We use the point-slope equation for the middle points between start and end: y = mx - mx_1 + y_1
     // where m = (y_2 - y_1) / (x_2 - x_1)
@@ -333,8 +337,8 @@ float calculateError(std::vector<khiva::dimensionality::Point> ts, int start, in
     return res;
 }
 
-khiva::dimensionality::Segment merge(khiva::dimensionality::Segment s1, khiva::dimensionality::Segment s2) {
-    khiva::dimensionality::Segment res;
+Segment merge(Segment s1, Segment s2) {
+    Segment res;
 
     res.first = s1.first;
     res.second = s2.second;
@@ -342,8 +346,8 @@ khiva::dimensionality::Segment merge(khiva::dimensionality::Segment s1, khiva::d
     return res;
 }
 
-std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLABottomUp(std::vector<Point> ts, float maxError) {
-    std::vector<khiva::dimensionality::Segment> segments;
+std::vector<Point> PLABottomUp(std::vector<Point> ts, float maxError) {
+    std::vector<Segment> segments;
     std::vector<float> mergeCost;
 
     // Allocating vector of segments
@@ -377,7 +381,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLABottomUp(std
     }
 
     // Build a polyline from a set of segments
-    std::vector<khiva::dimensionality::Point> result;
+    std::vector<Point> result;
     for (size_t i = 0; i < segments.size(); i++) {
         result.push_back(ts[segments[i].first]);
         result.push_back(ts[segments[i].second]);
@@ -386,7 +390,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLABottomUp(std
     return result;
 }
 
-af::array khiva::dimensionality::PLABottomUp(af::array ts, float maxError) {
+af::array PLABottomUp(af::array ts, float maxError) {
     if (ts.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
@@ -394,14 +398,14 @@ af::array khiva::dimensionality::PLABottomUp(af::array ts, float maxError) {
     auto h_x = khiva::utils::makeScopedHostPtr(ts.col(0).host<float>());
     auto h_y = khiva::utils::makeScopedHostPtr(ts.col(1).host<float>());
 
-    std::vector<khiva::dimensionality::Point> points;
+    std::vector<Point> points;
 
     // Creating a vector of Points
     for (int i = 0; i < ts.dims(0); i++) {
         points.emplace_back(h_x[i], h_y[i]);
     }
 
-    std::vector<khiva::dimensionality::Point> reducedPoints = khiva::dimensionality::PLABottomUp(points, maxError);
+    std::vector<Point> reducedPoints = PLABottomUp(points, maxError);
     std::vector<float> x;
     x.reserve(reducedPoints.size());
     std::vector<float> y;
@@ -421,10 +425,10 @@ af::array khiva::dimensionality::PLABottomUp(af::array ts, float maxError) {
     return res;
 }
 
-std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLASlidingWindow(
-    std::vector<khiva::dimensionality::Point> ts, float maxError) {
-    std::vector<khiva::dimensionality::Point> result;
-    std::vector<khiva::dimensionality::Segment> segments;
+std::vector<Point> PLASlidingWindow(
+    std::vector<Point> ts, float maxError) {
+    std::vector<Point> result;
+    std::vector<Segment> segments;
 
     size_t anchor = 0;
     size_t i;
@@ -454,7 +458,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLASlidingWindo
     return result;
 }
 
-af::array khiva::dimensionality::PLASlidingWindow(af::array ts, float maxError) {
+af::array PLASlidingWindow(af::array ts, float maxError) {
     if (ts.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
@@ -462,14 +466,14 @@ af::array khiva::dimensionality::PLASlidingWindow(af::array ts, float maxError) 
     auto h_x = khiva::utils::makeScopedHostPtr(ts.col(0).host<float>());
     auto h_y = khiva::utils::makeScopedHostPtr(ts.col(1).host<float>());
 
-    std::vector<khiva::dimensionality::Point> points;
+    std::vector<Point> points;
 
     // Creating a vector of Points
     for (int i = 0; i < ts.dims(0); i++) {
         points.emplace_back(h_x[i], h_y[i]);
     }
 
-    std::vector<khiva::dimensionality::Point> reducedPoints = khiva::dimensionality::PLASlidingWindow(points, maxError);
+    std::vector<Point> reducedPoints = PLASlidingWindow(points, maxError);
     std::vector<float> x;
     x.reserve(reducedPoints.size());
     std::vector<float> y;
@@ -488,9 +492,9 @@ af::array khiva::dimensionality::PLASlidingWindow(af::array ts, float maxError) 
     return res;
 }
 
-std::vector<khiva::dimensionality::Point> khiva::dimensionality::ramerDouglasPeucker(
-    std::vector<khiva::dimensionality::Point> pointList, double epsilon) {
-    std::vector<khiva::dimensionality::Point> out;
+std::vector<Point> ramerDouglasPeucker(
+    std::vector<Point> pointList, double epsilon) {
+    std::vector<Point> out;
 
     if (pointList.size() < 2) throw std::invalid_argument("Not enough points to simplify ...");
 
@@ -509,10 +513,10 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::ramerDouglasPeu
 
     // If max distance is greater than epsilon, recursively simplify
     if (dmax > epsilon) {
-        std::vector<khiva::dimensionality::Point> recResults1;
-        std::vector<khiva::dimensionality::Point> recResults2;
-        std::vector<khiva::dimensionality::Point> firstLine(pointList.begin(), pointList.begin() + index + 1);
-        std::vector<khiva::dimensionality::Point> lastLine(pointList.begin() + index, pointList.end());
+        std::vector<Point> recResults1;
+        std::vector<Point> recResults2;
+        std::vector<Point> firstLine(pointList.begin(), pointList.begin() + index + 1);
+        std::vector<Point> lastLine(pointList.begin() + index, pointList.end());
         recResults1 = ramerDouglasPeucker(firstLine, epsilon);
         recResults2 = ramerDouglasPeucker(lastLine, epsilon);
 
@@ -529,11 +533,11 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::ramerDouglasPeu
     return out;
 }
 
-af::array khiva::dimensionality::ramerDouglasPeucker(af::array pointList, double epsilon) {
+af::array ramerDouglasPeucker(af::array pointList, double epsilon) {
     if (pointList.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
-    std::vector<khiva::dimensionality::Point> points;
+    std::vector<Point> points;
     auto x = khiva::utils::makeScopedHostPtr(pointList.col(0).host<float>());
     auto y = khiva::utils::makeScopedHostPtr(pointList.col(1).host<float>());
 
@@ -541,7 +545,7 @@ af::array khiva::dimensionality::ramerDouglasPeucker(af::array pointList, double
         points.emplace_back(x[i], y[i]);
     }
 
-    std::vector<khiva::dimensionality::Point> rPoints = khiva::dimensionality::ramerDouglasPeucker(points, epsilon);
+    std::vector<Point> rPoints = ramerDouglasPeucker(points, epsilon);
     af::array out = af::constant(0, rPoints.size(), 2);
 
     std::vector<float> vx;
@@ -560,7 +564,7 @@ af::array khiva::dimensionality::ramerDouglasPeucker(af::array pointList, double
     return af::join(1, ox, oy);
 }
 
-af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
+af::array SAX(af::array a, int alphabet_size) {
     if (a.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
@@ -601,9 +605,9 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     return result;
 }
 
-int64_t computeTriangleArea(const khiva::dimensionality::VisvalingamSummaryPoint &a,
-        const khiva::dimensionality::VisvalingamSummaryPoint &b,
-        const khiva::dimensionality::VisvalingamSummaryPoint &c,
+int64_t computeTriangleArea(const VisvalingamSummaryPoint &a,
+        const VisvalingamSummaryPoint &b,
+        const VisvalingamSummaryPoint &c,
         const long scale = 1000000000) {
     float f1 = a.x * (b.y - c.y);
     float f2 = b.x * (c.y - a.y);
@@ -625,9 +629,9 @@ public:
     }
 };
 
-void recomputeAreaNeighbor(std::map<int64_t, khiva::dimensionality::VisvalingamSummaryPoint>::iterator &iterator_point,
+void recomputeAreaNeighbor(std::map<int64_t, VisvalingamSummaryPoint>::iterator &iterator_point,
                             std::set<std::pair<int64_t, int64_t>, mapComparator> &point_indexer,
-                            std::map<int64_t, khiva::dimensionality::VisvalingamSummaryPoint> &points,
+                            std::map<int64_t, VisvalingamSummaryPoint> &points,
                             const int64_t scale){
 
     auto im1m1 = shiftIterator(iterator_point, -1);
@@ -636,7 +640,7 @@ void recomputeAreaNeighbor(std::map<int64_t, khiva::dimensionality::VisvalingamS
 
     auto old_area_minus1 = iterator_point->second.area;
     auto new_area_minus1 = computeTriangleArea(im1m1->second, iterator_point->second, im1p1->second, scale);
-    points[iterator_point->first] = khiva::dimensionality::VisvalingamSummaryPoint{iterator_point->second.x,
+    points[iterator_point->first] = VisvalingamSummaryPoint{iterator_point->second.x,
                                                              iterator_point->second.y,
                                                              new_area_minus1};
 
@@ -647,17 +651,17 @@ void recomputeAreaNeighbor(std::map<int64_t, khiva::dimensionality::VisvalingamS
             std::make_pair(new_area_minus1, original_position_minus1)));
 }
 
-std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
-        std::vector<khiva::dimensionality::Point> pointList, int64_t numPoints, int64_t scale) {
+std::vector<Point> visvalingam(
+        std::vector<Point> pointList, int64_t numPoints, int64_t scale) {
 
-    std::map<int64_t, khiva::dimensionality::VisvalingamSummaryPoint> points;
+    std::map<int64_t, VisvalingamSummaryPoint> points;
     std::set<std::pair<int64_t, int64_t>, mapComparator> point_indexer;
     long counter = 0;
 
     std::transform(pointList.begin(), pointList.end(), std::inserter(points, points.end()),
-                   [&counter](const khiva::dimensionality::Point &point) {
+                   [&counter](const Point &point) {
                        return std::make_pair(counter++,
-                               khiva::dimensionality::VisvalingamSummaryPoint{point.first,
+                               VisvalingamSummaryPoint{point.first,
                                                                               point.second,
                                                                               std::numeric_limits<long>::max()});
                    });
@@ -694,19 +698,19 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
         }
     }
 
-    std::vector<khiva::dimensionality::Point> out_vector.reserve(numPoints);
-    std::transform(points.begin(), points.end(), std::back_inserter(out_vector),
-                   [](const std::pair<int64_t, khiva::dimensionality::VisvalingamSummaryPoint> &p) {
-                       return khiva::dimensionality::Point{p.second.x, p.second.y};
+    std::vector<Point> out_vector(numPoints);
+    std::transform(points.cbegin(), points.cend(), out_vector.begin(),
+                   [](const std::pair<int64_t, VisvalingamSummaryPoint> &p) {
+                       return Point{p.second.x, p.second.y};
                    });
 
     return out_vector;
 }
-af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints) {
+af::array visvalingam(af::array pointList, int numPoints) {
     if (pointList.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
-    std::vector<khiva::dimensionality::Point> points;
+    std::vector<Point> points;
     points.reserve(pointList.dims(0));
     auto x = khiva::utils::makeScopedHostPtr(pointList.col(0).host<float>());
     auto y = khiva::utils::makeScopedHostPtr(pointList.col(1).host<float>());
@@ -715,7 +719,7 @@ af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints)
         points.emplace_back(x[i], y[i]);
     }
 
-    std::vector<khiva::dimensionality::Point> rPoints = khiva::dimensionality::visvalingam(points, static_cast<long>(numPoints));
+    std::vector<Point> rPoints = visvalingam(points, static_cast<long>(numPoints));
     af::array out = af::constant(0, rPoints.size(), 2);
 
     std::vector<float> vx;
@@ -732,4 +736,7 @@ af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints)
     af::array oy(rPoints.size(), vy.data());
 
     return af::join(1, ox, oy);
+}
+
+}
 }
