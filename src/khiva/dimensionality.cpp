@@ -662,7 +662,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
                                                                               std::numeric_limits<long>::max()});
                    });
 
-    long points_to_be_deleted = static_cast<long>(pointList.size()) - numPoints;
+    auto points_to_be_deleted = pointList.size() - numPoints;
     auto point_iterator = point_indexer.begin();
 
     // Precompute areas
@@ -694,7 +694,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
         }
     }
 
-    std::vector<khiva::dimensionality::Point> out_vector;
+    std::vector<khiva::dimensionality::Point> out_vector.reserve(numPoints);
     std::transform(points.begin(), points.end(), std::back_inserter(out_vector),
                    [](const std::pair<int64_t, khiva::dimensionality::VisvalingamSummaryPoint> &p) {
                        return khiva::dimensionality::Point{p.second.x, p.second.y};
