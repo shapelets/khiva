@@ -622,8 +622,8 @@ Iter shiftIterator(Iter iter, Distance positions) {
 
 class mapComparatorVisvalingam {
 public:
-    bool operator()(const std::pair<long, long> &p1, const std::pair<long, long> &p2, double epsilon = 0.00000001) const {
-        return ((p1.first < p2.first) || ((std::abs(p1.first - p2.first) > epsilon) && (p1.second < p2.second)));
+    bool operator()(const std::pair<long, long> &p1, const std::pair<long, long> &p2, double epsilon = 0.0000000000000001) const {
+        return ((p1.first < p2.first) || ((std::abs(p1.first - p2.first) < epsilon) && (p1.second < p2.second)));
     }
 };
 
