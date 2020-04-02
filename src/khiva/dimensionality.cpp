@@ -646,7 +646,7 @@ void recomputeAreaNeighboor(std::map<long, khiva::dimensionality::VisvalingamSum
             std::make_pair(new_area_minus1, original_position_minus1)));
 }
 
-std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(std::vector<khiva::dimensionality::Point> entry_points, long max_points, long scale) {
+std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(std::vector<khiva::dimensionality::Point> entry_points, long max_points, int64_t scale) {
 
     std::map<long, khiva::dimensionality::VisvalingamSummaryPoint> points;
     std::set<std::pair<long, long>, mapComparator> point_indexer;
