@@ -608,7 +608,7 @@ int64_t computeTriangleArea(const khiva::dimensionality::VisvalingamSummaryPoint
     float f1 = a.x * (b.y - c.y);
     float f2 = b.x * (c.y - a.y);
     float f3 = c.x * (a.y - b.y);
-    return  static_cast<int64_t >(std::abs((f1 + f2 + f3) / 2.0f) * scale);
+    return  static_cast<int64_t>(std::abs((f1 + f2 + f3) / 2.0f) * scale);
 }
 
 #include <iterator>
@@ -632,12 +632,10 @@ void recomputeAreaNeighbor(std::map<int64_t, khiva::dimensionality::VisvalingamS
 
     auto im1m1 = shiftIterator(iterator_point, -1);
     auto im1p1 = shiftIterator(iterator_point, 1);
-
     auto original_position_minus1 = iterator_point->first;
 
     auto old_area_minus1 = iterator_point->second.area;
     auto new_area_minus1 = computeTriangleArea(im1m1->second, iterator_point->second, im1p1->second, scale);
-
     points[iterator_point->first] = khiva::dimensionality::VisvalingamSummaryPoint{iterator_point->second.x,
                                                              iterator_point->second.y,
                                                              new_area_minus1};
@@ -688,11 +686,11 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
         points.erase(iterator_point);
 
         if (iterator_point_minus1->first > 0) {
-            recomputeAreaNeighboor(iterator_point_minus1, point_indexer, points, scale);
+            recomputeAreaNeighbor(iterator_point_minus1, point_indexer, points, scale);
         }
 
         if (iterator_point_plus1->first < counter - 1) {
-            recomputeAreaNeighboor(iterator_point_plus1, point_indexer, points, scale);
+            recomputeAreaNeighbor(iterator_point_plus1, point_indexer, points, scale);
         }
     }
 
