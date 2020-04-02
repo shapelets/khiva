@@ -83,12 +83,26 @@ void stompConsiderTrivialMultipleSeries() {
     af::freeHost(resultingDistance);
 }
 
-int main() {
-    stompIgnoreTrivialOneSeries();
-    stompIgnoreTrivialMultipleSeries();
+void visvalingamTest(){
+    float pointList[] = {0.0f, 1.0f, 2.0f,  3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f,
+                         0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+    af::array points(10, 2, pointList);
+    std::vector<khiva::dimensionality::Point> expected = {
+            khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
+            khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(7.0f, 9.0f),
+            khiva::dimensionality::Point(9.0f, 9.0f)};
 
-    stompConsiderTrivialOneSeries();
-    stompConsiderTrivialMultipleSeries();
+    af::array res = khiva::dimensionality::visvalingam(points, 5);
+    auto *points_x = res.col(0).host<float>();
+    auto *points_y = res.col(1).host<float>();
+
+    for (size_t i = 0; i < expected.size(); i++) {
+       std::cout <<  expected[i].first << ", " << points_y[i] << std::endl;
+    }
+}
+
+int main() {
+    visvalingamTest();
 
     return 0;
 }

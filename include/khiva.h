@@ -18,4 +18,5 @@
 #include <khiva/regression.h>
 #include <khiva/regularization.h>
 #include <khiva/statistics.h>
+#include <khiva/utils.h>
 #include <khiva/version.h>

@@ -21,9 +21,9 @@ typedef std::pair<float, float> Point;
 typedef std::pair<int, int> Segment;
 
 struct VisvalingamSummaryPoint {
-float x;
-float y;
-float area;
+    float x;
+    float y;
+    int64_t area;
 };
 
 /**
@@ -193,10 +193,11 @@ KHIVAAPI af::array SAX(af::array a, int alphabetSize);
  *
  * @param pointList Expects an input vector of points.
  * @param numPoints Sets the number of points returned after the execution of the method.
+ * * @param scale Sets the precision used to compute the areas of the triangularization, the longer, the more accurate.
  *
  * @return std:vector<khiva::dimensionality::Point> where the number of points has been reduced to numPoints.
  */
-KHIVAAPI std::vector<khiva::dimensionality::Point> visvalingam(std::vector<khiva::dimensionality::Point> pointList, long numPoints);
+KHIVAAPI std::vector<khiva::dimensionality::Point> visvalingam(std::vector<khiva::dimensionality::Point> pointList, long numPoints, long scale = 1000000000);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number
