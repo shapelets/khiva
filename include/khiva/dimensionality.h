@@ -20,6 +20,12 @@ typedef std::pair<float, float> Point;
 
 typedef std::pair<int, int> Segment;
 
+struct VisvalingamSummaryPoint {
+float x;
+float y;
+float area;
+};
+
 /**
  * @brief Piecewise Aggregate Approximation (PAA) approximates a time series \f$X\f$ of length \f$n\f$ into vector
  * \f$\bar{X}=(\bar{x}_{1},…,\bar{x}_{M})\f$ of any arbitrary length \f$M \leq n\f$ where each of \f$\bar{x_{i}}\f$ is
@@ -190,7 +196,7 @@ KHIVAAPI af::array SAX(af::array a, int alphabetSize);
  *
  * @return std:vector<khiva::dimensionality::Point> where the number of points has been reduced to numPoints.
  */
-KHIVAAPI std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
+KHIVAAPI std::vector<khiva::dimensionality::Point> visvalingam(std::vector<khiva::dimensionality::Point> pointList, long numPoints);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number
