@@ -601,7 +601,10 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     return result;
 }
 
-int64_t computeTriangleArea(const khiva::dimensionality::VisvalingamSummaryPoint &a, const khiva::dimensionality::VisvalingamSummaryPoint &b, const khiva::dimensionality::VisvalingamSummaryPoint &c, const long scale = 1000000000) {
+int64_t computeTriangleArea(const khiva::dimensionality::VisvalingamSummaryPoint &a,
+        const khiva::dimensionality::VisvalingamSummaryPoint &b,
+        const khiva::dimensionality::VisvalingamSummaryPoint &c,
+        const long scale = 1000000000) {
     float f1 = a.x * (b.y - c.y);
     float f2 = b.x * (c.y - a.y);
     float f3 = c.x * (a.y - b.y);
@@ -622,9 +625,10 @@ public:
     }
 };
 
-void recomputeAreaNeighboor(std::map<int64_t, khiva::dimensionality::VisvalingamSummaryPoint>::iterator &iterator_point,
+void recomputeAreaNeighbor(std::map<int64_t, khiva::dimensionality::VisvalingamSummaryPoint>::iterator &iterator_point,
                             std::set<std::pair<int64_t, int64_t>, mapComparator> &point_indexer,
-                            std::map<int64_t, khiva::dimensionality::VisvalingamSummaryPoint> &points, const int64_t scale){
+                            std::map<int64_t, khiva::dimensionality::VisvalingamSummaryPoint> &points,
+                            const int64_t scale){
 
     auto im1m1 = shiftIterator(iterator_point, -1);
     auto im1p1 = shiftIterator(iterator_point, 1);
@@ -645,7 +649,8 @@ void recomputeAreaNeighboor(std::map<int64_t, khiva::dimensionality::Visvalingam
             std::make_pair(new_area_minus1, original_position_minus1)));
 }
 
-std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(std::vector<khiva::dimensionality::Point> pointList, int64_t numPoints, int64_t scale) {
+std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
+        std::vector<khiva::dimensionality::Point> pointList, int64_t numPoints, int64_t scale) {
 
     std::map<int64_t, khiva::dimensionality::VisvalingamSummaryPoint> points;
     std::set<std::pair<int64_t, int64_t>, mapComparator> point_indexer;
@@ -653,8 +658,10 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(std
 
     std::transform(pointList.begin(), pointList.end(), std::inserter(points, points.end()),
                    [&counter](const khiva::dimensionality::Point &point) {
-                       return std::make_pair(counter++, khiva::dimensionality::VisvalingamSummaryPoint{point.first, point.second,
-                                                                                 std::numeric_limits<long>::max()});
+                       return std::make_pair(counter++,
+                               khiva::dimensionality::VisvalingamSummaryPoint{point.first,
+                                                                              point.second,
+                                                                              std::numeric_limits<long>::max()});
                    });
 
     long points_to_be_deleted = static_cast<long>(pointList.size()) - numPoints;
