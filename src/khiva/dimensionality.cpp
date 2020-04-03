@@ -608,9 +608,10 @@ af::array SAX(af::array a, int alphabet_size) {
 int64_t computeTriangleArea(const VisvalingamSummaryPoint &a,
         const VisvalingamSummaryPoint &b,
         const VisvalingamSummaryPoint &c,
-        const long scale = 1000000000) {
+        const long scale = 1e9) {
+    
     float f1 = a.x * (b.y - c.y);
-    float f2 = b.x * (c.y - a.y);
+    float f2 = b.x * (c.y - a.y);s
     float f3 = c.x * (a.y - b.y);
     return  static_cast<int64_t>(std::abs((f1 + f2 + f3) / 2.0f) * scale);
 }
@@ -651,19 +652,16 @@ void recomputeAreaNeighbor(std::map<int64_t, VisvalingamSummaryPoint>::iterator 
             std::make_pair(new_area_minus1, original_position_minus1)));
 }
 
-std::vector<Point> visvalingam(
-        std::vector<Point> pointList, int64_t numPoints, int64_t scale) {
+std::vector<Point> visvalingam(std::vector<Point> pointList, int64_t numPoints, int64_t scale) {
 
     std::map<int64_t, VisvalingamSummaryPoint> points;
     std::set<std::pair<int64_t, int64_t>, mapComparator> point_indexer;
     long counter = 0;
 
-    std::transform(pointList.begin(), pointList.end(), std::inserter(points, points.end()),
+    std::transform(pointList.cbegin(), pointList.cend(), std::inserter(points, points.end()),
                    [&counter](const Point &point) {
                        return std::make_pair(counter++,
-                               VisvalingamSummaryPoint{point.first,
-                                                                              point.second,
-                                                                              std::numeric_limits<long>::max()});
+                               VisvalingamSummaryPoint{point.first, point.second, std::numeric_limits<long>::max()});
                    });
 
     auto points_to_be_deleted = pointList.size() - numPoints;
@@ -677,7 +675,7 @@ std::vector<Point> visvalingam(
     }
 
     // One point to be deleted on each iteration
-    for (long iter = 0; iter < points_to_be_deleted; iter++) {
+    for (int64_t iter = 0; iter < points_to_be_deleted; iter++) {
 
         auto min_index_iterator = point_indexer.begin();
         long min_element = min_index_iterator->second;
@@ -719,7 +717,7 @@ af::array visvalingam(af::array pointList, int numPoints) {
         points.emplace_back(x[i], y[i]);
     }
 
-    std::vector<Point> rPoints = visvalingam(points, static_cast<long>(numPoints));
+    std::vector<Point> rPoints = visvalingam(points, numPoints);
     af::array out = af::constant(0, rPoints.size(), 2);
 
     std::vector<float> vx;
