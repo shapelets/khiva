@@ -18,8 +18,7 @@
 #include <map>
 #include <set>
 
-namespace khiva {
-namespace dimensionality {
+using namespace khiva::dimensionality;
 
 struct VisvalingamSummaryPoint {
     float x;
@@ -146,7 +145,7 @@ std::pair<int, int> getSegmentFromSelected(Point point,
     return std::make_pair(lower, upper);
 }
 
-std::vector<Point> PAA(std::vector<Point> points,
+std::vector<Point> khiva::dimensionality::PAA(std::vector<Point> points,
                                                                      int bins) {
     auto begin = points.begin();
     auto last = points.end();
@@ -225,7 +224,7 @@ af::array PAA_CPU(af::array a, int bins) {
     return result;
 }
 
-af::array PAA(af::array a, int bins) {
+af::array khiva::dimensionality::PAA(af::array a, int bins) {
     // Resulting array
     af::array result;
 
@@ -249,7 +248,7 @@ af::array PAA(af::array a, int bins) {
     return result;
 }
 
-af::array PIP(af::array ts, int numberIPs) {
+af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
     if (ts.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
@@ -346,7 +345,7 @@ Segment merge(Segment s1, Segment s2) {
     return res;
 }
 
-std::vector<Point> PLABottomUp(std::vector<Point> ts, float maxError) {
+std::vector<Point> khiva::dimensionality::PLABottomUp(std::vector<Point> ts, float maxError) {
     std::vector<Segment> segments;
     std::vector<float> mergeCost;
 
@@ -390,7 +389,7 @@ std::vector<Point> PLABottomUp(std::vector<Point> ts, float maxError) {
     return result;
 }
 
-af::array PLABottomUp(af::array ts, float maxError) {
+af::array khiva::dimensionality::PLABottomUp(af::array ts, float maxError) {
     if (ts.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
@@ -425,7 +424,7 @@ af::array PLABottomUp(af::array ts, float maxError) {
     return res;
 }
 
-std::vector<Point> PLASlidingWindow(
+std::vector<Point> khiva::dimensionality::PLASlidingWindow(
     std::vector<Point> ts, float maxError) {
     std::vector<Point> result;
     std::vector<Segment> segments;
@@ -458,7 +457,7 @@ std::vector<Point> PLASlidingWindow(
     return result;
 }
 
-af::array PLASlidingWindow(af::array ts, float maxError) {
+af::array khiva::dimensionality::PLASlidingWindow(af::array ts, float maxError) {
     if (ts.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
@@ -492,7 +491,7 @@ af::array PLASlidingWindow(af::array ts, float maxError) {
     return res;
 }
 
-std::vector<Point> ramerDouglasPeucker(
+std::vector<Point> khiva::dimensionality::ramerDouglasPeucker(
     std::vector<Point> pointList, double epsilon) {
     std::vector<Point> out;
 
@@ -533,7 +532,7 @@ std::vector<Point> ramerDouglasPeucker(
     return out;
 }
 
-af::array ramerDouglasPeucker(af::array pointList, double epsilon) {
+af::array khiva::dimensionality::ramerDouglasPeucker(af::array pointList, double epsilon) {
     if (pointList.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
@@ -564,7 +563,7 @@ af::array ramerDouglasPeucker(af::array pointList, double epsilon) {
     return af::join(1, ox, oy);
 }
 
-af::array SAX(af::array a, int alphabet_size) {
+af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     if (a.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
@@ -652,7 +651,7 @@ void recomputeAreaNeighbor(std::map<int64_t, VisvalingamSummaryPoint>::iterator 
             std::make_pair(new_area_minus1, original_position_minus1)));
 }
 
-std::vector<Point> visvalingam(std::vector<Point> pointList, int64_t numPoints, int64_t scale) {
+std::vector<Point> khiva::dimensionality::visvalingam(std::vector<Point> pointList, int64_t numPoints, int64_t scale) {
 
     std::map<int64_t, VisvalingamSummaryPoint> points;
     std::set<std::pair<int64_t, int64_t>, mapComparator> point_indexer;
@@ -696,15 +695,16 @@ std::vector<Point> visvalingam(std::vector<Point> pointList, int64_t numPoints, 
         }
     }
 
-    std::vector<Point> out_vector(numPoints);
-    std::transform(points.cbegin(), points.cend(), out_vector.begin(),
+    std::vector<Point> out_vector;
+    out_vector.reserve(numPoints);
+    std::transform(points.cbegin(), points.cend(), std::back_inserter(out_vector),
                    [](const std::pair<int64_t, VisvalingamSummaryPoint> &p) {
                        return Point{p.second.x, p.second.y};
                    });
 
     return out_vector;
 }
-af::array visvalingam(af::array pointList, int numPoints) {
+af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints) {
     if (pointList.dims(1) != 2) {
         throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
     }
@@ -734,7 +734,4 @@ af::array visvalingam(af::array pointList, int numPoints) {
     af::array oy(rPoints.size(), vy.data());
 
     return af::join(1, ox, oy);
-}
-
-}
 }
