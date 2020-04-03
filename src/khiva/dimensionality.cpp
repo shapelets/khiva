@@ -656,12 +656,12 @@ std::vector<Point> visvalingam(std::vector<Point> pointList, int64_t numPoints, 
 
     std::map<int64_t, VisvalingamSummaryPoint> points;
     std::set<std::pair<int64_t, int64_t>, mapComparator> point_indexer;
-    long counter = 0;
+    int64_t counter = 0;
 
     std::transform(pointList.cbegin(), pointList.cend(), std::inserter(points, points.end()),
                    [&counter](const Point &point) {
                        return std::make_pair(counter++,
-                               VisvalingamSummaryPoint{point.first, point.second, std::numeric_limits<long>::max()});
+                               VisvalingamSummaryPoint{point.first, point.second, std::numeric_limits<int64_t>::max()});
                    });
 
     auto points_to_be_deleted = pointList.size() - numPoints;
@@ -678,7 +678,7 @@ std::vector<Point> visvalingam(std::vector<Point> pointList, int64_t numPoints, 
     for (int64_t iter = 0; iter < points_to_be_deleted; iter++) {
 
         auto min_index_iterator = point_indexer.begin();
-        long min_element = min_index_iterator->second;
+        int64_t min_element = min_index_iterator->second;
         point_indexer.erase(min_index_iterator);
 
         auto iterator_point = points.find(min_element);
