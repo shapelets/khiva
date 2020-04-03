@@ -187,10 +187,11 @@ KHIVAAPI af::array SAX(af::array a, int alphabetSize);
  *
  * @param pointList Expects an input vector of points.
  * @param numPoints Sets the number of points returned after the execution of the method.
+ * * @param scale Sets the precision used to compute the areas of the triangularization, the longer, the more accurate.
  *
  * @return std:vector<khiva::dimensionality::Point> where the number of points has been reduced to numPoints.
  */
-KHIVAAPI std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
+KHIVAAPI std::vector<Point> visvalingam(std::vector<Point> pointList, int64_t numPoints, int64_t scale = 1000000000);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number
