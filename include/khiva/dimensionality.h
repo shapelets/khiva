@@ -191,7 +191,7 @@ KHIVAAPI af::array SAX(af::array a, int alphabetSize);
  *
  * @return std:vector<khiva::dimensionality::Point> where the number of points has been reduced to numPoints.
  */
-KHIVAAPI std::vector<khiva::dimensionality::Point> visvalingam(std::vector<khiva::dimensionality::Point> pointList, int64_t numPoints, int64_t scale = 10000000);
+KHIVAAPI std::vector<Point> visvalingam(std::vector<Point> pointList, int64_t numPoints, int64_t scale = 1000000000);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number

@@ -609,9 +609,9 @@ int64_t computeTriangleArea(const VisvalingamSummaryPoint &a,
         const VisvalingamSummaryPoint &b,
         const VisvalingamSummaryPoint &c,
         const long scale = 1e9) {
-    
+
     float f1 = a.x * (b.y - c.y);
-    float f2 = b.x * (c.y - a.y);s
+    float f2 = b.x * (c.y - a.y);
     float f3 = c.x * (a.y - b.y);
     return  static_cast<int64_t>(std::abs((f1 + f2 + f3) / 2.0f) * scale);
 }
