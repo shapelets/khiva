@@ -15,14 +15,14 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *e
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref_tss;
+        auto arr = (af_array) ref_tss;
         af::array var = af::array(arr);
 
         jlong raw_pointer_labels = 0;
-        af_array af_p_labels = (af_array) raw_pointer_labels;
+        auto af_p_labels = (af_array) raw_pointer_labels;
 
         jlong raw_pointer_centroids = 0;
-        af_array af_p_centroids = (af_array) raw_pointer_centroids;
+        auto af_p_centroids = (af_array) raw_pointer_centroids;
 
         af_retain_array(&arr, var.get());
 
@@ -48,7 +48,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *e
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Clustering_kMeans. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *env, jobject, jlong ref_tss, jint k,
@@ -58,14 +58,14 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *e
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref_tss;
+        auto arr = (af_array) ref_tss;
         af::array var = af::array(arr);
 
         jlong raw_pointer_labels = 0;
-        af_array af_p_labels = (af_array) raw_pointer_labels;
+        auto af_p_labels = (af_array) raw_pointer_labels;
 
         jlong raw_pointer_centroids = 0;
-        af_array af_p_centroids = (af_array) raw_pointer_centroids;
+        auto af_p_centroids = (af_array) raw_pointer_centroids;
 
         af_retain_array(&arr, var.get());
 
@@ -91,5 +91,5 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *e
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Clustering_kShape. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }

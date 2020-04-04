@@ -15,11 +15,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_absEnergy(JNIEnv *env, jobje
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::absEnergy(var).get());
@@ -36,7 +36,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_absEnergy(JNIEnv *env, jobje
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_absEnergy. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_absoluteSumOfChanges(JNIEnv *env, jobject, jlong ref) {
@@ -45,11 +45,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_absoluteSumOfChanges(JNIEnv 
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::absoluteSumOfChanges(var).get());
@@ -66,7 +66,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_absoluteSumOfChanges(JNIEnv 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_absoluteSumOfChanges. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorrelation(JNIEnv *env, jobject, jlong ref,
@@ -76,11 +76,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorrelation(JN
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         switch (aggregationFunction) {
@@ -123,7 +123,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorrelation(JN
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_aggregatedAutocorrelation. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTrend(JNIEnv *env, jobject, jlong ref,
@@ -133,23 +133,23 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTrend(JNIEnv
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer_slope = 0;
-        af_array af_p_slope = (af_array) raw_pointer_slope;
+        auto af_p_slope = (af_array) raw_pointer_slope;
 
         jlong raw_pointer_intercept = 0;
-        af_array af_p_intercept = (af_array) raw_pointer_intercept;
+        auto af_p_intercept = (af_array) raw_pointer_intercept;
 
         jlong raw_pointer_rvalue = 0;
-        af_array af_p_rvalue = (af_array) raw_pointer_rvalue;
+        auto af_p_rvalue = (af_array) raw_pointer_rvalue;
 
         jlong raw_pointer_pvalue = 0;
-        af_array af_p_pvalue = (af_array) raw_pointer_pvalue;
+        auto af_p_pvalue = (af_array) raw_pointer_pvalue;
 
         jlong raw_pointer_stderrest = 0;
-        af_array af_p_stderrest = (af_array) raw_pointer_stderrest;
+        auto af_p_stderrest = (af_array) raw_pointer_stderrest;
 
         af_retain_array(&arr, var.get());
 
@@ -212,7 +212,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTrend(JNIEnv
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_aggregatedLinearTrend. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_approximateEntropy(JNIEnv *env, jobject, jlong ref, jint m,
@@ -222,11 +222,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_approximateEntropy(JNIEnv *e
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::approximateEntropy(var, m, r).get());
@@ -243,7 +243,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_approximateEntropy(JNIEnv *e
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_approximateEntropy. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JNIEnv *env, jobject, jlong ref_xss, jlong ref_yss,
@@ -253,14 +253,14 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JNIEnv *env,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array xss = (af_array) ref_xss;
+        auto xss = (af_array) ref_xss;
         af::array var_xss;
-        af_array yss = (af_array) ref_yss;
+        auto yss = (af_array) ref_yss;
         af::array var_yss;
 
         check_and_retain_arrays(xss, yss, var_xss, var_yss);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
         af_retain_array(&af_p, khiva::features::crossCovariance(var_xss, var_yss, unbiased).get());
 
         tmp[0] = (jlong) xss;
@@ -276,7 +276,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCovariance(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_crossCovariance. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCovariance(JNIEnv *env, jobject, jlong ref, jboolean unbiased) {
@@ -285,11 +285,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCovariance(JNIEnv *env, 
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::autoCovariance(var, unbiased).get());
@@ -307,7 +307,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCovariance(JNIEnv *env, 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_autoCovariance. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCorrelation(JNIEnv *env, jobject, jlong ref_xss, jlong ref_yss,
@@ -317,15 +317,15 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCorrelation(JNIEnv *env
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_xss = (af_array) ref_xss;
+        auto arr_xss = (af_array) ref_xss;
         af::array var_xss;
-        af_array arr_yss = (af_array) ref_yss;
+        auto arr_yss = (af_array) ref_yss;
         af::array var_yss;
 
         check_and_retain_arrays(arr_xss, arr_yss, var_xss, var_yss);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, khiva::features::crossCorrelation(var_xss, var_yss, unbiased).get());
 
@@ -342,7 +342,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_crossCorrelation(JNIEnv *env
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_crossCorrelation. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCorrelation(JNIEnv *env, jobject, jlong ref, jlong maxLag,
@@ -352,11 +352,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCorrelation(JNIEnv *env,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::autoCorrelation(var, static_cast<long>(maxLag), unbiased).get());
@@ -374,7 +374,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_autoCorrelation(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_autoCorrelation. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_binnedEntropy(JNIEnv *env, jobject, jlong ref, jint max_bins) {
@@ -383,11 +383,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_binnedEntropy(JNIEnv *env, j
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::binnedEntropy(var, max_bins).get());
@@ -405,7 +405,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_binnedEntropy(JNIEnv *env, j
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_binnedEntropy. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_c3(JNIEnv *env, jobject, jlong ref, jlong lag) {
@@ -414,11 +414,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_c3(JNIEnv *env, jobject, jlo
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::c3(var, static_cast<long>(lag)).get());
@@ -436,7 +436,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_c3(JNIEnv *env, jobject, jlo
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_c3. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_cidCe(JNIEnv *env, jobject, jlong ref, jboolean zNormalize) {
@@ -445,11 +445,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_cidCe(JNIEnv *env, jobject, 
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::cidCe(var, zNormalize).get());
@@ -467,7 +467,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_cidCe(JNIEnv *env, jobject, 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_cidCe. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_countAboveMean(JNIEnv *env, jobject, jlong ref) {
@@ -476,11 +476,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_countAboveMean(JNIEnv *env, 
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::countAboveMean(var).get());
@@ -498,7 +498,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_countAboveMean(JNIEnv *env, 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_countAboveMean. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_countBelowMean(JNIEnv *env, jobject, jlong ref) {
@@ -507,11 +507,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_countBelowMean(JNIEnv *env, 
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::countBelowMean(var).get());
@@ -529,7 +529,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_countBelowMean(JNIEnv *env, 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_countBelowMean. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_cwtCoefficients(JNIEnv *env, jobject, jlong ref, jlong widths,
@@ -539,16 +539,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_cwtCoefficients(JNIEnv *env,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var;
 
-        af_array af_w = (af_array) widths;
+        auto af_w = (af_array) widths;
         af::array var_w;
 
         check_and_retain_arrays(arr, af_w, var, var_w);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, khiva::features::cwtCoefficients(var, var_w, coeff, w).get());
 
@@ -566,7 +566,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_cwtCoefficients(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_cwtCoefficients. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_energyRatioByChunks(JNIEnv *env, jobject, jlong ref,
@@ -576,11 +576,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_energyRatioByChunks(JNIEnv *
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::energyRatioByChunks(var, static_cast<long>(numSegments),
@@ -600,7 +600,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_energyRatioByChunks(JNIEnv *
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_energyRatioByChunks. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_fftAggregated(JNIEnv *env, jobject, jlong ref) {
@@ -609,11 +609,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_fftAggregated(JNIEnv *env, j
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::fftAggregated(var).get());
@@ -631,7 +631,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_fftAggregated(JNIEnv *env, j
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_fftAggregated. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_fftCoefficient(JNIEnv *env, jobject, jlong ref, jlong coefficient) {
@@ -640,20 +640,20 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_fftCoefficient(JNIEnv *env, 
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer_real = 0;
-        af_array af_p_real = (af_array) raw_pointer_real;
+        auto af_p_real = (af_array) raw_pointer_real;
 
         jlong raw_pointer_imag = 0;
-        af_array af_p_imag = (af_array) raw_pointer_imag;
+        auto af_p_imag = (af_array) raw_pointer_imag;
 
         jlong raw_pointer_absolute = 0;
-        af_array af_p_absolute = (af_array) raw_pointer_absolute;
+        auto af_p_absolute = (af_array) raw_pointer_absolute;
 
         jlong raw_pointer_angle = 0;
-        af_array af_p_angle = (af_array) raw_pointer_angle;
+        auto af_p_angle = (af_array) raw_pointer_angle;
 
         af_retain_array(&arr, var.get());
 
@@ -685,7 +685,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_fftCoefficient(JNIEnv *env, 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_fftCoefficient. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMaximum(JNIEnv *env, jobject, jlong ref) {
@@ -694,11 +694,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMaximum(JNIEn
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::firstLocationOfMaximum(var).get());
@@ -716,7 +716,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMaximum(JNIEn
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_firstLocationOfMaximum. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMinimum(JNIEnv *env, jobject, jlong ref) {
@@ -725,11 +725,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMinimum(JNIEn
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::firstLocationOfMinimum(var).get());
@@ -747,7 +747,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMinimum(JNIEn
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_firstLocationOfMinimum. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_friedrichCoefficients(JNIEnv *env, jobject, jlong ref, jint m,
@@ -757,11 +757,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_friedrichCoefficients(JNIEnv
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::friedrichCoefficients(var, m, r).get());
@@ -779,7 +779,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_friedrichCoefficients(JNIEnv
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_friedrichCoefficients. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicates(JNIEnv *env, jobject, jlong ref) {
@@ -788,11 +788,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicates(JNIEnv *env, j
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::hasDuplicates(var).get());
@@ -810,7 +810,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicates(JNIEnv *env, j
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_hasDuplicates. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMax(JNIEnv *env, jobject, jlong ref) {
@@ -819,11 +819,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMax(JNIEnv *env,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::hasDuplicateMax(var).get());
@@ -841,7 +841,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMax(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_hasDuplicateMax. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMin(JNIEnv *env, jobject, jlong ref) {
@@ -850,11 +850,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMin(JNIEnv *env,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::hasDuplicateMin(var).get());
@@ -872,7 +872,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_hasDuplicateMin(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_hasDuplicateMin. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_indexMassQuantile(JNIEnv *env, jobject, jlong ref, jfloat q) {
@@ -881,11 +881,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_indexMassQuantile(JNIEnv *en
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::indexMassQuantile(var, q).get());
@@ -903,7 +903,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_indexMassQuantile(JNIEnv *en
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_indexMassQuantile. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_kurtosis(JNIEnv *env, jobject, jlong ref) {
@@ -912,11 +912,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_kurtosis(JNIEnv *env, jobjec
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::kurtosis(var).get());
@@ -934,7 +934,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_kurtosis(JNIEnv *env, jobjec
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_kurtosis. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_largeStandardDeviation(JNIEnv *env, jobject, jlong ref, jfloat r) {
@@ -943,11 +943,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_largeStandardDeviation(JNIEn
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::largeStandardDeviation(var, r).get());
@@ -965,7 +965,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_largeStandardDeviation(JNIEn
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_largeStandardDeviation. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMaximum(JNIEnv *env, jobject, jlong ref) {
@@ -974,11 +974,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMaximum(JNIEnv
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::lastLocationOfMaximum(var).get());
@@ -996,7 +996,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMaximum(JNIEnv
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_lastLocationOfMaximum. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMinimum(JNIEnv *env, jobject, jlong ref) {
@@ -1005,11 +1005,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMinimum(JNIEnv
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::lastLocationOfMinimum(var).get());
@@ -1027,7 +1027,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_lastLocationOfMinimum(JNIEnv
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_lastLocationOfMinimum. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_length(JNIEnv *env, jobject, jlong ref) {
@@ -1036,11 +1036,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_length(JNIEnv *env, jobject,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::length(var).get());
@@ -1058,7 +1058,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_length(JNIEnv *env, jobject,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_length. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_linearTrend(JNIEnv *env, jobject, jlong ref) {
@@ -1067,23 +1067,23 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_linearTrend(JNIEnv *env, job
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer_pvalue = 0;
-        af_array af_p_pvalue = (af_array) raw_pointer_pvalue;
+        auto af_p_pvalue = (af_array) raw_pointer_pvalue;
 
         jlong raw_pointer_rvalue = 0;
-        af_array af_p_rvalue = (af_array) raw_pointer_rvalue;
+        auto af_p_rvalue = (af_array) raw_pointer_rvalue;
 
         jlong raw_pointer_intercept = 0;
-        af_array af_p_intercept = (af_array) raw_pointer_intercept;
+        auto af_p_intercept = (af_array) raw_pointer_intercept;
 
         jlong raw_pointer_slope = 0;
-        af_array af_p_slope = (af_array) raw_pointer_slope;
+        auto af_p_slope = (af_array) raw_pointer_slope;
 
         jlong raw_pointer_stderr = 0;
-        af_array af_p_stderr = (af_array) raw_pointer_stderr;
+        auto af_p_stderr = (af_array) raw_pointer_stderr;
 
         af_retain_array(&arr, var.get());
 
@@ -1118,7 +1118,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_linearTrend(JNIEnv *env, job
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_linearTrend. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_localMaximals(JNIEnv *env, jobject, jlong ref) {
@@ -1127,11 +1127,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_localMaximals(JNIEnv *env, j
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::localMaximals(var).get());
@@ -1149,7 +1149,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_localMaximals(JNIEnv *env, j
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_localMaximals. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeAboveMean(JNIEnv *env, jobject, jlong ref) {
@@ -1158,11 +1158,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeAboveMean(JNIEn
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::longestStrikeAboveMean(var).get());
@@ -1180,7 +1180,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeAboveMean(JNIEn
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_longestStrikeAboveMean. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeBelowMean(JNIEnv *env, jobject, jlong ref) {
@@ -1189,11 +1189,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeBelowMean(JNIEn
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::longestStrikeBelowMean(var).get());
@@ -1211,7 +1211,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_longestStrikeBelowMean(JNIEn
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_longestStrikeBelowMean. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_maxLangevinFixedPoint(JNIEnv *env, jobject, jlong ref, jint m,
@@ -1221,11 +1221,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_maxLangevinFixedPoint(JNIEnv
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::maxLangevinFixedPoint(var, m, r).get());
@@ -1243,7 +1243,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_maxLangevinFixedPoint(JNIEnv
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_maxLangevinFixedPoint. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_maximum(JNIEnv *env, jobject, jlong ref) {
@@ -1252,11 +1252,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_maximum(JNIEnv *env, jobject
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::maximum(var).get());
@@ -1274,7 +1274,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_maximum(JNIEnv *env, jobject
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_maximum. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_mean(JNIEnv *env, jobject, jlong ref) {
@@ -1283,11 +1283,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_mean(JNIEnv *env, jobject, j
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::mean(var).get());
@@ -1305,7 +1305,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_mean(JNIEnv *env, jobject, j
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_mean. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_meanAbsoluteChange(JNIEnv *env, jobject, jlong ref) {
@@ -1314,11 +1314,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_meanAbsoluteChange(JNIEnv *e
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::meanAbsoluteChange(var).get());
@@ -1336,7 +1336,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_meanAbsoluteChange(JNIEnv *e
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_meanAbsoluteChange. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_meanChange(JNIEnv *env, jobject, jlong ref) {
@@ -1345,11 +1345,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_meanChange(JNIEnv *env, jobj
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::meanChange(var).get());
@@ -1367,7 +1367,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_meanChange(JNIEnv *env, jobj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_meanChange. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_meanSecondDerivativeCentral(JNIEnv *env, jobject, jlong ref) {
@@ -1376,11 +1376,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_meanSecondDerivativeCentral(
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::meanSecondDerivativeCentral(var).get());
@@ -1398,7 +1398,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_meanSecondDerivativeCentral(
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_meanSecondDerivativeCentral. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_median(JNIEnv *env, jobject, jlong ref) {
@@ -1407,11 +1407,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_median(JNIEnv *env, jobject,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::median(var).get());
@@ -1429,7 +1429,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_median(JNIEnv *env, jobject,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_median. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_minimum(JNIEnv *env, jobject, jlong ref) {
@@ -1438,11 +1438,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_minimum(JNIEnv *env, jobject
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::minimum(var).get());
@@ -1460,7 +1460,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_minimum(JNIEnv *env, jobject
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_minimum. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCrossingM(JNIEnv *env, jobject, jlong ref, jint m) {
@@ -1469,11 +1469,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCrossingM(JNIEnv *env,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::numberCrossingM(var, m).get());
@@ -1491,7 +1491,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCrossingM(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_numberCrossingM. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCwtPeaks(JNIEnv *env, jobject, jlong ref, jint maxW) {
@@ -1500,11 +1500,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCwtPeaks(JNIEnv *env, 
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::numberCwtPeaks(var, maxW).get());
@@ -1522,7 +1522,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_numberCwtPeaks(JNIEnv *env, 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_numberCwtPeaks. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_numberPeaks(JNIEnv *env, jobject, jlong ref, jint n) {
@@ -1531,11 +1531,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_numberPeaks(JNIEnv *env, job
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::numberPeaks(var, n).get());
@@ -1553,7 +1553,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_numberPeaks(JNIEnv *env, job
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_numberPeaks. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_partialAutocorrelation(JNIEnv *env, jobject, jlong ref,
@@ -1563,15 +1563,15 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_partialAutocorrelation(JNIEn
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var;
-        af_array arr_lags = (af_array) lags;
+        auto arr_lags = (af_array) lags;
         af::array var_lags;
 
         check_and_retain_arrays(arr, arr_lags, var, var_lags);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, khiva::features::partialAutocorrelation(var, var_lags).get());
 
@@ -1589,7 +1589,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_partialAutocorrelation(JNIEn
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_partialAutocorrelation. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringDatapointsToAllDatapoints(
@@ -1601,11 +1601,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringDatap
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::percentageOfReoccurringDatapointsToAllDatapoints(var, isSorted).get());
@@ -1623,7 +1623,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringDatap
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_percentageOfReoccurringDatapointsToAllDatapoints. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringValuesToAllValues(JNIEnv *env, jobject,
@@ -1634,11 +1634,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringValue
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::percentageOfReoccurringValuesToAllValues(var, isSorted).get());
@@ -1656,7 +1656,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_percentageOfReoccurringValue
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_percentageOfReoccurringValuesToAllValues. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *env, jobject, jlong ref, jlong q,
@@ -1666,13 +1666,13 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *env, jobjec
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var;
-        af_array arr_q = (af_array) q;
+        auto arr_q = (af_array) q;
         af::array var_q;
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         check_and_retain_arrays(arr, arr_q, var, var_q);
 
@@ -1692,7 +1692,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_quantile(JNIEnv *env, jobjec
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_quantile. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_rangeCount(JNIEnv *env, jobject, jlong ref, jfloat min,
@@ -1702,11 +1702,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_rangeCount(JNIEnv *env, jobj
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::rangeCount(var, min, max).get());
@@ -1724,7 +1724,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_rangeCount(JNIEnv *env, jobj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_rangeCount. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioBeyondRSigma(JNIEnv *env, jobject, jlong ref, jfloat r) {
@@ -1733,11 +1733,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioBeyondRSigma(JNIEnv *en
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::ratioBeyondRSigma(var, r).get());
@@ -1755,7 +1755,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioBeyondRSigma(JNIEnv *en
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_ratioBeyondRSigma. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioValueNumberToTimeSeriesLength(JNIEnv *env, jobject,
@@ -1765,11 +1765,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioValueNumberToTimeSeries
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::ratioValueNumberToTimeSeriesLength(var).get());
@@ -1787,7 +1787,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_ratioValueNumberToTimeSeries
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_ratioValueNumberToTimeSeriesLength. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_sampleEntropy(JNIEnv *env, jobject, jlong ref) {
@@ -1796,11 +1796,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sampleEntropy(JNIEnv *env, j
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::sampleEntropy(var).get());
@@ -1818,7 +1818,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sampleEntropy(JNIEnv *env, j
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_sampleEntropy. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_skewness(JNIEnv *env, jobject, jlong ref) {
@@ -1827,11 +1827,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_skewness(JNIEnv *env, jobjec
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::skewness(var).get());
@@ -1849,7 +1849,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_skewness(JNIEnv *env, jobjec
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_skewness. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_spktWelchDensity(JNIEnv *env, jobject, jlong ref, jint coeff) {
@@ -1858,11 +1858,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_spktWelchDensity(JNIEnv *env
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::spktWelchDensity(var, coeff).get());
@@ -1880,7 +1880,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_spktWelchDensity(JNIEnv *env
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_spktWelchDensity. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_standardDeviation(JNIEnv *env, jobject, jlong ref) {
@@ -1889,11 +1889,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_standardDeviation(JNIEnv *en
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::standardDeviation(var).get());
@@ -1911,7 +1911,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_standardDeviation(JNIEnv *en
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_standardDeviation. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringDatapoints(JNIEnv *env, jobject, jlong ref,
@@ -1921,11 +1921,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringDatapoints(J
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::sumOfReoccurringDatapoints(var, isSorted).get());
@@ -1943,7 +1943,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringDatapoints(J
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_sumOfReoccurringDatapoints. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringValues(JNIEnv *env, jobject, jlong ref,
@@ -1953,11 +1953,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringValues(JNIEn
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::sumOfReoccurringValues(var, isSorted).get());
@@ -1975,7 +1975,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sumOfReoccurringValues(JNIEn
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_sumOfReoccurringValues. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_sumValues(JNIEnv *env, jobject, jlong ref) {
@@ -1984,11 +1984,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sumValues(JNIEnv *env, jobje
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::sumValues(var).get());
@@ -2006,7 +2006,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_sumValues(JNIEnv *env, jobje
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_sumValues. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_symmetryLooking(JNIEnv *env, jobject, jlong ref, jfloat r) {
@@ -2015,11 +2015,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_symmetryLooking(JNIEnv *env,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::symmetryLooking(var, r).get());
@@ -2037,7 +2037,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_symmetryLooking(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_symmetryLooking. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_timeReversalAsymmetryStatistic(JNIEnv *env, jobject, jlong ref,
@@ -2047,11 +2047,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_timeReversalAsymmetryStatist
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::timeReversalAsymmetryStatistic(var, lag).get());
@@ -2069,7 +2069,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_timeReversalAsymmetryStatist
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_timeReversalAsymmetryStatistic. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_valueCount(JNIEnv *env, jobject, jlong ref, jfloat v) {
@@ -2078,11 +2078,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_valueCount(JNIEnv *env, jobj
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::valueCount(var, v).get());
@@ -2100,7 +2100,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_valueCount(JNIEnv *env, jobj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_valueCount. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_variance(JNIEnv *env, jobject, jlong ref) {
@@ -2109,11 +2109,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_variance(JNIEnv *env, jobjec
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::variance(var).get());
@@ -2131,7 +2131,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_variance(JNIEnv *env, jobjec
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_variance. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_varianceLargerThanStandardDeviation(JNIEnv *env, jobject,
@@ -2141,11 +2141,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_varianceLargerThanStandardDe
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::features::varianceLargerThanStandardDeviation(var).get());
@@ -2163,5 +2163,5 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_varianceLargerThanStandardDe
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_varianceLargerThanStandardDeviation. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }

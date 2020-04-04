@@ -18,22 +18,22 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_profile = (af_array)ref_profile;
+        auto arr_profile = (af_array)ref_profile;
         af::array var_profile;
 
-        af_array arr_index = (af_array)ref_index;
+        auto arr_index = (af_array)ref_index;
         af::array var_index;
 
         check_and_retain_arrays(arr_profile, arr_index, var_profile, var_index);
 
         jlong raw_pointer_discord_distances = 0;
-        af_array af_p_discord_distances = (af_array)raw_pointer_discord_distances;
+        auto af_p_discord_distances = (af_array)raw_pointer_discord_distances;
 
         jlong raw_pointer_discord_indices = 0;
-        af_array af_p_discord_indices = (af_array)raw_pointer_discord_indices;
+        auto af_p_discord_indices = (af_array)raw_pointer_discord_indices;
 
         jlong raw_pointer_subsequence_indices = 0;
-        af_array af_p_subsequence_indices = (af_array)raw_pointer_subsequence_indices;
+        auto af_p_subsequence_indices = (af_array)raw_pointer_subsequence_indices;
 
         af::array discords;
         af::array discords_indices;
@@ -61,7 +61,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Matrix_findBestNDiscords. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
@@ -72,22 +72,22 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, j
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_profile = (af_array)ref_profile;
+        auto arr_profile = (af_array)ref_profile;
         af::array var_profile;
 
-        af_array arr_index = (af_array)ref_index;
+        auto arr_index = (af_array)ref_index;
         af::array var_index;
 
         check_and_retain_arrays(arr_profile, arr_index, var_profile, var_index);
 
         jlong raw_pointer_motif_distances = 0;
-        af_array af_p_motif_distances = (af_array)raw_pointer_motif_distances;
+        auto af_p_motif_distances = (af_array)raw_pointer_motif_distances;
 
         jlong raw_pointer_motif_indices = 0;
-        af_array af_p_motif_indices = (af_array)raw_pointer_motif_indices;
+        auto af_p_motif_indices = (af_array)raw_pointer_motif_indices;
 
         jlong raw_pointer_subsequence_indices = 0;
-        af_array af_p_subsequence_indices = (af_array)raw_pointer_subsequence_indices;
+        auto af_p_subsequence_indices = (af_array)raw_pointer_subsequence_indices;
 
         af::array motifs;
         af::array motif_indices;
@@ -115,7 +115,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, j
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Matrix_findBestNMotifs. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv *env, jobject, jlong ref_query,
@@ -125,19 +125,19 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv *e
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_q = (af_array)ref_query;
+        auto arr_q = (af_array)ref_query;
         af::array var_q;
 
-        af_array arr_ts = (af_array)ref_ts;
+        auto arr_ts = (af_array)ref_ts;
         af::array var_ts;
 
         check_and_retain_arrays(arr_q, arr_ts, var_q, var_ts);
 
         jlong raw_pointer_distance = 0;
-        af_array af_p_distance = (af_array)raw_pointer_distance;
+        auto af_p_distance = (af_array)raw_pointer_distance;
 
         jlong raw_pointer_index = 0;
-        af_array af_p_index = (af_array)raw_pointer_index;
+        auto af_p_index = (af_array)raw_pointer_index;
 
         af::array distance;
         af::array index;
@@ -162,7 +162,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv *e
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Matrix_findBestNOccurrences. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, jlong ref_query, jlong ref_ts) {
@@ -171,16 +171,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, jlo
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_q = (af_array)ref_query;
+        auto arr_q = (af_array)ref_query;
         af::array var_q;
 
-        af_array arr_ts = (af_array)ref_ts;
+        auto arr_ts = (af_array)ref_ts;
         af::array var_ts;
 
         check_and_retain_arrays(arr_q, arr_ts, var_q, var_ts);
 
         jlong raw_pointer_distance = 0;
-        af_array af_p_distance = (af_array)raw_pointer_distance;
+        auto af_p_distance = (af_array)raw_pointer_distance;
 
         af::array distance;
 
@@ -201,7 +201,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, jlo
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Matrix_mass. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jlong ref_a, jlong ref_b, jlong m) {
@@ -210,19 +210,19 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jl
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_a = (af_array)ref_a;
+        auto arr_a = (af_array)ref_a;
         af::array var_a;
 
-        af_array arr_b = (af_array)ref_b;
+        auto arr_b = (af_array)ref_b;
         af::array var_b;
 
         check_and_retain_arrays(arr_a, arr_b, var_a, var_b);
 
         jlong raw_pointer_distance = 0;
-        af_array af_p_distance = (af_array)raw_pointer_distance;
+        auto af_p_distance = (af_array)raw_pointer_distance;
 
         jlong raw_pointer_index = 0;
-        af_array af_p_index = (af_array)raw_pointer_index;
+        auto af_p_index = (af_array)raw_pointer_index;
 
         af::array distance;
         af::array index;
@@ -247,7 +247,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jl
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Matrix_stomp. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m) {
@@ -256,14 +256,14 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, job
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_a = (af_array)ref_a;
+        auto arr_a = (af_array)ref_a;
         af::array var_a = af::array(arr_a);
 
         jlong raw_pointer_distance = 0;
-        af_array af_p_distance = (af_array)raw_pointer_distance;
+        auto af_p_distance = (af_array)raw_pointer_distance;
 
         jlong raw_pointer_index = 0;
-        af_array af_p_index = (af_array)raw_pointer_index;
+        auto af_p_index = (af_array)raw_pointer_index;
 
         af_retain_array(&arr_a, var_a.get());
 
@@ -289,7 +289,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, job
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Matrix_stompSelfJoin. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv *env, jobject, jlong ref_a, jlong ref_b,
@@ -299,19 +299,19 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv *env, job
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_a = (af_array)ref_a;
+        auto arr_a = (af_array)ref_a;
         af::array var_a;
 
-        af_array arr_b = (af_array)ref_b;
+        auto arr_b = (af_array)ref_b;
         af::array var_b;
 
         check_and_retain_arrays(arr_a, arr_b, var_a, var_b);
 
         jlong raw_pointer_distance = 0;
-        af_array af_p_distance = (af_array)raw_pointer_distance;
+        auto af_p_distance = (af_array)raw_pointer_distance;
 
         jlong raw_pointer_index = 0;
-        af_array af_p_index = (af_array)raw_pointer_index;
+        auto af_p_index = (af_array)raw_pointer_index;
 
         af::array distance;
         af::array index;
@@ -336,7 +336,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv *env, job
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Matrix_Matrixprofile. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoin(JNIEnv *env, jobject, jlong ref_a, jlong m) {
@@ -345,14 +345,14 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoin(JNIEnv *
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_a = (af_array)ref_a;
+        auto arr_a = (af_array)ref_a;
         af::array var_a = af::array(arr_a);
 
         jlong raw_pointer_distance = 0;
-        af_array af_p_distance = (af_array)raw_pointer_distance;
+        auto af_p_distance = (af_array)raw_pointer_distance;
 
         jlong raw_pointer_index = 0;
-        af_array af_p_index = (af_array)raw_pointer_index;
+        auto af_p_index = (af_array)raw_pointer_index;
 
         af_retain_array(&arr_a, var_a.get());
 
@@ -378,7 +378,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoin(JNIEnv *
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Matrix_MatrixprofileSelfJoin. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileLR(JNIEnv *env, jobject, jlong ref_a,
@@ -388,20 +388,20 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileLR(JNIE
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_a = (af_array)ref_a;
+        auto arr_a = (af_array)ref_a;
         af::array var_a = af::array(arr_a);
 
         af_retain_array(&arr_a, var_a.get());
 
         jlong raw_pointer_pleft = 0;
-        af_array af_p_pleft = (af_array)raw_pointer_pleft;
+        auto af_p_pleft = (af_array)raw_pointer_pleft;
         jlong raw_pointer_ileft = 0;
-        af_array af_p_ileft = (af_array)raw_pointer_ileft;
+        auto af_p_ileft = (af_array)raw_pointer_ileft;
 
         jlong raw_pointer_pright = 0;
-        af_array af_p_pright = (af_array)raw_pointer_pright;
+        auto af_p_pright = (af_array)raw_pointer_pright;
         jlong raw_pointer_iright = 0;
-        af_array af_p_iright = (af_array)raw_pointer_iright;
+        auto af_p_iright = (af_array)raw_pointer_iright;
 
         af::array pleft, ileft, pright, iright;
         long subsequence = static_cast<long>(m);
@@ -428,7 +428,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileLR(JNIE
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Matrix_matrixProfileLR. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *env, jobject, jlong ref_a, jlong m) {
@@ -437,11 +437,11 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *en
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_a = (af_array)ref_a;
+        auto arr_a = (af_array)ref_a;
         af::array var_a = af::array(arr_a);
 
         jlong raw_pointer_chains = 0;
-        af_array af_p_chains = (af_array)raw_pointer_chains;
+        auto af_p_chains = (af_array)raw_pointer_chains;
 
         af_retain_array(&arr_a, var_a.get());
 
@@ -464,5 +464,5 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *en
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Matrix_getChains. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }

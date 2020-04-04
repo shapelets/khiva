@@ -41,37 +41,36 @@ CREATE_T_ARRAY(Byte, byte, khiva::dtype::u8)
 jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComplex(JNIEnv *env, jclass, jobjectArray objs,
                                                                         jlongArray dims) {
     try {
-        af_array ret = 0;
-        jlong *dimptr = env->GetLongArrayElements(dims, 0);
+        af_array ret = nullptr;
+        jlong *dimPtr = env->GetLongArrayElements(dims, nullptr);
         jint len = env->GetArrayLength(objs);
 
         static jclass cls;
         static jfieldID re, im;
-        static bool isfirst = true;
+        static bool isFirst = true;
 
-        if (isfirst) {
+        if (isFirst) {
             cls = env->FindClass("io/shapelets/khiva/FloatComplex");
             re = env->GetFieldID(cls, "real", "F");
             im = env->GetFieldID(cls, "imag", "F");
-            isfirst = false;
+            isFirst = false;
         }
 
-        af::af_cfloat *tmp = (af::af_cfloat *) malloc(len * sizeof(af::af_cfloat));
+        std::vector<af::af_cfloat> tmp;
+        tmp.reserve(len);
 
         for (int i = 0; i < len; i++) {
             jobject obj = env->GetObjectArrayElement(objs, i);
             jfloat real = env->GetFloatField(obj, re);
             jfloat imag = env->GetFloatField(obj, im);
 
-            tmp[i].real = real;
-            tmp[i].imag = imag;
+            tmp.emplace_back(real, imag);
         }
 
-        dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
-        af_retain_array(&ret, khiva::array::createArray(af_array(tmp), 4, tdims, khiva::dtype::c32).get());
+        dim_t tdims[4] = {dimPtr[0], dimPtr[1], dimPtr[2], dimPtr[3]};
+        af_retain_array(&ret, khiva::array::createArray(af_array(tmp.data()), 4, tdims, khiva::dtype::c32).get());
 
-        free(tmp);
-        env->ReleaseLongArrayElements(dims, dimptr, 0);
+        env->ReleaseLongArrayElements(dims, dimPtr, 0);
         return jlong(ret);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
@@ -86,37 +85,36 @@ jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComplex(JNIEnv *
 jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass, jobjectArray objs,
                                                                          jlongArray dims) {
     try {
-        af_array ret = 0;
-        jlong *dimptr = env->GetLongArrayElements(dims, 0);
+        af_array ret = nullptr;
+        jlong *dimPtr = env->GetLongArrayElements(dims, nullptr);
         jint len = env->GetArrayLength(objs);
 
         static jclass cls;
         static jfieldID re, im;
-        static bool isfirst = true;
+        static bool isFirst = true;
 
-        if (isfirst) {
+        if (isFirst) {
             cls = env->FindClass("io/shapelets/khiva/DoubleComplex");
             re = env->GetFieldID(cls, "real", "D");
             im = env->GetFieldID(cls, "imag", "D");
-            isfirst = false;
+            isFirst = false;
         }
 
-        af::af_cdouble *tmp = (af::af_cdouble *) malloc(len * sizeof(af::af_cdouble));
+        std::vector<af::af_cdouble> tmp;
+        tmp.reserve(len);
 
         for (int i = 0; i < len; i++) {
             jobject obj = env->GetObjectArrayElement(objs, i);
             jdouble real = env->GetDoubleField(obj, re);
             jdouble imag = env->GetDoubleField(obj, im);
 
-            tmp[i].real = real;
-            tmp[i].imag = imag;
+            tmp.emplace_back(real, imag);
         }
 
-        dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
-        af_retain_array(&ret, khiva::array::createArray(af_array(tmp), 4, tdims, khiva::dtype::c64).get());
+        dim_t tdims[4] = {dimPtr[0], dimPtr[1], dimPtr[2], dimPtr[3]};
+        af_retain_array(&ret, khiva::array::createArray(af_array(tmp.data()), 4, tdims, khiva::dtype::c64).get());
 
-        free(tmp);
-        env->ReleaseLongArrayElements(dims, dimptr, 0);
+        env->ReleaseLongArrayElements(dims, dimPtr, 0);
         return jlong(ret);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
@@ -193,12 +191,13 @@ jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFromArray(JNI
         jmethodID id = env->GetMethodID(cls, "<init>", "(DD)V");
         if (id == NULL) return NULL;
 
-        result = env->NewObjectArray(static_cast<jsize>(elements), cls, NULL);
+        result = env->NewObjectArray(static_cast<jsize>(elements), cls, nullptr);
+        std::vector<af::af_cdouble> tmp;
+        tmp.reserve(elements);
 
-        af::af_cdouble *tmp = (af::af_cdouble *) malloc(sizeof(af::af_cdouble) * elements);
-        af_array a = (af_array) ref;
+        auto a = (af_array) ref;
         af::array var = af::array(a);
-        khiva::array::getData(var, tmp);
+        khiva::array::getData(var, tmp.data());
         af_retain_array(&a, var.get());
         env->SetLongField(thisObj, fidf, jlong(a));
 
@@ -209,7 +208,6 @@ jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFromArray(JNI
             env->SetObjectArrayElement(result, i, obj);
         }
 
-        free(tmp);
         return result;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
@@ -218,7 +216,7 @@ jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFromArray(JNI
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in getDoubleComplexFromArray. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jobjectArray JNICALL Java_io_shapelets_khiva_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj) {
@@ -235,12 +233,13 @@ jobjectArray JNICALL Java_io_shapelets_khiva_Array_getFloatComplexFromArray(JNIE
         jmethodID id = env->GetMethodID(cls, "<init>", "(FF)V");
         if (id == NULL) return NULL;
 
-        result = env->NewObjectArray(static_cast<jsize>(elements), cls, NULL);
+        result = env->NewObjectArray(static_cast<jsize>(elements), cls, nullptr);
 
-        af::af_cfloat *tmp = (af::af_cfloat *) malloc(sizeof(af::af_cfloat) * elements);
-        af_array a = (af_array) ref;
+        std::vector<af::af_cfloat> tmp;
+        tmp.reserve(elements);
+        auto a = (af_array) ref;
         af::array var = af::array(a);
-        khiva::array::getData(var, tmp);
+        khiva::array::getData(var, tmp.data());
         af_retain_array(&a, var.get());
         env->SetLongField(thisObj, fidf, jlong(a));
 
@@ -250,8 +249,6 @@ jobjectArray JNICALL Java_io_shapelets_khiva_Array_getFloatComplexFromArray(JNIE
             jobject obj = env->NewObject(cls, id, re, im);
             env->SetObjectArrayElement(result, i, obj);
         }
-
-        free(tmp);
         return result;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
@@ -269,7 +266,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_nativeGetDims(JNIEnv *env, jobj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array a = (af_array) ref;
+        auto a = (af_array) ref;
         af::array var = af::array(a);
         af::dim4 d = khiva::array::getDims(var);
         jlong result[4];
@@ -298,7 +295,7 @@ jint JNICALL Java_io_shapelets_khiva_Array_nativeGetType(JNIEnv *env, jobject th
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array a = (af_array) ref;
+        auto a = (af_array) ref;
         af::array var = af::array(a);
         jint t = khiva::array::getType(var);
         af_retain_array(&a, var.get());
@@ -320,7 +317,7 @@ void JNICALL Java_io_shapelets_khiva_Array_nativePrint(JNIEnv *env, jobject this
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array a = (af_array) ref;
+        auto a = (af_array) ref;
         af::array var = af::array(a);
         khiva::array::print(var);
         af_retain_array(&a, var.get());
@@ -340,15 +337,15 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_join(JNIEnv *env, jobject thisO
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = khiva::array::join(dim, a, b);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -375,15 +372,15 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_add(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = a + b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -410,16 +407,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_mul(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a * b;
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
         af_retain_array(&af_p, c.get());
         env->SetLongField(thisObj, fidf, jlong(lhs));
 
@@ -443,15 +440,15 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_sub(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = a - b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -478,16 +475,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_div(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a / b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -514,15 +511,15 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_mod(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = a % b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -549,15 +546,15 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_pow(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = af::pow(a, b);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -584,16 +581,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_lt(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a < b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -620,16 +617,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_gt(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a > b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -656,16 +653,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_le(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a <= b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -692,16 +689,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_ge(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a >= b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -728,15 +725,15 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_eq(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = a == b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -763,16 +760,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_ne(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a != b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -799,16 +796,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_bitAnd(JNIEnv *env, jobject thi
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a & b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -835,16 +832,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_bitOr(JNIEnv *env, jobject this
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a | b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -871,16 +868,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_bitXor(JNIEnv *env, jobject thi
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = !a != !b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -907,12 +904,12 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftL(JNIEnv *env, jobject
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a = af::array(lhs);
 
         af::array c = (a << n).as(a.type());
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
@@ -936,12 +933,12 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftR(JNIEnv *env, jobject
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a = af::array(lhs);
 
         af::array c = (a >> n).as(a.type());
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
@@ -965,12 +962,12 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeNot(JNIEnv *env, jobject thisO
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a = af::array(lhs);
 
         af::array c = !a;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
@@ -994,12 +991,12 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *env, jobject
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a = af::array(lhs);
 
         af::array c = af::transpose(a, conjugate);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
@@ -1022,12 +1019,12 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCol(JNIEnv *env, jobject thisO
         jclass clazz = env->GetObjectClass(thisObj);
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a = af::array(lhs);
 
         af::array c = a.col(index);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
@@ -1051,12 +1048,12 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCols(JNIEnv *env, jobject this
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a = af::array(lhs);
 
         af::array c = a.cols(first, last);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
@@ -1081,12 +1078,12 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeRow(JNIEnv *env, jobject thisO
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a = af::array(lhs);
 
         af::array c = a.row(index);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
@@ -1110,12 +1107,12 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeRows(JNIEnv *env, jobject this
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a = af::array(lhs);
 
         af::array c = a.rows(first, last);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
@@ -1139,16 +1136,16 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, jobject thi
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = af::matmul(a, b);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
@@ -1176,12 +1173,12 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCopy(JNIEnv *env, jobject this
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a = af::array(lhs);
 
         af::array c = a.copy();
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
@@ -1205,13 +1202,13 @@ jlong JNICALL Java_io_shapelets_khiva_Array_as(JNIEnv *env, jobject thisObj, jin
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array) ref;
         af::array a = af::array(lhs);
 
-        khiva::dtype dt = static_cast<khiva::dtype>(type);
+        auto dt = static_cast<khiva::dtype>(type);
         af::array c = a.as(dt);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());

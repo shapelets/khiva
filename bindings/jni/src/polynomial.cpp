@@ -14,12 +14,12 @@ jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobje
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array xx = (af_array) refX;
+        auto xx = (af_array) refX;
         af::array x;
-        af_array yy = (af_array) refY;
+        auto yy = (af_array) refY;
         af::array y;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         check_and_retain_arrays(xx, yy, x, y);
 
@@ -38,7 +38,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobje
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Polynomial_polyfit. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref) {
@@ -47,11 +47,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::polynomial::roots(var).get());
@@ -69,5 +69,5 @@ jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Polynomial_roots. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
