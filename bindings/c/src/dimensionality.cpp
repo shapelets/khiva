@@ -10,7 +10,7 @@
 #include <iostream>
 #include <khiva_c/internal/util.h>
 
-void paa(khiva_array *a, int *bins, khiva_array *result, int *error_code, char *error_message) {
+void paa(khiva_array *a, const int *bins, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*a);
         af_retain_array(a, var.get());
@@ -22,7 +22,7 @@ void paa(khiva_array *a, int *bins, khiva_array *result, int *error_code, char *
     }
 }
 
-void pip(khiva_array *a, int *number_ips, khiva_array *result, int *error_code, char *error_message) {
+void pip(khiva_array *a, const int *number_ips, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*a);
         af_retain_array(a, var.get());
@@ -34,7 +34,7 @@ void pip(khiva_array *a, int *number_ips, khiva_array *result, int *error_code, 
     }
 }
 
-void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *result, int *error_code, char *error_message) {
+void pla_bottom_up(khiva_array *ts, const float *max_error, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*ts);
         af_retain_array(ts, var.get());
@@ -47,7 +47,7 @@ void pla_bottom_up(khiva_array *ts, float *max_error, khiva_array *result, int *
     }
 }
 
-void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array *result, int *error_code, char *error_message) {
+void pla_sliding_window(khiva_array *ts, const float *max_error, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*ts);
         af_retain_array(ts, var.get());
@@ -60,7 +60,7 @@ void pla_sliding_window(khiva_array *ts, float *max_error, khiva_array *result, 
     }
 }
 
-void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_array *res_points, int *error_code,
+void ramer_douglas_peucker(khiva_array *points, const double *epsilon, khiva_array *res_points, int *error_code,
                            char *error_message) {
     try {
         af::array var = af::array(*points);
@@ -73,7 +73,7 @@ void ramer_douglas_peucker(khiva_array *points, double *epsilon, khiva_array *re
     }
 }
 
-void sax(khiva_array *a, int *alphabet_size, khiva_array *result, int *error_code, char *error_message) {
+void sax(khiva_array *a, const int *alphabet_size, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*a);
         af_retain_array(a, var.get());
@@ -86,7 +86,7 @@ void sax(khiva_array *a, int *alphabet_size, khiva_array *result, int *error_cod
     }
 }
 
-void visvalingam(khiva_array *points, int *num_points, khiva_array *res_points, int *error_code, char *error_message) {
+void visvalingam(khiva_array *points, const int *num_points, khiva_array *res_points, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*points);
         af_retain_array(points, var.get());

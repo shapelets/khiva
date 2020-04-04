@@ -9,7 +9,7 @@
 #include <khiva_c/statistics.h>
 #include <khiva_c/internal/util.h>
 
-void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_array *result, int *error_code,
+void covariance_statistics(khiva_array *tss, const bool *unbiased, khiva_array *result, int *error_code,
                            char *error_message) {
     try {
         af::array var = af::array(*tss);
@@ -36,7 +36,7 @@ void kurtosis_statistics(khiva_array *tss, khiva_array *result, int *error_code,
     }
 }
 
-void ljung_box(khiva_array *tss, long *lags, khiva_array *result, int *error_code, char *error_message) {
+void ljung_box(khiva_array *tss, const long *lags, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*tss);
         af_retain_array(tss, var.get());
@@ -49,7 +49,7 @@ void ljung_box(khiva_array *tss, long *lags, khiva_array *result, int *error_cod
     }
 }
 
-void moment_statistics(khiva_array *tss, int *k, khiva_array *result, int *error_code, char *error_message) {
+void moment_statistics(khiva_array *tss, const int *k, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*tss);
         af_retain_array(tss, var.get());
@@ -62,7 +62,7 @@ void moment_statistics(khiva_array *tss, int *k, khiva_array *result, int *error
     }
 }
 
-void quantile_statistics(khiva_array *tss, khiva_array *q, float *precision, khiva_array *result, int *error_code,
+void quantile_statistics(khiva_array *tss, khiva_array *q, const float *precision, khiva_array *result, int *error_code,
                          char *error_message) {
     try {
         af::array var;
@@ -77,7 +77,7 @@ void quantile_statistics(khiva_array *tss, khiva_array *q, float *precision, khi
     }
 }
 
-void quantiles_cut_statistics(khiva_array *tss, float *quantiles, float *precision, khiva_array *result,
+void quantiles_cut_statistics(khiva_array *tss, const float *quantiles, const float *precision, khiva_array *result,
                               int *error_code, char *error_message) {
     try {
         af::array var = af::array(*tss);

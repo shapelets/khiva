@@ -11,7 +11,7 @@
 #include <cstring>
 #include <thread>
 
-void create_array(void *data, unsigned *ndims, long long *dims, khiva_array *result, int *type, int *error_code,
+void create_array(void *data, const unsigned *ndims, long long *dims, khiva_array *result, const int *type, int *error_code,
                   char *error_message) {
     try {
         af_retain_array(result, khiva::array::createArray(data, *ndims, dims, *type).get());
@@ -86,7 +86,7 @@ void get_type(khiva_array *array, int *t, int *error_code, char *error_message) 
     }
 }
 
-void join(int *dim, khiva_array *first, khiva_array *second, khiva_array *result, int *error_code,
+void join(const int *dim, khiva_array *first, khiva_array *second, khiva_array *result, int *error_code,
           char *error_message) {
     try {
         af::array var1;
@@ -317,7 +317,7 @@ void khiva_bitxor(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *
         af::array var1;
         af::array var2;
         check_and_retain_arrays(lhs, rhs, var1, var2);
-        af::array r = !var1 != !var2;
+        af::array r = (!var1) != !var2;
         af_retain_array(result, r.get());
         *error_code = 0;
     } catch (const std::exception &e) {
@@ -369,7 +369,7 @@ void khiva_not(khiva_array *array, khiva_array *result, int *error_code, char *e
     }
 }
 
-void khiva_transpose(khiva_array *array, bool *conjugate, khiva_array *result, int *error_code, char *error_message) {
+void khiva_transpose(khiva_array *array, const bool *conjugate, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var1 = af::array(*array);
         af_retain_array(array, var1.get());
@@ -382,7 +382,7 @@ void khiva_transpose(khiva_array *array, bool *conjugate, khiva_array *result, i
     }
 }
 
-void khiva_col(khiva_array *array, int *index, khiva_array *result, int *error_code, char *error_message) {
+void khiva_col(khiva_array *array, const int *index, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var1 = af::array(*array);
         af_retain_array(array, var1.get());
@@ -396,7 +396,7 @@ void khiva_col(khiva_array *array, int *index, khiva_array *result, int *error_c
     }
 }
 
-void khiva_cols(khiva_array *array, int *first, int *last, khiva_array *result, int *error_code, char *error_message) {
+void khiva_cols(khiva_array *array, const int *first, const int *last, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var1 = af::array(*array);
         af_retain_array(array, var1.get());
@@ -410,7 +410,7 @@ void khiva_cols(khiva_array *array, int *first, int *last, khiva_array *result, 
     }
 }
 
-void khiva_row(khiva_array *array, int *index, khiva_array *result, int *error_code, char *error_message) {
+void khiva_row(khiva_array *array, const int *index, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var1 = af::array(*array);
         af_retain_array(array, var1.get());
@@ -424,7 +424,7 @@ void khiva_row(khiva_array *array, int *index, khiva_array *result, int *error_c
     }
 }
 
-void khiva_rows(khiva_array *array, int *first, int *last, khiva_array *result, int *error_code, char *error_message) {
+void khiva_rows(khiva_array *array, const int *first, const int *last, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var1 = af::array(*array);
         af_retain_array(array, var1.get());
@@ -482,7 +482,7 @@ void khiva_as(khiva_array *array, const int *type, khiva_array *result, int *err
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
-        khiva::dtype dt = static_cast<khiva::dtype>(*type);
+        auto dt = static_cast<khiva::dtype>(*type);
         af::array r = var.as(dt);
         af_retain_array(result, r.get());
         *error_code = 0;

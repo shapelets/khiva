@@ -10,7 +10,7 @@
 #include <khiva_c/internal/util.h>
 #include <iostream>
 
-void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, long *n, khiva_array *discord_distances,
+void find_best_n_discords(khiva_array *profile, khiva_array *index, const long *m, const long *n, khiva_array *discord_distances,
                           khiva_array *discord_indices, khiva_array *subsequence_indices, bool *self_join,
                           int *error_code, char *error_message) {
     try {
@@ -35,7 +35,7 @@ void find_best_n_discords(khiva_array *profile, khiva_array *index, long *m, lon
     }
 }
 
-void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long *n, khiva_array *motif_distances,
+void find_best_n_motifs(khiva_array *profile, khiva_array *index, const long *m, const long *n, khiva_array *motif_distances,
                         khiva_array *motif_indices, khiva_array *subsequence_indices, bool *self_join, int *error_code,
                         char *error_message) {
     try {
@@ -60,7 +60,7 @@ void find_best_n_motifs(khiva_array *profile, khiva_array *index, long *m, long 
     }
 }
 
-void find_best_n_occurrences(khiva_array *q, khiva_array *t, long *n, khiva_array *distances, khiva_array *indexes,
+void find_best_n_occurrences(khiva_array *q, khiva_array *t, const long *n, khiva_array *distances, khiva_array *indexes,
                              int *error_code, char *error_message) {
     try {
         af::array var_q;
@@ -98,7 +98,7 @@ void mass(khiva_array *q, khiva_array *t, khiva_array *distances, int *error_cod
     }
 }
 
-void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i, int *error_code,
+void stomp(khiva_array *tssa, khiva_array *tssb, const long *m, khiva_array *p, khiva_array *i, int *error_code,
            char *error_message) {
     try {
         af::array var_tssa;
@@ -119,7 +119,7 @@ void stomp(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_
     }
 }
 
-void stomp_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i, int *error_code, char *error_message) {
+void stomp_self_join(khiva_array *tss, const long *m, khiva_array *p, khiva_array *i, int *error_code, char *error_message) {
     try {
         af::array var_tss = af::array(*tss);
         af_retain_array(tss, var_tss.get());
@@ -138,7 +138,7 @@ void stomp_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i, 
     }
 }
 
-void matrix_profile(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *p, khiva_array *i, int *error_code,
+void matrix_profile(khiva_array *tssa, khiva_array *tssb, const long *m, khiva_array *p, khiva_array *i, int *error_code,
                     char *error_message) {
     try {
         af::array var_tssa;
@@ -159,7 +159,7 @@ void matrix_profile(khiva_array *tssa, khiva_array *tssb, long *m, khiva_array *
     }
 }
 
-void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_array *i, int *error_code,
+void matrix_profile_self_join(khiva_array *tss, const long *m, khiva_array *p, khiva_array *i, int *error_code,
                               char *error_message) {
     try {
         af::array var_tss = af::array(*tss);
@@ -179,7 +179,7 @@ void matrix_profile_self_join(khiva_array *tss, long *m, khiva_array *p, khiva_a
     }
 }
 
-void matrix_profile_lr(khiva_array *tss, long *m, khiva_array *pleft, khiva_array *ileft, khiva_array *pright,
+void matrix_profile_lr(khiva_array *tss, const long *m, khiva_array *pleft, khiva_array *ileft, khiva_array *pright,
                        khiva_array *iright, int *error_code, char *error_message) {
     try {
         af::array var_tss = af::array(*tss);
@@ -201,7 +201,7 @@ void matrix_profile_lr(khiva_array *tss, long *m, khiva_array *pleft, khiva_arra
     }
 }
 
-void get_chains(khiva_array *tss, long *m, khiva_array *c, int *error_code, char *error_message) {
+void get_chains(khiva_array *tss, const long *m, khiva_array *c, int *error_code, char *error_message) {
     try {
         af::array var_tss = af::array(*tss);
         af_retain_array(tss, var_tss.get());
