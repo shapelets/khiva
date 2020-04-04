@@ -23,7 +23,7 @@ void find_best_n_discords(khiva_array *profile, khiva_array *index, const long *
         af::array subsequenceIndices;
 
         khiva::matrix::findBestNDiscords(var_profile, var_index, *m, *n, discords, discordIndices, subsequenceIndices,
-                                         self_join);
+                                         *self_join);
         af_retain_array(discord_distances, discords.get());
         af_retain_array(discord_indices, discordIndices.get());
         af_retain_array(subsequence_indices, subsequenceIndices.get());

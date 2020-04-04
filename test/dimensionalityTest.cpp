@@ -7,9 +7,7 @@
 #include <gtest/gtest.h>
 #include <khiva/dimensionality.h>
 #include <khiva/internal/scopedHostPtr.h>
-#include <fstream>
 #include <iostream>
-#include <sstream>
 #include "khivaTest.h"
 
 void paaDivisible() {
@@ -66,14 +64,14 @@ void paaNorm() {
     std::vector<khiva::dimensionality::Point> pointList;
     pointList.emplace_back(0.0f, 0.0f);
     pointList.emplace_back(1.0f, 0.1f);
-    pointList.push_back(khiva::dimensionality::Point(2.0f, -0.1f));
+    pointList.emplace_back(2.0f, -0.1f);
     pointList.emplace_back(3.0f, 5.0f);
-    pointList.push_back(khiva::dimensionality::Point(4.0f, 6.0f));
+    pointList.emplace_back(4.0f, 6.0f);
     pointList.emplace_back(5.0f, 7.0f);
     pointList.emplace_back(6.0f, 8.1f);
     pointList.emplace_back(7.0f, 9.0f);
     pointList.emplace_back(8.0f, 9.0f);
-    pointList.push_back(khiva::dimensionality::Point(9.0f, 9.0f));
+    pointList.emplace_back(9.0f, 9.0f);
 
     auto out = khiva::dimensionality::PAA(pointList, 6);
 

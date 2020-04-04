@@ -9,15 +9,12 @@
 #include <SCAMP/src/SCAMP.h>
 #include <SCAMP/src/common.h>
 #include <SCAMP/src/scamp_exception.h>
-#include <khiva/internal/libraryInternal.h>
 #include <khiva/internal/vectorUtil.h>
-#include <khiva/library.h>
 #include <khiva/normalization.h>
 
 #include <algorithm>
 #include <cmath>
 #include <iostream>
-#include <iterator>
 #include <limits>
 #include <set>
 #include <thread>

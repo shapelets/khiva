@@ -6,7 +6,6 @@
 
 #include <jni.h>
 #include <khiva/regression.h>
-#include <khiva_jni/regression.h>
 #include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobject, jlong ref_xss, jlong ref_yss) {

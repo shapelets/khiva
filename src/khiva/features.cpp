@@ -879,7 +879,7 @@ std::vector<LineTuple> filterFunction(const std::vector<LineTuple>& ridgeLines, 
     return res;
 }
 
-std::vector<LineTuple> filterRidgeLines(const af::array& cwtDat, std::vector<LineTuple> ridgeLines, int minSnr,
+std::vector<LineTuple> filterRidgeLines(const af::array& cwtDat, const std::vector<LineTuple>& ridgeLines, int minSnr,
                                         float noisePerc) {
     int numPoints = static_cast<int>(cwtDat.dims(1));
     int minLength = static_cast<int>(std::ceil(cwtDat.dims(0) / 4.0));
@@ -898,7 +898,7 @@ std::vector<LineTuple> filterRidgeLines(const af::array& cwtDat, std::vector<Lin
         noises[i] = scoreAtPercentile(rowOne, windowStart, windowEnd, noisePerc);
     }
 
-    return filterFunction(std::move(ridgeLines), noises, cwtValues, minSnr, minLength);
+    return filterFunction(ridgeLines, noises, cwtValues, minSnr, minLength);
 }
 
 af::array khiva::features::numberCwtPeaks(af::array tss, int maxW) {

@@ -7,7 +7,6 @@
 #include <khiva/distances.h>
 #include <khiva/normalization.h>
 #include <algorithm>
-#include <limits>
 
 double distance(double x, double y) { return std::sqrt(std::pow((x - y), 2)); }
 

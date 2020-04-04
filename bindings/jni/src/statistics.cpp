@@ -6,7 +6,6 @@
 
 #include <jni.h>
 #include <khiva/statistics.h>
-#include <khiva_jni/statistics.h>
 #include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEnv *env, jobject, jlong ref, jboolean unbiased) {

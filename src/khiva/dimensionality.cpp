@@ -26,17 +26,6 @@ struct VisvalingamSummaryPoint {
     int64_t area;
 };
 
-float computeTriangleArea(Point a, Point b, Point c) {
-    float res = 0.0;
-
-    float f1 = a.first * (b.second - c.second);
-    float f2 = b.first * (c.second - a.second);
-    float f3 = c.first * (a.second - b.second);
-    res = std::abs((f1 + f2 + f3) / 2);
-
-    return res;
-}
-
 std::vector<float> computeBreakpoints(int alphabet_size, float mean_value, float std_value) {
     std::vector<float> res;
     boost::math::normal dist(mean_value, std_value);
@@ -89,14 +78,11 @@ double PerpendicularDistance(const Point &pt, const Point &lineStart, const Poin
  * We use the point-slope equiation to solve it.
  */
 float verticalDistance(Point p, Point start, Point end) {
-    float res = 0.0;
     float dy = end.second - start.second;
     float dx = end.first - start.first;
     float m = dy / dx;
     float line_y = (p.first - start.first) * m + start.second;
-    res = (p.second - line_y) * (p.second - line_y);
-
-    return res;
+    return (p.second - line_y) * (p.second - line_y);
 }
 
 /**
@@ -121,8 +107,7 @@ bool isPointInDesiredList(khiva::dimensionality::Point point,
 /**
  * @brief This function calculates the segment indices that we need to compare the point.
  */
-std::pair<int, int> getSegmentFromSelected(Point point,
-                                           std::vector<Point> selected) {
+std::pair<int, int> getSegmentFromSelected(Point point, const std::vector<Point>& selected) {
     int lower = 0, upper = 0;
     // We do not check the first element, as it is fixed and set to the first element of the time series
     size_t i = 0;
@@ -140,8 +125,7 @@ std::pair<int, int> getSegmentFromSelected(Point point,
     return std::make_pair(lower, upper);
 }
 
-std::vector<Point> khiva::dimensionality::PAA(std::vector<Point> points,
-                                                                     int bins) {
+std::vector<Point> khiva::dimensionality::PAA(const std::vector<Point>& points, int bins) {
     auto begin = points.begin();
     auto last = points.end();
     float xrange = (*(last - 1)).first - (*begin).first;
@@ -172,8 +156,10 @@ af::array PAA_CPU(af::array a, int bins) {
     af::array result;
     int n = a.dims(0);
 
-    T *column = static_cast<T *>(malloc(sizeof(T) * n));
-    T *reducedColumn = static_cast<T *>(malloc(sizeof(T) * bins));
+    std::vector<T> column;
+    column.reserve(n);
+    std::vector<T> reducedColumn;
+    reducedColumn.reserve(bins);
 
     // Find out the number of elements per bin
     T elemPerBin = static_cast<T>(n) / static_cast<T>(bins);
@@ -181,7 +167,7 @@ af::array PAA_CPU(af::array a, int bins) {
     // For each column
     for (int i = 0; i < a.dims(1); i++) {
         af::array aux = a.col(i);
-        aux.host(column);
+        aux.host(column.data());
         T start = 0.0;
         T end = elemPerBin - 1;
 
@@ -205,21 +191,17 @@ af::array PAA_CPU(af::array a, int bins) {
         }
 
         // First Column
+        af::array col(bins, 1, reducedColumn.data());
         if (i == 0) {
-            af::array aux(bins, 1, static_cast<T *>(reducedColumn));
-            result = aux;
+            result = col;
         } else {
-            af::array aux(bins, 1, static_cast<T *>(reducedColumn));
-            result = af::join(1, result, aux);
+            result = af::join(1, result, col);
         }
     }
-    free(reducedColumn);
-    free(column);
-
     return result;
 }
 
-af::array khiva::dimensionality::PAA(af::array a, int bins) {
+af::array khiva::dimensionality::PAA(const af::array& a, int bins) {
     // Resulting array
     af::array result;
 
@@ -287,7 +269,7 @@ af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
                 float d = verticalDistance(points[i], selected[segment.first], selected[segment.second]);
                 // We store the point with the maximum distance to the line that connects the segment.
                 if (d > dmax) {
-                    index = static_cast<int>(i);
+                    index = i;
                     dmax = d;
                     position = segment.second;
                 }
@@ -297,26 +279,25 @@ af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
     }
 
     // Converting from vector to array
-    float *x = (float *)malloc(sizeof(float) * selected.size());
-    float *y = (float *)malloc(sizeof(float) * selected.size());
+    std::vector<float> x;
+    x.reserve(selected.size());
+    std::vector<float> y;
+    y.reserve(selected.size());
     for (size_t i = 0; i < selected.size(); i++) {
         x[i] = selected[i].first;
         y[i] = selected[i].second;
     }
 
     // from c-array to af::array
-    af::array tsx(selected.size(), 1, x);
-    af::array tsy(selected.size(), 1, y);
+    af::array tsx(selected.size(), 1, x.data());
+    af::array tsy(selected.size(), 1, y.data());
     af::array res = af::join(1, tsx, tsy);
-
-    free(x);
-    free(y);
 
     return res;
 }
 
 float calculateError(std::vector<Point> ts, int start, int end) {
-    float res = 0;
+    float res = 0.0f;
 
     Point p1 = ts[start];
     Point p2 = ts[end];
@@ -340,21 +321,23 @@ Segment merge(Segment s1, Segment s2) {
     return res;
 }
 
-std::vector<Point> khiva::dimensionality::PLABottomUp(std::vector<Point> ts, float maxError) {
+std::vector<Point> khiva::dimensionality::PLABottomUp(const std::vector<Point>& ts, float maxError) {
     std::vector<Segment> segments;
-    std::vector<float> mergeCost;
+    segments.reserve(ts.size());
 
     // Allocating vector of segments
     for (size_t i = 0; i < ts.size() - 1; i = i + 2) {
-        segments.push_back(std::make_pair(i, i + 1));
+        segments.emplace_back(i, i + 1);
     }
 
+    std::vector<float> mergeCost;
+    mergeCost.reserve(segments.size());
     for (size_t i = 0; i < segments.size() - 1; i++) {
         mergeCost.push_back(calculateError(ts, segments[i].first, segments[i + 1].second));
     }
 
     // Calculate minimum, calculating in advance
-    std::vector<float>::iterator minCost = std::min_element(std::begin(mergeCost), std::end(mergeCost));
+    auto minCost = std::min_element(std::begin(mergeCost), std::end(mergeCost));
     while ((segments.size() > 2) && (*minCost < maxError)) {
         // We have to merge
         int index = static_cast<int>(std::distance(std::begin(mergeCost), minCost));
@@ -376,9 +359,9 @@ std::vector<Point> khiva::dimensionality::PLABottomUp(std::vector<Point> ts, flo
 
     // Build a polyline from a set of segments
     std::vector<Point> result;
-    for (size_t i = 0; i < segments.size(); i++) {
-        result.push_back(ts[segments[i].first]);
-        result.push_back(ts[segments[i].second]);
+    for (auto & segment : segments) {
+        result.push_back(ts[segment.first]);
+        result.push_back(ts[segment.second]);
     }
 
     return result;
@@ -419,8 +402,7 @@ af::array khiva::dimensionality::PLABottomUp(af::array ts, float maxError) {
     return res;
 }
 
-std::vector<Point> khiva::dimensionality::PLASlidingWindow(
-    std::vector<Point> ts, float maxError) {
+std::vector<Point> khiva::dimensionality::PLASlidingWindow(const std::vector<Point>& ts, float maxError) {
     std::vector<Point> result;
     std::vector<Segment> segments;
 
@@ -646,7 +628,7 @@ void recomputeAreaNeighbor(std::map<int64_t, VisvalingamSummaryPoint>::iterator 
             std::make_pair(new_area_minus1, original_position_minus1)));
 }
 
-std::vector<Point> khiva::dimensionality::visvalingam(std::vector<Point> pointList, int64_t numPoints, int64_t scale) {
+std::vector<Point> khiva::dimensionality::visvalingam(const std::vector<Point>& pointList, int64_t numPoints, int64_t scale) {
 
     std::map<int64_t, VisvalingamSummaryPoint> points;
     std::set<std::pair<int64_t, int64_t>, mapComparator> point_indexer;

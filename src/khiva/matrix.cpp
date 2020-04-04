@@ -6,7 +6,6 @@
 
 #include <khiva/internal/libraryInternal.h>
 #include <khiva/internal/matrixInternal.h>
-#include <khiva/matrix.h>
 
 #include <stdexcept>
 

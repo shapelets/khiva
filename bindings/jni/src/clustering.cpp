@@ -6,7 +6,6 @@
 
 #include <jni.h>
 #include <khiva/clustering.h>
-#include <khiva_jni/clustering.h>
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *env, jobject, jlong ref_tss, jint k,
                                                                        jfloat tolerance, jint maxIterations) {

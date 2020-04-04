@@ -5,11 +5,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #include <arrayfire.h>
 #include <khiva/clustering.h>
-#include <khiva/distances.h>
+//#include <khiva/distances.h>
 #include <khiva/normalization.h>
 #include <khiva/internal/scopedHostPtr.h>
 #include <Eigen/Eigenvalues>
-#include <iostream>
 #include <limits>
 #include <random>
 

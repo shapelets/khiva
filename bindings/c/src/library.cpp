@@ -6,7 +6,6 @@
 
 #include <khiva/library.h>
 #include <khiva/version.h>
-#include <khiva_c/library.h>
 #include <khiva_c/internal/util.h>
 #include <cstring>
 

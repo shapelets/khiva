@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-void printVectorSegment(std::vector<khiva::dimensionality::Segment> seg, std::vector<khiva::dimensionality::Point> ts) {
+void printVectorSegment(const std::vector<khiva::dimensionality::Segment>& seg, std::vector<khiva::dimensionality::Point> ts) {
     std::cout << "VECTORPOINT: " << seg.size() << std::endl;
     int i = 0;
     for (auto &s : seg) {
@@ -22,7 +22,7 @@ void printVectorSegment(std::vector<khiva::dimensionality::Segment> seg, std::ve
     std::cout << std::endl;
 }
 
-void printVectorPoint(std::vector<khiva::dimensionality::Point> vec) {
+void printVectorPoint(const std::vector<khiva::dimensionality::Point>& vec) {
     std::cout << "VECTORPOINT: " << vec.size() << std::endl;
     int i = 0;
     for (auto &v : vec) {

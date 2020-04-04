@@ -36,7 +36,7 @@ typedef std::pair<int, int> Segment;
  *
  * @return result A vector of Points with the reduced dimensionality.
  */
-KHIVAAPI std::vector<Point> PAA(std::vector<Point> points, int bins);
+KHIVAAPI std::vector<Point> PAA(const std::vector<Point>& points, int bins);
 
 /**
  * @brief Piecewise Aggregate Approximation (PAA) approximates a time series \f$X\f$ of length \f$n\f$ into vector
@@ -80,7 +80,7 @@ KHIVAAPI af::array PIP(af::array ts, int numberIPs);
  *
  * @return std::vector Vector with the reduced number of points.
  */
-KHIVAAPI std::vector<Point> PLABottomUp(std::vector<Point> ts, float maxError);
+KHIVAAPI std::vector<Point> PLABottomUp(const std::vector<Point>& ts, float maxError);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA BottomUP) to the time series.
@@ -107,7 +107,7 @@ KHIVAAPI af::array PLABottomUp(af::array ts, float maxError);
  *
  * @return std::vector Vector with the reduced number of points.
  */
-KHIVAAPI std::vector<Point> PLASlidingWindow(std::vector<Point> ts, float maxError);
+KHIVAAPI std::vector<Point> PLASlidingWindow(const std::vector<Point>& ts, float maxError);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA Sliding Window) to the time series.
@@ -191,7 +191,7 @@ KHIVAAPI af::array SAX(af::array a, int alphabetSize);
  *
  * @return std:vector<khiva::dimensionality::Point> where the number of points has been reduced to numPoints.
  */
-KHIVAAPI std::vector<Point> visvalingam(std::vector<Point> pointList, int64_t numPoints, int64_t scale = 1000000000);
+KHIVAAPI std::vector<Point> visvalingam(const std::vector<Point>& pointList, int64_t numPoints, int64_t scale = 1000000000);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number

@@ -6,7 +6,6 @@
 
 #include <jni.h>
 #include <khiva/distances.h>
-#include <khiva_jni/distances.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref) {
     try {
