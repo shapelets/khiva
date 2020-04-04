@@ -29,7 +29,7 @@ namespace clustering {
  * @param tolerance The error tolerance to stop the computation of the centroids.
  * @param maxIterations The maximum number of iterations allowed.
  */
-KHIVAAPI void kMeans(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance = 0.0000000001,
+KHIVAAPI void kMeans(const af::array& tss, int k, af::array &centroids, af::array &labels, float tolerance = 0.0000000001,
                      int maxIterations = 100);
 
 /**
@@ -46,7 +46,7 @@ KHIVAAPI void kMeans(af::array tss, int k, af::array &centroids, af::array &labe
  * @param tolerance The error tolerance to stop the computation of the centroids.
  * @param maxIterations The maximum number of iterations allowed.
  */
-KHIVAAPI void kShape(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance = 0.0000000001,
+KHIVAAPI void kShape(const af::array& tss, int k, af::array &centroids, af::array &labels, float tolerance = 0.0000000001,
                      int maxIterations = 100);
 
 }  // namespace clustering

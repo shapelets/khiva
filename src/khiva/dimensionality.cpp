@@ -10,8 +10,6 @@
 #include <algorithm>
 #include <boost/math/distributions/normal.hpp>
 #include <cmath>
-#include <iostream>
-#include <iterator>
 #include <limits>
 #include <stdexcept>
 #include <utility>
@@ -105,16 +103,11 @@ void insertPointBetweenSelected(khiva::dimensionality::Point p, int position,
 /**
  * @brief This function just checks if the given point is already in the vector.
  */
-bool isPointInDesiredList(khiva::dimensionality::Point point, std::vector<khiva::dimensionality::Point> selected) {
-    bool found = false;
-    for (size_t i = 0; i < selected.size(); i++) {
-        // We just compare the horizontal component as it is unique
-        if (selected[i].first == point.first) {
-            found = true;
-            break;
-        }
-    }
-    return found;
+bool isPointInDesiredList(khiva::dimensionality::Point point,
+                          const std::vector<khiva::dimensionality::Point> &selected) {
+    auto it = std::find_if(selected.cbegin(), selected.cend(),
+                 [&point](const khiva::dimensionality::Point &p) { return p.first == point.first; });
+    return it != selected.end();
 }
 
 /**
@@ -122,7 +115,7 @@ bool isPointInDesiredList(khiva::dimensionality::Point point, std::vector<khiva:
  */
 std::pair<int, int> getSegmentFromSelected(khiva::dimensionality::Point point,
                                            std::vector<khiva::dimensionality::Point> selected) {
-    int lower = 0, upper = 0;
+    auto lower = 0, upper = 0;
     // We do not check the first element, as it is fixed and set to the first element of the time series
     size_t i = 0;
     bool rebased = false;
@@ -171,8 +164,10 @@ af::array PAA_CPU(af::array a, int bins) {
     af::array result;
     int n = a.dims(0);
 
-    T *column = static_cast<T *>(malloc(sizeof(T) * n));
-    T *reducedColumn = static_cast<T *>(malloc(sizeof(T) * bins));
+    std::vector<T> column;
+    column.reserve(n);
+    std::vector<T> reducedColumn;
+    reducedColumn.reserve(bins);
 
     // Find out the number of elements per bin
     T elemPerBin = static_cast<T>(n) / static_cast<T>(bins);
@@ -180,7 +175,7 @@ af::array PAA_CPU(af::array a, int bins) {
     // For each column
     for (int i = 0; i < a.dims(1); i++) {
         af::array aux = a.col(i);
-        aux.host(column);
+        aux.host(column.data());
         T start = 0.0;
         T end = elemPerBin - 1;
 
@@ -204,21 +199,17 @@ af::array PAA_CPU(af::array a, int bins) {
         }
 
         // First Column
+        af::array col(bins, 1, reducedColumn.data());
         if (i == 0) {
-            af::array aux(bins, 1, static_cast<T *>(reducedColumn));
-            result = aux;
+            result = col;
         } else {
-            af::array aux(bins, 1, static_cast<T *>(reducedColumn));
-            result = af::join(1, result, aux);
+            result = af::join(1, result, col);
         }
     }
-    free(reducedColumn);
-    free(column);
-
     return result;
 }
 
-af::array khiva::dimensionality::PAA(af::array a, int bins) {
+af::array khiva::dimensionality::PAA(const af::array& a, int bins) {
     // Resulting array
     af::array result;
 
@@ -296,20 +287,19 @@ af::array khiva::dimensionality::PIP(af::array ts, int numberIPs) {
     }
 
     // Converting from vector to array
-    float *x = (float *)malloc(sizeof(float) * selected.size());
-    float *y = (float *)malloc(sizeof(float) * selected.size());
+    std::vector<float> x;
+    x.reserve(selected.size());
+    std::vector<float> y;
+    y.reserve(selected.size());
     for (size_t i = 0; i < selected.size(); i++) {
         x[i] = selected[i].first;
         y[i] = selected[i].second;
     }
 
     // from c-array to af::array
-    af::array tsx(selected.size(), 1, x);
-    af::array tsy(selected.size(), 1, y);
+    af::array tsx(selected.size(), 1, x.data());
+    af::array tsy(selected.size(), 1, y.data());
     af::array res = af::join(1, tsx, tsy);
-
-    free(x);
-    free(y);
 
     return res;
 }
@@ -345,7 +335,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLABottomUp(std
 
     // Allocating vector of segments
     for (size_t i = 0; i < ts.size() - 1; i = i + 2) {
-        segments.push_back(std::make_pair(i, i + 1));
+        segments.emplace_back(i, i + 1);
     }
 
     for (size_t i = 0; i < segments.size() - 1; i++) {
@@ -353,7 +343,7 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLABottomUp(std
     }
 
     // Calculate minimum, calculating in advance
-    std::vector<float>::iterator minCost = std::min_element(std::begin(mergeCost), std::end(mergeCost));
+    auto minCost = std::min_element(std::begin(mergeCost), std::end(mergeCost));
     while ((segments.size() > 2) && (*minCost < maxError)) {
         // We have to merge
         int index = static_cast<int>(std::distance(std::begin(mergeCost), minCost));
@@ -375,9 +365,9 @@ std::vector<khiva::dimensionality::Point> khiva::dimensionality::PLABottomUp(std
 
     // Build a polyline from a set of segments
     std::vector<khiva::dimensionality::Point> result;
-    for (size_t i = 0; i < segments.size(); i++) {
-        result.push_back(ts[segments[i].first]);
-        result.push_back(ts[segments[i].second]);
+    for (auto & segment : segments) {
+        result.push_back(ts[segment.first]);
+        result.push_back(ts[segment.second]);
     }
 
     return result;
@@ -573,7 +563,7 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
         auto std_value = af::stdev<float>(ts);
         dim_t n = ts.dims(0);
         std::vector<int> aux(n, 0);
-        
+
         if (std_value > 0) {
             std::vector<float> breakingPoints = computeBreakpoints(alphabet_size, mean_value, std_value);
             std::vector<int> alphabet = generateAlphabet(alphabet_size);
@@ -581,7 +571,7 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
 
             // Iterate across elements of ts
             for (int i = 0; i < n; i++) {
-                size_t j = 0;                
+                size_t j = 0;
                 while ((j < breakingPoints.size()) && (a_h[i] > breakingPoints[j])) {
                     j++;
                 }
@@ -605,15 +595,12 @@ struct VisvalingamSummaryPoint {
 };
 
 void computeTriangleArea(VisvalingamSummaryPoint &a, VisvalingamSummaryPoint &b, VisvalingamSummaryPoint &c) {
-    float res = 0.0;
-
     float f1 = a.x * (b.y - c.y);
     float f2 = b.x * (c.y - a.y);
     float f3 = c.x * (a.y - b.y);
     a.area = std::abs((f1 + f2 + f3) / 2);
 }
 
-#include <iterator>
 template <typename Iter, typename Distance>
 Iter shiftIterator(Iter iter, Distance positions) {
     auto it_shifted = iter;

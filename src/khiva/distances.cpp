@@ -41,7 +41,7 @@ double khiva::distances::dtw(std::vector<double> t0, std::vector<double> t1) {
     return cost[m - 1][n - 1];
 }
 
-af::array distance(af::array a, af::array bss) {
+af::array distance(const af::array& a, const af::array& bss) {
     return af::sqrt(af::pow(af::tile(a, 1, static_cast<unsigned int>(bss.dims(1))) - bss, 2));
 }
 
@@ -91,7 +91,7 @@ af::array khiva::distances::dtw(af::array tss) {
     return result;
 }
 
-af::array khiva::distances::euclidean(af::array tss) {
+af::array khiva::distances::euclidean(const af::array& tss) {
     // simply invokes non squared version and completes with
     // an elementwise sqrt operation.
     return af::sqrt(khiva::distances::squaredEuclidean(tss));

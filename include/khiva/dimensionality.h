@@ -54,7 +54,7 @@ KHIVAAPI std::vector<Point> PAA(std::vector<Point> points, int bins);
  *
  * @return af::array An array of points with the reduced dimensionality.
  */
-KHIVAAPI af::array PAA(af::array a, int bins);
+KHIVAAPI af::array PAA(const af::array& a, int bins);
 
 /**
  * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.

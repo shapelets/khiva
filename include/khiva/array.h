@@ -27,7 +27,7 @@ namespace array {
  *
  * @return af::array Containing the data.
  */
-KHIVAAPI af::array createArray(void *data, unsigned ndims, dim_t *dims, const int type);
+KHIVAAPI af::array createArray(void *data, unsigned ndims, dim_t *dims, int type);
 
 /**
  * @brief Decreases the references count for the given array.
@@ -42,7 +42,7 @@ KHIVAAPI void deleteArray(af_array array);
  * @param array The Array that contains the data to be retrieved.
  * @param data Pointer to a preallocated block of memory in the host.
  */
-KHIVAAPI void getData(af::array array, void *data);
+KHIVAAPI void getData(const af::array& array, void *data);
 
 /**
  * @brief Returns the dimensions from a given array.
@@ -51,7 +51,7 @@ KHIVAAPI void getData(af::array array, void *data);
  *
  * @return af::dim4 The dimensions.
  */
-KHIVAAPI af::dim4 getDims(af::array array);
+KHIVAAPI af::dim4 getDims(const af::array& array);
 
 /**
  * @brief Gets the type of the array.
@@ -60,7 +60,7 @@ KHIVAAPI af::dim4 getDims(af::array array);
  *
  * @return int Value of the Dtype enumeration.
  */
-KHIVAAPI int getType(af::array array);
+KHIVAAPI int getType(const af::array& array);
 
 /**
  * @brief Joins the first and second arrays along the specified dimension.
@@ -71,14 +71,14 @@ KHIVAAPI int getType(af::array array);
  *
  * @return af::array The result of joining first and second along the specified dimension.
  */
-KHIVAAPI af::array join(int dim, af::array first, af::array second);
+KHIVAAPI af::array join(int dim, const af::array& first, const af::array& second);
 
 /**
  * @brief Prints the content of an array.
  *
  * @param array The array to be printed.
  */
-KHIVAAPI void print(af::array array);
+KHIVAAPI void print(const af::array& array);
 
 /**
  * @brief Array class, This class provides functionality manage Arrays on the host side.
@@ -104,7 +104,7 @@ class Array {
      *
      * @param in The input af::array.
      */
-    Array(af::array in)
+    explicit Array(af::array in)
         : x{static_cast<int>(in.dims(0))},
           y{static_cast<int>(in.dims(1))},
           w{static_cast<int>(in.dims(2))},

@@ -11,6 +11,7 @@
 #include <Eigen/Eigenvalues>
 #include <iostream>
 #include <limits>
+#include <random>
 
 /**
  * Computes initial k means or centroids.
@@ -19,7 +20,7 @@
  * @param k         The number of centroids.
  * @return          The new centroids.
  */
-af::array calculateInitialMeans(af::array tss, int k) { return af::constant(0, tss.dims(0), k, tss.type()); }
+af::array calculateInitialMeans(const af::array& tss, int k) { return af::constant(0, tss.dims(0), k, tss.type()); }
 
 /**
  * Computes The euclidean distance for a tiled time series agains k-means.
@@ -28,7 +29,7 @@ af::array calculateInitialMeans(af::array tss, int k) { return af::constant(0, t
  * @param means     The centroids.
  * @return          The distance from a time series to all k-means.
  */
-af::array kEuclideanDistance(af::array tts, af::array means) {
+af::array kEuclideanDistance(const af::array& tts, const af::array& means) {
     return af::reorder(af::sqrt(af::sum(af::pow((tts - means), 2), 0)), 1, 0);
 }
 
@@ -40,7 +41,7 @@ af::array kEuclideanDistance(af::array tts, af::array means) {
  * @param minDistance   The resulting distance for each time series to all k-means.
  * @param labels        The ids of the closes mean for all time series.
  */
-void euclideanDistance(af::array tss, af::array means, af::array &minDistance, af::array &idxs) {
+void euclideanDistance(af::array tss, const af::array& means, af::array &minDistance, af::array &idxs) {
     int nSeries = tss.dims(1);
     af::array kDistances = af::constant(0.0, means.dims(1), nSeries, tss.type());
 
@@ -60,7 +61,7 @@ void euclideanDistance(af::array tss, af::array means, af::array &minDistance, a
  * @param k         Number of means.
  * @return          The new means.
  */
-af::array computeNewMeans(af::array tss, af::array labels, int k) {
+af::array computeNewMeans(const af::array& tss, const af::array& labels, int k) {
     af::array labelsTiled = af::tile(labels, tss.dims(0));
     af::array newMeans = af::constant(0.0, tss.dims(0), k, tss.type());
 
@@ -86,7 +87,7 @@ af::array generateRandomLabels(int nTimeSeries, int k) {
     }
 
     // Randomize
-    std::random_shuffle(idx.begin(), idx.end());
+    std::shuffle(idx.begin(), idx.end(), std::mt19937(std::random_device()()));
     return af::array(nTimeSeries, 1, idx.data());
 }
 
@@ -115,14 +116,14 @@ af::array generateUniformLabels(int nTimeSeries, int k) {
  * @param newMeans  The newMeans
  * @return          The accumulated change ratio between iterations.
  */
-float computeError(af::array means, af::array newMeans) {
+float computeError(const af::array& means, const af::array& newMeans) {
     auto error = khiva::utils::makeScopedHostPtr(af::sum(af::sqrt(af::sum(af::pow(means - newMeans, 2), 0)))
                       .as(af::dtype::f32)
                       .host<float>());
     return error[0];
 }
 
-void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance,
+void khiva::clustering::kMeans(const af::array& tss, int k, af::array &centroids, af::array &labels, float tolerance,
                                int maxIterations) {
     float error = std::numeric_limits<float>::max();
 
@@ -163,7 +164,7 @@ void khiva::clustering::kMeans(af::array tss, int k, af::array &centroids, af::a
  * @param tss   Contains the time series.
  * @return      Normalized time series.
  */
-af::array matrixNorm(af::array tss) { return af::sqrt(af::sum(af::pow(tss, 2))); }
+af::array matrixNorm(const af::array& tss) { return af::sqrt(af::sum(af::pow(tss, 2))); }
 
 /**
  * This function returns a subset of time series from tss, where all time series belong to the centroid's
@@ -174,11 +175,11 @@ af::array matrixNorm(af::array tss) { return af::sqrt(af::sum(af::pow(tss, 2)));
  * @param centroidId    The given centroid ID.
  * @return              A subset of time series.
  */
-af::array selectSubset(af::array tss, af::array labels, int centroidId) {
+af::array selectSubset(const af::array& tss, const af::array& labels, int centroidId) {
     return af::lookup(tss, af::where((labels == centroidId)), 1);
 }
 
-af::array eigenVectors(af::array matrix) {
+af::array eigenVectors(const af::array& matrix) {
     auto matHost = khiva::utils::makeScopedHostPtr(matrix.host<float>());
     Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost.get(), matrix.dims(0), matrix.dims(1));
 
@@ -189,7 +190,7 @@ af::array eigenVectors(af::array matrix) {
     return af::array(matrix.dims(0), matrix.dims(1), re.data());
 }
 
-af::array eigenValues(af::array matrix) {
+af::array eigenValues(const af::array& matrix) {
     auto matHost = khiva::utils::makeScopedHostPtr(matrix.host<float>());
     Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost.get(), matrix.dims(0), matrix.dims(1));
 
@@ -205,7 +206,7 @@ af::array eigenValues(af::array matrix) {
  * @param m     The input matrix.
  * @return      The first Eigen vector.
  */
-af::array getFirstEigenVector(af::array m) {
+af::array getFirstEigenVector(const af::array& m) {
     af::array eigenValues;
     af::array eigenVectors;
 
@@ -253,7 +254,7 @@ af::array getFirstEigenVector(af::array m) {
  * @param centroid  The reference centroid.
  * @return          The normalized crosscorrelation.
  */
-af::array ncc(af::array ts, af::array centroid) {
+af::array ncc(const af::array& ts, const af::array& centroid) {
     int nElements = ts.dims(0);
 
     af::array tsNorm = af::sqrt(af::sum(af::pow(ts, 2)));
@@ -295,7 +296,7 @@ af::array ncc3Dim(af::array tss, af::array centroids) {
  * @return              The resulting shift over the original time series that gets the maximum correlation with
  * centroid.
  */
-af::array SBDShifted(af::array ts, af::array centroid) {
+af::array SBDShifted(af::array ts, const af::array& centroid) {
     unsigned int index;
     float correlation;
     af::array shiftedTS;
@@ -321,7 +322,7 @@ af::array SBDShifted(af::array ts, af::array centroid) {
  * @param centroid  The given centroid.
  * @return          The updated shape of the centroid.
  */
-af::array shapeExtraction(af::array tss, af::array centroid) {
+af::array shapeExtraction(af::array tss, const af::array& centroid) {
     int ntss = tss.dims(1);
     int nelements = tss.dims(0);
     af::array shiftedTSS = af::constant(0, tss.dims(0), tss.dims(1), tss.type());
@@ -360,7 +361,7 @@ af::array shapeExtraction(af::array tss, af::array centroid) {
  * @param labels    The set of labels.
  * @return          The new centroids.
  */
-af::array refinementStep(af::array tss, af::array centroids, af::array labels) {
+af::array refinementStep(const af::array& tss, af::array centroids, const af::array& labels) {
     int ntss = tss.dims(1);
     int ncentroids = centroids.dims(1);
     af::array subset;
@@ -385,7 +386,7 @@ af::array refinementStep(af::array tss, af::array centroids, af::array labels) {
  * @param labels    The set of labels.
  * @return          The new set of labels.
  */
-af::array assignmentStep(af::array tss, af::array centroids, af::array labels) {
+af::array assignmentStep(const af::array& tss, const af::array& centroids, af::array labels) {
     af::array min = af::constant(std::numeric_limits<float>::max(), tss.dims(1), tss.type());
     af::array distances = 1 - af::max(ncc3Dim(tss, centroids), 2);
     af::min(min, labels, distances, 0);
@@ -394,10 +395,10 @@ af::array assignmentStep(af::array tss, af::array centroids, af::array labels) {
     return labels;
 }
 
-void khiva::clustering::kShape(af::array tss, int k, af::array &centroids, af::array &labels, float tolerance,
+void khiva::clustering::kShape(const af::array& tss, int k, af::array &centroids, af::array &labels, float tolerance,
                                int maxIterations) {
-    unsigned int nTimeseries = static_cast<unsigned int>(tss.dims(1));
-    unsigned int nElements = static_cast<unsigned int>(tss.dims(0));
+    auto nTimeseries = static_cast<unsigned int>(tss.dims(1));
+    auto nElements = static_cast<unsigned int>(tss.dims(0));
 
     if (centroids.isempty()) {
         centroids = af::constant(0, nElements, k, tss.type());

@@ -6,7 +6,6 @@
 
 #include <arrayfire.h>
 #include <khiva/array.h>
-#include <complex>
 
 af::dim4 toDim4(const unsigned ndims, const dim_t *const dims) {
     af::dim4 d(1, 1, 1, 1);
@@ -51,12 +50,12 @@ af::array khiva::array::createArray(void *data, unsigned ndims, dim_t *dims, con
 
 void khiva::array::deleteArray(af_array array) { af_release_array(array); }
 
-void khiva::array::getData(af::array array, void *data) { array.host(data); }
+void khiva::array::getData(const af::array& array, void *data) { array.host(data); }
 
-af::dim4 khiva::array::getDims(af::array array) { return array.dims(); }
+af::dim4 khiva::array::getDims(const af::array& array) { return array.dims(); }
 
-int khiva::array::getType(af::array array) { return array.type(); }
+int khiva::array::getType(const af::array& array) { return array.type(); }
 
-void khiva::array::print(af::array array) { af_print(array); }
+void khiva::array::print(const af::array& array) { af_print(array) }
 
-af::array khiva::array::join(int dim, af::array first, af::array second) { return af::join(dim, first, second); }
+af::array khiva::array::join(int dim, const af::array& first, const af::array& second) { return af::join(dim, first, second); }

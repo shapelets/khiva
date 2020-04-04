@@ -26,7 +26,7 @@ namespace normalization {
  * normalized by dividing each number by 10^j, where j is the number of integer digits of the max number in the time
  * series.
  */
-KHIVAAPI af::array decimalScalingNorm(af::array tss);
+KHIVAAPI af::array decimalScalingNorm(const af::array& tss);
 
 /**
  * @brief Same as decimalScalingNorm, but it performs the operation in place, without allocating further memory.
@@ -50,7 +50,7 @@ KHIVAAPI void decimalScalingNormInPlace(af::array &tss);
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0) have been
  * normalized by maximum and minimum values, and scaled as per high and low parameters.
  */
-KHIVAAPI af::array maxMinNorm(af::array tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
+KHIVAAPI af::array maxMinNorm(const af::array& tss, double high = 1.0, double low = 0.0, double epsilon = 0.00000001);
 
 /**
  * @brief Same as maxMinNorm, but it performs the operation in place, without allocating further memory.
@@ -79,7 +79,7 @@ KHIVAAPI void maxMinNormInPlace(af::array &tss, double high = 1.0, double low = 
  * normalized by substracting the mean from each number and dividing each number by \f$ max(x) - min(x)\f$, in the
  * time series.
  */
-KHIVAAPI af::array meanNorm(af::array tss);
+KHIVAAPI af::array meanNorm(const af::array& tss);
 
 /**
  * @brief Normalizes the given time series according to its maximum-minimum value and its mean. It follows the following
@@ -105,7 +105,7 @@ KHIVAAPI void meanNormInPlace(af::array &tss);
  * @return af::array With the same dimensions as tss where the time series have been adjusted for zero mean and one as
  * standard deviation.
  */
-KHIVAAPI af::array znorm(af::array tss, double epsilon = 0.00000001);
+KHIVAAPI af::array znorm(const af::array& tss, double epsilon = 0.00000001);
 
 /**
  * @brief Adjusts the time series in the given input and performs z-norm inplace (without allocating further memory).

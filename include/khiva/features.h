@@ -26,7 +26,7 @@ namespace features {
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the sum of the squares values in the time series.
  */
-KHIVAAPI af::array absEnergy(af::array base);
+KHIVAAPI af::array absEnergy(const af::array& base);
 
 /**
  * @brief Calculates the sum over the absolute value of consecutive changes in the time series.
@@ -58,7 +58,7 @@ KHIVAAPI af::array absoluteSumOfChanges(af::array tss);
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correlation for each time series.
  */
-KHIVAAPI af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregationFunction)(const af::array &,
+KHIVAAPI af::array aggregatedAutocorrelation(const af::array& tss, af::array (*aggregationFunction)(const af::array &,
                                                                                              const bool, const dim_t));
 
 /**
@@ -77,7 +77,7 @@ KHIVAAPI af::array aggregatedAutocorrelation(af::array tss, af::array (*aggregat
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correlation for each time series.
  */
-KHIVAAPI af::array aggregatedAutocorrelation(af::array tss,
+KHIVAAPI af::array aggregatedAutocorrelation(const af::array& tss,
                                              af::array (*aggregationFunction)(const af::array &, const int));
 
 /**
@@ -96,7 +96,7 @@ KHIVAAPI af::array aggregatedAutocorrelation(af::array tss,
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0)
  * contains the aggregated correlation for each time series.
  */
-KHIVAAPI af::array aggregatedAutocorrelation(af::array tss,
+KHIVAAPI af::array aggregatedAutocorrelation(const af::array& tss,
                                              af::array (*aggregationFunction)(const af::array &, const dim_t));
 
 /**
@@ -113,7 +113,7 @@ KHIVAAPI af::array aggregatedAutocorrelation(af::array tss,
  * Wald Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
  */
-KHIVAAPI void aggregatedLinearTrend(af::array t, long chunkSize,
+KHIVAAPI void aggregatedLinearTrend(const af::array& t, long chunkSize,
                                     af::array (*aggregationFunction)(const af::array &, const int), af::array &slope,
                                     af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
 
@@ -131,7 +131,7 @@ KHIVAAPI void aggregatedLinearTrend(af::array t, long chunkSize,
  * Wald Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
  */
-KHIVAAPI void aggregatedLinearTrend(af::array t, long chunkSize,
+KHIVAAPI void aggregatedLinearTrend(const af::array& t, long chunkSize,
                                     af::array (*aggregationFunction)(const af::array &, const dim_t), af::array &slope,
                                     af::array &intercept, af::array &rvalue, af::array &pvalue, af::array &stderrest);
 
@@ -152,7 +152,7 @@ KHIVAAPI void aggregatedLinearTrend(af::array t, long chunkSize,
  * @return af::array An array with the same dimensions as tss, whose values (time series in dimension 0) contains
  * the vectorized Approximate entropy for all the input time series in tss.
  */
-KHIVAAPI af::array approximateEntropy(af::array tss, int m, float r);
+KHIVAAPI af::array approximateEntropy(const af::array& tss, int m, float r);
 
 /**
  * @brief Calculates the autocorrelation of the specified lag for the given time series, according to the formula [1].
@@ -171,7 +171,7 @@ KHIVAAPI af::array approximateEntropy(af::array tss, int m, float r);
  *
  * @return af::array The autocorrelation value for the given time series.
  */
-KHIVAAPI af::array autoCorrelation(af::array tss, long maxLag, bool unbiased = false);
+KHIVAAPI af::array autoCorrelation(const af::array& tss, long maxLag, bool unbiased = false);
 
 /**
  * @brief Calculates the auto-covariance the given time series.
@@ -182,7 +182,7 @@ KHIVAAPI af::array autoCorrelation(af::array tss, long maxLag, bool unbiased = f
  *
  * @return af::array The auto-covariance value for the given time series.
  */
-KHIVAAPI af::array autoCovariance(af::array xss, bool unbiased = false);
+KHIVAAPI af::array autoCovariance(const af::array& xss, bool unbiased = false);
 
 /**
  * @brief Calculates the binned entropy for the given time series and number of bins. It calculates the value of:
@@ -220,7 +220,7 @@ KHIVAAPI af::array binnedEntropy(af::array tss, int max_bins);
  *
  * @return af::array The non-linearity value for the given time series.
  */
-KHIVAAPI af::array c3(af::array tss, long lag);
+KHIVAAPI af::array c3(const af::array& tss, long lag);
 
 /**
  * @brief This function calculator is an estimate for a time series complexity [1] (A more complex time series has more
@@ -248,7 +248,7 @@ KHIVAAPI af::array cidCe(af::array tss, bool zNormalize = false);
  *
  * @return af::array The number of values in the time series that are higher than the mean.
  */
-KHIVAAPI af::array countAboveMean(af::array tss);
+KHIVAAPI af::array countAboveMean(const af::array& tss);
 
 /**
  * @brief Calculates the number of values in the time series that are lower than the mean.
@@ -258,7 +258,7 @@ KHIVAAPI af::array countAboveMean(af::array tss);
  *
  * @return af::array The number of values in the time series that are lower than the mean.
  */
-KHIVAAPI af::array countBelowMean(af::array tss);
+KHIVAAPI af::array countBelowMean(const af::array& tss);
 
 /**
  * @brief Calculates the cross-covariance of the given time series.
@@ -271,7 +271,7 @@ KHIVAAPI af::array countBelowMean(af::array tss);
  *
  * @return af::array The cross-covariance value for the given time series.
  */
-KHIVAAPI af::array crossCovariance(af::array xss, af::array yss, bool unbiased = true);
+KHIVAAPI af::array crossCovariance(const af::array& xss, const af::array& yss, bool unbiased = true);
 
 /**
  * @brief Calculates the cross-correlation of the given time series.
@@ -284,7 +284,7 @@ KHIVAAPI af::array crossCovariance(af::array xss, af::array yss, bool unbiased =
  *
  * @return af::array The cross-correlation value for the given time series.
  */
-KHIVAAPI af::array crossCorrelation(af::array xss, af::array yss, bool unbiased = true);
+KHIVAAPI af::array crossCorrelation(const af::array& xss, const af::array& yss, bool unbiased = true);
 
 /** @brief Calculates a Continuous wavelet transform for the Ricker wavelet, also known as the "Mexican hat wavelet"
  * which is defined by:
@@ -305,7 +305,7 @@ KHIVAAPI af::array crossCorrelation(af::array xss, af::array yss, bool unbiased 
  *
  * @return af::array Result of calculated coefficients.
  */
-KHIVAAPI af::array cwtCoefficients(af::array tss, af::array widths, int coeff, int w);
+KHIVAAPI af::array cwtCoefficients(const af::array& tss, const af::array& widths, int coeff, int w);
 
 /**
  * @brief Calculates the sum of squares of chunk i out of N chunks expressed as a ratio with the sum of squares over
@@ -330,7 +330,7 @@ KHIVAAPI af::array energyRatioByChunks(af::array tss, long numSegments, long seg
  * @return af::array The spectral centroid (mean), variance, skew, and kurtosis of the absolute fourier transform
  * spectrum.
  */
-KHIVAAPI af::array fftAggregated(af::array tss);
+KHIVAAPI af::array fftAggregated(const af::array& tss);
 
 /**
  * @brief Calculates the fourier coefficients of the one-dimensional discrete Fourier Transform for real input by using
@@ -348,7 +348,7 @@ KHIVAAPI af::array fftAggregated(af::array tss);
  * @param abs The absolute value of the coefficient.
  * @param angle The angle of the coefficient.
  */
-KHIVAAPI void fftCoefficient(af::array tss, long coefficient, af::array &real, af::array &imag, af::array &abs,
+KHIVAAPI void fftCoefficient(const af::array& tss, long coefficient, af::array &real, af::array &imag, af::array &abs,
                              af::array &angle);
 
 /**
@@ -360,7 +360,7 @@ KHIVAAPI void fftCoefficient(af::array tss, long coefficient, af::array &real, a
  * @return af::array The first relative location of the maximum value to the length of the time series, for each
  * time series.
  */
-KHIVAAPI af::array firstLocationOfMaximum(af::array tss);
+KHIVAAPI af::array firstLocationOfMaximum(const af::array& tss);
 
 /**
  * @brief Calculates the first location of the minimal value of each time series. The position is calculated relatively
@@ -371,7 +371,7 @@ KHIVAAPI af::array firstLocationOfMaximum(af::array tss);
  *
  * @return af::array the first relative location of the minimal value of each time series.
  */
-KHIVAAPI af::array firstLocationOfMinimum(af::array tss);
+KHIVAAPI af::array firstLocationOfMinimum(const af::array& tss);
 
 /**
  * @brief Coefficients of polynomial \f$h(x)\f$, which has been fitted to the deterministic dynamics of Langevin model:
@@ -389,7 +389,7 @@ KHIVAAPI af::array firstLocationOfMinimum(af::array tss);
  *
  * @return af::array The coefficients for each time series.
  */
-KHIVAAPI af::array friedrichCoefficients(af::array tss, int m, float r);
+KHIVAAPI af::array friedrichCoefficients(const af::array& tss, int m, float r);
 
 /**
  * @brief Computes if the input time series contain duplicated elements.
@@ -409,7 +409,7 @@ KHIVAAPI af::array hasDuplicates(af::array tss);
  *
  * @return af::array Array containing True if the maximum value of the time series is duplicated and false otherwise.
  */
-KHIVAAPI af::array hasDuplicateMax(af::array tss);
+KHIVAAPI af::array hasDuplicateMax(const af::array& tss);
 
 /**
  * @brief Computes if the minimum of input time series is duplicated.
@@ -419,7 +419,7 @@ KHIVAAPI af::array hasDuplicateMax(af::array tss);
  *
  * @return af::array Array containing True if the minimum of the time series is duplicated and false otherwise.
  */
-KHIVAAPI af::array hasDuplicateMin(af::array tss);
+KHIVAAPI af::array hasDuplicateMin(const af::array& tss);
 
 /**
  * @brief Calculates the relative index \f$i\f$ where \f$q\%\f$ of the mass of the time series within tss lie at the
@@ -433,7 +433,7 @@ KHIVAAPI af::array hasDuplicateMin(af::array tss);
  *
  * @return af::array The relative indices i where q% of the mass of the time series lie at the left of i.
  */
-KHIVAAPI af::array indexMassQuantile(af::array tss, float q);
+KHIVAAPI af::array indexMassQuantile(const af::array& tss, float q);
 
 /**
  * @brief Returns the kurtosis of tss (calculated with the adjusted Fisher-Pearson standardized moment coefficient G2).
@@ -443,7 +443,7 @@ KHIVAAPI af::array indexMassQuantile(af::array tss, float q);
  *
  * @return af::array The kurtosis of tss.
  */
-KHIVAAPI af::array kurtosis(af::array tss);
+KHIVAAPI af::array kurtosis(const af::array& tss);
 
 /**
  * @brief Checks if the time series within tss have a large standard deviation.
@@ -457,7 +457,7 @@ KHIVAAPI af::array kurtosis(af::array tss);
  *
  * @return af::array Array containing True for those time series in tss that have a large standard deviation.
  */
-KHIVAAPI af::array largeStandardDeviation(af::array tss, float r);
+KHIVAAPI af::array largeStandardDeviation(const af::array& tss, float r);
 
 /**
  * @brief Calculates the last location of the maximum value of each time series. The position is calculated relatively
@@ -468,7 +468,7 @@ KHIVAAPI af::array largeStandardDeviation(af::array tss, float r);
  *
  * @return af::array The last relative location of the maximum value of each time series.
  */
-KHIVAAPI af::array lastLocationOfMaximum(af::array tss);
+KHIVAAPI af::array lastLocationOfMaximum(const af::array& tss);
 
 /**
  * @brief Calculates the last location of the minimum value of each time series. The position is calculated relatively
@@ -478,7 +478,7 @@ KHIVAAPI af::array lastLocationOfMaximum(af::array tss);
  * one indicates the number of time series.
  * @return af::array The last relative location of the minimum value of each series.
  */
-KHIVAAPI af::array lastLocationOfMinimum(af::array tss);
+KHIVAAPI af::array lastLocationOfMinimum(const af::array& tss);
 
 /**
  * @brief Returns the length of the input time series.
@@ -488,7 +488,7 @@ KHIVAAPI af::array lastLocationOfMinimum(af::array tss);
  *
  * @return af::array The length of tss.
  */
-KHIVAAPI af::array length(af::array tss);
+KHIVAAPI af::array length(const af::array& tss);
 
 /**
  * @brief Calculate a linear least-squares regression for the values of the time series versus the sequence from 0
@@ -502,7 +502,7 @@ KHIVAAPI af::array length(af::array tss);
  * @param slope The slope for all time series.
  * @param stder The stderr values for all time series.
  */
-KHIVAAPI void linearTrend(af::array tss, af::array &pvalue, af::array &rvalue, af::array &intercept, af::array &slope,
+KHIVAAPI void linearTrend(const af::array& tss, af::array &pvalue, af::array &rvalue, af::array &intercept, af::array &slope,
                           af::array &stder);
 
 /**
@@ -513,7 +513,7 @@ KHIVAAPI void linearTrend(af::array tss, af::array &pvalue, af::array &rvalue, a
  *
  * @return af::array The calculated local maximals for each time series in tss.
  */
-KHIVAAPI af::array localMaximals(af::array tss);
+KHIVAAPI af::array localMaximals(const af::array& tss);
 
 /**
  * @brief Calculates the length of the longest consecutive subsequence in tss that is bigger than the mean of tss.
@@ -524,7 +524,7 @@ KHIVAAPI af::array localMaximals(af::array tss);
  * @return af::array the length of the longest consecutive subsequence in the input time series that is bigger than
  * the mean.
  */
-KHIVAAPI af::array longestStrikeAboveMean(af::array tss);
+KHIVAAPI af::array longestStrikeAboveMean(const af::array& tss);
 
 /**
  * @brief Calculates the length of the longest consecutive subsequence in tss that is below the mean of tss.
@@ -534,7 +534,7 @@ KHIVAAPI af::array longestStrikeAboveMean(af::array tss);
  *
  * @return af::array The length of the longest consecutive subsequence in the input time series that is below the mean.
  */
-KHIVAAPI af::array longestStrikeBelowMean(af::array tss);
+KHIVAAPI af::array longestStrikeBelowMean(const af::array& tss);
 
 /**
  * @brief Largest fixed point of dynamics \f$\max_x {h(x)=0}\f$ estimated from polynomial
@@ -552,7 +552,7 @@ KHIVAAPI af::array longestStrikeBelowMean(af::array tss);
  *
  * @return af::array Largest fixed point of deterministic dynamics.
  */
-KHIVAAPI af::array maxLangevinFixedPoint(af::array tss, int m, float r);
+KHIVAAPI af::array maxLangevinFixedPoint(const af::array& tss, int m, float r);
 
 /**
  * @brief Calculates the maximum value for each time series within tss.
@@ -562,7 +562,7 @@ KHIVAAPI af::array maxLangevinFixedPoint(af::array tss, int m, float r);
  *
  * @return af::array The maximum value of each time series within tss.
  */
-KHIVAAPI af::array maximum(af::array tss);
+KHIVAAPI af::array maximum(const af::array& tss);
 
 /**
  * @brief Calculates the mean value for each time series within tss.
@@ -572,7 +572,7 @@ KHIVAAPI af::array maximum(af::array tss);
  *
  * @return af::array The mean value of each time series within tss.
  */
-KHIVAAPI af::array mean(af::array tss);
+KHIVAAPI af::array mean(const af::array& tss);
 
 /**
  * @brief Calculates the mean over the absolute differences between subsequent time series values in tss.
@@ -585,7 +585,7 @@ KHIVAAPI af::array mean(af::array tss);
  *
  * @return af::array The mean over the absolute differences between subsequent time series values.
  */
-KHIVAAPI af::array meanAbsoluteChange(af::array tss);
+KHIVAAPI af::array meanAbsoluteChange(const af::array& tss);
 
 /**
  * @brief Calculates the mean over the differences between subsequent time series values in tss.
@@ -598,7 +598,7 @@ KHIVAAPI af::array meanAbsoluteChange(af::array tss);
  *
  * @return af::array The mean over the differences between subsequent time series values.
  */
-KHIVAAPI af::array meanChange(af::array tss);
+KHIVAAPI af::array meanChange(const af::array& tss);
 
 /**
  * @brief Calculates mean value of a central approximation of the second derivative for each time series in tss.
@@ -621,7 +621,7 @@ KHIVAAPI af::array meanSecondDerivativeCentral(af::array tss);
  *
  * @return af::array The median value of each time series within tss.
  */
-KHIVAAPI af::array median(af::array tss);
+KHIVAAPI af::array median(const af::array& tss);
 
 /**
  * @brief Calculates the minimum value for each time series within tss.
@@ -631,7 +631,7 @@ KHIVAAPI af::array median(af::array tss);
  *
  * @return af::array The minimum value of each time series within tss.
  */
-KHIVAAPI af::array minimum(af::array tss);
+KHIVAAPI af::array minimum(const af::array& tss);
 
 /**
  * @brief Calculates the number of m-crossings. A m-crossing is defined as two sequential values where the first value
@@ -644,7 +644,7 @@ KHIVAAPI af::array minimum(af::array tss);
  *
  * @return af::array The number of m-crossings of each time series within tss.
  */
-KHIVAAPI af::array numberCrossingM(af::array tss, int m);
+KHIVAAPI af::array numberCrossingM(const af::array& tss, int m);
 
 /**
  * @brief This feature calculator searches for different peaks. To do so, the time series is smoothed by a ricker
@@ -701,7 +701,7 @@ KHIVAAPI af::array numberPeaks(af::array tss, int n);
  *
  * @return af::array The partial autocorrelation for each time series for the given lag.
  */
-KHIVAAPI af::array partialAutocorrelation(af::array tss, af::array lags);
+KHIVAAPI af::array partialAutocorrelation(const af::array& tss, const af::array& lags);
 
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
@@ -745,7 +745,7 @@ KHIVAAPI af::array percentageOfReoccurringValuesToAllValues(af::array tss, bool 
  *
  * @return af::array Values at the given quantile.
  */
-KHIVAAPI af::array quantile(af::array tss, af::array q, float precision = 100000000);
+KHIVAAPI af::array quantile(const af::array& tss, const af::array& q, float precision = 100000000);
 
 /**
  * @brief Counts observed values within the interval [min, max).
@@ -757,7 +757,7 @@ KHIVAAPI af::array quantile(af::array tss, af::array q, float precision = 100000
  *
  * @return af::array Values at the given range.
  */
-KHIVAAPI af::array rangeCount(af::array tss, float min, float max);
+KHIVAAPI af::array rangeCount(const af::array& tss, float min, float max);
 
 /**
  * @brief Calculates the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
@@ -770,7 +770,7 @@ KHIVAAPI af::array rangeCount(af::array tss, float min, float max);
  * @return af::array The ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
  * \f$x\f$.
  */
-KHIVAAPI af::array ratioBeyondRSigma(af::array tss, float r);
+KHIVAAPI af::array ratioBeyondRSigma(const af::array& tss, float r);
 
 /**
  * @brief Calculates a factor which is 1 if all values in the time series occur only once, and below one if this is
@@ -815,7 +815,7 @@ KHIVAAPI af::array sampleEntropy(af::array tss);
  *
  * @return af::array Containing the skewness of each time series in tss.
  */
-KHIVAAPI af::array skewness(af::array tss);
+KHIVAAPI af::array skewness(const af::array& tss);
 
 /**
  * @brief Estimates the cross power spectral density of the time series tss at different frequencies. To do so, the
@@ -837,7 +837,7 @@ KHIVAAPI af::array skewness(af::array tss);
  *
  * @return af::array Containing the power spectrum of the different frequencies for each time series in tss.
  */
-KHIVAAPI af::array spktWelchDensity(af::array tss, int coeff);
+KHIVAAPI af::array spktWelchDensity(const af::array& tss, int coeff);
 
 /**
  * @brief Calculates the standard deviation of each time series within tss.
@@ -847,7 +847,7 @@ KHIVAAPI af::array spktWelchDensity(af::array tss, int coeff);
  *
  * @return af::array The standard deviation of each time series within tss.
  */
-KHIVAAPI af::array standardDeviation(af::array tss);
+KHIVAAPI af::array standardDeviation(const af::array& tss);
 
 /**
  * @brief Calculates the sum of all data points, that are present in the time series more than once.
@@ -879,7 +879,7 @@ KHIVAAPI af::array sumOfReoccurringValues(af::array tss, bool isSorted = false);
  *
  * @return af::array An array containing the sum of values in each time series.
  */
-KHIVAAPI af::array sumValues(af::array tss);
+KHIVAAPI af::array sumValues(const af::array& tss);
 
 /**
  * @brief Calculates if the distribution of tss *looks symmetric*. This is the case if
@@ -927,7 +927,7 @@ KHIVAAPI af::array timeReversalAsymmetryStatistic(af::array tss, int lag);
  *
  * @return af::array Containing the count of the given value in each time series.
  */
-KHIVAAPI af::array valueCount(af::array tss, float v);
+KHIVAAPI af::array valueCount(const af::array& tss, float v);
 
 /**
  * @brief Computes the variance for the time series tss.
@@ -937,7 +937,7 @@ KHIVAAPI af::array valueCount(af::array tss, float v);
  *
  * @return af::array An array containing the variance in each time series.
  */
-KHIVAAPI af::array variance(af::array tss);
+KHIVAAPI af::array variance(const af::array& tss);
 
 /**
  * @brief Calculates if the variance of tss is greater than the standard deviation. In other words, if the variance of
@@ -948,7 +948,7 @@ KHIVAAPI af::array variance(af::array tss);
  *
  * @return af::array Denoting if the variance of tss is greater than the standard deviation.
  */
-KHIVAAPI af::array varianceLargerThanStandardDeviation(af::array tss);
+KHIVAAPI af::array varianceLargerThanStandardDeviation(const af::array& tss);
 
 }  // namespace features
 }  // namespace khiva

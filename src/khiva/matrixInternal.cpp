@@ -28,7 +28,7 @@ using namespace khiva::matrix::internal;
 
 constexpr double EPSILON = 1e-8;
 
-void getMinDistance(af::array distances, af::array &minDistances, af::array &index) {
+void getMinDistance(const af::array& distances, af::array &minDistances, af::array &index) {
     af::min(minDistances, index, distances, 2);
 }
 
@@ -41,7 +41,7 @@ void getMinDistance(af::array distances, af::array &minDistances, af::array &ind
  * @param m Subsequence length used to calculate the matrix profile.
  * @return True if the motif/discord should be filtered and false otherwise.
  */
-bool isFiltered(std::set<std::pair<unsigned int, unsigned int>> pairs, std::pair<unsigned int, unsigned int> pair,
+bool isFiltered(const std::set<std::pair<unsigned int, unsigned int>>& pairs, std::pair<unsigned int, unsigned int> pair,
                 long m) {
     unsigned int startQ = static_cast<unsigned int>(std::max(static_cast<long>(pair.first) - m / 2, 0L));
     unsigned int startR = static_cast<unsigned int>(std::max(static_cast<long>(pair.second) - m / 2, 0L));
@@ -49,7 +49,7 @@ bool isFiltered(std::set<std::pair<unsigned int, unsigned int>> pairs, std::pair
     unsigned int endR = pair.second + static_cast<unsigned int>(m / 2);
     for (unsigned int i = startQ; i <= endQ; i++) {
         for (unsigned int j = startR; j <= endR; j++) {
-            if (std::find(pairs.begin(), pairs.end(), std::make_pair(i, j)) != pairs.end()) {
+            if (pairs.find(std::make_pair(i, j)) != pairs.end()) {
                 return true;
             }
         }
@@ -201,7 +201,7 @@ namespace khiva {
 namespace matrix {
 namespace internal {
 
-af::array slidingDotProduct(af::array q, af::array t) {
+af::array slidingDotProduct(const af::array& q, const af::array& t) {
     long n = static_cast<long>(t.dims(0));
     long m = static_cast<long>(q.dims(0));
 
@@ -214,7 +214,7 @@ af::array slidingDotProduct(af::array q, af::array t) {
     return qt(af::seq(m - 1, n - 1), af::span, af::span, af::span);
 }
 
-void meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &stdev) {
+void meanStdev(const af::array& t, af::array &a, long m, af::array &mean, af::array &stdev) {
     long na = static_cast<long>(t.dims(0));
 
     af::array tmp = af::constant(0, 1, t.dims(1), t.type());
@@ -246,7 +246,7 @@ void meanStdev(af::array t, af::array &a, long m, af::array &mean, af::array &st
     a = (sum_t2 - 2 * sum_t * mean + m * mean_t_p2) / sigma_t2;
 }
 
-void meanStdev(af::array t, long m, af::array &mean, af::array &stdev) {
+void meanStdev(const af::array& t, long m, af::array &mean, af::array &stdev) {
     long na = static_cast<long>(t.dims(0));
 
     af::array tmp = af::constant(0, 1, t.dims(1), t.type());
@@ -272,8 +272,8 @@ void meanStdev(af::array t, long m, af::array &mean, af::array &stdev) {
     stdev = af::sqrt(sigma_t2);
 }
 
-void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
-                        af::array sigma_t, af::array mask, af::array &distances) {
+void calculateDistances(const af::array& qt, const af::array& a, const af::array& sum_q, const af::array& sum_q2, const af::array& mean_t,
+                        const af::array& sigma_t, const af::array& mask, af::array &distances) {
     long batchSize = static_cast<long>(qt.dims(3));
     long tsLength = static_cast<long>(qt.dims(0));
     long nTimeSeries = static_cast<long>(qt.dims(1));
@@ -312,8 +312,8 @@ void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array su
     distances = af::reorder(dist, 0, 2, 1, 3);
 }
 
-void calculateDistances(af::array qt, af::array a, af::array sum_q, af::array sum_q2, af::array mean_t,
-                        af::array sigma_t, af::array &distances) {
+void calculateDistances(const af::array& qt, const af::array& a, const af::array& sum_q, const af::array& sum_q2, const af::array& mean_t,
+                        const af::array& sigma_t, af::array &distances) {
     long batchSize = static_cast<long>(qt.dims(3));
     long tsLength = static_cast<long>(qt.dims(0));
     long nTimeSeries = static_cast<long>(qt.dims(1));
@@ -385,7 +385,7 @@ af::array generateMask(long m, long numRows, long row, long numColumns, long col
     return af::tile(mask, 1, 1, static_cast<unsigned int>(nTimeSeries));
 }
 
-void massWithMask(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array mask,
+void massWithMask(af::array q, const af::array& t, const af::array& a, const af::array& mean_t, const af::array& sigma_t, const af::array& mask,
                   af::array &distances) {
     // Normalizing the query sequence. q can contain query sequences from multiple series
     q = khiva::normalization::znorm(q, EPSILON);
@@ -404,7 +404,7 @@ void massWithMask(af::array q, af::array t, af::array a, af::array mean_t, af::a
     calculateDistances(qt, a, sum_q, sum_q2, mean_t, sigma_t, mask, distances);
 }
 
-void mass(af::array q, af::array t, af::array a, af::array mean_t, af::array sigma_t, af::array &distances) {
+void mass(af::array q, const af::array& t, const af::array& a, const af::array& mean_t, const af::array& sigma_t, af::array &distances) {
     // Normalizing the query sequence. q can contain query sequences from multiple series
     q = khiva::normalization::znorm(q, EPSILON);
 
@@ -546,7 +546,7 @@ void getChains(af::array tss, long m, af::array &chains) {
     }
 }
 
-void stomp_batched(af::array ta, af::array tb, long m, long batch_size, af::array &profile, af::array &index) {
+void stomp_batched(const af::array& ta, af::array tb, long m, long batch_size, af::array &profile, af::array &index) {
     long nb = static_cast<long>(tb.dims(0));
 
     af::array aux;
@@ -709,7 +709,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
         idx += aux;
 
         af::dim4 dims = min.dims();
-        float sliceStride = static_cast<float>(dims[0]);
+        auto sliceStride = static_cast<float>(dims[0]);
 
         // Offset inside the batch
         af::array bidx = af::tile(af::iota(af::dim4(dims[0])), 1, static_cast<unsigned int>(idx.dims(1)),
@@ -729,7 +729,7 @@ void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_siz
     }
 }
 
-void stomp_parallel(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
+void stomp_parallel(const af::array& ta, af::array tb, long m, af::array &profile, af::array &index) {
     long nb = static_cast<long>(tb.dims(0));
 
     af::array aux;
@@ -866,7 +866,7 @@ void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch
         idx += aux;
 
         af::dim4 dims = min.dims();
-        float sliceStride = static_cast<float>(dims[0]);
+        auto sliceStride = static_cast<float>(dims[0]);
 
         // Offset inside the batch
         af::array bidx = af::tile(af::iota(af::dim4(dims[0])), 1, static_cast<unsigned int>(nTimeSeries));
@@ -925,7 +925,7 @@ void stomp_parallel(af::array t, long m, af::array &profile, af::array &index) {
     af::sync();
 }
 
-void findBestN(af::array profile, af::array index, long m, long n, af::array &distance, af::array &indices,
+void findBestN(const af::array& profile, const af::array& index, long m, long n, af::array &distance, af::array &indices,
                af::array &subsequenceIndices, bool selfJoin, bool lookForMotifs) {
     std::string aux = (lookForMotifs) ? "motifs" : "discords";
     if (n > std::max(static_cast<int>(std::ceil(profile.dims(0) / std::ceil(m / 2.0f))), 1)) {

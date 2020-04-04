@@ -47,7 +47,7 @@ KHIVAAPI af::array dtw(af::array tss);
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-KHIVAAPI af::array euclidean(af::array tss);
+KHIVAAPI af::array euclidean(const af::array& tss);
 
 /**
  * @brief Calculates hamming distances between time series.

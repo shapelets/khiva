@@ -13,7 +13,7 @@ using namespace Eigen;
 
 #define EPSILON 1e-8
 
-af::array vandermonde(af::array x, int order, bool ascending) {
+af::array vandermonde(const af::array& x, int order, bool ascending) {
     af::array result = af::array(x.dims(0), order, x.type());
     gfor(af::seq i, order) { result(af::span, i) = af::pow(x, i); }
     if (!ascending) {
@@ -22,10 +22,10 @@ af::array vandermonde(af::array x, int order, bool ascending) {
     return result;
 }
 
-af::array khiva::polynomial::polyfit(af::array x, af::array y, int deg) {
+af::array khiva::polynomial::polyfit(const af::array& x, const af::array& y, int deg) {
     int order = deg + 1;
     af::array lhs = vandermonde(x, order, false);
-    af::array rhs = y;
+    const af::array& rhs = y;
 
     af::array scale = af::max(af::sqrt(af::sum(lhs * lhs, 0)), EPSILON);
 

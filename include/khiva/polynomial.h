@@ -25,7 +25,7 @@ namespace polynomial {
  *
  * @return af::array Polynomial coefficients, highest power first.
  */
-KHIVAAPI af::array polyfit(af::array x, af::array y, int deg);
+KHIVAAPI af::array polyfit(const af::array& x, const af::array& y, int deg);
 
 /**
  * @brief Calculates the roots of a polynomial with coefficients given in \f$p\f$. The values in the rank-1 array

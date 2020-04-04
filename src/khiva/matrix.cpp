@@ -19,7 +19,7 @@ constexpr long BATCH_SIZE_A = 8192;
 namespace khiva {
 namespace matrix {
 
-void mass(af::array q, af::array t, af::array &distances) {
+void mass(af::array q, const af::array& t, af::array &distances) {
     af::array aux, mean, stdev;
 
     q = af::reorder(q, 0, 3, 2, 1);
@@ -29,7 +29,7 @@ void mass(af::array q, af::array t, af::array &distances) {
     distances = af::reorder(distances, 2, 0, 1, 3);
 }
 
-void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances, af::array &indexes) {
+void findBestNOccurrences(const af::array& q, const af::array& t, long n, af::array &distances, af::array &indexes) {
     if (n > t.dims(0) - q.dims(0) + 1) {
         throw std::invalid_argument("You cannot retrieve more than (L-m+1) occurrences.");
     }
@@ -51,17 +51,17 @@ void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances
     distances = sortedDistances(af::seq(n), af::span, af::span);
 }
 
-void findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs, af::array &motifsIndices,
+void findBestNMotifs(const af::array& profile, const af::array& index, long m, long n, af::array &motifs, af::array &motifsIndices,
                      af::array &subsequenceIndices, bool selfJoin) {
     internal::findBestN(profile, index, m, n, motifs, motifsIndices, subsequenceIndices, selfJoin, true);
 }
 
-void findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
+void findBestNDiscords(const af::array& profile, const af::array& index, long m, long n, af::array &discords,
                        af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin) {
     internal::findBestN(profile, index, m, n, discords, discordsIndices, subsequenceIndices, selfJoin, false);
 }
 
-void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
+void stomp(const af::array& ta, const af::array& tb, long m, af::array &profile, af::array &index) {
     auto batchSizeSquared = library::internal::getValueScaledToMemoryDevice(
         BATCH_SIZE_SQUARED, khiva::library::internal::Complexity::CUADRATIC);
     if (tb.dims(0) > batchSizeSquared) {
@@ -80,7 +80,7 @@ void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &in
     }
 }
 
-void stomp(af::array t, long m, af::array &profile, af::array &index) {
+void stomp(const af::array& t, long m, af::array &profile, af::array &index) {
     const auto batchSizeSquared = library::internal::getValueScaledToMemoryDevice(
         BATCH_SIZE_SQUARED, khiva::library::internal::Complexity::CUADRATIC);
 
@@ -99,20 +99,20 @@ void stomp(af::array t, long m, af::array &profile, af::array &index) {
     }
 }
 
-void matrixProfile(af::array tss, long m, af::array &profile, af::array &index) {
+void matrixProfile(const af::array& tss, long m, af::array &profile, af::array &index) {
     internal::scamp(tss, m, profile, index);
 }
 
-void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::array &index) {
+void matrixProfile(const af::array& ta, const af::array& tb, long m, af::array &profile, af::array &index) {
     internal::scamp(ta, tb, m, profile, index);
 }
 
-void matrixProfileLR(af::array tss, long m, af::array &profileLeft, af::array &indexLeft, af::array &profileRight,
+void matrixProfileLR(const af::array& tss, long m, af::array &profileLeft, af::array &indexLeft, af::array &profileRight,
                      af::array &indexRight) {
     internal::scampLR(tss, m, profileLeft, indexLeft, profileRight, indexRight);
 }
 
-void getChains(af::array tss, long m, af::array &chains) { internal::getChains(tss, m, chains); }
+void getChains(const af::array& tss, long m, af::array &chains) { internal::getChains(tss, m, chains); }
 
 }  // namespace matrix
 }  // namespace khiva

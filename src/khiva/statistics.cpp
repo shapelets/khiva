@@ -7,7 +7,7 @@
 #include <khiva/features.h>
 #include <khiva/statistics.h>
 
-af::array khiva::statistics::covariance(af::array tss, bool unbiased) {
+af::array khiva::statistics::covariance(const af::array& tss, bool unbiased) {
     long n = static_cast<long>(tss.dims(0));
 
     af::array result = khiva::features::crossCovariance(tss, tss) * n / (n - unbiased);
@@ -15,8 +15,8 @@ af::array khiva::statistics::covariance(af::array tss, bool unbiased) {
     return af::reorder(result(0, af::span, af::span), 1, 2, 0, 3);
 }
 
-af::array khiva::statistics::kurtosis(af::array tss) {
-    double n = static_cast<double>(tss.dims(0));
+af::array khiva::statistics::kurtosis(const af::array& tss) {
+    auto n = static_cast<double>(tss.dims(0));
 
     double a = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
     af::array tssMinusMean = (tss - af::tile(af::mean(tss, 0), static_cast<unsigned int>(tss.dims(0))));
@@ -27,13 +27,13 @@ af::array khiva::statistics::kurtosis(af::array tss) {
     return a * b - c;
 }
 
-af::array khiva::statistics::moment(af::array tss, int k) {
-    double n = static_cast<double>(tss.dims(0));
+af::array khiva::statistics::moment(const af::array& tss, int k) {
+    auto n = static_cast<double>(tss.dims(0));
 
     return af::sum(af::pow(tss, k), 0) / n;
 }
 
-af::array khiva::statistics::ljungBox(af::array tss, long lags) {
+af::array khiva::statistics::ljungBox(const af::array& tss, long lags) {
     long n = tss.dims(0);
     const double e = 2;
     af::array ac = khiva::features::autoCorrelation(tss, lags + 1);
@@ -43,7 +43,7 @@ af::array khiva::statistics::ljungBox(af::array tss, long lags) {
     return af::sum(d) * n * (n + 2);
 }
 
-af::array khiva::statistics::quantile(af::array tss, af::array q, float precision) {
+af::array khiva::statistics::quantile(af::array tss, const af::array& q, float precision) {
     long n = static_cast<long>(tss.dims(0));
 
     af::array idx = q * (n - 1);
@@ -58,7 +58,7 @@ af::array khiva::statistics::quantile(af::array tss, af::array q, float precisio
     return a + b;
 }
 
-af::array searchSorted(af::array tss, af::array qs) {
+af::array searchSorted(const af::array& tss, const af::array& qs) {
     af::array input = af::tile(tss, 1, 1, static_cast<unsigned int>(qs.dims(0)));
     af::array qsReordered = af::tile(af::reorder(qs, 2, 1, 0, 3), static_cast<unsigned int>(tss.dims(0)));
 
@@ -69,7 +69,7 @@ af::array searchSorted(af::array tss, af::array qs) {
     return result;
 }
 
-af::array khiva::statistics::quantilesCut(af::array tss, float quantiles, float precision) {
+af::array khiva::statistics::quantilesCut(const af::array& tss, float quantiles, float precision) {
     af::array q = af::seq(0, 1, 1 / (double)quantiles);
 
     af::array qs = khiva::statistics::quantile(tss, q);
@@ -95,15 +95,15 @@ af::array khiva::statistics::quantilesCut(af::array tss, float quantiles, float 
     return result;
 }
 
-af::array khiva::statistics::sampleStdev(af::array tss) {
-    double n = static_cast<double>(tss.dims(0));
+af::array khiva::statistics::sampleStdev(const af::array& tss) {
+    auto n = static_cast<double>(tss.dims(0));
     af::array mean = af::mean(tss, 0);
 
     return af::sqrt(af::sum(af::pow(tss - af::tile(mean, static_cast<unsigned int>(tss.dims(0))), 2), 0) / (n - 1));
 }
 
-af::array khiva::statistics::skewness(af::array tss) {
-    float n = static_cast<float>(tss.dims(0));
+af::array khiva::statistics::skewness(const af::array& tss) {
+    auto n = static_cast<float>(tss.dims(0));
     af::array tssMinusMean = (tss - af::tile(af::mean(tss, 0), static_cast<unsigned int>(tss.dims(0))));
     af::array m3 = khiva::statistics::moment(tssMinusMean, 3);
     af::array s3 = af::pow(khiva::statistics::sampleStdev(tss), 3);
