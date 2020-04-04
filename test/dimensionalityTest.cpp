@@ -64,15 +64,15 @@ void paaNonDivisibleDouble() {
 
 void paaNorm() {
     std::vector<khiva::dimensionality::Point> pointList;
-    pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
-    pointList.push_back(khiva::dimensionality::Point(1.0f, 0.1f));
+    pointList.emplace_back(0.0f, 0.0f);
+    pointList.emplace_back(1.0f, 0.1f);
     pointList.push_back(khiva::dimensionality::Point(2.0f, -0.1f));
-    pointList.push_back(khiva::dimensionality::Point(3.0f, 5.0f));
+    pointList.emplace_back(3.0f, 5.0f);
     pointList.push_back(khiva::dimensionality::Point(4.0f, 6.0f));
-    pointList.push_back(khiva::dimensionality::Point(5.0f, 7.0f));
-    pointList.push_back(khiva::dimensionality::Point(6.0f, 8.1f));
-    pointList.push_back(khiva::dimensionality::Point(7.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(8.0f, 9.0f));
+    pointList.emplace_back(5.0f, 7.0f);
+    pointList.emplace_back(6.0f, 8.1f);
+    pointList.emplace_back(7.0f, 9.0f);
+    pointList.emplace_back(8.0f, 9.0f);
     pointList.push_back(khiva::dimensionality::Point(9.0f, 9.0f));
 
     auto out = khiva::dimensionality::PAA(pointList, 6);
@@ -135,16 +135,16 @@ void pipException() {
 void plaBottomUp() {
     float maxError = 1.0;
     std::vector<khiva::dimensionality::Point> pointList;
-    pointList.push_back(khiva::dimensionality::Point(0.0, 0.0));
-    pointList.push_back(khiva::dimensionality::Point(1.0, 0.1));
-    pointList.push_back(khiva::dimensionality::Point(2.0, -0.1));
-    pointList.push_back(khiva::dimensionality::Point(3.0, 5.0));
-    pointList.push_back(khiva::dimensionality::Point(4.0, 6.0));
-    pointList.push_back(khiva::dimensionality::Point(5.0, 7.0));
-    pointList.push_back(khiva::dimensionality::Point(6.0, 8.1));
-    pointList.push_back(khiva::dimensionality::Point(7.0, 9.0));
-    pointList.push_back(khiva::dimensionality::Point(8.0, 9.0));
-    pointList.push_back(khiva::dimensionality::Point(9.0, 9.0));
+    pointList.emplace_back(0.0, 0.0);
+    pointList.emplace_back(1.0, 0.1);
+    pointList.emplace_back(2.0, -0.1);
+    pointList.emplace_back(3.0, 5.0);
+    pointList.emplace_back(4.0, 6.0);
+    pointList.emplace_back(5.0, 7.0);
+    pointList.emplace_back(6.0, 8.1);
+    pointList.emplace_back(7.0, 9.0);
+    pointList.emplace_back(8.0, 9.0);
+    pointList.emplace_back(9.0, 9.0);
 
     auto out = khiva::dimensionality::PLABottomUp(pointList, maxError);
 
@@ -237,16 +237,16 @@ void plaBottomUpException() {
 void plaSlidingWindow() {
     float maxError = 1.0;
     std::vector<khiva::dimensionality::Point> pointList;
-    pointList.push_back(khiva::dimensionality::Point(0.0, 0.0));
-    pointList.push_back(khiva::dimensionality::Point(1.0, 0.1));
-    pointList.push_back(khiva::dimensionality::Point(2.0, -0.1));
-    pointList.push_back(khiva::dimensionality::Point(3.0, 5.0));
-    pointList.push_back(khiva::dimensionality::Point(4.0, 6.0));
-    pointList.push_back(khiva::dimensionality::Point(5.0, 7.0));
-    pointList.push_back(khiva::dimensionality::Point(6.0, 8.1));
-    pointList.push_back(khiva::dimensionality::Point(7.0, 9.0));
-    pointList.push_back(khiva::dimensionality::Point(8.0, 9.0));
-    pointList.push_back(khiva::dimensionality::Point(9.0, 9.0));
+    pointList.emplace_back(0.0, 0.0);
+    pointList.emplace_back(1.0, 0.1);
+    pointList.emplace_back(2.0, -0.1);
+    pointList.emplace_back(3.0, 5.0);
+    pointList.emplace_back(4.0, 6.0);
+    pointList.emplace_back(5.0, 7.0);
+    pointList.emplace_back(6.0, 8.1);
+    pointList.emplace_back(7.0, 9.0);
+    pointList.emplace_back(8.0, 9.0);
+    pointList.emplace_back(9.0, 9.0);
 
     auto out = khiva::dimensionality::PLASlidingWindow(pointList, maxError);
 
@@ -331,16 +331,16 @@ void ramerDouglasPeucker() {
         khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(6.0f, 8.1f),
         khiva::dimensionality::Point(9.0f, 9.0f)};
 
-    pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
-    pointList.push_back(khiva::dimensionality::Point(1.0f, 0.1f));
-    pointList.push_back(khiva::dimensionality::Point(2.0f, -0.1f));
-    pointList.push_back(khiva::dimensionality::Point(3.0f, 5.0f));
-    pointList.push_back(khiva::dimensionality::Point(4.0f, 6.0f));
-    pointList.push_back(khiva::dimensionality::Point(5.0f, 7.0f));
-    pointList.push_back(khiva::dimensionality::Point(6.0f, 8.1f));
-    pointList.push_back(khiva::dimensionality::Point(7.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(8.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(9.0f, 9.0f));
+    pointList.emplace_back(0.0f, 0.0f);
+    pointList.emplace_back(1.0f, 0.1f);
+    pointList.emplace_back(2.0f, -0.1f);
+    pointList.emplace_back(3.0f, 5.0f);
+    pointList.emplace_back(4.0f, 6.0f);
+    pointList.emplace_back(5.0f, 7.0f);
+    pointList.emplace_back(6.0f, 8.1f);
+    pointList.emplace_back(7.0f, 9.0f);
+    pointList.emplace_back(8.0f, 9.0f);
+    pointList.emplace_back(9.0f, 9.0f);
 
     pointListOut = khiva::dimensionality::ramerDouglasPeucker(pointList, 1.0);
 
@@ -427,16 +427,16 @@ void visvalingam() {
         khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(7.0f, 9.0f),
         khiva::dimensionality::Point(9.0f, 9.0f)};
 
-    pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
-    pointList.push_back(khiva::dimensionality::Point(1.0f, 0.1f));
-    pointList.push_back(khiva::dimensionality::Point(2.0f, -0.1f));
-    pointList.push_back(khiva::dimensionality::Point(3.0f, 5.0f));
-    pointList.push_back(khiva::dimensionality::Point(4.0f, 6.0f));
-    pointList.push_back(khiva::dimensionality::Point(5.0f, 7.0f));
-    pointList.push_back(khiva::dimensionality::Point(6.0f, 8.1f));
-    pointList.push_back(khiva::dimensionality::Point(7.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(8.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(9.0f, 9.0f));
+    pointList.emplace_back(0.0f, 0.0f);
+    pointList.emplace_back(1.0f, 0.1f);
+    pointList.emplace_back(2.0f, -0.1f);
+    pointList.emplace_back(3.0f, 5.0f);
+    pointList.emplace_back(4.0f, 6.0f);
+    pointList.emplace_back(5.0f, 7.0f);
+    pointList.emplace_back(6.0f, 8.1f);
+    pointList.emplace_back(7.0f, 9.0f);
+    pointList.emplace_back(8.0f, 9.0f);
+    pointList.emplace_back(9.0f, 9.0f);
 
     out = khiva::dimensionality::visvalingam(pointList, 5);
 

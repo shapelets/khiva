@@ -7,9 +7,7 @@
 #include <gtest/gtest.h>
 #include <khiva/clustering.h>
 #include <khiva/internal/scopedHostPtr.h>
-#include <fstream>
 #include <iostream>
-#include <sstream>
 #include "khivaTest.h"
 
 void kmeans() {
@@ -23,7 +21,6 @@ void kmeans() {
 
     unsigned int initial_l[] = {0, 1, 2, 0, 1, 2};
     af::array labels(6, 1, initial_l);
-    unsigned int expected_l[] = {0, 2, 1, 2, 2, 1};
 
     khiva::clustering::kMeans(tss, 3, means, labels);
 
