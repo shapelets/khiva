@@ -13,6 +13,7 @@
 #include <khiva/normalization.h>
 
 #include <algorithm>
+#include <iterator> // For MSVC 2017
 #include <cmath>
 #include <iostream>
 #include <limits>
