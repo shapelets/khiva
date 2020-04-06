@@ -126,8 +126,8 @@ void plaBottomUp2() {
     auto pox = khiva::utils::makeScopedHostPtr(d_out.col(0).host<float>());
     auto poy = khiva::utils::makeScopedHostPtr(d_out.col(1).host<float>());
 
-    auto expectedX = std::vector<float>{0.0, 1.0, 2.0, 3.0, 4.0, 7.0, 8.0, 9.0};
-    auto expectedY = std::vector<float>{0.0, 0.1, -0.1, 5.0, 6.0, 9.0, 9.0, 9.0};
+    auto expectedX = std::vector<float>{0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 7.0f, 8.0f, 9.0f};
+    auto expectedY = std::vector<float>{0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 9.0f, 9.0f, 9.0f};
 
     auto poxVector = std::vector<float>(pox.get(), pox.get() + d_out.col(0).elements());
     auto poyVector = std::vector<float>(poy.get(), poy.get() + d_out.col(1).elements());
@@ -170,8 +170,8 @@ void plaSlidingWindow2() {
     auto pox_h = khiva::utils::makeScopedHostPtr(out.col(0).host<float>());
     auto poy_h = khiva::utils::makeScopedHostPtr(out.col(1).host<float>());
 
-    auto expectedX = std::vector<float>{0.0, 2.0, 3.0, 7.0, 8.0, 9.0};
-    auto expectedY = std::vector<float>{0.0, -0.1, 5.0, 9.0, 9.0, 9.0};
+    auto expectedX = std::vector<float>{0.0f, 2.0f, 3.0f, 7.0f, 8.0f, 9.0f};
+    auto expectedY = std::vector<float>{0.0f, -0.1f, 5.0f, 9.0f, 9.0f, 9.0f};
 
     auto poxVector = std::vector<float>(pox_h.get(), pox_h.get() + out.col(0).elements());
     auto poyVector = std::vector<float>(poy_h.get(), poy_h.get() + out.col(1).elements());
@@ -206,8 +206,8 @@ void ramerDouglasPeucker2() {
     auto points_x = khiva::utils::makeScopedHostPtr(res.col(0).host<float>());
     auto points_y = khiva::utils::makeScopedHostPtr(res.col(1).host<float>());
 
-    auto expectedX = std::vector<float>{0.0, 2.0, 3.0, 6.0, 9.0};
-    auto expectedY = std::vector<float>{0.0, -0.1, 5.0, 8.1, 9.0};
+    auto expectedX = std::vector<float>{0.0f, 2.0f, 3.0f, 6.0f, 9.0f};
+    auto expectedY = std::vector<float>{0.0f, -0.1f, 5.0f, 8.1f, 9.0f};
 
     auto pxVector = std::vector<float>(points_x.get(), points_x.get() + res.col(0).elements());
     auto pyVector = std::vector<float>(points_y.get(), points_y.get() + res.col(1).elements());
@@ -273,8 +273,8 @@ void visvalingam2() {
     auto points_x = khiva::utils::makeScopedHostPtr(res.col(0).host<float>());
     auto points_y = khiva::utils::makeScopedHostPtr(res.col(1).host<float>());
 
-    auto expectedX = std::vector<float>{0.0, 2.0, 3.0, 7.0, 9.0};
-    auto expectedY = std::vector<float>{0.0, -0.1, 5.0, 9.0, 9.0};
+    auto expectedX = std::vector<float>{0.0f, 2.0f, 3.0f, 7.0f, 9.0f};
+    auto expectedY = std::vector<float>{0.0f, -0.1f, 5.0f, 9.0f, 9.0f};
 
     auto pxVector = std::vector<float>(points_x.get(), points_x.get() + res.col(0).elements());
     auto pyVector = std::vector<float>(points_y.get(), points_y.get() + res.col(1).elements());
