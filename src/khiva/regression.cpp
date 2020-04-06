@@ -9,11 +9,11 @@
 #include <boost/math/distributions/students_t.hpp>
 #include <khiva/internal/scopedHostPtr.h>
 
-#define EPSILON 1e-20
+constexpr auto EPSILON = 1e-20;
 
-void khiva::regression::linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue,
+void khiva::regression::linear(const af::array& xss, const af::array& yss, af::array &slope, af::array &intercept, af::array &rvalue,
                                af::array &pvalue, af::array &stderrest) {
-    long n = static_cast<long>(xss.dims(0));
+    auto n = xss.dims(0);
 
     af::array meanX = af::mean(xss, 0);
     af::array meanY = af::mean(yss, 0);

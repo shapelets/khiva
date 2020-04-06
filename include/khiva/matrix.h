@@ -60,7 +60,7 @@ KHIVAAPI void findBestNOccurrences(const af::array& q, const af::array& t, long 
  * series.
  * @param distances Resulting distances.
  */
-KHIVAAPI void mass(af::array q, const af::array& t, af::array &distances);
+KHIVAAPI void mass(const af::array& q, const af::array& t, af::array &distances);
 
 /**
  * @brief This function extracts the best N motifs from a previously calculated matrix profile.

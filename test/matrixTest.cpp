@@ -49,23 +49,16 @@ void meanStdev() {
     ASSERT_EQ(stdev.dims(0), 12);
     ASSERT_EQ(stdev.dims(1), 2);
 
-    float expectedMean[] = {10.333333333f,
-                            10.666666666f,
-                            11.333333333f,
-                            11.333333333f,
-                            11,
-                            10.333333333f,
-                            10.333333333f,
-                            11,
-                            11.333333333f,
-                            11,
-                            10.333333333f,
-                            10.333333333f};
-    float expectedStdev[] = {0.471404521f, 0.471404521f, 0.471404521f, 0.471404521f, 0.816496581f, 0.471404521f,
-                             0.471404521f, 0.816496581f, 0.471404521f, 0.816496581f, 0.471404521f, 0.471404521f};
+    std::vector<float> expectedMean = {10.333333333f, 10.666666666f, 11.333333333f, 11.333333333f, 11, 10.333333333f,
+                                       10.333333333f, 11, 11.333333333f, 11, 10.333333333f, 10.333333333f};
+    std::vector<float> expectedStdev = {0.471404521f, 0.471404521f, 0.471404521f, 0.471404521f,
+                                        0.816496581f, 0.471404521f, 0.471404521f, 0.816496581f,
+                                        0.471404521f, 0.816496581f, 0.471404521f, 0.471404521f};
     auto resultingMean = khiva::utils::makeScopedHostPtr(mean.host<float>());
     auto resultingStdev = khiva::utils::makeScopedHostPtr(stdev.host<float>());
-    for (int i = 0; i < 24; i++) {
+    std::vector<float> resultingMeanVector(resultingMean.get(), resultingMean.get() + mean.elements());
+    std::vector<float> resultingStdevVector(resultingStdev.get(), resultingStdev.get() + stdev.elements());
+    for (int i = 0; i < resultingMeanVector.size(); i++) {
         ASSERT_NEAR(resultingMean[i], expectedMean[i % 12], EPSILON * 3e3);
         ASSERT_NEAR(resultingStdev[i], expectedStdev[i % 12], EPSILON * 3e3);
     }

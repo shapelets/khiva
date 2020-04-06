@@ -11,9 +11,11 @@
 
 using namespace Eigen;
 
-#define EPSILON 1e-8
+constexpr auto EPSILON = 1e-8;
 
-af::array vandermonde(const af::array& x, int order, bool ascending) {
+namespace {
+
+af::array vandermonde(const af::array &x, int order, bool ascending) {
     af::array result = af::array(x.dims(0), order, x.type());
     gfor(af::seq i, order) { result(af::span, i) = af::pow(x, i); }
     if (!ascending) {
@@ -21,6 +23,9 @@ af::array vandermonde(const af::array& x, int order, bool ascending) {
     }
     return result;
 }
+
+}
+
 
 af::array khiva::polynomial::polyfit(const af::array& x, const af::array& y, int deg) {
     int order = deg + 1;
@@ -39,7 +44,7 @@ af::array khiva::polynomial::polyfit(const af::array& x, const af::array& y, int
     return c;
 }
 
-af::array khiva::polynomial::roots(af::array pp) {
+af::array khiva::polynomial::roots(const af::array& pp) {
     af::array result = af::array(pp.dims(0) - 1, pp.dims(1), af::dtype::c32);
     for (int i = 0; i < pp.dims(1); i++) {
         af::array p = pp(af::span, i);

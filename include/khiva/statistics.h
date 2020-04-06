@@ -90,7 +90,7 @@ KHIVAAPI af::array ljungBox(const af::array& tss, long lags);
  *
  * @return af::array Values at the given quantile.
  */
-KHIVAAPI af::array quantile(af::array tss, const af::array& q, float precision = 100000000);
+KHIVAAPI af::array quantile(const af::array& tss, const af::array& q, float precision = 100000000);
 
 /**
  * @brief Discretizes the time series into equal-sized buckets based on sample quantiles.

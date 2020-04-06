@@ -40,7 +40,7 @@ af::array kEuclideanDistance(const af::array& tts, const af::array& means) {
  * @param minDistance   The resulting distance for each time series to all k-means.
  * @param labels        The ids of the closes mean for all time series.
  */
-void euclideanDistance(af::array tss, const af::array& means, af::array &minDistance, af::array &idxs) {
+void euclideanDistance(const af::array & tss, const af::array& means, af::array &minDistance, af::array &idxs) {
     int nSeries = tss.dims(1);
     af::array kDistances = af::constant(0.0, means.dims(1), nSeries, tss.type());
 

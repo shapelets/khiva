@@ -38,7 +38,7 @@ KHIVAAPI af::array polyfit(const af::array& x, const af::array& y, int deg);
  *
  * @return af::array Containing the roots of the polynomial.
  */
-KHIVAAPI af::array roots(af::array pp);
+KHIVAAPI af::array roots(const af::array& pp);
 
 }  // namespace polynomial
 }  // namespace khiva

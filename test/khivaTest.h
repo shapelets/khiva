@@ -7,7 +7,7 @@
 #ifndef KHIVA_TEST_H
 #define KHIVA_TEST_H
 
-#define EPSILON 1e-6
+constexpr auto EPSILON = 1e-6;
 
 #define KHIVA_TEST(SUITE_NAME, TEST_NAME, FUNCTION_NAME) \
     KHIVA_TEST_BACKENDS(SUITE_NAME, TEST_NAME, FUNCTION_NAME, true, true, true, true, true, true)

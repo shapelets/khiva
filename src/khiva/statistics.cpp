@@ -8,7 +8,7 @@
 #include <khiva/statistics.h>
 
 af::array khiva::statistics::covariance(const af::array& tss, bool unbiased) {
-    long n = static_cast<long>(tss.dims(0));
+    auto n = tss.dims(0);
 
     af::array result = khiva::features::crossCovariance(tss, tss) * n / (n - unbiased);
 
@@ -34,7 +34,7 @@ af::array khiva::statistics::moment(const af::array& tss, int k) {
 }
 
 af::array khiva::statistics::ljungBox(const af::array& tss, long lags) {
-    long n = tss.dims(0);
+    auto n = tss.dims(0);
     const double e = 2;
     af::array ac = khiva::features::autoCorrelation(tss, lags + 1);
     af::array acp = af::pow(ac(af::seq(1, af::end), af::span), e);
@@ -43,8 +43,8 @@ af::array khiva::statistics::ljungBox(const af::array& tss, long lags) {
     return af::sum(d) * n * (n + 2);
 }
 
-af::array khiva::statistics::quantile(af::array tss, const af::array& q, float precision) {
-    long n = static_cast<long>(tss.dims(0));
+af::array khiva::statistics::quantile(const af::array& tss, const af::array& q, float precision) {
+    auto n = tss.dims(0);
 
     af::array idx = q * (n - 1);
     af::array idxAsInt = idx.as(af::dtype::u32);
@@ -71,9 +71,7 @@ af::array searchSorted(const af::array& tss, const af::array& qs) {
 
 af::array khiva::statistics::quantilesCut(const af::array& tss, float quantiles, float precision) {
     af::array q = af::seq(0, 1, 1 / (double)quantiles);
-
     af::array qs = khiva::statistics::quantile(tss, q);
-
     af::array ss = searchSorted(tss, qs);
 
     af::array qcut = af::array(qs.dims(0) - 1, 2, qs.dims(1), qs.type());
@@ -98,12 +96,11 @@ af::array khiva::statistics::quantilesCut(const af::array& tss, float quantiles,
 af::array khiva::statistics::sampleStdev(const af::array& tss) {
     auto n = static_cast<double>(tss.dims(0));
     af::array mean = af::mean(tss, 0);
-
     return af::sqrt(af::sum(af::pow(tss - af::tile(mean, static_cast<unsigned int>(tss.dims(0))), 2), 0) / (n - 1));
 }
 
 af::array khiva::statistics::skewness(const af::array& tss) {
-    auto n = static_cast<float>(tss.dims(0));
+    auto n = static_cast<double>(tss.dims(0));
     af::array tssMinusMean = (tss - af::tile(af::mean(tss, 0), static_cast<unsigned int>(tss.dims(0))));
     af::array m3 = khiva::statistics::moment(tssMinusMean, 3);
     af::array s3 = af::pow(khiva::statistics::sampleStdev(tss), 3);
