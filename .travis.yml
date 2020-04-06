@@ -4,7 +4,6 @@ dist: bionic
 cache:
   directories:
   - "${HOME}/.conan"
-  - "${TRAVIS_BUILD_DIR}/cmake"
   - "${TRAVIS_BUILD_DIR}/arrayfire"
 matrix:
   include:
@@ -64,7 +63,6 @@ matrix:
     cache:
       directories:
       - "${HOME}/.conan"
-      - "${TRAVIS_BUILD_DIR}/cmake"
       - "${TRAVIS_BUILD_DIR}/arrayfire"
       - "$HOME/.pyenv"
       - "$HOME/Library/Caches/Homebrew"
@@ -85,7 +83,6 @@ matrix:
     cache:
       directories:
       - "${HOME}/.conan"
-      - "${TRAVIS_BUILD_DIR}/cmake"
       - "${TRAVIS_BUILD_DIR}/arrayfire"
       - "$HOME/.pyenv"
       - "$HOME/Library/Caches/Homebrew"
