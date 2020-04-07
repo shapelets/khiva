@@ -21,9 +21,8 @@ namespace matrix {
 
 void mass(const af::array& q, const af::array& t, af::array &distances) {
     af::array aux, mean, stdev;
-
     auto qReordered = af::reorder(q, 0, 3, 2, 1);
-    const long long m = qReordered.dims(0);
+    auto m = qReordered.dims(0);
     internal::meanStdev(t, aux, m, mean, stdev);
     internal::mass(qReordered, t, aux, mean, stdev, distances);
     distances = af::reorder(distances, 2, 0, 1, 3);

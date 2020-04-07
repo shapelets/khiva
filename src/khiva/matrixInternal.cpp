@@ -191,8 +191,8 @@ namespace matrix {
 namespace internal {
 
 af::array slidingDotProduct(const af::array& q, const af::array& t) {
-    long n = static_cast<long>(t.dims(0));
-    long m = static_cast<long>(q.dims(0));
+    auto n = t.dims(0);
+    auto m = q.dims(0);
 
     // Flipping all the query sequences contained in q
     af::array qr = af::flip(q, 0);
@@ -204,8 +204,7 @@ af::array slidingDotProduct(const af::array& q, const af::array& t) {
 }
 
 void meanStdev(const af::array& t, af::array &a, long m, af::array &mean, af::array &stdev) {
-    long na = static_cast<long>(t.dims(0));
-
+    auto na = t.dims(0);
     af::array tmp = af::constant(0, 1, t.dims(1), t.type());
 
     // Cumulative sum of all the time series contained in t
@@ -236,7 +235,7 @@ void meanStdev(const af::array& t, af::array &a, long m, af::array &mean, af::ar
 }
 
 void meanStdev(const af::array& t, long m, af::array &mean, af::array &stdev) {
-    long na = static_cast<long>(t.dims(0));
+    auto na = t.dims(0);
 
     af::array tmp = af::constant(0, 1, t.dims(1), t.type());
 
@@ -263,18 +262,18 @@ void meanStdev(const af::array& t, long m, af::array &mean, af::array &stdev) {
 
 void calculateDistances(const af::array& qt, const af::array& a, const af::array& sum_q, const af::array& sum_q2, const af::array& mean_t,
                         const af::array& sigma_t, const af::array& mask, af::array &distances) {
-    long batchSize = static_cast<long>(qt.dims(3));
-    long tsLength = static_cast<long>(qt.dims(0));
-    long nTimeSeries = static_cast<long>(qt.dims(1));
+    auto batchSize = static_cast<unsigned int>(qt.dims(3));
+    auto tsLength = static_cast<unsigned int>(qt.dims(0));
+    auto nTimeSeries = static_cast<unsigned int>(qt.dims(1));
 
     // Tiling the input data to match the batch size, the time series length and the number of time series
-    af::array a_tiled = af::tile(a, 1, 1, 1, static_cast<unsigned int>(batchSize));
+    af::array a_tiled = af::tile(a, 1, 1, 1, batchSize);
     af::array sum_q_tiled =
-        af::tile(sum_q, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
+        af::tile(sum_q, tsLength, nTimeSeries);
     af::array sum_q2_tiled =
-        af::tile(sum_q2, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
-    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
-    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
+        af::tile(sum_q2, tsLength, nTimeSeries);
+    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, batchSize);
+    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, batchSize);
 
     // Required to avoid a division by zero when the standard deviation is zero
     double eps = (sigma_t_tiled.type() == 0) ? EPSILON * 1e4 : EPSILON;
@@ -303,18 +302,17 @@ void calculateDistances(const af::array& qt, const af::array& a, const af::array
 
 void calculateDistances(const af::array& qt, const af::array& a, const af::array& sum_q, const af::array& sum_q2, const af::array& mean_t,
                         const af::array& sigma_t, af::array &distances) {
-    long batchSize = static_cast<long>(qt.dims(3));
-    long tsLength = static_cast<long>(qt.dims(0));
-    long nTimeSeries = static_cast<long>(qt.dims(1));
+    auto batchSize = static_cast<unsigned int>(qt.dims(3));
+    auto tsLength = static_cast<unsigned int>(qt.dims(0));
+    auto nTimeSeries = static_cast<unsigned int>(qt.dims(1));
 
     // Tiling the input data to match the batch size, the time series length and the number of time series
-    af::array a_tiled = af::tile(a, 1, 1, 1, static_cast<unsigned int>(batchSize));
+    af::array a_tiled = af::tile(a, 1, 1, 1, batchSize);
     af::array sum_q_tiled =
-        af::tile(sum_q, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
-    af::array sum_q2_tiled =
-        af::tile(sum_q2, static_cast<unsigned int>(tsLength), static_cast<unsigned int>(nTimeSeries));
-    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
-    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, static_cast<unsigned int>(batchSize));
+        af::tile(sum_q, tsLength, nTimeSeries);
+    af::array sum_q2_tiled = af::tile(sum_q2, tsLength, nTimeSeries);
+    af::array mean_t_tiled = af::tile(mean_t, 1, 1, 1, batchSize);
+    af::array sigma_t_tiled = af::tile(sigma_t, 1, 1, 1, batchSize);
 
     // Required to avoid a division by zero when the standard deviation is zero
     double eps = (sigma_t_tiled.type() == 0) ? EPSILON * 1e4 : EPSILON;
