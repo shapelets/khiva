@@ -1,5 +1,4 @@
 language: cpp
-sudo: required
 dist: bionic
 cache:
   directories:
@@ -9,7 +8,6 @@ matrix:
   include:
   - os: linux
     dist: bionic
-    sudo: required
     compiler:
     - gcc
     git:
@@ -22,7 +20,6 @@ matrix:
     - source .CI/travis/build_linux.sh
   - os: linux
     dist: bionic
-    sudo: required
     compiler:
     - clang
     git:
@@ -49,7 +46,7 @@ matrix:
       file:
       - "${TRAVIS_BUILD_DIR}/build/khiva-*.deb"
       - "${TRAVIS_BUILD_DIR}/build/khiva-*.rpm"
-      - "${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.sh"
+      - "${TRAVIS_BUILD_DIR}/build/khiva-*.sh"
       draft: true
       prerelease: false
       on:
@@ -103,12 +100,12 @@ matrix:
     - cpack -G productbuild
     deploy:
       name: "${TRAVIS_TAG} - MacOS"
-      body: "${TRAVIS_COMMIT_MESSAGE}"
+      body: "${TRAVIS_TAG}"
       skip_cleanup: true
       provider: releases
       api_key:
         secure: "aJmfhcML6BcvuKEPSGAEiEY+b6uhbaGaM/uUn0Xth+huXpQmjNExzR3/kPTFvfLH8irla6v91QVKrSRVPkCdtYOx8DO+H+YGH85dG52FpXA6NbhOYzO/pbH9ScD9SL3pr90r9FfdxyoIh5tLNPujoDtk3A2zUnw0jQYjFSx6aeCTTwYBBVnzGlvjZ9ybkYFlOX5BUQUmdMhB3UsJy/5Q1rpcigSlV8yCm6Sl7ucek8DP+iOtks8Xw51dMkRpgJpIkBq0JOypfCSyKiYgYHMXN8bIU5aeKGBmED9DCac+VhZkbROYbWwCXyadwvr6tuBVwFmgExKLhJnvQXOmnodaesZkyg0cCHQjLgSsouATo9vDAg3gpJUdITDUETE8GTan3/6xW5pFfStb2hyFd6Q9ZopAYuz24vHmdKCNWSMp2AwFALWVXt1xGwJ28XUdgVFGObdkSOtXa4PbnqGZvLNPFLJcibUXq2ei+C51TN7bv8KQIfgDJltZe99eUdjiZJX2rTDv1lX07bFMXiHI4ipDPhFOzyZvYVAiMJbudQUurpzwY+6KG+Gagt142k8aATg4e40RaYFPVakx2TtxFApVyGDIgrkzZ3s1X2IsC3Dklb9f5Iqx5gf59hKFG3vAsUxLw2u+rthWAu7jnsAbQZSsIAicLlMec1fAW9xA2rkt2ZY="
-      file: "${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.pkg"
+      file: "${TRAVIS_BUILD_DIR}/build/khiva-*.pkg"
       draft: true
       prerelease: false
       on:
