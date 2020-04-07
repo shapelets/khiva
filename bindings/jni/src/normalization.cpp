@@ -53,7 +53,7 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNormInPlace(JN
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Normalization_decimalScalingNormInPlace. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env, jobject, jlong ref, jdouble high,
@@ -104,7 +104,7 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *en
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in maxMinNormInPlace. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Normalization_meanNorm(JNIEnv *env, jobject, jlong ref) {
@@ -153,7 +153,7 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Normalization_meanNormInPlace. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobject, jlong ref, jdouble epsilon) {
@@ -202,5 +202,5 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_znormInPlace(JNIEnv *env, jo
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Normalization_znormInPlace. Unknown reason");
     }
-    return NULL;
+    return 0;
 }

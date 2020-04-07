@@ -104,7 +104,7 @@ af::array entropy(af::array tss, int m, float r) {
     return sum;
 }
 
- af::array aggregatingOnChunks(const af::array &input, long chunkSize, AggregationFuncInt aggregationFunction) {
+af::array aggregatingOnChunks(const af::array &input, long chunkSize, AggregationFuncInt aggregationFunction) {
     // Calculating the chunk size to split the input data into. The rest of dividing the input data
     // length by the chunk size should be zero. In other words, input data length should be multiple
     // of the chunk size
@@ -433,7 +433,6 @@ std::vector<LineTuple> filterRidgeLines(const af::array &cwtDat, const std::vect
     return filterFunction(ridgeLines, noises, cwtValues, minSnr, minLength);
 }
 
-
 af::array cidCeInternal(const af::array &tss) {
     auto n = tss.dims(0);
     // Calculating tss(t + 1) - tss(t) from 0 to the length of the time series minus 1
@@ -443,7 +442,6 @@ af::array cidCeInternal(const af::array &tss) {
     // Returning the square root of the sum of squares of diff
     return af::sqrt(af::sum(diff * diff));
 }
-
 
 af::array levinsonDurbin(af::array acv, int maxlag, bool) {
     int order = maxlag;
@@ -570,9 +568,8 @@ af::array khiva::features::absoluteSumOfChanges(const af::array &tss) {
     return af::sum(af::abs(minus), 0);
 }
 
-af::array khiva::features::aggregatedAutocorrelation(
-    const af::array &tss,
-    AggregationFuncBoolDimT aggregationFunction) {
+af::array khiva::features::aggregatedAutocorrelation(const af::array &tss,
+                                                     AggregationFuncBoolDimT aggregationFunction) {
     auto n = tss.dims(0);
     af::array autocorrelations = khiva::features::autoCorrelation(tss, n, true)(af::seq(1, n - 1), af::span);
     return aggregationFunction(autocorrelations, true, 0);
@@ -699,7 +696,7 @@ af::array khiva::features::autoCorrelation(const af::array &tss, long maxLag, bo
     return acov(af::seq(maxLag), af::span) / af::tile(acov(0, af::span), static_cast<unsigned int>(maxLag));
 }
 
-af::array khiva::features::binnedEntropy(const af::array& tss, int max_bins) {
+af::array khiva::features::binnedEntropy(const af::array &tss, int max_bins) {
     auto len = tss.dims(0);
     auto nts = tss.dims(1);
     af::array res = af::constant(0, 1, nts, tss.type());
@@ -722,13 +719,13 @@ af::array khiva::features::c3(const af::array &tss, long lag) {
     return af::mean(aux(af::seq(static_cast<double>(tss.dims(0)) - 2 * lag), af::span), 0);
 }
 
-af::array khiva::features::cidCe(const af::array& tss, bool zNormalize) {    
+af::array khiva::features::cidCe(const af::array &tss, bool zNormalize) {
     // Apply z-normalization if specified
     if (zNormalize) {
         auto norm = khiva::normalization::znorm(tss);
         return cidCeInternal(norm);
     }
-    return cidCeInternal(tss);    
+    return cidCeInternal(tss);
 }
 
 af::array khiva::features::countAboveMean(const af::array &tss) {
@@ -850,7 +847,7 @@ af::array khiva::features::friedrichCoefficients(const af::array &tss, int m, fl
     return estimateFriedrichCoefficients(tss, m, r);
 }
 
-af::array khiva::features::hasDuplicates(const af::array& tss) {
+af::array khiva::features::hasDuplicates(const af::array &tss) {
     // Array with the number of input time series in the 1st dimension of type bool
     auto result = af::array(tss.dims(1), af::dtype::b8);
 
@@ -1017,7 +1014,7 @@ af::array khiva::features::numberCrossingM(const af::array &tss, int m) {
     return af::sum(af::abs(af::diff1(tss > m)), 0).as(tss.type());
 }
 
-af::array khiva::features::numberCwtPeaks(const af::array& tss, int maxW) {
+af::array khiva::features::numberCwtPeaks(const af::array &tss, int maxW) {
     af::array out = af::constant(0, 1, tss.dims(1), tss.type());
 
     af::array widths = (af::range(af::dim4(maxW)) + 1).as(af::dtype::s32);
@@ -1078,7 +1075,7 @@ af::array khiva::features::partialAutocorrelation(const af::array &tss, const af
     return ld;
 }
 
-af::array khiva::features::percentageOfReoccurringDatapointsToAllDatapoints(const af::array& tss, bool isSorted) {
+af::array khiva::features::percentageOfReoccurringDatapointsToAllDatapoints(const af::array &tss, bool isSorted) {
     af::array result = af::array(1, tss.dims(1), tss.type());
     // Doing it sequentially because the setUnique function can only be used with a vector
     for (int i = 0; i < tss.dims(1); i++) {
@@ -1105,7 +1102,7 @@ af::array khiva::features::percentageOfReoccurringDatapointsToAllDatapoints(cons
     return result;
 }
 
-af::array khiva::features::percentageOfReoccurringValuesToAllValues(const af::array& tss, bool isSorted) {
+af::array khiva::features::percentageOfReoccurringValuesToAllValues(const af::array &tss, bool isSorted) {
     af::array result = af::constant(0, 1, tss.dims(1), tss.type());
     // Doing it sequentially because the setUnique function can only be used with a vector
     for (int i = 0; i < tss.dims(1); i++) {
@@ -1147,7 +1144,7 @@ af::array khiva::features::ratioBeyondRSigma(const af::array &tss, float r) {
     return af::sum(greaterThanRSigma.as(tss.type()), 0) / n;
 }
 
-af::array khiva::features::ratioValueNumberToTimeSeriesLength(const af::array& tss) {
+af::array khiva::features::ratioValueNumberToTimeSeriesLength(const af::array &tss) {
     af::array result = af::constant(0, 1, tss.dims(1), tss.type());
     for (auto i = 0; i < tss.dims(1); i++) {
         auto n = static_cast<float>(af::setUnique(tss(af::span, i)).dims(0));
@@ -1156,7 +1153,7 @@ af::array khiva::features::ratioValueNumberToTimeSeriesLength(const af::array& t
     return result;
 }
 
-af::array khiva::features::sampleEntropy(const af::array& tss) {
+af::array khiva::features::sampleEntropy(const af::array &tss) {
     auto n = tss.dims(0);
 
     af::array std = af::stdev(tss, 0);
@@ -1233,7 +1230,7 @@ af::array khiva::features::spktWelchDensity(const af::array &tss, int coeff) {
 
 af::array khiva::features::standardDeviation(const af::array &tss) { return af::stdev(tss, 0); }
 
-af::array khiva::features::sumOfReoccurringDatapoints(const af::array& tss, bool isSorted) {
+af::array khiva::features::sumOfReoccurringDatapoints(const af::array &tss, bool isSorted) {
     af::array result = af::array(1, tss.dims(1), tss.type());
     // Doing it sequentially because the setUnique function can only be used with a vector
     for (auto i = 0; i < tss.dims(1); i++) {
@@ -1261,7 +1258,7 @@ af::array khiva::features::sumOfReoccurringDatapoints(const af::array& tss, bool
     return result;
 }
 
-af::array khiva::features::sumOfReoccurringValues(const af::array& tss, bool isSorted) {
+af::array khiva::features::sumOfReoccurringValues(const af::array &tss, bool isSorted) {
     af::array result = af::constant(0, 1, tss.dims(1), tss.type());
     // Doing it sequentially because the setUnique function can only be used with a vector
     for (int i = 0; i < tss.dims(1); i++) {
@@ -1280,13 +1277,13 @@ af::array khiva::features::sumOfReoccurringValues(const af::array& tss, bool isS
 
 af::array khiva::features::sumValues(const af::array &tss) { return af::sum(tss, 0); }
 
-af::array khiva::features::symmetryLooking(const af::array& tss, float r) {
+af::array khiva::features::symmetryLooking(const af::array &tss, float r) {
     af::array meanMedianAbsDifference = af::abs(af::mean(tss, 0) - af::median(tss, 0));
     af::array maxMinDifference = af::max(tss, 0) - af::min(tss, 0);
     return meanMedianAbsDifference < (r * maxMinDifference);
 }
 
-af::array khiva::features::timeReversalAsymmetryStatistic(const af::array& tss, int lag) {
+af::array khiva::features::timeReversalAsymmetryStatistic(const af::array &tss, int lag) {
     int n = static_cast<int>(tss.dims(0));
     if (n <= (2 * lag)) {
         throw std::invalid_argument("The size of tss needs to be larger for this lag value ...");

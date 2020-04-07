@@ -58,7 +58,7 @@ void meanStdev() {
     auto resultingStdev = khiva::utils::makeScopedHostPtr(stdev.host<float>());
     std::vector<float> resultingMeanVector(resultingMean.get(), resultingMean.get() + mean.elements());
     std::vector<float> resultingStdevVector(resultingStdev.get(), resultingStdev.get() + stdev.elements());
-    for (int i = 0; i < resultingMeanVector.size(); i++) {
+    for (size_t i = 0; i < resultingMeanVector.size(); i++) {
         ASSERT_NEAR(resultingMean[i], expectedMean[i % 12], EPSILON * 3e3);
         ASSERT_NEAR(resultingStdev[i], expectedStdev[i % 12], EPSILON * 3e3);
     }

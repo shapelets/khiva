@@ -491,7 +491,7 @@ void scampLR(af::array tss, long m, af::array &profileLeft, af::array &indexLeft
 ChainVector extractAllChains(const IndexesVector &profileLeft, const IndexesVector &profileRight) {
     ChainVector chains;
     std::vector<int> chainLenghts(profileRight.size(), 1);
-    for (int anchorIdx = 0; anchorIdx < profileRight.size(); ++anchorIdx) {
+    for (size_t anchorIdx = 0; anchorIdx < profileRight.size(); ++anchorIdx) {
         if (chainLenghts[anchorIdx] == 1) {
             chains.emplace_back();
             auto &currChain = chains.back();
@@ -966,7 +966,8 @@ void findBestN(const af::array& profile, const af::array& index, long m, long n,
             resIndicesPairs.insert(target[0]);
 
             // Calculate the best N motifs
-            int k = 1, l = 1;
+            auto k = 1L;
+            size_t l = 1;
             while (l < target.size() && k < n) {
                 if (!isFiltered(resIndicesPairs, target[l], m) &&
                     (!selfJoin || !isFiltered(resIndicesPairs, std::make_pair(target[l].second, target[l].first), m))) {

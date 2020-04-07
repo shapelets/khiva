@@ -42,7 +42,7 @@ af::array kEuclideanDistance(const af::array &tts, const af::array &means) {
  * @param labels        The ids of the closes mean for all time series.
  */
 void euclideanDistance(const af::array &tss, const af::array &means, af::array &minDistance, af::array &idxs) {
-    int nSeries = tss.dims(1);
+    auto nSeries = tss.dims(1);
     af::array kDistances = af::constant(0.0, means.dims(1), nSeries, tss.type());
 
     // This for loop could be parallel, not parallelized to keep memory footprint low
@@ -143,27 +143,6 @@ af::array selectSubset(const af::array &tss, const af::array &labels, int centro
     return af::lookup(tss, af::where((labels == centroidId)), 1);
 }
 
-af::array eigenVectors(const af::array &matrix) {
-    auto matHost = khiva::utils::makeScopedHostPtr(matrix.host<float>());
-    Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost.get(), matrix.dims(0), matrix.dims(1));
-
-    Eigen::EigenSolver<Eigen::MatrixXf> solution(mat);
-
-    Eigen::MatrixXf re;
-    re = solution.eigenvectors().real();
-    return af::array(matrix.dims(0), matrix.dims(1), re.data());
-}
-
-af::array eigenValues(const af::array &matrix) {
-    auto matHost = khiva::utils::makeScopedHostPtr(matrix.host<float>());
-    Eigen::MatrixXf mat = Eigen::Map<Eigen::MatrixXf>(matHost.get(), matrix.dims(0), matrix.dims(1));
-
-    Eigen::VectorXcf eivals = mat.eigenvalues();
-
-    Eigen::VectorXf re = eivals.real();
-    return af::array(matrix.dims(0), re.data());
-}
-
 /**
  * This function computes the first EigenVector of a matrix.
  *
@@ -219,7 +198,7 @@ af::array getFirstEigenVector(const af::array &m) {
  * @return          The normalized crosscorrelation.
  */
 af::array ncc(const af::array &ts, const af::array &centroid) {
-    int nElements = ts.dims(0);
+    dim_t nElements = ts.dims(0);
 
     af::array tsNorm = af::sqrt(af::sum(af::pow(ts, 2)));
     af::array centroidNorm = af::sqrt(af::sum(af::pow(centroid, 2)));
@@ -238,17 +217,16 @@ af::array ncc3Dim(const af::array &tss, const af::array &centroids) {
     // Combination of all pairs of norms
     af::array den = af::matmul(matrixNorm(centroids).T(), matrixNorm(tss));
     den(den == 0) = af::Inf;
-    int distanceSize = static_cast<unsigned int>(centroids.dims(0)) * 2 - 1;
+    auto distanceSize = centroids.dims(0) * 2 - 1;
 
-    af::array cc = af::constant(0, static_cast<unsigned int>(centroids.dims(1)), static_cast<unsigned int>(tss.dims(1)),
-                                distanceSize, tss.type());
-    for (unsigned int i = 0; i < static_cast<unsigned int>(centroids.dims(1)); i++) {
-        for (unsigned int j = 0; j < static_cast<unsigned int>(tss.dims(1)); j++) {
+    af::array cc = af::constant(0, centroids.dims(1), tss.dims(1), distanceSize, tss.type());
+    for (dim_t i = 0; i < centroids.dims(1); ++i) {
+        for (dim_t j = 0; j < tss.dims(1); ++j) {
             cc(i, j, af::span) = af::convolve(tss.col(j), af::flip(centroids.col(i), 0), AF_CONV_EXPAND);
         }
     }
 
-    den = af::tile(den, 1, 1, distanceSize);
+    den = af::tile(den, 1, 1, static_cast<unsigned int>(distanceSize));
     return (cc / den);
 }
 
@@ -326,12 +304,11 @@ af::array shapeExtraction(const af::array &tss, const af::array &centroid) {
  * @return          The new centroids.
  */
 af::array refinementStep(const af::array &tss, const af::array &centroids, const af::array &labels) {
-    int ntss = tss.dims(1);
-    int ncentroids = centroids.dims(1);
+    auto ncentroids = centroids.dims(1);
     af::array subset;
     af::array result = centroids;
 
-    for (int j = 0; j < ncentroids; j++) {
+    for (dim_t j = 0; j < ncentroids; j++) {
         subset = selectSubset(tss, labels, j);
         // if centroid j has at least one labeled time series.
         if (!subset.isempty()) {

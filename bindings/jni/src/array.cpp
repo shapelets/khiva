@@ -79,7 +79,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComplex(JNIEnv *
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in createArrayFromFloatComplex. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass, jobjectArray objs,
@@ -123,7 +123,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleComplex(JNIEnv 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in createArrayFromDoubleComplex. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jobject thisObj) {
@@ -875,7 +875,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_bitXor(JNIEnv *env, jobject thi
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
-        af::array c = !a != !b;
+        af::array c = (!a) != !b;
         jlong raw_pointer = 0;
         auto af_p = (af_array) raw_pointer;
 
@@ -924,7 +924,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftL(JNIEnv *env, jobject
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeBitShiftL. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftR(JNIEnv *env, jobject thisObj, jint n) {
@@ -953,7 +953,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftR(JNIEnv *env, jobject
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeBitShiftR. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeNot(JNIEnv *env, jobject thisObj) {
@@ -982,7 +982,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeNot(JNIEnv *env, jobject thisO
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeNot. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *env, jobject thisObj, jboolean conjugate) {
@@ -1011,7 +1011,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *env, jobject
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeBTranspose. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeCol(JNIEnv *env, jobject thisObj, jint index) {
@@ -1039,7 +1039,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCol(JNIEnv *env, jobject thisO
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeCol. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeCols(JNIEnv *env, jobject thisObj, jint first, jint last) {
@@ -1068,7 +1068,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCols(JNIEnv *env, jobject this
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeCols. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeRow(JNIEnv *env, jobject thisObj, jint index) {
@@ -1098,7 +1098,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeRow(JNIEnv *env, jobject thisO
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeRow. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeRows(JNIEnv *env, jobject thisObj, jint first, jint last) {
@@ -1127,7 +1127,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeRows(JNIEnv *env, jobject this
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeRows. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -1154,8 +1154,8 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, jobject thi
         jlong result[] = {(jlong) rhs, (jlong) af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
-
         return p;
+
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -1193,7 +1193,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCopy(JNIEnv *env, jobject this
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeCopy. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_as(JNIEnv *env, jobject thisObj, jint type) {
@@ -1223,5 +1223,5 @@ jlong JNICALL Java_io_shapelets_khiva_Array_as(JNIEnv *env, jobject thisObj, jin
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeArrayAs. Unknown reason");
     }
-    return NULL;
+    return 0;
 }

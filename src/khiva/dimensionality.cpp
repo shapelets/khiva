@@ -336,9 +336,9 @@ af::array khiva::dimensionality::PIP(const af::array &ts, int numberIPs) {
     x.reserve(selected.size());
     std::vector<float> y;
     y.reserve(selected.size());
-    for (size_t i = 0; i < selected.size(); i++) {
-        x.emplace_back(selected[i].first);
-        y.emplace_back(selected[i].second);
+    for (auto & i : selected) {
+        x.emplace_back(i.first);
+        y.emplace_back(i.second);
     }
 
     // from c-array to af::array
@@ -635,7 +635,7 @@ std::vector<Point> khiva::dimensionality::visvalingam(const std::vector<Point> &
     }
 
     // One point to be deleted on each iteration
-    for (int64_t iter = 0; iter < points_to_be_deleted; iter++) {
+    for (size_t iter = 0; iter < points_to_be_deleted; iter++) {
         auto min_index_iterator = point_indexer.begin();
         int64_t min_element = min_index_iterator->second;
         point_indexer.erase(min_index_iterator);

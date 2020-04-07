@@ -97,19 +97,19 @@ class Array {
     /**
      * @brief Default Constructor of Array class.
      */
-    Array() : x{0}, y{1}, w{1}, z{1}, dims{0}, data{nullptr} {}
+    Array() : data{nullptr}, x{0}, y{1}, w{1}, z{1}, dims{0} {}
 
     /**
      * @brief Constructor of Array class which receives and af::array.
      *
      * @param in The input af::array.
      */
-    explicit Array(af::array in)
-        : x{static_cast<int>(in.dims(0))},
+    explicit Array(const af::array& in)
+        : data{in.host<T>()},
+          x{static_cast<int>(in.dims(0))},
           y{static_cast<int>(in.dims(1))},
           w{static_cast<int>(in.dims(2))},
           z{static_cast<int>(in.dims(3))},
-          data{in.host<T>()},
           dims{static_cast<int>(in.numdims())} {
         af::sync();
     }
