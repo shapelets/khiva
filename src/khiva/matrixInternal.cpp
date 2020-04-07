@@ -109,7 +109,7 @@ MatrixProfilePair getProfileOutput(const SCAMP::Profile &p, uint64_t window) {
     distances.resize(arr.size());
     indexes.resize(arr.size());
 
-    for (int i = 0; i < arr.size(); ++i) {
+    for (size_t i = 0; i < arr.size(); ++i) {
         SCAMP::mp_entry e;
         e.ulong = arr[i];
         distances[i] = static_cast<double>(convertToEuclidean(e.floats[0], window));

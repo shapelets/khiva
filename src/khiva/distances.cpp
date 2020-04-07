@@ -24,7 +24,6 @@ af::array dtwInternal(const af::array& a, const af::array& bss) {
     // Allocate the cost Matrix:
     af::array cost = af::constant(0, m, n, bss.dims(1));
     auto d = distance(a(0), bss(0, af::span));
-    auto ds = d.dims();
     cost(0, 0, af::span) = af::reorder(d, 0, 2, 1, 3);
 
     // Calculate the first column
