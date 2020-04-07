@@ -6,7 +6,7 @@
 
 #include <khiva/linalg.h>
 
-af::array khiva::linalg::lls(af::array A, af::array b) {
+af::array khiva::linalg::lls(const af::array &A, const af::array &b) {
     af::array U;
     af::array S;
     af::array VT;

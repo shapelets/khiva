@@ -4,16 +4,19 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <khiva/internal/scopedHostPtr.h>
 #include <khiva/linalg.h>
 #include <khiva/polynomial.h>
+
 #include <Eigen/Eigenvalues>
-#include <khiva/internal/scopedHostPtr.h>
 
 using namespace Eigen;
 
-#define EPSILON 1e-8
+constexpr auto EPSILON = 1e-8;
 
-af::array vandermonde(af::array x, int order, bool ascending) {
+namespace {
+
+af::array vandermonde(const af::array &x, int order, bool ascending) {
     af::array result = af::array(x.dims(0), order, x.type());
     gfor(af::seq i, order) { result(af::span, i) = af::pow(x, i); }
     if (!ascending) {
@@ -22,10 +25,12 @@ af::array vandermonde(af::array x, int order, bool ascending) {
     return result;
 }
 
-af::array khiva::polynomial::polyfit(af::array x, af::array y, int deg) {
+}  // namespace
+
+af::array khiva::polynomial::polyfit(const af::array &x, const af::array &y, int deg) {
     int order = deg + 1;
     af::array lhs = vandermonde(x, order, false);
-    af::array rhs = y;
+    const af::array &rhs = y;
 
     af::array scale = af::max(af::sqrt(af::sum(lhs * lhs, 0)), EPSILON);
 
@@ -39,7 +44,7 @@ af::array khiva::polynomial::polyfit(af::array x, af::array y, int deg) {
     return c;
 }
 
-af::array khiva::polynomial::roots(af::array pp) {
+af::array khiva::polynomial::roots(const af::array &pp) {
     af::array result = af::array(pp.dims(0) - 1, pp.dims(1), af::dtype::c32);
     for (int i = 0; i < pp.dims(1); i++) {
         af::array p = pp(af::span, i);

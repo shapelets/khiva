@@ -15,11 +15,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, j
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         switch (aggregationFunction) {
@@ -59,5 +59,5 @@ jlongArray JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, j
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Regularization_groupBy. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }

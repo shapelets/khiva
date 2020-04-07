@@ -6,7 +6,7 @@
 
 #include <arrayfire.h>
 #include <benchmark/benchmark.h>
-#include <float.h>
+#include <cfloat>
 #include <khiva/normalization.h>
 #include "khivaBenchmark.h"
 

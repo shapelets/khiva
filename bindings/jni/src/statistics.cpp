@@ -6,7 +6,6 @@
 
 #include <jni.h>
 #include <khiva/statistics.h>
-#include <khiva_jni/statistics.h>
 #include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEnv *env, jobject, jlong ref, jboolean unbiased) {
@@ -15,11 +14,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEnv *env, jo
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::statistics::covariance(var, unbiased).get());
@@ -36,7 +35,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_covariance(JNIEnv *env, jo
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Statistics_covariance. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Statistics_moment(JNIEnv *env, jobject, jlong ref, jint k) {
@@ -45,11 +44,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_moment(JNIEnv *env, jobjec
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::statistics::moment(var, k).get());
@@ -66,7 +65,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_moment(JNIEnv *env, jobjec
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Statistics_moment. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Statistics_sampleStdev(JNIEnv *env, jobject, jlong ref) {
@@ -75,11 +74,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_sampleStdev(JNIEnv *env, j
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::statistics::sampleStdev(var).get());
@@ -96,7 +95,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_sampleStdev(JNIEnv *env, j
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Statistics_sampleStdev. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Statistics_kurtosis(JNIEnv *env, jobject, jlong ref) {
@@ -105,11 +104,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_kurtosis(JNIEnv *env, jobj
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::statistics::kurtosis(var).get());
@@ -126,7 +125,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_kurtosis(JNIEnv *env, jobj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Statistics_kurtosis. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Statistics_skewness(JNIEnv *env, jobject, jlong ref) {
@@ -135,11 +134,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_skewness(JNIEnv *env, jobj
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::statistics::skewness(var).get());
@@ -156,7 +155,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_skewness(JNIEnv *env, jobj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Statistics_skewness. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobject, jlong ref, jlong ref_q,
@@ -166,13 +165,13 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobj
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var;
-        af_array arr_q = (af_array) ref_q;
+        auto arr_q = (af_array) ref_q;
         af::array var_q;
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         check_and_retain_arrays(arr, arr_q, var, var_q);
         af_retain_array(&af_p, khiva::statistics::quantile(var, var_q, precision).get());
@@ -190,7 +189,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantile(JNIEnv *env, jobj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Statistics_quantile. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantilesCut(JNIEnv *env, jobject, jlong ref, jfloat quantiles,
@@ -200,11 +199,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantilesCut(JNIEnv *env, 
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::statistics::quantilesCut(var, quantiles, precision).get());
@@ -221,7 +220,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_quantilesCut(JNIEnv *env, 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Statistics_quantilesCut. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Statistics_ljungBox(JNIEnv *env, jobject, jlong ref, jlong lags) {
@@ -230,11 +229,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_ljungBox(JNIEnv *env, jobj
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::statistics::ljungBox(var, lags).get());
@@ -252,5 +251,5 @@ jlongArray JNICALL Java_io_shapelets_khiva_Statistics_ljungBox(JNIEnv *env, jobj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Statistics_ljungBox. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }

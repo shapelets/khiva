@@ -10,8 +10,8 @@
 #include <khiva_c/internal/util.h>
 #include <iostream>
 
-void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
-             int *max_iterations, int *error_code, char *error_message) {
+void k_means(khiva_array *tss, const int *k, khiva_array *centroids, khiva_array *labels, const float *tolerance,
+             const int *max_iterations, int *error_code, char *error_message) {
     try {
         af::array var_tss = af::array(*tss);
         af_retain_array(tss, var_tss.get());
@@ -30,8 +30,8 @@ void k_means(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labe
     }
 }
 
-void k_shape(khiva_array *tss, int *k, khiva_array *centroids, khiva_array *labels, float *tolerance,
-             int *max_iterations, int *error_code, char *error_message) {
+void k_shape(khiva_array *tss, const int *k, khiva_array *centroids, khiva_array *labels, const float *tolerance,
+             const int *max_iterations, int *error_code, char *error_message) {
     try {
         af::array var_tss = af::array(*tss);
         af_retain_array(tss, var_tss.get());

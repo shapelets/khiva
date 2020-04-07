@@ -7,9 +7,8 @@
 #ifndef KHIVA_CORE_LIBRARY_H
 #define KHIVA_CORE_LIBRARY_H
 
-#include <khiva/defines.h>
-
 #include <arrayfire.h>
+#include <khiva/defines.h>
 
 namespace khiva {
 

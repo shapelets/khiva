@@ -14,12 +14,12 @@ jlongArray JNICALL Java_io_shapelets_khiva_Linalg_lls(JNIEnv *env, jobject, jlon
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_a = (af_array) ref_a;
+        auto arr_a = (af_array) ref_a;
         af::array var_a;
-        af_array arr_b = (af_array) ref_b;
+        auto arr_b = (af_array) ref_b;
         af::array var_b;
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         check_and_retain_arrays(arr_a, arr_b, var_a, var_b);
 
@@ -39,5 +39,5 @@ jlongArray JNICALL Java_io_shapelets_khiva_Linalg_lls(JNIEnv *env, jobject, jlon
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Linalg_lls. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }

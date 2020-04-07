@@ -18,7 +18,7 @@ jstring JNICALL Java_io_shapelets_khiva_Library_backendInfo(JNIEnv *env, jobject
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Library_backendInfo. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 void JNICALL Java_io_shapelets_khiva_Library_setBackend(JNIEnv *env, jobject, jint backend) {
@@ -123,5 +123,5 @@ jstring JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Library_version. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }

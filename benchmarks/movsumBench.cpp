@@ -6,7 +6,6 @@
 
 #include <arrayfire.h>
 #include <benchmark/benchmark.h>
-#include <set>
 #include <vector>
 #include "khivaBenchmark.h"
 

@@ -13,11 +13,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNorm(JNIE
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::normalization::decimalScalingNorm(var).get());
@@ -35,12 +35,12 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNorm(JNIE
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Normalization_decimalScalingNorm. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNormInPlace(JNIEnv *env, jobject, jlong ref) {
     try {
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         khiva::normalization::decimalScalingNormInPlace(var);
@@ -53,7 +53,7 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNormInPlace(JN
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Normalization_decimalScalingNormInPlace. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env, jobject, jlong ref, jdouble high,
@@ -63,11 +63,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env,
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::normalization::maxMinNorm(var, high, low, epsilon).get());
@@ -85,13 +85,13 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Normalization_maxMinNorm. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *env, jobject, jlong ref, jdouble high,
                                                                       jdouble low, jdouble epsilon) {
     try {
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         khiva::normalization::maxMinNormInPlace(var, high, low, epsilon);
@@ -104,7 +104,7 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *en
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in maxMinNormInPlace. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Normalization_meanNorm(JNIEnv *env, jobject, jlong ref) {
@@ -113,11 +113,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_meanNorm(JNIEnv *env, j
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::normalization::meanNorm(var).get());
@@ -135,12 +135,12 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_meanNorm(JNIEnv *env, j
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Normalization_meanNorm. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JNIEnv *env, jobject, jlong ref) {
     try {
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         khiva::normalization::meanNormInPlace(var);
@@ -153,7 +153,7 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JNIEnv *env,
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Normalization_meanNormInPlace. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobject, jlong ref, jdouble epsilon) {
@@ -162,11 +162,11 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobj
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array) raw_pointer;
 
         af_retain_array(&arr, var.get());
         af_retain_array(&af_p, khiva::normalization::znorm(var, epsilon).get());
@@ -184,12 +184,12 @@ jlongArray JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in MatrixNormalization_znorm. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Normalization_znormInPlace(JNIEnv *env, jobject, jlong ref, jdouble epsilon) {
     try {
-        af_array arr = (af_array) ref;
+        auto arr = (af_array) ref;
         af::array var = af::array(arr);
 
         khiva::normalization::znormInPlace(var, epsilon);
@@ -202,5 +202,5 @@ jlong JNICALL Java_io_shapelets_khiva_Normalization_znormInPlace(JNIEnv *env, jo
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Normalization_znormInPlace. Unknown reason");
     }
-    return NULL;
+    return 0;
 }

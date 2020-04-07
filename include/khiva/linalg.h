@@ -7,9 +7,8 @@
 #ifndef KHIVA_CORE_LINALG_H
 #define KHIVA_CORE_LINALG_H
 
-#include <khiva/defines.h>
-
 #include <arrayfire.h>
+#include <khiva/defines.h>
 
 namespace khiva {
 
@@ -27,7 +26,7 @@ namespace linalg {
  *
  * @return af::array Contains the solution to the linear equation problem minimizing the norm 2.
  */
-KHIVAAPI af::array lls(af::array A, af::array b);
+KHIVAAPI af::array lls(const af::array &A, const af::array &b);
 
 }  // namespace linalg
 }  // namespace khiva

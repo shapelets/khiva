@@ -11,7 +11,7 @@
 #include <khiva_c/polynomial.h>
 #include <khiva_c/internal/util.h>
 
-void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result, int *error_code, char *error_message) {
+void polyfit(khiva_array *x, khiva_array *y, const int *deg, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array xx;
         af::array yy;

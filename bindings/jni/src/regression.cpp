@@ -6,7 +6,6 @@
 
 #include <jni.h>
 #include <khiva/regression.h>
-#include <khiva_jni/regression.h>
 #include <khiva_jni/util.h>
 
 jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobject, jlong ref_xss, jlong ref_yss) {
@@ -15,26 +14,26 @@ jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobjec
         jlong tmp[l];
         jlongArray pointers = env->NewLongArray(l);
 
-        af_array arr_xss = (af_array) ref_xss;
+        auto arr_xss = (af_array) ref_xss;
         af::array var_xss;
 
-        af_array arr_yss = (af_array) ref_yss;
+        auto arr_yss = (af_array) ref_yss;
         af::array var_yss;
 
         jlong raw_pointer_pvalue = 0;
-        af_array af_p_pvalue = (af_array) raw_pointer_pvalue;
+        auto af_p_pvalue = (af_array) raw_pointer_pvalue;
 
         jlong raw_pointer_rvalue = 0;
-        af_array af_p_rvalue = (af_array) raw_pointer_rvalue;
+        auto af_p_rvalue = (af_array) raw_pointer_rvalue;
 
         jlong raw_pointer_intercept = 0;
-        af_array af_p_intercept = (af_array) raw_pointer_intercept;
+        auto af_p_intercept = (af_array) raw_pointer_intercept;
 
         jlong raw_pointer_slope = 0;
-        af_array af_p_slope = (af_array) raw_pointer_slope;
+        auto af_p_slope = (af_array) raw_pointer_slope;
 
         jlong raw_pointer_stderr = 0;
-        af_array af_p_stderr = (af_array) raw_pointer_stderr;
+        auto af_p_stderr = (af_array) raw_pointer_stderr;
 
         check_and_retain_arrays(arr_xss, arr_yss, var_xss, var_yss);
 
@@ -70,5 +69,5 @@ jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobjec
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Regression_linear. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }

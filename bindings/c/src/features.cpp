@@ -35,7 +35,7 @@ void absolute_sum_of_changes(khiva_array *array, khiva_array *result, int *error
     }
 }
 
-void aggregated_autocorrelation(khiva_array *array, int *aggregation_function, khiva_array *result, int *error_code,
+void aggregated_autocorrelation(khiva_array *array, const int *aggregation_function, khiva_array *result, int *error_code,
                                 char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -78,7 +78,7 @@ void aggregated_autocorrelation(khiva_array *array, int *aggregation_function, k
     }
 }
 
-void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregation_function, khiva_array *slope,
+void aggregated_linear_trend(khiva_array *array, const long *chunkSize, const int *aggregation_function, khiva_array *slope,
                              khiva_array *intercept, khiva_array *rvalue, khiva_array *pvalue, khiva_array *stderrest,
                              int *error_code, char *error_message) {
     try {
@@ -131,7 +131,7 @@ void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregati
     }
 }
 
-void approximate_entropy(khiva_array *array, int *m, float *r, khiva_array *result, int *error_code,
+void approximate_entropy(khiva_array *array, const int *m, const float *r, khiva_array *result, int *error_code,
                          char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -145,7 +145,7 @@ void approximate_entropy(khiva_array *array, int *m, float *r, khiva_array *resu
     }
 }
 
-void cross_covariance(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_array *result, int *error_code,
+void cross_covariance(khiva_array *xss, khiva_array *yss, const bool *unbiased, khiva_array *result, int *error_code,
                       char *error_message) {
     try {
         af::array var_xss;
@@ -160,7 +160,7 @@ void cross_covariance(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_
     }
 }
 
-void auto_covariance(khiva_array *array, bool *unbiased, khiva_array *result, int *error_code, char *error_message) {
+void auto_covariance(khiva_array *array, const bool *unbiased, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -173,7 +173,7 @@ void auto_covariance(khiva_array *array, bool *unbiased, khiva_array *result, in
     }
 }
 
-void cross_correlation(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_array *result, int *error_code,
+void cross_correlation(khiva_array *xss, khiva_array *yss, const bool *unbiased, khiva_array *result, int *error_code,
                        char *error_message) {
     try {
         af::array var_xss;
@@ -188,7 +188,7 @@ void cross_correlation(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva
     }
 }
 
-void auto_correlation(khiva_array *array, long *max_lag, bool *unbiased, khiva_array *result, int *error_code,
+void auto_correlation(khiva_array *array, const long *max_lag, const bool *unbiased, khiva_array *result, int *error_code,
                       char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -202,7 +202,7 @@ void auto_correlation(khiva_array *array, long *max_lag, bool *unbiased, khiva_a
     }
 }
 
-void binned_entropy(khiva_array *array, int *max_bins, khiva_array *result, int *error_code, char *error_message) {
+void binned_entropy(khiva_array *array, const int *max_bins, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -215,7 +215,7 @@ void binned_entropy(khiva_array *array, int *max_bins, khiva_array *result, int 
     }
 }
 
-void c3(khiva_array *array, long *lag, khiva_array *result, int *error_code, char *error_message) {
+void c3(khiva_array *array, const long *lag, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -228,7 +228,7 @@ void c3(khiva_array *array, long *lag, khiva_array *result, int *error_code, cha
     }
 }
 
-void cid_ce(khiva_array *array, bool *zNormalize, khiva_array *result, int *error_code, char *error_message) {
+void cid_ce(khiva_array *array, const bool *zNormalize, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -267,7 +267,7 @@ void count_below_mean(khiva_array *array, khiva_array *result, int *error_code, 
     }
 }
 
-void cwt_coefficients(khiva_array *array, khiva_array *width, int *coeff, int *w, khiva_array *result, int *error_code,
+void cwt_coefficients(khiva_array *array, khiva_array *width, const int *coeff, const int *w, khiva_array *result, int *error_code,
                       char *error_message) {
     try {
         af::array var;
@@ -282,7 +282,7 @@ void cwt_coefficients(khiva_array *array, khiva_array *width, int *coeff, int *w
     }
 }
 
-void energy_ratio_by_chunks(khiva_array *array, long *num_segments, long *segment_focus, khiva_array *result,
+void energy_ratio_by_chunks(khiva_array *array, const long *num_segments, const long *segment_focus, khiva_array *result,
                             int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -309,7 +309,7 @@ void fft_aggregated(khiva_array *array, khiva_array *result, int *error_code, ch
     }
 }
 
-void fft_coefficient(khiva_array *array, long *coefficient, khiva_array *real, khiva_array *imag, khiva_array *absolute,
+void fft_coefficient(khiva_array *array, const long *coefficient, khiva_array *real, khiva_array *imag, khiva_array *absolute,
                      khiva_array *angle, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -355,7 +355,7 @@ void first_location_of_minimum(khiva_array *array, khiva_array *result, int *err
     }
 }
 
-void friedrich_coefficients(khiva_array *array, int *m, float *r, khiva_array *result, int *error_code,
+void friedrich_coefficients(khiva_array *array, const int *m, const float *r, khiva_array *result, int *error_code,
                             char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -408,7 +408,7 @@ void has_duplicate_min(khiva_array *array, khiva_array *result, int *error_code,
     }
 }
 
-void index_mass_quantile(khiva_array *array, float *q, khiva_array *result, int *error_code, char *error_message) {
+void index_mass_quantile(khiva_array *array, const float *q, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -434,7 +434,7 @@ void kurtosis(khiva_array *array, khiva_array *result, int *error_code, char *er
     }
 }
 
-void large_standard_deviation(khiva_array *array, float *r, khiva_array *result, int *error_code, char *error_message) {
+void large_standard_deviation(khiva_array *array, const float *r, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -546,7 +546,7 @@ void longest_strike_below_mean(khiva_array *array, khiva_array *result, int *err
     }
 }
 
-void max_langevin_fixed_point(khiva_array *array, int *m, float *r, khiva_array *result, int *error_code,
+void max_langevin_fixed_point(khiva_array *array, const int *m, const float *r, khiva_array *result, int *error_code,
                               char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -651,7 +651,7 @@ void minimum(khiva_array *array, khiva_array *result, int *error_code, char *err
     }
 }
 
-void number_crossing_m(khiva_array *array, int *m, khiva_array *result, int *error_code, char *error_message) {
+void number_crossing_m(khiva_array *array, const int *m, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -664,7 +664,7 @@ void number_crossing_m(khiva_array *array, int *m, khiva_array *result, int *err
     }
 }
 
-void number_cwt_peaks(khiva_array *array, int *max_w, khiva_array *result, int *error_code, char *error_message) {
+void number_cwt_peaks(khiva_array *array, const int *max_w, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -677,7 +677,7 @@ void number_cwt_peaks(khiva_array *array, int *max_w, khiva_array *result, int *
     }
 }
 
-void number_peaks(khiva_array *array, int *n, khiva_array *result, int *error_code, char *error_message) {
+void number_peaks(khiva_array *array, const int *n, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -705,7 +705,7 @@ void partial_autocorrelation(khiva_array *array, khiva_array *lags, khiva_array 
     }
 }
 
-void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_array *array, bool *is_sorted, khiva_array *result,
+void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_array *array, const bool *is_sorted, khiva_array *result,
                                                             int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -720,7 +720,7 @@ void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_array *array, 
     }
 }
 
-void percentage_of_reoccurring_values_to_all_values(khiva_array *array, bool *is_sorted, khiva_array *result,
+void percentage_of_reoccurring_values_to_all_values(khiva_array *array, const bool *is_sorted, khiva_array *result,
                                                     int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -734,7 +734,7 @@ void percentage_of_reoccurring_values_to_all_values(khiva_array *array, bool *is
     }
 }
 
-void quantile(khiva_array *array, khiva_array *q, float *precision, khiva_array *result, int *error_code,
+void quantile(khiva_array *array, khiva_array *q, const float *precision, khiva_array *result, int *error_code,
               char *error_message) {
     try {
         af::array var;
@@ -749,7 +749,7 @@ void quantile(khiva_array *array, khiva_array *q, float *precision, khiva_array 
     }
 }
 
-void range_count(khiva_array *array, float *min, float *max, khiva_array *result, int *error_code,
+void range_count(khiva_array *array, const float *min, const float *max, khiva_array *result, int *error_code,
                  char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -763,7 +763,7 @@ void range_count(khiva_array *array, float *min, float *max, khiva_array *result
     }
 }
 
-void ratio_beyond_r_sigma(khiva_array *array, float *r, khiva_array *result, int *error_code, char *error_message) {
+void ratio_beyond_r_sigma(khiva_array *array, const float *r, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -816,7 +816,7 @@ void skewness(khiva_array *array, khiva_array *result, int *error_code, char *er
     }
 }
 
-void spkt_welch_density(khiva_array *array, int *coeff, khiva_array *result, int *error_code, char *error_message) {
+void spkt_welch_density(khiva_array *array, const int *coeff, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -842,7 +842,7 @@ void standard_deviation(khiva_array *array, khiva_array *result, int *error_code
     }
 }
 
-void sum_of_reoccurring_datapoints(khiva_array *array, bool *is_sorted, khiva_array *result, int *error_code,
+void sum_of_reoccurring_datapoints(khiva_array *array, const bool *is_sorted, khiva_array *result, int *error_code,
                                    char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -856,7 +856,7 @@ void sum_of_reoccurring_datapoints(khiva_array *array, bool *is_sorted, khiva_ar
     }
 }
 
-void sum_of_reoccurring_values(khiva_array *array, bool *is_sorted, khiva_array *result, int *error_code,
+void sum_of_reoccurring_values(khiva_array *array, const bool *is_sorted, khiva_array *result, int *error_code,
                                char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -883,7 +883,7 @@ void sum_values(khiva_array *array, khiva_array *result, int *error_code, char *
     }
 }
 
-void symmetry_looking(khiva_array *array, float *r, khiva_array *result, int *error_code, char *error_message) {
+void symmetry_looking(khiva_array *array, const float *r, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());
@@ -896,7 +896,7 @@ void symmetry_looking(khiva_array *array, float *r, khiva_array *result, int *er
     }
 }
 
-void time_reversal_asymmetry_statistic(khiva_array *array, int *lag, khiva_array *result, int *error_code,
+void time_reversal_asymmetry_statistic(khiva_array *array, const int *lag, khiva_array *result, int *error_code,
                                        char *error_message) {
     try {
         af::array var = af::array(*array);
@@ -910,7 +910,7 @@ void time_reversal_asymmetry_statistic(khiva_array *array, int *lag, khiva_array
     }
 }
 
-void value_count(khiva_array *array, float *v, khiva_array *result, int *error_code, char *error_message) {
+void value_count(khiva_array *array, const float *v, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af_retain_array(array, var.get());

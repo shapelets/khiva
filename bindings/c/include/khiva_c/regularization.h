@@ -38,7 +38,7 @@ extern "C" {
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void group_by(khiva_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
+KHIVA_C_API void group_by(khiva_array *array, const int *aggregation_function, const int *n_columns_key, const int *n_columns_value,
                           khiva_array *result, int *error_code, char *error_message);
 
 #ifdef __cplusplus

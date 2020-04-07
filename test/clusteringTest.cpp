@@ -7,9 +7,9 @@
 #include <gtest/gtest.h>
 #include <khiva/clustering.h>
 #include <khiva/internal/scopedHostPtr.h>
-#include <fstream>
+
 #include <iostream>
-#include <sstream>
+
 #include "khivaTest.h"
 
 void kmeans() {
@@ -23,7 +23,6 @@ void kmeans() {
 
     unsigned int initial_l[] = {0, 1, 2, 0, 1, 2};
     af::array labels(6, 1, initial_l);
-    unsigned int expected_l[] = {0, 2, 1, 2, 2, 1};
 
     khiva::clustering::kMeans(tss, 3, means, labels);
 
@@ -58,15 +57,15 @@ void kmeans2() {
 void kShapeFloat() {
     float tolerance = 1e-10;
     int maxIter = 100;
-    float a[35] = {1.0f,  2.0f,  3.0f,  4.0f,  5.0f,   6.0f,  7.0f,  0.0f, 10.0f, 4.0f, 5.0f, 7.0f,
-                   -3.0f, 0.0f,  -1.0f, 15.0f, -12.0f, 8.0f,  9.0f,  4.0f, 5.0f,  2.0f, 8.0f, 7.0f,
-                   -6.0f, -1.0f, 2.0f,  9.0f,  -5.0f,  -5.0f, -6.0f, 7.0f, 9.0f,  9.0f, 0.0f};
+    float a[] = {1.0f,  2.0f,  3.0f,  4.0f,  5.0f,   6.0f,  7.0f,  0.0f, 10.0f, 4.0f, 5.0f, 7.0f,
+                 -3.0f, 0.0f,  -1.0f, 15.0f, -12.0f, 8.0f,  9.0f,  4.0f, 5.0f,  2.0f, 8.0f, 7.0f,
+                 -6.0f, -1.0f, 2.0f,  9.0f,  -5.0f,  -5.0f, -6.0f, 7.0f, 9.0f,  9.0f, 0.0f};
 
-    unsigned int idxh[5] = {0, 1, 2, 0, 1};
+    unsigned int idxh[] = {0, 1, 2, 0, 1};
 
-    float expected_c[21] = {-0.5234, 0.1560, -0.3627, -1.2764, -0.7781, 0.9135,  1.8711,
-                            -0.7825, 1.5990, 0.1701,  0.4082,  0.8845,  -1.4969, -0.7825,
-                            -0.6278, 1.3812, -2.0090, 0.5022,  0.6278,  -0.0000, 0.1256};
+    auto expected_c = std::vector<float>{-0.5234f, 0.1560f, -0.3627f, -1.2764f, -0.7781f, 0.9135f,  1.8711f,
+                                         -0.7825f, 1.5990f, 0.1701f,  0.4082f,  0.8845f,  -1.4969f, -0.7825f,
+                                         -0.6278f, 1.3812f, -2.0090f, 0.5022f,  0.6278f,  -0.0000f, 0.1256f};
     int k = 3;
     int nElements = 7;
     int ntss = 5;
@@ -78,9 +77,9 @@ void kShapeFloat() {
     khiva::clustering::kShape(data, k, centroids, idx, tolerance, maxIter);
 
     auto calculated_c = khiva::utils::makeScopedHostPtr(centroids.host<float>());
-    auto calculated_l = khiva::utils::makeScopedHostPtr(idx.host<unsigned int>());
+    // auto calculated_l = khiva::utils::makeScopedHostPtr(idx.host<unsigned int>());
 
-    for (size_t i = 0; i < 21; i++) {
+    for (size_t i = 0; i < expected_c.size(); ++i) {
         ASSERT_NEAR(calculated_c[i], expected_c[i], 1e-3);
     }
 }
@@ -91,11 +90,11 @@ void kShapeDouble() {
     double a[35] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0,  0.0,  10.0, 4.0, 5.0,  7.0,  -3.0, 0.0, -1.0, 15.0, -12.0, 8.0,
                     9.0, 4.0, 5.0, 2.0, 8.0, 7.0, -6.0, -1.0, 2.0,  9.0, -5.0, -5.0, -6.0, 7.0, 9.0,  9.0,  0.0};
 
-    unsigned int idxh[5] = {0, 1, 2, 0, 1};
+    unsigned int idxh[] = {0, 1, 2, 0, 1};
 
-    double expected_c[21] = {-0.5234, 0.1560, -0.3627, -1.2764, -0.7781, 0.9135,  1.8711,
-                             -0.7825, 1.5990, 0.1701,  0.4082,  0.8845,  -1.4969, -0.7825,
-                             -0.6278, 1.3812, -2.0090, 0.5022,  0.6278,  -0.0000, 0.1256};
+    auto expected_c = std::vector<double>{-0.5234, 0.1560, -0.3627, -1.2764, -0.7781, 0.9135,  1.8711,
+                                          -0.7825, 1.5990, 0.1701,  0.4082,  0.8845,  -1.4969, -0.7825,
+                                          -0.6278, 1.3812, -2.0090, 0.5022,  0.6278,  -0.0000, 0.1256};
     int k = 3;
     int nElements = 7;
     int ntss = 5;
@@ -107,9 +106,9 @@ void kShapeDouble() {
     khiva::clustering::kShape(data, k, centroids, idx, tolerance, maxIter);
 
     auto calculated_c = khiva::utils::makeScopedHostPtr(centroids.host<double>());
-    auto calculated_l = khiva::utils::makeScopedHostPtr(idx.host<unsigned int>());
+    // auto calculated_l = khiva::utils::makeScopedHostPtr(idx.host<unsigned int>());
 
-    for (size_t i = 0; i < 21; i++) {
+    for (size_t i = 0; i < expected_c.size(); i++) {
         ASSERT_NEAR(calculated_c[i], expected_c[i], 1e-3);
     }
 }

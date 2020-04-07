@@ -154,7 +154,7 @@ void CalculateDistances(benchmark::State &state) {
     af::array mask = khiva::matrix::internal::generateMask(m, 1, 0, n - m + 1, 0);
 
     auto sumQ = sum(q);
-    auto sumQ2 = sum(pow(q, 2));
+    auto sumQ2 = sum(af::pow(q, 2));
 
     af::array distances;
 
@@ -197,7 +197,7 @@ void CalculateDistanceProfileParallel(benchmark::State &state) {
         gfor(af::seq idx, n - m + 1) {
             auto q = input(af::span, idx, af::span, af::span);
             auto sumQ = sum(q);
-            auto sumQ2 = sum(pow(q, 2));
+            auto sumQ2 = sum(af::pow(q, 2));
             auto qt = khiva::matrix::internal::slidingDotProduct(q, t);
             khiva::matrix::internal::calculateDistances(qt, a, sumQ, sumQ2, mean, stdev, mask, distances);
             distances.eval();

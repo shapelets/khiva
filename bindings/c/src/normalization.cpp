@@ -35,7 +35,7 @@ void decimal_scaling_norm_in_place(khiva_array *tss, int *error_code, char *erro
     }
 }
 
-void max_min_norm(khiva_array *tss, double *high, double *low, double *epsilon, khiva_array *result, int *error_code,
+void max_min_norm(khiva_array *tss, const double *high, const double *low, const double *epsilon, khiva_array *result, int *error_code,
                   char *error_message) {
     try {
         af::array var = af::array(*tss);
@@ -49,7 +49,7 @@ void max_min_norm(khiva_array *tss, double *high, double *low, double *epsilon, 
     }
 }
 
-void max_min_norm_in_place(khiva_array *tss, double *high, double *low, double *epsilon, int *error_code,
+void max_min_norm_in_place(khiva_array *tss, const double *high, const double *low, const double *epsilon, int *error_code,
                            char *error_message) {
     try {
         af::array var = af::array(*tss);
@@ -89,7 +89,7 @@ void mean_norm_in_place(khiva_array *tss, int *error_code, char *error_message) 
     }
 }
 
-void znorm(khiva_array *tss, double *epsilon, khiva_array *result, int *error_code, char *error_message) {
+void znorm(khiva_array *tss, const double *epsilon, khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*tss);
         af_retain_array(tss, var.get());
@@ -102,7 +102,7 @@ void znorm(khiva_array *tss, double *epsilon, khiva_array *result, int *error_co
     }
 }
 
-void znorm_in_place(khiva_array *tss, double *epsilon, int *error_code, char *error_message) {
+void znorm_in_place(khiva_array *tss, const double *epsilon, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*tss);
         khiva::normalization::znormInPlace(var, *epsilon);

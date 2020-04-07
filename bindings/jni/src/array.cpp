@@ -7,6 +7,8 @@
 #include <khiva/array.h>
 #include <khiva_jni/array.h>
 #include <khiva_jni/util.h>
+
+#include <array>
 #include <cstring>
 
 #define CREATE_T_ARRAY(Ty, ty, dty)                                                                           \
@@ -19,7 +21,7 @@
         af_retain_array(&ret, khiva::array::createArray(inptr, 4, tdims, dty).get());                         \
         env->ReleaseLongArrayElements(dims, dimptr, 0);                                                       \
         env->Release##Ty##ArrayElements(elems, (j##ty *)inptr, 0);                                            \
-        return jlong(ret);                                                                                    \
+        return reinterpret_cast<jlong>(ret);                                                                  \
     }
 
 CREATE_T_ARRAY(Float, float, khiva::dtype::f32)
@@ -41,38 +43,37 @@ CREATE_T_ARRAY(Byte, byte, khiva::dtype::u8)
 jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComplex(JNIEnv *env, jclass, jobjectArray objs,
                                                                         jlongArray dims) {
     try {
-        af_array ret = 0;
-        jlong *dimptr = env->GetLongArrayElements(dims, 0);
+        af_array ret = nullptr;
+        jlong *dimPtr = env->GetLongArrayElements(dims, nullptr);
         jint len = env->GetArrayLength(objs);
 
         static jclass cls;
         static jfieldID re, im;
-        static bool isfirst = true;
+        static bool isFirst = true;
 
-        if (isfirst) {
+        if (isFirst) {
             cls = env->FindClass("io/shapelets/khiva/FloatComplex");
             re = env->GetFieldID(cls, "real", "F");
             im = env->GetFieldID(cls, "imag", "F");
-            isfirst = false;
+            isFirst = false;
         }
 
-        af::af_cfloat *tmp = (af::af_cfloat *) malloc(len * sizeof(af::af_cfloat));
+        std::vector<af::af_cfloat> tmp;
+        tmp.reserve(len);
 
         for (int i = 0; i < len; i++) {
             jobject obj = env->GetObjectArrayElement(objs, i);
             jfloat real = env->GetFloatField(obj, re);
             jfloat imag = env->GetFloatField(obj, im);
 
-            tmp[i].real = real;
-            tmp[i].imag = imag;
+            tmp.emplace_back(real, imag);
         }
 
-        dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
-        af_retain_array(&ret, khiva::array::createArray(af_array(tmp), 4, tdims, khiva::dtype::c32).get());
+        dim_t tdims[4] = {dimPtr[0], dimPtr[1], dimPtr[2], dimPtr[3]};
+        af_retain_array(&ret, khiva::array::createArray(af_array(tmp.data()), 4, tdims, khiva::dtype::c32).get());
 
-        free(tmp);
-        env->ReleaseLongArrayElements(dims, dimptr, 0);
-        return jlong(ret);
+        env->ReleaseLongArrayElements(dims, dimPtr, 0);
+        return reinterpret_cast<jlong>(ret);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -80,44 +81,43 @@ jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComplex(JNIEnv *
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in createArrayFromFloatComplex. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass, jobjectArray objs,
                                                                          jlongArray dims) {
     try {
-        af_array ret = 0;
-        jlong *dimptr = env->GetLongArrayElements(dims, 0);
+        af_array ret = nullptr;
+        jlong *dimPtr = env->GetLongArrayElements(dims, nullptr);
         jint len = env->GetArrayLength(objs);
 
         static jclass cls;
         static jfieldID re, im;
-        static bool isfirst = true;
+        static bool isFirst = true;
 
-        if (isfirst) {
+        if (isFirst) {
             cls = env->FindClass("io/shapelets/khiva/DoubleComplex");
             re = env->GetFieldID(cls, "real", "D");
             im = env->GetFieldID(cls, "imag", "D");
-            isfirst = false;
+            isFirst = false;
         }
 
-        af::af_cdouble *tmp = (af::af_cdouble *) malloc(len * sizeof(af::af_cdouble));
+        std::vector<af::af_cdouble> tmp;
+        tmp.reserve(len);
 
         for (int i = 0; i < len; i++) {
             jobject obj = env->GetObjectArrayElement(objs, i);
             jdouble real = env->GetDoubleField(obj, re);
             jdouble imag = env->GetDoubleField(obj, im);
 
-            tmp[i].real = real;
-            tmp[i].imag = imag;
+            tmp.emplace_back(real, imag);
         }
 
-        dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
-        af_retain_array(&ret, khiva::array::createArray(af_array(tmp), 4, tdims, khiva::dtype::c64).get());
+        dim_t tdims[4] = {dimPtr[0], dimPtr[1], dimPtr[2], dimPtr[3]};
+        af_retain_array(&ret, khiva::array::createArray(af_array(tmp.data()), 4, tdims, khiva::dtype::c64).get());
 
-        free(tmp);
-        env->ReleaseLongArrayElements(dims, dimptr, 0);
-        return jlong(ret);
+        env->ReleaseLongArrayElements(dims, dimPtr, 0);
+        return reinterpret_cast<jlong>(ret);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -125,16 +125,17 @@ jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleComplex(JNIEnv 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in createArrayFromDoubleComplex. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jobject thisObj) {
     try {
-        jclass clazz = env->GetObjectClass(thisObj);
-        jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
-        jlong ref = env->GetLongField(thisObj, fidf);
-
-        khiva::array::deleteArray((void *) ref);
+        // Get the Arrayfire handle
+        auto clazz = env->GetObjectClass(thisObj);
+        auto fieldId = env->GetFieldID(clazz, "reference", "J");
+        auto ref = env->GetLongField(thisObj, fieldId);
+        auto arrayHandle = reinterpret_cast<af_array>(ref);
+        khiva::array::deleteArray(arrayHandle);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -151,14 +152,14 @@ void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jobject this
         jlong ref = env->GetLongField(thisObj, fidf);                                                     \
         j##ty##Array result;                                                                              \
         dim_t elements = 0;                                                                               \
-        af_get_elements(&elements, (void *)ref);                                                          \
+        auto a = reinterpret_cast<af_array>(ref);                                                         \
+        af_get_elements(&elements, a);                                                                    \
         result = env->New##Ty##Array(static_cast<jsize>(elements));                                       \
         j##ty *resf = env->Get##Ty##ArrayElements(result, 0);                                             \
-        af_array a = (af_array)ref;                                                                       \
         af::array var = af::array(a);                                                                     \
         khiva::array::getData(var, resf);                                                                 \
         af_retain_array(&a, var.get());                                                                   \
-        env->SetLongField(thisObj, fidf, jlong(a));                                                       \
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(a));                                     \
         env->Release##Ty##ArrayElements(result, resf, 0);                                                 \
         return result;                                                                                    \
     }
@@ -181,36 +182,35 @@ GET_T_FROM_ARRAY(Byte, byte)
 
 jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj) {
     try {
-        jclass clazz = env->GetObjectClass(thisObj);
-        jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
-        jlong ref = env->GetLongField(thisObj, fidf);
+        // Check Output class is available
+        auto cls = env->FindClass("io/shapelets/khiva/DoubleComplex");
+        auto id = env->GetMethodID(cls, "<init>", "(DD)V");
+        if (id == nullptr) return nullptr;
 
-        jobjectArray result;
+        // Get the Arrayfire handle
+        auto clazz = env->GetObjectClass(thisObj);
+        auto fieldId = env->GetFieldID(clazz, "reference", "J");
+        auto ref = env->GetLongField(thisObj, fieldId);
+        auto arrayHandle = reinterpret_cast<af_array>(ref);
+
+        // Extract the elements from the af::array
         dim_t elements = 0;
-        (af_get_elements(&elements, (void *) (ref)));
+        af_get_elements(&elements, arrayHandle);
+        std::vector<af::af_cdouble> tmp(elements);
 
-        jclass cls = env->FindClass("io/shapelets/khiva/DoubleComplex");
-        jmethodID id = env->GetMethodID(cls, "<init>", "(DD)V");
-        if (id == NULL) return NULL;
+        af_get_data_ptr(tmp.data(), arrayHandle);
+        af_retain_array(&arrayHandle, arrayHandle);
+        // TODO: I think the line below it's not necessary. The pointer address didn't change.
+        env->SetLongField(thisObj, fieldId, reinterpret_cast<jlong>(arrayHandle));
 
-        result = env->NewObjectArray(static_cast<jsize>(elements), cls, NULL);
-
-        af::af_cdouble *tmp = (af::af_cdouble *) malloc(sizeof(af::af_cdouble) * elements);
-        af_array a = (af_array) ref;
-        af::array var = af::array(a);
-        khiva::array::getData(var, tmp);
-        af_retain_array(&a, var.get());
-        env->SetLongField(thisObj, fidf, jlong(a));
-
-        for (int i = 0; i < elements; i++) {
-            double re = tmp[i].real;
-            double im = tmp[i].imag;
-            jobject obj = env->NewObject(cls, id, re, im);
-            env->SetObjectArrayElement(result, i, obj);
+        // Build the Java array
+        auto objectArray = env->NewObjectArray(static_cast<jsize>(elements), cls, nullptr);
+        jsize i = 0;
+        for (const auto &elem : tmp) {
+            auto obj = env->NewObject(cls, id, elem.real, elem.imag);
+            env->SetObjectArrayElement(objectArray, i++, obj);
         }
-
-        free(tmp);
-        return result;
+        return objectArray;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -218,41 +218,40 @@ jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFromArray(JNI
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in getDoubleComplexFromArray. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jobjectArray JNICALL Java_io_shapelets_khiva_Array_getFloatComplexFromArray(JNIEnv *env, jobject thisObj) {
     try {
-        jclass clazz = env->GetObjectClass(thisObj);
-        jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
-        jlong ref = env->GetLongField(thisObj, fidf);
-
-        jobjectArray result;
-        dim_t elements = 0;
-        (af_get_elements(&elements, (void *) (ref)));
-
+        // Check Output class is available
         jclass cls = env->FindClass("io/shapelets/khiva/FloatComplex");
         jmethodID id = env->GetMethodID(cls, "<init>", "(FF)V");
-        if (id == NULL) return NULL;
+        if (id == nullptr) return nullptr;
 
-        result = env->NewObjectArray(static_cast<jsize>(elements), cls, NULL);
+        // Get the Arrayfire handle
+        auto clazz = env->GetObjectClass(thisObj);
+        auto fieldId = env->GetFieldID(clazz, "reference", "J");
+        auto ref = env->GetLongField(thisObj, fieldId);
+        auto arrayHandle = reinterpret_cast<af_array>(ref);
 
-        af::af_cfloat *tmp = (af::af_cfloat *) malloc(sizeof(af::af_cfloat) * elements);
-        af_array a = (af_array) ref;
-        af::array var = af::array(a);
-        khiva::array::getData(var, tmp);
-        af_retain_array(&a, var.get());
-        env->SetLongField(thisObj, fidf, jlong(a));
+        dim_t elements = 0;
+        // TODO: check errors in the C-API calls.
+        af_get_elements(&elements, arrayHandle);
+        std::vector<af::af_cfloat> tmp(elements);
 
-        for (int i = 0; i < elements; i++) {
-            float re = tmp[i].real;
-            float im = tmp[i].imag;
-            jobject obj = env->NewObject(cls, id, re, im);
-            env->SetObjectArrayElement(result, i, obj);
+        af_get_data_ptr(tmp.data(), arrayHandle);
+        af_retain_array(&arrayHandle, arrayHandle);
+        // TODO: I think the line below it's not necessary. The pointer address didn't change.
+        env->SetLongField(thisObj, fieldId, reinterpret_cast<jlong>(arrayHandle));
+
+        // Build the Java array
+        auto objectArray = env->NewObjectArray(static_cast<jsize>(elements), cls, nullptr);
+        jsize i = 0;
+        for (const auto &elem : tmp) {
+            auto obj = env->NewObject(cls, id, elem.real, elem.imag);
+            env->SetObjectArrayElement(objectArray, i++, obj);
         }
-
-        free(tmp);
-        return result;
+        return objectArray;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -260,27 +259,27 @@ jobjectArray JNICALL Java_io_shapelets_khiva_Array_getFloatComplexFromArray(JNIE
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in getFloatComplexFromArray. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_nativeGetDims(JNIEnv *env, jobject thisObj) {
     try {
-        jclass clazz = env->GetObjectClass(thisObj);
-        jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
-        jlong ref = env->GetLongField(thisObj, fidf);
+        // Get the Arrayfire handle
+        auto clazz = env->GetObjectClass(thisObj);
+        auto fieldId = env->GetFieldID(clazz, "reference", "J");
+        auto ref = env->GetLongField(thisObj, fieldId);
+        auto arrayHandle = reinterpret_cast<af_array>(ref);
 
-        af_array a = (af_array) ref;
-        af::array var = af::array(a);
-        af::dim4 d = khiva::array::getDims(var);
-        jlong result[4];
-        jlongArray p = env->NewLongArray(4);
+        // Extract the dims from the af::array
+        auto var = af::array(arrayHandle);
+        auto d = khiva::array::getDims(var);
+        std::array<jlong, 4> result{};
+        std::copy(d.get(), d.get() + 4, result.begin());
+        auto p = env->NewLongArray(4);
 
-        std::memcpy(result, d.dims, sizeof(d.dims));
-
-        af_retain_array(&a, var.get());
-        env->SetLongField(thisObj, fidf, jlong(a));
-        env->SetLongArrayRegion(p, 0, 4, &result[0]);
-
+        af_retain_array(&arrayHandle, var.get());
+        env->SetLongField(thisObj, fieldId, reinterpret_cast<jlong>(arrayHandle));
+        env->SetLongArrayRegion(p, 0, 4, result.data());
         return p;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
@@ -289,20 +288,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_nativeGetDims(JNIEnv *env, jobj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in nativeGetDims. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jint JNICALL Java_io_shapelets_khiva_Array_nativeGetType(JNIEnv *env, jobject thisObj) {
     try {
-        jclass clazz = env->GetObjectClass(thisObj);
-        jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
-        jlong ref = env->GetLongField(thisObj, fidf);
+        // Get the Arrayfire handle
+        auto clazz = env->GetObjectClass(thisObj);
+        auto fieldId = env->GetFieldID(clazz, "reference", "J");
+        auto ref = env->GetLongField(thisObj, fieldId);
+        auto arrayHandle = reinterpret_cast<af_array>(ref);
 
-        af_array a = (af_array) ref;
-        af::array var = af::array(a);
-        jint t = khiva::array::getType(var);
-        af_retain_array(&a, var.get());
-        env->SetLongField(thisObj, fidf, jlong(a));
+        auto var = af::array(arrayHandle);
+        auto t = khiva::array::getType(var);
+        af_retain_array(&arrayHandle, var.get());
+        env->SetLongField(thisObj, fieldId, reinterpret_cast<jlong>(arrayHandle));
         return t;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
@@ -311,20 +311,21 @@ jint JNICALL Java_io_shapelets_khiva_Array_nativeGetType(JNIEnv *env, jobject th
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in nativeGetType. Unknown reason");
     }
-    return (jint) 0;
+    return (jint)0;
 }
 
 void JNICALL Java_io_shapelets_khiva_Array_nativePrint(JNIEnv *env, jobject thisObj) {
     try {
-        jclass clazz = env->GetObjectClass(thisObj);
-        jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
-        jlong ref = env->GetLongField(thisObj, fidf);
+        // Get the Arrayfire handle
+        auto clazz = env->GetObjectClass(thisObj);
+        auto fieldId = env->GetFieldID(clazz, "reference", "J");
+        auto ref = env->GetLongField(thisObj, fieldId);
+        auto arrayHandle = reinterpret_cast<af_array>(ref);
 
-        af_array a = (af_array) ref;
-        af::array var = af::array(a);
+        af::array var = af::array(arrayHandle);
         khiva::array::print(var);
-        af_retain_array(&a, var.get());
-        env->SetLongField(thisObj, fidf, jlong(a));
+        af_retain_array(&arrayHandle, var.get());
+        env->SetLongField(thisObj, fieldId, reinterpret_cast<jlong>(arrayHandle));
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -340,21 +341,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_join(JNIEnv *env, jobject thisO
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = khiva::array::join(dim, a, b);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = reinterpret_cast<af_array>(raw_pointer);
 
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {reinterpret_cast<jlong>(rhs), reinterpret_cast<jlong>(af_p)};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -366,7 +367,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_join(JNIEnv *env, jobject thisO
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_join. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_add(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -375,21 +376,18 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_add(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
-        af::array a;
-        af_array rhs = (af_array) ref_rhs;
-        af::array b;
-
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
+        af::array a, b;
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = a + b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {reinterpret_cast<jlong>(rhs), reinterpret_cast<jlong>(af_p)};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -401,7 +399,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_add(JNIEnv *env, jobject thisOb
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_add. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_mul(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -410,20 +408,19 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_mul(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a * b;
 
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
         af_retain_array(&af_p, c.get());
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
         return p;
@@ -434,7 +431,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_mul(JNIEnv *env, jobject thisOb
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_mul. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_sub(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -443,21 +440,20 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_sub(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = a - b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -469,7 +465,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_sub(JNIEnv *env, jobject thisOb
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_sub. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_div(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -478,22 +474,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_div(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a / b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -505,7 +500,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_div(JNIEnv *env, jobject thisOb
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_div. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_mod(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -514,21 +509,20 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_mod(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = a % b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -540,7 +534,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_mod(JNIEnv *env, jobject thisOb
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_mod. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_pow(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -549,21 +543,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_pow(JNIEnv *env, jobject thisOb
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = (af_array)ref;
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
+        auto rhs = (af_array)ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = af::pow(a, b);
         jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        auto af_p = (af_array)raw_pointer;
 
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -575,7 +569,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_pow(JNIEnv *env, jobject thisOb
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_pow. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_lt(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -584,22 +578,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_lt(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a < b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -611,7 +604,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_lt(JNIEnv *env, jobject thisObj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_lt. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_gt(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -620,22 +613,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_gt(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a > b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -647,7 +639,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_gt(JNIEnv *env, jobject thisObj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_gt. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_le(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -656,22 +648,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_le(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a <= b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -683,7 +674,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_le(JNIEnv *env, jobject thisObj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_le. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_ge(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -692,22 +683,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_ge(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a >= b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -719,7 +709,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_ge(JNIEnv *env, jobject thisObj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_ge. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_eq(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -728,21 +718,20 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_eq(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
         af::array c = a == b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -754,7 +743,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_eq(JNIEnv *env, jobject thisObj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_eq. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_ne(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -763,22 +752,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_ne(JNIEnv *env, jobject thisObj
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a != b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -790,7 +778,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_ne(JNIEnv *env, jobject thisObj
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_ne. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_bitAnd(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -799,22 +787,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_bitAnd(JNIEnv *env, jobject thi
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a & b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -826,7 +813,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_bitAnd(JNIEnv *env, jobject thi
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_bitAnd. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_bitOr(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -835,22 +822,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_bitOr(JNIEnv *env, jobject this
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = a | b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -862,7 +848,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_bitOr(JNIEnv *env, jobject this
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_bitOr. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_bitXor(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -871,22 +857,21 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_bitXor(JNIEnv *env, jobject thi
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
-        af::array c = !a != !b;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af::array c = (!a) != !b;
 
+        af_array af_p;
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
 
@@ -898,7 +883,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_bitXor(JNIEnv *env, jobject thi
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_bitXor. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftL(JNIEnv *env, jobject thisObj, jint n) {
@@ -907,19 +892,18 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftL(JNIEnv *env, jobject
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a = af::array(lhs);
 
         af::array c = (a << n).as(a.type());
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        return (jlong) af_p;
+        return (jlong)af_p;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -927,7 +911,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftL(JNIEnv *env, jobject
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeBitShiftL. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftR(JNIEnv *env, jobject thisObj, jint n) {
@@ -936,19 +920,18 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftR(JNIEnv *env, jobject
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a = af::array(lhs);
 
         af::array c = (a >> n).as(a.type());
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        return (jlong) af_p;
+        return (jlong)af_p;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -956,7 +939,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeBitShiftR(JNIEnv *env, jobject
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeBitShiftR. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeNot(JNIEnv *env, jobject thisObj) {
@@ -965,19 +948,18 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeNot(JNIEnv *env, jobject thisO
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a = af::array(lhs);
 
         af::array c = !a;
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        return (jlong) af_p;
+        return (jlong)af_p;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -985,7 +967,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeNot(JNIEnv *env, jobject thisO
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeNot. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *env, jobject thisObj, jboolean conjugate) {
@@ -994,19 +976,18 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *env, jobject
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a = af::array(lhs);
 
         af::array c = af::transpose(a, conjugate);
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
 
+        af_array af_p;
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        return (jlong) af_p;
+        return (jlong)af_p;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -1014,7 +995,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeTranspose(JNIEnv *env, jobject
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeBTranspose. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeCol(JNIEnv *env, jobject thisObj, jint index) {
@@ -1022,19 +1003,19 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCol(JNIEnv *env, jobject thisO
         jclass clazz = env->GetObjectClass(thisObj);
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
-        af_array lhs = (af_array) ref;
+
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a = af::array(lhs);
 
         af::array c = a.col(index);
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        return (jlong) af_p;
+        return (jlong)af_p;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -1042,7 +1023,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCol(JNIEnv *env, jobject thisO
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeCol. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeCols(JNIEnv *env, jobject thisObj, jint first, jint last) {
@@ -1051,19 +1032,18 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCols(JNIEnv *env, jobject this
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a = af::array(lhs);
 
         af::array c = a.cols(first, last);
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        return (jlong) af_p;
+        return reinterpret_cast<jlong>(af_p);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -1071,7 +1051,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCols(JNIEnv *env, jobject this
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeCols. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeRow(JNIEnv *env, jobject thisObj, jint index) {
@@ -1081,19 +1061,18 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeRow(JNIEnv *env, jobject thisO
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a = af::array(lhs);
 
         af::array c = a.row(index);
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        return (jlong) af_p;
+        return (jlong)af_p;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -1101,7 +1080,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeRow(JNIEnv *env, jobject thisO
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeRow. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeRows(JNIEnv *env, jobject thisObj, jint first, jint last) {
@@ -1110,19 +1089,18 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeRows(JNIEnv *env, jobject this
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a = af::array(lhs);
 
         af::array c = a.rows(first, last);
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        return (jlong) af_p;
+        return (jlong)af_p;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -1130,7 +1108,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeRows(JNIEnv *env, jobject this
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeRows. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlongArray JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, jobject thisObj, jlong ref_rhs) {
@@ -1139,26 +1117,25 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, jobject thi
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
+        auto rhs = reinterpret_cast<af_array>(ref_rhs);
         af::array a;
-        af_array rhs = (af_array) ref_rhs;
         af::array b;
 
         check_and_retain_arrays(lhs, rhs, a, b);
 
         af::array c = af::matmul(a, b);
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        jlong result[] = {(jlong) rhs, (jlong) af_p};
+        jlong result[] = {(jlong)rhs, (jlong)af_p};
         jlongArray p = env->NewLongArray(2);
         env->SetLongArrayRegion(p, 0, 2, &result[0]);
-
         return p;
+
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -1166,7 +1143,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, jobject thi
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_matmul. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_nativeCopy(JNIEnv *env, jobject thisObj) {
@@ -1176,19 +1153,19 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCopy(JNIEnv *env, jobject this
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a = af::array(lhs);
 
         af::array c = a.copy();
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+
+        af_array af_p;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        return (jlong) af_p;
+        return (jlong)af_p;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -1196,7 +1173,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_nativeCopy(JNIEnv *env, jobject this
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeCopy. Unknown reason");
     }
-    return NULL;
+    return 0;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_as(JNIEnv *env, jobject thisObj, jint type) {
@@ -1205,20 +1182,19 @@ jlong JNICALL Java_io_shapelets_khiva_Array_as(JNIEnv *env, jobject thisObj, jin
         jfieldID fidf = env->GetFieldID(clazz, "reference", "J");
         jlong ref = env->GetLongField(thisObj, fidf);
 
-        af_array lhs = (af_array) ref;
+        auto lhs = reinterpret_cast<af_array>(ref);
         af::array a = af::array(lhs);
 
-        khiva::dtype dt = static_cast<khiva::dtype>(type);
+        auto dt = static_cast<khiva::dtype>(type);
         af::array c = a.as(dt);
-        jlong raw_pointer = 0;
-        af_array af_p = (af_array) raw_pointer;
+        af_array af_p;
 
         af_retain_array(&lhs, a.get());
         af_retain_array(&af_p, c.get());
 
-        env->SetLongField(thisObj, fidf, jlong(lhs));
+        env->SetLongField(thisObj, fidf, reinterpret_cast<jlong>(lhs));
 
-        return (jlong) af_p;
+        return (jlong)af_p;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -1226,5 +1202,5 @@ jlong JNICALL Java_io_shapelets_khiva_Array_as(JNIEnv *env, jobject thisObj, jin
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Array_nativeArrayAs. Unknown reason");
     }
-    return NULL;
+    return 0;
 }

@@ -6,7 +6,6 @@
 
 #include <khiva/library.h>
 #include <khiva/version.h>
-#include <khiva_c/library.h>
 #include <khiva_c/internal/util.h>
 #include <cstring>
 
@@ -20,7 +19,7 @@ void backend_info(char **info, int *error_code, char *error_message) {
     }
 }
 
-void set_backend(int *backend, int *error_code, char *error_message) {
+void set_backend(const int *backend, int *error_code, char *error_message) {
     try{
         khiva::library::setBackend(static_cast<khiva::library::Backend>(*backend));
     } catch (const std::exception &e) {
@@ -50,7 +49,7 @@ void get_backends(int *backends, int *error_code, char *error_message) {
     }
 }
 
-void set_device(int *device, int *error_code, char *error_message) {
+void set_device(const int *device, int *error_code, char *error_message) {
     try{
         khiva::library::setDevice(*device);
     } catch (const std::exception &e) {
@@ -80,7 +79,7 @@ void get_device_count(int *device_count, int *error_code, char *error_message) {
     }
 }
 
-void set_device_memory_in_gb(double *memory, int *error_code, char *error_message) {
+void set_device_memory_in_gb(const double *memory, int *error_code, char *error_message) {
     try{
         khiva::library::setDeviceMemoryInGB(*memory);
     } catch (const std::exception &e) {

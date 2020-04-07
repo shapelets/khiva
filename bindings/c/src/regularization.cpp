@@ -9,7 +9,7 @@
 #include <khiva_c/regularization.h>
 #include <khiva_c/internal/util.h>
 
-void group_by(khiva_array *array, int *aggregation_function, int *n_columns_key, int *n_columns_value,
+void group_by(khiva_array *array, const int *aggregation_function, const int *n_columns_key, const int *n_columns_value,
               khiva_array *result, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
