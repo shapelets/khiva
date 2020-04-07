@@ -17,7 +17,7 @@ af::array distance(const af::array &a, const af::array &bss) {
     return af::sqrt(af::pow(af::tile(a, 1, static_cast<unsigned int>(bss.dims(1))) - bss, 2));
 }
 
-af::array dtwInternal(const af::array& a, const af::array& bss) {
+af::array dtwInternal(const af::array &a, const af::array &bss) {
     auto m = a.dims(0);
     auto n = bss.dims(0);
 
@@ -78,7 +78,7 @@ double khiva::distances::dtw(const std::vector<double> &t0, const std::vector<do
     return cost[m - 1][n - 1];
 }
 
-af::array khiva::distances::dtw(const af::array& tss) {
+af::array khiva::distances::dtw(const af::array &tss) {
     // get the number of time series
     auto numOfTs = tss.dims(1);
     // the result is a squared matrix of dimensions numOfTs x numOfTs

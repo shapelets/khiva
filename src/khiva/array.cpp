@@ -7,7 +7,7 @@
 #include <arrayfire.h>
 #include <khiva/array.h>
 
-af::dim4 toDim4(const unsigned ndims, const dim_t *const dims) {
+static af::dim4 toDim4(const unsigned ndims, const dim_t *const dims) {
     af::dim4 d(1, 1, 1, 1);
 
     for (unsigned i = 0; i < ndims; i++) {
@@ -16,46 +16,48 @@ af::dim4 toDim4(const unsigned ndims, const dim_t *const dims) {
     return d;
 }
 
-af::array khiva::array::createArray(void *data, unsigned ndims, dim_t *dims, const int type) {
+af::array khiva::array::createArray(const void *data, unsigned ndims, const dim_t *dims, const int type) {
     af::dim4 d = toDim4(ndims, dims);
     switch ((khiva::dtype)(type)) {
         case khiva::dtype::f32:
-            return af::array(d, static_cast<float *>(data));
+            return af::array(d, static_cast<const float *>(data));
         case khiva::dtype::c32:
-            return af::array(d, static_cast<af::cfloat *>(data));
+            return af::array(d, static_cast<const af::cfloat *>(data));
         case khiva::dtype::f64:
-            return af::array(d, static_cast<double *>(data));
+            return af::array(d, static_cast<const double *>(data));
         case khiva::dtype::c64:
-            return af::array(d, static_cast<af::cdouble *>(data));
+            return af::array(d, static_cast<const af::cdouble *>(data));
         case khiva::dtype::b8:
-            return af::array(d, static_cast<char *>(data));
+            return af::array(d, static_cast<const char *>(data));
         case khiva::dtype::s32:
-            return af::array(d, static_cast<int *>(data));
+            return af::array(d, static_cast<const int *>(data));
         case khiva::dtype::u32:
-            return af::array(d, static_cast<unsigned int *>(data));
+            return af::array(d, static_cast<const unsigned int *>(data));
         case khiva::dtype::u8:
-            return af::array(d, static_cast<unsigned char *>(data));
+            return af::array(d, static_cast<const unsigned char *>(data));
         case khiva::dtype::s64:
-            return af::array(d, static_cast<long long *>(data));
+            return af::array(d, static_cast<const long long *>(data));
         case khiva::dtype::u64:
-            return af::array(d, static_cast<unsigned long long *>(data));
+            return af::array(d, static_cast<const unsigned long long *>(data));
         case khiva::dtype::s16:
-            return af::array(d, static_cast<short *>(data));
+            return af::array(d, static_cast<const short *>(data));
         case khiva::dtype::u16:
-            return af::array(d, static_cast<unsigned short *>(data));
+            return af::array(d, static_cast<const unsigned short *>(data));
         default:
-            return af::array(d, static_cast<float *>(data));
+            return af::array(d, static_cast<const float *>(data));
     }
 }
 
 void khiva::array::deleteArray(af_array array) { af_release_array(array); }
 
-void khiva::array::getData(const af::array& array, void *data) { array.host(data); }
+void khiva::array::getData(const af::array &array, void *data) { array.host(data); }
 
-af::dim4 khiva::array::getDims(const af::array& array) { return array.dims(); }
+af::dim4 khiva::array::getDims(const af::array &array) { return array.dims(); }
 
-int khiva::array::getType(const af::array& array) { return array.type(); }
+int khiva::array::getType(const af::array &array) { return array.type(); }
 
-void khiva::array::print(const af::array& array) { af_print(array) }
+void khiva::array::print(const af::array &array){af_print(array)}
 
-af::array khiva::array::join(int dim, const af::array& first, const af::array& second) { return af::join(dim, first, second); }
+af::array khiva::array::join(int dim, const af::array &first, const af::array &second) {
+    return af::join(dim, first, second);
+}

@@ -17,6 +17,6 @@
 #define KHIVA_C_API
 #endif
 
-typedef void *khiva_array;
+using khiva_array = void *;
 
 #endif

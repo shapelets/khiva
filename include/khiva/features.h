@@ -198,7 +198,7 @@ KHIVAAPI af::array autoCovariance(const af::array &xss, bool unbiased = false);
  *
  * @return af::array The binned entropy value for the given time series.
  */
-KHIVAAPI af::array binnedEntropy(const af::array& tss, int max_bins);
+KHIVAAPI af::array binnedEntropy(const af::array &tss, int max_bins);
 
 /**
  * @brief This function calculates the value of:
@@ -239,7 +239,7 @@ KHIVAAPI af::array c3(const af::array &tss, long lag);
  *
  * @return af::array The complexity value for the given time series.
  */
-KHIVAAPI af::array cidCe(const af::array& tss, bool zNormalize = false);
+KHIVAAPI af::array cidCe(const af::array &tss, bool zNormalize = false);
 
 /**
  * @brief Calculates the number of values in the time series that are higher than the mean.
@@ -400,7 +400,7 @@ KHIVAAPI af::array friedrichCoefficients(const af::array &tss, int m, float r);
  *
  * @return af::array Array containing True if the time series contains duplicated elements and false otherwise.
  */
-KHIVAAPI af::array hasDuplicates(const af::array& tss);
+KHIVAAPI af::array hasDuplicates(const af::array &tss);
 
 /**
  * @brief Computes if the maximum within time series is duplicated.
@@ -658,7 +658,7 @@ KHIVAAPI af::array numberCrossingM(const af::array &tss, int m);
  *
  * @return af::array The number of peaks for each time series.
  */
-KHIVAAPI af::array numberCwtPeaks(const af::array& tss, int maxW);
+KHIVAAPI af::array numberCwtPeaks(const af::array &tss, int maxW);
 
 /**
  * @brief Calculates the number of peaks of at least support \f$n\f$ in the time series \f$tss\f$. A peak of support
@@ -718,7 +718,7 @@ KHIVAAPI af::array partialAutocorrelation(const af::array &tss, const af::array 
  *
  * @return af::array The percentage of unique data points, that are present in the time series more than once.
  */
-KHIVAAPI af::array percentageOfReoccurringDatapointsToAllDatapoints(const af::array& tss, bool isSorted = false);
+KHIVAAPI af::array percentageOfReoccurringDatapointsToAllDatapoints(const af::array &tss, bool isSorted = false);
 
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
@@ -734,7 +734,7 @@ KHIVAAPI af::array percentageOfReoccurringDatapointsToAllDatapoints(const af::ar
  *
  * @return af::array The percentage of unique values, that are present in the time series more than once.
  */
-KHIVAAPI af::array percentageOfReoccurringValuesToAllValues(const af::array& tss, bool isSorted = false);
+KHIVAAPI af::array percentageOfReoccurringValuesToAllValues(const af::array &tss, bool isSorted = false);
 
 /**
  * @brief Returns values at the given quantile.
@@ -785,7 +785,7 @@ KHIVAAPI af::array ratioBeyondRSigma(const af::array &tss, float r);
  *
  * @return af::array The ratio of unique values with respect to the total number of values.
  */
-KHIVAAPI af::array ratioValueNumberToTimeSeriesLength(const af::array& tss);
+KHIVAAPI af::array ratioValueNumberToTimeSeriesLength(const af::array &tss);
 
 /**
  * @brief Calculates a vectorized sample entropy algorithm. For short time-series this method is highly dependent on the
@@ -805,7 +805,7 @@ KHIVAAPI af::array ratioValueNumberToTimeSeriesLength(const af::array& tss);
  * @return af::array With the same dimensions as tss, whose values (time series in dimension 0) contains the
  * vectorized sample entropy for all the input time series in tss.
  */
-KHIVAAPI af::array sampleEntropy(const af::array& tss);
+KHIVAAPI af::array sampleEntropy(const af::array &tss);
 
 /**
  * @brief Calculates the sample skewness of tss (calculated with the adjusted Fisher-Pearson standardized moment
@@ -859,7 +859,7 @@ KHIVAAPI af::array standardDeviation(const af::array &tss);
  *
  * @return af::array The sum of all data points, that are present in the time series more than once.
  */
-KHIVAAPI af::array sumOfReoccurringDatapoints(const af::array& tss, bool isSorted = false);
+KHIVAAPI af::array sumOfReoccurringDatapoints(const af::array &tss, bool isSorted = false);
 
 /**
  * @brief Calculates the sum of all values, that are present in the time series more than once.
@@ -870,7 +870,7 @@ KHIVAAPI af::array sumOfReoccurringDatapoints(const af::array& tss, bool isSorte
  *
  * @return af::array Returns the sum of all values, that are present in the time series more than once.
  */
-KHIVAAPI af::array sumOfReoccurringValues(const af::array& tss, bool isSorted = false);
+KHIVAAPI af::array sumOfReoccurringValues(const af::array &tss, bool isSorted = false);
 
 /**
  * @brief Calculates the sum over the time series tss.
@@ -894,7 +894,7 @@ KHIVAAPI af::array sumValues(const af::array &tss);
  *
  * @return af::array Denoting if the input time series look symmetric.
  */
-KHIVAAPI af::array symmetryLooking(const af::array& tss, float r);
+KHIVAAPI af::array symmetryLooking(const af::array &tss, float r);
 
 /**
  * @brief This function calculates the value of:
@@ -917,7 +917,7 @@ KHIVAAPI af::array symmetryLooking(const af::array& tss, float r);
  *
  * @return af::array Containing the time reversal asymmetry statistic value in each time series.
  */
-KHIVAAPI af::array timeReversalAsymmetryStatistic(const af::array& tss, int lag);
+KHIVAAPI af::array timeReversalAsymmetryStatistic(const af::array &tss, int lag);
 
 /**
  * @brief Counts occurrences of value in the time series tss.

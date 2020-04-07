@@ -7,9 +7,8 @@
 #ifndef KHIVA_CORE_DISTANCES_H
 #define KHIVA_CORE_DISTANCES_H
 
-#include <khiva/defines.h>
-
 #include <arrayfire.h>
+#include <khiva/defines.h>
 
 namespace khiva {
 
@@ -23,7 +22,7 @@ namespace distances {
  *
  * @return array The resulting distance between a and b.
  */
-KHIVAAPI double dtw(const std::vector<double>& a, const std::vector<double>& b);
+KHIVAAPI double dtw(const std::vector<double> &a, const std::vector<double> &b);
 
 /**
  * @brief Calculates the Dynamic Time Warping Distance.
@@ -35,7 +34,7 @@ KHIVAAPI double dtw(const std::vector<double>& a, const std::vector<double>& b);
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
-KHIVAAPI af::array dtw(const af::array& tss);
+KHIVAAPI af::array dtw(const af::array &tss);
 
 /**
  * @brief Calculates euclidean distances between time series.
@@ -47,7 +46,7 @@ KHIVAAPI af::array dtw(const af::array& tss);
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-KHIVAAPI af::array euclidean(const af::array& tss);
+KHIVAAPI af::array euclidean(const af::array &tss);
 
 /**
  * @brief Calculates hamming distances between time series.
@@ -59,7 +58,7 @@ KHIVAAPI af::array euclidean(const af::array& tss);
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-KHIVAAPI af::array hamming(const af::array& tss);
+KHIVAAPI af::array hamming(const af::array &tss);
 
 /**
  * @brief Calculates manhattan distances between time series.
@@ -71,7 +70,7 @@ KHIVAAPI af::array hamming(const af::array& tss);
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-KHIVAAPI af::array manhattan(const af::array& tss);
+KHIVAAPI af::array manhattan(const af::array &tss);
 
 /**
  * @brief Calculates the Shape-Based distance (SBD). It computes the normalized cross-correlation and it returns 1.0
@@ -84,7 +83,7 @@ KHIVAAPI af::array manhattan(const af::array& tss);
  * Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between time series 0
  * and time series 1.
  */
-KHIVAAPI af::array sbd(const af::array& tss);
+KHIVAAPI af::array sbd(const af::array &tss);
 
 /**
  * @brief Calculates non squared version of the euclidean distance.
@@ -96,7 +95,7 @@ KHIVAAPI af::array sbd(const af::array& tss);
  * Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between time series 0
  * and time series 1.
  */
-KHIVAAPI af::array squaredEuclidean(const af::array& tss);
+KHIVAAPI af::array squaredEuclidean(const af::array &tss);
 
 }  // namespace distances
 }  // namespace khiva

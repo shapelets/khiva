@@ -277,7 +277,7 @@ std::vector<LineTuple> identifyRidgeLines(const af::array &cwt_tss, const khiva:
     auto startRow = rowsWithMaximal.back();
 
     // Setting the first Ridge Lines (rows, cols, gap number)
-    std::vector<int> lastRowCols = khiva::array::getIndexMaxColums(relativeMaximals.getRow(startRow));
+    std::vector<int> lastRowCols = khiva::array::getIndexMaxColumns(relativeMaximals.getRow(startRow));
     std::vector<CWTTuple> ridgeLines;
 
     for (auto c : lastRowCols) {
@@ -304,7 +304,7 @@ std::vector<LineTuple> identifyRidgeLines(const af::array &cwt_tss, const khiva:
     }
 
     for (const int &row : rows) {
-        std::vector<int> thisMaxCols = khiva::array::getIndexMaxColums(relativeMaximals.getRow(row));
+        std::vector<int> thisMaxCols = khiva::array::getIndexMaxColumns(relativeMaximals.getRow(row));
 
         // Increment the gap number of each line
         for (auto &line : ridgeLines) {

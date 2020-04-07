@@ -32,9 +32,9 @@ extern "C" {
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, const long *m, const long *n,
+KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, long m, long n,
                                       khiva_array *discord_distances, khiva_array *discord_indices,
-                                      khiva_array *subsequence_indices, bool *self_join, int *error_code,
+                                      khiva_array *subsequence_indices, bool self_join, int *error_code,
                                       char *error_message);
 
 /**
@@ -55,9 +55,9 @@ KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, const long *m, const long *n,
+KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, long m, long n,
                                     khiva_array *motif_distances, khiva_array *motif_indices,
-                                    khiva_array *subsequence_indices, bool *self_join, int *error_code,
+                                    khiva_array *subsequence_indices, bool self_join, int *error_code,
                                     char *error_message);
 
 /**
@@ -82,7 +82,7 @@ KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, co
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void find_best_n_occurrences(khiva_array *q, khiva_array *t, const long *n, khiva_array *distances,
+KHIVA_C_API void find_best_n_occurrences(khiva_array *q, khiva_array *t, long n, khiva_array *distances,
                                          khiva_array *indexes, int *error_code, char *error_message);
 
 /**
@@ -126,8 +126,8 @@ KHIVA_C_API void mass(khiva_array *q, khiva_array *t, khiva_array *distances, in
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void stomp(khiva_array *tssa, khiva_array *tssb, const long *m, khiva_array *p, khiva_array *i, int *error_code,
-                       char *error_message);
+KHIVA_C_API void stomp(khiva_array *tssa, khiva_array *tssb, long m, khiva_array *p, khiva_array *i,
+                       int *error_code, char *error_message);
 
 /**
  * @brief Primitive of the STOMP self join algorithm.
@@ -144,7 +144,7 @@ KHIVA_C_API void stomp(khiva_array *tssa, khiva_array *tssb, const long *m, khiv
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void stomp_self_join(khiva_array *tss, const long *m, khiva_array *p, khiva_array *i, int *error_code,
+KHIVA_C_API void stomp_self_join(khiva_array *tss, long m, khiva_array *p, khiva_array *i, int *error_code,
                                  char *error_message);
 
 /**
@@ -163,7 +163,7 @@ KHIVA_C_API void stomp_self_join(khiva_array *tss, const long *m, khiva_array *p
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void matrix_profile(khiva_array *tssa, khiva_array *tssb, const long *m, khiva_array *p, khiva_array *i,
+KHIVA_C_API void matrix_profile(khiva_array *tssa, khiva_array *tssb, long m, khiva_array *p, khiva_array *i,
                                 int *error_code, char *error_message);
 
 /**
@@ -181,8 +181,8 @@ KHIVA_C_API void matrix_profile(khiva_array *tssa, khiva_array *tssb, const long
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, const long *m, khiva_array *p, khiva_array *i, int *error_code,
-                                          char *error_message);
+KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, long m, khiva_array *p, khiva_array *i,
+                                          int *error_code, char *error_message);
 
 /**
  * @brief Calculates the matrix profile to the left and to the right between 't' and using a subsequence length of 'm'.
@@ -201,7 +201,7 @@ KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, const long *m, khiva
  *
  *  Notice that when there is no match the subsequence index is the length of tss.
  */
-KHIVA_C_API void matrix_profile_lr(khiva_array *tss, const long *m, khiva_array *pleft, khiva_array *ileft,
+KHIVA_C_API void matrix_profile_lr(khiva_array *tss, long m, khiva_array *pleft, khiva_array *ileft,
                                    khiva_array *pright, khiva_array *iright, int *error_code, char *error_message);
 
 /**
@@ -225,7 +225,7 @@ KHIVA_C_API void matrix_profile_lr(khiva_array *tss, const long *m, khiva_array 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void get_chains(khiva_array *tss, const long *m, khiva_array *chains, int *error_code, char *error_message);
+KHIVA_C_API void get_chains(khiva_array *tss, long m, khiva_array *chains, int *error_code, char *error_message);
 
 #ifdef __cplusplus
 }

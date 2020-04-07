@@ -4,15 +4,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <khiva/internal/scopedHostPtr.h>
 #include <khiva/regression.h>
 #include <khiva/statistics.h>
+
 #include <boost/math/distributions/students_t.hpp>
-#include <khiva/internal/scopedHostPtr.h>
 
 constexpr auto EPSILON = 1e-20;
 
-void khiva::regression::linear(const af::array& xss, const af::array& yss, af::array &slope, af::array &intercept, af::array &rvalue,
-                               af::array &pvalue, af::array &stderrest) {
+void khiva::regression::linear(const af::array &xss, const af::array &yss, af::array &slope, af::array &intercept,
+                               af::array &rvalue, af::array &pvalue, af::array &stderrest) {
     auto n = xss.dims(0);
 
     af::array meanX = af::mean(xss, 0);

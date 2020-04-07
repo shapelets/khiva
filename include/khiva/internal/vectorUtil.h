@@ -11,9 +11,8 @@
 #error Internal headers cannot be included from user code
 #endif
 
-#include <khiva/defines.h>
-
 #include <arrayfire.h>
+#include <khiva/defines.h>
 
 #include <vector>
 

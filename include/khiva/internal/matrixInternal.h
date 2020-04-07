@@ -11,9 +11,8 @@
 #error Internal headers cannot be included from user code
 #endif
 
-#include <khiva/defines.h>
-
 #include <arrayfire.h>
+#include <khiva/defines.h>
 
 #include <utility>
 #include <vector>
@@ -39,7 +38,7 @@ using ChainVector = std::vector<Chain>;
  * @return array Returns an array with as many elements as 't' in the first dimension and as many elements as the last
  * dimension of 'q' in the last dimension.
  */
-KHIVAAPI af::array slidingDotProduct(const af::array& q, const af::array& t);
+KHIVAAPI af::array slidingDotProduct(const af::array &q, const af::array &t);
 
 /**
  * @brief Calculates the moving average and standard deviation of the time series 't'.
@@ -51,7 +50,7 @@ KHIVAAPI af::array slidingDotProduct(const af::array& q, const af::array& t);
  * @param mean Output array containing the moving average.
  * @param stdev Output array containing the moving standard deviation.
  */
-KHIVAAPI void meanStdev(const af::array& t, af::array &a, long m, af::array &mean, af::array &stdev);
+KHIVAAPI void meanStdev(const af::array &t, af::array &a, long m, af::array &mean, af::array &stdev);
 
 /**
  * @brief Calculates the moving average and standard deviation of the time series 't'.
@@ -61,7 +60,7 @@ KHIVAAPI void meanStdev(const af::array& t, af::array &a, long m, af::array &mea
  * @param mean Output array containing the moving average.
  * @param stdev Output array containing the moving standard deviation.
  */
-KHIVAAPI void meanStdev(const af::array& t, long m, af::array &mean, af::array &stdev);
+KHIVAAPI void meanStdev(const af::array &t, long m, af::array &mean, af::array &stdev);
 
 /**
  * @brief Calculates the distance between 'q' and the time series 't', which produced the sliding. Multiple queries can
@@ -77,8 +76,9 @@ KHIVAAPI void meanStdev(const af::array& t, long m, af::array &mean, af::array &
  * @param mask Mask band matrix to filter the trivial match of a subsequence with itself.
  * @param distances Resulting distances.
  */
-KHIVAAPI void calculateDistances(const af::array& qt, const af::array& a, const af::array& sum_q, const af::array& sum_q2, const af::array& mean_t,
-                                 const af::array& sigma_t, const af::array& mask, af::array &distances);
+KHIVAAPI void calculateDistances(const af::array &qt, const af::array &a, const af::array &sum_q,
+                                 const af::array &sum_q2, const af::array &mean_t, const af::array &sigma_t,
+                                 const af::array &mask, af::array &distances);
 
 /**
  * @brief Calculates the distance between 'q' and the time series 't', which produced the sliding. Multiple queries can
@@ -93,8 +93,9 @@ KHIVAAPI void calculateDistances(const af::array& qt, const af::array& a, const 
  * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements in 'q'.
  * @param distances Resulting distances.
  */
-KHIVAAPI void calculateDistances(const af::array& qt, const af::array& a, const af::array& sum_q, const af::array& sum_q2, const af::array& mean_t,
-                                 const af::array& sigma_t, af::array &distances);
+KHIVAAPI void calculateDistances(const af::array &qt, const af::array &a, const af::array &sum_q,
+                                 const af::array &sum_q2, const af::array &mean_t, const af::array &sigma_t,
+                                 af::array &distances);
 
 /**
  * @brief Given a tile indices and sizes it returns true when tile would not be affected
@@ -141,8 +142,8 @@ KHIVAAPI af::array generateMask(long m, long numRows, long row, long numColumns,
  * @param mask Specifies the elements that should not be considered in the computation.
  * @param distances Resulting distances.
  */
-KHIVAAPI void massWithMask(af::array q, const af::array& t, const af::array& a, const af::array& mean_t, const af::array& sigma_t, const af::array& mask,
-                           af::array &distances);
+KHIVAAPI void massWithMask(af::array q, const af::array &t, const af::array &a, const af::array &mean_t,
+                           const af::array &sigma_t, const af::array &mask, af::array &distances);
 
 /**
  * @brief Mueen's Algorithm for Similarity Search.
@@ -156,22 +157,24 @@ KHIVAAPI void massWithMask(af::array q, const af::array& t, const af::array& a, 
  * @param sigma_t Moving standard deviation of 't' using a window size equal to the number of elements in 'q'.
  * @param distances Resulting distances.
  */
-KHIVAAPI void mass(af::array q, const af::array& t, const af::array& a, const af::array& mean_t, const af::array& sigma_t, af::array &distance);
+KHIVAAPI void mass(af::array q, const af::array &t, const af::array &a, const af::array &mean_t,
+                   const af::array &sigma_t, af::array &distance);
 
-KHIVAAPI void stomp_batched(const af::array& ta, af::array tb, long m, long batch_size, af::array &profile, af::array &index);
+KHIVAAPI void stomp_batched(const af::array &ta, af::array tb, long m, long batch_size, af::array &profile,
+                            af::array &index);
 
 KHIVAAPI void stomp_batched_two_levels(af::array ta, af::array tb, long m, long batch_size_b, long batch_size_a,
                                        af::array &profile, af::array &index);
 
-KHIVAAPI void stomp_parallel(const af::array& ta, af::array tb, long m, af::array &profile, af::array &index);
+KHIVAAPI void stomp_parallel(const af::array &ta, af::array tb, long m, af::array &profile, af::array &index);
 
 KHIVAAPI void stomp_batched_two_levels(af::array t, long m, long batch_size_b, long batch_size_a, af::array &profile,
                                        af::array &index);
 
 KHIVAAPI void stomp_parallel(af::array t, long m, af::array &profile, af::array &index);
 
-KHIVAAPI void findBestN(const af::array& profile, const af::array& index, long m, long n, af::array &distance, af::array &indices,
-                        af::array &subsequenceIndices, bool selfJoin, bool lookForMotifs);
+KHIVAAPI void findBestN(const af::array &profile, const af::array &index, long m, long n, af::array &distance,
+                        af::array &indices, af::array &subsequenceIndices, bool selfJoin, bool lookForMotifs);
 
 KHIVAAPI void scamp(af::array tss, long m, af::array &profile, af::array &index);
 

@@ -127,10 +127,10 @@ std::pair<int, int> getSegmentFromSelected(const Point &point, const std::vector
 }
 
 template <typename T>
-af::array PAA_CPU(const af::array& a, int bins) {
+af::array PAA_CPU(const af::array &a, int bins) {
     af::array result;
     auto n = a.dims(0);
-    
+
     auto reducedColumn = std::vector<T>(bins);
 
     // Find out the number of elements per bin
@@ -336,7 +336,7 @@ af::array khiva::dimensionality::PIP(const af::array &ts, int numberIPs) {
     x.reserve(selected.size());
     std::vector<float> y;
     y.reserve(selected.size());
-    for (auto & i : selected) {
+    for (auto &i : selected) {
         x.emplace_back(i.first);
         y.emplace_back(i.second);
     }
@@ -432,7 +432,7 @@ af::array khiva::dimensionality::PLABottomUp(const af::array &ts, float maxError
     return res;
 }
 
-std::vector<Point> khiva::dimensionality::PLASlidingWindow(const std::vector<Point> &ts, float maxError) {    
+std::vector<Point> khiva::dimensionality::PLASlidingWindow(const std::vector<Point> &ts, float maxError) {
     std::vector<Segment> segments;
 
     size_t anchor = 0;
@@ -587,7 +587,6 @@ af::array khiva::dimensionality::SAX(const af::array &a, int alphabet_size) {
         auto std_value = af::stdev<float>(ts);
         dim_t n = ts.dims(0);
         std::vector<int> aux(n, 0);
-        
 
         if (std_value > 0) {
             std::vector<float> breakingPoints = computeBreakpoints(alphabet_size, mean_value, std_value);
@@ -596,7 +595,7 @@ af::array khiva::dimensionality::SAX(const af::array &a, int alphabet_size) {
 
             // Iterate across elements of ts
             for (int i = 0; i < n; i++) {
-                size_t j = 0;                
+                size_t j = 0;
                 while ((j < breakingPoints.size()) && (a_h[i] > breakingPoints[j])) {
                     j++;
                 }
