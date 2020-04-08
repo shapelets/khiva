@@ -4,24 +4,22 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-# git support
-INCLUDE(GetGitRevisionDescription)
+set(VERSION_MAJOR ${Khiva_VERSION_MAJOR})
+set(VERSION_MINOR ${Khiva_VERSION_MINOR})
+set(VERSION_PATCH ${Khiva_VERSION_PATCH})
+set(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
-# get current version from git tags
-git_describe(VERSION --tags)
-get_git_head_revision(HEAD_REF LONG_COMMIT_ID)
-
-# parse the version information into pieces.
-STRING(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" VERSION_MAJOR "${VERSION}")
-STRING(REGEX REPLACE "^v[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${VERSION}")
-STRING(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${VERSION}")
-STRING(SUBSTRING ${LONG_COMMIT_ID} 0 7 VERSION_SHA1)
-SET(VERSION_SHORT "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+execute_process(
+        COMMAND git log -1 --format=%h
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        OUTPUT_VARIABLE VERSION_SHA1
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
 # dump version information down to a header file
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/khiva/version.h.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/khiva/version.h.in
                ${CMAKE_CURRENT_SOURCE_DIR}/include/khiva/version.h)
 
 # dump version to the version test file
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/test/versionTest.cpp.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/test/versionTest.cpp.in
                ${CMAKE_CURRENT_SOURCE_DIR}/test/versionTest.cpp)

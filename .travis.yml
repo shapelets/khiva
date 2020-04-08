@@ -34,7 +34,6 @@ matrix:
     - cpack
     - cpack -G DEB
     - cpack -G RPM
-    - mv khiva.sh khiva-${TRAVIS_TAG}.sh
     deploy:
       name: "${TRAVIS_TAG} - Linux"
       body: "${TRAVIS_TAG}"

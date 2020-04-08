@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 cmake_minimum_required(VERSION 3.9.6)
-project(Khiva LANGUAGES C CXX)
+project(Khiva VERSION 0.5.0  LANGUAGES C CXX)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Using C++ 11
