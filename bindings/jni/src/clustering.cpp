@@ -6,6 +6,7 @@
 
 #include <jni.h>
 #include <khiva/clustering.h>
+#include <khiva_jni/clustering.h>
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *env, jobject, jlong ref_tss, jint k,
                                                                        jfloat tolerance, jint maxIterations) {
@@ -47,7 +48,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *e
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Clustering_kMeans. Unknown reason");
     }
-    return nullptr;
+    return NULL;
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *env, jobject, jlong ref_tss, jint k,
@@ -90,5 +91,5 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *e
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Clustering_kShape. Unknown reason");
     }
-    return nullptr;
+    return NULL;
 }

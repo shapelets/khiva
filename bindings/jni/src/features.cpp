@@ -6,7 +6,10 @@
 
 #include <jni.h>
 #include <khiva/features.h>
-#include <khiva_jni/util.h>
+#include <khiva_jni/internal/util.h>
+#include <khiva_jni/features.h>
+
+using namespace khiva::bindings::jni;
 
 jlongArray JNICALL Java_io_shapelets_khiva_Features_absEnergy(JNIEnv *env, jobject, jlong ref) {
     try {

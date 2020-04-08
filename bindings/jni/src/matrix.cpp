@@ -7,8 +7,10 @@
 #include <arrayfire.h>
 #include <khiva/matrix.h>
 #include <khiva_jni/matrix.h>
-#include <khiva_jni/util.h>
+#include <khiva_jni/internal/util.h>
 #include <iostream>
+
+using namespace khiva::bindings::jni;
 
 jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env, jobject, jlong ref_profile,
                                                                     jlong ref_index, jlong m, jlong n,

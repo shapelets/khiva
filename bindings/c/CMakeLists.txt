@@ -39,9 +39,10 @@ target_include_directories(${KHIVALIB_C} PUBLIC
         ${KHIVALIB_C_INC})
 
 # Declare compilation libraries
-target_link_libraries(${KHIVALIB_C} PUBLIC
-        ${KHIVALIB} PRIVATE
-        ${CMAKE_DL_LIBS})
+target_link_libraries(${KHIVALIB_C}
+    PUBLIC ${KHIVALIB}
+    PRIVATE ${CMAKE_DL_LIBS})
+
 # Add compile definitions
 target_compile_definitions(${KHIVALIB_C} PRIVATE KHIVA_C_EXPORTS)
 

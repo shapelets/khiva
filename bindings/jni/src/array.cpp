@@ -6,10 +6,12 @@
 
 #include <khiva/array.h>
 #include <khiva_jni/array.h>
-#include <khiva_jni/util.h>
+#include <khiva_jni/internal/util.h>
 
 #include <array>
 #include <cstring>
+
+using namespace khiva::bindings::jni;
 
 #define CREATE_T_ARRAY(Ty, ty, dty)                                                                           \
     jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFrom##Ty(JNIEnv *env, jobject, j##ty##Array elems, \

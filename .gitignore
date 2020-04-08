@@ -15,3 +15,4 @@ test/versionTest.cpp
 *.info
 .vscode/ipch
 cmake-build-*
+build*

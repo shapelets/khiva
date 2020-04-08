@@ -6,7 +6,9 @@
 
 #include <khiva/polynomial.h>
 #include <khiva_jni/polynomial.h>
-#include <khiva_jni/util.h>
+#include <khiva_jni/internal/util.h>
+
+using namespace khiva::bindings::jni;
 
 jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY, jint deg) {
     try {
