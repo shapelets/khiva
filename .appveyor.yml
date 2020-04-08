@@ -48,7 +48,7 @@ on_finish:
 after_test:
   - cpack -G NSIS
 artifacts:
-  - path: build\khiva-$(APPVEYOR_REPO_TAG_NAME).exe
+  - path: build\khiva-*.exe
     name: installer
 deploy:
   release: "$(APPVEYOR_REPO_TAG_NAME) - Windows"

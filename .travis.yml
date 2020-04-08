@@ -1,5 +1,4 @@
 language: cpp
-sudo: required
 dist: bionic
 cache:
   directories:
@@ -9,7 +8,6 @@ matrix:
   include:
   - os: linux
     dist: bionic
-    sudo: required
     compiler:
     - gcc
     git:
@@ -22,7 +20,6 @@ matrix:
     - source .CI/travis/build_linux.sh
   - os: linux
     dist: bionic
-    sudo: required
     compiler:
     - clang
     git:
@@ -37,7 +34,6 @@ matrix:
     - cpack
     - cpack -G DEB
     - cpack -G RPM
-    - mv khiva.sh khiva-${TRAVIS_TAG}.sh
     deploy:
       name: "${TRAVIS_TAG} - Linux"
       body: "${TRAVIS_TAG}"
@@ -49,7 +45,7 @@ matrix:
       file:
       - "${TRAVIS_BUILD_DIR}/build/khiva-*.deb"
       - "${TRAVIS_BUILD_DIR}/build/khiva-*.rpm"
-      - "${TRAVIS_BUILD_DIR}/build/khiva-${TRAVIS_TAG}.sh"
+      - "${TRAVIS_BUILD_DIR}/build/khiva-*.sh"
       draft: true
       prerelease: false
       on:
@@ -103,7 +99,7 @@ matrix:
     - cpack -G productbuild
     deploy:
       name: "${TRAVIS_TAG} - MacOS"
-      body: "${TRAVIS_COMMIT_MESSAGE}"
+      body: "${TRAVIS_TAG}"
       skip_cleanup: true
       provider: releases
       api_key:
