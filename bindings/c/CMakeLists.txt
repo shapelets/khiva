@@ -12,25 +12,49 @@ project(KHIVALIB_C)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Set the base directory to parent so src and include become
-# equaly visible
-set(KHIVALIB_C_BASE_DIR "${PROJECT_SOURCE_DIR}")
 # Define source directory
-set(KHIVALIB_C_SRC "${KHIVALIB_C_BASE_DIR}/src")
+set(KHIVALIB_C_SRC "${PROJECT_SOURCE_DIR}/src")
 # Define include directories
-set(KHIVALIB_C_INC "${KHIVALIB_C_BASE_DIR}/include")
+set(KHIVALIB_C_INC "${PROJECT_SOURCE_DIR}/include")
 
 # Library Name
 set(KHIVALIB_C "khiva_c")
 
-# Files to add to compilation
-file(GLOB_RECURSE KHIVALIB_C_CODE
-        "${KHIVALIB_C_SRC}/*.cpp"
-        "${KHIVALIB_C_INC}/*.h"
-        "${KHIVALIB_C_INC}/internal/*.h")
+# Sources to add to compilation
+set(KHIVALIB_C_SOURCES ${KHIVALIB_C_SRC}/array.cpp
+                       ${KHIVALIB_C_SRC}/clustering.cpp
+                       ${KHIVALIB_C_SRC}/dimensionality.cpp
+                       ${KHIVALIB_C_SRC}/distances.cpp
+                       ${KHIVALIB_C_SRC}/features.cpp
+                       ${KHIVALIB_C_SRC}/library.cpp
+                       ${KHIVALIB_C_SRC}/linalg.cpp
+                       ${KHIVALIB_C_SRC}/matrix.cpp
+                       ${KHIVALIB_C_SRC}/normalization.cpp
+                       ${KHIVALIB_C_SRC}/polynomial.cpp
+                       ${KHIVALIB_C_SRC}/regression.cpp
+                       ${KHIVALIB_C_SRC}/regularization.cpp
+                       ${KHIVALIB_C_SRC}/statistics.cpp
+                       ${KHIVALIB_C_SRC}/util.cpp)
+
+# Headers to add to compilation
+set(KHIVALIB_C_HEADERS ${KHIVALIB_C_INC}/khiva_c/array.h
+                       ${KHIVALIB_C_INC}/khiva_c/clustering.h
+                       ${KHIVALIB_C_INC}/khiva_c/defines.h
+                       ${KHIVALIB_C_INC}/khiva_c/dimensionality.h
+                       ${KHIVALIB_C_INC}/khiva_c/distances.h
+                       ${KHIVALIB_C_INC}/khiva_c/features.h
+                       ${KHIVALIB_C_INC}/khiva_c/library.h
+                       ${KHIVALIB_C_INC}/khiva_c/linalg.h
+                       ${KHIVALIB_C_INC}/khiva_c/matrix.h
+                       ${KHIVALIB_C_INC}/khiva_c/normalization.h
+                       ${KHIVALIB_C_INC}/khiva_c/polynomial.h
+                       ${KHIVALIB_C_INC}/khiva_c/regression.h
+                       ${KHIVALIB_C_INC}/khiva_c/regularization.h
+                       ${KHIVALIB_C_INC}/khiva_c/statistics.h
+                       ${KHIVALIB_C_INC}/khiva_c/internal/util.h)
 
 # The output is a static library
-add_library(${KHIVALIB_C} SHARED ${KHIVALIB_C_CODE})
+add_library(${KHIVALIB_C} SHARED ${KHIVALIB_C_HEADERS} ${KHIVALIB_C_SOURCES})
 
 # Declare include directories
 target_include_directories(${KHIVALIB_C} PUBLIC
@@ -39,9 +63,10 @@ target_include_directories(${KHIVALIB_C} PUBLIC
         ${KHIVALIB_C_INC})
 
 # Declare compilation libraries
-target_link_libraries(${KHIVALIB_C} PUBLIC
-        ${KHIVALIB} PRIVATE
-        ${CMAKE_DL_LIBS})
+target_link_libraries(${KHIVALIB_C}
+    PUBLIC ${KHIVALIB}
+    PRIVATE ${CMAKE_DL_LIBS})
+
 # Add compile definitions
 target_compile_definitions(${KHIVALIB_C} PRIVATE KHIVA_C_EXPORTS)
 

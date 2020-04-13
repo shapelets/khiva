@@ -6,7 +6,9 @@
 
 #include <khiva/linalg.h>
 #include <khiva_jni/linalg.h>
-#include <khiva_jni/util.h>
+#include <khiva_jni/internal/util.h>
+
+using namespace khiva::bindings::jni;
 
 jlongArray JNICALL Java_io_shapelets_khiva_Linalg_lls(JNIEnv *env, jobject, jlong ref_a, jlong ref_b) {
     try {

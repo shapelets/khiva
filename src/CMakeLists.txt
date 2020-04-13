@@ -6,13 +6,13 @@
 
 cmake_minimum_required(VERSION 3.9.6)
 
+project(KHIVALIB)
+
 include(CheckLanguage)
 
 # Compile with C++11 support.
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON) 
-
-project(KHIVALIB) 
 
 if(NOT ${KHIVA_ONLY_CPU_BACKEND})
 	check_language(CUDA)
@@ -21,8 +21,8 @@ endif()
 if(CMAKE_CUDA_COMPILER)
 	message(STATUS "CUDA compiler found: ${CMAKE_CUDA_COMPILER}")
 	enable_language(CUDA)
-  	add_definitions("-D_HAS_CUDA_")
-  	include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+    add_definitions("-D_HAS_CUDA_")
+    include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
 elseif(${KHIVA_ONLY_CPU_BACKEND})
 else()
 	message(STATUS "No CUDA compiler found, building SCAMP without CUDA.")
@@ -41,22 +41,54 @@ find_package(Eigen3 CONFIG REQUIRED)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Files to add to compilation
-set(KHIVA_INTERNAL_SOURCES_PATH "${KHIVALIB_SRC}/khiva")
-file(GLOB_RECURSE KHIVALIB_CODE 
-    "${KHIVA_INTERNAL_SOURCES_PATH}/*.cpp"
-    "${KHIVA_INTERNAL_SOURCES_PATH}/*.h"
-    "${KHIVA_INTERNAL_SOURCES_PATH}/*.hpp"
-    "${KHIVALIB_INC}/*.h" )
+# Sources to add to compilation
+set(KHIVALIB_SOURCES ${KHIVALIB_SRC}/khiva/array.cpp
+                     ${KHIVALIB_SRC}/khiva/clustering.cpp
+                     ${KHIVALIB_SRC}/khiva/dimensionality.cpp
+                     ${KHIVALIB_SRC}/khiva/distances.cpp
+                     ${KHIVALIB_SRC}/khiva/features.cpp
+                     ${KHIVALIB_SRC}/khiva/library.cpp
+                     ${KHIVALIB_SRC}/khiva/libraryInternal.cpp
+                     ${KHIVALIB_SRC}/khiva/linalg.cpp
+                     ${KHIVALIB_SRC}/khiva/matrix.cpp
+                     ${KHIVALIB_SRC}/khiva/matrixInternal.cpp
+                     ${KHIVALIB_SRC}/khiva/normalization.cpp
+                     ${KHIVALIB_SRC}/khiva/polynomial.cpp
+                     ${KHIVALIB_SRC}/khiva/regression.cpp
+                     ${KHIVALIB_SRC}/khiva/regularization.cpp
+                     ${KHIVALIB_SRC}/khiva/statistics.cpp
+                     ${KHIVALIB_SRC}/khiva/version.cpp)
+
+# Headers to add to compilation
+set(KHIVALIB_HEADERS ${KHIVALIB_INC}/khiva/array.h
+                     ${KHIVALIB_INC}/khiva/clustering.h
+                     ${KHIVALIB_INC}/khiva/defines.h
+                     ${KHIVALIB_INC}/khiva/dimensionality.h
+                     ${KHIVALIB_INC}/khiva/distances.h
+                     ${KHIVALIB_INC}/khiva/features.h
+                     ${KHIVALIB_INC}/khiva/library.h
+                     ${KHIVALIB_INC}/khiva/linalg.h
+                     ${KHIVALIB_INC}/khiva/matrix.h
+                     ${KHIVALIB_INC}/khiva/normalization.h
+                     ${KHIVALIB_INC}/khiva/polynomial.h
+                     ${KHIVALIB_INC}/khiva/regression.h
+                     ${KHIVALIB_INC}/khiva/regularization.h
+                     ${KHIVALIB_INC}/khiva/statistics.h
+                     ${KHIVALIB_INC}/khiva/utils.h
+                     ${KHIVALIB_INC}/khiva/version.h
+                     ${KHIVALIB_INC}/khiva/internal/libraryInternal.h
+                     ${KHIVALIB_INC}/khiva/internal/matrixInternal.h
+                     ${KHIVALIB_INC}/khiva/internal/scopedHostPtr.h
+                     ${KHIVALIB_INC}/khiva/internal/vectorUtil.h)
 
 # The output is a static library
-add_library(${KHIVALIB} SHARED ${KHIVALIB_CODE})
+add_library(${KHIVALIB} SHARED ${KHIVALIB_HEADERS} ${KHIVALIB_SOURCES})
 
 # Declare include directories
 target_include_directories(${KHIVALIB} 
-						PRIVATE
-						   ${SCAMP_INCLUDE_DIRS}
-						PUBLIC
+                        PRIVATE
+                           ${SCAMP_INCLUDE_DIRS}
+                        PUBLIC
                            $<BUILD_INTERFACE:${KHIVALIB_INC}>
                            $<BUILD_INTERFACE:${KHIVALIB_INC}/internal>
                            $<INSTALL_INTERFACE:${KHIVA_INSTALL_INC_DIR}>)

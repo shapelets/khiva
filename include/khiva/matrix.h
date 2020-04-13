@@ -152,7 +152,8 @@ KHIVAAPI void matrixProfile(const af::array &tss, long m, af::array &profile, af
  * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
  * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
  *
- * @param t Query and reference time series.
+ * @param ta Query and reference time series.
+ * @param tb Query and reference time series.
  * @param m Subsequence length.
  * @param profile The matrix profile, which reflects the distance to the closer element of the subsequence from 't' in a
  * different location of itself.

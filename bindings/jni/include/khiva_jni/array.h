@@ -7,7 +7,6 @@
 #ifndef KHIVA_BINDINGJAVA_ARRAY_H
 #define KHIVA_BINDINGJAVA_ARRAY_H
 
-#include <arrayfire.h>
 #include <jni.h>
 
 #ifdef __cplusplus

@@ -59,11 +59,11 @@ void get_data(khiva_array *array, void *data, int *error_code, char *error_messa
     }
 }
 
-void get_dims(khiva_array *array, long long *dimens, int *error_code, char *error_message) {
+void get_dims(khiva_array *array, long long *dims, int *error_code, char *error_message) {
     try {
         af::array var = af::array(*array);
         af::dim4 d = khiva::array::getDims(var);
-        std::memcpy(dimens, d.dims, sizeof(d.dims));
+        std::copy(std::begin(d.dims), std::end(d.dims), dims);
         af_retain_array(array, var.get());
         *error_code = 0;
     } catch (const std::exception &e) {
