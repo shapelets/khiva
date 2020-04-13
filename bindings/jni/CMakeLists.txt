@@ -13,7 +13,6 @@ if (NOT JNI_FOUND)
     message(FATAL_ERROR "JDK not found. Please install JDK or disable building JNI bindings by using the flag KHIVA_BUILD_JNI_BINDINGS.")
 endif ()
 
-
 # Compile with C++11 support.
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,47 +22,43 @@ set(KHIVALIB_JNI_SRC "${PROJECT_SOURCE_DIR}/src")
 # Define include directories
 set(KHIVALIB_JNI_INC "${PROJECT_SOURCE_DIR}/include")
 
+# Sources to add to compilation
+set(KHIVALIB_JNI_SOURCES ${KHIVALIB_JNI_SRC}/array.cpp
+                         ${KHIVALIB_JNI_SRC}/clustering.cpp
+                         ${KHIVALIB_JNI_SRC}/dimensionality.cpp
+                         ${KHIVALIB_JNI_SRC}/distances.cpp
+                         ${KHIVALIB_JNI_SRC}/features.cpp
+                         ${KHIVALIB_JNI_SRC}/library.cpp
+                         ${KHIVALIB_JNI_SRC}/linalg.cpp
+                         ${KHIVALIB_JNI_SRC}/matrix.cpp
+                         ${KHIVALIB_JNI_SRC}/normalization.cpp
+                         ${KHIVALIB_JNI_SRC}/polynomial.cpp
+                         ${KHIVALIB_JNI_SRC}/regression.cpp
+                         ${KHIVALIB_JNI_SRC}/regularization.cpp
+                         ${KHIVALIB_JNI_SRC}/statistics.cpp
+                         ${KHIVALIB_JNI_SRC}/util.cpp)
 
-set(KHIVALIB_JNI_SOURCES $KHIVALIB_JNI_SRC/array.cpp
-                         $KHIVALIB_JNI_SRC/clustering.cpp
-                         $KHIVALIB_JNI_SRC/dimensionality.cpp
-                         $KHIVALIB_JNI_SRC/distances.cpp
-                         $KHIVALIB_JNI_SRC/features.cpp
-                         $KHIVALIB_JNI_SRC/library.cpp
-                         $KHIVALIB_JNI_SRC/linalg.cpp
-                         $KHIVALIB_JNI_SRC/matrix.cpp
-                         $KHIVALIB_JNI_SRC/normalization.cpp
-                         $KHIVALIB_JNI_SRC/polynomial.cpp
-                         $KHIVALIB_JNI_SRC/regression.cpp
-                         $KHIVALIB_JNI_SRC/regularization.cpp
-                         $KHIVALIB_JNI_SRC/statistics.cpp
-                         $KHIVALIB_JNI_SRC/util.cpp)
-
-set(KHIVALIB_JNI_HEADERS $KHIVALIB_JNI_INC/khiva_jni/array.h
-                         $KHIVALIB_JNI_INC/khiva_jni/clustering.h
-                         $KHIVALIB_JNI_INC/khiva_jni/dimensionality.h
-                         $KHIVALIB_JNI_INC/khiva_jni/distances.h
-                         $KHIVALIB_JNI_INC/khiva_jni/features.h
-                         $KHIVALIB_JNI_INC/khiva_jni/library.h
-                         $KHIVALIB_JNI_INC/khiva_jni/linalg.h
-                         $KHIVALIB_JNI_INC/khiva_jni/matrix.h
-                         $KHIVALIB_JNI_INC/khiva_jni/normalization.h
-                         $KHIVALIB_JNI_INC/khiva_jni/polynomial.h
-                         $KHIVALIB_JNI_INC/khiva_jni/regression.h
-                         $KHIVALIB_JNI_INC/khiva_jni/regularization.h
-                         $KHIVALIB_JNI_INC/khiva_jni/statistics.h
-                         $KHIVALIB_JNI_INC/khiva_jni/internal/util.h)
-
-# Files to add to compilation
-file(GLOB_RECURSE KHIVALIB_JNI_CODE
-        "${KHIVALIB_JNI_SRC}/*.cpp"
-        "${KHIVALIB_JNI_INC}/*.h")
+# Headers to add to compilation
+set(KHIVALIB_JNI_HEADERS ${KHIVALIB_JNI_INC}/khiva_jni/array.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/clustering.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/dimensionality.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/distances.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/features.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/library.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/linalg.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/matrix.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/normalization.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/polynomial.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/regression.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/regularization.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/statistics.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/internal/util.h)
 
 # Library Name
 set(KHIVALIB_JNI "khiva_jni")
 
 # The output is a static library
-add_library(${KHIVALIB_JNI} SHARED ${KHIVALIB_JNI_CODE})
+add_library(${KHIVALIB_JNI} SHARED ${KHIVALIB_JNI_HEADERS} ${KHIVALIB_JNI_SOURCES})
 
 # Declare include directories
 target_include_directories(${KHIVALIB_JNI}
@@ -94,4 +89,5 @@ install(DIRECTORY ${KHIVALIB_JNI_INC}/
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN ".gitignore" EXCLUDE
+        PATTERN "internal/*.h" EXCLUDE
         )
