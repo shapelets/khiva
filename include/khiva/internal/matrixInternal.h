@@ -158,7 +158,7 @@ KHIVAAPI void massWithMask(af::array q, const af::array &t, const af::array &a, 
  * @param distances Resulting distances.
  */
 KHIVAAPI void mass(af::array q, const af::array &t, const af::array &a, const af::array &mean_t,
-                   const af::array &sigma_t, af::array &distance);
+                   const af::array &sigma_t, af::array &distances);
 
 KHIVAAPI void stomp_batched(const af::array &ta, af::array tb, long m, long batch_size, af::array &profile,
                             af::array &index);

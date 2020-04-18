@@ -92,4 +92,5 @@ install(DIRECTORY ${KHIVALIB_JNI_INC}/
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN ".gitignore" EXCLUDE
+        PATTERN "internal/*.h" EXCLUDE
         )
