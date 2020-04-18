@@ -33,9 +33,9 @@ void JNICALL Java_io_shapelets_khiva_Library_setBackend(JNIEnv *env, jobject, ji
     }
 }
 
-int JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *env, jobject) {
+jint JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *env, jobject) {
     try {
-        return static_cast<int>(khiva::library::getBackend());
+        return static_cast<jint>(khiva::library::getBackend());
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -47,7 +47,7 @@ int JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *env, jobject) {
     return -1;
 }
 
-int JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *env, jobject) {
+jint JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *env, jobject) {
     try {
         return khiva::library::getBackends();
     } catch (const std::exception &e) {
@@ -73,7 +73,7 @@ void JNICALL Java_io_shapelets_khiva_Library_setDevice(JNIEnv *env, jobject, jin
     }
 }
 
-int JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *env, jobject) {
+jint JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *env, jobject) {
     try {
         return khiva::library::getDevice();
     } catch (const std::exception &e) {
@@ -87,7 +87,7 @@ int JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *env, jobject) {
     return -1;
 }
 
-int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *env, jobject) {
+jint JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *env, jobject) {
     try {
         return khiva::library::getDeviceCount();
     } catch (const std::exception &e) {

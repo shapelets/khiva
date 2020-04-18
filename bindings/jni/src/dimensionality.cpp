@@ -8,33 +8,15 @@
 #include <khiva_jni/dimensionality.h>
 #include <stdexcept>
 
-jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *env, jobject, jlong ref, jint bins) {
+jlong JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *env, jobject, jlong ref, jint bins) {
     try {
-        const jint l = 2;
-        jlong tmp[l];
-        jlongArray pointers = env->NewLongArray(l);
-
-        auto arr = (af_array) ref;
-        af::array var = af::array(arr);
-
-        jlong raw_pointer = 0;
-        auto af_p = (af_array) raw_pointer;
-
-        char const *className = "java/lang/RuntimeException";
-        jclass exClass = env->FindClass(className);
-
-        af_retain_array(&arr, var.get());
-        try {
-            af_retain_array(&af_p, khiva::dimensionality::PAA(var, bins).get());
-        } catch (std::invalid_argument &ia) {
-            char const *message = ia.what();
-            env->ThrowNew(exClass, message);
-        }
-        tmp[0] = (jlong) arr;
-        tmp[1] = (jlong) af_p;
-
-        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
-        return pointers;
+        auto arr = *reinterpret_cast<af::array *>(ref);               
+        auto paa = khiva::dimensionality::PAA(arr, bins);     
+        return reinterpret_cast<jlong>(new af::array(paa));
+    } catch (std::invalid_argument &ia) {
+        auto message = ia.what();
+        auto exClass = env->FindClass("java/lang/RuntimeException");
+        env->ThrowNew(exClass, message);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -42,37 +24,18 @@ jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *env, jobje
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Dimensionality_paa. Unknown reason");
     }
-    return nullptr;
+    return 0;
 }
 
-jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *env, jobject, jlong ref, jint numberIPs) {
+jlong JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *env, jobject, jlong ref, jint numberIPs) {
     try {
-        const jint l = 2;
-        jlong tmp[l];
-        jlongArray pointers = env->NewLongArray(l);
-
-        auto arr = (af_array) ref;
-        af::array var = af::array(arr);
-
-        jlong raw_pointer = 0;
-        auto af_p = (af_array) raw_pointer;
-
-        char const *className = "java/lang/RuntimeException";
-        jclass exClass = env->FindClass(className);
-
-        af_retain_array(&arr, var.get());
-        try {
-            af_retain_array(&af_p, khiva::dimensionality::PIP(var, numberIPs).get());
-        } catch (std::invalid_argument &ia) {
-            char const *message = ia.what();
-            env->ThrowNew(exClass, message);
-        }
-
-        tmp[0] = (jlong) arr;
-        tmp[1] = (jlong) af_p;
-
-        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
-        return pointers;
+        auto arr = *reinterpret_cast<af::array *>(ref);
+        auto pip = khiva::dimensionality::PIP(arr, numberIPs);
+        return reinterpret_cast<jlong>(new af::array(pip));
+    } catch (std::invalid_argument &ia) {
+        auto message = ia.what();
+        auto exClass = env->FindClass("java/lang/RuntimeException");
+        env->ThrowNew(exClass, message);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -80,38 +43,19 @@ jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *env, jobje
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Dimensionality_pip. Unknown reason");
     }
-    return nullptr;
+    return 0;
 }
 
-jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref,
+jlong JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref,
                                                                       jfloat maxError) {
     try {
-        const jint l = 2;
-        jlong tmp[l];
-        jlongArray pointers = env->NewLongArray(l);
-
-        auto arr = (af_array) ref;
-        af::array var = af::array(arr);
-
-        jlong raw_pointer = 0;
-        auto af_p = (af_array) raw_pointer;
-
-        char const *className = "java/lang/RuntimeException";
-        jclass exClass = env->FindClass(className);
-
-        af_retain_array(&arr, var.get());
-        try {
-            af_retain_array(&af_p, khiva::dimensionality::PLABottomUp(var, maxError).get());
-        } catch (std::invalid_argument &ia) {
-            char const *message = ia.what();
-            env->ThrowNew(exClass, message);
-        }
-
-        tmp[0] = (jlong) arr;
-        tmp[1] = (jlong) af_p;
-
-        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
-        return pointers;
+        auto arr = *reinterpret_cast<af::array *>(ref);
+        auto pla = khiva::dimensionality::PLABottomUp(arr, maxError);
+        return reinterpret_cast<jlong>(new af::array(pla));
+    } catch (std::invalid_argument &ia) {
+        auto message = ia.what();
+        auto exClass = env->FindClass("java/lang/RuntimeException");
+        env->ThrowNew(exClass, message);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -119,38 +63,19 @@ jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *en
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Dimensionality_PLABottomUp. Unknown reason");
     }
-    return nullptr;
+    return 0;
 }
 
-jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWindow(JNIEnv *env, jobject, jlong ref,
+jlong JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWindow(JNIEnv *env, jobject, jlong ref,
                                                                            jfloat maxError) {
     try {
-        const jint l = 2;
-        jlong tmp[l];
-        jlongArray pointers = env->NewLongArray(l);
-
-        auto arr = (af_array) ref;
-        af::array var = af::array(arr);
-
-        jlong raw_pointer = 0;
-        auto af_p = (af_array) raw_pointer;
-
-        char const *className = "java/lang/RuntimeException";
-        jclass exClass = env->FindClass(className);
-
-        af_retain_array(&arr, var.get());
-        try {
-            af_retain_array(&af_p, khiva::dimensionality::PLASlidingWindow(var, maxError).get());
-        } catch (std::invalid_argument &ia) {
-            char const *message = ia.what();
-            env->ThrowNew(exClass, message);
-        }
-
-        tmp[0] = (jlong) arr;
-        tmp[1] = (jlong) af_p;
-
-        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
-        return pointers;
+        auto arr = *reinterpret_cast<af::array *>(ref);
+        auto pla = khiva::dimensionality::PLASlidingWindow(arr, maxError);
+        return reinterpret_cast<jlong>(new af::array(pla));
+    } catch (std::invalid_argument &ia) {
+        auto message = ia.what();
+        auto exClass = env->FindClass("java/lang/RuntimeException");
+        env->ThrowNew(exClass, message);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -158,38 +83,19 @@ jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWindow(JNIEn
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Dimensionality_PLASlidingWindow. Unknown reason");
     }
-    return nullptr;
+    return 0;
 }
 
-jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject, jlong ref,
+jlong JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject, jlong ref,
                                                                               jdouble epsilon) {
     try {
-        const jint l = 2;
-        jlong tmp[l];
-        jlongArray pointers = env->NewLongArray(l);
-
-        auto arr = (af_array) ref;
-        af::array var = af::array(arr);
-
-        jlong raw_pointer = 0;
-        auto af_p = (af_array) raw_pointer;
-
-        char const *className = "java/lang/RuntimeException";
-        jclass exClass = env->FindClass(className);
-
-        af_retain_array(&arr, var.get());
-        try {
-            af_retain_array(&af_p, khiva::dimensionality::ramerDouglasPeucker(var, epsilon).get());
-        } catch (std::invalid_argument &ia) {
-            char const *message = ia.what();
-            env->ThrowNew(exClass, message);
-        }
-
-        tmp[0] = (jlong) arr;
-        tmp[1] = (jlong) af_p;
-
-        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
-        return pointers;
+        auto arr = *reinterpret_cast<af::array *>(ref);
+        auto result = khiva::dimensionality::ramerDouglasPeucker(arr, epsilon);
+        return reinterpret_cast<jlong>(new af::array(result));
+    } catch (std::invalid_argument &ia) {
+        auto message = ia.what();
+        auto exClass = env->FindClass("java/lang/RuntimeException");
+        env->ThrowNew(exClass, message);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -197,37 +103,18 @@ jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JN
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Dimensionality_ramerDouglasPeucker. Unknown reason");
     }
-    return nullptr;
+    return 0;
 }
 
-jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *env, jobject, jlong ref, jint alphabetSize) {
+jlong JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *env, jobject, jlong ref, jint alphabetSize) {
     try {
-        const jint l = 2;
-        jlong tmp[l];
-        jlongArray pointers = env->NewLongArray(l);
-
-        auto arr = (af_array) ref;
-        af::array var = af::array(arr);
-
-        jlong raw_pointer = 0;
-        auto af_p = (af_array) raw_pointer;
-
-        char const *className = "java/lang/RuntimeException";
-        jclass exClass = env->FindClass(className);
-
-        af_retain_array(&arr, var.get());
-        try {
-            af_retain_array(&af_p, khiva::dimensionality::SAX(var, alphabetSize).get());
-        } catch (std::invalid_argument &ia) {
-            char const *message = ia.what();
-            env->ThrowNew(exClass, message);
-        }
-
-        tmp[0] = (jlong) arr;
-        tmp[1] = (jlong) af_p;
-
-        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
-        return pointers;
+        auto arr = *reinterpret_cast<af::array *>(ref);
+        auto result = khiva::dimensionality::SAX(arr, alphabetSize);
+        return reinterpret_cast<jlong>(new af::array(result));
+    } catch (std::invalid_argument &ia) {
+        auto message = ia.what();
+        auto exClass = env->FindClass("java/lang/RuntimeException");
+        env->ThrowNew(exClass, message);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -235,37 +122,18 @@ jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *env, jobje
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Dimensionality_sax. Unknown reason");
     }
-    return nullptr;
+    return 0;
 }
 
-jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref, jint numPoints) {
+jlong JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref, jint numPoints) {
     try {
-        const jint l = 2;
-        jlong tmp[l];
-        jlongArray pointers = env->NewLongArray(l);
-
-        auto arr = (af_array) ref;
-        af::array var = af::array(arr);
-
-        jlong raw_pointer = 0;
-        auto af_p = (af_array) raw_pointer;
-
-        char const *className = "java/lang/RuntimeException";
-        jclass exClass = env->FindClass(className);
-
-        af_retain_array(&arr, var.get());
-        try {
-            af_retain_array(&af_p, khiva::dimensionality::visvalingam(var, numPoints).get());
-        } catch (std::invalid_argument &ia) {
-            char const *message = ia.what();
-            env->ThrowNew(exClass, message);
-        }
-
-        tmp[0] = (jlong) arr;
-        tmp[1] = (jlong) af_p;
-
-        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
-        return pointers;
+        auto arr = *reinterpret_cast<af::array *>(ref);
+        auto result = khiva::dimensionality::visvalingam(arr, numPoints);
+        return reinterpret_cast<jlong>(new af::array(result));
+    } catch (std::invalid_argument &ia) {
+        auto message = ia.what();
+        auto exClass = env->FindClass("java/lang/RuntimeException");
+        env->ThrowNew(exClass, message);
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, e.what());
@@ -273,5 +141,5 @@ jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(JNIEnv *en
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Dimensionality_visvalingam. Unknown reason");
     }
-    return nullptr;
+    return 0;
 }

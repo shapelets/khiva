@@ -19,11 +19,11 @@ extern "C" {
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
  *
- * @return The updated reference and an upper triangular matrix where each position corresponds to the distance between
+ * @return A reference to an upper triangular matrix where each position corresponds to the distance between
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between
  * time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the Dynamic Time Warping Distance.
@@ -31,11 +31,11 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_euclidean(JNIEnv 
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
  *
- * @return result The updated ref and an upper triangular matrix where each position corresponds to the distance between
+ * @return A reference to an upper triangular matrix where each position corresponds to the distance between
  * two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_dtw(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Distances_dtw(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates Hamming distances between time series.
@@ -43,11 +43,11 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_dtw(JNIEnv *env, 
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
  *
- * @return The updated ref and an upper triangular matrix where each position corresponds to the
+ * @return A reference to an upper triangular matrix where each position corresponds to the
  * distance between two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the
  * distance between time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_hamming(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Distances_hamming(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates Manhattan distances between time series.
@@ -55,11 +55,11 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_hamming(JNIEnv *e
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
  *
- * @return The updated ref and an upper triangular matrix where each position corresponds to the distance between two
+ * @return A reference to an upper triangular matrix where each position corresponds to the distance between two
  * time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance between time
  * series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the Shape-Based distance (SBD). It computes the normalized cross-correlation and it returns 1.0
@@ -68,11 +68,11 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_manhattan(JNIEnv 
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
  *
- * @return result The updated reference and an upper triangular matrix where each position corresponds to the distance
+ * @return A reference to an upper triangular matrix where each position corresponds to the distance
  * between two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_sbd(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Distances_sbd(JNIEnv *env, jobject, jlong ref);
 
 /**
  * @brief Calculates the non squared version of the euclidean distance.
@@ -80,11 +80,11 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_sbd(JNIEnv *env, 
  * @param tss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
  *
- * @return result The updated reference and an upper triangular matrix where each position corresponds to the distance
+ * @return A reference to an upper triangular matrix where each position corresponds to the distance
  * between two time series. Diagonal elements will be zero. For example: Position row 0 column 1 records the distance
  * between time series 0 and time series 1.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref);
 
 #ifdef __cplusplus
 }

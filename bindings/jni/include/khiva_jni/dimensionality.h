@@ -27,9 +27,9 @@ extern "C" {
  * @param ref Set of points.
  * @param bins Sets the total number of divisions.
  *
- * @return The updated ref and an array of points with the reduced dimensionality.
+ * @return A reference to an array of points with the reduced dimensionality.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *env, jobject, jlong ref, jint bins);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *env, jobject, jlong ref, jint bins);
 
 /**
  * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.
@@ -40,9 +40,9 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *
  * @param ref Expects an input array whose dimension zero is the length of the time series.
  * @param numberIPs The number of points to be returned.
  *
- * @return The updated ref and an array with the most Perceptually Important numberIPs.
+ * @return A reference to an array with the most Perceptually Important numberIPs.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *env, jobject, jlong ref,
                                                                         jint numberIPs);
 
 /**
@@ -55,9 +55,9 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *
  * points in the first column and the second component of the points in the second column.
  * @param maxError The maximum approximation error allowed.
  *
- * @return The updated reference and a reference to an Array with the reduced number of points.
+ * @return A reference to an Array with the reduced number of points.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref,
                                                                                 jfloat maxError);
 
 /**
@@ -70,9 +70,9 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(
  * points in the first column and the second component of the points in the second column.
  * @param maxError The maximum approximation error allowed.
  *
- * @return The updated reference and a reference to an Array with the reduced number of points.
+ * @return A reference to an Array with the reduced number of points.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWindow(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWindow(JNIEnv *env, jobject, jlong ref,
                                                                                      jfloat maxError);
 
 /**
@@ -89,10 +89,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWi
  * @param ref Array with the x-coordinates and y-coordinates of the input points (x in column 0 and y in column 1).
  * @param epsilon It acts as the threshold value to decide which points should be considered meaningful or not.
  *
- * @return The updated ref and an array with the x-coordinates and y-coordinates of the selected points (x in column 0
+ * @return A reference to an array with the x-coordinates and y-coordinates of the selected points (x in column 0
  * and y in column 1).
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject, jlong ref,
                                                                                         jdouble epsilon);
 
 /**
@@ -110,9 +110,9 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglas
  * @param ref Array with the input time series.
  * @param alphabetSize Number of element within the alphabet.
  *
- * @return The updated ref and an array of symbols.
+ * @return A reference to an array of symbols.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *env, jobject, jlong ref,
                                                                         jint alphabetSize);
 
 /**
@@ -125,10 +125,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *
  * @param ref Array with the x-coordinates and y-coordinates of the input points (x in column 0 and y in column 1).
  * @param numPoints Sets the number of points returned after the execution of the method.
  *
- * @return The updated ref and an array with the x-coordinates and y-coordinates of the selected points (x in column 0
+ * @return A reference to an array with the x-coordinates and y-coordinates of the selected points (x in column 0
  * and y in column 1).
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref,
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref,
                                                                                 jint numPoints);
 
 #ifdef __cplusplus

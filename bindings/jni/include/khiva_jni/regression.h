@@ -22,7 +22,7 @@ extern "C" {
  * @param ref_yss Expects an input array whose dimension zero is the length of the time series (all the same) and
  * dimension one indicates the number of time series.
  *
- * @return An array with the updated refs and refs to:
+ * @return An array with refs to:
  *      {
  *          slope Slope of the regression line.
  *          intercept Intercept of the regression line.

@@ -93,7 +93,7 @@ SCAMP::SCAMPArgs getDefaultArgs() {
     return args;
 }
 
-float convertToEuclidean(float val, uint64_t window) {
+double convertToEuclidean(float val, uint64_t window) {
     // If there was no match, we can't do a valid conversion, just return NaN
     if (val < -1) {
         return std::numeric_limits<float>::max();
@@ -112,7 +112,7 @@ MatrixProfilePair getProfileOutput(const SCAMP::Profile &p, uint64_t window) {
     for (size_t i = 0; i < arr.size(); ++i) {
         SCAMP::mp_entry e;
         e.ulong = arr[i];
-        distances[i] = static_cast<double>(convertToEuclidean(e.floats[0], window));
+        distances[i] = convertToEuclidean(e.floats[0], window);
         indexes[i] = (e.floats[0] < -1) ? -1 : e.ints[1];
     }
     return std::make_pair(std::move(distances), std::move(indexes));
@@ -142,7 +142,7 @@ void runScamp(SCAMP::SCAMPArgs &args) {
 
     try {
         SCAMP::do_SCAMP(&args, devices, numWorkersCPU);
-    } catch (SCAMPException &e) {
+    } catch (SCAMPException &) {
         return;
     }
 }

@@ -14,7 +14,10 @@
 #include <limits>
 
 namespace khiva {
+
 using dtype = af::dtype;
+constexpr auto KHIVA_MAX_DIMS = 4U;
+
 namespace array {
 
 /**

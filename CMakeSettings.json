@@ -27,6 +27,11 @@
           "name": "KHIVA_USE_CONAN",
           "value": "OFF",
           "type": "BOOL"
+        },
+        {
+          "name": "KHIVA_BUILD_DOCUMENTATION",
+          "value": "OFF",
+          "type": "BOOL"
         }
       ]
     },

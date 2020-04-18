@@ -46,7 +46,7 @@ void khiva::regression::linear(const af::array &xss, const af::array &yss, af::a
     r = af::max(r, -1.0);
     rvalue = r;
 
-    long df = n - 2;
+    auto df = n - 2;
     slope = rNum / ssxm;
     intercept = meanY - slope * meanX;
 

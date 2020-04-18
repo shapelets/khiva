@@ -7,18 +7,9 @@
 #include <arrayfire.h>
 #include <khiva/array.h>
 
-static af::dim4 toDim4(const unsigned ndims, const dim_t *const dims) {
-    af::dim4 d(1, 1, 1, 1);
-
-    for (unsigned i = 0; i < ndims; i++) {
-        d[i] = dims[i];
-    }
-    return d;
-}
-
 af::array khiva::array::createArray(const void *data, unsigned ndims, const dim_t *dims, const int type) {
-    af::dim4 d = toDim4(ndims, dims);
-    switch ((khiva::dtype)(type)) {
+    af::dim4 d = af::dim4(ndims, dims);
+    switch (static_cast<khiva::dtype>(type)) {
         case khiva::dtype::f32:
             return af::array(d, static_cast<const float *>(data));
         case khiva::dtype::c32:
