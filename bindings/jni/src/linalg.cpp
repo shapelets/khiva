@@ -6,19 +6,8 @@
 
 #include <khiva/linalg.h>
 #include <khiva_jni/linalg.h>
+#include <khiva_jni/internal/utils.h>
 
 jlong JNICALL Java_io_shapelets_khiva_Linalg_lls(JNIEnv *env, jobject, jlong ref_a, jlong ref_b) {
-    try {
-        auto arr_a = *reinterpret_cast<af::array *>(ref_a);
-        auto arr_b = *reinterpret_cast<af::array *>(ref_b);
-        auto result = khiva::linalg::lls(arr_a, arr_b);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Linalg_lls. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCallTwoArrays(env, khiva::linalg::lls, ref_a, ref_b);
 }

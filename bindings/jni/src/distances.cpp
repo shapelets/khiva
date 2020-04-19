@@ -4,96 +4,31 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <jni.h>
 #include <khiva/distances.h>
 #include <khiva_jni/distances.h>
+#include <khiva_jni/internal/utils.h>
 
 jlong JNICALL Java_io_shapelets_khiva_Distances_euclidean(JNIEnv *env, jobject, jlong ref) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::distances::euclidean(arr);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Distances_euclidean. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::distances::euclidean, ref);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Distances_dtw(JNIEnv *env, jobject, jlong ref) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::distances::dtw(arr);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Distances_dtw. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(
+        env, [](const af::array &a) { return khiva::distances::dtw(a); }, ref);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Distances_hamming(JNIEnv *env, jobject, jlong ref) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::distances::hamming(arr);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Distances_hamming. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::distances::hamming, ref);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Distances_manhattan(JNIEnv *env, jobject, jlong ref) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::distances::manhattan(arr);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Distances_manhattan. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::distances::manhattan, ref);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Distances_sbd(JNIEnv *env, jobject, jlong ref) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::distances::sbd(arr);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Distances_sbd. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::distances::sbd, ref);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Distances_squaredEuclidean(JNIEnv *env, jobject, jlong ref) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::distances::squaredEuclidean(arr);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Distances_squaredEuclidean. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::distances::squaredEuclidean, ref);
 }

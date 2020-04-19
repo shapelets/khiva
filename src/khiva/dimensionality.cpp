@@ -229,9 +229,7 @@ void recomputeAreaNeighbor(std::map<int64_t, VisvalingamSummaryPoint>::iterator 
 }  // namespace
 
 std::vector<Point> khiva::dimensionality::PAA(const std::vector<Point> &points, int bins) {
-    auto begin = points.begin();
-    auto last = points.end();
-    float xrange = (*(last - 1)).first - (*begin).first;
+    float xrange = points.back().first - points.front().first;    
     float width_bin = xrange / bins;
     float reduction = bins / xrange;
 
@@ -239,11 +237,11 @@ std::vector<Point> khiva::dimensionality::PAA(const std::vector<Point> &points, 
     std::vector<int> counter(bins, 0);
 
     // Iterating over the time series
-    for (auto i = begin; i != last; i++) {
-        int pos = static_cast<int>(std::min((*i).first * reduction, (float)(bins - 1)));
-        sum[pos] += (*i).second;
-        counter[pos] = counter[pos] + 1;
-    }
+    for (const auto &p : points) {        
+        auto pos = static_cast<size_t>(std::min(p.first * reduction, (float)(bins - 1)));
+        sum[pos] += p.second;
+        counter[pos] += 1;
+    }    
 
     std::vector<Point> result;
     result.reserve(bins);

@@ -7,20 +7,10 @@
 #include <khiva/normalization.h>
 #include <khiva_jni/normalization.h>
 #include <khiva/internal/vectorUtil.h>
+#include <khiva_jni/internal/utils.h>
 
 jlong JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNorm(JNIEnv *env, jobject, jlong ref) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::normalization::decimalScalingNorm(arr);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Normalization_decimalScalingNorm. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::normalization::decimalScalingNorm, ref);
 }
 
 void JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNormInPlace(JNIEnv *env, jobject, jlong ref) {
@@ -38,18 +28,7 @@ void JNICALL Java_io_shapelets_khiva_Normalization_decimalScalingNormInPlace(JNI
 
 jlong JNICALL Java_io_shapelets_khiva_Normalization_maxMinNorm(JNIEnv *env, jobject, jlong ref, jdouble high,
                                                                jdouble low, jdouble epsilon) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::normalization::maxMinNorm(arr, high, low, epsilon);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Normalization_maxMinNorm. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::normalization::maxMinNorm, ref, high, low, epsilon);
 }
 
 void JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *env, jobject, jlong ref, jdouble high,
@@ -67,18 +46,7 @@ void JNICALL Java_io_shapelets_khiva_Normalization_maxMinNormInPlace(JNIEnv *env
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Normalization_meanNorm(JNIEnv *env, jobject, jlong ref) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::normalization::meanNorm(arr);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Normalization_meanNorm. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::normalization::meanNorm, ref);
 }
 
 void JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JNIEnv *env, jobject, jlong ref) {
@@ -95,18 +63,7 @@ void JNICALL Java_io_shapelets_khiva_Normalization_meanNormInPlace(JNIEnv *env, 
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Normalization_znorm(JNIEnv *env, jobject, jlong ref, jdouble epsilon) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::normalization::znorm(arr, epsilon);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Normalization_znorm. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::normalization::znorm, ref, epsilon);
 }
 
 void JNICALL Java_io_shapelets_khiva_Normalization_znormInPlace(JNIEnv *env, jobject, jlong ref, jdouble epsilon) {

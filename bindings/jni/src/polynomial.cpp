@@ -6,34 +6,12 @@
 
 #include <khiva/polynomial.h>
 #include <khiva_jni/polynomial.h>
+#include <khiva_jni/internal/utils.h>
 
 jlong JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY, jint deg) {
-    try {
-        auto arr_x = *reinterpret_cast<af::array *>(refX);        
-        auto arr_y = *reinterpret_cast<af::array *>(refY);
-        auto result = khiva::polynomial::polyfit(arr_x, arr_y, deg);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Polynomial_polyfit. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCallTwoArrays(env, khiva::polynomial::polyfit, refX, refY, deg);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::polynomial::roots(arr);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Polynomial_roots. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::polynomial::roots, ref);
 }

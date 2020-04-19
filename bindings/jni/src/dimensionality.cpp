@@ -6,140 +6,40 @@
 
 #include <khiva/dimensionality.h>
 #include <khiva_jni/dimensionality.h>
-#include <stdexcept>
+#include <khiva_jni/internal/utils.h>
 
 jlong JNICALL Java_io_shapelets_khiva_Dimensionality_paa(JNIEnv *env, jobject, jlong ref, jint bins) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);               
-        auto paa = khiva::dimensionality::PAA(arr, bins);     
-        return reinterpret_cast<jlong>(new af::array(paa));
-    } catch (std::invalid_argument &ia) {
-        auto message = ia.what();
-        auto exClass = env->FindClass("java/lang/RuntimeException");
-        env->ThrowNew(exClass, message);
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Dimensionality_paa. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(
+        env, [](const af::array &a, int bins) { return khiva::dimensionality::PAA(a, bins); }, ref, bins);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Dimensionality_pip(JNIEnv *env, jobject, jlong ref, jint numberIPs) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto pip = khiva::dimensionality::PIP(arr, numberIPs);
-        return reinterpret_cast<jlong>(new af::array(pip));
-    } catch (std::invalid_argument &ia) {
-        auto message = ia.what();
-        auto exClass = env->FindClass("java/lang/RuntimeException");
-        env->ThrowNew(exClass, message);
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Dimensionality_pip. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::dimensionality::PIP, ref, numberIPs);
 }
 
-jlong JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref,
-                                                                      jfloat maxError) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto pla = khiva::dimensionality::PLABottomUp(arr, maxError);
-        return reinterpret_cast<jlong>(new af::array(pla));
-    } catch (std::invalid_argument &ia) {
-        auto message = ia.what();
-        auto exClass = env->FindClass("java/lang/RuntimeException");
-        env->ThrowNew(exClass, message);
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Dimensionality_PLABottomUp. Unknown reason");
-    }
-    return 0;
+jlong JNICALL Java_io_shapelets_khiva_Dimensionality_PLABottomUp(JNIEnv *env, jobject, jlong ref, jfloat maxError) {
+    return khiva::jni::KhivaCall(
+        env, [](const af::array &a, float f) { return khiva::dimensionality::PLABottomUp(a, f); }, ref, maxError);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Dimensionality_PLASlidingWindow(JNIEnv *env, jobject, jlong ref,
-                                                                           jfloat maxError) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto pla = khiva::dimensionality::PLASlidingWindow(arr, maxError);
-        return reinterpret_cast<jlong>(new af::array(pla));
-    } catch (std::invalid_argument &ia) {
-        auto message = ia.what();
-        auto exClass = env->FindClass("java/lang/RuntimeException");
-        env->ThrowNew(exClass, message);
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Dimensionality_PLASlidingWindow. Unknown reason");
-    }
-    return 0;
+                                                                      jfloat maxError) {
+    return khiva::jni::KhivaCall(
+        env, [](const af::array &a, float f) { return khiva::dimensionality::PLASlidingWindow(a, f); }, ref, maxError);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Dimensionality_ramerDouglasPeucker(JNIEnv *env, jobject, jlong ref,
-                                                                              jdouble epsilon) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::dimensionality::ramerDouglasPeucker(arr, epsilon);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (std::invalid_argument &ia) {
-        auto message = ia.what();
-        auto exClass = env->FindClass("java/lang/RuntimeException");
-        env->ThrowNew(exClass, message);
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Dimensionality_ramerDouglasPeucker. Unknown reason");
-    }
-    return 0;
+                                                                         jdouble epsilon) {
+    return khiva::jni::KhivaCall(
+        env, [](const af::array &a, float f) { return khiva::dimensionality::ramerDouglasPeucker(a, f); }, ref,
+        epsilon);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Dimensionality_sax(JNIEnv *env, jobject, jlong ref, jint alphabetSize) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::dimensionality::SAX(arr, alphabetSize);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (std::invalid_argument &ia) {
-        auto message = ia.what();
-        auto exClass = env->FindClass("java/lang/RuntimeException");
-        env->ThrowNew(exClass, message);
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Dimensionality_sax. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(env, khiva::dimensionality::SAX, ref, alphabetSize);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Dimensionality_visvalingam(JNIEnv *env, jobject, jlong ref, jint numPoints) {
-    try {
-        auto arr = *reinterpret_cast<af::array *>(ref);
-        auto result = khiva::dimensionality::visvalingam(arr, numPoints);
-        return reinterpret_cast<jlong>(new af::array(result));
-    } catch (std::invalid_argument &ia) {
-        auto message = ia.what();
-        auto exClass = env->FindClass("java/lang/RuntimeException");
-        env->ThrowNew(exClass, message);
-    } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, e.what());
-    } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
-        env->ThrowNew(exceptionClass, "Error in Dimensionality_visvalingam. Unknown reason");
-    }
-    return 0;
+    return khiva::jni::KhivaCall(
+        env, [](const af::array &a, int n) { return khiva::dimensionality::visvalingam(a, n); }, ref, numPoints);
 }
