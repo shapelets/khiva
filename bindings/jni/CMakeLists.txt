@@ -77,9 +77,10 @@ set_target_properties(${KHIVALIB_JNI} PROPERTIES
         FOLDER bindings
         PUBLIC_HEADER "${KHIVALIB_JNI_INC}/khiva_jni.h")
 
-if(KHIVA_BUILD_TESTS)
-    add_subdirectory(test)
-endif()
+# TODO:
+#if(KHIVA_BUILD_TESTS)
+#    add_subdirectory(test)
+#endif()
 
 # JNI binding
 install(TARGETS ${KHIVALIB_JNI} DESTINATION ${KHIVA_INSTALL_LIB_DIR}
