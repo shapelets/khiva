@@ -57,7 +57,7 @@ if(KHIVA_USE_CONAN)
                         "Check the following instructions to run conan installation:\n"
                         "https://github.com/shapelets/khiva/blob/master/doc/markdown/INSTALLATION.md#build-from-source-code-1")
     endif()
-    CONAN_BASIC_SETUP(KEEP_RPATHS)
+    conan_basic_setup(KEEP_RPATHS)
 else()
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

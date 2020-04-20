@@ -33,7 +33,9 @@
           "value": "OFF",
           "type": "BOOL"
         }
-      ]
+      ],
+      "enableClangTidyCodeAnalysis": true,
+      "enableMicrosoftCodeAnalysis": true
     },
     {
       "name": "x64-Release",
@@ -52,7 +54,9 @@
           "value": "OFF",
           "type": "BOOL"
         }
-      ]
+      ],
+      "enableClangTidyCodeAnalysis": true,
+      "enableMicrosoftCodeAnalysis": true
     }
   ]
 }

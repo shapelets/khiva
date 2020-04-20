@@ -117,7 +117,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTrend(JNIEnv
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_aggregatedLinearTrend. Unknown reason");
     }
-    return 0;
+    return nullptr;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Features_approximateEntropy(JNIEnv *env, jobject, jlong ref, jint m, jfloat r) {
@@ -205,7 +205,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_fftCoefficient(JNIEnv *env, 
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_fftCoefficient. Unknown reason");
     }
-    return 0;
+    return nullptr;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Features_firstLocationOfMaximum(JNIEnv *env, jobject, jlong ref) {
@@ -286,7 +286,7 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_linearTrend(JNIEnv *env, job
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Features_linearTrend. Unknown reason");
     }
-    return 0;
+    return nullptr;
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Features_localMaximals(JNIEnv *env, jobject, jlong ref) {
