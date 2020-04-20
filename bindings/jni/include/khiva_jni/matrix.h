@@ -74,7 +74,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JN
  *          - The resulting distances.
  *          - The resulting indexes.
  */
-JNIEXPORT jlongArray Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv *env, jobject, jlong ref_query,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv *env, jobject, jlong ref_query,
                                                                          jlong ref_ts, jlong n);
 
 /**
@@ -99,7 +99,7 @@ JNIEXPORT jlongArray Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv 
  * @return A reference to the resulting distances.
  *
  */
-JNIEXPORT jlong Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, jlong ref_query, jlong ref_ts);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, jlong ref_query, jlong ref_ts);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
