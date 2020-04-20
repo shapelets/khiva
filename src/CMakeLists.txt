@@ -98,7 +98,7 @@ target_link_libraries(${KHIVALIB}
 	PRIVATE 
 		scamp
 		Eigen3::Eigen
-        Boost::boost
+		$<IF:$<BOOL:${KHIVA_USE_CONAN}>,Boost::Boost,Boost::boost>
 	PUBLIC 
 		$<IF:$<BOOL:${KHIVA_ONLY_CPU_BACKEND}>,ArrayFire::afcpu,ArrayFire::af>
 		${CMAKE_DL_LIBS}
