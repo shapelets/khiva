@@ -1,6 +1,6 @@
 [requires]
 gtest/1.10.0
-google-benchmark/1.4.1@mpusz/stable
+benchmark/1.5.0
 boost/1.70.0
 eigen/3.3.4@conan/stable
 
@@ -11,4 +11,5 @@ gtest:fPIC=True
 boost:header_only=True # False
 
 [generators]
-cmake
+cmake_find_package
+cmake_paths

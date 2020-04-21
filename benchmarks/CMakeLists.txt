@@ -6,7 +6,11 @@
 
 cmake_minimum_required(VERSION 3.9.6)
 find_package(Threads REQUIRED)
-find_package(benchmark CONFIG REQUIRED)
+if (KHIVA_USE_CONAN)
+   find_package(benchmark REQUIRED)
+else()
+   find_package(benchmark CONFIG REQUIRED)
+endif ()
 
 file(GLOB_RECURSE ALL_BENCH_CPP *.cpp)
 

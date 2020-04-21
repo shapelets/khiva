@@ -41,7 +41,7 @@ First, go to the source directory.
 
 Once the build process is finished you can install the library in your system folder:
 
-- Run `cmake -DBUILD_TYPE=Release -P cmake_install.cmake`.
+- Run `cmake --build . --config Release --target install` to install.
 
 ### Generating the Khiva installer
 
