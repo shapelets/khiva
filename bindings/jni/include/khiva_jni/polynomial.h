@@ -21,9 +21,9 @@ extern "C" {
  * @param y y-coordinates of the sample points.
  * @param deg Degree of the fitting polynomial.
  *
- * @return The updated refs and an array with the polynomial coefficients, highest power first.
+ * @return A reference to an array with the polynomial coefficients, highest power first.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY,
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *env, jobject, jlong refX, jlong refY,
                                                                         jint deg);
 
 /**
@@ -36,9 +36,9 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_polyfit(JNIEnv *
  *
  * @param pp Array of polynomial coefficients.
  *
- * @return The updated ref and an array containing the roots of the polynomial.
+ * @return A reference to  an array containing the roots of the polynomial.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Polynomial_roots(JNIEnv *env, jobject, jlong ref);
 
 #ifdef __cplusplus
 }

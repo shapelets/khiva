@@ -34,11 +34,11 @@ extern "C" {
  * @param nColumnsValue Number of columns conforming the value (they are expected to be consecutive to the column
  * keys).
  *
- * @return The updated ref and an array with the values of the group keys aggregated using the aggregationFunction.
+ * @return A reference to an array with the values of the group keys aggregated using the aggregationFunction.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
-                                                                            jint aggregationFunction, jint nColumnsKey,
-                                                                            jint nColumnsValue);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobject, jlong ref,
+                                                                       jint aggregationFunction, jint nColumnsKey,
+                                                                       jint nColumnsValue);
 
 #ifdef __cplusplus
 }

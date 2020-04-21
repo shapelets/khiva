@@ -30,14 +30,14 @@ JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_setBackend(JNIEnv *, jobj
  *
  * @return The active backend.
  */
-JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *, jobject);
+JNIEXPORT jint JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *, jobject);
 
 /**
  * @brief JNI interface to get the available backends.
  *
  * @return The available backends.
  */
-JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *, jobject);
+JNIEXPORT jint JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *, jobject);
 
 /**
  * @brief JNI interface to set the device.
@@ -51,14 +51,14 @@ JNIEXPORT void JNICALL Java_io_shapelets_khiva_Library_setDevice(JNIEnv *, jobje
  *
  * @return The active device.
  */
-JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *, jobject);
+JNIEXPORT jint JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *, jobject);
 
 /**
  * @brief JNI interface to get the device count.
  *
  * @return The device count.
  */
-JNIEXPORT int JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, jobject);
+JNIEXPORT jint JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *, jobject);
 
 /**
  * @brief JNI interface to set the memory of the device in use. This information is used for splitting some algorithms

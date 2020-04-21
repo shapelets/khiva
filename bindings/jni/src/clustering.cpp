@@ -4,42 +4,29 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <jni.h>
 #include <khiva/clustering.h>
 #include <khiva_jni/clustering.h>
+#include <array>
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *env, jobject, jlong ref_tss, jint k,
                                                                        jfloat tolerance, jint maxIterations) {
     try {
-        const jint l = 3;
-        jlong tmp[l];
-        jlongArray pointers = env->NewLongArray(l);
-
-        auto arr = (af_array) ref_tss;
-        af::array var = af::array(arr);
-
-        jlong raw_pointer_labels = 0;
-        auto af_p_labels = (af_array) raw_pointer_labels;
-
-        jlong raw_pointer_centroids = 0;
-        auto af_p_centroids = (af_array) raw_pointer_centroids;
-
-        af_retain_array(&arr, var.get());
-
+        auto arr = *reinterpret_cast<af::array*>(ref_tss);
+        
         af::array primitive_labels;
         af::array primitive_centroids;
+        khiva::clustering::kMeans(arr, k, primitive_centroids, primitive_labels, tolerance, static_cast<int>(maxIterations));
 
-        khiva::clustering::kMeans(var, static_cast<int>(k), primitive_centroids, primitive_labels,
-                                  static_cast<float>(tolerance), static_cast<int>(maxIterations));
+        auto centroids_result = new af::array(primitive_centroids);
+        auto labels_result = new af::array(primitive_labels);
 
-        af_retain_array(&af_p_labels, primitive_labels.get());
-        af_retain_array(&af_p_centroids, primitive_centroids.get());
+        constexpr auto output_size = 2;
+        std::array<jlong, output_size> output;
+        output[0] = reinterpret_cast<jlong>(centroids_result);
+        output[1] = reinterpret_cast<jlong>(labels_result);
 
-        tmp[0] = (jlong) arr;
-        tmp[1] = (jlong) af_p_centroids;
-        tmp[2] = (jlong) af_p_labels;
-
-        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+        auto pointers = env->NewLongArray(output_size);
+        env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
@@ -48,41 +35,28 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *e
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Clustering_kMeans. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }
 
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *env, jobject, jlong ref_tss, jint k,
                                                                        jfloat tolerance, jint maxIterations) {
     try {
-        const jint l = 3;
-        jlong tmp[l];
-        jlongArray pointers = env->NewLongArray(l);
-
-        auto arr = (af_array) ref_tss;
-        af::array var = af::array(arr);
-
-        jlong raw_pointer_labels = 0;
-        auto af_p_labels = (af_array) raw_pointer_labels;
-
-        jlong raw_pointer_centroids = 0;
-        auto af_p_centroids = (af_array) raw_pointer_centroids;
-
-        af_retain_array(&arr, var.get());
+        auto arr = *reinterpret_cast<af::array *>(ref_tss);
 
         af::array primitive_labels;
         af::array primitive_centroids;
+        khiva::clustering::kShape(arr, k, primitive_centroids, primitive_labels, tolerance, static_cast<int>(maxIterations));
 
-        khiva::clustering::kShape(var, static_cast<int>(k), primitive_centroids, primitive_labels,
-                                  static_cast<float>(tolerance), static_cast<int>(maxIterations));
+        auto centroids_result = new af::array(primitive_centroids);
+        auto labels_result = new af::array(primitive_labels);
 
-        af_retain_array(&af_p_labels, primitive_labels.get());
-        af_retain_array(&af_p_centroids, primitive_centroids.get());
+        constexpr auto output_size = 2;
+        std::array<jlong, output_size> output;
+        output[0] = reinterpret_cast<jlong>(centroids_result);
+        output[1] = reinterpret_cast<jlong>(labels_result);
 
-        tmp[0] = (jlong) arr;
-        tmp[1] = (jlong) af_p_centroids;
-        tmp[2] = (jlong) af_p_labels;
-
-        env->SetLongArrayRegion(pointers, 0, l, &tmp[0]);
+        auto pointers = env->NewLongArray(output_size);
+        env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
         jclass exceptionClass = env->FindClass("java/lang/Exception");
@@ -91,5 +65,5 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *e
         jclass exceptionClass = env->FindClass("java/lang/Exception");
         env->ThrowNew(exceptionClass, "Error in Clustering_kShape. Unknown reason");
     }
-    return NULL;
+    return nullptr;
 }

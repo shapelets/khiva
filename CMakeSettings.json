@@ -27,8 +27,15 @@
           "name": "KHIVA_USE_CONAN",
           "value": "OFF",
           "type": "BOOL"
+        },
+        {
+          "name": "KHIVA_BUILD_DOCUMENTATION",
+          "value": "OFF",
+          "type": "BOOL"
         }
-      ]
+      ],
+      "enableClangTidyCodeAnalysis": true,
+      "enableMicrosoftCodeAnalysis": true
     },
     {
       "name": "x64-Release",
@@ -47,7 +54,9 @@
           "value": "OFF",
           "type": "BOOL"
         }
-      ]
+      ],
+      "enableClangTidyCodeAnalysis": true,
+      "enableMicrosoftCodeAnalysis": true
     }
   ]
 }

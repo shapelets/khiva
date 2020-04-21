@@ -21,12 +21,9 @@ brew install --force freeimage fontconfig glfw glbinding
 
 # Installing conan
 pip${PYTHON_VERSION} install --upgrade pip
-pip${PYTHON_VERSION} install conan==1.22.2
+pip${PYTHON_VERSION} install conan
 
 if ! [[ -z "${TRAVIS_TAG}" ]]; then
   brew install doxygen graphviz
   pip${PYTHON_VERSION} install sphinx==1.7.5 breathe==4.9.1 sphinx_rtd_theme==0.4.0
 fi
-
-# Installing library dependencies with conan
-conan remote add -f conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz

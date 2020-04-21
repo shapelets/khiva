@@ -6,9 +6,8 @@
 
 #include <khiva/regularization.h>
 
-af::array khiva::regularization::groupBy(const af::array &in,
-                                         af::array (*aggregationFunction)(const af::array &, const dim_t),
-                                         int nColumnsKey, int nColumnsValue) {
+af::array khiva::regularization::groupBy(const af::array &in, AggregationFuncDimT aggregationFunction, int nColumnsKey,
+                                         int nColumnsValue) {
     auto n = in.dims(0);
 
     af::seq keyColumns = af::seq(nColumnsKey);
@@ -31,8 +30,7 @@ af::array khiva::regularization::groupBy(const af::array &in,
     return values;
 }
 
-af::array khiva::regularization::groupBy(const af::array &in,
-                                         af::array (*aggregationFunction)(const af::array &, bool, const dim_t),
+af::array khiva::regularization::groupBy(const af::array &in, AggregationFuncBoolDimT aggregationFunction,
                                          int nColumnsKey, int nColumnsValue) {
     auto n = in.dims(0);
 
@@ -56,9 +54,8 @@ af::array khiva::regularization::groupBy(const af::array &in,
     return values;
 }
 
-af::array khiva::regularization::groupBy(const af::array &in,
-                                         af::array (*aggregationFunction)(const af::array &, const int),
-                                         int nColumnsKey, int nColumnsValue) {
+af::array khiva::regularization::groupBy(const af::array &in, AggregationFuncInt aggregationFunction, int nColumnsKey,
+                                         int nColumnsValue) {
     auto n = in.dims(0);
 
     af::seq keyColumns = af::seq(nColumnsKey);

@@ -116,54 +116,54 @@ JNIEXPORT void JNICALL Java_io_shapelets_khiva_Array_nativePrint(JNIEnv *env, jo
  * @param dim The dimension along which the join occurs.
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_join(JNIEnv *env, jobject thisObj, jint dim, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_join(JNIEnv *env, jobject thisObj, jint dim, jlong ref_rhs);
 
 /**
  * @brief Adds this array with the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_add(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_add(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Multiplies this array with the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_mul(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_mul(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Subtracts this array with the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_sub(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_sub(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Divides this array with the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_div(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_div(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Performs the modulo operation of this array between the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_mod(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_mod(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Powers this array with the one specified as parameter. This array is the base and the exponent is the
@@ -171,90 +171,90 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_mod(JNIEnv *env, jobj
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_pow(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_pow(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Compares (element-wise) if this array is lower than the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_lt(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_lt(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Compares (element-wise) if this array is greater than the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_gt(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_gt(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Compares (element-wise) if this array is lower or equal than the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_le(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_le(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Compares (element-wise) if this array is greater or equal than the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_ge(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_ge(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Compares (element-wise) if this array is equal to the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_eq(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_eq(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Compares (element-wise) if this array is not equal to the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_ne(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_ne(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Performs an AND operation with this array (element-wise) and the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_bitAnd(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_bitAnd(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Performs an OR operation with this array (element-wise) and the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_bitOr(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_bitOr(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Performs an eXclusive-OR operation with this array (element-wise) and the one specified as parameter.
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_bitXor(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_bitXor(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Performs a left bit shift operation to this array (element-wise) as many times as specified in the parameter
@@ -335,9 +335,9 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_nativeRows(JNIEnv *env, jo
  *
  * @param ref_rhs Reference to the right-hand side array for the operation.
  *
- * @return The updated reference of the right-hand side array and the reference of the resulting array.
+ * @return The reference of the resulting array.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, jobject thisObj, jlong ref_rhs);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_matmul(JNIEnv *env, jobject thisObj, jlong ref_rhs);
 
 /**
  * @brief Performs a deep copy of this array. Both the data stored in the device and all the object properties in Java.

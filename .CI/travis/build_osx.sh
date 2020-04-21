@@ -16,6 +16,7 @@ function check-error() {
 
 mkdir -p build && cd build
 conan install .. -s compiler=apple-clang -s compiler.version=9.1 -s compiler.libcxx=libc++ --build missing
+check-error "Error installing Conan packages"
 cmake ..
 check-error "Error generating CMake configuration"
 cmake --build . -- -j8

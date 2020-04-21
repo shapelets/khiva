@@ -22,7 +22,7 @@ foreach(ONE_TEST_CPP ${ALL_TEST_CPP})
     string(REPLACE "Test" "" ONE_TEST_EXEC ${ONE_TEST_EXEC_TMP})
     set(TARGET_NAME ${ONE_TEST_EXEC})
     add_executable(${TARGET_NAME} ${ONE_TEST_CPP})
-    target_link_libraries(${TARGET_NAME} PRIVATE ${KHIVALIB} GTest::GTest GTest::Main ${CMAKE_THREAD_LIBS_INIT})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${KHIVALIB} GTest::GTest $<IF:$<BOOL:${KHIVA_USE_CONAN}>,,GTest::Main> ${CMAKE_THREAD_LIBS_INIT})
 	target_include_directories(${TARGET_NAME} PRIVATE ${INTERNAL_HEADERS_DIR})
     set_target_properties(${TARGET_NAME} PROPERTIES FOLDER test)
     gtest_discover_tests(${TARGET_NAME} AUTO

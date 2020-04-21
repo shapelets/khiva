@@ -17,6 +17,7 @@ mkdir -p build && cd build
 conan profile new --detect --force default
 conan profile update settings.compiler.libcxx=libstdc++11 default
 conan install .. --build missing
+check-error "Error installing Conan packages"
 cmake ..
 check-error "Error generating CMake configuration"
 cmake --build . -- -j8

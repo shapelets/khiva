@@ -23,22 +23,6 @@ set(KHIVALIB_JNI_SRC "${PROJECT_SOURCE_DIR}/src")
 set(KHIVALIB_JNI_INC "${PROJECT_SOURCE_DIR}/include")
 
 # Sources to add to compilation
-set(KHIVALIB_JNI_SOURCES ${KHIVALIB_JNI_SRC}/array.cpp
-                         ${KHIVALIB_JNI_SRC}/clustering.cpp
-                         ${KHIVALIB_JNI_SRC}/dimensionality.cpp
-                         ${KHIVALIB_JNI_SRC}/distances.cpp
-                         ${KHIVALIB_JNI_SRC}/features.cpp
-                         ${KHIVALIB_JNI_SRC}/library.cpp
-                         ${KHIVALIB_JNI_SRC}/linalg.cpp
-                         ${KHIVALIB_JNI_SRC}/matrix.cpp
-                         ${KHIVALIB_JNI_SRC}/normalization.cpp
-                         ${KHIVALIB_JNI_SRC}/polynomial.cpp
-                         ${KHIVALIB_JNI_SRC}/regression.cpp
-                         ${KHIVALIB_JNI_SRC}/regularization.cpp
-                         ${KHIVALIB_JNI_SRC}/statistics.cpp
-                         ${KHIVALIB_JNI_SRC}/util.cpp)
-
-# Headers to add to compilation
 set(KHIVALIB_JNI_HEADERS ${KHIVALIB_JNI_INC}/khiva_jni/array.h
                          ${KHIVALIB_JNI_INC}/khiva_jni/clustering.h
                          ${KHIVALIB_JNI_INC}/khiva_jni/dimensionality.h
@@ -52,7 +36,22 @@ set(KHIVALIB_JNI_HEADERS ${KHIVALIB_JNI_INC}/khiva_jni/array.h
                          ${KHIVALIB_JNI_INC}/khiva_jni/regression.h
                          ${KHIVALIB_JNI_INC}/khiva_jni/regularization.h
                          ${KHIVALIB_JNI_INC}/khiva_jni/statistics.h
-                         ${KHIVALIB_JNI_INC}/khiva_jni/internal/util.h)
+                         ${KHIVALIB_JNI_INC}/khiva_jni/internal/utils.h)
+
+# Sources to add to compilation
+set(KHIVALIB_JNI_SOURCES ${KHIVALIB_JNI_SRC}/array.cpp
+                         ${KHIVALIB_JNI_SRC}/clustering.cpp
+                         ${KHIVALIB_JNI_SRC}/dimensionality.cpp
+                         ${KHIVALIB_JNI_SRC}/distances.cpp
+                         ${KHIVALIB_JNI_SRC}/features.cpp
+                         ${KHIVALIB_JNI_SRC}/library.cpp
+                         ${KHIVALIB_JNI_SRC}/linalg.cpp
+                         ${KHIVALIB_JNI_SRC}/matrix.cpp
+                         ${KHIVALIB_JNI_SRC}/normalization.cpp
+                         ${KHIVALIB_JNI_SRC}/polynomial.cpp
+                         ${KHIVALIB_JNI_SRC}/regression.cpp
+                         ${KHIVALIB_JNI_SRC}/regularization.cpp
+                         ${KHIVALIB_JNI_SRC}/statistics.cpp)
 
 # Library Name
 set(KHIVALIB_JNI "khiva_jni")
@@ -77,6 +76,11 @@ set_target_properties(${KHIVALIB_JNI} PROPERTIES
         SOVERSION ${VERSION_MAJOR}
         FOLDER bindings
         PUBLIC_HEADER "${KHIVALIB_JNI_INC}/khiva_jni.h")
+
+# TODO:
+#if(KHIVA_BUILD_TESTS)
+#    add_subdirectory(test)
+#endif()
 
 # JNI binding
 install(TARGETS ${KHIVALIB_JNI} DESTINATION ${KHIVA_INSTALL_LIB_DIR}
