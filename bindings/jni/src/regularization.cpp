@@ -36,10 +36,10 @@ jlong JNICALL Java_io_shapelets_khiva_Regularization_groupBy(JNIEnv *env, jobjec
         }
         return reinterpret_cast<jlong>(new af::array(result));
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Features_aggregatedLinearTrend. Unknown reason");
     }
     return 0;

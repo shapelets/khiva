@@ -32,10 +32,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Regression_linear(JNIEnv *env, jobjec
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Regression_linear. Unknown reason");
     }
     return nullptr;

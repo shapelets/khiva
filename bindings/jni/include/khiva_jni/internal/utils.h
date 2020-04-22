@@ -19,10 +19,10 @@ jlong KhivaCall(JNIEnv *env, Func f, jlong ref, Args &&... args) {
         auto result = f(arr, std::forward<Args>(args)...);
         return reinterpret_cast<jlong>(new af::array(result));
     } catch (const std::exception &e) {
-        auto exceptionClass = env->FindClass("java/lang/Exception");
+        auto exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        auto exceptionClass = env->FindClass("java/lang/Exception");
+        auto exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Unknown error executing native function");
     }
     return 0;
@@ -36,10 +36,10 @@ jlong KhivaCallTwoArrays(JNIEnv *env, Func f, jlong ref_a, jlong ref_b, Args &&.
         auto result = f(arr_a, arr_b, std::forward<Args>(args)...);
         return reinterpret_cast<jlong>(new af::array(result));
     } catch (const std::exception &e) {
-        auto exceptionClass = env->FindClass("java/lang/Exception");
+        auto exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        auto exceptionClass = env->FindClass("java/lang/Exception");
+        auto exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Unknown error executing native function");
     }
     return 0;

@@ -12,10 +12,10 @@ jstring JNICALL Java_io_shapelets_khiva_Library_backendInfo(JNIEnv *env, jobject
     try {
         return env->NewStringUTF(khiva::library::backendInfo().c_str());
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Library_backendInfo. Unknown reason");
     }
     return nullptr;
@@ -25,10 +25,10 @@ void JNICALL Java_io_shapelets_khiva_Library_setBackend(JNIEnv *env, jobject, ji
     try {
         khiva::library::setBackend(static_cast<khiva::library::Backend>(backend));
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Library_setBackend. Unknown reason");
     }
 }
@@ -37,10 +37,10 @@ jint JNICALL Java_io_shapelets_khiva_Library_getBackend(JNIEnv *env, jobject) {
     try {
         return static_cast<jint>(khiva::library::getBackend());
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Library_getBackend. Unknown reason");
     }
     // It shouldn't reach this point
@@ -51,10 +51,10 @@ jint JNICALL Java_io_shapelets_khiva_Library_getBackends(JNIEnv *env, jobject) {
     try {
         return khiva::library::getBackends();
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Library_getBackends. Unknown reason");
     }
     // It shouldn't reach this point
@@ -65,10 +65,10 @@ void JNICALL Java_io_shapelets_khiva_Library_setDevice(JNIEnv *env, jobject, jin
     try {
         khiva::library::setDevice(device);
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Library_setDevice. Unknown reason");
     }
 }
@@ -77,10 +77,10 @@ jint JNICALL Java_io_shapelets_khiva_Library_getDeviceID(JNIEnv *env, jobject) {
     try {
         return khiva::library::getDevice();
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Library_getDeviceID. Unknown reason");
     }
     // It shouldn't reach this point
@@ -91,10 +91,10 @@ jint JNICALL Java_io_shapelets_khiva_Library_getDeviceCount(JNIEnv *env, jobject
     try {
         return khiva::library::getDeviceCount();
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Library_getDeviceCount. Unknown reason");
     }
     // It shouldn't reach this point
@@ -105,10 +105,10 @@ void JNICALL Java_io_shapelets_khiva_Library_setDeviceMemoryInGB(JNIEnv *env, jo
     try {
         khiva::library::setDeviceMemoryInGB(memory);
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Library_setDeviceMemoryInGB. Unknown reason");
     }
 }
@@ -117,10 +117,10 @@ jstring JNICALL Java_io_shapelets_khiva_Library_version(JNIEnv *env, jobject) {
     try {
         return env->NewStringUTF(khiva::version().c_str());
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Library_version. Unknown reason");
     }
     return nullptr;
