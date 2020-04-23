@@ -21,18 +21,72 @@ extern "C" {
  *
  * @return The array reference.
  */
-#define CREATE_T_ARRAY(Ty, ty, dty)                                                                 \
-    JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFrom##Ty(JNIEnv *env, jobject, \
-                                                                              j##ty##Array elems, jlongArray dims);
-CREATE_T_ARRAY(Float, float, khiva::dtype::f32)
-CREATE_T_ARRAY(Double, double, khiva::dtype::f64)
-CREATE_T_ARRAY(Int, int, khiva::dtype::s32)
-CREATE_T_ARRAY(Boolean, boolean, khiva::dtype::b8)
-CREATE_T_ARRAY(Long, long, khiva::dtype::s64)
-CREATE_T_ARRAY(Short, short, khiva::dtype::s16)
-CREATE_T_ARRAY(Byte, byte, khiva::dtype::u8)
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloat(JNIEnv *env, jobject, jfloatArray elems,
+                                                                           jlongArray dims);
 
-#undef CREATE_T_ARRAY
+/**
+ * @brief Creates an Array object of Double.
+ *
+ * @param elems Data used in order to create the array.
+ * @param dims Cardinality of dimensions of the data.
+ *
+ * @return The array reference.
+ */
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDouble(JNIEnv *env, jobject, jdoubleArray elems,
+                                                                           jlongArray dims);
+/**
+ * @brief Creates an Array object of Int.
+ *
+ * @param elems Data used in order to create the array.
+ * @param dims Cardinality of dimensions of the data.
+ *
+ * @return The array reference.
+ */
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromInt(JNIEnv *env, jobject, jintArray elems,
+                                                                           jlongArray dims);
+/**
+ * @brief Creates an Array object of Boolean.
+ *
+ * @param elems Data used in order to create the array.
+ * @param dims Cardinality of dimensions of the data.
+ *
+ * @return The array reference.
+ */
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromBoolean(JNIEnv *env, jobject, jbooleanArray elems,
+                                                                           jlongArray dims);
+
+/**
+ * @brief Creates an Array object of Long.
+ *
+ * @param elems Data used in order to create the array.
+ * @param dims Cardinality of dimensions of the data.
+ *
+ * @return The array reference.
+ */
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromLong(JNIEnv *env, jobject, jlongArray elems,
+                                                                           jlongArray dims);
+
+/**
+ * @brief Creates an Array object of Short.
+ *
+ * @param elems Data used in order to create the array.
+ * @param dims Cardinality of dimensions of the data.
+ *
+ * @return The array reference.
+ */
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromShort(JNIEnv *env, jobject, jshortArray elems,
+                                                                           jlongArray dims);
+
+/**
+ * @brief Creates an Array object of Byte.
+ *
+ * @param elems Data used in order to create the array.
+ * @param dims Cardinality of dimensions of the data.
+ *
+ * @return The array reference.
+ */
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromByte(JNIEnv *env, jobject, jbyteArray elems,
+                                                                           jlongArray dims);
 
 /**
  * @brief Creates an Array object of Float Complex.
@@ -62,20 +116,53 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromDoubleCompl
 JNIEXPORT void JNICALL Java_io_shapelets_khiva_Array_deleteArray(JNIEnv *env, jobject thisObj);
 
 /**
- * @brief Retrieves data from the device to host (Float, Double, Int, Boolean, Long, Short or Byte).
+ * @brief Retrieves data from the device to host.
  *
  * @return Array with the data.
  */
-#define GET_T_FROM_ARRAY(Ty, ty) \
-    JNIEXPORT j##ty##Array JNICALL Java_io_shapelets_khiva_Array_get##Ty##FromArray(JNIEnv *env, jobject thisObj);
-GET_T_FROM_ARRAY(Float, float)
-GET_T_FROM_ARRAY(Double, double)
-GET_T_FROM_ARRAY(Int, int)
-GET_T_FROM_ARRAY(Boolean, boolean)
-GET_T_FROM_ARRAY(Long, long)
-GET_T_FROM_ARRAY(Short, short)
-GET_T_FROM_ARRAY(Byte, byte)
-#undef GET_T_FROM_ARRAY
+JNIEXPORT jfloatArray JNICALL Java_io_shapelets_khiva_Array_getFloatFromArray(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief Retrieves data from the device to host.
+ *
+ * @return Array with the data.
+ */
+JNIEXPORT jdoubleArray JNICALL Java_io_shapelets_khiva_Array_getDoubleFromArray(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief Retrieves data from the device to host.
+ *
+ * @return Array with the data.
+ */
+JNIEXPORT jintArray JNICALL Java_io_shapelets_khiva_Array_getIntFromArray(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief Retrieves data from the device to host.
+ *
+ * @return Array with the data.
+ */
+JNIEXPORT jbooleanArray JNICALL Java_io_shapelets_khiva_Array_getBooleanFromArray(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief Retrieves data from the device to host.
+ *
+ * @return Array with the data.
+ */
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Array_getLongFromArray(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief Retrieves data from the device to host.
+ *
+ * @return Array with the data.
+ */
+JNIEXPORT jshortArray JNICALL Java_io_shapelets_khiva_Array_getShortFromArray(JNIEnv *env, jobject thisObj);
+
+/**
+ * @brief Retrieves data from the device to host.
+ *
+ * @return Array with the data.
+ */
+JNIEXPORT jbyteArray JNICALL Java_io_shapelets_khiva_Array_getByteFromArray(JNIEnv *env, jobject thisObj);
 
 /**
  * @brief Retrieves data from the device to host (Double Complex).
