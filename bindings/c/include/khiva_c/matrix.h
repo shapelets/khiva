@@ -18,9 +18,8 @@ extern "C" {
  *
  * @param profile The matrix profile containing the minimum distance of each
  * subsequence
- * @param The matrix profile index containing the index of the most similar
+ * @param index The matrix profile index containing the index of the most similar
  * subsequence
- * @param length_profile Length of the matrix profile
  * @param m Subsequence length value used to calculate the input matrix profile.
  * @param n Number of discords to extract
  * @param discord_distances The distance of the best N discords
@@ -43,7 +42,6 @@ KHIVA_C_API void find_best_n_discords(const khiva_array *profile, const khiva_ar
  * @param profile The matrix profile containing the minimum distance of each
  * subsequence.
  * @param index The matrix profile index containing where each minimum occurs.
- * @param length_profile Length of the matrix profile.
  * @param m Subsequence length value used to calculate the input matrix profile.
  * @param n Number of motifs to extract.
  * @param motif_distances The distance of the best N motifs.

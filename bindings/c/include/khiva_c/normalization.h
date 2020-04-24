@@ -106,8 +106,6 @@ KHIVA_C_API void mean_norm_in_place(const khiva_array *tss, int *error_code, cha
  * @brief Calculates a new set of times series with zero mean and standard deviation one.
  *
  * @param tss Time series concatenated in a single row.
- * @param tss_l Time series length (All time series need to have the same length).
- * @param tss_n Number of time series.
  * @param epsilon Minimum standard deviation to consider. It acts as a gatekeeper for
  * those time series that may be constant or near constant.
  * @param result Array with the same dimensions as tss where the time series have been
