@@ -842,7 +842,7 @@ void quantile(const khiva_array *array, const khiva_array *q, const float *preci
               int *error_code, char *error_message) {
     try {
         auto var = array::from_af_array(*array);
-        auto var_q = array::from_af_array(*array);
+        auto var_q = array::from_af_array(*q);
         auto res = khiva::features::quantile(var, var_q, *precision);
         *result = util::increment_ref_count(res.get());
         *error_code = 0;
