@@ -4,21 +4,27 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
+#include <khiva/array.h>
+#include <khiva/internal/util.h>
 #include <khiva/linalg.h>
-#include <khiva_c/linalg.h>
 #include <khiva_c/internal/util.h>
+#include <khiva_c/linalg.h>
 
-void lls(khiva_array *a, khiva_array *b, khiva_array *result, int *error_code, char *error_message) {
+using namespace khiva;
+using namespace khiva::util;
+
+void lls(const khiva_array *a, const khiva_array *b, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var_a;
-        af::array var_b;
-        check_and_retain_arrays(a, b, var_a, var_b);
-        af_retain_array(result, khiva::linalg::lls(var_a, var_b).get());
+        auto var_a = array::from_af_array(*a);
+        auto var_b = array::from_af_array(*b);
+        auto res = khiva::linalg::lls(var_a, var_b);
+        *result = util::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("lls", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("lls", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }

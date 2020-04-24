@@ -12,7 +12,6 @@
 #endif
 
 #include <arrayfire.h>
-#include <khiva/defines.h>
 
 #include <vector>
 

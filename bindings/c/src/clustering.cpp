@@ -5,47 +5,53 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <arrayfire.h>
+#include <khiva/array.h>
 #include <khiva/clustering.h>
+#include <khiva/internal/util.h>
 #include <khiva_c/clustering.h>
 #include <khiva_c/internal/util.h>
-#include <iostream>
 
-void k_means(khiva_array *tss, const int *k, khiva_array *centroids, khiva_array *labels, const float *tolerance,
+using namespace khiva;
+using namespace khiva::util;
+
+void k_means(const khiva_array *tss, const int *k, khiva_array *centroids, khiva_array *labels, const float *tolerance,
              const int *max_iterations, int *error_code, char *error_message) {
     try {
-        af::array var_tss = af::array(*tss);
-        af_retain_array(tss, var_tss.get());
+        auto var_tss = array::from_af_array(*tss);
         af::array primitive_labels;
         af::array primitive_centroids;
 
         khiva::clustering::kMeans(var_tss, *k, primitive_centroids, primitive_labels, *tolerance, *max_iterations);
 
-        af_retain_array(labels, primitive_labels.get());
-        af_retain_array(centroids, primitive_centroids.get());
+        *labels = increment_ref_count(primitive_labels.get());
+        *centroids = increment_ref_count(primitive_centroids.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("k_means", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("k_means", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void k_shape(khiva_array *tss, const int *k, khiva_array *centroids, khiva_array *labels, const float *tolerance,
+void k_shape(const khiva_array *tss, const int *k, khiva_array *centroids, khiva_array *labels, const float *tolerance,
              const int *max_iterations, int *error_code, char *error_message) {
     try {
-        af::array var_tss = af::array(*tss);
-        af_retain_array(tss, var_tss.get());
+        auto var_tss = array::from_af_array(*tss);
         af::array primitive_labels;
         af::array primitive_centroids;
 
         khiva::clustering::kShape(var_tss, *k, primitive_centroids, primitive_labels, *tolerance, *max_iterations);
 
-        af_retain_array(labels, primitive_labels.get());
-        af_retain_array(centroids, primitive_centroids.get());
+        *labels = increment_ref_count(primitive_labels.get());
+        *centroids = increment_ref_count(primitive_centroids.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("k_shape", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("k_shape", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }

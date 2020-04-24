@@ -4,115 +4,136 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
+#include <khiva/array.h>
+#include <khiva/internal/util.h>
 #include <khiva/statistics.h>
-#include <khiva_c/statistics.h>
 #include <khiva_c/internal/util.h>
+#include <khiva_c/statistics.h>
 
-void covariance_statistics(khiva_array *tss, const bool *unbiased, khiva_array *result, int *error_code,
+using namespace khiva;
+using namespace khiva::util;
+
+void covariance_statistics(const khiva_array *tss, const bool *unbiased, khiva_array *result, int *error_code,
                            char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::statistics::covariance(var, *unbiased).get());
+        auto var = array::from_af_array(*tss);
+        auto res = khiva::statistics::covariance(var, *unbiased);
+        *result = util::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("covariance_statistics", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("covariance_statistics", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void kurtosis_statistics(khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
+void kurtosis_statistics(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::statistics::kurtosis(var).get());
+        auto var = array::from_af_array(*tss);
+        auto res = khiva::statistics::kurtosis(var);
+        *result = util::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("kurtosis_statistics", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("kurtosis_statistics", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void ljung_box(khiva_array *tss, const long *lags, khiva_array *result, int *error_code, char *error_message) {
+void ljung_box(const khiva_array *tss, const long *lags, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::statistics::ljungBox(var, *lags).get());
+        auto var = array::from_af_array(*tss);
+        auto res = khiva::statistics::ljungBox(var, *lags);
+        *result = util::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("ljung_box", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("ljung_box", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void moment_statistics(khiva_array *tss, const int *k, khiva_array *result, int *error_code, char *error_message) {
+void moment_statistics(const khiva_array *tss, const int *k, khiva_array *result, int *error_code,
+                       char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::statistics::moment(var, *k).get());
+        auto var = array::from_af_array(*tss);
+        auto res = khiva::statistics::moment(var, *k);
+        *result = util::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("moment_statistics", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("moment_statistics", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void quantile_statistics(khiva_array *tss, khiva_array *q, const float *precision, khiva_array *result, int *error_code,
-                         char *error_message) {
+void quantile_statistics(const khiva_array *tss, const khiva_array *q, const float *precision, khiva_array *result,
+                         int *error_code, char *error_message) {
     try {
-        af::array var;
-        af::array var_q;
-        check_and_retain_arrays(tss, q, var, var_q);
-        af_retain_array(result, khiva::statistics::quantile(var, var_q, *precision).get());
+        auto var = array::from_af_array(*tss);
+        auto var_q = array::from_af_array(*q);
+        auto res = khiva::statistics::quantile(var, var_q , *precision);
+        *result = util::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("quantile_statistics", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("quantile_statistics", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void quantiles_cut_statistics(khiva_array *tss, const float *quantiles, const float *precision, khiva_array *result,
-                              int *error_code, char *error_message) {
+void quantiles_cut_statistics(const khiva_array *tss, const float *quantiles, const float *precision,
+                              khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::statistics::quantilesCut(var, *quantiles, *precision).get());
+        auto var = array::from_af_array(*tss);
+        auto res = khiva::statistics::quantilesCut(var, *quantiles, *precision);
+        *result = util::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("quantiles_cut_statistics", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("quantiles_cut_statistics", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void sample_stdev_statistics(khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
+void sample_stdev_statistics(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::statistics::sampleStdev(var).get());
+        auto var = array::from_af_array(*tss);
+        auto res = khiva::statistics::sampleStdev(var);
+        *result = util::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("sample_stdev_statistics", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("sample_stdev_statistics", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void skewness_statistics(khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
+void skewness_statistics(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::statistics::skewness(var).get());
+        auto var = array::from_af_array(*tss);
+        auto res = khiva::statistics::skewness(var);
+        *result = util::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("skewness_statistics", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("skewness_statistics", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }

@@ -4,20 +4,23 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
+#include <khiva/array.h>
+#include <khiva/internal/util.h>
 #include <khiva/matrix.h>
 #include <khiva_c/internal/util.h>
 #include <khiva_c/matrix.h>
 
 #include <iostream>
 
-void find_best_n_discords(khiva_array *profile, khiva_array *index, long m, long n, khiva_array *discord_distances,
-                          khiva_array *discord_indices, khiva_array *subsequence_indices, bool self_join,
-                          int *error_code, char *error_message) {
+using namespace khiva;
+using namespace khiva::util;
+
+void find_best_n_discords(const khiva_array *profile, const khiva_array *index, long m, long n,
+                          khiva_array *discord_distances, khiva_array *discord_indices,
+                          khiva_array *subsequence_indices, bool self_join, int *error_code, char *error_message) {
     try {
-        af::array var_profile;
-        af::array var_index;
-        check_and_retain_arrays(profile, index, var_profile, var_index);
+        auto var_profile = array::from_af_array(*profile);
+        auto var_index = array::from_af_array(*index);
 
         af::array discords;
         af::array discordIndices;
@@ -25,24 +28,25 @@ void find_best_n_discords(khiva_array *profile, khiva_array *index, long m, long
 
         khiva::matrix::findBestNDiscords(var_profile, var_index, m, n, discords, discordIndices, subsequenceIndices,
                                          self_join);
-        af_retain_array(discord_distances, discords.get());
-        af_retain_array(discord_indices, discordIndices.get());
-        af_retain_array(subsequence_indices, subsequenceIndices.get());
+        *discord_distances = util::increment_ref_count(discords.get());
+        *discord_indices = util::increment_ref_count(discordIndices.get());
+        *subsequence_indices = util::increment_ref_count(subsequenceIndices.get());
 
-    } catch (const std::exception &e) {
-        fill_error("find_best_n_discords", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("find_best_n_discords", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void find_best_n_motifs(khiva_array *profile, khiva_array *index, long m, long n, khiva_array *motif_distances,
-                        khiva_array *motif_indices, khiva_array *subsequence_indices, bool self_join, int *error_code,
-                        char *error_message) {
+void find_best_n_motifs(const khiva_array *profile, const khiva_array *index, long m, long n,
+                        khiva_array *motif_distances, khiva_array *motif_indices, khiva_array *subsequence_indices,
+                        bool self_join, int *error_code, char *error_message) {
     try {
-        af::array var_profile;
-        af::array var_index;
-        check_and_retain_arrays(profile, index, var_profile, var_index);
+        auto var_profile = array::from_af_array(*profile);
+        auto var_index = array::from_af_array(*index);
 
         af::array motifs;
         af::array motifIndices;
@@ -50,172 +54,185 @@ void find_best_n_motifs(khiva_array *profile, khiva_array *index, long m, long n
 
         khiva::matrix::findBestNMotifs(var_profile, var_index, m, n, motifs, motifIndices, subsequenceIndices,
                                        self_join);
-
-        af_retain_array(motif_distances, motifs.get());
-        af_retain_array(motif_indices, motifIndices.get());
-        af_retain_array(subsequence_indices, subsequenceIndices.get());
-    } catch (const std::exception &e) {
-        fill_error("find_best_n_motifs", e.what(), error_message, error_code, 1);
+        *motif_distances = util::increment_ref_count(motifs.get());
+        *motif_indices = util::increment_ref_count(motifIndices.get());
+        *subsequence_indices = util::increment_ref_count(subsequenceIndices.get());
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("find_best_n_motifs", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void find_best_n_occurrences(khiva_array *q, khiva_array *t, long n, khiva_array *distances,
+void find_best_n_occurrences(const khiva_array *q, const khiva_array *t, long n, khiva_array *distances,
                              khiva_array *indexes, int *error_code, char *error_message) {
     try {
-        af::array var_q;
-        af::array var_t;
-        check_and_retain_arrays(q, t, var_q, var_t);
-        af::array distancesAux, indexesAux;
+        auto var_q = array::from_af_array(*q);
+        auto var_t = array::from_af_array(*t);
+
+        af::array distancesAux;
+        af::array indexesAux;
 
         khiva::matrix::findBestNOccurrences(var_q, var_t, n, distancesAux, indexesAux);
 
-        af_retain_array(distances, distancesAux.get());
-        af_retain_array(indexes, indexesAux.get());
+        *distances = util::increment_ref_count(distancesAux.get());
+        *indexes = util::increment_ref_count(indexesAux.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("find_best_n_occurrences", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("find_best_n_occurrences", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void mass(khiva_array *q, khiva_array *t, khiva_array *distances, int *error_code, char *error_message) {
+void mass(const khiva_array *q, const khiva_array *t, khiva_array *distances, int *error_code, char *error_message) {
     try {
-        af::array var_q;
-        af::array var_t;
-        check_and_retain_arrays(q, t, var_q, var_t);
+        auto var_q = array::from_af_array(*q);
+        auto var_t = array::from_af_array(*t);
         af::array distancesAux;
 
         khiva::matrix::mass(var_q, var_t, distancesAux);
 
-        af_retain_array(distances, distancesAux.get());
+        *distances = util::increment_ref_count(distancesAux.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("mass", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("mass", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void stomp(khiva_array *tssa, khiva_array *tssb, long m, khiva_array *p, khiva_array *i, int *error_code,
+void stomp(const khiva_array *tssa, const khiva_array *tssb, long m, khiva_array *p, khiva_array *i, int *error_code,
            char *error_message) {
     try {
-        af::array var_tssa;
-        af::array var_tssb;
-        check_and_retain_arrays(tssa, tssb, var_tssa, var_tssb);
+        auto var_tssa = array::from_af_array(*tssa);
+        auto var_tssb = array::from_af_array(*tssb);
         af::array distance;
         af::array index;
 
         khiva::matrix::stomp(var_tssa, var_tssb, m, distance, index);
 
-        af_retain_array(p, distance.get());
-        af_retain_array(i, index.get());
+        *p = util::increment_ref_count(distance.get());
+        *i = util::increment_ref_count(index.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("stomp", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("stomp", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void stomp_self_join(khiva_array *tss, long m, khiva_array *p, khiva_array *i, int *error_code,
+void stomp_self_join(const khiva_array *tss, long m, khiva_array *p, khiva_array *i, int *error_code,
                      char *error_message) {
     try {
-        af::array var_tss = af::array(*tss);
-        af_retain_array(tss, var_tss.get());
+        auto var_tss = array::from_af_array(*tss);
         af::array profile;
         af::array index;
 
         khiva::matrix::stomp(var_tss, m, profile, index);
 
-        af_retain_array(p, profile.get());
-        af_retain_array(i, index.get());
+        *p = util::increment_ref_count(profile.get());
+        *i = util::increment_ref_count(index.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("stomp_self_join", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("stomp_self_join", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void matrix_profile(khiva_array *tssa, khiva_array *tssb, long m, khiva_array *p, khiva_array *i,
-                    int *error_code, char *error_message) {
+void matrix_profile(const khiva_array *tssa, khiva_array *tssb, long m, khiva_array *p, khiva_array *i, int *error_code,
+                    char *error_message) {
     try {
-        af::array var_tssa;
-        af::array var_tssb;
-        check_and_retain_arrays(tssa, tssb, var_tssa, var_tssb);
+        auto var_tssa = array::from_af_array(*tssa);
+        auto var_tssb = array::from_af_array(*tssb);
         af::array distance;
         af::array index;
 
         khiva::matrix::matrixProfile(var_tssa, var_tssb, m, distance, index);
 
-        af_retain_array(p, distance.get());
-        af_retain_array(i, index.get());
+        *p = util::increment_ref_count(distance.get());
+        *i = util::increment_ref_count(index.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("matrix_profile", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("matrix_profile", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void matrix_profile_self_join(khiva_array *tss, long m, khiva_array *p, khiva_array *i, int *error_code,
+void matrix_profile_self_join(const khiva_array *tss, long m, khiva_array *p, khiva_array *i, int *error_code,
                               char *error_message) {
     try {
-        af::array var_tss = af::array(*tss);
-        af_retain_array(tss, var_tss.get());
+        auto var_tss = array::from_af_array(*tss);
         af::array profile;
         af::array index;
 
         khiva::matrix::matrixProfile(var_tss, m, profile, index);
 
-        af_retain_array(p, profile.get());
-        af_retain_array(i, index.get());
+        *p = util::increment_ref_count(profile.get());
+        *i = util::increment_ref_count(index.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("matrix_profile_self_join", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("matrix_profile_self_join", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void matrix_profile_lr(khiva_array *tss, long m, khiva_array *pleft, khiva_array *ileft, khiva_array *pright,
+void matrix_profile_lr(const khiva_array *tss, long m, khiva_array *pleft, khiva_array *ileft, khiva_array *pright,
                        khiva_array *iright, int *error_code, char *error_message) {
     try {
-        af::array var_tss = af::array(*tss);
-        af_retain_array(tss, var_tss.get());
-        af::array profileLeft, indexesLeft, profileRight, indexesRight;
+        auto var_tss = array::from_af_array(*tss);
+        af::array profileLeft;
+        af::array indexesLeft;
+        af::array profileRight;
+        af::array indexesRight;
 
         khiva::matrix::matrixProfileLR(var_tss, m, profileLeft, indexesLeft, profileRight, indexesRight);
 
-        af_retain_array(pleft, profileLeft.get());
-        af_retain_array(ileft, indexesLeft.get());
-        af_retain_array(pright, profileRight.get());
-        af_retain_array(iright, indexesRight.get());
-
+        *pleft = util::increment_ref_count(profileLeft.get());
+        *ileft = util::increment_ref_count(indexesLeft.get());
+        *pright = util::increment_ref_count(profileRight.get());
+        *iright = util::increment_ref_count(indexesRight.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("matrix_profile_lr", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("matrix_profile_lr", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void get_chains(khiva_array *tss, long m, khiva_array *c, int *error_code, char *error_message) {
+void get_chains(const khiva_array *tss, long m, khiva_array *c, int *error_code, char *error_message) {
     try {
-        af::array var_tss = af::array(*tss);
-        af_retain_array(tss, var_tss.get());
+        auto var_tss = array::from_af_array(*tss);
         af::array chains;
 
         khiva::matrix::getChains(var_tss, m, chains);
 
-        af_retain_array(c, chains.get());
+        *c = util::increment_ref_count(chains.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("get_chains", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("get_chains", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
