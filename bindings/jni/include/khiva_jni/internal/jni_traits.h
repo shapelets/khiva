@@ -89,7 +89,7 @@ struct ArrayTraits<short> {
 };
 
 template <>
-struct ArrayTraits<byte> {
+struct ArrayTraits<jbyte> {
     using JavaType = jbyte;
     using JavaTypePtr = jbyte *;
     using JavaArrayType = jbyteArray;

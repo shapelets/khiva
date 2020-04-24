@@ -78,7 +78,7 @@ jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromShort(JNIEnv *env, jo
 
 jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromByte(JNIEnv *env, jobject, jbyteArray elems,
                                                                 jlongArray dims) {
-    return createArrayFromJava<byte>(env, elems, dims);
+    return createArrayFromJava<jbyte>(env, elems, dims);
 }
 
 jlong JNICALL Java_io_shapelets_khiva_Array_createArrayFromFloatComplex(JNIEnv *env, jclass, jobjectArray objs,
@@ -203,7 +203,7 @@ jshortArray JNICALL Java_io_shapelets_khiva_Array_getShortFromArray(JNIEnv *env,
 }
 
 jbyteArray JNICALL Java_io_shapelets_khiva_Array_getByteFromArray(JNIEnv *env, jobject thisObj) {
-    return getJavaArrayFromKhiva<byte>(env, thisObj);
+    return getJavaArrayFromKhiva<jbyte>(env, thisObj);
 }
 
 jobjectArray JNICALL Java_io_shapelets_khiva_Array_getDoubleComplexFromArray(JNIEnv *env, jobject thisObj) {
