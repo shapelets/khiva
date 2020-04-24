@@ -36,7 +36,8 @@ set(KHIVALIB_JNI_HEADERS ${KHIVALIB_JNI_INC}/khiva_jni/array.h
                          ${KHIVALIB_JNI_INC}/khiva_jni/regression.h
                          ${KHIVALIB_JNI_INC}/khiva_jni/regularization.h
                          ${KHIVALIB_JNI_INC}/khiva_jni/statistics.h
-                         ${KHIVALIB_JNI_INC}/khiva_jni/internal/utils.h)
+                         ${KHIVALIB_JNI_INC}/khiva_jni/internal/utils.h
+                         ${KHIVALIB_JNI_INC}/khiva_jni/internal/jni_traits.h)
 
 # Sources to add to compilation
 set(KHIVALIB_JNI_SOURCES ${KHIVALIB_JNI_SRC}/array.cpp

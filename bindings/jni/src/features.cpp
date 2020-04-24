@@ -47,10 +47,10 @@ jlong JNICALL Java_io_shapelets_khiva_Features_aggregatedAutocorrelation(JNIEnv 
         }
         return reinterpret_cast<jlong>(new af::array(result));
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Features_aggregatedAutocorrelation. Unknown reason");
     }
     return 0;
@@ -111,10 +111,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_aggregatedLinearTrend(JNIEnv
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Features_aggregatedLinearTrend. Unknown reason");
     }
     return nullptr;
@@ -199,10 +199,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_fftCoefficient(JNIEnv *env, 
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Features_fftCoefficient. Unknown reason");
     }
     return nullptr;
@@ -280,10 +280,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Features_linearTrend(JNIEnv *env, job
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Features_linearTrend. Unknown reason");
     }
     return nullptr;
