@@ -18,7 +18,7 @@ void covariance_statistics(const khiva_array *tss, const bool *unbiased, khiva_a
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::statistics::covariance(var, *unbiased);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -33,7 +33,7 @@ void kurtosis_statistics(const khiva_array *tss, khiva_array *result, int *error
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::statistics::kurtosis(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -48,7 +48,7 @@ void ljung_box(const khiva_array *tss, const long *lags, khiva_array *result, in
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::statistics::ljungBox(var, *lags);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -64,7 +64,7 @@ void moment_statistics(const khiva_array *tss, const int *k, khiva_array *result
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::statistics::moment(var, *k);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -81,7 +81,7 @@ void quantile_statistics(const khiva_array *tss, const khiva_array *q, const flo
         auto var = array::from_af_array(*tss);
         auto var_q = array::from_af_array(*q);
         auto res = khiva::statistics::quantile(var, var_q , *precision);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -97,7 +97,7 @@ void quantiles_cut_statistics(const khiva_array *tss, const float *quantiles, co
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::statistics::quantilesCut(var, *quantiles, *precision);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -112,7 +112,7 @@ void sample_stdev_statistics(const khiva_array *tss, khiva_array *result, int *e
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::statistics::sampleStdev(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -127,7 +127,7 @@ void skewness_statistics(const khiva_array *tss, khiva_array *result, int *error
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::statistics::skewness(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

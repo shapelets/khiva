@@ -28,9 +28,9 @@ void find_best_n_discords(const khiva_array *profile, const khiva_array *index, 
 
         khiva::matrix::findBestNDiscords(var_profile, var_index, m, n, discords, discordIndices, subsequenceIndices,
                                          self_join);
-        *discord_distances = util::increment_ref_count(discords.get());
-        *discord_indices = util::increment_ref_count(discordIndices.get());
-        *subsequence_indices = util::increment_ref_count(subsequenceIndices.get());
+        *discord_distances = array::increment_ref_count(discords.get());
+        *discord_indices = array::increment_ref_count(discordIndices.get());
+        *subsequence_indices = array::increment_ref_count(subsequenceIndices.get());
 
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -54,9 +54,9 @@ void find_best_n_motifs(const khiva_array *profile, const khiva_array *index, lo
 
         khiva::matrix::findBestNMotifs(var_profile, var_index, m, n, motifs, motifIndices, subsequenceIndices,
                                        self_join);
-        *motif_distances = util::increment_ref_count(motifs.get());
-        *motif_indices = util::increment_ref_count(motifIndices.get());
-        *subsequence_indices = util::increment_ref_count(subsequenceIndices.get());
+        *motif_distances = array::increment_ref_count(motifs.get());
+        *motif_indices = array::increment_ref_count(motifIndices.get());
+        *subsequence_indices = array::increment_ref_count(subsequenceIndices.get());
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
         *error_code = e.err();
@@ -77,8 +77,8 @@ void find_best_n_occurrences(const khiva_array *q, const khiva_array *t, long n,
 
         khiva::matrix::findBestNOccurrences(var_q, var_t, n, distancesAux, indexesAux);
 
-        *distances = util::increment_ref_count(distancesAux.get());
-        *indexes = util::increment_ref_count(indexesAux.get());
+        *distances = array::increment_ref_count(distancesAux.get());
+        *indexes = array::increment_ref_count(indexesAux.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -97,7 +97,7 @@ void mass(const khiva_array *q, const khiva_array *t, khiva_array *distances, in
 
         khiva::matrix::mass(var_q, var_t, distancesAux);
 
-        *distances = util::increment_ref_count(distancesAux.get());
+        *distances = array::increment_ref_count(distancesAux.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -118,8 +118,8 @@ void stomp(const khiva_array *tssa, const khiva_array *tssb, long m, khiva_array
 
         khiva::matrix::stomp(var_tssa, var_tssb, m, distance, index);
 
-        *p = util::increment_ref_count(distance.get());
-        *i = util::increment_ref_count(index.get());
+        *p = array::increment_ref_count(distance.get());
+        *i = array::increment_ref_count(index.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -139,8 +139,8 @@ void stomp_self_join(const khiva_array *tss, long m, khiva_array *p, khiva_array
 
         khiva::matrix::stomp(var_tss, m, profile, index);
 
-        *p = util::increment_ref_count(profile.get());
-        *i = util::increment_ref_count(index.get());
+        *p = array::increment_ref_count(profile.get());
+        *i = array::increment_ref_count(index.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -161,8 +161,8 @@ void matrix_profile(const khiva_array *tssa, khiva_array *tssb, long m, khiva_ar
 
         khiva::matrix::matrixProfile(var_tssa, var_tssb, m, distance, index);
 
-        *p = util::increment_ref_count(distance.get());
-        *i = util::increment_ref_count(index.get());
+        *p = array::increment_ref_count(distance.get());
+        *i = array::increment_ref_count(index.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -182,8 +182,8 @@ void matrix_profile_self_join(const khiva_array *tss, long m, khiva_array *p, kh
 
         khiva::matrix::matrixProfile(var_tss, m, profile, index);
 
-        *p = util::increment_ref_count(profile.get());
-        *i = util::increment_ref_count(index.get());
+        *p = array::increment_ref_count(profile.get());
+        *i = array::increment_ref_count(index.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -205,10 +205,10 @@ void matrix_profile_lr(const khiva_array *tss, long m, khiva_array *pleft, khiva
 
         khiva::matrix::matrixProfileLR(var_tss, m, profileLeft, indexesLeft, profileRight, indexesRight);
 
-        *pleft = util::increment_ref_count(profileLeft.get());
-        *ileft = util::increment_ref_count(indexesLeft.get());
-        *pright = util::increment_ref_count(profileRight.get());
-        *iright = util::increment_ref_count(indexesRight.get());
+        *pleft = array::increment_ref_count(profileLeft.get());
+        *ileft = array::increment_ref_count(indexesLeft.get());
+        *pright = array::increment_ref_count(profileRight.get());
+        *iright = array::increment_ref_count(indexesRight.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -226,7 +226,7 @@ void get_chains(const khiva_array *tss, long m, khiva_array *c, int *error_code,
 
         khiva::matrix::getChains(var_tss, m, chains);
 
-        *c = util::increment_ref_count(chains.get());
+        *c = array::increment_ref_count(chains.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

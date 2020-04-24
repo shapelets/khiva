@@ -19,8 +19,6 @@ namespace util {
 
 std::string khiva_file_path(const std::string &path);
 
-af_array increment_ref_count(const af_array in);
-
 }  // namespace util
 }  // namespace khiva
 

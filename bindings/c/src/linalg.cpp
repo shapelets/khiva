@@ -18,7 +18,7 @@ void lls(const khiva_array *a, const khiva_array *b, khiva_array *result, int *e
         auto var_a = array::from_af_array(*a);
         auto var_b = array::from_af_array(*b);
         auto res = khiva::linalg::lls(var_a, var_b);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

@@ -23,8 +23,8 @@ void k_means(const khiva_array *tss, const int *k, khiva_array *centroids, khiva
 
         khiva::clustering::kMeans(var_tss, *k, primitive_centroids, primitive_labels, *tolerance, *max_iterations);
 
-        *labels = increment_ref_count(primitive_labels.get());
-        *centroids = increment_ref_count(primitive_centroids.get());
+        *labels = array::increment_ref_count(primitive_labels.get());
+        *centroids = array::increment_ref_count(primitive_centroids.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -44,8 +44,8 @@ void k_shape(const khiva_array *tss, const int *k, khiva_array *centroids, khiva
 
         khiva::clustering::kShape(var_tss, *k, primitive_centroids, primitive_labels, *tolerance, *max_iterations);
 
-        *labels = increment_ref_count(primitive_labels.get());
-        *centroids = increment_ref_count(primitive_centroids.get());
+        *labels = array::increment_ref_count(primitive_labels.get());
+        *centroids = array::increment_ref_count(primitive_centroids.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

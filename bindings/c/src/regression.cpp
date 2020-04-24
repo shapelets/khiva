@@ -28,11 +28,11 @@ void linear(const khiva_array *xss, const khiva_array *yss, khiva_array *slope, 
         khiva::regression::linear(var_xss, var_yss, slope_primitive, intercept_primtive, rvalue_primitive,
                                   pvalue_primitive, stderrest_primitive);
 
-        *slope = util::increment_ref_count(slope_primitive.get());
-        *intercept = util::increment_ref_count(intercept_primtive.get());
-        *rvalue = util::increment_ref_count(rvalue_primitive.get());
-        *pvalue = util::increment_ref_count(pvalue_primitive.get());
-        *stderrest = util::increment_ref_count(stderrest_primitive.get());
+        *slope = array::increment_ref_count(slope_primitive.get());
+        *intercept = array::increment_ref_count(intercept_primtive.get());
+        *rvalue = array::increment_ref_count(rvalue_primitive.get());
+        *pvalue = array::increment_ref_count(pvalue_primitive.get());
+        *stderrest = array::increment_ref_count(stderrest_primitive.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

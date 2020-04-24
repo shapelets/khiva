@@ -17,7 +17,7 @@ void euclidean(const khiva_array *tss, khiva_array *result, int *error_code, cha
     try {
         auto array = array::from_af_array(*tss);
         auto r = khiva::distances::euclidean(array);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -32,7 +32,7 @@ void dtw(const khiva_array *tss, khiva_array *result, int *error_code, char *err
     try {
         auto array = array::from_af_array(*tss);
         auto r = khiva::distances::dtw(array);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -47,7 +47,7 @@ void hamming(const khiva_array *tss, khiva_array *result, int *error_code, char 
     try {
         auto array = array::from_af_array(*tss);
         auto r = khiva::distances::hamming(array);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -62,7 +62,7 @@ void manhattan(const khiva_array *tss, khiva_array *result, int *error_code, cha
     try {
         auto array = array::from_af_array(*tss);
         auto r = khiva::distances::manhattan(array);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -77,7 +77,7 @@ void sbd(const khiva_array *tss, khiva_array *result, int *error_code, char *err
     try {
         auto array = array::from_af_array(*tss);
         auto r = khiva::distances::sbd(array);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -92,7 +92,7 @@ void squared_euclidean(const khiva_array *tss, khiva_array *result, int *error_c
     try {
         auto array = array::from_af_array(*tss);
         auto r = khiva::distances::squaredEuclidean(array);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

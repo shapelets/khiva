@@ -10,12 +10,3 @@ std::string khiva::util::khiva_file_path(const std::string &path) {
     auto pos = path.rfind("khiva");
     return (pos == std::string::npos) ? path : path.substr(pos);
 }
-
-af_array khiva::util::increment_ref_count(const af_array array) {
-    af_array ptr;
-    auto af_error = af_retain_array(&ptr, array);
-    if (af_error != AF_SUCCESS) {
-        throw af::exception("Error retaining array", __func__, khiva_file_path(__FILE__).c_str(), __LINE__, af_error);
-    }
-    return ptr;
-}

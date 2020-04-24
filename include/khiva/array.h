@@ -89,7 +89,15 @@ KHIVAAPI void print(const af::array &array);
  *
  * @param array The array to be printed.
  */
-KHIVAAPI af::array from_af_array(const af_array in);
+KHIVAAPI af::array from_af_array(const af_array array);
+
+/**
+ * @brief Increments the reference count of the af_array C pointer passed throwing if there is an error.
+ * The user of this function is responsible to release the returned array by calling deleteArray.
+ *
+ * @param array The array whose reference count is going to be incremented.
+ */
+KHIVAAPI af_array increment_ref_count(const af_array array);
 
 /**
  * @brief Array class, This class provides functionality manage Arrays on the host side.

@@ -17,7 +17,7 @@ void abs_energy(const khiva_array *array, khiva_array *result, int *error_code, 
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::absEnergy(var);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -32,7 +32,7 @@ void absolute_sum_of_changes(const khiva_array *array, khiva_array *result, int 
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::absoluteSumOfChanges(var);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -71,7 +71,7 @@ void aggregated_autocorrelation(const khiva_array *array, const int *aggregation
                 r = khiva::features::aggregatedAutocorrelation(var, af::mean);
                 break;
         }
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -120,11 +120,11 @@ void aggregated_linear_trend(const khiva_array *array, const long *chunkSize, co
                                                        primitive_rvalue, primitive_pvalue, primitive_stderrest);
                 break;
         }
-        *slope = util::increment_ref_count(primitive_slope.get());
-        *intercept = util::increment_ref_count(primitive_intercept.get());
-        *rvalue = util::increment_ref_count(primitive_intercept.get());
-        *pvalue = util::increment_ref_count(primitive_pvalue.get());
-        *stderrest = util::increment_ref_count(primitive_stderrest.get());
+        *slope = array::increment_ref_count(primitive_slope.get());
+        *intercept = array::increment_ref_count(primitive_intercept.get());
+        *rvalue = array::increment_ref_count(primitive_intercept.get());
+        *pvalue = array::increment_ref_count(primitive_pvalue.get());
+        *stderrest = array::increment_ref_count(primitive_stderrest.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -140,7 +140,7 @@ void approximate_entropy(const khiva_array *array, const int *m, const float *r,
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::approximateEntropy(var, *m, *r);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -157,7 +157,7 @@ void cross_covariance(const khiva_array *xss, const khiva_array *yss, const bool
         auto var_xss = array::from_af_array(*xss);
         auto var_yss = array::from_af_array(*yss);
         auto r = khiva::features::crossCovariance(var_xss, var_yss, *unbiased);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -173,7 +173,7 @@ void auto_covariance(const khiva_array *array, const bool *unbiased, khiva_array
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::autoCovariance(var, *unbiased);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -190,7 +190,7 @@ void cross_correlation(const khiva_array *xss, const khiva_array *yss, const boo
         auto var_xss = array::from_af_array(*xss);
         auto var_yss = array::from_af_array(*yss);
         auto r = khiva::features::crossCorrelation(var_xss, var_yss, *unbiased);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -206,7 +206,7 @@ void auto_correlation(const khiva_array *array, const long *max_lag, const bool 
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::autoCorrelation(var, *max_lag, *unbiased);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -222,7 +222,7 @@ void binned_entropy(const khiva_array *array, const int *max_bins, khiva_array *
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::binnedEntropy(var, *max_bins);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -237,7 +237,7 @@ void c3(const khiva_array *array, const long *lag, khiva_array *result, int *err
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::c3(var, *lag);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -253,7 +253,7 @@ void cid_ce(const khiva_array *array, const bool *zNormalize, khiva_array *resul
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::cidCe(var, *zNormalize);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -268,7 +268,7 @@ void count_above_mean(const khiva_array *array, khiva_array *result, int *error_
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::countAboveMean(var);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -283,7 +283,7 @@ void count_below_mean(const khiva_array *array, khiva_array *result, int *error_
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::countBelowMean(var);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -300,7 +300,7 @@ void cwt_coefficients(const khiva_array *array, const khiva_array *width, const 
         auto var = array::from_af_array(*array);
         auto var_width = array::from_af_array(*width);
         auto r = khiva::features::cwtCoefficients(var, var_width, *coeff, *w);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -316,7 +316,7 @@ void energy_ratio_by_chunks(const khiva_array *array, const long *num_segments, 
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::energyRatioByChunks(var, *num_segments, *segment_focus);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -331,7 +331,7 @@ void fft_aggregated(const khiva_array *array, khiva_array *result, int *error_co
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::fftAggregated(var);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -352,10 +352,10 @@ void fft_coefficient(const khiva_array *array, const long *coefficient, khiva_ar
         af::array primitive_angle;
         khiva::features::fftCoefficient(var, *coefficient, primitive_real, primitive_imag, primitive_abs,
                                         primitive_angle);
-        *real = util::increment_ref_count(primitive_real.get());
-        *imag = util::increment_ref_count(primitive_real.get());
-        *absolute = util::increment_ref_count(primitive_real.get());
-        *angle = util::increment_ref_count(primitive_real.get());
+        *real = array::increment_ref_count(primitive_real.get());
+        *imag = array::increment_ref_count(primitive_real.get());
+        *absolute = array::increment_ref_count(primitive_real.get());
+        *angle = array::increment_ref_count(primitive_real.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -370,7 +370,7 @@ void first_location_of_maximum(const khiva_array *array, khiva_array *result, in
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::firstLocationOfMaximum(var);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -385,7 +385,7 @@ void first_location_of_minimum(const khiva_array *array, khiva_array *result, in
     try {
         auto var = array::from_af_array(*array);
         auto r = khiva::features::firstLocationOfMinimum(var);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -401,7 +401,7 @@ void friedrich_coefficients(const khiva_array *array, const int *m, const float 
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::friedrichCoefficients(var, *m, *r);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -416,7 +416,7 @@ void has_duplicates(const khiva_array *array, khiva_array *result, int *error_co
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::hasDuplicates(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -431,7 +431,7 @@ void has_duplicate_max(const khiva_array *array, khiva_array *result, int *error
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::hasDuplicateMax(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -446,7 +446,7 @@ void has_duplicate_min(const khiva_array *array, khiva_array *result, int *error
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::hasDuplicateMin(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -462,7 +462,7 @@ void index_mass_quantile(const khiva_array *array, const float *q, khiva_array *
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::indexMassQuantile(var, *q);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -477,7 +477,7 @@ void kurtosis(const khiva_array *array, khiva_array *result, int *error_code, ch
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::kurtosis(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -493,7 +493,7 @@ void large_standard_deviation(const khiva_array *array, const float *r, khiva_ar
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::largeStandardDeviation(var, *r);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -508,7 +508,7 @@ void last_location_of_maximum(const khiva_array *array, khiva_array *result, int
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::lastLocationOfMaximum(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -523,7 +523,7 @@ void last_location_of_minimum(const khiva_array *array, khiva_array *result, int
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::lastLocationOfMinimum(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -538,7 +538,7 @@ void length(const khiva_array *array, khiva_array *result, int *error_code, char
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::length(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -560,11 +560,11 @@ void linear_trend(const khiva_array *array, khiva_array *pvalue, khiva_array *rv
         af::array primitive_stdrr;
         khiva::features::linearTrend(var, primitive_pvalue, primitive_rvalue, primitive_intercept, primitive_slope,
                                      primitive_stdrr);
-        *slope = util::increment_ref_count(primitive_slope.get());
-        *intercept = util::increment_ref_count(primitive_intercept.get());
-        *rvalue = util::increment_ref_count(primitive_rvalue.get());
-        *pvalue = util::increment_ref_count(primitive_pvalue.get());
-        *stdrr = util::increment_ref_count(primitive_stdrr.get());
+        *slope = array::increment_ref_count(primitive_slope.get());
+        *intercept = array::increment_ref_count(primitive_intercept.get());
+        *rvalue = array::increment_ref_count(primitive_rvalue.get());
+        *pvalue = array::increment_ref_count(primitive_pvalue.get());
+        *stdrr = array::increment_ref_count(primitive_stdrr.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -579,7 +579,7 @@ void local_maximals(const khiva_array *array, khiva_array *result, int *error_co
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::localMaximals(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -594,7 +594,7 @@ void longest_strike_above_mean(const khiva_array *array, khiva_array *result, in
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::longestStrikeAboveMean(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -609,7 +609,7 @@ void longest_strike_below_mean(const khiva_array *array, khiva_array *result, in
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::longestStrikeBelowMean(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -625,7 +625,7 @@ void max_langevin_fixed_point(const khiva_array *array, const int *m, const floa
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::maxLangevinFixedPoint(var, *m, *r);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -640,7 +640,7 @@ void maximum(const khiva_array *array, khiva_array *result, int *error_code, cha
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::maximum(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -655,7 +655,7 @@ void mean(const khiva_array *array, khiva_array *result, int *error_code, char *
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::mean(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -670,7 +670,7 @@ void mean_absolute_change(const khiva_array *array, khiva_array *result, int *er
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::meanAbsoluteChange(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -685,7 +685,7 @@ void mean_change(const khiva_array *array, khiva_array *result, int *error_code,
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::meanChange(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -701,7 +701,7 @@ void mean_second_derivative_central(const khiva_array *array, khiva_array *resul
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::meanSecondDerivativeCentral(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -716,7 +716,7 @@ void median(const khiva_array *array, khiva_array *result, int *error_code, char
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::median(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -731,7 +731,7 @@ void minimum(const khiva_array *array, khiva_array *result, int *error_code, cha
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::minimum(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -747,7 +747,7 @@ void number_crossing_m(const khiva_array *array, const int *m, khiva_array *resu
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::numberCrossingM(var, *m);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -763,7 +763,7 @@ void number_cwt_peaks(const khiva_array *array, const int *max_w, khiva_array *r
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::numberPeaks(var, *max_w);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -778,7 +778,7 @@ void number_peaks(const khiva_array *array, const int *n, khiva_array *result, i
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::numberPeaks(var, *n);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -795,7 +795,7 @@ void partial_autocorrelation(const khiva_array *array, const khiva_array *lags, 
         auto var = array::from_af_array(*array);
         auto var_lags = array::from_af_array(*lags);
         auto res = khiva::features::partialAutocorrelation(var, var_lags);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -811,7 +811,7 @@ void percentage_of_reoccurring_datapoints_to_all_datapoints(const khiva_array *a
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::percentageOfReoccurringDatapointsToAllDatapoints(var, *is_sorted);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -827,7 +827,7 @@ void percentage_of_reoccurring_values_to_all_values(const khiva_array *array, co
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::percentageOfReoccurringValuesToAllValues(var, *is_sorted);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -844,7 +844,7 @@ void quantile(const khiva_array *array, const khiva_array *q, const float *preci
         auto var = array::from_af_array(*array);
         auto var_q = array::from_af_array(*q);
         auto res = khiva::features::quantile(var, var_q, *precision);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -860,7 +860,7 @@ void range_count(const khiva_array *array, const float *min, const float *max, k
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::rangeCount(var, *min, *max);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -876,7 +876,7 @@ void ratio_beyond_r_sigma(const khiva_array *array, const float *r, khiva_array 
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::ratioBeyondRSigma(var, *r);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -892,7 +892,7 @@ void ratio_value_number_to_time_series_length(const khiva_array *array, khiva_ar
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::ratioValueNumberToTimeSeriesLength(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -907,7 +907,7 @@ void sample_entropy(const khiva_array *array, khiva_array *result, int *error_co
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::sampleEntropy(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -922,7 +922,7 @@ void skewness(const khiva_array *array, khiva_array *result, int *error_code, ch
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::skewness(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -938,7 +938,7 @@ void spkt_welch_density(const khiva_array *array, const int *coeff, khiva_array 
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::spktWelchDensity(var, *coeff);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -953,7 +953,7 @@ void standard_deviation(const khiva_array *array, khiva_array *result, int *erro
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::standardDeviation(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -969,7 +969,7 @@ void sum_of_reoccurring_datapoints(const khiva_array *array, const bool *is_sort
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::sumOfReoccurringDatapoints(var, *is_sorted);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -985,7 +985,7 @@ void sum_of_reoccurring_values(const khiva_array *array, const bool *is_sorted, 
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::sumOfReoccurringValues(var, *is_sorted);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -1000,7 +1000,7 @@ void sum_values(const khiva_array *array, khiva_array *result, int *error_code, 
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::sumValues(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -1016,7 +1016,7 @@ void symmetry_looking(const khiva_array *array, const float *r, khiva_array *res
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::symmetryLooking(var, *r);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -1032,7 +1032,7 @@ void time_reversal_asymmetry_statistic(const khiva_array *array, const int *lag,
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::timeReversalAsymmetryStatistic(var, *lag);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -1047,7 +1047,7 @@ void value_count(const khiva_array *array, const float *v, khiva_array *result, 
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::valueCount(var, *v);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -1062,7 +1062,7 @@ void variance(const khiva_array *array, khiva_array *result, int *error_code, ch
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::variance(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -1078,7 +1078,7 @@ void variance_larger_than_standard_deviation(const khiva_array *array, khiva_arr
     try {
         auto var = array::from_af_array(*array);
         auto res = khiva::features::varianceLargerThanStandardDeviation(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

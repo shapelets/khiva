@@ -64,3 +64,12 @@ af::array khiva::array::from_af_array(const af_array in) {
     af_array ptr = increment_ref_count(in);
     return af::array(ptr);
 }
+
+af_array khiva::array::increment_ref_count(const af_array array) {
+    af_array ptr;
+    auto af_error = af_retain_array(&ptr, array);
+    if (af_error != AF_SUCCESS) {
+        throw af::exception("Error retaining array", __func__, khiva_file_path(__FILE__).c_str(), __LINE__, af_error);
+    }
+    return ptr;
+}

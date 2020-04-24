@@ -17,7 +17,7 @@ void decimal_scaling_norm(const khiva_array *tss, khiva_array *result, int *erro
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::normalization::decimalScalingNorm(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -48,7 +48,7 @@ void max_min_norm(const khiva_array *tss, const double *high, const double *low,
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::normalization::maxMinNorm(var, *high, *low, *epsilon);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -79,7 +79,7 @@ void mean_norm(const khiva_array *tss, khiva_array *result, int *error_code, cha
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::normalization::meanNorm(var);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -108,7 +108,7 @@ void znorm(const khiva_array *tss, const double *epsilon, khiva_array *result, i
     try {
         auto var = array::from_af_array(*tss);
         auto res = khiva::normalization::znorm(var, *epsilon);
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

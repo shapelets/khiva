@@ -19,7 +19,7 @@ void create_array(const void *data, unsigned ndims, const long long *dims, khiva
                   int *error_code, char *error_message) {
     try {
         auto array = array::createArray(data, ndims, dims, type);
-        *result = util::increment_ref_count(array.get());
+        *result = array::increment_ref_count(array.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -106,7 +106,7 @@ void join(int dim, const khiva_array *first, const khiva_array *second, khiva_ar
         auto var1 = array::from_af_array(*first);
         auto var2 = array::from_af_array(*second);
         af::array r = khiva::array::join(dim, var1, var2);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -123,7 +123,7 @@ void khiva_add(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resu
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 + var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -140,7 +140,7 @@ void khiva_mul(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resu
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 * var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -157,7 +157,7 @@ void khiva_sub(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resu
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 - var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -174,7 +174,7 @@ void khiva_div(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resu
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 / var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -191,7 +191,7 @@ void khiva_mod(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resu
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 % var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -208,7 +208,7 @@ void khiva_pow(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resu
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = af::pow(var1, var2);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -225,7 +225,7 @@ void khiva_lt(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resul
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 < var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -242,7 +242,7 @@ void khiva_gt(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resul
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 > var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -259,7 +259,7 @@ void khiva_le(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resul
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 <= var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -276,7 +276,7 @@ void khiva_ge(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resul
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 >= var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -293,7 +293,7 @@ void khiva_eq(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resul
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 == var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -310,7 +310,7 @@ void khiva_ne(const khiva_array *lhs, const khiva_array *rhs, khiva_array *resul
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 != var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -327,7 +327,7 @@ void khiva_bitand(const khiva_array *lhs, const khiva_array *rhs, khiva_array *r
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 & var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -344,7 +344,7 @@ void khiva_bitor(const khiva_array *lhs, const khiva_array *rhs, khiva_array *re
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = var1 | var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -361,7 +361,7 @@ void khiva_bitxor(const khiva_array *lhs, const khiva_array *rhs, khiva_array *r
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = (!var1) != !var2;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -376,7 +376,7 @@ void khiva_bitshiftl(const khiva_array *array, int n, khiva_array *result, int *
     try {
         auto var = array::from_af_array(*array);
         af::array r = var << n;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -391,7 +391,7 @@ void khiva_bitshiftr(const khiva_array *array, int n, khiva_array *result, int *
     try {
         auto var = array::from_af_array(*array);
         af::array r = var >> n;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -406,7 +406,7 @@ void khiva_not(const khiva_array *array, khiva_array *result, int *error_code, c
     try {
         auto var = array::from_af_array(*array);
         af::array r = !var;
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -421,7 +421,7 @@ void khiva_transpose(const khiva_array *array, bool conjugate, khiva_array *resu
     try {
         auto var = array::from_af_array(*array);
         auto r = af::transpose(var, conjugate);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -436,7 +436,7 @@ void khiva_col(const khiva_array *array, int index, khiva_array *result, int *er
     try {
         auto var = array::from_af_array(*array);
         af::array r = var.col(index);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -451,7 +451,7 @@ void khiva_cols(const khiva_array *array, int first, int last, khiva_array *resu
     try {
         auto var = array::from_af_array(*array);
         af::array r = var.cols(first, last);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -466,7 +466,7 @@ void khiva_row(const khiva_array *array, int index, khiva_array *result, int *er
     try {
         auto var = array::from_af_array(*array);
         af::array r = var.row(index);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -481,7 +481,7 @@ void khiva_rows(const khiva_array *array, int first, int last, khiva_array *resu
     try {
         auto var = array::from_af_array(*array);
         af::array r = var.rows(first, last);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -497,7 +497,7 @@ void khiva_matmul(const khiva_array *lhs, const khiva_array *rhs, khiva_array *r
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
         auto r = af::matmul(var1, var2);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -510,7 +510,7 @@ void khiva_matmul(const khiva_array *lhs, const khiva_array *rhs, khiva_array *r
 
 void from_arrayfire(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        *result = util::increment_ref_count(*array);
+        *result = array::increment_ref_count(*array);
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);
@@ -530,7 +530,7 @@ void khiva_as(khiva_array *array, int type, khiva_array *result, int *error_code
         auto var = array::from_af_array(*array);
         auto dt = static_cast<khiva::dtype>(type);
         auto r = var.as(dt);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         util::fill_error(__func__, e.what(), error_message);

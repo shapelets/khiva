@@ -17,7 +17,7 @@ void paa(const khiva_array *a, const int *bins, khiva_array *result, int *error_
     try {
         auto array = array::from_af_array(*a);
         auto r = khiva::dimensionality::PAA(array, *bins);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -32,7 +32,7 @@ void pip(const khiva_array *a, const int *number_ips, khiva_array *result, int *
     try {
         auto array = array::from_af_array(*a);
         auto r = khiva::dimensionality::PIP(array, *number_ips);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -48,7 +48,7 @@ void pla_bottom_up(const khiva_array *ts, const float *max_error, khiva_array *r
     try {
         auto array = array::from_af_array(*ts);
         auto r = khiva::dimensionality::PLABottomUp(array, *max_error);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -64,7 +64,7 @@ void pla_sliding_window(const khiva_array *ts, const float *max_error, khiva_arr
     try {
         auto array = array::from_af_array(*ts);
         auto r = khiva::dimensionality::PLASlidingWindow(array, *max_error);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -80,7 +80,7 @@ void ramer_douglas_peucker(const khiva_array *points, const double *epsilon, khi
     try {
         auto array = array::from_af_array(*points);
         auto r = khiva::dimensionality::ramerDouglasPeucker(array, *epsilon);
-        *res_points = util::increment_ref_count(r.get());
+        *res_points = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -95,7 +95,7 @@ void sax(const khiva_array *a, const int *alphabet_size, khiva_array *result, in
     try {
         auto array = array::from_af_array(*a);
         auto r = khiva::dimensionality::SAX(array, *alphabet_size);
-        *result = util::increment_ref_count(r.get());
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -111,7 +111,7 @@ void visvalingam(const khiva_array *points, const int *num_points, khiva_array *
     try {
         auto array = array::from_af_array(*points);
         auto r = khiva::dimensionality::visvalingam(array, *num_points);
-        *res_points = util::increment_ref_count(r.get());
+        *res_points = array::increment_ref_count(r.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

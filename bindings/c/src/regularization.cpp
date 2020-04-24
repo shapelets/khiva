@@ -41,7 +41,7 @@ void group_by(const khiva_array *array, const int *aggregation_function, const i
                 res = khiva::regularization::groupBy(var, af::mean, *n_columns_key, *n_columns_value);
                 break;
         }
-        *result = util::increment_ref_count(res.get());
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
