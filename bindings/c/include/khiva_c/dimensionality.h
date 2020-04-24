@@ -30,7 +30,7 @@ extern "C" {
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void paa(khiva_array *a, const int *bins, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void paa(const khiva_array *a, const int *bins, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.
@@ -44,7 +44,8 @@ KHIVA_C_API void paa(khiva_array *a, const int *bins, khiva_array *result, int *
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void pip(khiva_array *a, const int *number_ips, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void pip(const khiva_array *a, const int *number_ips, khiva_array *result, int *error_code,
+                     char *error_message);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA BottomUP) to the time series.
@@ -59,7 +60,8 @@ KHIVA_C_API void pip(khiva_array *a, const int *number_ips, khiva_array *result,
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void pla_bottom_up(khiva_array *ts, const float *max_error, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void pla_bottom_up(const khiva_array *ts, const float *max_error, khiva_array *result, int *error_code,
+                               char *error_message);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA Sliding Window) to the time series.
@@ -74,7 +76,8 @@ KHIVA_C_API void pla_bottom_up(khiva_array *ts, const float *max_error, khiva_ar
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void pla_sliding_window(khiva_array *ts, const float *max_error, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void pla_sliding_window(const khiva_array *ts, const float *max_error, khiva_array *result, int *error_code,
+                                    char *error_message);
 
 /**
  * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve
@@ -96,8 +99,8 @@ KHIVA_C_API void pla_sliding_window(khiva_array *ts, const float *max_error, khi
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void ramer_douglas_peucker(khiva_array *points, const double *epsilon, khiva_array *res_points, int *error_code,
-                                       char *error_message);
+KHIVA_C_API void ramer_douglas_peucker(const khiva_array *points, const double *epsilon, khiva_array *res_points,
+                                       int *error_code, char *error_message);
 
 /**
  * @brief Symbolic Aggregate approXimation (SAX). It transforms a numeric time series into a time series of symbols with
@@ -117,7 +120,8 @@ KHIVA_C_API void ramer_douglas_peucker(khiva_array *points, const double *epsilo
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void sax(khiva_array *a, const int *alphabet_size, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void sax(const khiva_array *a, const int *alphabet_size, khiva_array *result, int *error_code,
+                     char *error_message);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number
@@ -134,7 +138,8 @@ KHIVA_C_API void sax(khiva_array *a, const int *alphabet_size, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void visvalingam(khiva_array *points, const int *num_points, khiva_array *res_points, int *error_code, char *error_message);
+KHIVA_C_API void visvalingam(const khiva_array *points, const int *num_points, khiva_array *res_points, int *error_code,
+                             char *error_message);
 
 #ifdef __cplusplus
 }

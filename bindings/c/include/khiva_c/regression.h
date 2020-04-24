@@ -30,7 +30,7 @@ extern "C" {
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void linear(khiva_array *xss, khiva_array *yss, khiva_array *slope, khiva_array *intercept,
+KHIVA_C_API void linear(const khiva_array *xss, const khiva_array *yss, khiva_array *slope, khiva_array *intercept,
                         khiva_array *rvalue, khiva_array *pvalue, khiva_array *stderrest, int *error_code,
                         char *error_message);
 
