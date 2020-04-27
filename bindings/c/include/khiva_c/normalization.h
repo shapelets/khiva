@@ -35,7 +35,7 @@ KHIVA_C_API void decimal_scaling_norm(const khiva_array *tss, khiva_array *resul
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void decimal_scaling_norm_in_place(const khiva_array *tss, int *error_code, char *error_message);
+KHIVA_C_API void decimal_scaling_norm_in_place(khiva_array *tss, int *error_code, char *error_message);
 
 /**
  * @brief Normalizes the given time series according to its minimum and maximum value and adjusts each value within the
@@ -67,7 +67,7 @@ KHIVA_C_API void max_min_norm(const khiva_array *tss, const double *high, const 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void max_min_norm_in_place(const khiva_array *tss, const double *high, const double *low, const double *epsilon, int *error_code,
+KHIVA_C_API void max_min_norm_in_place(khiva_array *tss, const double *high, const double *low, const double *epsilon, int *error_code,
                                        char *error_message);
 
 /**
@@ -100,7 +100,7 @@ KHIVA_C_API void mean_norm(const khiva_array *tss, khiva_array *result, int *err
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void mean_norm_in_place(const khiva_array *tss, int *error_code, char *error_message);
+KHIVA_C_API void mean_norm_in_place(khiva_array *tss, int *error_code, char *error_message);
 
 /**
  * @brief Calculates a new set of times series with zero mean and standard deviation one.
@@ -127,7 +127,7 @@ KHIVA_C_API void znorm(const khiva_array *tss, const double *epsilon, khiva_arra
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void znorm_in_place(const khiva_array *tss, const double *epsilon, int *error_code, char *error_message);
+KHIVA_C_API void znorm_in_place(khiva_array *tss, const double *epsilon, int *error_code, char *error_message);
 
 #ifdef __cplusplus
 }

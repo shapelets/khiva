@@ -151,8 +151,8 @@ void stomp_self_join(const khiva_array *tss, long m, khiva_array *p, khiva_array
     }
 }
 
-void matrix_profile(const khiva_array *tssa, khiva_array *tssb, long m, khiva_array *p, khiva_array *i, int *error_code,
-                    char *error_message) {
+void matrix_profile(const khiva_array *tssa, const khiva_array *tssb, long m, khiva_array *p, khiva_array *i,
+                    int *error_code, char *error_message) {
     try {
         auto var_tssa = array::from_af_array(*tssa);
         auto var_tssb = array::from_af_array(*tssb);

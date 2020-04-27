@@ -122,7 +122,7 @@ void aggregated_linear_trend(const khiva_array *array, const long *chunkSize, co
         }
         *slope = array::increment_ref_count(primitive_slope.get());
         *intercept = array::increment_ref_count(primitive_intercept.get());
-        *rvalue = array::increment_ref_count(primitive_intercept.get());
+        *rvalue = array::increment_ref_count(primitive_rvalue.get());
         *pvalue = array::increment_ref_count(primitive_pvalue.get());
         *stderrest = array::increment_ref_count(primitive_stderrest.get());
         *error_code = 0;
@@ -353,9 +353,9 @@ void fft_coefficient(const khiva_array *array, const long *coefficient, khiva_ar
         khiva::features::fftCoefficient(var, *coefficient, primitive_real, primitive_imag, primitive_abs,
                                         primitive_angle);
         *real = array::increment_ref_count(primitive_real.get());
-        *imag = array::increment_ref_count(primitive_real.get());
-        *absolute = array::increment_ref_count(primitive_real.get());
-        *angle = array::increment_ref_count(primitive_real.get());
+        *imag = array::increment_ref_count(primitive_imag.get());
+        *absolute = array::increment_ref_count(primitive_abs.get());
+        *angle = array::increment_ref_count(primitive_angle.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

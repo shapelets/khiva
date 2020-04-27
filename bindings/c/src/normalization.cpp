@@ -28,10 +28,11 @@ void decimal_scaling_norm(const khiva_array *tss, khiva_array *result, int *erro
     }
 }
 
-void decimal_scaling_norm_in_place(const khiva_array *tss, int *error_code, char *error_message) {
+void decimal_scaling_norm_in_place(khiva_array *tss, int *error_code, char *error_message) {
     try {
         auto var = array::from_af_array(*tss);
-        khiva::normalization::decimalScalingNormInPlace(var);        
+        khiva::normalization::decimalScalingNormInPlace(var);
+        *tss = array::increment_ref_count(var.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -59,12 +60,13 @@ void max_min_norm(const khiva_array *tss, const double *high, const double *low,
     }
 }
 
-void max_min_norm_in_place(const khiva_array *tss, const double *high, const double *low, const double *epsilon,
+void max_min_norm_in_place(khiva_array *tss, const double *high, const double *low, const double *epsilon,
                            int *error_code,
                            char *error_message) {
     try {
         auto var = array::from_af_array(*tss);
         khiva::normalization::maxMinNormInPlace(var, *high, *low, *epsilon);
+        *tss = array::increment_ref_count(var.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -90,10 +92,11 @@ void mean_norm(const khiva_array *tss, khiva_array *result, int *error_code, cha
     }
 }
 
-void mean_norm_in_place(const khiva_array *tss, int *error_code, char *error_message) {
+void mean_norm_in_place(khiva_array *tss, int *error_code, char *error_message) {
     try {
         auto var = array::from_af_array(*tss);
         khiva::normalization::meanNormInPlace(var);
+        *tss = array::increment_ref_count(var.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);
@@ -119,10 +122,11 @@ void znorm(const khiva_array *tss, const double *epsilon, khiva_array *result, i
     }
 }
 
-void znorm_in_place(const khiva_array *tss, const double *epsilon, int *error_code, char *error_message) {
+void znorm_in_place(khiva_array *tss, const double *epsilon, int *error_code, char *error_message) {
     try {
         auto var = array::from_af_array(*tss);
         khiva::normalization::znormInPlace(var, *epsilon);
+        *tss = array::increment_ref_count(var.get());
         *error_code = 0;
     } catch (af::exception &e) {
         fill_error(__func__, e.what(), error_message);

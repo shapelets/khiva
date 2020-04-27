@@ -4,14 +4,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
 #include <khiva/array.h>
 #include <khiva/internal/util.h>
 #include <khiva_c/array.h>
 #include <khiva_c/internal/util.h>
-
-#include <cstring>
-#include <thread>
 
 using namespace khiva;
 
@@ -417,7 +413,8 @@ void khiva_not(const khiva_array *array, khiva_array *result, int *error_code, c
     }
 }
 
-void khiva_transpose(const khiva_array *array, bool conjugate, khiva_array *result, int *error_code, char *error_message) {
+void khiva_transpose(const khiva_array *array, bool conjugate, khiva_array *result, int *error_code,
+                     char *error_message) {
     try {
         auto var = array::from_af_array(*array);
         auto r = af::transpose(var, conjugate);
@@ -447,7 +444,8 @@ void khiva_col(const khiva_array *array, int index, khiva_array *result, int *er
     }
 }
 
-void khiva_cols(const khiva_array *array, int first, int last, khiva_array *result, int *error_code, char *error_message) {
+void khiva_cols(const khiva_array *array, int first, int last, khiva_array *result, int *error_code,
+                char *error_message) {
     try {
         auto var = array::from_af_array(*array);
         af::array r = var.cols(first, last);
@@ -477,7 +475,8 @@ void khiva_row(const khiva_array *array, int index, khiva_array *result, int *er
     }
 }
 
-void khiva_rows(const khiva_array *array, int first, int last, khiva_array *result, int *error_code, char *error_message) {
+void khiva_rows(const khiva_array *array, int first, int last, khiva_array *result, int *error_code,
+                char *error_message) {
     try {
         auto var = array::from_af_array(*array);
         af::array r = var.rows(first, last);
@@ -492,7 +491,8 @@ void khiva_rows(const khiva_array *array, int first, int last, khiva_array *resu
     }
 }
 
-void khiva_matmul(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code, char *error_message) {
+void khiva_matmul(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
+                  char *error_message) {
     try {
         auto var1 = array::from_af_array(*lhs);
         auto var2 = array::from_af_array(*rhs);
@@ -522,10 +522,17 @@ void from_arrayfire(const khiva_array *array, khiva_array *result, int *error_co
 }
 
 void copy(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
-    *error_code = af_copy_array(result, *array);    
+    *error_code = af_copy_array(result, *array);
+    if (*error_code != AF_SUCCESS) {
+        char *err_str;
+        dim_t len;
+        af_get_last_error(&err_str, &len);
+        util::fill_error(__func__, err_str, error_message);
+        af_free_host(err_str);
+    }
 }
 
-void khiva_as(khiva_array *array, int type, khiva_array *result, int *error_code, char *error_message) {
+void khiva_as(const khiva_array *array, int type, khiva_array *result, int *error_code, char *error_message) {
     try {
         auto var = array::from_af_array(*array);
         auto dt = static_cast<khiva::dtype>(type);
