@@ -33,10 +33,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JNIEnv *env,
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Matrix_findBestNDiscords. Unknown reason");
     }
     return nullptr;
@@ -64,10 +64,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, j
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Matrix_findBestNMotifs. Unknown reason");
     }
     return nullptr;
@@ -91,10 +91,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv *e
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Matrix_findBestNOccurrences. Unknown reason");
     }
     return nullptr;
@@ -108,10 +108,10 @@ jlong JNICALL Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, jlong re
         khiva::matrix::mass(arr_query, arr_ts, distance);
         return reinterpret_cast<jlong>(new af::array(distance));
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Matrix_mass. Unknown reason");
     }
     return 0;
@@ -134,10 +134,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, jobject, jl
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Matrix_stomp. Unknown reason");
     }
     return nullptr;
@@ -159,10 +159,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv *env, job
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Matrix_stompSelfJoin. Unknown reason");
     }
     return nullptr;
@@ -186,10 +186,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv *env, job
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Matrix_Matrixprofile. Unknown reason");
     }
     return nullptr;
@@ -211,10 +211,10 @@ jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoin(JNIEnv *
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Matrix_MatrixProfileSelfJoin. Unknown reason");
     }
     return nullptr;
@@ -238,10 +238,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileLR(JNIE
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Matrix_MatrixProfileLR. Unknown reason");
     }
     return nullptr;
@@ -254,10 +254,10 @@ JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *env, jo
         khiva::matrix::getChains(arr_a, static_cast<long>(m), chains);
         return reinterpret_cast<jlong>(new af::array(chains));
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Matrix_mass. Unknown reason");
     }
     return 0;

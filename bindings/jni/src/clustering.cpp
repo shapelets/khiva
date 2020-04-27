@@ -29,10 +29,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kMeans(JNIEnv *e
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Clustering_kMeans. Unknown reason");
     }
     return nullptr;
@@ -59,10 +59,10 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Clustering_kShape(JNIEnv *e
         env->SetLongArrayRegion(pointers, 0, output_size, output.data());
         return pointers;
     } catch (const std::exception &e) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, e.what());
     } catch (...) {
-        jclass exceptionClass = env->FindClass("java/lang/Exception");
+        jclass exceptionClass = env->FindClass("io/shapelets/khiva/KhivaException");
         env->ThrowNew(exceptionClass, "Error in Clustering_kShape. Unknown reason");
     }
     return nullptr;
