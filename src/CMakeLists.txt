@@ -57,6 +57,7 @@ set(KHIVALIB_SOURCES ${KHIVALIB_SRC}/khiva/array.cpp
                      ${KHIVALIB_SRC}/khiva/regression.cpp
                      ${KHIVALIB_SRC}/khiva/regularization.cpp
                      ${KHIVALIB_SRC}/khiva/statistics.cpp
+                     ${KHIVALIB_SRC}/khiva/util.cpp
                      ${KHIVALIB_SRC}/khiva/version.cpp)
 
 # Headers to add to compilation
@@ -79,6 +80,7 @@ set(KHIVALIB_HEADERS ${KHIVALIB_INC}/khiva/array.h
                      ${KHIVALIB_INC}/khiva/internal/libraryInternal.h
                      ${KHIVALIB_INC}/khiva/internal/matrixInternal.h
                      ${KHIVALIB_INC}/khiva/internal/scopedHostPtr.h
+                     ${KHIVALIB_INC}/khiva/internal/util.h
                      ${KHIVALIB_INC}/khiva/internal/vectorUtil.h)
 
 # The output is a static library

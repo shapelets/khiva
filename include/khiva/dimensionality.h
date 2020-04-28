@@ -187,7 +187,7 @@ KHIVAAPI af::array SAX(const af::array &a, int alphabetSize);
  *
  * @param pointList Expects an input vector of points.
  * @param numPoints Sets the number of points returned after the execution of the method.
- * * @param scale Sets the precision used to compute the areas of the triangularization, the longer, the more accurate.
+ * @param scale Sets the precision used to compute the areas of the triangularization, the longer, the more accurate.
  *
  * @return std:vector<khiva::dimensionality::Point> where the number of points has been reduced to numPoints.
  */
@@ -201,7 +201,8 @@ KHIVAAPI std::vector<Point> visvalingam(const std::vector<Point> &pointList, int
  * [1] M. Visvalingam and J. D. Whyatt, Line generalisation by repeated elimination of points,
  * The Cartographic Journal, 1993.
  *
- * @param pointList Expects an input vector of points.
+ * @param pointList Expects an input array formed by to columns where the first column is interpreted as the x cordinate
+ * of a point and the second column as the y coordinate.
  * @param numPoints Sets the number of points returned after the execution of the method.
  *
  * @return af::array where the number of points has been reduced to numPoints.

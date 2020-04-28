@@ -4,8 +4,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
 #include <khiva/array.h>
+#include <khiva/internal/util.h>
+
+using namespace khiva::util;
 
 af::array khiva::array::createArray(const void *data, unsigned ndims, const dim_t *dims, const int type) {
     af::dim4 d = af::dim4(ndims, dims);
@@ -39,7 +41,12 @@ af::array khiva::array::createArray(const void *data, unsigned ndims, const dim_
     }
 }
 
-void khiva::array::deleteArray(af_array array) { af_release_array(array); }
+void khiva::array::deleteArray(af_array array) {     
+    auto af_error = af_release_array(array); 
+    if (af_error != AF_SUCCESS) {
+        throw af::exception("Error releasing array", __func__, khiva_file_path(__FILE__).c_str(), __LINE__, af_error);
+    }
+}
 
 void khiva::array::getData(const af::array &array, void *data) { array.host(data); }
 
@@ -51,4 +58,18 @@ void khiva::array::print(const af::array &array){af_print(array)}
 
 af::array khiva::array::join(int dim, const af::array &first, const af::array &second) {
     return af::join(dim, first, second);
+}
+
+af::array khiva::array::from_af_array(const af_array in) {
+    af_array ptr = increment_ref_count(in);
+    return af::array(ptr);
+}
+
+af_array khiva::array::increment_ref_count(const af_array array) {
+    af_array ptr;
+    auto af_error = af_retain_array(&ptr, array);
+    if (af_error != AF_SUCCESS) {
+        throw af::exception("Error retaining array", __func__, khiva_file_path(__FILE__).c_str(), __LINE__, af_error);
+    }
+    return ptr;
 }

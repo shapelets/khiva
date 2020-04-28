@@ -24,7 +24,7 @@ extern "C" {
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void create_array(void *data, unsigned ndims, const long long *dims, khiva_array *result, int type,
+KHIVA_C_API void create_array(const void *data, unsigned ndims, const long long *dims, khiva_array *result, int type,
                               int *error_code, char *error_message);
 
 /**
@@ -43,7 +43,7 @@ KHIVA_C_API void delete_array(khiva_array *array, int *error_code, char *error_m
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void display(khiva_array *array, int *error_code, char *error_message);
+KHIVA_C_API void display(const khiva_array *array, int *error_code, char *error_message);
 
 /**
  * @brief Retrieves the data from the device to the host.
@@ -53,7 +53,7 @@ KHIVA_C_API void display(khiva_array *array, int *error_code, char *error_messag
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void get_data(khiva_array *array, void *data, int *error_code, char *error_message);
+KHIVA_C_API void get_data(const khiva_array *array, void *data, int *error_code, char *error_message);
 
 /**
  * @brief Gets the Array dimensions.
@@ -63,7 +63,7 @@ KHIVA_C_API void get_data(khiva_array *array, void *data, int *error_code, char 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void get_dims(khiva_array *array, long long *dims, int *error_code, char *error_message);
+KHIVA_C_API void get_dims(const khiva_array *array, long long *dims, int *error_code, char *error_message);
 
 /**
  * @brief Gets the type of the array.
@@ -73,7 +73,7 @@ KHIVA_C_API void get_dims(khiva_array *array, long long *dims, int *error_code, 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void get_type(khiva_array *array, int *t, int *error_code, char *error_message);
+KHIVA_C_API void get_type(const khiva_array *array, int *t, int *error_code, char *error_message);
 
 /**
  * @brief Joins the first and second arrays along the specified dimension.
@@ -85,8 +85,8 @@ KHIVA_C_API void get_type(khiva_array *array, int *t, int *error_code, char *err
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void join(int dim, khiva_array *first, khiva_array *second, khiva_array *result, int *error_code,
-                      char *error_message);
+KHIVA_C_API void join(int dim, const khiva_array *first, const khiva_array *second, khiva_array *result,
+                      int *error_code, char *error_message);
 
 /**
  * @brief Adds two arrays.
@@ -97,7 +97,7 @@ KHIVA_C_API void join(int dim, khiva_array *first, khiva_array *second, khiva_ar
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_add(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                            char *error_message);
 
 /**
@@ -109,7 +109,7 @@ KHIVA_C_API void khiva_add(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_mul(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                            char *error_message);
 
 /**
@@ -121,7 +121,7 @@ KHIVA_C_API void khiva_mul(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_sub(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_sub(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                            char *error_message);
 
 /**
@@ -133,7 +133,7 @@ KHIVA_C_API void khiva_sub(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_div(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_div(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                            char *error_message);
 
 /**
@@ -145,7 +145,7 @@ KHIVA_C_API void khiva_div(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_mod(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_mod(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                            char *error_message);
 
 /**
@@ -157,7 +157,7 @@ KHIVA_C_API void khiva_mod(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_pow(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_pow(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                            char *error_message);
 
 /**
@@ -169,7 +169,7 @@ KHIVA_C_API void khiva_pow(khiva_array *lhs, khiva_array *rhs, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_lt(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_lt(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                           char *error_message);
 
 /**
@@ -181,7 +181,7 @@ KHIVA_C_API void khiva_lt(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_gt(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_gt(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                           char *error_message);
 
 /**
@@ -193,7 +193,7 @@ KHIVA_C_API void khiva_gt(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_le(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_le(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                           char *error_message);
 
 /**
@@ -205,7 +205,7 @@ KHIVA_C_API void khiva_le(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_ge(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_ge(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                           char *error_message);
 
 /**
@@ -217,7 +217,7 @@ KHIVA_C_API void khiva_ge(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_eq(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_eq(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                           char *error_message);
 
 /**
@@ -229,7 +229,7 @@ KHIVA_C_API void khiva_eq(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_ne(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_ne(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                           char *error_message);
 
 /**
@@ -241,7 +241,7 @@ KHIVA_C_API void khiva_ne(khiva_array *lhs, khiva_array *rhs, khiva_array *resul
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_bitand(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_bitand(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                               char *error_message);
 
 /**
@@ -253,7 +253,7 @@ KHIVA_C_API void khiva_bitand(khiva_array *lhs, khiva_array *rhs, khiva_array *r
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_bitor(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_bitor(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                              char *error_message);
 
 /**
@@ -265,7 +265,7 @@ KHIVA_C_API void khiva_bitor(khiva_array *lhs, khiva_array *rhs, khiva_array *re
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_bitxor(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_bitxor(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                               char *error_message);
 
 /**
@@ -277,7 +277,8 @@ KHIVA_C_API void khiva_bitxor(khiva_array *lhs, khiva_array *rhs, khiva_array *r
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_bitshiftl(khiva_array *array, int n, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void khiva_bitshiftl(const khiva_array *array, int n, khiva_array *result, int *error_code,
+                                 char *error_message);
 
 /**
  * @brief Performs a right bit shift operation (element-wise) to array as many times as specified in the parameter n.
@@ -288,7 +289,8 @@ KHIVA_C_API void khiva_bitshiftl(khiva_array *array, int n, khiva_array *result,
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_bitshiftr(khiva_array *array, int n, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void khiva_bitshiftr(const khiva_array *array, int n, khiva_array *result, int *error_code,
+                                 char *error_message);
 
 /**
  * @brief Logical NOT operation to array.
@@ -298,7 +300,7 @@ KHIVA_C_API void khiva_bitshiftr(khiva_array *array, int n, khiva_array *result,
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_not(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void khiva_not(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Transposes array.
@@ -309,7 +311,7 @@ KHIVA_C_API void khiva_not(khiva_array *array, khiva_array *result, int *error_c
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_transpose(khiva_array *array, bool conjugate, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_transpose(const khiva_array *array, bool conjugate, khiva_array *result, int *error_code,
                                  char *error_message);
 
 /**
@@ -321,7 +323,8 @@ KHIVA_C_API void khiva_transpose(khiva_array *array, bool conjugate, khiva_array
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_col(khiva_array *array, int index, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void khiva_col(const khiva_array *array, int index, khiva_array *result, int *error_code,
+                           char *error_message);
 
 /**
  * @brief Retrieves a subset of columns of array, starting at first and finishing at last, both inclusive.
@@ -333,7 +336,7 @@ KHIVA_C_API void khiva_col(khiva_array *array, int index, khiva_array *result, i
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_cols(khiva_array *array, int first, int last, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_cols(const khiva_array *array, int first, int last, khiva_array *result, int *error_code,
                             char *error_message);
 
 /**
@@ -345,7 +348,7 @@ KHIVA_C_API void khiva_cols(khiva_array *array, int first, int last, khiva_array
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_row(khiva_array *array, int index, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_row(const khiva_array *array, int index, khiva_array *result, int *error_code,
                            char *error_message);
 
 /**
@@ -358,7 +361,7 @@ KHIVA_C_API void khiva_row(khiva_array *array, int index, khiva_array *result, i
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_rows(khiva_array *array, int first, int last, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_rows(const khiva_array *array, int first, int last, khiva_array *result, int *error_code,
                             char *error_message);
 
 /**
@@ -369,7 +372,8 @@ KHIVA_C_API void khiva_rows(khiva_array *array, int first, int last, khiva_array
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void from_arrayfire(khiva_array *arrayfire, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void from_arrayfire(const khiva_array *arrayfire, khiva_array *result, int *error_code,
+                                char *error_message);
 
 /**
  * @brief Performs a matrix multiplication of lhs and rhs.
@@ -380,7 +384,7 @@ KHIVA_C_API void from_arrayfire(khiva_array *arrayfire, khiva_array *result, int
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_matmul(khiva_array *lhs, khiva_array *rhs, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_matmul(const khiva_array *lhs, const khiva_array *rhs, khiva_array *result, int *error_code,
                               char *error_message);
 /**
  * @brief Performs a deep copy of array.
@@ -390,7 +394,7 @@ KHIVA_C_API void khiva_matmul(khiva_array *lhs, khiva_array *rhs, khiva_array *r
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void copy(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void copy(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 /**
  * @brief Changes the type of array.
  *
@@ -400,7 +404,7 @@ KHIVA_C_API void copy(khiva_array *array, khiva_array *result, int *error_code, 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void khiva_as(khiva_array *array, int type, khiva_array *result, int *error_code,
+KHIVA_C_API void khiva_as(const khiva_array *array, int type, khiva_array *result, int *error_code,
                           char *error_message);
 
 #ifdef __cplusplus

@@ -84,6 +84,22 @@ KHIVAAPI af::array join(int dim, const af::array &first, const af::array &second
 KHIVAAPI void print(const af::array &array);
 
 /**
+ * @brief Creates an af::array from its af_array C pointer. The resulting array does not acquire the input pointer
+ * passed. User of this function is responsible to release it.
+ *
+ * @param array The array to be printed.
+ */
+KHIVAAPI af::array from_af_array(const af_array array);
+
+/**
+ * @brief Increments the reference count of the af_array C pointer passed throwing if there is an error.
+ * The user of this function is responsible to release the returned array by calling deleteArray.
+ *
+ * @param array The array whose reference count is going to be incremented.
+ */
+KHIVAAPI af_array increment_ref_count(const af_array array);
+
+/**
  * @brief Array class, This class provides functionality manage Arrays on the host side.
  */
 template <class T>

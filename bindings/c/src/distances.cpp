@@ -4,85 +4,101 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
+#include <khiva/array.h>
 #include <khiva/distances.h>
+#include <khiva/internal/util.h>
 #include <khiva_c/distances.h>
 #include <khiva_c/internal/util.h>
 
-void euclidean(khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
+using namespace khiva;
+using namespace khiva::util;
+
+void euclidean(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::distances::euclidean(var).get());
+        auto array = array::from_af_array(*tss);
+        auto r = khiva::distances::euclidean(array);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("euclidean", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("euclidean", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void dtw(khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
+void dtw(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::distances::dtw(var).get());
+        auto array = array::from_af_array(*tss);
+        auto r = khiva::distances::dtw(array);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("dtw", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("dtw", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void hamming(khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
+void hamming(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::distances::hamming(var).get());
+        auto array = array::from_af_array(*tss);
+        auto r = khiva::distances::hamming(array);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("hamming", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("hamming", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void manhattan(khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
+void manhattan(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::distances::manhattan(var).get());
+        auto array = array::from_af_array(*tss);
+        auto r = khiva::distances::manhattan(array);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("manhattan", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("manhattan", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void sbd(khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
+void sbd(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::distances::sbd(var).get());
+        auto array = array::from_af_array(*tss);
+        auto r = khiva::distances::sbd(array);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("sbd", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("sbd", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void squared_euclidean(khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
+void squared_euclidean(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*tss);
-        af_retain_array(tss, var.get());
-        af_retain_array(result, khiva::distances::squaredEuclidean(var).get());
+        auto array = array::from_af_array(*tss);
+        auto r = khiva::distances::squaredEuclidean(array);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("squared_euclidean", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("squared_euclidean", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }

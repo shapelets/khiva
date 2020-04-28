@@ -24,7 +24,7 @@ extern "C" {
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void abs_energy(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void abs_energy(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the sum over the absolute value of consecutive changes in the time series.
@@ -37,7 +37,8 @@ KHIVA_C_API void abs_energy(khiva_array *array, khiva_array *result, int *error_
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void absolute_sum_of_changes(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void absolute_sum_of_changes(const khiva_array *array, khiva_array *result, int *error_code,
+                                         char *error_message);
 
 /**
  * @brief Calculates the value of an aggregation function f_agg (e.g. var or mean) of the autocorrelation
@@ -61,8 +62,8 @@ KHIVA_C_API void absolute_sum_of_changes(khiva_array *array, khiva_array *result
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void aggregated_autocorrelation(khiva_array *array, const int *aggregation_function, khiva_array *result,
-                                            int *error_code, char *error_message);
+KHIVA_C_API void aggregated_autocorrelation(const khiva_array *array, const int *aggregation_function,
+                                            khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates a linear least-squares regression for values of the time series that were aggregated
@@ -89,10 +90,10 @@ KHIVA_C_API void aggregated_autocorrelation(khiva_array *array, const int *aggre
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void aggregated_linear_trend(khiva_array *array, const long *chunkSize, const int *aggregation_function,
-                                         khiva_array *slope, khiva_array *intercept, khiva_array *rvalue,
-                                         khiva_array *pvalue, khiva_array *stderrest, int *error_code,
-                                         char *error_message);
+KHIVA_C_API void aggregated_linear_trend(const khiva_array *array, const long *chunkSize,
+                                         const int *aggregation_function, khiva_array *slope, khiva_array *intercept,
+                                         khiva_array *rvalue, khiva_array *pvalue, khiva_array *stderrest,
+                                         int *error_code, char *error_message);
 
 /**
  * @brief Calculates a vectorized Approximate entropy algorithm.
@@ -111,8 +112,8 @@ KHIVA_C_API void aggregated_linear_trend(khiva_array *array, const long *chunkSi
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void approximate_entropy(khiva_array *array, const int *m, const float *r, khiva_array *result, int *error_code,
-                                     char *error_message);
+KHIVA_C_API void approximate_entropy(const khiva_array *array, const int *m, const float *r, khiva_array *result,
+                                     int *error_code, char *error_message);
 
 /**
  * @brief Calculates the cross-covariance of the given time series.
@@ -129,8 +130,8 @@ KHIVA_C_API void approximate_entropy(khiva_array *array, const int *m, const flo
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void cross_covariance(khiva_array *xss, khiva_array *yss, const bool *unbiased, khiva_array *result,
-                                  int *error_code, char *error_message);
+KHIVA_C_API void cross_covariance(const khiva_array *xss, const khiva_array *yss, const bool *unbiased,
+                                  khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the auto-covariance the given time series.
@@ -144,7 +145,7 @@ KHIVA_C_API void cross_covariance(khiva_array *xss, khiva_array *yss, const bool
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void auto_covariance(khiva_array *array, const bool *unbiased, khiva_array *result, int *error_code,
+KHIVA_C_API void auto_covariance(const khiva_array *array, const bool *unbiased, khiva_array *result, int *error_code,
                                  char *error_message);
 
 /**
@@ -162,8 +163,8 @@ KHIVA_C_API void auto_covariance(khiva_array *array, const bool *unbiased, khiva
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void cross_correlation(khiva_array *xss, khiva_array *yss, const bool *unbiased, khiva_array *result,
-                                   int *error_code, char *error_message);
+KHIVA_C_API void cross_correlation(const khiva_array *xss, const khiva_array *yss, const bool *unbiased,
+                                   khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the autocorrelation of the specified lag for the given time.
@@ -178,8 +179,8 @@ KHIVA_C_API void cross_correlation(khiva_array *xss, khiva_array *yss, const boo
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void auto_correlation(khiva_array *array, const long *max_lag, const bool *unbiased, khiva_array *result,
-                                  int *error_code, char *error_message);
+KHIVA_C_API void auto_correlation(const khiva_array *array, const long *max_lag, const bool *unbiased,
+                                  khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the binned entropy for the given time series and number of bins.
@@ -192,7 +193,7 @@ KHIVA_C_API void auto_correlation(khiva_array *array, const long *max_lag, const
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void binned_entropy(khiva_array *array, const int *max_bins, khiva_array *result, int *error_code,
+KHIVA_C_API void binned_entropy(const khiva_array *array, const int *max_bins, khiva_array *result, int *error_code,
                                 char *error_message);
 
 /**
@@ -207,7 +208,8 @@ KHIVA_C_API void binned_entropy(khiva_array *array, const int *max_bins, khiva_a
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void c3(khiva_array *array, const long *lag, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void c3(const khiva_array *array, const long *lag, khiva_array *result, int *error_code,
+                    char *error_message);
 
 /**
  * @brief Calculates an estimate for the time series complexity defined by
@@ -222,7 +224,7 @@ KHIVA_C_API void c3(khiva_array *array, const long *lag, khiva_array *result, in
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void cid_ce(khiva_array *array, const bool *zNormalize, khiva_array *result, int *error_code,
+KHIVA_C_API void cid_ce(const khiva_array *array, const bool *zNormalize, khiva_array *result, int *error_code,
                         char *error_message);
 
 /**
@@ -237,7 +239,7 @@ KHIVA_C_API void cid_ce(khiva_array *array, const bool *zNormalize, khiva_array 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void count_above_mean(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void count_above_mean(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the number of values in the time series that are lower than
@@ -251,7 +253,7 @@ KHIVA_C_API void count_above_mean(khiva_array *array, khiva_array *result, int *
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void count_below_mean(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void count_below_mean(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates a Continuous wavelet transform for the Ricker wavelet, also known as
@@ -277,8 +279,8 @@ KHIVA_C_API void count_below_mean(khiva_array *array, khiva_array *result, int *
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void cwt_coefficients(khiva_array *array, khiva_array *width, const int *coeff, const int *w, khiva_array *result,
-                                  int *error_code, char *error_message);
+KHIVA_C_API void cwt_coefficients(const khiva_array *array, const khiva_array *width, const int *coeff, const int *w,
+                                  khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the sum of squares of chunk i out of N chunks expressed as a ratio.
@@ -294,7 +296,7 @@ KHIVA_C_API void cwt_coefficients(khiva_array *array, khiva_array *width, const 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void energy_ratio_by_chunks(khiva_array *array, const long *num_segments, const long *segment_focus,
+KHIVA_C_API void energy_ratio_by_chunks(const khiva_array *array, const long *num_segments, const long *segment_focus,
                                         khiva_array *result, int *error_code, char *error_message);
 
 /**
@@ -309,7 +311,7 @@ KHIVA_C_API void energy_ratio_by_chunks(khiva_array *array, const long *num_segm
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void fft_aggregated(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void fft_aggregated(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the fourier coefficients of the one-dimensional discrete
@@ -326,8 +328,9 @@ KHIVA_C_API void fft_aggregated(khiva_array *array, khiva_array *result, int *er
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void fft_coefficient(khiva_array *array, const long *coefficient, khiva_array *real, khiva_array *imag,
-                                 khiva_array *absolute, khiva_array *angle, int *error_code, char *error_message);
+KHIVA_C_API void fft_coefficient(const khiva_array *array, const long *coefficient, khiva_array *real,
+                                 khiva_array *imag, khiva_array *absolute, khiva_array *angle, int *error_code,
+                                 char *error_message);
 
 /**
  * @brief Calculates the first relative location of the maximal value for each time series.
@@ -340,7 +343,7 @@ KHIVA_C_API void fft_coefficient(khiva_array *array, const long *coefficient, kh
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void first_location_of_maximum(khiva_array *array, khiva_array *result, int *error_code,
+KHIVA_C_API void first_location_of_maximum(const khiva_array *array, khiva_array *result, int *error_code,
                                            char *error_message);
 
 /**
@@ -354,7 +357,7 @@ KHIVA_C_API void first_location_of_maximum(khiva_array *array, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void first_location_of_minimum(khiva_array *array, khiva_array *result, int *error_code,
+KHIVA_C_API void first_location_of_minimum(const khiva_array *array, khiva_array *result, int *error_code,
                                            char *error_message);
 
 /**
@@ -376,8 +379,8 @@ KHIVA_C_API void first_location_of_minimum(khiva_array *array, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void friedrich_coefficients(khiva_array *array, const int *m, const float *r, khiva_array *result, int *error_code,
-                                        char *error_message);
+KHIVA_C_API void friedrich_coefficients(const khiva_array *array, const int *m, const float *r, khiva_array *result,
+                                        int *error_code, char *error_message);
 
 /**
  * @brief Calculates if the input time series contain duplicated elements.
@@ -390,7 +393,7 @@ KHIVA_C_API void friedrich_coefficients(khiva_array *array, const int *m, const 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void has_duplicates(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void has_duplicates(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates if the maximum within input time series is duplicated.
@@ -403,7 +406,7 @@ KHIVA_C_API void has_duplicates(khiva_array *array, khiva_array *result, int *er
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void has_duplicate_max(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void has_duplicate_max(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates if the minimum of the input time series is duplicated.
@@ -416,7 +419,7 @@ KHIVA_C_API void has_duplicate_max(khiva_array *array, khiva_array *result, int 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void has_duplicate_min(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void has_duplicate_min(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the index of the max quantile.
@@ -429,7 +432,7 @@ KHIVA_C_API void has_duplicate_min(khiva_array *array, khiva_array *result, int 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void index_mass_quantile(khiva_array *array, const float *q, khiva_array *result, int *error_code,
+KHIVA_C_API void index_mass_quantile(const khiva_array *array, const float *q, khiva_array *result, int *error_code,
                                      char *error_message);
 
 /**
@@ -443,7 +446,7 @@ KHIVA_C_API void index_mass_quantile(khiva_array *array, const float *q, khiva_a
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void kurtosis(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void kurtosis(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Checks if the time series within array have a large standard deviation.
@@ -456,8 +459,8 @@ KHIVA_C_API void kurtosis(khiva_array *array, khiva_array *result, int *error_co
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void large_standard_deviation(khiva_array *array, const float *r, khiva_array *result, int *error_code,
-                                          char *error_message);
+KHIVA_C_API void large_standard_deviation(const khiva_array *array, const float *r, khiva_array *result,
+                                          int *error_code, char *error_message);
 
 /**
  * @brief Calculates the last location of the maximum value of each time series. The position
@@ -470,7 +473,7 @@ KHIVA_C_API void large_standard_deviation(khiva_array *array, const float *r, kh
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void last_location_of_maximum(khiva_array *array, khiva_array *result, int *error_code,
+KHIVA_C_API void last_location_of_maximum(const khiva_array *array, khiva_array *result, int *error_code,
                                           char *error_message);
 
 /**
@@ -484,7 +487,7 @@ KHIVA_C_API void last_location_of_maximum(khiva_array *array, khiva_array *resul
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void last_location_of_minimum(khiva_array *array, khiva_array *result, int *error_code,
+KHIVA_C_API void last_location_of_minimum(const khiva_array *array, khiva_array *result, int *error_code,
                                           char *error_message);
 
 /**
@@ -497,7 +500,7 @@ KHIVA_C_API void last_location_of_minimum(khiva_array *array, khiva_array *resul
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void length(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void length(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculate a linear least-squares regression for the values of the time series versus the sequence from 0 to
@@ -514,8 +517,9 @@ KHIVA_C_API void length(khiva_array *array, khiva_array *result, int *error_code
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void linear_trend(khiva_array *array, khiva_array *pvalue, khiva_array *rvalue, khiva_array *intercept,
-                              khiva_array *slope, khiva_array *stdrr, int *error_code, char *error_message);
+KHIVA_C_API void linear_trend(const khiva_array *array, khiva_array *pvalue, khiva_array *rvalue,
+                              khiva_array *intercept, khiva_array *slope, khiva_array *stdrr, int *error_code,
+                              char *error_message);
 
 /**
  * @brief Calculates all Local Maximals fot the time series in array.
@@ -526,7 +530,7 @@ KHIVA_C_API void linear_trend(khiva_array *array, khiva_array *pvalue, khiva_arr
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void local_maximals(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void local_maximals(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the length of the longest consecutive subsequence in array that is bigger than the mean of array.
@@ -539,7 +543,7 @@ KHIVA_C_API void local_maximals(khiva_array *array, khiva_array *result, int *er
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void longest_strike_above_mean(khiva_array *array, khiva_array *result, int *error_code,
+KHIVA_C_API void longest_strike_above_mean(const khiva_array *array, khiva_array *result, int *error_code,
                                            char *error_message);
 
 /**
@@ -552,7 +556,7 @@ KHIVA_C_API void longest_strike_above_mean(khiva_array *array, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void longest_strike_below_mean(khiva_array *array, khiva_array *result, int *error_code,
+KHIVA_C_API void longest_strike_below_mean(const khiva_array *array, khiva_array *result, int *error_code,
                                            char *error_message);
 
 /**
@@ -573,8 +577,8 @@ KHIVA_C_API void longest_strike_below_mean(khiva_array *array, khiva_array *resu
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void max_langevin_fixed_point(khiva_array *array, const int *m, const float *r, khiva_array *result, int *error_code,
-                                          char *error_message);
+KHIVA_C_API void max_langevin_fixed_point(const khiva_array *array, const int *m, const float *r, khiva_array *result,
+                                          int *error_code, char *error_message);
 
 /**
  * @brief Calculates the maximum value for each time series within array.
@@ -586,7 +590,7 @@ KHIVA_C_API void max_langevin_fixed_point(khiva_array *array, const int *m, cons
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void maximum(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void maximum(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the mean value for each time series within array.
@@ -598,7 +602,7 @@ KHIVA_C_API void maximum(khiva_array *array, khiva_array *result, int *error_cod
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void mean(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void mean(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the mean over the absolute differences between subsequent time series values in array.
@@ -610,7 +614,8 @@ KHIVA_C_API void mean(khiva_array *array, khiva_array *result, int *error_code, 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void mean_absolute_change(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void mean_absolute_change(const khiva_array *array, khiva_array *result, int *error_code,
+                                      char *error_message);
 
 /**
  * @brief Calculates the mean over the differences between subsequent time series values in array.
@@ -622,7 +627,7 @@ KHIVA_C_API void mean_absolute_change(khiva_array *array, khiva_array *result, i
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void mean_change(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void mean_change(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates mean value of a central approximation of the second derivative for each time series in array.
@@ -634,7 +639,7 @@ KHIVA_C_API void mean_change(khiva_array *array, khiva_array *result, int *error
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void mean_second_derivative_central(khiva_array *array, khiva_array *result, int *error_code,
+KHIVA_C_API void mean_second_derivative_central(const khiva_array *array, khiva_array *result, int *error_code,
                                                 char *error_message);
 
 /**
@@ -647,7 +652,7 @@ KHIVA_C_API void mean_second_derivative_central(khiva_array *array, khiva_array 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void median(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void median(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the minimum value for each time series within array.
@@ -659,7 +664,7 @@ KHIVA_C_API void median(khiva_array *array, khiva_array *result, int *error_code
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void minimum(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void minimum(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the number of m-crossings. A m-crossing is defined as two sequential values where the first
@@ -674,7 +679,7 @@ KHIVA_C_API void minimum(khiva_array *array, khiva_array *result, int *error_cod
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void number_crossing_m(khiva_array *array, const int *m, khiva_array *result, int *error_code,
+KHIVA_C_API void number_crossing_m(const khiva_array *array, const int *m, khiva_array *result, int *error_code,
                                    char *error_message);
 
 /**
@@ -689,7 +694,7 @@ KHIVA_C_API void number_crossing_m(khiva_array *array, const int *m, khiva_array
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void number_cwt_peaks(khiva_array *array, const int *max_w, khiva_array *result, int *error_code,
+KHIVA_C_API void number_cwt_peaks(const khiva_array *array, const int *max_w, khiva_array *result, int *error_code,
                                   char *error_message);
 
 /**
@@ -705,7 +710,8 @@ KHIVA_C_API void number_cwt_peaks(khiva_array *array, const int *max_w, khiva_ar
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void number_peaks(khiva_array *array, const int *n, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void number_peaks(const khiva_array *array, const int *n, khiva_array *result, int *error_code,
+                              char *error_message);
 
 /**
  * @brief Calculates the value of the partial autocorrelation function at the given lag. The lag \f$k\f$ partial
@@ -735,8 +741,8 @@ KHIVA_C_API void number_peaks(khiva_array *array, const int *n, khiva_array *res
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void partial_autocorrelation(khiva_array *array, khiva_array *lags, khiva_array *result, int *error_code,
-                                         char *error_message);
+KHIVA_C_API void partial_autocorrelation(const khiva_array *array, const khiva_array *lags, khiva_array *result,
+                                         int *error_code, char *error_message);
 
 /**
  * @brief Calculates the percentage of unique values, that are present in the time series more than once.
@@ -754,7 +760,7 @@ KHIVA_C_API void partial_autocorrelation(khiva_array *array, khiva_array *lags, 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_array *array, const bool *is_sorted,
+KHIVA_C_API void percentage_of_reoccurring_datapoints_to_all_datapoints(const khiva_array *array, const bool *is_sorted,
                                                                         khiva_array *result, int *error_code,
                                                                         char *error_message);
 
@@ -773,7 +779,7 @@ KHIVA_C_API void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_ar
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void percentage_of_reoccurring_values_to_all_values(khiva_array *array, const bool *is_sorted,
+KHIVA_C_API void percentage_of_reoccurring_values_to_all_values(const khiva_array *array, const bool *is_sorted,
                                                                 khiva_array *result, int *error_code,
                                                                 char *error_message);
 
@@ -789,8 +795,8 @@ KHIVA_C_API void percentage_of_reoccurring_values_to_all_values(khiva_array *arr
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void quantile(khiva_array *array, khiva_array *q, const float *precision, khiva_array *result, int *error_code,
-                          char *error_message);
+KHIVA_C_API void quantile(const khiva_array *array, const khiva_array *q, const float *precision, khiva_array *result,
+                          int *error_code, char *error_message);
 
 /**
  * @brief Counts observed values within the interval [min, max).
@@ -804,8 +810,8 @@ KHIVA_C_API void quantile(khiva_array *array, khiva_array *q, const float *preci
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void range_count(khiva_array *array, const float *min, const float *max, khiva_array *result, int *error_code,
-                             char *error_message);
+KHIVA_C_API void range_count(const khiva_array *array, const float *min, const float *max, khiva_array *result,
+                             int *error_code, char *error_message);
 
 /**
  * @brief Calculates the ratio of values that are more than \f$r*std(x)\f$ (so \f$r\f$ sigma) away from the mean of
@@ -820,7 +826,7 @@ KHIVA_C_API void range_count(khiva_array *array, const float *min, const float *
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void ratio_beyond_r_sigma(khiva_array *array, const float *r, khiva_array *result, int *error_code,
+KHIVA_C_API void ratio_beyond_r_sigma(const khiva_array *array, const float *r, khiva_array *result, int *error_code,
                                       char *error_message);
 
 /**
@@ -837,8 +843,8 @@ KHIVA_C_API void ratio_beyond_r_sigma(khiva_array *array, const float *r, khiva_
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void ratio_value_number_to_time_series_length(khiva_array *array, khiva_array *result, int *error_code,
-                                                          char *error_message);
+KHIVA_C_API void ratio_value_number_to_time_series_length(const khiva_array *array, khiva_array *result,
+                                                          int *error_code, char *error_message);
 
 /**
  * @brief Calculates a vectorized sample entropy algorithm.
@@ -857,7 +863,7 @@ KHIVA_C_API void ratio_value_number_to_time_series_length(khiva_array *array, kh
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void sample_entropy(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void sample_entropy(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the sample skewness of array (calculated with the adjusted Fisher-Pearson standardized
@@ -870,7 +876,7 @@ KHIVA_C_API void sample_entropy(khiva_array *array, khiva_array *result, int *er
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void skewness(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void skewness(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Estimates the cross power spectral density of the time series array at different frequencies. To do so, the
@@ -892,7 +898,7 @@ KHIVA_C_API void skewness(khiva_array *array, khiva_array *result, int *error_co
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void spkt_welch_density(khiva_array *array, const int *coeff, khiva_array *result, int *error_code,
+KHIVA_C_API void spkt_welch_density(const khiva_array *array, const int *coeff, khiva_array *result, int *error_code,
                                     char *error_message);
 
 /**
@@ -905,7 +911,8 @@ KHIVA_C_API void spkt_welch_density(khiva_array *array, const int *coeff, khiva_
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void standard_deviation(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void standard_deviation(const khiva_array *array, khiva_array *result, int *error_code,
+                                    char *error_message);
 
 /**
  * @brief Calculates the sum of all data points, that are present in the time series more than once.
@@ -918,7 +925,7 @@ KHIVA_C_API void standard_deviation(khiva_array *array, khiva_array *result, int
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void sum_of_reoccurring_datapoints(khiva_array *array, const bool *is_sorted, khiva_array *result,
+KHIVA_C_API void sum_of_reoccurring_datapoints(const khiva_array *array, const bool *is_sorted, khiva_array *result,
                                                int *error_code, char *error_message);
 
 /**
@@ -931,8 +938,8 @@ KHIVA_C_API void sum_of_reoccurring_datapoints(khiva_array *array, const bool *i
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void sum_of_reoccurring_values(khiva_array *array, const bool *is_sorted, khiva_array *result, int *error_code,
-                                           char *error_message);
+KHIVA_C_API void sum_of_reoccurring_values(const khiva_array *array, const bool *is_sorted, khiva_array *result,
+                                           int *error_code, char *error_message);
 
 /**
  * @brief Calculates the sum over the time series array.
@@ -943,7 +950,7 @@ KHIVA_C_API void sum_of_reoccurring_values(khiva_array *array, const bool *is_so
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void sum_values(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void sum_values(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates if the distribution of array *looks symmetric*. This is the case if
@@ -959,7 +966,7 @@ KHIVA_C_API void sum_values(khiva_array *array, khiva_array *result, int *error_
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void symmetry_looking(khiva_array *array, const float *r, khiva_array *result, int *error_code,
+KHIVA_C_API void symmetry_looking(const khiva_array *array, const float *r, khiva_array *result, int *error_code,
                                   char *error_message);
 
 /**
@@ -984,8 +991,8 @@ KHIVA_C_API void symmetry_looking(khiva_array *array, const float *r, khiva_arra
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void time_reversal_asymmetry_statistic(khiva_array *array, const int *lag, khiva_array *result, int *error_code,
-                                                   char *error_message);
+KHIVA_C_API void time_reversal_asymmetry_statistic(const khiva_array *array, const int *lag, khiva_array *result,
+                                                   int *error_code, char *error_message);
 
 /**
  * @brief Counts occurrences of value in the time series array.
@@ -998,7 +1005,8 @@ KHIVA_C_API void time_reversal_asymmetry_statistic(khiva_array *array, const int
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void value_count(khiva_array *array, const float *v, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void value_count(const khiva_array *array, const float *v, khiva_array *result, int *error_code,
+                             char *error_message);
 
 /**
  * @brief Computes the variance for the time series array.
@@ -1009,7 +1017,7 @@ KHIVA_C_API void value_count(khiva_array *array, const float *v, khiva_array *re
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void variance(khiva_array *array, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void variance(const khiva_array *array, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates if the variance of array is greater than the standard deviation. In other words, if the variance of
@@ -1021,7 +1029,7 @@ KHIVA_C_API void variance(khiva_array *array, khiva_array *result, int *error_co
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void variance_larger_than_standard_deviation(khiva_array *array, khiva_array *result, int *error_code,
+KHIVA_C_API void variance_larger_than_standard_deviation(const khiva_array *array, khiva_array *result, int *error_code,
                                                          char *error_message);
 
 #ifdef __cplusplus

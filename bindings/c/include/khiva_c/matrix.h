@@ -18,9 +18,8 @@ extern "C" {
  *
  * @param profile The matrix profile containing the minimum distance of each
  * subsequence
- * @param The matrix profile index containing the index of the most similar
+ * @param index The matrix profile index containing the index of the most similar
  * subsequence
- * @param length_profile Length of the matrix profile
  * @param m Subsequence length value used to calculate the input matrix profile.
  * @param n Number of discords to extract
  * @param discord_distances The distance of the best N discords
@@ -32,7 +31,7 @@ extern "C" {
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, long m, long n,
+KHIVA_C_API void find_best_n_discords(const khiva_array *profile, const khiva_array *index, long m, long n,
                                       khiva_array *discord_distances, khiva_array *discord_indices,
                                       khiva_array *subsequence_indices, bool self_join, int *error_code,
                                       char *error_message);
@@ -43,7 +42,6 @@ KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, 
  * @param profile The matrix profile containing the minimum distance of each
  * subsequence.
  * @param index The matrix profile index containing where each minimum occurs.
- * @param length_profile Length of the matrix profile.
  * @param m Subsequence length value used to calculate the input matrix profile.
  * @param n Number of motifs to extract.
  * @param motif_distances The distance of the best N motifs.
@@ -55,7 +53,7 @@ KHIVA_C_API void find_best_n_discords(khiva_array *profile, khiva_array *index, 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, long m, long n,
+KHIVA_C_API void find_best_n_motifs(const khiva_array *profile, const khiva_array *index, long m, long n,
                                     khiva_array *motif_distances, khiva_array *motif_indices,
                                     khiva_array *subsequence_indices, bool self_join, int *error_code,
                                     char *error_message);
@@ -82,7 +80,7 @@ KHIVA_C_API void find_best_n_motifs(khiva_array *profile, khiva_array *index, lo
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void find_best_n_occurrences(khiva_array *q, khiva_array *t, long n, khiva_array *distances,
+KHIVA_C_API void find_best_n_occurrences(const khiva_array *q, const khiva_array *t, long n, khiva_array *distances,
                                          khiva_array *indexes, int *error_code, char *error_message);
 
 /**
@@ -108,7 +106,7 @@ KHIVA_C_API void find_best_n_occurrences(khiva_array *q, khiva_array *t, long n,
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void mass(khiva_array *q, khiva_array *t, khiva_array *distances, int *error_code, char *error_message);
+KHIVA_C_API void mass(const khiva_array *q, const khiva_array *t, khiva_array *distances, int *error_code, char *error_message);
 
 /**
  * @brief  Primitive of the STOMP algorithm.
@@ -126,7 +124,7 @@ KHIVA_C_API void mass(khiva_array *q, khiva_array *t, khiva_array *distances, in
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void stomp(khiva_array *tssa, khiva_array *tssb, long m, khiva_array *p, khiva_array *i,
+KHIVA_C_API void stomp(const khiva_array *tssa, const khiva_array *tssb, long m, khiva_array *p, khiva_array *i,
                        int *error_code, char *error_message);
 
 /**
@@ -144,7 +142,7 @@ KHIVA_C_API void stomp(khiva_array *tssa, khiva_array *tssb, long m, khiva_array
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void stomp_self_join(khiva_array *tss, long m, khiva_array *p, khiva_array *i, int *error_code,
+KHIVA_C_API void stomp_self_join(const khiva_array *tss, long m, khiva_array *p, khiva_array *i, int *error_code,
                                  char *error_message);
 
 /**
@@ -163,7 +161,7 @@ KHIVA_C_API void stomp_self_join(khiva_array *tss, long m, khiva_array *p, khiva
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void matrix_profile(khiva_array *tssa, khiva_array *tssb, long m, khiva_array *p, khiva_array *i,
+KHIVA_C_API void matrix_profile(const khiva_array *tssa, const khiva_array *tssb, long m, khiva_array *p, khiva_array *i,
                                 int *error_code, char *error_message);
 
 /**
@@ -181,7 +179,7 @@ KHIVA_C_API void matrix_profile(khiva_array *tssa, khiva_array *tssb, long m, kh
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, long m, khiva_array *p, khiva_array *i,
+KHIVA_C_API void matrix_profile_self_join(const khiva_array *tss, long m, khiva_array *p, khiva_array *i,
                                           int *error_code, char *error_message);
 
 /**
@@ -201,7 +199,7 @@ KHIVA_C_API void matrix_profile_self_join(khiva_array *tss, long m, khiva_array 
  *
  *  Notice that when there is no match the subsequence index is the length of tss.
  */
-KHIVA_C_API void matrix_profile_lr(khiva_array *tss, long m, khiva_array *pleft, khiva_array *ileft,
+KHIVA_C_API void matrix_profile_lr(const khiva_array *tss, long m, khiva_array *pleft, khiva_array *ileft,
                                    khiva_array *pright, khiva_array *iright, int *error_code, char *error_message);
 
 /**
@@ -225,7 +223,7 @@ KHIVA_C_API void matrix_profile_lr(khiva_array *tss, long m, khiva_array *pleft,
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void get_chains(khiva_array *tss, long m, khiva_array *chains, int *error_code, char *error_message);
+KHIVA_C_API void get_chains(const khiva_array *tss, long m, khiva_array *chains, int *error_code, char *error_message);
 
 #ifdef __cplusplus
 }

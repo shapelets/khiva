@@ -7,94 +7,116 @@
 #include <khiva/library.h>
 #include <khiva/version.h>
 #include <khiva_c/internal/util.h>
+#include <khiva_c/library.h>
+
 #include <cstring>
 
+using namespace khiva;
+using namespace khiva::util;
+
 void backend_info(char **info, int *error_code, char *error_message) {
-    try{
+    try {
         std::strcpy(*info, khiva::library::backendInfo().c_str());
-    } catch (const std::exception &e) {
-        fill_error("backend_info", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
     } catch (...) {
-        fill_unknown("backend_info", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
 void set_backend(const int *backend, int *error_code, char *error_message) {
-    try{
+    try {
         khiva::library::setBackend(static_cast<khiva::library::Backend>(*backend));
-    } catch (const std::exception &e) {
-        fill_error("set_backend", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("set_backend", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
 void get_backend(int *backend, int *error_code, char *error_message) {
-    try{
+    try {
         *backend = static_cast<int>(khiva::library::getBackend());
-    } catch (const std::exception &e) {
-        fill_error("get_backend", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("get_backend", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
 void get_backends(int *backends, int *error_code, char *error_message) {
-    try{
+    try {
         *backends = khiva::library::getBackends();
-    } catch (const std::exception &e) {
-        fill_error("get_backends", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("get_backends", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
 void set_device(const int *device, int *error_code, char *error_message) {
-    try{
+    try {
         khiva::library::setDevice(*device);
-    } catch (const std::exception &e) {
-        fill_error("set_device", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("set_device", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
 void get_device_id(int *device_id, int *error_code, char *error_message) {
-    try{
+    try {
         *device_id = khiva::library::getDevice();
-    } catch (const std::exception &e) {
-        fill_error("get_device_id", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("get_device_id", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
 void get_device_count(int *device_count, int *error_code, char *error_message) {
-    try{
+    try {
         *device_count = khiva::library::getDeviceCount();
-    } catch (const std::exception &e) {
-        fill_error("get_device_count", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("get_device_count", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
 void set_device_memory_in_gb(const double *memory, int *error_code, char *error_message) {
-    try{
+    try {
         khiva::library::setDeviceMemoryInGB(*memory);
-    } catch (const std::exception &e) {
-        fill_error("set_device_memory_in_gb", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("set_device_memory_in_gb", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
 void version(char **v, int *error_code, char *error_message) {
-    try{
+    try {
         strcpy(*v, khiva::version().c_str());
-    } catch (const std::exception &e) {
-        fill_error("version", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("version", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
