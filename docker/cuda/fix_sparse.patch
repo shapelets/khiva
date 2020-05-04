@@ -1,0 +1,13 @@
+diff --git a/src/backend/cpu/sparse.cpp b/src/backend/cpu/sparse.cpp
+index d6032ade..302bd798 100644
+--- a/src/backend/cpu/sparse.cpp
++++ b/src/backend/cpu/sparse.cpp
+@@ -339,7 +339,7 @@ SparseArray<T> sparseConvertStorageToStorage(const SparseArray<T> &in)
+     SparseArray<T> converted = createEmptySparseArray<T>(in.dims(), (int)in.getNNZ(), dest);
+     converted.eval();
+ 
+-    function<void (Param<T>, Param<int>, Param<int>,
++	std::function<void (Param<T>, Param<int>, Param<int>,
+                    CParam<T>, CParam<int>, CParam<int>)
+             > converter;
+ 
