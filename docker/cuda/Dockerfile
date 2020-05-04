@@ -31,10 +31,9 @@ WORKDIR /root
 COPY *.patch ./
 FROM khiva-cuda-builder-base AS arrayfire-cuda-builder
 ENV AF_DISABLE_GRAPHICS=1
-RUN git clone --recursive https://github.com/arrayfire/arrayfire.git && \
+RUN git clone -b v3.6.2 --depth 1  --recurse-submodules -j 8 https://github.com/arrayfire/arrayfire.git && \
     cd arrayfire && \
-    git checkout tags/v3.6.2 && \ 
-	git apply /root/fix_queue.patch && \
+    git apply /root/fix_queue.patch && \
     git apply /root/fix_sort.patch && \
     git apply /root/fix_sparse.patch && \
     mkdir build && cd build && \
@@ -55,14 +54,14 @@ RUN git clone --recursive https://github.com/arrayfire/arrayfire.git && \
     cmake --build . --target install -- -j8
 
 FROM khiva-cuda-builder-base AS khiva-cuda-builder
+ARG KHIVA_BRANCH=v0.5.0
 COPY --from=arrayfire-cuda-builder /opt/arrayfire /opt/arrayfire
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 RUN echo /opt/arrayfire/lib > /etc/ld.so.conf.d/arrayfire.conf && \
     ldconfig && \
-    git clone --recurse-submodules https://github.com/shapelets/khiva.git && \
+    git clone -b ${KHIVA_BRANCH} --depth 1  --recurse-submodules -j 8 https://github.com/shapelets/khiva.git && \
     cd khiva && \
-    git checkout tags/v0.5.0 && \
-	mkdir build && \
+    mkdir build && \
     cd build && \
     conan install .. --build missing && \
     cmake .. \

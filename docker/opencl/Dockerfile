@@ -11,7 +11,7 @@ RUN apt-get update && \
     liblapacke-dev \
     libopenblas-dev \
     ocl-icd-opencl-dev \
-    python3-pip \    
+    python3-pip \
     software-properties-common && \
     pip3 install setuptools && \
     pip3 install conan --upgrade && \
@@ -51,7 +51,7 @@ RUN git clone -b v3.6.2 --depth 1 --recurse-submodules -j 8 https://github.com/a
              -DAF_BUILD_DOCS=OFF \
              -DAF_WITH_LOGGING=OFF \
              -DAF_WITH_STATIC_FREEIMAGE=OFF && \
-    cmake --build . --target install -- -j8 
+    cmake --build . --target install -- -j8
 
 FROM khiva-opencl-builder-base AS khiva-builder
 ARG KHIVA_BRANCH=v0.5.0
@@ -62,7 +62,7 @@ RUN echo /opt/arrayfire/lib > /etc/ld.so.conf.d/arrayfire.conf && \
     add-apt-repository ppa:intel-opencl/intel-opencl && \
     apt-get update && \
     apt-get install -y intel-opencl-icd clinfo && \
-    git clone -b v0.5.0 --depth 1 --recurse-submodules -j 8 https://github.com/shapelets/khiva.git && \
+    git clone -b ${KHIVA_BRANCH} --depth 1 --recurse-submodules -j 8 https://github.com/shapelets/khiva.git && \
     cd khiva && \
     mkdir build && \
     cd build && \
