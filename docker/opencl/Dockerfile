@@ -4,12 +4,13 @@ RUN apt-get update && \
     build-essential \
     cmake \
     git \
-    libboost-all-dev \
+    libboost-math-dev \
     libfftw3-dev \
     libfreeimage-dev \
     liblapack-dev \
     liblapacke-dev \
     libopenblas-dev \
+    openjdk-8-jdk \
     ocl-icd-opencl-dev \
     python3-pip \
     software-properties-common && \
@@ -74,7 +75,8 @@ RUN echo /opt/arrayfire/lib > /etc/ld.so.conf.d/arrayfire.conf && \
         -DKHIVA_BUILD_EXAMPLES=OFF \
         -DKHIVA_BUILD_DOCUMENTATION=OFF \
         -DKHIVA_USE_CONAN=ON \
-        -DKHIVA_BUILD_JNI_BINDINGS=OFF && \
+        -DKHIVA_BUILD_C_BINDINGS=ON \
+        -DKHIVA_BUILD_JNI_BINDINGS=ON && \
     cmake --build . --target install -- -j8
 
 FROM intelopencl/intel-opencl:ubuntu-18.04-ppa AS arrayfire-intel-opencl

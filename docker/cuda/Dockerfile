@@ -72,6 +72,7 @@ RUN echo /opt/arrayfire/lib > /etc/ld.so.conf.d/arrayfire.conf && \
         -DKHIVA_BUILD_EXAMPLES=OFF \
         -DKHIVA_BUILD_DOCUMENTATION=OFF \
         -DKHIVA_USE_CONAN=ON \
+        -DKHIVA_BUILD_C_BINDINGS=ON \
         -DKHIVA_BUILD_JNI_BINDINGS=ON && \
     cmake --build . --target install -- -j8
 
