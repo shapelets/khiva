@@ -14,10 +14,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip && \
     pip3 install setuptools && \
     pip3 install conan --upgrade && \
-    conan remote add conan-mpusz https://api.bintray.com/conan/mpusz/conan-mpusz && \
     conan profile new --detect default && \
     conan profile update settings.compiler.libcxx=libstdc++11 default && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 # AF_DISABLE_GRAPHICS - Environment variable to disable graphics at
 # runtime due to lack of graphics support by docker - visit
@@ -81,7 +80,8 @@ RUN apt-get update && \
     libfftw3-3 \
     liblapacke && \
     echo /opt/arrayfire/lib > /etc/ld.so.conf.d/arrayfire.conf && \
-    ldconfig
+    ldconfig && \
+    rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 FROM arrayfire-cuda AS khiva-cuda
 COPY --from=khiva-cuda-builder /opt/khiva /opt/khiva
