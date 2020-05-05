@@ -31,11 +31,8 @@ WORKDIR /root
 COPY *.patch ./
 FROM khiva-cuda-builder-base AS arrayfire-cuda-builder
 ENV AF_DISABLE_GRAPHICS=1
-RUN git clone -b v3.6.2 --depth 1  --recurse-submodules -j 8 https://github.com/arrayfire/arrayfire.git && \
+RUN git clone -b v3.6.2 --depth 1 --recurse-submodules -j 8 https://github.com/arrayfire/arrayfire.git && \
     cd arrayfire && \
-    git apply /root/fix_queue.patch && \
-    git apply /root/fix_sort.patch && \
-    git apply /root/fix_sparse.patch && \
     mkdir build && cd build && \
     cmake .. -DCMAKE_INSTALL_PREFIX=/opt/arrayfire \
              -DCMAKE_BUILD_TYPE=Release \
@@ -47,7 +44,7 @@ RUN git clone -b v3.6.2 --depth 1  --recurse-submodules -j 8 https://github.com/
              -DAF_WITH_GRAPHICS=OFF \
              -DAF_WITH_NONFREE=OFF \
              -DAF_BUILD_EXAMPLES=OFF \
-             -DBUILD_TESTING=ON \
+             -DBUILD_TESTING=OFF \
              -DAF_BUILD_DOCS=OFF \
              -DAF_WITH_LOGGING=OFF \
              -DAF_WITH_STATIC_FREEIMAGE=OFF && \
