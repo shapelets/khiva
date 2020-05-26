@@ -84,6 +84,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 FROM arrayfire-intel-opencl as khiva-intel-opencl
+ENV LD_LIBRARY_PATH="/opt/khiva/lib:${LD_LIBRARY_PATH}"
 COPY --from=khiva-builder /opt/khiva /opt/khiva
 RUN echo /opt/khiva/lib > /etc/ld.so.conf.d/khiva.conf && \
     ldconfig
