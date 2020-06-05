@@ -10,6 +10,7 @@
 #include <SCAMP/src/common.h>
 #include <SCAMP/src/scamp_exception.h>
 #include <khiva/internal/vectorUtil.h>
+#include <khiva/library.h>
 #include <khiva/normalization.h>
 
 #include <algorithm>
