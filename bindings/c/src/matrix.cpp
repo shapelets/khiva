@@ -236,3 +236,42 @@ void get_chains(const khiva_array *tss, long m, khiva_array *c, int *error_code,
         *error_code = AF_ERR_UNKNOWN;
     }
 }
+
+void matrix_profile_self_threshold(const khiva_array *tss, long m, double threshold, khiva_array *sums, int *error_code,
+                                   char *error_message) {
+    try {
+        auto var_tss = array::from_af_array(*tss);
+        af::array sumCorrelation;
+
+        khiva::matrix::matrixProfileThresh(var_tss, m, threshold, sumCorrelation);
+
+        *sums = array::increment_ref_count(sumCorrelation.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
+    } catch (...) {
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
+    }
+}
+
+void matrix_profile_threshold(const khiva_array *ta, const khiva_array *tb, long m, double threshold, khiva_array *sums,
+                              int *error_code, char *error_message) {
+    try {
+        auto var_ta = array::from_af_array(*ta);
+        auto var_tb = array::from_af_array(*tb);
+        af::array sumCorrelation;
+
+        khiva::matrix::matrixProfileThresh(var_ta, var_tb, m, threshold, sumCorrelation);
+
+        *sums = array::increment_ref_count(sumCorrelation.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
+    } catch (...) {
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
+    }
+}

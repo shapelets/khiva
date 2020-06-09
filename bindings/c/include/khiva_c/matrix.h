@@ -106,7 +106,8 @@ KHIVA_C_API void find_best_n_occurrences(const khiva_array *q, const khiva_array
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void mass(const khiva_array *q, const khiva_array *t, khiva_array *distances, int *error_code, char *error_message);
+KHIVA_C_API void mass(const khiva_array *q, const khiva_array *t, khiva_array *distances, int *error_code,
+                      char *error_message);
 
 /**
  * @brief  Primitive of the STOMP algorithm.
@@ -161,8 +162,8 @@ KHIVA_C_API void stomp_self_join(const khiva_array *tss, long m, khiva_array *p,
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void matrix_profile(const khiva_array *tssa, const khiva_array *tssb, long m, khiva_array *p, khiva_array *i,
-                                int *error_code, char *error_message);
+KHIVA_C_API void matrix_profile(const khiva_array *tssa, const khiva_array *tssb, long m, khiva_array *p,
+                                khiva_array *i, int *error_code, char *error_message);
 
 /**
  * @brief Matrix Profile self join algorithm.
@@ -225,6 +226,43 @@ KHIVA_C_API void matrix_profile_lr(const khiva_array *tss, long m, khiva_array *
  */
 KHIVA_C_API void get_chains(const khiva_array *tss, long m, khiva_array *chains, int *error_code, char *error_message);
 
+/**
+ * @brief Calculates the sum of correlations above a threshold between 'tss' and itself using a subsequence
+ * length of 'm' at each location in 'tss'.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param tss Query and reference time series.
+ * @param m Subsequence length.
+ * @param threshold Threshold.
+ * @param sums The sum of correlations above a threshold between 'tss' and itself using a subsequence length
+ * of 'm' at each location in 'tss'.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
+ */
+KHIVA_C_API void matrix_profile_self_threshold(const khiva_array *tss, long m, double threshold, khiva_array *sums,
+                                               int *error_code, char *error_message);
+
+/**
+ * @brief Calculates the sum of correlations above a threshold between 'ta' and 'tb' using a subsequence length of 'm'.
+ *
+ * [1] Yan Zhu, Zachary Zimmerman, Nader Shakibay Senobari, Chin-Chia Michael Yeh, Gareth Funning, Abdullah Mueen,
+ * Philip Brisk and Eamonn Keogh (2016). Matrix Profile II: Exploiting a Novel Algorithm and GPUs to break the one
+ * Hundred Million Barrier for Time Series Motifs and Joins. IEEE ICDM 2016.
+ *
+ * @param ta Query time series.
+ * @param tb Reference time series.
+ * @param m Subsequence length.
+ * @param threshold Threshold.
+ * @param sums The sum of correlations above a threshold between 'ta' and 'tb' using a subsequence length of
+ * 'm' at each location in 'ta'.
+ * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
+ * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
+ */
+KHIVA_C_API void matrix_profile_threshold(const khiva_array *ta, const khiva_array *tb, long m, double threshold,
+                                          khiva_array *sums, int *error_code, char *error_message);
 #ifdef __cplusplus
 }
 #endif

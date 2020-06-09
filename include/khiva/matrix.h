@@ -211,6 +211,7 @@ KHIVAAPI void getChains(const af::array &tss, long m, af::array &chains);
  *
  * @param tss Query and reference time series.
  * @param m Subsequence length.
+ * @param threshold Threshold.
  * @param sumCorrelation The sum of correlations above a threshold between 'tss' and itself using a subsequence length
  * of 'm' at each location in 'tss'.
  */
@@ -226,6 +227,7 @@ KHIVAAPI void matrixProfileThresh(af::array tss, long m, double threshold, af::a
  * @param ta Query time series.
  * @param tb Reference time series.
  * @param m Subsequence length.
+ * @param threshold Threshold.
  * @param sumCorrelation The sum of correlations above a threshold between 'ta' and 'tb' using a subsequence length of
  * 'm' at each location in 'ta'.
  */
