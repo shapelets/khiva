@@ -40,10 +40,7 @@ endif()
 if(CMAKE_CUDA_COMPILER)
   enable_language(CUDA)
     # For CUFFT libraries
-    find_package(CUDA ${CMAKE_CUDA_VERSION} REQUIRED)
-    message("CUDA_LIBRARIES = ${CUDA_LIBRARIES}")
-    message("CUDA_CUFFT_LIBRARIES = ${CUDA_CUFFT_LIBRARIES}")
-    message("CUDA_cudart_LIBRARY = ${CUDA_cudart_LIBRARY}")
+    find_package(CUDA ${CMAKE_CUDA_VERSION} REQUIRED)    
 endif()
 
 add_library(common SCAMP/src/common.cpp)
