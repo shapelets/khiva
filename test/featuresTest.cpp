@@ -366,9 +366,7 @@ void binnedEntropy() {
     af::array h_data(20, 1, ts1);
     af::array h_data2(20, 1, ts2);
     af::array tss = af::join(1, h_data, h_data2);
-
     af::array output = khiva::features::binnedEntropy(tss, 5);
-
     auto h_out = khiva::utils::makeScopedHostPtr(output.host<float>());
     float a[] = {1.6094379124341005f, 1.5614694247763998f};
     ASSERT_NEAR(h_out[0], a[0], EPSILON);

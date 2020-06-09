@@ -56,10 +56,7 @@ set(CPACK_PACKAGE_VERSION_PATCH "${VERSION_PATCH}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "${LIBRARY_NAME}")
 
 set(inst_pkg_name ${APP_LOW_NAME})
-set(inst_pkg_version "")
-if (APPLE OR WIN32)
-  set(inst_pkg_version "-v${VERSION_SHORT}")
-endif ()
+set(inst_pkg_version "-v${VERSION_SHORT}")
 
 set(CPACK_PACKAGE_FILE_NAME "${inst_pkg_name}${inst_pkg_version}")
 

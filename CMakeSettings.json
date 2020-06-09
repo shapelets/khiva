@@ -1,7 +1,13 @@
 ﻿{
   "environments": [
+    //{
+    //  "VCToolsVersion": "14.0" // MSVC 2015
+    //}
+    //{
+    //  "VCToolsVersion": "14.16" // MSVC 2017
+    //}
     {
-      "VCToolsVersion": "14.24"
+      "VCToolsVersion": "14.25" // MSVC2019
     }
   ],
   "configurations": [
@@ -14,19 +20,22 @@
       "installRoot": "${projectDir}\\out\\install\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
-      "ctestCommandArgs": "",
+      "ctestCommandArgs": "--output-on-failure -j8",
+      "cmakeToolchain": "${env.VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
       "variables": [
-        {
-          "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "${env.VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-          "type": "STRING"
-        },
         {
           "name": "KHIVA_USE_CONAN",
           "value": "OFF",
-          "type": "STRING"
+          "type": "BOOL"
+        },
+        {
+          "name": "KHIVA_BUILD_DOCUMENTATION",
+          "value": "OFF",
+          "type": "BOOL"
         }
-      ]
+      ],
+      "enableClangTidyCodeAnalysis": true,
+      "enableMicrosoftCodeAnalysis": true
     },
     {
       "name": "x64-Release",
@@ -35,21 +44,19 @@
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
       "cmakeCommandArgs": "",
-      "buildCommandArgs": "-v",
-      "ctestCommandArgs": "",
+      "buildCommandArgs": "-v -j8",
+      "ctestCommandArgs": "--output-on-failure -j8",
+      "cmakeToolchain": "${env.VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "variables": [
         {
-          "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "${env.VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-          "type": "STRING"
-        },
-        {
           "name": "KHIVA_USE_CONAN",
           "value": "OFF",
-          "type": "STRING"
+          "type": "BOOL"
         }
-      ]
+      ],
+      "enableClangTidyCodeAnalysis": true,
+      "enableMicrosoftCodeAnalysis": true
     }
   ]
 }

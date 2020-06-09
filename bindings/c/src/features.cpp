@@ -4,86 +4,89 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <arrayfire.h>
+#include <khiva/array.h>
 #include <khiva/features.h>
+#include <khiva/internal/util.h>
 #include <khiva_c/features.h>
 #include <khiva_c/internal/util.h>
 
-void abs_energy(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+using namespace khiva;
+using namespace khiva::util;
+
+void abs_energy(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::absEnergy(var).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::absEnergy(var);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("abs_energy", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("abs_energy", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void absolute_sum_of_changes(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void absolute_sum_of_changes(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::absoluteSumOfChanges(var).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::absoluteSumOfChanges(var);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("absolute_sum_of_changes", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("absolute_sum_of_changes", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void aggregated_autocorrelation(khiva_array *array, int *aggregation_function, khiva_array *result, int *error_code,
-                                char *error_message) {
+void aggregated_autocorrelation(const khiva_array *array, const int *aggregation_function, khiva_array *result,
+                                int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-
+        auto var = array::from_af_array(*array);
+        af::array r;
         switch (*aggregation_function) {
             case 0:
-                af_retain_array(result, khiva::features::aggregatedAutocorrelation(var, af::mean).get());
-                *error_code = 0;
+                r = khiva::features::aggregatedAutocorrelation(var, af::mean);
                 break;
             case 1:
-                af_retain_array(result, khiva::features::aggregatedAutocorrelation(var, af::median).get());
-                *error_code = 0;
+                r = khiva::features::aggregatedAutocorrelation(var, af::median);
                 break;
             case 2:
-                af_retain_array(result, khiva::features::aggregatedAutocorrelation(var, af::min).get());
-                *error_code = 0;
+                r = khiva::features::aggregatedAutocorrelation(var, af::min);
                 break;
             case 3:
-                af_retain_array(result, khiva::features::aggregatedAutocorrelation(var, af::max).get());
-                *error_code = 0;
+                r = khiva::features::aggregatedAutocorrelation(var, af::max);
                 break;
             case 4:
-                af_retain_array(result, khiva::features::aggregatedAutocorrelation(var, af::stdev).get());
-                *error_code = 0;
+                r = khiva::features::aggregatedAutocorrelation(var, af::stdev);
                 break;
             case 5:
-                af_retain_array(result, khiva::features::aggregatedAutocorrelation(var, af::var).get());
-                *error_code = 0;
+                r = khiva::features::aggregatedAutocorrelation(var, af::var);
                 break;
             default:
-                af_retain_array(result, khiva::features::aggregatedAutocorrelation(var, af::mean).get());
-                *error_code = 0;
+                r = khiva::features::aggregatedAutocorrelation(var, af::mean);
                 break;
         }
-    } catch (const std::exception &e) {
-        fill_error("aggregated_autocorrelation", e.what(), error_message, error_code, 1);
+        *result = array::increment_ref_count(r.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("aggregated_autocorrelation", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregation_function, khiva_array *slope,
-                             khiva_array *intercept, khiva_array *rvalue, khiva_array *pvalue, khiva_array *stderrest,
-                             int *error_code, char *error_message) {
+void aggregated_linear_trend(const khiva_array *array, const long *chunkSize, const int *aggregation_function,
+                             khiva_array *slope, khiva_array *intercept, khiva_array *rvalue, khiva_array *pvalue,
+                             khiva_array *stderrest, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
+        auto var = array::from_af_array(*array);
         af::array primitive_slope;
         af::array primitive_intercept;
         af::array primitive_rvalue;
@@ -117,835 +120,971 @@ void aggregated_linear_trend(khiva_array *array, long *chunkSize, int *aggregati
                                                        primitive_rvalue, primitive_pvalue, primitive_stderrest);
                 break;
         }
-        af_retain_array(slope, primitive_slope.get());
-        af_retain_array(intercept, primitive_intercept.get());
-        af_retain_array(rvalue, primitive_rvalue.get());
-        af_retain_array(pvalue, primitive_pvalue.get());
-        af_retain_array(stderrest, primitive_stderrest.get());
-
+        *slope = array::increment_ref_count(primitive_slope.get());
+        *intercept = array::increment_ref_count(primitive_intercept.get());
+        *rvalue = array::increment_ref_count(primitive_rvalue.get());
+        *pvalue = array::increment_ref_count(primitive_pvalue.get());
+        *stderrest = array::increment_ref_count(primitive_stderrest.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("aggregated_linear_trend", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("aggregated_linear_trend", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void approximate_entropy(khiva_array *array, int *m, float *r, khiva_array *result, int *error_code,
+void approximate_entropy(const khiva_array *array, const int *m, const float *r, khiva_array *result, int *error_code,
                          char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::approximateEntropy(var, *m, *r).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::approximateEntropy(var, *m, *r);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("approximate_entropy", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("approximate_entropy", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void cross_covariance(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_array *result, int *error_code,
-                      char *error_message) {
+void cross_covariance(const khiva_array *xss, const khiva_array *yss, const bool *unbiased, khiva_array *result,
+                      int *error_code, char *error_message) {
     try {
-        af::array var_xss;
-        af::array var_yss;
-        check_and_retain_arrays(xss, yss, var_xss, var_yss);
-        af_retain_array(result, khiva::features::crossCovariance(var_xss, var_yss, *unbiased).get());
+        auto var_xss = array::from_af_array(*xss);
+        auto var_yss = array::from_af_array(*yss);
+        auto r = khiva::features::crossCovariance(var_xss, var_yss, *unbiased);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("cross_covariance", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("cross_covariance", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void auto_covariance(khiva_array *array, bool *unbiased, khiva_array *result, int *error_code, char *error_message) {
+void auto_covariance(const khiva_array *array, const bool *unbiased, khiva_array *result, int *error_code,
+                     char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::autoCovariance(var, *unbiased).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::autoCovariance(var, *unbiased);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("auto_covariance", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("auto_covariance", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void cross_correlation(khiva_array *xss, khiva_array *yss, bool *unbiased, khiva_array *result, int *error_code,
-                       char *error_message) {
+void cross_correlation(const khiva_array *xss, const khiva_array *yss, const bool *unbiased, khiva_array *result,
+                       int *error_code, char *error_message) {
     try {
-        af::array var_xss;
-        af::array var_yss;
-        check_and_retain_arrays(xss, yss, var_xss, var_yss);
-        af_retain_array(result, khiva::features::crossCorrelation(var_xss, var_yss, *unbiased).get());
+        auto var_xss = array::from_af_array(*xss);
+        auto var_yss = array::from_af_array(*yss);
+        auto r = khiva::features::crossCorrelation(var_xss, var_yss, *unbiased);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("cross_correlation", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("cross_correlation", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void auto_correlation(khiva_array *array, long *max_lag, bool *unbiased, khiva_array *result, int *error_code,
-                      char *error_message) {
+void auto_correlation(const khiva_array *array, const long *max_lag, const bool *unbiased, khiva_array *result,
+                      int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::autoCorrelation(var, *max_lag, *unbiased).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::autoCorrelation(var, *max_lag, *unbiased);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("auto_correlation", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("auto_correlation", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void binned_entropy(khiva_array *array, int *max_bins, khiva_array *result, int *error_code, char *error_message) {
+void binned_entropy(const khiva_array *array, const int *max_bins, khiva_array *result, int *error_code,
+                    char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::binnedEntropy(var, *max_bins).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::binnedEntropy(var, *max_bins);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("binned_entropy", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("binned_entropy", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void c3(khiva_array *array, long *lag, khiva_array *result, int *error_code, char *error_message) {
+void c3(const khiva_array *array, const long *lag, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::c3(var, *lag).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::c3(var, *lag);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("c3", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("c3", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void cid_ce(khiva_array *array, bool *zNormalize, khiva_array *result, int *error_code, char *error_message) {
+void cid_ce(const khiva_array *array, const bool *zNormalize, khiva_array *result, int *error_code,
+            char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::cidCe(var, *zNormalize).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::cidCe(var, *zNormalize);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("cid_ce", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("cid_ce", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void count_above_mean(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void count_above_mean(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::countAboveMean(var).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::countAboveMean(var);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("count_above_mean", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("count_above_mean", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void count_below_mean(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void count_below_mean(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::countBelowMean(var).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::countBelowMean(var);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("count_below_mean", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("count_below_mean", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void cwt_coefficients(khiva_array *array, khiva_array *width, int *coeff, int *w, khiva_array *result, int *error_code,
-                      char *error_message) {
+void cwt_coefficients(const khiva_array *array, const khiva_array *width, const int *coeff, const int *w,
+                      khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var;
-        af::array var_width;
-        check_and_retain_arrays(array, width, var, var_width);
-        af_retain_array(result, khiva::features::cwtCoefficients(var, var_width, *coeff, *w).get());
+        auto var = array::from_af_array(*array);
+        auto var_width = array::from_af_array(*width);
+        auto r = khiva::features::cwtCoefficients(var, var_width, *coeff, *w);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("cwt_coefficients", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("cwt_coefficients", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void energy_ratio_by_chunks(khiva_array *array, long *num_segments, long *segment_focus, khiva_array *result,
-                            int *error_code, char *error_message) {
+void energy_ratio_by_chunks(const khiva_array *array, const long *num_segments, const long *segment_focus,
+                            khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::energyRatioByChunks(var, *num_segments, *segment_focus).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::energyRatioByChunks(var, *num_segments, *segment_focus);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("energy_ratio_by_chunks", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("energy_ratio_by_chunks", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void fft_aggregated(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void fft_aggregated(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::fftAggregated(var).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::fftAggregated(var);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("fft_aggregated", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("fft_aggregated", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void fft_coefficient(khiva_array *array, long *coefficient, khiva_array *real, khiva_array *imag, khiva_array *absolute,
-                     khiva_array *angle, int *error_code, char *error_message) {
+void fft_coefficient(const khiva_array *array, const long *coefficient, khiva_array *real, khiva_array *imag,
+                     khiva_array *absolute, khiva_array *angle, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af::array primitive_real, primitive_imag, primitive_abs, primitive_angle;
+        auto var = array::from_af_array(*array);
+        af::array primitive_real;
+        af::array primitive_imag;
+        af::array primitive_abs;
+        af::array primitive_angle;
         khiva::features::fftCoefficient(var, *coefficient, primitive_real, primitive_imag, primitive_abs,
                                         primitive_angle);
-        af_retain_array(real, primitive_real.get());
-        af_retain_array(imag, primitive_imag.get());
-        af_retain_array(absolute, primitive_abs.get());
-        af_retain_array(angle, primitive_angle.get());
+        *real = array::increment_ref_count(primitive_real.get());
+        *imag = array::increment_ref_count(primitive_imag.get());
+        *absolute = array::increment_ref_count(primitive_abs.get());
+        *angle = array::increment_ref_count(primitive_angle.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("fft_coefficient", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("fft_coefficient", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void first_location_of_maximum(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void first_location_of_maximum(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::firstLocationOfMaximum(var).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::firstLocationOfMaximum(var);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("first_location_of_maximum", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("first_location_of_maximum", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void first_location_of_minimum(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void first_location_of_minimum(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::firstLocationOfMinimum(var).get());
+        auto var = array::from_af_array(*array);
+        auto r = khiva::features::firstLocationOfMinimum(var);
+        *result = array::increment_ref_count(r.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("first_location_of_minimum", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("first_location_of_minimum", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void friedrich_coefficients(khiva_array *array, int *m, float *r, khiva_array *result, int *error_code,
-                            char *error_message) {
+void friedrich_coefficients(const khiva_array *array, const int *m, const float *r, khiva_array *result,
+                            int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::friedrichCoefficients(var, *m, *r).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::friedrichCoefficients(var, *m, *r);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("friedrich_coefficients", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("friedrich_coefficients", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void has_duplicates(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void has_duplicates(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::hasDuplicates(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::hasDuplicates(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("has_duplicates", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("has_duplicates", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void has_duplicate_max(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void has_duplicate_max(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::hasDuplicateMax(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::hasDuplicateMax(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("has_duplicate_max", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("has_duplicate_max", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void has_duplicate_min(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void has_duplicate_min(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::hasDuplicateMin(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::hasDuplicateMin(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("has_duplicate_min", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("has_duplicate_min", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void index_mass_quantile(khiva_array *array, float *q, khiva_array *result, int *error_code, char *error_message) {
+void index_mass_quantile(const khiva_array *array, const float *q, khiva_array *result, int *error_code,
+                         char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::indexMassQuantile(var, *q).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::indexMassQuantile(var, *q);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("index_mass_quantile", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("index_mass_quantile", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void kurtosis(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void kurtosis(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::kurtosis(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::kurtosis(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("kurtosis", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("kurtosis", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void large_standard_deviation(khiva_array *array, float *r, khiva_array *result, int *error_code, char *error_message) {
-    try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::largeStandardDeviation(var, *r).get());
-        *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("large_standard_deviation", e.what(), error_message, error_code, 1);
-    } catch (...) {
-        fill_unknown("large_standard_deviation", error_message, error_code, -1);
-    }
-}
-
-void last_location_of_maximum(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
-    try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::lastLocationOfMaximum(var).get());
-        *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("last_location_of_maximum", e.what(), error_message, error_code, 1);
-    } catch (...) {
-        fill_unknown("last_location_of_maximum", error_message, error_code, -1);
-    }
-}
-
-void last_location_of_minimum(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
-    try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::lastLocationOfMinimum(var).get());
-        *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("last_location_of_minimum", e.what(), error_message, error_code, 1);
-    } catch (...) {
-        fill_unknown("last_location_of_minimum", error_message, error_code, -1);
-    }
-}
-
-void length(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
-    try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::length(var).get());
-        *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("length", e.what(), error_message, error_code, 1);
-    } catch (...) {
-        fill_unknown("length", error_message, error_code, -1);
-    }
-}
-
-void linear_trend(khiva_array *array, khiva_array *pvalue, khiva_array *rvalue, khiva_array *intercept,
-                  khiva_array *slope, khiva_array *stdrr, int *error_code, char *error_message) {
-    try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af::array primitive_pvalue, primitive_rvalue, primitive_intercept, primitive_slope, primitive_stdrr;
-        khiva::features::linearTrend(var, primitive_pvalue, primitive_rvalue, primitive_intercept, primitive_slope,
-                                     primitive_stdrr);
-        af_retain_array(slope, primitive_slope.get());
-        af_retain_array(intercept, primitive_intercept.get());
-        af_retain_array(rvalue, primitive_rvalue.get());
-        af_retain_array(pvalue, primitive_pvalue.get());
-        af_retain_array(stdrr, primitive_stdrr.get());
-        *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("linear_trend", e.what(), error_message, error_code, 1);
-    } catch (...) {
-        fill_unknown("linear_trend", error_message, error_code, -1);
-    }
-}
-
-void local_maximals(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
-    try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::localMaximals(var).get());
-        *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("local_maximals", e.what(), error_message, error_code, 1);
-    } catch (...) {
-        fill_unknown("local_maximals", error_message, error_code, -1);
-    }
-}
-
-void longest_strike_above_mean(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
-    try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::longestStrikeAboveMean(var).get());
-        *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("longest_strike_above_mean", e.what(), error_message, error_code, 1);
-    } catch (...) {
-        fill_unknown("longest_strike_above_mean", error_message, error_code, -1);
-    }
-}
-
-void longest_strike_below_mean(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
-    try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::longestStrikeBelowMean(var).get());
-        *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("longest_strike_below_mean", e.what(), error_message, error_code, 1);
-    } catch (...) {
-        fill_unknown("longest_strike_below_mean", error_message, error_code, -1);
-    }
-}
-
-void max_langevin_fixed_point(khiva_array *array, int *m, float *r, khiva_array *result, int *error_code,
+void large_standard_deviation(const khiva_array *array, const float *r, khiva_array *result, int *error_code,
                               char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::maxLangevinFixedPoint(var, *m, *r).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::largeStandardDeviation(var, *r);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("max_langevin_fixed_point", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("max_langevin_fixed_point", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void maximum(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void last_location_of_maximum(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::maximum(af::array(var)).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::lastLocationOfMaximum(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("maximum", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("maximum", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void mean(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void last_location_of_minimum(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::mean(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::lastLocationOfMinimum(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("mean", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("mean", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void mean_absolute_change(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void length(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::meanAbsoluteChange(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::length(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("mean_absolute_change", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("mean_absolute_change", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void mean_change(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void linear_trend(const khiva_array *array, khiva_array *pvalue, khiva_array *rvalue, khiva_array *intercept,
+                  khiva_array *slope, khiva_array *stdrr, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::meanChange(var).get());
+        auto var = array::from_af_array(*array);
+        af::array primitive_pvalue;
+        af::array primitive_rvalue;
+        af::array primitive_intercept;
+        af::array primitive_slope;
+        af::array primitive_stdrr;
+        khiva::features::linearTrend(var, primitive_pvalue, primitive_rvalue, primitive_intercept, primitive_slope,
+                                     primitive_stdrr);
+        *slope = array::increment_ref_count(primitive_slope.get());
+        *intercept = array::increment_ref_count(primitive_intercept.get());
+        *rvalue = array::increment_ref_count(primitive_rvalue.get());
+        *pvalue = array::increment_ref_count(primitive_pvalue.get());
+        *stdrr = array::increment_ref_count(primitive_stdrr.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("mean_change", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("mean_change", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void mean_second_derivative_central(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void local_maximals(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::meanSecondDerivativeCentral(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::localMaximals(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("mean_second_derivative_central", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("mean_second_derivative_central", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void median(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void longest_strike_above_mean(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::median(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::longestStrikeAboveMean(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("median", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("median", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void minimum(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void longest_strike_below_mean(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::minimum(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::longestStrikeBelowMean(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("minimum", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("minimum", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void number_crossing_m(khiva_array *array, int *m, khiva_array *result, int *error_code, char *error_message) {
+void max_langevin_fixed_point(const khiva_array *array, const int *m, const float *r, khiva_array *result,
+                              int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::numberCrossingM(var, *m).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::maxLangevinFixedPoint(var, *m, *r);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("number_crossing_m", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("number_crossing_m", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void number_cwt_peaks(khiva_array *array, int *max_w, khiva_array *result, int *error_code, char *error_message) {
+void maximum(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::numberPeaks(var, *max_w).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::maximum(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("number_cwt_peaks", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("number_cwt_peaks", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void number_peaks(khiva_array *array, int *n, khiva_array *result, int *error_code, char *error_message) {
+void mean(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::numberPeaks(var, *n).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::mean(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("number_peaks", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("number_peaks", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void partial_autocorrelation(khiva_array *array, khiva_array *lags, khiva_array *result, int *error_code,
+void mean_absolute_change(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+    try {
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::meanAbsoluteChange(var);
+        *result = array::increment_ref_count(res.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
+    } catch (...) {
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
+    }
+}
+
+void mean_change(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+    try {
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::meanChange(var);
+        *result = array::increment_ref_count(res.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
+    } catch (...) {
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
+    }
+}
+
+void mean_second_derivative_central(const khiva_array *array, khiva_array *result, int *error_code,
+                                    char *error_message) {
+    try {
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::meanSecondDerivativeCentral(var);
+        *result = array::increment_ref_count(res.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
+    } catch (...) {
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
+    }
+}
+
+void median(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+    try {
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::median(var);
+        *result = array::increment_ref_count(res.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
+    } catch (...) {
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
+    }
+}
+
+void minimum(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+    try {
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::minimum(var);
+        *result = array::increment_ref_count(res.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
+    } catch (...) {
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
+    }
+}
+
+void number_crossing_m(const khiva_array *array, const int *m, khiva_array *result, int *error_code,
+                       char *error_message) {
+    try {
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::numberCrossingM(var, *m);
+        *result = array::increment_ref_count(res.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
+    } catch (...) {
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
+    }
+}
+
+void number_cwt_peaks(const khiva_array *array, const int *max_w, khiva_array *result, int *error_code,
+                      char *error_message) {
+    try {
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::numberPeaks(var, *max_w);
+        *result = array::increment_ref_count(res.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
+    } catch (...) {
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
+    }
+}
+
+void number_peaks(const khiva_array *array, const int *n, khiva_array *result, int *error_code, char *error_message) {
+    try {
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::numberPeaks(var, *n);
+        *result = array::increment_ref_count(res.get());
+        *error_code = 0;
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
+    } catch (...) {
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
+    }
+}
+
+void partial_autocorrelation(const khiva_array *array, const khiva_array *lags, khiva_array *result, int *error_code,
                              char *error_message) {
     try {
-        af::array var;
-        af::array var_lags;
-        check_and_retain_arrays(array, lags, var, var_lags);
-        af_retain_array(result, khiva::features::partialAutocorrelation(var, var_lags).get());
+        auto var = array::from_af_array(*array);
+        auto var_lags = array::from_af_array(*lags);
+        auto res = khiva::features::partialAutocorrelation(var, var_lags);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("partial_autocorrelation", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("partial_autocorrelation", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void percentage_of_reoccurring_datapoints_to_all_datapoints(khiva_array *array, bool *is_sorted, khiva_array *result,
-                                                            int *error_code, char *error_message) {
+void percentage_of_reoccurring_datapoints_to_all_datapoints(const khiva_array *array, const bool *is_sorted,
+                                                            khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result,
-                        khiva::features::percentageOfReoccurringDatapointsToAllDatapoints(var, *is_sorted).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::percentageOfReoccurringDatapointsToAllDatapoints(var, *is_sorted);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("percentage_of_reoccurring_datapoints_to_all_datapoints", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("percentage_of_reoccurring_datapoints_to_all_datapoints", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void percentage_of_reoccurring_values_to_all_values(khiva_array *array, bool *is_sorted, khiva_array *result,
-                                                    int *error_code, char *error_message) {
+void percentage_of_reoccurring_values_to_all_values(const khiva_array *array, const bool *is_sorted,
+                                                    khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::percentageOfReoccurringValuesToAllValues(var, *is_sorted).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::percentageOfReoccurringValuesToAllValues(var, *is_sorted);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("percentage_of_reoccurring_values_to_all_values", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("percentage_of_reoccurring_values_to_all_values", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void quantile(khiva_array *array, khiva_array *q, float *precision, khiva_array *result, int *error_code,
-              char *error_message) {
+void quantile(const khiva_array *array, const khiva_array *q, const float *precision, khiva_array *result,
+              int *error_code, char *error_message) {
     try {
-        af::array var;
-        af::array var_q;
-        check_and_retain_arrays(array, q, var, var_q);
-        af_retain_array(result, khiva::features::quantile(var, var_q, *precision).get());
+        auto var = array::from_af_array(*array);
+        auto var_q = array::from_af_array(*q);
+        auto res = khiva::features::quantile(var, var_q, *precision);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("quantile", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("quantile", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void range_count(khiva_array *array, float *min, float *max, khiva_array *result, int *error_code,
+void range_count(const khiva_array *array, const float *min, const float *max, khiva_array *result, int *error_code,
                  char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::rangeCount(var, *min, *max).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::rangeCount(var, *min, *max);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("range_count", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("range_count", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void ratio_beyond_r_sigma(khiva_array *array, float *r, khiva_array *result, int *error_code, char *error_message) {
+void ratio_beyond_r_sigma(const khiva_array *array, const float *r, khiva_array *result, int *error_code,
+                          char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::ratioBeyondRSigma(var, *r).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::ratioBeyondRSigma(var, *r);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("ratio_beyond_r_sigma", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("ratio_beyond_r_sigma", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void ratio_value_number_to_time_series_length(khiva_array *array, khiva_array *result, int *error_code,
+void ratio_value_number_to_time_series_length(const khiva_array *array, khiva_array *result, int *error_code,
                                               char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::ratioValueNumberToTimeSeriesLength(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::ratioValueNumberToTimeSeriesLength(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("ratio_value_number_to_time_series_length", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("ratio_value_number_to_time_series_length", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void sample_entropy(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void sample_entropy(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::sampleEntropy(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::sampleEntropy(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("sample_entropy", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("sample_entropy", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void skewness(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void skewness(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::skewness(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::skewness(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("skewness", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("skewness", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void spkt_welch_density(khiva_array *array, int *coeff, khiva_array *result, int *error_code, char *error_message) {
+void spkt_welch_density(const khiva_array *array, const int *coeff, khiva_array *result, int *error_code,
+                        char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::spktWelchDensity(var, *coeff).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::spktWelchDensity(var, *coeff);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("spkt_welch_density", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("spkt_welch_density", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void standard_deviation(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void standard_deviation(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::standardDeviation(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::standardDeviation(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("standard_deviation", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("standard_deviation", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void sum_of_reoccurring_datapoints(khiva_array *array, bool *is_sorted, khiva_array *result, int *error_code,
-                                   char *error_message) {
+void sum_of_reoccurring_datapoints(const khiva_array *array, const bool *is_sorted, khiva_array *result,
+                                   int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::sumOfReoccurringDatapoints(var, *is_sorted).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::sumOfReoccurringDatapoints(var, *is_sorted);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("sum_of_reoccurring_datapoints", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("sum_of_reoccurring_datapoints", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void sum_of_reoccurring_values(khiva_array *array, bool *is_sorted, khiva_array *result, int *error_code,
+void sum_of_reoccurring_values(const khiva_array *array, const bool *is_sorted, khiva_array *result, int *error_code,
                                char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::sumOfReoccurringValues(var, *is_sorted).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::sumOfReoccurringValues(var, *is_sorted);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("sum_of_reoccurring_values", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("sum_of_reoccurring_values", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void sum_values(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void sum_values(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::sumValues(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::sumValues(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("sum_values", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("sum_values", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void symmetry_looking(khiva_array *array, float *r, khiva_array *result, int *error_code, char *error_message) {
+void symmetry_looking(const khiva_array *array, const float *r, khiva_array *result, int *error_code,
+                      char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::symmetryLooking(var, *r).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::symmetryLooking(var, *r);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("symmetry_looking", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("symmetry_looking", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void time_reversal_asymmetry_statistic(khiva_array *array, int *lag, khiva_array *result, int *error_code,
+void time_reversal_asymmetry_statistic(const khiva_array *array, const int *lag, khiva_array *result, int *error_code,
                                        char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::timeReversalAsymmetryStatistic(var, *lag).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::timeReversalAsymmetryStatistic(var, *lag);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("time_reversal_asymmetry_statistic", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("time_reversal_asymmetry_statistic", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void value_count(khiva_array *array, float *v, khiva_array *result, int *error_code, char *error_message) {
+void value_count(const khiva_array *array, const float *v, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::valueCount(var, *v).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::valueCount(var, *v);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("value_count", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("value_count", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void variance(khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
+void variance(const khiva_array *array, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::variance(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::variance(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("variance", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("variance", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void variance_larger_than_standard_deviation(khiva_array *array, khiva_array *result, int *error_code,
+void variance_larger_than_standard_deviation(const khiva_array *array, khiva_array *result, int *error_code,
                                              char *error_message) {
     try {
-        af::array var = af::array(*array);
-        af_retain_array(array, var.get());
-        af_retain_array(result, khiva::features::varianceLargerThanStandardDeviation(var).get());
+        auto var = array::from_af_array(*array);
+        auto res = khiva::features::varianceLargerThanStandardDeviation(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("variance_larger_than_standard_deviation", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("variance_larger_than_standard_deviation", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }

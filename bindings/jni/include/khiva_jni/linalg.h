@@ -22,9 +22,9 @@ extern "C" {
  *
  * @param ref_a A Coefficient matrix containing the coefficients of the linear equation problem to solve.
  * @param ref_b A vector with the measured values.
- * @return Updated ref and the solution to the linear equation problem minimizing the norm 2.
+ * @return A reference to the solution to the linear equation problem minimizing the norm 2.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Linalg_lls(JNIEnv *env, jobject, jlong ref_a, jlong ref_b);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Linalg_lls(JNIEnv *env, jobject, jlong ref_a, jlong ref_b);
 
 #ifdef __cplusplus
 }

@@ -37,7 +37,7 @@
         bool cuda = backends & af::Backend::AF_BACKEND_CUDA;                                  \
         bool opencl = backends & af::Backend::AF_BACKEND_OPENCL;                              \
         bool cpu = backends & af::Backend::AF_BACKEND_CPU;                                    \
-        if (cuda && CUDA) {                                                                   \
+        if (cuda && (CUDA)) {                                                                   \
             af::setBackend(af::Backend::AF_BACKEND_CUDA);                                     \
             for (int i = 0; i < af::getDeviceCount(); i++) {                                  \
                 if (i == CUDA_BENCHMARKING_DEVICE) {                                          \
@@ -49,7 +49,7 @@
                 }                                                                             \
             }                                                                                 \
         }                                                                                     \
-        if (opencl && OPENCL) {                                                               \
+        if (opencl && (OPENCL)) {                                                               \
             af::setBackend(af::Backend::AF_BACKEND_OPENCL);                                   \
             for (int i = 0; i < af::getDeviceCount(); i++) {                                  \
                 if (i == OPENCL_BENCHMARKING_DEVICE) {                                        \
@@ -61,7 +61,7 @@
                 }                                                                             \
             }                                                                                 \
         }                                                                                     \
-        if (cpu && CPU) {                                                                     \
+        if (cpu && (CPU)) {                                                                     \
             af::setBackend(af::Backend::AF_BACKEND_CPU);                                      \
             for (int i = 0; i < af::getDeviceCount(); i++) {                                  \
                 if (i == CPU_BENCHMARKING_DEVICE) {                                           \

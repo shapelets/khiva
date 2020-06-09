@@ -4,12 +4,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#ifndef KHIVA_BINDINGJAVA_UTIL_H
-#define KHIVA_BINDINGJAVA_UTIL_H
+#include <khiva/internal/util.h>
 
-#include <arrayfire.h>
-#include <jni.h>
-
-void check_and_retain_arrays(af_array &a, af_array &b, af::array &var_a, af::array &var_b);
-
-#endif
+std::string khiva::util::khiva_file_path(const std::string &path) {
+    auto pos = path.rfind("khiva");
+    return (pos == std::string::npos) ? path : path.substr(pos);
+}

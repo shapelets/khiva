@@ -12,6 +12,7 @@
 #endif
 
 #include <arrayfire.h>
+
 #include <memory>
 
 namespace khiva {

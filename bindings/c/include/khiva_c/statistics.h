@@ -23,7 +23,7 @@ extern "C" {
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_array *result, int *error_code,
+KHIVA_C_API void covariance_statistics(const khiva_array *tss, const bool *unbiased, khiva_array *result, int *error_code,
                                        char *error_message);
 
 /**
@@ -35,7 +35,7 @@ KHIVA_C_API void covariance_statistics(khiva_array *tss, bool *unbiased, khiva_a
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void kurtosis_statistics(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void kurtosis_statistics(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief The Ljung–Box test checks that data whithin the time series are independently distributed (i.e. the
@@ -70,7 +70,7 @@ KHIVA_C_API void kurtosis_statistics(khiva_array *tss, khiva_array *result, int 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void ljung_box(khiva_array *tss, long *lags, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void ljung_box(const khiva_array *tss, const long *lags, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Returns the kth moment of the given time series.
@@ -82,7 +82,7 @@ KHIVA_C_API void ljung_box(khiva_array *tss, long *lags, khiva_array *result, in
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void moment_statistics(khiva_array *tss, int *k, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void moment_statistics(const khiva_array *tss, const int *k, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Returns values at the given quantile.
@@ -95,7 +95,7 @@ KHIVA_C_API void moment_statistics(khiva_array *tss, int *k, khiva_array *result
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void quantile_statistics(khiva_array *tss, khiva_array *q, float *precision, khiva_array *result,
+KHIVA_C_API void quantile_statistics(const khiva_array *tss, const khiva_array *q, const float *precision, khiva_array *result,
                                      int *error_code, char *error_message);
 
 /**
@@ -110,7 +110,7 @@ KHIVA_C_API void quantile_statistics(khiva_array *tss, khiva_array *q, float *pr
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void quantiles_cut_statistics(khiva_array *tss, float *quantiles, float *precision, khiva_array *result,
+KHIVA_C_API void quantiles_cut_statistics(const khiva_array *tss, const float *quantiles, const float *precision, khiva_array *result,
                                           int *error_code, char *error_message);
 
 /**
@@ -122,7 +122,7 @@ KHIVA_C_API void quantiles_cut_statistics(khiva_array *tss, float *quantiles, fl
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void sample_stdev_statistics(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void sample_stdev_statistics(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
 /**
  * @brief Calculates the sample skewness of tss (calculated with the adjusted Fisher-Pearson standardized moment
@@ -134,7 +134,7 @@ KHIVA_C_API void sample_stdev_statistics(khiva_array *tss, khiva_array *result, 
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void skewness_statistics(khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void skewness_statistics(const khiva_array *tss, khiva_array *result, int *error_code, char *error_message);
 
 #ifdef __cplusplus
 }

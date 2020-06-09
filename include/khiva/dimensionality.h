@@ -7,18 +7,18 @@
 #ifndef KHIVA_CORE_DIMENSIONALITY_H
 #define KHIVA_CORE_DIMENSIONALITY_H
 
+#include <arrayfire.h>
 #include <khiva/defines.h>
 
-#include <arrayfire.h>
 #include <vector>
 
 namespace khiva {
 
 namespace dimensionality {
 
-typedef std::pair<float, float> Point;
+using Point = std::pair<float, float>;
 
-typedef std::pair<int, int> Segment;
+using Segment = std::pair<int, int>;
 
 /**
  * @brief Piecewise Aggregate Approximation (PAA) approximates a time series \f$X\f$ of length \f$n\f$ into vector
@@ -36,7 +36,7 @@ typedef std::pair<int, int> Segment;
  *
  * @return result A vector of Points with the reduced dimensionality.
  */
-KHIVAAPI std::vector<Point> PAA(std::vector<Point> points, int bins);
+KHIVAAPI std::vector<Point> PAA(const std::vector<Point> &points, int bins);
 
 /**
  * @brief Piecewise Aggregate Approximation (PAA) approximates a time series \f$X\f$ of length \f$n\f$ into vector
@@ -54,7 +54,7 @@ KHIVAAPI std::vector<Point> PAA(std::vector<Point> points, int bins);
  *
  * @return af::array An array of points with the reduced dimensionality.
  */
-KHIVAAPI af::array PAA(af::array a, int bins);
+KHIVAAPI af::array PAA(const af::array &a, int bins);
 
 /**
  * @brief Calculates the number of Perceptually Important Points (PIP) in the time series.
@@ -67,7 +67,7 @@ KHIVAAPI af::array PAA(af::array a, int bins);
  *
  * @return af::array Array with the most Perceptually Important numPoints.
  */
-KHIVAAPI af::array PIP(af::array ts, int numberIPs);
+KHIVAAPI af::array PIP(const af::array &ts, int numberIPs);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA BottomUP) to the time series.
@@ -80,7 +80,7 @@ KHIVAAPI af::array PIP(af::array ts, int numberIPs);
  *
  * @return std::vector Vector with the reduced number of points.
  */
-KHIVAAPI std::vector<Point> PLABottomUp(std::vector<Point> ts, float maxError);
+KHIVAAPI std::vector<Point> PLABottomUp(const std::vector<Point> &ts, float maxError);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA BottomUP) to the time series.
@@ -94,7 +94,7 @@ KHIVAAPI std::vector<Point> PLABottomUp(std::vector<Point> ts, float maxError);
  *
  * @return af::array with the reduced number of points.
  */
-KHIVAAPI af::array PLABottomUp(af::array ts, float maxError);
+KHIVAAPI af::array PLABottomUp(const af::array &ts, float maxError);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA Sliding Window) to the time series.
@@ -107,7 +107,7 @@ KHIVAAPI af::array PLABottomUp(af::array ts, float maxError);
  *
  * @return std::vector Vector with the reduced number of points.
  */
-KHIVAAPI std::vector<Point> PLASlidingWindow(std::vector<Point> ts, float maxError);
+KHIVAAPI std::vector<Point> PLASlidingWindow(const std::vector<Point> &ts, float maxError);
 
 /**
  * @brief Applies the Piecewise Linear Approximation (PLA Sliding Window) to the time series.
@@ -121,7 +121,7 @@ KHIVAAPI std::vector<Point> PLASlidingWindow(std::vector<Point> ts, float maxErr
  *
  * @return af::array with the reduced number of points.
  */
-KHIVAAPI af::array PLASlidingWindow(af::array ts, float maxError);
+KHIVAAPI af::array PLASlidingWindow(const af::array &ts, float maxError);
 
 /**
  * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve
@@ -139,7 +139,7 @@ KHIVAAPI af::array PLASlidingWindow(af::array ts, float maxError);
  *
  * @return std:vector<khiva::dimensionality::Point> with the selected points.
  */
-KHIVAAPI std::vector<Point> ramerDouglasPeucker(std::vector<Point> pointList, double epsilon);
+KHIVAAPI std::vector<Point> ramerDouglasPeucker(const std::vector<Point> &pointList, double epsilon);
 
 /**
  * @brief The Ramer–Douglas–Peucker algorithm (RDP) is an algorithm for reducing the number of points in a curve
@@ -157,7 +157,7 @@ KHIVAAPI std::vector<Point> ramerDouglasPeucker(std::vector<Point> pointList, do
  *
  * @return af::array with the selected points.
  */
-KHIVAAPI af::array ramerDouglasPeucker(af::array pointList, double epsilon);
+KHIVAAPI af::array ramerDouglasPeucker(const af::array &pointList, double epsilon);
 
 /**
  * @brief Symbolic Aggregate approXimation (SAX). It transforms a numeric time series into a time series of symbols with
@@ -176,7 +176,7 @@ KHIVAAPI af::array ramerDouglasPeucker(af::array pointList, double epsilon);
  *
  * @return result An array of symbols.
  */
-KHIVAAPI af::array SAX(af::array a, int alphabetSize);
+KHIVAAPI af::array SAX(const af::array &a, int alphabetSize);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number
@@ -187,10 +187,12 @@ KHIVAAPI af::array SAX(af::array a, int alphabetSize);
  *
  * @param pointList Expects an input vector of points.
  * @param numPoints Sets the number of points returned after the execution of the method.
+ * @param scale Sets the precision used to compute the areas of the triangularization, the longer, the more accurate.
  *
  * @return std:vector<khiva::dimensionality::Point> where the number of points has been reduced to numPoints.
  */
-KHIVAAPI std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
+KHIVAAPI std::vector<Point> visvalingam(const std::vector<Point> &pointList, int64_t numPoints,
+                                        int64_t scale = 1000000000);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number
@@ -199,12 +201,13 @@ KHIVAAPI std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoi
  * [1] M. Visvalingam and J. D. Whyatt, Line generalisation by repeated elimination of points,
  * The Cartographic Journal, 1993.
  *
- * @param pointList Expects an input vector of points.
+ * @param pointList Expects an input array formed by to columns where the first column is interpreted as the x cordinate
+ * of a point and the second column as the y coordinate.
  * @param numPoints Sets the number of points returned after the execution of the method.
  *
  * @return af::array where the number of points has been reduced to numPoints.
  */
-KHIVAAPI af::array visvalingam(af::array pointList, int numPoints);
+KHIVAAPI af::array visvalingam(const af::array &pointList, int numPoints);
 
 }  // namespace dimensionality
 }  // namespace khiva

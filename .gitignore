@@ -2,7 +2,6 @@
 .vs
 
 bin
-build
 .DS_Store
 *.cmake
 *CMakeFiles*
@@ -14,4 +13,5 @@ test/versionTest.cpp
 *.gcov
 *.info
 .vscode/ipch
-cmake-build-*
+cmake-build-*/
+build*/

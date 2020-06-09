@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 cmake_minimum_required(VERSION 3.9.6)
-project(Khiva LANGUAGES C CXX)
+project(Khiva VERSION 0.5.0 LANGUAGES C CXX)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Using C++ 11
@@ -50,14 +50,13 @@ endif()
 
 if(KHIVA_USE_CONAN)
     # Bring conan generated dependencies
-    if(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
-        include(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake)
+    if(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/conan_paths.cmake)
+        include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
     else()
         message(WARNING "The file conanbuildinfo.cmake does not exist, you have to run conan install first.\n"
                         "Check the following instructions to run conan installation:\n"
                         "https://github.com/shapelets/khiva/blob/master/doc/markdown/INSTALLATION.md#build-from-source-code-1")
     endif()
-    CONAN_BASIC_SETUP(KEEP_RPATHS)
 else()
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

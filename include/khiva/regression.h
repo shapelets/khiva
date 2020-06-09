@@ -7,9 +7,8 @@
 #ifndef KHIVA_CORE_REGRESSION_H
 #define KHIVA_CORE_REGRESSION_H
 
-#include <khiva/defines.h>
-
 #include <arrayfire.h>
+#include <khiva/defines.h>
 
 namespace khiva {
 
@@ -30,8 +29,8 @@ namespace regression {
  * Test with t-distribution of the test statistic.
  * @param stderrest Standard error of the estimated gradient.
  */
-KHIVAAPI void linear(af::array xss, af::array yss, af::array &slope, af::array &intercept, af::array &rvalue,
-                     af::array &pvalue, af::array &stderrest);
+KHIVAAPI void linear(const af::array &xss, const af::array &yss, af::array &slope, af::array &intercept,
+                     af::array &rvalue, af::array &pvalue, af::array &stderrest);
 
 }  // namespace regression
 }  // namespace khiva

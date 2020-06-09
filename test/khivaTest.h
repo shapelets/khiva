@@ -7,7 +7,7 @@
 #ifndef KHIVA_TEST_H
 #define KHIVA_TEST_H
 
-#define EPSILON 1e-6
+constexpr auto EPSILON = 1e-6;
 
 #define KHIVA_TEST(SUITE_NAME, TEST_NAME, FUNCTION_NAME) \
     KHIVA_TEST_BACKENDS(SUITE_NAME, TEST_NAME, FUNCTION_NAME, true, true, true, true, true, true)
@@ -20,7 +20,7 @@
         bool opencl = backends & af::Backend::AF_BACKEND_OPENCL;                                                 \
         bool cpu = backends & af::Backend::AF_BACKEND_CPU;                                                       \
                                                                                                                  \
-        if (cpu && CPU) {                                                                                        \
+        if (cpu && (CPU)) {                                                                                        \
             af::setBackend(af::Backend::AF_BACKEND_CPU);                                                         \
             int devices = (CPUDEVICES) ? af::getDeviceCount() : 1;                                               \
             for (int i = 0; i < devices; i++) {                                                                  \
@@ -32,7 +32,7 @@
                 FUNCTION_NAME();                                                                                 \
             }                                                                                                    \
         }                                                                                                        \
-        if (cuda && CUDA) {                                                                                      \
+        if (cuda && (CUDA)) {                                                                                      \
             af::setBackend(af::Backend::AF_BACKEND_CUDA);                                                        \
             int devices = (CUDADEVICES) ? af::getDeviceCount() : 1;                                              \
             for (int i = 0; i < devices; i++) {                                                                  \
@@ -44,7 +44,7 @@
                 FUNCTION_NAME();                                                                                 \
             }                                                                                                    \
         }                                                                                                        \
-        if (opencl && OPENCL) {                                                                                  \
+        if (opencl && (OPENCL)) {                                                                                  \
             af::setBackend(af::Backend::AF_BACKEND_OPENCL);                                                      \
             int devices = (OPENCLDEVICES) ? af::getDeviceCount() : 1;                                            \
             for (int i = 0; i < devices; i++) {                                                                  \

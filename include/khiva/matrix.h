@@ -7,9 +7,9 @@
 #ifndef KHIVA_CORE_MATRIX_H
 #define KHIVA_CORE_MATRIX_H
 
+#include <arrayfire.h>
 #include <khiva/defines.h>
 
-#include <arrayfire.h>
 #include <utility>
 #include <vector>
 
@@ -37,7 +37,8 @@ namespace matrix {
  * @param distances Resulting distances.
  * @param indexes Resulting indexes.
  */
-KHIVAAPI void findBestNOccurrences(af::array q, af::array t, long n, af::array &distances, af::array &indexes);
+KHIVAAPI void findBestNOccurrences(const af::array &q, const af::array &t, long n, af::array &distances,
+                                   af::array &indexes);
 
 /**
  * @brief Mueen's Algorithm for Similarity Search.
@@ -60,7 +61,7 @@ KHIVAAPI void findBestNOccurrences(af::array q, af::array t, long n, af::array &
  * series.
  * @param distances Resulting distances.
  */
-KHIVAAPI void mass(af::array q, af::array t, af::array &distances);
+KHIVAAPI void mass(const af::array &q, const af::array &t, af::array &distances);
 
 /**
  * @brief This function extracts the best N motifs from a previously calculated matrix profile.
@@ -76,7 +77,7 @@ KHIVAAPI void mass(af::array q, af::array t, af::array &distances);
  * @param selfJoin Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-KHIVAAPI void findBestNMotifs(af::array profile, af::array index, long m, long n, af::array &motifs,
+KHIVAAPI void findBestNMotifs(const af::array &profile, const af::array &index, long m, long n, af::array &motifs,
                               af::array &motifsIndices, af::array &subsequenceIndices, bool selfJoin = false);
 
 /**
@@ -93,7 +94,7 @@ KHIVAAPI void findBestNMotifs(af::array profile, af::array index, long m, long n
  * @param selfJoin Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
  */
-KHIVAAPI void findBestNDiscords(af::array profile, af::array index, long m, long n, af::array &discords,
+KHIVAAPI void findBestNDiscords(const af::array &profile, const af::array &index, long m, long n, af::array &discords,
                                 af::array &discordsIndices, af::array &subsequenceIndices, bool selfJoin = false);
 
 /**
@@ -110,7 +111,7 @@ KHIVAAPI void findBestNDiscords(af::array profile, af::array index, long m, long
  * in 'tb'.
  * @param index The matrix profile index, which points to where the aforementioned minimum is located.
  */
-KHIVAAPI void stomp(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
+KHIVAAPI void stomp(const af::array &ta, const af::array &tb, long m, af::array &profile, af::array &index);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 't' and itself using a subsequence length of 'm'.
@@ -126,7 +127,7 @@ KHIVAAPI void stomp(af::array ta, af::array tb, long m, af::array &profile, af::
  * different location of itself.
  * @param index The matrix profile index, which points to where the aforementioned minimum is located.
  */
-KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
+KHIVAAPI void stomp(const af::array &t, long m, af::array &profile, af::array &index);
 
 /**
  * @brief Calculates the matrix profile between 'tss' and itself using a subsequence length of 'm'.
@@ -142,7 +143,7 @@ KHIVAAPI void stomp(af::array t, long m, af::array &profile, af::array &index);
  * in a different location of itself.
  * @param index The matrix profile index, which points to where the aforementioned minimum is located.
  */
-KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array &index);
+KHIVAAPI void matrixProfile(const af::array &tss, long m, af::array &profile, af::array &index);
 
 /**
  * @brief Calculates the matrix profile between 'ta' and 'tb' using a subsequence length of 'm'.
@@ -153,12 +154,13 @@ KHIVAAPI void matrixProfile(af::array tss, long m, af::array &profile, af::array
  *
  * @param ta Query time series.
  * @param tb Reference time series.
+
  * @param m Subsequence length.
  * @param profile The matrix profile, which reflects the distance to the closest element of the subsequence from 'ta'
  * in 'tb'.
  * @param index The matrix profile index, which points to where the aforementioned minimum is located.
  */
-KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profile, af::array &index);
+KHIVAAPI void matrixProfile(const af::array &ta, const af::array &tb, long m, af::array &profile, af::array &index);
 
 /**
  * @brief Calculates the matrix profile to the left and to the right between 't' and using a subsequence length of 'm'.
@@ -175,7 +177,7 @@ KHIVAAPI void matrixProfile(af::array ta, af::array tb, long m, af::array &profi
  *
  *  Notice that when there is no match the subsequence index is the length of tss.
  */
-KHIVAAPI void matrixProfileLR(af::array tss, long m, af::array &profileLeft, af::array &indexLeft,
+KHIVAAPI void matrixProfileLR(const af::array &tss, long m, af::array &profileLeft, af::array &indexLeft,
                               af::array &profileRight, af::array &indexRight);
 
 /**
@@ -197,7 +199,7 @@ KHIVAAPI void matrixProfileLR(af::array tss, long m, af::array &profileLeft, af:
  *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies
  *  that 0 is an invalid chain index.
  */
-KHIVAAPI void getChains(af::array tss, long m, af::array &chains);
+KHIVAAPI void getChains(const af::array &tss, long m, af::array &chains);
 
 /**
  * @brief Calculates the sum of correlations above a threshold between 'tss' and itself using a subsequence

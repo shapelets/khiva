@@ -37,48 +37,62 @@ endif()
 
 # ----------------------------------------------------------------------------------------
 #                              ===== Build targets =====
+if(CMAKE_CUDA_COMPILER)
+  enable_language(CUDA)
+    # For CUFFT libraries
+    find_package(CUDA ${CMAKE_CUDA_VERSION} REQUIRED)
+    message("CUDA_LIBRARIES = ${CUDA_LIBRARIES}")
+    message("CUDA_CUFFT_LIBRARIES = ${CUDA_CUFFT_LIBRARIES}")
+    message("CUDA_cudart_LIBRARY = ${CUDA_cudart_LIBRARY}")
+endif()
 
 add_library(common SCAMP/src/common.cpp)
 
+if (CMAKE_CUDA_COMPILER) 
+  target_link_libraries(common ${CUDA_LIBRARIES})
+endif()
+
+add_library(qt_helper SCAMP/src/qt_helper.cpp)
+
 if (CMAKE_CUDA_COMPILER)
   add_library(qt_kernels SCAMP/src/qt_kernels.cu)
+  target_link_libraries(qt_helper ${CUDA_CUFFT_LIBRARIES} qt_kernels common)
   set_target_properties(qt_kernels
                       PROPERTIES
                       POSITION_INDEPENDENT_CODE ON
-					  COMPILE_FLAGS "${COMPILE_FLAGS} ${CUDA_GENCODE_FLAGS}") 
+					            COMPILE_FLAGS "${COMPILE_FLAGS} ${CUDA_GENCODE_FLAGS}")
+else()
+  target_link_libraries(qt_helper common)
+endif()
 
+add_library(kernel_common SCAMP/src/kernel_common.cpp)
 
+if (CMAKE_CUDA_COMPILER)
+  add_library(gpu_utils SCAMP/src/kernel_gpu_utils.cu)
+  target_link_libraries(gpu_utils kernel_common ${CUDA_LIBRARIES})
   add_library(gpu_kernels SCAMP/src/kernels.cu)
-  target_link_libraries(gpu_kernels common)
+  target_link_libraries(gpu_kernels gpu_utils kernel_common common)
   set_target_properties(gpu_kernels
                       PROPERTIES
                       POSITION_INDEPENDENT_CODE ON
 					  COMPILE_FLAGS "${COMPILE_FLAGS} ${CUDA_GENCODE_FLAGS}") 
-
 endif()
-
-add_library(qt_helper SCAMP/src/qt_helper.cpp) 
-target_link_libraries(qt_helper 
-					common
-					$<$<BOOL:${CMAKE_CUDA_COMPILER}>:cufft>
-					$<$<BOOL:${CMAKE_CUDA_COMPILER}>:qt_kernels>)
-
 
 add_library(cpu_stats SCAMP/src/cpu_stats.cpp)
 target_link_libraries(cpu_stats common)
 
 add_library(cpu_kernels SCAMP/src/cpu_kernels.cpp)
-target_link_libraries(cpu_kernels common)
+target_link_libraries(cpu_kernels kernel_common common)
 
 add_library(tile SCAMP/src/tile.cpp) 
 target_link_libraries(tile 
+          common
 					$<$<BOOL:${CMAKE_CUDA_COMPILER}>:gpu_kernels>
 					cpu_kernels 
 					qt_helper) 
 
-
 add_library(scamp SCAMP/src/SCAMP.cpp) 
-target_link_libraries(scamp PRIVATE tile cpu_stats)
+target_link_libraries(scamp PRIVATE tile cpu_stats common qt_helper)
 
 
 set_target_properties(scamp
@@ -95,7 +109,15 @@ set_target_properties(qt_helper
 
 set_target_properties(cpu_stats
                       PROPERTIES
-                      POSITION_INDEPENDENT_CODE ON) 
+                      POSITION_INDEPENDENT_CODE ON)
+
+set_target_properties(kernel_common
+                      PROPERTIES
+                      POSITION_INDEPENDENT_CODE ON)
+
+set_target_properties(gpu_utils
+                      PROPERTIES
+                      POSITION_INDEPENDENT_CODE ON)
 
 set_target_properties(cpu_kernels
                       PROPERTIES

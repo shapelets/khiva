@@ -23,15 +23,15 @@ extern "C" {
  * @param n Number of motifs to extract.
  * @param self_join Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
- * @return The updated ref_profile and ref_index and references to:
+ * @return References to:
  *           - The distance of the best N motifs.
  *           - The indexes of the best N motifs.
  *           - The indexes of the query sequences that produced
  *             the minimum reported in the motifs.
  */
 JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIEnv *env, jobject, jlong ref_profile,
-                                                                            jlong ref_index, jlong m, jlong n,
-                                                                            jboolean self_join);
+                                                                       jlong ref_index, jlong m, jlong n,
+                                                                       jboolean self_join);
 
 /**
  * @brief This function extracts the best N motifs from a previously calculated matrix profile.
@@ -43,7 +43,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNMotifs(JNIE
  * @param n Number of discords to extract.
  * @param self_join Indicates whether the input profile comes from a self join operation or not. It determines
  * whether the mirror similar region is included in the output or not.
- * @return The updated ref_profile and ref_index and references to:
+ * @return References to:
  *          - The distance of the best N discords.
  *          - The indexes of the best N discords.
  *          - The indexes of the query sequences that produced
@@ -70,11 +70,11 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNDiscords(JN
  * @param ref_ts Array whose first dimension is the length of the time series and the second dimension is the number of
  * time series.
  * @param n Number of matches to return.
- * @return The updated ref_query and ref_ts and references to:
+ * @return References to:
  *          - The resulting distances.
  *          - The resulting indexes.
  */
-JNIEXPORT jlongArray Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv *env, jobject, jlong ref_query,
+JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv *env, jobject, jlong ref_query,
                                                                          jlong ref_ts, jlong n);
 
 /**
@@ -96,11 +96,10 @@ JNIEXPORT jlongArray Java_io_shapelets_khiva_Matrix_findBestNOccurrences(JNIEnv 
  * number of queries.
  * @param ref_ts Array whose first dimension is the length of the time series and the second dimension is the number of
  * time series.
- * @return The updated ref_query and ref_ts and reference to:
- *          - The resulting distances.
+ * @return A reference to the resulting distances.
  *
  */
-JNIEXPORT jlongArray Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, jlong ref_query, jlong ref_ts);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, jlong ref_query, jlong ref_ts);
 
 /**
  * @brief STOMP algorithm to calculate the matrix profile between 'ta' and 'tb' using a subsequence length
@@ -113,7 +112,7 @@ JNIEXPORT jlongArray Java_io_shapelets_khiva_Matrix_mass(JNIEnv *env, jobject, j
  * @param ref_a Query time series.
  * @param ref_b Reference time series.
  * @param m The length of the subsequence.
- * @return The updated ref_a and ref_b and references to:
+ * @return References to:
  *          - The distance profile.
  *          - The index profile.
  */
@@ -130,7 +129,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stomp(JNIEnv *env, j
  *
  * @param ref_a Query and reference time series.
  * @param m Subsequence length.Subsequence length.
- * @return The updated ref_a and references to:
+ * @return References to:
  *          - The matrix profile, which reflects the distance to the closer element of the subsequence
  *            from 't' in a different location of itself.
  *          - The matrix profile index, which points to where the aforementioned minimum is located.
@@ -148,7 +147,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_stompSelfJoin(JNIEnv
  * @param ref_a Query time series.
  * @param ref_b Reference time series.
  * @param m The length of the subsequence.
- * @return The updated ref_a and ref_b and references to:
+ * @return References to:
  *          - The distance profile.
  *          - The index profile.
  */
@@ -165,7 +164,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfile(JNIEnv
  *
  * @param ref_a Query and reference time series.
  * @param m Subsequence length.Subsequence length.
- * @return The updated ref_a and references to:
+ * @return References to:
  *          - The matrix profile, which reflects the distance to the closer element of the subsequence
  *            from 't' in a different location of itself.
  *          - The matrix profile index, which points to where the aforementioned minimum is located.
@@ -181,7 +180,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileSelfJoi
  *
  * @param ref_a Time series to compute the matrix profile.
  * @param m Subsequence length.
- * @return The updtaed ref_a and referneces to:
+ * @return References to:
  *          - The matrix profile to the left distances
  *          - The subsequence indexes to the left
  *          - The matrix profile to the right distances
@@ -199,7 +198,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileLR(JNIE
  *
  * @param ref_a Time series to compute the chains within them.
  * @param m Subsequence length.
- * @return The updated ref_a and reference to the calculated chains with the following topology:
+ * @return A reference to the calculated chains with the following topology:
  *  - 1st dimension corresponds to the chains indexes flattened.
  *  - 2nd dimension:
                 - [0] corresponds to all the indexes in the chains flattened
@@ -210,7 +209,7 @@ JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_matrixProfileLR(JNIE
  *  values belonging to a chain is lower than the maximum, the remaining values and indexes are 0. It implies
  *  that 0 is an invalid chain index.
  */
-JNIEXPORT jlongArray JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *env, jobject, jlong ref_a, jlong m);
+JNIEXPORT jlong JNICALL Java_io_shapelets_khiva_Matrix_getChains(JNIEnv *env, jobject, jlong ref_a, jlong m);
 
 #ifdef __cplusplus
 }

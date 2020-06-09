@@ -8,53 +8,40 @@
 #include <gtest/gtest.h>
 #include <khiva.h>
 #include <khiva/internal/vectorUtil.h>
+
 #include "khivaTest.h"
 
 void vector1Dim() {
-    int data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
-    af::array t = af::array(14, data);
+    std::vector<int> data = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+    af::array t = af::array(data.size(), data.data());
 
     auto vect = khiva::vectorutil::get<int>(t);
-
-    for (int i = 0; i < vect.size(); ++i) {
-        ASSERT_EQ(vect[i], data[i]);
-    }
+    ASSERT_EQ(vect, data);
 }
 
 void vector2Dim() {
-    int data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
-    af::array t = af::array(7, 2, data);
+    std::vector<int> data = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10};
+    auto num_cols = 2;
+    af::array t = af::array(data.size() / num_cols, num_cols, data.data());
 
     auto vect = khiva::vectorutil::get<int>(t);
-
-    ASSERT_EQ(vect.size(), 14);
-    for (int i = 0; i < vect.size(); ++i) {
-        ASSERT_EQ(vect[i], data[i]);
-    }
+    ASSERT_EQ(vect, data);
 }
 
 void vector3Dim() {
-    int data[] = {10, 10, 10, 11, 12, 11, 10, 10};
-    af::array t = af::array(2, 2, 2, data);
+    std::vector<int> data = {10, 10, 10, 11, 12, 11, 10, 10};
+    af::array t = af::array(2, 2, 2, data.data());
 
     auto vect = khiva::vectorutil::get<int>(t);
-
-    ASSERT_EQ(vect.size(), 8);
-    for (int i = 0; i < vect.size(); ++i) {
-        ASSERT_EQ(vect[i], data[i]);
-    }
+    ASSERT_EQ(vect, data);
 }
 
 void vector4Dim() {
-    int data[] = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10, 12, 44};
-    af::array t = af::array(2, 2, 2, 2, data);
+    std::vector<int> data = {10, 10, 10, 11, 12, 11, 10, 10, 11, 12, 11, 10, 10, 10, 12, 44};
+    af::array t = af::array(2, 2, 2, 2, data.data());
 
     auto vect = khiva::vectorutil::get<int>(t);
-
-    ASSERT_EQ(vect.size(), 16);
-    for (int i = 0; i < vect.size(); ++i) {
-        ASSERT_EQ(vect[i], data[i]);
-    }
+    ASSERT_EQ(vect, data);
 }
 
 void arr0Dim() {

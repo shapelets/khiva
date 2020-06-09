@@ -27,7 +27,7 @@ KHIVA_C_API void backend_info(char **info, int *error_code, char *error_message)
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void set_backend(int *backend, int *error_code, char *error_message);
+KHIVA_C_API void set_backend(const int *backend, int *error_code, char *error_message);
 
 /**
  * @brief Gets the active backend.
@@ -54,7 +54,7 @@ KHIVA_C_API void get_backends(int *backends, int *error_code, char *error_messag
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void set_device(int *device, int *error_code, char *error_message);
+KHIVA_C_API void set_device(const int *device, int *error_code, char *error_message);
 
 /**
  * @brief Gets the active device.
@@ -82,7 +82,7 @@ KHIVA_C_API void get_device_count(int *device_count, int *error_code, char *erro
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void set_device_memory_in_gb(double *memory, int *error_code, char *error_message);
+KHIVA_C_API void set_device_memory_in_gb(const double *memory, int *error_code, char *error_message);
 
 /**
  * @brief Returns a string with the current version of the library.

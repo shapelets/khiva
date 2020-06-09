@@ -6,12 +6,12 @@
 
 #include <khiva/regularization.h>
 
-af::array khiva::regularization::groupBy(af::array in, af::array (*aggregationFunction)(const af::array &, const dim_t),
-                                         int nColumnsKey, int nColumnsValue) {
-    long n = static_cast<long>(in.dims(0));
+af::array khiva::regularization::groupBy(const af::array &in, AggregationFuncDimT aggregationFunction, int nColumnsKey,
+                                         int nColumnsValue) {
+    auto n = in.dims(0);
 
     af::seq keyColumns = af::seq(nColumnsKey);
-    af::seq valuesColumns = af::seq(nColumnsValue) + (double)nColumnsKey;
+    af::seq valuesColumns = af::seq(nColumnsValue) + static_cast<double>(nColumnsKey);
 
     af::array minus = in(af::seq(1, n - 1), keyColumns) - in(af::seq(0, n - 2), keyColumns);
     af::array groupKeysMask = af::anyTrue(af::join(0, af::constant(1, 1, nColumnsKey, minus.type()), minus) != 0, 1);
@@ -30,10 +30,9 @@ af::array khiva::regularization::groupBy(af::array in, af::array (*aggregationFu
     return values;
 }
 
-af::array khiva::regularization::groupBy(af::array in,
-                                         af::array (*aggregationFunction)(const af::array &, bool, const dim_t),
+af::array khiva::regularization::groupBy(const af::array &in, AggregationFuncBoolDimT aggregationFunction,
                                          int nColumnsKey, int nColumnsValue) {
-    long n = static_cast<long>(in.dims(0));
+    auto n = in.dims(0);
 
     af::seq keyColumns = af::seq(nColumnsKey);
     af::seq valuesColumns = af::seq(nColumnsValue) + (double)nColumnsKey;
@@ -55,9 +54,9 @@ af::array khiva::regularization::groupBy(af::array in,
     return values;
 }
 
-af::array khiva::regularization::groupBy(af::array in, af::array (*aggregationFunction)(const af::array &, const int),
-                                         int nColumnsKey, int nColumnsValue) {
-    long n = static_cast<long>(in.dims(0));
+af::array khiva::regularization::groupBy(const af::array &in, AggregationFuncInt aggregationFunction, int nColumnsKey,
+                                         int nColumnsValue) {
+    auto n = in.dims(0);
 
     af::seq keyColumns = af::seq(nColumnsKey);
     af::seq valuesColumns = af::seq(nColumnsValue) + (double)nColumnsKey;

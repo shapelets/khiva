@@ -26,7 +26,7 @@ extern "C" {
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void lls(khiva_array *a, khiva_array *b, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void lls(const khiva_array *a, const khiva_array *b, khiva_array *result, int *error_code, char *error_message);
 
 #ifdef __cplusplus
 }

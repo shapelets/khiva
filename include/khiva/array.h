@@ -14,7 +14,10 @@
 #include <limits>
 
 namespace khiva {
-typedef af::dtype dtype;
+
+using dtype = af::dtype;
+constexpr auto KHIVA_MAX_DIMS = 4U;
+
 namespace array {
 
 /**
@@ -27,7 +30,7 @@ namespace array {
  *
  * @return af::array Containing the data.
  */
-KHIVAAPI af::array createArray(void *data, unsigned ndims, dim_t *dims, const int type);
+KHIVAAPI af::array createArray(const void *data, unsigned ndims, const dim_t *dims, int type);
 
 /**
  * @brief Decreases the references count for the given array.
@@ -42,7 +45,7 @@ KHIVAAPI void deleteArray(af_array array);
  * @param array The Array that contains the data to be retrieved.
  * @param data Pointer to a preallocated block of memory in the host.
  */
-KHIVAAPI void getData(af::array array, void *data);
+KHIVAAPI void getData(const af::array &array, void *data);
 
 /**
  * @brief Returns the dimensions from a given array.
@@ -51,7 +54,7 @@ KHIVAAPI void getData(af::array array, void *data);
  *
  * @return af::dim4 The dimensions.
  */
-KHIVAAPI af::dim4 getDims(af::array array);
+KHIVAAPI af::dim4 getDims(const af::array &array);
 
 /**
  * @brief Gets the type of the array.
@@ -60,7 +63,7 @@ KHIVAAPI af::dim4 getDims(af::array array);
  *
  * @return int Value of the Dtype enumeration.
  */
-KHIVAAPI int getType(af::array array);
+KHIVAAPI int getType(const af::array &array);
 
 /**
  * @brief Joins the first and second arrays along the specified dimension.
@@ -71,14 +74,30 @@ KHIVAAPI int getType(af::array array);
  *
  * @return af::array The result of joining first and second along the specified dimension.
  */
-KHIVAAPI af::array join(int dim, af::array first, af::array second);
+KHIVAAPI af::array join(int dim, const af::array &first, const af::array &second);
 
 /**
  * @brief Prints the content of an array.
  *
  * @param array The array to be printed.
  */
-KHIVAAPI void print(af::array array);
+KHIVAAPI void print(const af::array &array);
+
+/**
+ * @brief Creates an af::array from its af_array C pointer. The resulting array does not acquire the input pointer
+ * passed. User of this function is responsible to release it.
+ *
+ * @param array The array to be printed.
+ */
+KHIVAAPI af::array from_af_array(const af_array array);
+
+/**
+ * @brief Increments the reference count of the af_array C pointer passed throwing if there is an error.
+ * The user of this function is responsible to release the returned array by calling deleteArray.
+ *
+ * @param array The array whose reference count is going to be incremented.
+ */
+KHIVAAPI af_array increment_ref_count(const af_array array);
 
 /**
  * @brief Array class, This class provides functionality manage Arrays on the host side.
@@ -97,19 +116,19 @@ class Array {
     /**
      * @brief Default Constructor of Array class.
      */
-    Array() : x{0}, y{1}, w{1}, z{1}, dims{0}, data{nullptr} {}
+    Array() : data{nullptr}, x{0}, y{1}, w{1}, z{1}, dims{0} {}
 
     /**
      * @brief Constructor of Array class which receives and af::array.
      *
      * @param in The input af::array.
      */
-    Array(af::array in)
-        : x{static_cast<int>(in.dims(0))},
+    explicit Array(const af::array &in)
+        : data{in.host<T>()},
+          x{static_cast<int>(in.dims(0))},
           y{static_cast<int>(in.dims(1))},
           w{static_cast<int>(in.dims(2))},
           z{static_cast<int>(in.dims(3))},
-          data{in.host<T>()},
           dims{static_cast<int>(in.numdims())} {
         af::sync();
     }
@@ -326,7 +345,7 @@ std::vector<int> getRowsWithMaximals(const khiva::array::Array<T> &a) {
  * @return std::vector<int> with the indices of the columns with maximals.
  */
 template <typename T>
-std::vector<int> getIndexMaxColums(const std::vector<T> &r) {
+std::vector<int> getIndexMaxColumns(const std::vector<T> &r) {
     std::vector<int> result;
     result.reserve(r.size());
     for (unsigned long i = 0; i < r.size(); i++) {

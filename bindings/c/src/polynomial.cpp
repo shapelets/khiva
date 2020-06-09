@@ -6,34 +6,43 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <arrayfire.h>
+#include <khiva/array.h>
+#include <khiva/internal/util.h>
 #include <khiva/polynomial.h>
-#include <khiva_c/polynomial.h>
 #include <khiva_c/internal/util.h>
+#include <khiva_c/polynomial.h>
 
-void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result, int *error_code, char *error_message) {
+using namespace khiva;
+using namespace khiva::util;
+
+void polyfit(const khiva_array *x, const khiva_array *y, const int *deg, khiva_array *result, int *error_code,
+             char *error_message) {
     try {
-        af::array xx;
-        af::array yy;
-        check_and_retain_arrays(x, y, xx, yy);
-        af_retain_array(result, khiva::polynomial::polyfit(xx, yy, *deg).get());
+        auto var_x = array::from_af_array(*x);
+        auto var_y = array::from_af_array(*y);
+        auto res = khiva::polynomial::polyfit(var_x, var_y, *deg);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("polyfit", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("polyfit", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }
 
-void roots(khiva_array *p, khiva_array *result, int *error_code, char *error_message) {
+void roots(const khiva_array *p, khiva_array *result, int *error_code, char *error_message) {
     try {
-        af::array var = af::array(*p);
-        af_retain_array(p, var.get());
-        af_retain_array(result, khiva::polynomial::roots(var).get());
+        auto var = array::from_af_array(*p);
+        auto res = khiva::polynomial::roots(var);
+        *result = array::increment_ref_count(res.get());
         *error_code = 0;
-    } catch (const std::exception &e) {
-        fill_error("roots", e.what(), error_message, error_code, 1);
+    } catch (af::exception &e) {
+        fill_error(__func__, e.what(), error_message);
+        *error_code = e.err();
     } catch (...) {
-        fill_unknown("roots", error_message, error_code, -1);
+        fill_error(__func__, "Unknown error.", error_message);
+        *error_code = AF_ERR_UNKNOWN;
     }
 }

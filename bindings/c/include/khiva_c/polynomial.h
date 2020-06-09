@@ -24,7 +24,7 @@ extern "C" {
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *result, int *error_code,
+KHIVA_C_API void polyfit(const khiva_array *x, const khiva_array *y, const int *deg, khiva_array *result, int *error_code,
                          char *error_message);
 
 /**
@@ -39,7 +39,7 @@ KHIVA_C_API void polyfit(khiva_array *x, khiva_array *y, int *deg, khiva_array *
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void roots(khiva_array *p, khiva_array *result, int *error_code, char *error_message);
+KHIVA_C_API void roots(const khiva_array *p, khiva_array *result, int *error_code, char *error_message);
 
 #ifdef __cplusplus
 }

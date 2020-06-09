@@ -11,8 +11,6 @@
 #error Internal headers cannot be included from user code
 #endif
 
-#include <khiva/defines.h>
-
 #include <arrayfire.h>
 
 #include <vector>
@@ -22,9 +20,7 @@ namespace vectorutil {
 
 template <typename T>
 std::vector<T> get(af::array arr) {
-    std::vector<T> ret;
-    auto dims = arr.dims(0) * arr.dims(1) * arr.dims(2) * arr.dims(3);
-    ret.resize(dims);
+    std::vector<T> ret(arr.elements());
     arr.host(ret.data());
     return ret;
 }

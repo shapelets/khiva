@@ -10,12 +10,15 @@
 #include <arrayfire.h>
 #include <khiva_c/defines.h>
 
-#define KHIVA_ERROR_LENGTH 256
+namespace khiva {
+namespace util {
 
-void check_and_retain_arrays(khiva_array *a, khiva_array *b, af::array &var_a, af::array &var_b);
+constexpr size_t KHIVA_ERROR_LENGTH = 256;
 
-void fill_error(const char *function_name, const char *src_message, char *dst_message, int *error_code, int error);
+void fill_error(const char *function_name, const char *src_message, char *dst_message);
 
-void fill_unknown(const char *function_name, char *dst_message, int *error_code, int error);
+
+}  // namespace util
+}  // namespace khiva
 
 #endif
