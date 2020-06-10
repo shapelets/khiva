@@ -237,7 +237,7 @@ void get_chains(const khiva_array *tss, long m, khiva_array *c, int *error_code,
     }
 }
 
-void matrix_profile_self_threshold(const khiva_array *tss, long m, double threshold, khiva_array *sums, int *error_code,
+void matrix_profile_threshold_self(const khiva_array *tss, long m, double threshold, khiva_array *sums, int *error_code,
                                    char *error_message) {
     try {
         auto var_tss = array::from_af_array(*tss);

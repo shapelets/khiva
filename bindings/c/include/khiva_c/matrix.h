@@ -242,7 +242,7 @@ KHIVA_C_API void get_chains(const khiva_array *tss, long m, khiva_array *chains,
  * @param error_code Allocated pointer to integer, where the resulting error_code is stored.
  * @param error_message Allocated char array to KHIVA_ERROR_LENGTH, where the resulting error message is stored.
  */
-KHIVA_C_API void matrix_profile_self_threshold(const khiva_array *tss, long m, double threshold, khiva_array *sums,
+KHIVA_C_API void matrix_profile_threshold_self(const khiva_array *tss, long m, double threshold, khiva_array *sums,
                                                int *error_code, char *error_message);
 
 /**
