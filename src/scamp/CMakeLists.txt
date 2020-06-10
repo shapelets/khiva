@@ -67,12 +67,15 @@ add_library(kernel_common SCAMP/src/kernel_common.cpp)
 if (CMAKE_CUDA_COMPILER)
   add_library(gpu_utils SCAMP/src/kernel_gpu_utils.cu)
   target_link_libraries(gpu_utils kernel_common ${CUDA_LIBRARIES})
+  set_target_properties(gpu_utils
+                      PROPERTIES
+                      POSITION_INDEPENDENT_CODE ON)
   add_library(gpu_kernels SCAMP/src/kernels.cu)
   target_link_libraries(gpu_kernels gpu_utils kernel_common common)
   set_target_properties(gpu_kernels
                       PROPERTIES
                       POSITION_INDEPENDENT_CODE ON
-					  COMPILE_FLAGS "${COMPILE_FLAGS} ${CUDA_GENCODE_FLAGS}") 
+					  COMPILE_FLAGS "${COMPILE_FLAGS} ${CUDA_GENCODE_FLAGS}")
 endif()
 
 add_library(cpu_stats SCAMP/src/cpu_stats.cpp)
@@ -109,10 +112,6 @@ set_target_properties(cpu_stats
                       POSITION_INDEPENDENT_CODE ON)
 
 set_target_properties(kernel_common
-                      PROPERTIES
-                      POSITION_INDEPENDENT_CODE ON)
-
-set_target_properties(gpu_utils
                       PROPERTIES
                       POSITION_INDEPENDENT_CODE ON)
 
