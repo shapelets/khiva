@@ -674,7 +674,11 @@ af::array khiva::dimensionality::visvalingam(const af::array &pointList, int num
         points.emplace_back(x[i], y[i]);
     }
 
-    std::vector<Point> rPoints = visvalingam(points, numPoints);
+    std::vector<Point> rPoints = points;
+    if (points.size() > numPoints) {
+        rPoints = visvalingam(points, numPoints);
+    }
+
     af::array out = af::constant(0, rPoints.size(), 2);
 
     std::vector<float> vx;
