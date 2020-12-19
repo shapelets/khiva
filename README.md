@@ -23,8 +23,6 @@ Khiva is inspired by other time series libraries as [tsfresh](https://github.com
  - [Java](https://github.com/shapelets/khiva-java)
  - [C#](https://github.com/shapelets/khiva-csharp)
 
- 
-
 ## Other Matrix Profile implementations
 - Python implementation developed at Target: [https://github.com/target/matrixprofile-ts](https://github.com/target/matrixprofile-ts)
 
