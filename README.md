@@ -20,7 +20,9 @@ Khiva is inspired by other time series libraries as [tsfresh](https://github.com
  - [Matlab](https://github.com/shapelets/khiva-matlab)
  - [Ruby](https://github.com/ankane/khiva-ruby)
  - [Kotlin](https://github.com/shapelets/khiva-kotlin)
- - [JAva](https://github.com/shapelets/khiva-java)
+ - [Java](https://github.com/shapelets/khiva-java)
+ - [C#](https://github.com/shapelets/khiva-csharp)
+
  
 
 ## Other Matrix Profile implementations
