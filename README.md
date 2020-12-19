@@ -14,6 +14,15 @@ Khiva provides a mean for time series analytics at scale. These analytics can be
 
 Khiva is inspired by other time series libraries as [tsfresh](https://github.com/blue-yonder/tsfresh), [tslearn](https://github.com/rtavenar/tslearn) and [hctsa](https://github.com/benfulcher/hctsa) among others.
 
+## Khiva Bindings to other languages
+ - [Python](https://github.com/shapelets/khiva-python)
+ - [R](https://github.com/shapelets/khiva-r)
+ - [Matlab](https://github.com/shapelets/khiva-matlab)
+ - [Ruby](https://github.com/ankane/khiva-ruby)
+ - [Kotlin](https://github.com/shapelets/khiva-kotlin)
+ - [JAva](https://github.com/shapelets/khiva-java)
+ 
+
 ## Other Matrix Profile implementations
 - Python implementation developed at Target: [https://github.com/target/matrixprofile-ts](https://github.com/target/matrixprofile-ts)
 
