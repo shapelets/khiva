@@ -1,11 +1,11 @@
 image:
-  - Visual Studio 2017
+  - Visual Studio 2019
 environment:
   AF_PATH: C:\Program Files\ArrayFire\v3
   PATH: $(AF_PATH)\lib;C:\Python36-x64;C:\Python36-x64\Scripts;$(PATH)
   matrix:
-    - GENERATOR: Visual Studio 15 2017 Win64
-      VCPKG_VISUAL_STUDIO_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2017\Community
+    - GENERATOR: Visual Studio 16 2019
+      VCPKG_VISUAL_STUDIO_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community
     - GENERATOR: Visual Studio 14 2015 Win64
       VCPKG_VISUAL_STUDIO_PATH: C:\Program Files (x86)\Microsoft Visual Studio 14.0
 cache:
