@@ -16,6 +16,9 @@ namespace khiva {
 
 namespace dimensionality {
 
+template <typename T>
+using TPoint = std::pair<T, T>;
+
 using Point = std::pair<float, float>;
 
 using Segment = std::pair<int, int>;
@@ -191,8 +194,9 @@ KHIVAAPI af::array SAX(const af::array &a, int alphabetSize);
  *
  * @return std:vector<khiva::dimensionality::Point> where the number of points has been reduced to numPoints.
  */
-KHIVAAPI std::vector<Point> visvalingam(const std::vector<Point> &pointList, int64_t numPoints,
-                                        int64_t scale = 1000000000);
+template <typename T>
+KHIVAAPI std::vector<TPoint<T>> visvalingam(const std::vector<TPoint<T>> &pointList, int64_t numPoints,
+                                            int64_t scale = 1000000000);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number

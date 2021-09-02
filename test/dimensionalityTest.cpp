@@ -42,6 +42,8 @@ void paaNonDivisibleFloat() {
 }
 
 void paaNonDivisibleDouble() {
+    if (!af::isDoubleAvailable(af::getDevice())) return;
+
     double pointList[] = {0.0, 1.0, 2.0,  3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0,
                           0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
     af::array a(10, 2, pointList);
@@ -68,7 +70,7 @@ void paaNorm() {
     std::vector<khiva::dimensionality::Point> expected = {{0.75, 0.05}, {2.25, -0.1}, {3.75, 5.5},
                                                           {5.25, 7.0},  {6.75, 8.55}, {8.25, 9.0}};
 
-    ASSERT_EQ(expected, out);    
+    ASSERT_EQ(expected, out);
 }
 
 void pip() {
@@ -253,34 +255,49 @@ void saxException() {
     ASSERT_THROW(khiva::dimensionality::SAX(a, 6), std::invalid_argument);
 }
 
-void visvalingam() {
-    std::vector<khiva::dimensionality::Point> pointList = {{0.0, 0.0}, {1.0, 0.1}, {2.0, -0.1}, {3.0, 5.0}, {4.0, 6.0},
-                                                           {5.0, 7.0}, {6.0, 8.1}, {7.0, 9.0},  {8.0, 9.0}, {9.0, 9.0}};
-    std::vector<khiva::dimensionality::Point> expected = {{0.0, 0.0}, {2.0, -0.1}, {3.0, 5.0}, {7.0, 9.0}, {9.0, 9.0}};
-
-    auto out = khiva::dimensionality::visvalingam(pointList, 5);
-
-    ASSERT_EQ(expected, out);
-}
-
-void visvalingam2() {
-    float pointList[] = {0.0f, 1.0f, 2.0f,  3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f,
-                         0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
+template <typename T>
+void visvalingam_templated() {
+    T pointList[] = {0.0, 1.0, 2.0,  3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0,
+                     0.0, 0.1, -0.1, 5.0, 6.0, 7.0, 8.1, 9.0, 9.0, 9.0};
     af::array points(10, 2, pointList);
-    std::vector<khiva::dimensionality::Point> expected = {{0.0, 0.0}, {2.0, -0.1}, {3.0, 5.0}, {7.0, 9.0}, {9.0, 9.0}};
+
+    std::vector<khiva::dimensionality::TPoint<T>> expected = {
+        {0.0, 0.0}, {2.0, -0.1}, {3.0, 5.0}, {7.0, 9.0}, {9.0, 9.0}};
 
     af::array res = khiva::dimensionality::visvalingam(points, 5);
-    auto points_x = khiva::utils::makeScopedHostPtr(res.col(0).host<float>());
-    auto points_y = khiva::utils::makeScopedHostPtr(res.col(1).host<float>());
 
-    auto expectedX = std::vector<float>{0.0f, 2.0f, 3.0f, 7.0f, 9.0f};
-    auto expectedY = std::vector<float>{0.0f, -0.1f, 5.0f, 9.0f, 9.0f};
+    auto points_x = khiva::utils::makeScopedHostPtr(res.col(0).host<T>());
+    auto points_y = khiva::utils::makeScopedHostPtr(res.col(1).host<T>());
 
-    auto pxVector = std::vector<float>(points_x.get(), points_x.get() + res.col(0).elements());
-    auto pyVector = std::vector<float>(points_y.get(), points_y.get() + res.col(1).elements());
+    auto expectedX = std::vector<T>{0.0, 2.0, 3.0, 7.0, 9.0};
+    auto expectedY = std::vector<T>{0.0, -0.1, 5.0, 9.0, 9.0};
 
-    ASSERT_EQ(expectedX, pxVector);
-    ASSERT_EQ(expectedY, pyVector);
+    auto pxVector = std::vector<T>(points_x.get(), points_x.get() + res.col(0).elements());
+    auto pyVector = std::vector<T>(points_y.get(), points_y.get() + res.col(1).elements());
+
+    std::vector<T> xsbs;
+    std::vector<T> ysbs;
+    std::transform(expectedX.begin(), expectedX.end(), pxVector.begin(), std::back_inserter(xsbs),
+                   [](const T &e, const T &a) { return std::abs(e - a); });
+    std::transform(expectedY.begin(), expectedY.end(), pyVector.begin(), std::back_inserter(ysbs),
+                   [](const T &e, const T &a) { return std::abs(e - a); });
+
+    for (auto diff : xsbs) {
+        ASSERT_LT(diff, 1e-08);
+    }
+
+    for (auto diff : ysbs) {
+        ASSERT_LT(diff, 1e-08);
+    }
+}
+
+void visvalingam_af() {
+    SCOPED_TRACE("f32 types...");
+    visvalingam_templated<float>();
+    if (af::isDoubleAvailable(af::getDevice())) {
+        SCOPED_TRACE("f64 types...");
+        visvalingam_templated<double>();
+    }
 }
 
 void visvalingamException() {
@@ -307,6 +324,5 @@ KHIVA_TEST(DimensionalityTests, RamerDouglasPeuckerException, ramerDouglasPeucke
 KHIVA_TEST(DimensionalityTests, SAX, sax)
 KHIVA_TEST(DimensionalityTests, SAX2, sax2)
 KHIVA_TEST(DimensionalityTests, SAXException, saxException)
-KHIVA_TEST(DimensionalityTests, Visvalingam, visvalingam)
-KHIVA_TEST(DimensionalityTests, Visvalingam2, visvalingam2)
+KHIVA_TEST(DimensionalityTests, VisvalingamAF, visvalingam_af)
 KHIVA_TEST(DimensionalityTests, VisvalingamException, visvalingamException)
