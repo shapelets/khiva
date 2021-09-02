@@ -8,11 +8,15 @@
 #define KHIVA_CORE_DIMENSIONALITY_H
 
 #include <arrayfire.h>
+
 #include <vector>
 
 namespace khiva {
 
 namespace dimensionality {
+
+template <typename T>
+using TPoint = std::pair<T, T>;
 
 typedef std::pair<float, float> Point;
 
@@ -188,7 +192,8 @@ af::array SAX(af::array a, int alphabetSize);
  *
  * @return std:vector<khiva::dimensionality::Point> where the number of points has been reduced to numPoints.
  */
-std::vector<Point> visvalingam(std::vector<Point> pointList, int numPoints);
+template <typename T>
+std::vector<TPoint<T>> visvalingam(std::vector<TPoint<T>> pointList, int numPoints);
 
 /**
  * @brief Reduces a set of points by applying the Visvalingam method (minimum triangle area) until the number

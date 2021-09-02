@@ -5,6 +5,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <khiva/dimensionality.h>
+
 #include <algorithm>
 #include <boost/math/distributions/normal.hpp>
 #include <cmath>
@@ -14,18 +15,6 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
-
-float computeTriangleArea(khiva::dimensionality::Point a, khiva::dimensionality::Point b,
-                          khiva::dimensionality::Point c) {
-    float res = 0.0;
-
-    float f1 = a.first * (b.second - c.second);
-    float f2 = b.first * (c.second - a.second);
-    float f3 = c.first * (a.second - b.second);
-    res = std::abs((f1 + f2 + f3) / 2);
-
-    return res;
-}
 
 std::vector<float> computeBreakpoints(int alphabet_size, float mean_value, float std_value) {
     std::vector<float> res;
@@ -611,58 +600,86 @@ af::array khiva::dimensionality::SAX(af::array a, int alphabet_size) {
     return result;
 }
 
-std::vector<khiva::dimensionality::Point> khiva::dimensionality::visvalingam(
-    std::vector<khiva::dimensionality::Point> pointList, int num_points_allowed) {
+template <typename T>
+T computeTriangleArea(khiva::dimensionality::TPoint<T> a, khiva::dimensionality::TPoint<T> b,
+                      khiva::dimensionality::TPoint<T> c) {
+    constexpr T typedTwo = static_cast<T>(2);
+    T res = static_cast<T>(0);
+
+    auto f1 = a.first * (b.second - c.second);
+    auto f2 = b.first * (c.second - a.second);
+    auto f3 = c.first * (a.second - b.second);
+    res = std::abs((f1 + f2 + f3) / typedTwo);
+
+    return res;
+}
+
+template <typename T>
+std::vector<khiva::dimensionality::TPoint<T>> khiva::dimensionality::visvalingam(
+    std::vector<khiva::dimensionality::TPoint<T>> pointList, int num_points_allowed) {
     // variables
-    std::vector<khiva::dimensionality::Point> out(pointList.begin(), pointList.end());
-    float min_area = std::numeric_limits<float>::max();
+    std::vector<khiva::dimensionality::TPoint<T>> out(pointList.begin(), pointList.end());
+    float min_area = std::numeric_limits<T>::max();
     int candidate_point = -1;
     int iterations = static_cast<int>(out.size()) - num_points_allowed;
 
     // One point to be deleted in each iteration
     for (int iter = 0; iter < iterations; iter++) {
         for (size_t p = 0; p < out.size() - 2; p++) {
-            float area = computeTriangleArea(out[p], out[p + 1], out[p + 2]);
+            T area = computeTriangleArea(out[p], out[p + 1], out[p + 2]);
             if (area < min_area) {
                 min_area = area;
                 candidate_point = static_cast<int>(p + 1);
             }
         }
-        std::vector<khiva::dimensionality::Point>::iterator nth = out.begin() + candidate_point;
+        auto nth = out.begin() + candidate_point;
         out.erase(nth);
-        min_area = std::numeric_limits<float>::max();
+        min_area = std::numeric_limits<T>::max();
     }
     return out;
 }
 
-af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints) {
-    if (pointList.dims(1) != 2) {
-        throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
-    }
-    std::vector<khiva::dimensionality::Point> points;
-    float *x = pointList.col(0).host<float>();
-    float *y = pointList.col(1).host<float>();
+template <typename T>
+af::array visvalingamBridge(af::array pointList, int numPoints) {
+    constexpr T zero = static_cast<T>(0);
+
+    std::vector<khiva::dimensionality::TPoint<T>> points;
+    T *x = pointList.col(0).host<T>();
+    T *y = pointList.col(1).host<T>();
 
     for (int i = 0; i < pointList.dims(0); i++) {
         points.push_back(std::make_pair(x[i], y[i]));
     }
 
-    std::vector<khiva::dimensionality::Point> rPoints = khiva::dimensionality::visvalingam(points, numPoints);
-    af::array out = af::constant(0, rPoints.size(), 2);
+    std::vector<khiva::dimensionality::TPoint<T>> rPoints = khiva::dimensionality::visvalingam(points, numPoints);
 
-    std::vector<float> vx(rPoints.size(), 0);
-    std::vector<float> vy(rPoints.size(), 0);
+    std::vector<T> vx(rPoints.size(), zero);
+    std::vector<T> vy(rPoints.size(), zero);
 
     for (size_t i = 0; i < rPoints.size(); i++) {
         vx[i] = rPoints[i].first;
         vy[i] = rPoints[i].second;
     }
 
-    float *ax = &vx[0];
-    float *ay = &vy[0];
+    T *ax = &vx[0];
+    T *ay = &vy[0];
 
     af::array ox(rPoints.size(), ax);
     af::array oy(rPoints.size(), ay);
 
     return af::join(1, ox, oy);
+}
+
+af::array khiva::dimensionality::visvalingam(af::array pointList, int numPoints) {
+    if (pointList.dims(1) != 2) {
+        throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
+    }
+
+    if (pointList.type() == af::dtype::f64) {
+        return visvalingamBridge<double>(pointList, numPoints);
+    } else if (pointList.type() == af::dtype::f32) {
+        return visvalingamBridge<float>(pointList, numPoints);
+    } else {
+        throw std::invalid_argument("Visvalingam is only supported for f32 and f64 types");
+    }
 }

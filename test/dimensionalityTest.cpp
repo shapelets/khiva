@@ -6,9 +6,11 @@
 
 #include <gtest/gtest.h>
 #include <khiva/dimensionality.h>
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
+
 #include "khivaTest.h"
 
 void paaDivisible() {
@@ -418,24 +420,50 @@ void saxException() {
     }
 }
 
-void visvalingam() {
-    std::vector<khiva::dimensionality::Point> pointList;
-    std::vector<khiva::dimensionality::Point> out;
-    std::vector<khiva::dimensionality::Point> expected = {
-        khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
-        khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(7.0f, 9.0f),
-        khiva::dimensionality::Point(9.0f, 9.0f)};
+using FPoint = khiva::dimensionality::TPoint<float>;
+using DPoint = khiva::dimensionality::TPoint<double>;
 
-    pointList.push_back(khiva::dimensionality::Point(0.0f, 0.0f));
-    pointList.push_back(khiva::dimensionality::Point(1.0f, 0.1f));
-    pointList.push_back(khiva::dimensionality::Point(2.0f, -0.1f));
-    pointList.push_back(khiva::dimensionality::Point(3.0f, 5.0f));
-    pointList.push_back(khiva::dimensionality::Point(4.0f, 6.0f));
-    pointList.push_back(khiva::dimensionality::Point(5.0f, 7.0f));
-    pointList.push_back(khiva::dimensionality::Point(6.0f, 8.1f));
-    pointList.push_back(khiva::dimensionality::Point(7.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(8.0f, 9.0f));
-    pointList.push_back(khiva::dimensionality::Point(9.0f, 9.0f));
+void visvalingam_float() {
+    std::vector<FPoint> pointList;
+    std::vector<FPoint> out;
+    std::vector<FPoint> expected = {FPoint(0.0f, 0.0f), FPoint(2.0f, -0.1f), FPoint(3.0f, 5.0f), FPoint(7.0f, 9.0f),
+                                    FPoint(9.0f, 9.0f)};
+
+    pointList.push_back(FPoint(0.0f, 0.0f));
+    pointList.push_back(FPoint(1.0f, 0.1f));
+    pointList.push_back(FPoint(2.0f, -0.1f));
+    pointList.push_back(FPoint(3.0f, 5.0f));
+    pointList.push_back(FPoint(4.0f, 6.0f));
+    pointList.push_back(FPoint(5.0f, 7.0f));
+    pointList.push_back(FPoint(6.0f, 8.1f));
+    pointList.push_back(FPoint(7.0f, 9.0f));
+    pointList.push_back(FPoint(8.0f, 9.0f));
+    pointList.push_back(FPoint(9.0f, 9.0f));
+
+    out = khiva::dimensionality::visvalingam(pointList, 5);
+
+    for (size_t i = 0; i < out.size(); i++) {
+        ASSERT_EQ(out[i].first, expected[i].first);
+        ASSERT_EQ(out[i].second, expected[i].second);
+    }
+}
+
+void visvalingam_double() {
+    std::vector<DPoint> pointList;
+    std::vector<DPoint> out;
+    std::vector<DPoint> expected = {DPoint(0.0, 0.0), DPoint(2.0, -0.1), DPoint(3.0, 5.0), DPoint(7.0, 9.0),
+                                    DPoint(9.0, 9.0)};
+
+    pointList.push_back(DPoint(0.0, 0.0));
+    pointList.push_back(DPoint(1.0, 0.1));
+    pointList.push_back(DPoint(2.0, -0.1));
+    pointList.push_back(DPoint(3.0, 5.0));
+    pointList.push_back(DPoint(4.0, 6.0));
+    pointList.push_back(DPoint(5.0, 7.0));
+    pointList.push_back(DPoint(6.0, 8.1));
+    pointList.push_back(DPoint(7.0, 9.0));
+    pointList.push_back(DPoint(8.0, 9.0));
+    pointList.push_back(DPoint(9.0, 9.0));
 
     out = khiva::dimensionality::visvalingam(pointList, 5);
 
@@ -449,10 +477,8 @@ void visvalingam2() {
     float pointList[] = {0.0f, 1.0f, 2.0f,  3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f,
                          0.0f, 0.1f, -0.1f, 5.0f, 6.0f, 7.0f, 8.1f, 9.0f, 9.0f, 9.0f};
     af::array points(10, 2, pointList);
-    std::vector<khiva::dimensionality::Point> expected = {
-        khiva::dimensionality::Point(0.0f, 0.0f), khiva::dimensionality::Point(2.0f, -0.1f),
-        khiva::dimensionality::Point(3.0f, 5.0f), khiva::dimensionality::Point(7.0f, 9.0f),
-        khiva::dimensionality::Point(9.0f, 9.0f)};
+    std::vector<FPoint> expected = {FPoint(0.0f, 0.0f), FPoint(2.0f, -0.1f), FPoint(3.0f, 5.0f), FPoint(7.0f, 9.0f),
+                                    FPoint(9.0f, 9.0f)};
 
     af::array res = khiva::dimensionality::visvalingam(points, 5);
     float *points_x = res.col(0).host<float>();
@@ -494,6 +520,7 @@ KHIVA_TEST(DimensionalityTests, RamerDouglasPeuckerException, ramerDouglasPeucke
 KHIVA_TEST(DimensionalityTests, SAX, sax)
 KHIVA_TEST(DimensionalityTests, SAX2, sax2)
 KHIVA_TEST(DimensionalityTests, SAXException, saxException)
-KHIVA_TEST(DimensionalityTests, Visvalingam, visvalingam)
+KHIVA_TEST(DimensionalityTests, VisvalingamFloat, visvalingam_float)
+KHIVA_TEST(DimensionalityTests, VisvalingamDouble, visvalingam_double)
 KHIVA_TEST(DimensionalityTests, Visvalingam2, visvalingam2)
 KHIVA_TEST(DimensionalityTests, VisvalingamException, visvalingamException)
