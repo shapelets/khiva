@@ -269,8 +269,8 @@ void visvalingam_templated() {
     auto points_x = khiva::utils::makeScopedHostPtr(res.col(0).host<T>());
     auto points_y = khiva::utils::makeScopedHostPtr(res.col(1).host<T>());
 
-    auto expectedX = std::vector<T>{0.0, 2.0, 3.0, 7.0, 9.0};
-    auto expectedY = std::vector<T>{0.0, -0.1, 5.0, 9.0, 9.0};
+    auto expectedX = std::vector<T>{0.0f, 2.0f, 3.0f, 7.0f, 9.0f};
+    auto expectedY = std::vector<T>{0.0f, -0.1f, 5.0f, 9.0f, 9.0f};
 
     auto pxVector = std::vector<T>(points_x.get(), points_x.get() + res.col(0).elements());
     auto pyVector = std::vector<T>(points_y.get(), points_y.get() + res.col(1).elements());
