@@ -23,9 +23,10 @@ using namespace khiva::dimensionality;
 
 namespace {
 
+template <typename T>
 struct VisvalingamSummaryPoint {
-    float x;
-    float y;
+    T x;
+    T y;
     int64_t area;
 };
 
@@ -187,12 +188,13 @@ float calculateError(const std::vector<Point> &ts, int start, int end) {
 
 Segment merge(Segment s1, Segment s2) { return {s1.first, s2.second}; }
 
-int64_t computeTriangleArea(const VisvalingamSummaryPoint &a, const VisvalingamSummaryPoint &b,
-                            const VisvalingamSummaryPoint &c, const long scale = 1e9) {
-    float f1 = a.x * (b.y - c.y);
-    float f2 = b.x * (c.y - a.y);
-    float f3 = c.x * (a.y - b.y);
-    return static_cast<int64_t>(std::abs((static_cast<double>(f1) + f2 + f3) / 2.0f) * scale);
+template <typename T>
+int64_t computeTriangleArea(const VisvalingamSummaryPoint<T> &a, const VisvalingamSummaryPoint<T> &b,
+                            const VisvalingamSummaryPoint<T> &c, const long scale = 1e9) {
+    auto f1 = a.x * (b.y - c.y);
+    auto f2 = b.x * (c.y - a.y);
+    auto f3 = c.x * (a.y - b.y);
+    return static_cast<int64_t>(std::abs((static_cast<T>(f1) + f2 + f3) / static_cast<T>(2.0)) * scale);
 }
 
 template <typename Iter, typename Distance>
@@ -208,9 +210,10 @@ class mapComparator {
     }
 };
 
-void recomputeAreaNeighbor(std::map<int64_t, VisvalingamSummaryPoint>::iterator &iterator_point,
+template <typename T>
+void recomputeAreaNeighbor(typename std::map<int64_t, VisvalingamSummaryPoint<T>>::iterator &iterator_point,
                            std::set<std::pair<int64_t, int64_t>, mapComparator> &point_indexer,
-                           std::map<int64_t, VisvalingamSummaryPoint> &points, const int64_t scale) {
+                           std::map<int64_t, VisvalingamSummaryPoint<T>> &points, const int64_t scale) {
     auto im1m1 = shiftIterator(iterator_point, -1);
     auto im1p1 = shiftIterator(iterator_point, 1);
     auto original_position_minus1 = iterator_point->first;
@@ -218,7 +221,7 @@ void recomputeAreaNeighbor(std::map<int64_t, VisvalingamSummaryPoint>::iterator 
     auto old_area_minus1 = iterator_point->second.area;
     auto new_area_minus1 = computeTriangleArea(im1m1->second, iterator_point->second, im1p1->second, scale);
     points[iterator_point->first] =
-        VisvalingamSummaryPoint{iterator_point->second.x, iterator_point->second.y, new_area_minus1};
+        VisvalingamSummaryPoint<T>{iterator_point->second.x, iterator_point->second.y, new_area_minus1};
 
     auto it = point_indexer.find(std::make_pair(old_area_minus1, original_position_minus1));
     point_indexer.erase(it);
@@ -229,7 +232,7 @@ void recomputeAreaNeighbor(std::map<int64_t, VisvalingamSummaryPoint>::iterator 
 }  // namespace
 
 std::vector<Point> khiva::dimensionality::PAA(const std::vector<Point> &points, int bins) {
-    float xrange = points.back().first - points.front().first;    
+    float xrange = points.back().first - points.front().first;
     float width_bin = xrange / bins;
     float reduction = bins / xrange;
 
@@ -237,11 +240,11 @@ std::vector<Point> khiva::dimensionality::PAA(const std::vector<Point> &points, 
     std::vector<int> counter(bins, 0);
 
     // Iterating over the time series
-    for (const auto &p : points) {        
+    for (const auto &p : points) {
         auto pos = static_cast<size_t>(std::min(p.first * reduction, (float)(bins - 1)));
         sum[pos] += p.second;
         counter[pos] += 1;
-    }    
+    }
 
     std::vector<Point> result;
     result.reserve(bins);
@@ -609,16 +612,17 @@ af::array khiva::dimensionality::SAX(const af::array &a, int alphabet_size) {
     return result;
 }
 
-std::vector<Point> khiva::dimensionality::visvalingam(const std::vector<Point> &pointList, int64_t numPoints,
-                                                      int64_t scale) {
-    std::map<int64_t, VisvalingamSummaryPoint> points;
+template <typename T>
+std::vector<TPoint<T>> khiva::dimensionality::visvalingam(const std::vector<TPoint<T>> &pointList, int64_t numPoints,
+                                                          int64_t scale) {
+    std::map<int64_t, VisvalingamSummaryPoint<T>> points;
     std::set<std::pair<int64_t, int64_t>, mapComparator> point_indexer;
     int64_t counter = 0;
 
     std::transform(
         pointList.cbegin(), pointList.cend(), std::inserter(points, points.end()), [&counter](const Point &point) {
             return std::make_pair(
-                counter++, VisvalingamSummaryPoint{point.first, point.second, std::numeric_limits<int64_t>::max()});
+                counter++, VisvalingamSummaryPoint<T>{point.first, point.second, std::numeric_limits<int64_t>::max()});
         });
 
     auto points_to_be_deleted = pointList.size() - numPoints;
@@ -652,34 +656,34 @@ std::vector<Point> khiva::dimensionality::visvalingam(const std::vector<Point> &
         }
     }
 
-    std::vector<Point> out_vector;
+    std::vector<TPoint<T>> out_vector;
     out_vector.reserve(numPoints);
     std::transform(points.cbegin(), points.cend(), std::back_inserter(out_vector),
-                   [](const std::pair<int64_t, VisvalingamSummaryPoint> &p) {
+                   [](const std::pair<int64_t, VisvalingamSummaryPoint<T>> &p) {
                        return Point{p.second.x, p.second.y};
                    });
 
     return out_vector;
 }
-af::array khiva::dimensionality::visvalingam(const af::array &pointList, int numPoints) {
-    if (pointList.dims(1) != 2) {
-        throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
-    }
-    std::vector<Point> points;
+
+template <typename T>
+af::array visvalingamBridge(const af::array &pointList, int numPoints) {
+    std::vector<TPoint<T>> points;
     points.reserve(pointList.dims(0));
-    auto x = khiva::utils::makeScopedHostPtr(pointList.col(0).host<float>());
-    auto y = khiva::utils::makeScopedHostPtr(pointList.col(1).host<float>());
+
+    auto x = khiva::utils::makeScopedHostPtr(pointList.col(0).host<T>());
+    auto y = khiva::utils::makeScopedHostPtr(pointList.col(1).host<T>());
 
     for (int i = 0; i < pointList.dims(0); i++) {
         points.emplace_back(x[i], y[i]);
     }
 
-    std::vector<Point> rPoints = visvalingam(points, numPoints);
-    af::array out = af::constant(0, rPoints.size(), 2);
+    auto rPoints = visvalingam(points, numPoints);
 
-    std::vector<float> vx;
+    std::vector<T> vx;
     vx.reserve(rPoints.size());
-    std::vector<float> vy;
+
+    std::vector<T> vy;
     vy.reserve(rPoints.size());
 
     for (const auto &rPoint : rPoints) {
@@ -691,4 +695,18 @@ af::array khiva::dimensionality::visvalingam(const af::array &pointList, int num
     af::array oy(rPoints.size(), vy.data());
 
     return af::join(1, ox, oy);
+}
+
+af::array khiva::dimensionality::visvalingam(const af::array &pointList, int numPoints) {
+    if (pointList.dims(1) != 2) {
+        throw std::invalid_argument("Invalid dims. Khiva array with two columns expected (x axis and y axis).");
+    }
+
+    if (pointList.type() == af::dtype::f64) {
+        return visvalingamBridge<double>(pointList, numPoints);
+    } else if (pointList.type() == af::dtype::f32) {
+        return visvalingamBridge<float>(pointList, numPoints);
+    } else {
+        throw std::invalid_argument("Visvalingam is only supported for f32 and f64 types");
+    }
 }
